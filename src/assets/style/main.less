@@ -1,0 +1,28 @@
+@import './config.less'; // 配置变量
+
+// 系统
+
+
+
+@import './common/keyframes.less'; // 动画
+
+// ------------------------------------初始化全局样式-----------------------------------------
+
+
+
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    font-size: @g-fontSize;
+    background-color: @g-backgroundColor;
+    color: @g-color;
+
+    &.lock {
+        overflow: hidden;
+    }
+}
+
+// ------------------------------------框架-----------------------------------------

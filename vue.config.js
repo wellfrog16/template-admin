@@ -1,11 +1,21 @@
 const mock = require('./mock');
 const LessPluginFun = require('less-plugin-functions');
+const StyleLintPlugin = require('stylelint-webpack-plugin');
 
 module.exports = {
     assetsDir: 'src/assets',
 
     devServer: {
         before(app) { mock(app); }
+    },
+
+    configureWebpack: {
+        plugins: [
+            new StyleLintPlugin({
+                context: 'src',
+                files: ['**/*.less', '**/*.s?(a|c)ss', '**/*.vue']
+            })
+        ]
     },
 
     lintOnSave: true,
