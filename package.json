@@ -5,8 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "qq": "stylelint */**/*.{css,less,vue} --fix"
+    "eslint": "vue-cli-service lint",
+    "stylelint": "stylelint */**/*.{css,less,vue} --fix"
   },
   "dependencies": {
     "vue": "^2.5.17",
