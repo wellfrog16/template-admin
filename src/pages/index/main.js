@@ -3,7 +3,11 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 
+import jquery from 'jquery';
+
 Vue.config.productionTip = false;
+
+Vue.prototype.$jquery = jquery;
 
 new Vue({
     router,

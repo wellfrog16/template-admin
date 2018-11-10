@@ -27,6 +27,9 @@ module.exports = {
     },
 
     configureWebpack: {
+        externals: {
+            jquery: 'jQuery'
+        },
         plugins: [
             new StyleLintPlugin({
                 context: 'src',

@@ -13,6 +13,9 @@ export default {
     name: 'home',
     components: {
         HelloWorld
+    },
+    mounted() {
+        console.log(this.$jquery);
     }
 };
 </script>
