@@ -7,5 +7,5 @@ module.exports = {
         before(app) { mock(app); }
     },
 
-    lintOnSave: true,
-}
+    lintOnSave: true
+};

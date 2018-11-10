@@ -1,5 +1,8 @@
 # template-admin
 
+目前的一些问题
+1、.eslintignore 中如果使用 /*.js会导致npm run lint错误，和之前情况不同，暂无解决办法
+
 ## Project setup
 ```
 npm install
