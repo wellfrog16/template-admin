@@ -9,6 +9,23 @@ module.exports = {
         before(app) { mock(app); }
     },
 
+    pages: {
+        index: {
+            entry: 'src/pages/index/main.js',
+            template: 'public/index.html',
+            filename: 'index.html',
+            title: 'Index Page',
+            chunks: ['chunk-vendors', 'chunk-common', 'index']
+        },
+        demo: {
+            entry: 'src/pages/demo/main.js',
+            template: 'public/index.html',
+            filename: 'demo.html',
+            title: 'Demo Page',
+            chunks: ['chunk-vendors', 'chunk-common', 'demo']
+        }
+    },
+
     configureWebpack: {
         plugins: [
             new StyleLintPlugin({
