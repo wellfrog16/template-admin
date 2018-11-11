@@ -2,8 +2,8 @@
     <div id="app">
         <el-button type="primary" size="mini">asdasd</el-button>
         <div id="nav">
-            <router-link to="/">Home</router-link> |
-            <router-link to="/about">About</router-link>
+            <router-link to="/"><i class="fab fa-cc-visa fa-lg"></i>Home</router-link> |
+            <router-link to="/about"><i class="fas fa-sun fa-lg"></i>About</router-link>
         </div>
         <router-view/>
     </div>
