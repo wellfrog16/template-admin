@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <img src="logo.png" alt="">
+        <el-button type="primary" size="mini">asdasd</el-button>
         <div id="nav">
             <router-link to="/">Home</router-link> |
             <router-link to="/about">About</router-link>
