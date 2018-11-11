@@ -28,7 +28,8 @@ module.exports = {
 
     configureWebpack: {
         externals: {
-            jquery: 'jQuery'
+            jquery: 'jQuery',
+            echarts: 'echarts'
         },
         plugins: [
             new StyleLintPlugin({
