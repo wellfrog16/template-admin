@@ -1,10 +1,12 @@
 <template>
     <el-container :class="$style.container">
-        <el-aside :class="$style.aside" style="width:200px;">
+        <el-aside :class="$style.aside" :width="width">
+            <h1 :class="$style.logo"><span>管理系统logo</span></h1>
+            <aside-menu class="aside-menu" :data="menuData" :collapse="collapse" background-color="#1f2d3d" text-color="#fff" />
         </el-aside>
         <el-container>
             <el-header :class="$style.header">
-                11111111
+                <i :class="[$style.switch, 'fas fa-bars fa-lg']" @click="toggle"></i>
             </el-header>
             <el-main :class="$style.main">
             </el-main>
@@ -13,11 +15,54 @@
 </template>
 
 <script>
-export default { };
+import AsideMenu from '@/components/index/home/menu';
+import menu from '@/helper/menu';
+
+export default {
+    components: {AsideMenu},
+    data() {
+        return {
+            width: 'auto',
+            collapse: false,
+            menuData: menu.filter(this.$router.options.routes)
+        };
+    },
+    methods: {
+        toggle() {
+            const swit = this.$jquery(`.${this.$style.switch}`);
+            const target = this.$jquery(`.${this.$style.logo} span`);
+            if (this.collapse) {
+                setTimeout(() => target.show(), 100);
+                swit.removeClass(this.$style['switch-tran']);
+            } else {
+                target.hide();
+                swit.addClass(this.$style['switch-tran']);
+            }
+            this.collapse = !this.collapse;
+        }
+    }
+};
 </script>
+
+<style>
+.aside-menu:not(.el-menu--collapse) {
+    width: 250px;
+}
+</style>
 
 <style lang="less" module>
 @import '../../../assets/style/config.less';
+
+@height: 60px;
+
+.logo {
+    height: @height;
+    line-height: @height;
+    margin: 0;
+    color: #fff;
+    text-align: center;
+    font-size: 20px;
+}
 
 .container {
     height: 100vh;
@@ -26,12 +71,26 @@ export default { };
 .aside {
     width: 200px;
     background-color: @g-color-primary;
+
+    > ul {
+        border-right: 0;
+    }
 }
 
 .header {
-    height: 60px;
-    line-height: 60px;
+    height: @height;
+    line-height: @height;
     border-bottom: 1px solid @g-color-border4;
+}
+
+.switch {
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.switch-tran {
+    transform: rotate(90deg);
+    transition: all 0.2s;
 }
 
 .main {

@@ -1,13 +1,16 @@
 import Vue from 'vue';
 import ElementUI from 'element-ui';
+import utils from '@/utils/utils';
 import App from './App.vue';
 import router from './router/router';
-import store from './store/store';
+import store from '@/store';
 
 import jquery from 'jquery';
 import echarts from 'echarts';
 
 Vue.config.productionTip = false;
+
+Vue.filter('currency', utils.currency);
 
 Vue.prototype.$jquery = jquery;
 Vue.prototype.$echarts = echarts;

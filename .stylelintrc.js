@@ -4,7 +4,7 @@ module.exports = {
     'rules': {
         'indentation': 4, // 4个空格
         'no-empty-source': null,
-        'selector-class-pattern': '^[a-z]+[a-z\\d/-]*[a-z\\d]$', // class名字规则
+        'selector-class-pattern': '^[a-z]+[a-z\\d-_]*[a-z\\d]$', // class名字规则
         'selector-id-pattern': '^[a-zA-Z\\d]+$', // id名字规则
         'max-nesting-depth': 3, // 最大嵌套深度
         'max-empty-lines': 1,

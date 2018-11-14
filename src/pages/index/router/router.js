@@ -38,9 +38,30 @@ export default new Router({
     routes: [
         {
             path: '',
-            name: '系统',
+            name: '一级菜单',
             component: Home,
             icon: 'el-icon-setting',
+            children: [
+                {path: 'database', name: '二级菜单1', icon: 'el-icon-tickets', component: Root},
+                {path: 'log', name: '二级菜单2', icon: 'el-icon-document', component: Root},
+                {path: 'file', name: '二级菜单3', icon: 'menu-fix-icon fas fa-sun fa-lg', component: Root},
+                {
+                    path: 'config',
+                    name: '二级菜单4',
+                    component: Root,
+                    icon: 'el-icon-setting',
+                    children: [
+                        {path: 'dictionary', name: '三级菜单1', icon: 'el-icon-document', component: Root},
+                        {path: 'dictionary', name: '三级菜单2', icon: 'el-icon-document', component: Root}
+                    ]
+                }
+            ]
+        },
+        {
+            path: '',
+            name: '系统',
+            component: Home,
+            icon: 'menu-fix-icon fas fa-sun fa-lg',
             children: [
                 {path: 'database', name: '数据库', icon: 'el-icon-tickets', component: Root},
                 {path: 'log', name: '日志', icon: 'el-icon-document', component: Root},
