@@ -11,8 +11,10 @@ import moment from 'moment';
 
 Vue.config.productionTip = false;
 
+// 过滤器
 Vue.filter('currency', utils.currency);
 
+// 插件
 Vue.prototype.$jquery = jquery;
 Vue.prototype.$echarts = echarts;
 Vue.prototype.$moment = moment;

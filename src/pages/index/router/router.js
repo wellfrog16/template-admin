@@ -33,7 +33,7 @@ const scrollBehavior = (to, from, savedPosition) => {
     }
 };
 
-export default new Router({
+const router = new Router({
     scrollBehavior,
     routes: [
         {
@@ -88,3 +88,11 @@ export default new Router({
         }
     ]
 });
+
+// todo
+router.beforeEach((to, from, next) => {
+    // todo权限校验等
+    next();
+});
+
+export default router;
