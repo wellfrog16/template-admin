@@ -6,6 +6,9 @@ module.exports = {
     assetsDir: 'src/assets',
 
     devServer: {
+        host: '0.0.0.0',
+        port: 8080,
+        proxy: null,
         before(app) { mock(app); }
     },
 
