@@ -3,6 +3,7 @@ const LessPluginFun = require('less-plugin-functions');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 
 module.exports = {
+    baseUrl: '/',
     assetsDir: 'src/assets',
 
     devServer: {

@@ -44,7 +44,7 @@ const router = new Router({
             children: [
                 {path: 'database', name: '二级菜单1', icon: 'el-icon-tickets', component: Root},
                 {path: 'log', name: '二级菜单2', icon: 'el-icon-document', component: Root},
-                {path: 'file', name: '二级菜单3', icon: 'menu-fix-icon fas fa-sun fa-lg', component: Root},
+                {path: 'file', name: '二级菜单3', icon: 'menu-fix-icon fas fa-angry fa-lg', component: Root},
                 {
                     path: 'config',
                     name: '二级菜单4',
