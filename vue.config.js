@@ -34,7 +34,8 @@ module.exports = {
         externals: {
             jquery: 'jQuery',
             echarts: 'echarts',
-            moment: 'moment'
+            moment: 'moment',
+            underscore: '_',
         },
         plugins: [
             new StyleLintPlugin({
@@ -48,7 +49,7 @@ module.exports = {
 
     css: {
         // 是否使用css分离插件 ExtractTextPlugin
-        extract: true,
+        extract: false,
         // 开启 CSS source maps?
         sourceMap: false,
         // css预设器配置项
@@ -57,7 +58,7 @@ module.exports = {
                 plugins: [ new LessPluginFun() ]
             },
         },
-        //     // 启用 CSS modules for all css / pre-processor files.
-        //     modules: false
+        // 启用 CSS modules for all css / pre-processor files.
+        // modules: false
     }
 };
