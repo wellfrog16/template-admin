@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import ElementUI from 'element-ui';
-import utils from '@/utils/utils';
+import filters from '@/utils/filters';
 import App from './App.vue';
 import router from './router/router';
 import store from '@/store';
@@ -12,7 +12,7 @@ import moment from 'moment';
 Vue.config.productionTip = false;
 
 // 过滤器
-Vue.filter('currency', utils.currency);
+Vue.filter('currency', filters.currency);
 
 // 插件
 Vue.prototype.$jquery = jquery;

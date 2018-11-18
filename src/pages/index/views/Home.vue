@@ -9,6 +9,7 @@
                 <i :class="[$style.switch, 'fas fa-bars fa-lg']" @click="toggle"></i>
             </el-header>
             <el-main :class="$style.main">
+                <router-view/>
             </el-main>
         </el-container>
     </el-container>

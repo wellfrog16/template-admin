@@ -13,6 +13,7 @@ module.exports = {
         before(app) { mock(app); }
     },
 
+    // todo 自动根据文件名处理多页，而不用单独一个个去写
     pages: {
         index: {
             entry: 'src/pages/index/main.js',
@@ -36,6 +37,7 @@ module.exports = {
             echarts: 'echarts',
             moment: 'moment',
             underscore: '_',
+            axios: 'axios'
         },
         plugins: [
             new StyleLintPlugin({
@@ -59,6 +61,6 @@ module.exports = {
             },
         },
         // 启用 CSS modules for all css / pre-processor files.
-        // modules: false
+        modules: false
     }
 };

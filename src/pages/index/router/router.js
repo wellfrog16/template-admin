@@ -33,6 +33,7 @@ const scrollBehavior = (to, from, savedPosition) => {
     }
 };
 
+// todo 按模块写入单独的文件引用
 const router = new Router({
     scrollBehavior,
     routes: [
@@ -42,7 +43,7 @@ const router = new Router({
             component: Home,
             icon: 'el-icon-setting',
             children: [
-                {path: 'database', name: '二级菜单1', icon: 'el-icon-tickets', component: Root},
+                {path: 'demo', name: 'Demo', icon: 'el-icon-tickets', component: resolve => require(['../views/demo/Index.vue'], resolve)},
                 {path: 'log', name: '二级菜单2', icon: 'el-icon-document', component: Root},
                 {path: 'file', name: '二级菜单3', icon: 'menu-fix-icon fas fa-angry fa-lg', component: Root},
                 {
@@ -64,16 +65,16 @@ const router = new Router({
             icon: 'menu-fix-icon fas fa-sun fa-lg',
             children: [
                 {path: 'database', name: '数据库', icon: 'el-icon-tickets', component: Root},
-                {path: 'log', name: '日志', icon: 'el-icon-document', component: Root},
-                {path: 'file', name: '文件管理', icon: 'fa-memus fas fa-sun fa-lg', component: Root},
+                {path: 'log1', name: '日志', icon: 'el-icon-document', component: Root},
+                {path: 'file1', name: '文件管理', icon: 'fa-memus fas fa-sun fa-lg', component: Root},
                 {
-                    path: 'config',
+                    path: 'config1',
                     name: '设置',
                     component: Root,
                     icon: 'el-icon-setting',
                     children: [
-                        {path: 'dictionary', name: '常规', icon: 'el-icon-document', component: Root},
-                        {path: 'dictionary', name: '字典', icon: 'el-icon-document', component: Root}
+                        {path: 'dictionary2', name: '常规', icon: 'el-icon-document', component: Root},
+                        {path: 'dictionary3', name: '字典', icon: 'el-icon-document', component: Root}
                     ]
                 }
             ]
