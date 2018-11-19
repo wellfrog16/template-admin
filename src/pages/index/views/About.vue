@@ -12,8 +12,8 @@
     </div>
 </template>
 <script>
-import SCard from '@/components/index/common/SCard'
-import STable from '@/components/index/common/STable'
+import SCard from '@/components/index/common/SCard';
+import STable from '@/components/index/common/STable';
 export default {
     components: {
         SCard,
@@ -39,7 +39,7 @@ export default {
                 {test1: 1, test2: 2, test3: 3},
                 {test1: 1, test2: 2, test3: 3},
             ]
-        }
+        };
     }
 
 }

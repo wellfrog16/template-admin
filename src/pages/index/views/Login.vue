@@ -37,7 +37,6 @@
                 <div class="div3">国际化应用</div>
                 <div class="div4">行业应用</div>
             </div>
-            
         </div>
         <!-- <el-dialog :visible="showLoginDialog" center @close="handleCloseDialog" top="10%">
             <div class="login-dialog">
@@ -62,8 +61,8 @@
     </div>
 </template>
 <script>
-// import {saveAuthedInfos, saveRealName} from '@/utils/storageUtil'
-// import {loginApi} from '@/api/modules/dataAnsis'
+// import {saveAuthedInfos, saveRealName} from '@/utils/storageUtil';
+// import {loginApi} from '@/api/modules/dataAnsis';
 export default {
     data() {
         return {
@@ -73,49 +72,49 @@ export default {
                 userName: '',
                 password: ''
             }
-        }
+        };
     },
     methods: {
-        handleDetail () {
+        handleDetail() {
 
         },
         handleCloseDialog() {
-            this.showLoginDialog = false
+            this.showLoginDialog = false;
         },
-        handleLogin () {
-            this.showLoginDialog = !this.showLoginDialog
+        handleLogin() {
+            this.showLoginDialog = !this.showLoginDialog;
         },
         handleCancle() {
-            this.handleCloseDialog()
+            this.handleCloseDialog();
         },
         handleConfirm() {
             this.$refs.ruleForm.validate(valid => {
                 if (valid) {
                     // 请求token
-                    // this.getLogin()
-                    this.$router.push({path: '/index'})
+                    // this.getLogin();
+                    this.$router.push({path: '/index'});
                 }
-            })
+            });
         },
-        getLogin () {
-            let params = {
+        getLogin() {
+            /* let params = {
                 username: this.ruleForm.userName.toLowerCase(),
                 password: this.ruleForm.password
-            }
-            this.fullScreenLoading = true
-            loginApi(params).then((resp) => {
-                this.fullScreenLoading = false
-                console.log(resp)
-                // saveAuthedInfos(resp, params.username)
-                // saveRealName(res)
-                let redirect = decodeURIComponent(this.$router.currentRoute.query.redirect || '/index')
-                this.$router.push({path: redirect})
+            }; */
+            this.fullScreenLoading = true;
+            /* loginApi(params).then((resp) => {
+                this.fullScreenLoading = false;
+                console.log(resp);
+                // saveAuthedInfos(resp, params.username);
+                // saveRealName(res);
+                let redirect = decodeURIComponent(this.$router.currentRoute.query.redirect || '/index');
+                this.$router.push({path: redirect});
             }, () => {
-                this.fullScreenLoading = false
-            })
+                this.fullScreenLoading = false;
+            }) */
         }
     }
-}
+};
 </script>
 
 <style lang="less" scoped>
@@ -303,4 +302,3 @@ export default {
         }
     }
 </style>
-

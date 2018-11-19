@@ -60,12 +60,12 @@ const router = new Router({
         },
         {
             path: '',
-            name: '系统',
+            name: '数据分析工具集',
             component: Home,
             icon: 'menu-fix-icon fas fa-sun fa-lg',
             children: [
-                {path: 'database', name: '数据库', icon: 'el-icon-tickets', component: Root},
-                {path: 'log1', name: '日志', icon: 'el-icon-document', component: Root},
+                {path: 'index', name: '首页', icon: 'el-icon-tickets', component: Root},
+                {path: 'sceneConfig', name: '场景设置', icon: 'el-icon-document', component:  resolve => require(['../views/SceneConfig/index.vue'], resolve)},
                 {path: 'file1', name: '文件管理', icon: 'fa-memus fas fa-sun fa-lg', component: Root},
                 {
                     path: 'config1',
