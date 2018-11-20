@@ -43,6 +43,9 @@
                             <el-form-item prop="a" label="合约代码" label-width="140px">
                                 <el-input size="small" v-model="ruleForm.a" style="width: 300px;"></el-input>
                             </el-form-item>
+                            <el-form-item prop="a" label="时间区间" label-width="140px">
+                                <s-date-picker></s-date-picker>
+                            </el-form-item>
                         </el-col>
                     </el-row>
                 </el-form>
@@ -54,7 +57,15 @@
                 <el-input class="search-input" size="mini" prefix-icon="el-icon-search" placeholder="请输入账户号" v-model="searchAccountText"></el-input>
             </div>
             <div slot="content">
-                <s-table :columns="columns" :tableData="tableData"></s-table>
+                <s-table :columns="columns" :tableData="tableData">
+                    <el-table-column slot="tableColumnsPush" label="操作">
+                        <template slot-scope="scope">
+                            <el-button type="primary" size="small">查看</el-button>
+                            <el-button type="warning" size="small">编辑</el-button>
+                            <el-button type="danger" size="small" v-if="scope.row.a === 1">删除</el-button>
+                        </template>
+                    </el-table-column>
+                </s-table>
             </div>
         </s-card>
     </div>
@@ -62,17 +73,26 @@
 <script>
 import STable from '@/components/index/common/STable';
 import SCard from '@/components/index/common/SCard';
+import SDatePicker from '@/components/index/common/SDatePicker';
 export default {
-    components: {STable, SCard},
+    components: {STable, SCard, SDatePicker},
     data() {
         return {
             ruleForm: {
                 a: '9'
             },
-            tableData: [],
+            tableData: [
+                {a: 1, b: 2, c: 3}
+            ],
             columns: [
                 {
-                    label: '1', field: 'a'
+                    label: '场景名称', field: 'a'
+                },
+                {
+                    label: '场景类型', field: 'b'
+                },
+                {
+                    label: '场景说明', field: 'c'
                 }
             ],
             searchAccountText: '',
