@@ -60,21 +60,20 @@ const router = new Router({
         },
         {
             path: '',
-            name: '数据分析工具集',
+            name: '监管科技工具集',
             component: Home,
             icon: 'menu-fix-icon fas fa-sun fa-lg',
             children: [
-                {path: 'index', name: '首页', icon: 'el-icon-tickets', component: Root},
-                {path: 'sceneConfig', name: '场景设置', icon: 'el-icon-document', component:  resolve => require(['../views/SceneConfig/index.vue'], resolve)},
-                {path: 'file1', name: '文件管理', icon: 'fa-memus fas fa-sun fa-lg', component: Root},
+                {path: 'sceneConfig', name: '场景设置', icon: 'el-icon-document', component: resolve => require(['../views/sceneConfig/Index.vue'], resolve)},
+                {path: 'abnormityAnalysis', name: '异常行为分析', icon: 'el-icon-document', component: resolve => require(['../views/abnormityAnalysis/Index.vue'], resolve)},
                 {
-                    path: 'config1',
-                    name: '设置',
+                    path: '',
+                    name: '关联账户分析',
                     component: Root,
                     icon: 'el-icon-setting',
                     children: [
-                        {path: 'dictionary2', name: '常规', icon: 'el-icon-document', component: Root},
-                        {path: 'dictionary3', name: '字典', icon: 'el-icon-document', component: Root}
+                        {path: 'sceneConfig', name: '场景设置', icon: 'el-icon-document', component: Root},
+                        {path: 'abnormityAnalysis', name: '异常行为分析', icon: 'el-icon-document', component: Root}
                     ]
                 }
             ]
