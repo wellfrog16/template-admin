@@ -332,17 +332,17 @@ export default {
         selfValidateRangeDate(rule, value, callback, rangeDate) {
             if (this.isRange) {
                 if (!rangeDate[0] && !rangeDate[1]) {
-                    callback('请选择日期范围');
+                    callback(new Error('请选择日期范围'));
                 }
                 if (!rangeDate[0]) {
-                    callback('请选择开始日期');
+                    callback(new Error('请选择开始日期'));
                 }
                 if (!rangeDate[1]) {
-                    callback('请选择结束日期');
+                    callback(new Error('请选择结束日期'));
                 }
 
                 if (moment(rangeDate[1]).format('YYYY-MM-DD') < moment(rangeDate[0]).format('YYYY-MM-DD')) {
-                    callback('开始日期不能大于结束日期');
+                    callback(new Error('开始日期不能大于结束日期'));
                 }
                 callback();
             }
