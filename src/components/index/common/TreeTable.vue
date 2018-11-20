@@ -140,59 +140,59 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.tree-table-component {
-  .tree-table {
-    color: #606266;
+    .tree-table-component {
+        .tree-table {
+            color: #606266;
 
-    .custom-tree-node {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 14px;
-      padding-right: 8px;
+            .custom-tree-node {
+                flex: 1;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                font-size: 14px;
+                padding-right: 8px;
 
-      > div {
-        flex: 1;
-        padding: 0 10px;
-        color: #606266;
-      }
+                > div {
+                    flex: 1;
+                    padding: 0 10px;
+                    color: #606266;
+                }
+            }
+
+            /deep/ .el-tree-node__content {
+                padding: 10px;
+                border-radius: 3px;
+                border-bottom: 1px solid #ebebeb;
+            }
+        }
+
+        .table-header-container {
+            line-height: 55px;
+            background: #fff !important;
+            border-top: 1px solid #e6e4e4;
+            border-bottom: 1px solid #e6e4e4;
+            padding-left: 12px;
+
+            .el-checkbox {
+                display: inline-block;
+                position: relative;
+                float: left;
+                margin-right: 20px;
+            }
+
+            .table-header {
+                display: flex;
+                flex: 1;
+                align-items: center;
+                justify-content: space-between;
+                font-size: 14px;
+
+                > div {
+                    flex: 1;
+                    padding: 0 10px;
+                    color: #606266;
+                }
+            }
+        }
     }
-
-    /deep/ .el-tree-node__content {
-      padding: 10px;
-      border-radius: 3px;
-      border-bottom: 1px solid #ebebeb;
-    }
-  }
-
-  .table-header-container {
-    line-height: 55px;
-    background: #fff !important;
-    border-top: 1px solid #e6e4e4;
-    border-bottom: 1px solid #e6e4e4;
-    padding-left: 12px;
-
-    .el-checkbox {
-      display: inline-block;
-      position: relative;
-      float: left;
-      margin-right: 20px;
-    }
-
-    .table-header {
-      display: flex;
-      flex: 1;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 14px;
-
-      > div {
-        flex: 1;
-        padding: 0 10px;
-        color: #606266;
-      }
-    }
-  }
-}
 </style>
