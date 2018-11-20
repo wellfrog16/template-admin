@@ -22,9 +22,9 @@ export default {
     data() {
         return {
             columns: [
-                {label:1, field: 'test1'},
-                {label:11, field: 'test2'},
-                {label:121, field: 'test3'},
+                {label: 1, field: 'test1'},
+                {label: 11, field: 'test2'},
+                {label: 121, field: 'test3'}
             ],
             tableData: [
                 {test1: 1, test2: 2, test3: 3},
@@ -37,11 +37,9 @@ export default {
                 {test1: 1, test2: 2, test3: 3},
                 {test1: 1, test2: 2, test3: 3},
                 {test1: 1, test2: 2, test3: 3},
-                {test1: 1, test2: 2, test3: 3},
+                {test1: 1, test2: 2, test3: 3}
             ]
         };
     }
-
-}
+};
 </script>
-
