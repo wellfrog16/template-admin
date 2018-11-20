@@ -8,8 +8,8 @@
             trigger="hover">
             <el-input slot="reference" :value="val" ref="dealerInput" :clearable="true" @clear="handlerClear" size="small" :disabled="disabled"
                       @input="handlerInput" v-popover:popover1 @blur="handleBlur"></el-input>
-            <div style="max-height: 200px;overflow: auto;">
-                <el-tag class="tag-css" v-for="(item, index) in names" :key="index" style="margin:2px 5px">{{ item }}</el-tag>
+            <div style="max-height: 200px; overflow: auto;">
+                <el-tag class="tag-css" v-for="(item, index) in names" :key="index" style="margin:2px 5px;">{{ item }}</el-tag>
             </div>
         </el-popover>
         <el-popover
@@ -17,7 +17,7 @@
             :width="popoverWidth"
             :disabled="disabled"
             trigger="click">
-            <div style=" height: 200px;overflow-y: scroll;">
+            <div style=" height: 200px; overflow-y: scroll;">
                 <el-tree
                     ref="selectorDealer"
                     :show-checkbox="isMultipleMode"
