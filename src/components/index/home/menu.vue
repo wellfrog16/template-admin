@@ -1,7 +1,6 @@
 <template>
     <el-menu router
              :collapse="collapse"
-             :background-color="backgroundColor"
              :text-color="textColor"
              :active-text-color="activeTextColor"
     >
@@ -45,7 +44,6 @@ export default {
     props: {
         'data': {type: Array, default: () => []},
         'collapse': {type: Boolean, default: false},
-        'background-color': {type: String, default: '#fff'},
         'text-color': {type: String, default: '#303133'},
         'active-text-color': {type: String, default: '#409eff'}
     }

@@ -1,100 +1,85 @@
 <template>
-    <el-container :class="$style.container">
-        <el-aside :class="$style.aside" :width="width">
-            <h1 :class="$style.logo"><span>管理系统logo</span></h1>
-            <aside-menu class="aside-menu" :data="menuData" :collapse="collapse" background-color="#1f2d3d" text-color="#fff" />
-        </el-aside>
-        <el-container>
-            <el-header :class="$style.header">
-                <i :class="[$style.switch, 'fas fa-bars fa-lg']" @click="toggle"></i>
-            </el-header>
+    <div :class="$style.container">
+        <nav-top></nav-top>
+        <div :class="$style.containers">
+            <el-aside :class="$style.aside" :width="width">
+                <aside-menu class="aside-menu" :data="menuData" :collapse="collapse" background-color="#1f2d3d"
+                            text-color="#fff"/>
+            </el-aside>
             <el-main :class="$style.main">
                 <router-view/>
             </el-main>
-        </el-container>
-    </el-container>
+        </div>
+
+    </div>
 </template>
 
 <script>
-import AsideMenu from '@/components/index/home/menu';
-import menu from '@/helper/menu';
+    import AsideMenu from '@/components/index/home/menu';
+    import menu from '@/helper/menu';
 
-export default {
-    components: {AsideMenu},
-    data() {
-        return {
-            width: 'auto',
-            collapse: false,
-            menuData: menu.filter(this.$router.options.routes)
-        };
-    },
-    methods: {
-        toggle() {
-            const swit = this.$jquery(`.${this.$style.switch}`);
-            const target = this.$jquery(`.${this.$style.logo} span`);
-            if (this.collapse) {
-                setTimeout(() => target.show(), 100);
-                swit.removeClass(this.$style['switch-tran']);
-            } else {
-                target.hide();
-                swit.addClass(this.$style['switch-tran']);
+    export default {
+        components: {
+            AsideMenu,
+            NavTop: () => import("@/components/index/home/nav.vue"),
+        },
+        data() {
+            return {
+                width: 'auto',
+                collapse: false,
+                menuData: menu.filter(this.$router.options.routes)
+            };
+        },
+        methods: {
+            toggle() {
+                const swit = this.$jquery(`.${this.$style.switch}`);
+                const target = this.$jquery(`.${this.$style.logo} span`);
+                if (this.collapse) {
+                    setTimeout(() => target.show(), 100);
+                    swit.removeClass(this.$style['switch-tran']);
+                } else {
+                    target.hide();
+                    swit.addClass(this.$style['switch-tran']);
+                }
+                this.collapse = !this.collapse;
             }
-            this.collapse = !this.collapse;
         }
-    }
-};
+    };
 </script>
 
 <style>
-.aside-menu:not(.el-menu--collapse) {
-    width: 250px;
-}
+    .aside-menu:not(.el-menu--collapse) {
+        width: 249px;
+        background-color: rgb(4, 28, 66);
+    }
 </style>
 
 <style lang="less" module>
-@import '../../../assets/style/config.less';
-
-@height: 60px;
-
-.logo {
-    height: @height;
-    line-height: @height;
-    margin: 0;
-    color: #fff;
-    text-align: center;
-    font-size: 20px;
-}
-
-.container {
-    height: 100vh;
-}
-
-.aside {
-    width: 200px;
-    background-color: @g-color-primary;
-
-    > ul {
-        border-right: 0;
+    @import '../../../assets/style/config.less';
+    @height: 60px;
+    .container {
+        width: 100%;
+        height: 100vh;
     }
-}
 
-.header {
-    height: @height;
-    line-height: @height;
-    border-bottom: 1px solid @g-color-border4;
-}
+    .containers {
+        display: flex;
+    }
+    .aside {
+        width: 200px;
+    }
 
-.switch {
-    cursor: pointer;
-    transition: all 0.2s;
-}
+    .switch {
+        cursor: pointer;
+        transition: all 0.2s;
+    }
 
-.switch-tran {
-    transform: rotate(90deg);
-    transition: all 0.2s;
-}
+    .switch-tran {
+        transform: rotate(90deg);
+        transition: all 0.2s;
+    }
 
-.main {
-    background-color: #f0f2f5;
-}
+    .main {
+        background-color: #f0f2f5;
+    }
 </style>
