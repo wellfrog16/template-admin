@@ -2,8 +2,8 @@
     <el-card class="self-card-component">
         <div slot="header" class="card-header">
             <div class="header-left">
-                <span><i :class="icon"></i>{{title}}</span>
-                <span class="sub-title" v-if="subTitle">{{subTitle}}</span>
+                <span><i :class="icon"></i>{{ title }}</span>
+                <span class="sub-title" v-if="subTitle">{{ subTitle }}</span>
             </div>
             <div class="header-right"><slot name="right"></slot></div>
         </div>
@@ -26,7 +26,7 @@ export default {
             default: ''
         }
     }
-}
+};
 </script>
 <style lang="less" scoped>
     .self-card-component {
@@ -52,4 +52,3 @@ export default {
     }
 
 </style>
-
