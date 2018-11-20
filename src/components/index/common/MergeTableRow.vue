@@ -23,58 +23,57 @@ export default {
     data() {
         return {
             spanArr: []
-        }
+        };
     },
     props: {
         columns: {
             type: Array,
             default() {
-                return []
+                return [];
             }
         },
         tableData: {
             type: Array,
             default() {
-                return []
+                return [];
             }
         }
     },
     created() {
-        this.getSpanArr(this.tableData)
+        this.getSpanArr(this.tableData);
     },
     methods: {
-        getSpanArr(data) {　
-            let pos = 0
+        getSpanArr(data) {
+            let pos = 0;
             for (var i = 0; i < data.length; i++) {
-                if (i === 0) {
-                    this.spanArr.push(1);
-                    pos = 0
-                } else {
-                    // 判断当前元素与上一个元素是否相同
+                if (i === 0) {
+                    this.spanArr.push(1);
+                    pos = 0;
+                } else {
+                    // 判断当前元素与上一个元素是否相同
                     if (data[i].date === data[i - 1].date) {
-                        this.spanArr[pos] += 1;
-                        this.spanArr.push(0);
-                    } else {
-                        this.spanArr.push(1);
-                        pos = i;
-                    }
-                }
+                        this.spanArr[pos] += 1;
+                        this.spanArr.push(0);
+                    } else {
+                        this.spanArr.push(1);
+                        pos = i;
+                    }
+                }
             }
         },
-        spanMethod({ row, column, rowIndex, columnIndex }) {
+        spanMethod({row, column, rowIndex, columnIndex}) {
             if (columnIndex === 1) {
                 const _row = this.spanArr[rowIndex];
-                const _col = _row > 0 ? 1 : 0;
-                return {
-                    rowspan: _row,
-                    colspan: _col
-                }
+                const _col = _row > 0 ? 1 : 0;
+                return {
+                    rowspan: _row,
+                    colspan: _col
+                };
             }
         }
     }
-}
+};
 </script>
 <style lang="less" scoped>
 
 </style>
-

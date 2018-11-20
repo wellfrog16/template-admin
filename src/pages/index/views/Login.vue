@@ -2,10 +2,10 @@
     <div class="login-page">
         <div class="banner">
             <div class="logo">
-                <img src="../../../assets/img/login/logo.png" alt="">
+                <img src="../../../assets/img/usr/login/logo.png" alt="">
             </div>
             <div class="login-btn" @click="handleLogin">
-                <img src="../../../assets/img/login/login.png" alt=""><span>登录</span>
+                <img src="../../../assets/img/usr/login/login.png" alt=""><span>登录</span>
             </div>
         </div>
         <div class="main-content">
@@ -134,7 +134,7 @@ export default {
             width: 100%;
             height: 60px;
             line-height: 60px;
-            background: url('../../../assets/img/login/banner_bg.png') no-repeat;
+            background: url('../../../assets/img/usr/login/banner_bg.png') no-repeat;
             background-size: cover;
             overflow: hidden;
             display: flex;
@@ -175,7 +175,7 @@ export default {
             width: 100%;
             height: 100%;
             position: fixed;
-            background: url('../../../assets/img/login/content_bg.png') no-repeat;
+            background: url('../../../assets/img/usr/login/content_bg.png') no-repeat;
             background-size: cover;
             overflow: hidden;
 
@@ -202,7 +202,7 @@ export default {
                     margin-top: 50px;
                     color: #d7e7fa;
                     font-size: 14px;
-                    background: url('../../../assets/img/login/detail_btn_bg.png') no-repeat;
+                    background: url('../../../assets/img/usr/login/detail_btn_bg.png') no-repeat;
                     background-size: cover;
                 }
             }
@@ -252,48 +252,48 @@ export default {
                 }
 
                 .div1 {
-                    background: url('../../../assets/img/login/1_1.png') no-repeat;
+                    background: url('../../../assets/img/usr/login/1_1.png') no-repeat;
                     background-size: cover;
                 }
 
                 .div1:hover {
-                    background: url('../../../assets/img/login/1_2.png') no-repeat;
+                    background: url('../../../assets/img/usr/login/1_2.png') no-repeat;
                     background-size: cover;
                     color: #fff;
                     font-weight: 800;
                 }
 
                 .div2 {
-                    background: url('../../../assets/img/login/2_1.png') no-repeat;
+                    background: url('../../../assets/img/usr/login/2_1.png') no-repeat;
                     background-size: cover;
                 }
 
                 .div2:hover {
-                    background: url('../../../assets/img/login/2_2.png') no-repeat;
+                    background: url('../../../assets/img/usr/login/2_2.png') no-repeat;
                     background-size: cover;
                     color: #fff;
                     font-weight: 800;
                 }
 
                 .div3 {
-                    background: url('../../../assets/img/login/3_1.png') no-repeat;
+                    background: url('../../../assets/img/usr/login/3_1.png') no-repeat;
                     background-size: cover;
                 }
 
                 .div3:hover {
-                    background: url('../../../assets/img/login/3_2.png') no-repeat;
+                    background: url('../../../assets/img/usr/login/3_2.png') no-repeat;
                     background-size: cover;
                     color: #fff;
                     font-weight: 800;
                 }
 
                 .div4 {
-                    background: url('../../../assets/img/login/4_1.png') no-repeat;
+                    background: url('../../../assets/img/usr/login/4_1.png') no-repeat;
                     background-size: cover;
                 }
 
                 .div4:hover {
-                    background: url('../../../assets/img/login/4_2.png') no-repeat;
+                    background: url('../../../assets/img/usr/login/4_2.png') no-repeat;
                     background-size: cover;
                     color: #fff;
                     font-weight: 800;
