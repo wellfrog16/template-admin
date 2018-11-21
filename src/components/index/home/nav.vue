@@ -1,7 +1,7 @@
 <template>
     <div :class="$style.nav">
         <div :class="$style.nav_log"></div>
-        <div :class="$style.user_role">
+        <!-- <div :class="$style.user_role">
             <el-input :class="$style.search " type="text"></el-input>
             <p>
                 <i :class="[$style.switch, 'fas fa-bars fa-lg']"></i>Home
@@ -10,14 +10,14 @@
                 <i :class="[$style.switch, 'fas fa-bars fa-lg']"></i>管理员
             </p>
 
-        </div>
+        </div> -->
     </div>
 </template>
 
 <script>
-    export default {
-        name: "nav"
-    }
+export default {
+    name: 'nav'
+};
 </script>
 
 <style lang="less" module>

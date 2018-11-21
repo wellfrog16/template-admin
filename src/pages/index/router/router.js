@@ -46,7 +46,8 @@ const router = new Router({
             children: [
                 {
                     path: 'demo',
-                    name: 'Demo', icon: 'el-icon-tickets',
+                    name: 'Demo',
+                    icon: 'el-icon-tickets',
                     component: resolve => require(['../views/demo/Index.vue'], resolve)
                 },
                 // {
@@ -185,7 +186,6 @@ const router = new Router({
         }
     ]
 });
-
 
 router.beforeEach((to, from, next) => {
     // todo权限校验等
