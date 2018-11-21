@@ -38,7 +38,6 @@
 
         button {
             float: right;
-            font-size: 14px;
             color: #fff;
 
             i {
@@ -189,6 +188,12 @@
     border-color: #9e9999;
     color: #fff;
 }
+.el-input.is-disabled .el-input__inner {
+    height: 32px;
+    background: transparent;
+    border-color: #9e9999;
+    color: #fff;
+}
 // el-checkbox
 .el-checkbox {
     .el-checkbox__inner {
@@ -203,5 +208,8 @@
         .el-checkbox__inner {
             background: @g-active-bg;
         }
+    }
+    .el-checkbox__input.is-disabled .el-checkbox__inner {
+        background: transparent;
     }
 }
