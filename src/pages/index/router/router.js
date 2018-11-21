@@ -40,13 +40,15 @@ const router = new Router({
     routes: [
         {
             path: '',
-            name: '研究支撑平台',
+            name: 'flat',
+            label: '研究支撑平台',
             component: Home,
             icon: 'el-icon-setting',
             children: [
                 {
                     path: 'demo',
                     name: 'Demo',
+                    label: 'Demo',
                     icon: 'el-icon-tickets',
                     component: resolve => require(['../views/demo/Index.vue'], resolve)
                 },
@@ -85,48 +87,56 @@ const router = new Router({
         },
         {
             path: '',
-            name: '监管科技工具集',
+            name: 'tools',
+            label: '监管科技工具集',
             component: Home,
             icon: 'menu-fix-icon fas fa-sun fa-lg',
             children: [
                 {
                     path: '',
-                    name: '关联账户分析',
+                    name: 'linkAccountAnsis',
+                    label: '关联账户分析',
                     component: LinkAccountAnsis,
                     children: [
                         {
                             path: '/sceneConfig',
-                            name: '分析向导',
+                            name: 'sceneConfig',
+                            label: '分析向导',
                             icon: 'el-icon-more',
                             component: resolve => require(['../views/linkAccountAnsis/sceneConfig/Index.vue'], resolve)
                         },
                         {
                             path: 'log',
-                            name: '关联账户组合并',
+                            name: 'log',
+                            label: '关联账户组合并',
                             icon: 'el-icon-more',
                             component: Root
                         },
                         {
                             path: 'file',
-                            name: '组合场景合并',
+                            name: 'file',
+                            label: '组合场景合并',
                             icon: 'el-icon-more',
                             component: Root
                         },
                         {
                             path: 'dictionary',
-                            name: '异常交易分析',
+                            name: 'dictionary',
+                            label: '异常交易分析',
                             icon: 'el-icon-more',
                             component: resolve => require(['../views/linkAccountAnsis/abnormityAnalysis/Index.vue'], resolve)
                         },
                         {
                             path: 'dictionary1',
-                            name: '账户组画像',
+                            name: 'dictionary1',
+                            label: '账户组画像',
                             icon: 'el-icon-more',
                             component: Root
                         },
                         {
                             path: 'demo11',
-                            name: '客户信息查询',
+                            name: 'demo11',
+                            label: '客户信息查询',
                             icon: 'el-icon-more',
                             component: resolve => require(['../views/demo/Index.vue'], resolve)
                         }
@@ -171,6 +181,7 @@ const router = new Router({
         {
             path: '/about',
             name: 'about',
+            label: 'about',
             // route level code-splitting
             // this generates a separate chunk (about.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
@@ -179,6 +190,7 @@ const router = new Router({
         {
             path: '/login',
             name: 'login',
+            label: 'login',
             // route level code-splitting
             // this generates a separate chunk (login.[hash].js) for this route
             // which is lazy-loaded when the route is visited.

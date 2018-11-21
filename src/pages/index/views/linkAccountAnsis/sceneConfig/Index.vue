@@ -1,6 +1,6 @@
 <template>
     <div class="scene-config-page">
-        <s-card class="basic-info" :title="`客户群体选择`" :icon="`el-icon-edit`">
+        <s-card class="basic-info" :title="`客户群体选择`" :icon="`fa-icon-user`">
             <div slot="content">
                 <el-form ref="ruleForm" :model="ruleForm">
                     <el-row>
@@ -91,7 +91,7 @@
                 <el-input class="search-input" size="mini" prefix-icon="el-icon-search" placeholder="请输入账户号" v-model="searchAccountText"></el-input>
             </div>
             <div slot="content">
-                <s-table :columns="columns" :tableData="tableData">
+                <s-table :columns="columns" :tableData="tableData" :showSelectionColumn="true" @selection-change="handleSelectChange">
                     <el-table-column
                         :width="300"
                         slot="tableColumnsPush"
@@ -106,9 +106,19 @@
                 </s-table>
             </div>
         </s-card>
+        <div style="text-align:center; margin: 30px 0;">
+            <el-button size="small" type="primary" style="width: 100px;" @click="nextStep">下一步</el-button>
+        </div>
         <el-dialog :close-on-click-modal="false" :close-on-press-escape="false" :custom-class="`self-dialog`"
                    :visible="showDialog" width="85%" @close="handleCloseDialog" :title="`${operateType === 1 ? '查看' : operateType === 2 ? '编辑' : '新增'}场景配置`">
-            <edit-scene-dialog :operateType="operateType" :dialogItem="dialogItem"></edit-scene-dialog>
+            <edit-scene-dialog :operateType="operateType" :dialogItem="dialogItem" :createType="dialogItem.createType"></edit-scene-dialog>
+        </el-dialog>
+        <el-dialog :close-on-click-modal="false" :close-on-press-escape="false" :custom-class="`self-dialog`" :visible="showCarousel" width="85%" top="5%" @close="handleCloseCarousel">
+            <el-carousel :interval="4000" height="600px">
+                <el-carousel-item v-for="(item, index) in selectList" :key="index">
+                    <edit-scene-dialog :confirmCommitMode="true" :operateType="1" :dialogItem="item" :createType="item.createType"></edit-scene-dialog>
+                </el-carousel-item>
+            </el-carousel>
         </el-dialog>
     </div>
 </template>
@@ -127,6 +137,7 @@ export default {
             createTypeOptions,
             resultList: [{label: '结果集1', value: '1'}],
             showDialog: false,
+            showCarousel: false,
             uploadOption: {
                 name: '上传',
                 size: 'small',
@@ -141,14 +152,16 @@ export default {
                 selectDateRange: []
             },
             tableData: [
-                {a: 1, b: 2, c: 3}
+                {a: 1, createType: 1, c: 3},
+                {a: 1, createType: 2, c: 3},
+                {a: 1, createType: 0, c: 3},
             ],
             columns: [
                 {
                     label: '场景名称', field: 'a'
                 },
                 {
-                    label: '场景类型', field: 'b'
+                    label: '场景类型', field: 'createType'
                 },
                 {
                     label: '场景说明', field: 'c'
@@ -164,7 +177,8 @@ export default {
             ],
             dialogItem: {},
             operateType: 0,
-            createType: ''
+            createType: '',
+            selectList: []
         };
     },
     methods: {
@@ -196,6 +210,20 @@ export default {
                 this.openDialog({}, 0, val);
                 this.createType = '';
             }
+        },
+        handleCloseCarousel() {
+            this.showCarousel = false;
+        },
+        nextStep() {
+            if (!this.selectList.length) {
+                this.$message.error('请选择一个场景');
+                return;
+            }
+            this.showCarousel = true;
+        },
+        handleSelectChange(val) {
+            console.log(val);
+            this.selectList = val;
         }
     }
 };
@@ -234,6 +262,9 @@ export default {
         }
         .custom-width {
             width: 350px;
+        }
+        /deep/ .el-carousel__container {
+            min-height: 500px;
         }
     }
 </style>

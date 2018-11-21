@@ -13,6 +13,7 @@
                 </el-aside>
                 <el-main :class="$style.maicontainersn">
                     <router-view/>
+                    <!-- <bottom-operate-button></bottom-operate-button> -->
                 </el-main>
             </div>
         </div>
@@ -21,11 +22,13 @@
 
 <script>
 import AsideMenu from '@/components/index/home/menu';
+// import BottomOperateButton from '@/components/index/home/BottomOperateButton';
 import menu from '@/helper/menu';
 
 export default {
     components: {
         AsideMenu,
+        // BottomOperateButton,
         HeadTop: () => import('@/components/index/home/headTop.vue'),
     },
     data() {
@@ -75,12 +78,14 @@ export default {
         padding: 0;
         margin: 0;
         position: relative;
+        overflow: auto;
     }
     .aside {
         background: url('../../../assets/img/common/meunbj.png') no-repeat;
         height: 1080px;
         width: 200px;
         box-shadow: 0 0 10px #326fcb;
+        position: fixed;
     }
     .middle {
         display: flex;
@@ -89,6 +94,8 @@ export default {
         width: calc(100% - 180px);
         height: 100%;
         color: #fff;
+        margin-left: 200px;
+        margin-bottom: 30px;
     }
 
     .switch {

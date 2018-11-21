@@ -9,33 +9,33 @@
             <!-- 无二级子节点 -->
             <el-menu-item v-if="!item.children && !item.hidden" :index="item.path" :key="index">
                 <i :class="item.icon"></i>
-                <span slot="title">{{ item.name }}</span>
+                <span slot="title">{{ item.label }}</span>
             </el-menu-item>
 
             <!-- 有二级子节点 -->
-            <el-submenu v-if="item.children && !item.hidden" :index="item.name" :key="index">
+            <el-submenu v-if="item.children && !item.hidden" :index="item.label" :key="index">
                 <template slot="title">
                     <i :class="item.icon"></i>
-                    <span>{{ item.name }}</span>
+                    <span>{{ item.label }}</span>
                 </template>
                 <template v-for="(item1, index1) in item.children">
                     <!-- 无三级菜单 -->
                     <el-menu-item v-if="!item1.children" :index="`${item.path}${item1.path}`" :key="index1">
-                        <i :class="item1.icon"></i>{{ item1.name }}
+                        <i :class="item1.icon"></i>{{ item1.label }}
                     </el-menu-item>
 
                     <!-- 有三级菜单 -->
                     <template v-if="item1.children">
-                        <el-submenu :index="item1.name" :key="index1">
+                        <el-submenu :index="item1.label" :key="index1">
                             <template slot="title">
                                 <i :class="item1.icon"></i>
-                                <span>{{ item1.name }}</span>
+                                <span>{{ item1.label }}</span>
                             </template>
                             <el-menu-item
                                 v-for="(item2, index2) in item1.children"
                                 :index="`${item.path}${item1.path}${item2.path}`"
                                 :key="index2">
-                                <i :class="item2.icon"></i>{{ item2.name }}
+                                <i :class="item2.icon"></i>{{ item2.label }}
                             </el-menu-item>
                         </el-submenu>
                     </template>
