@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <div id="nav">
+        <div class="app-nav">
             <router-link to="/">Home1111111</router-link> |
             <router-link to="/about">About222222222</router-link>
         </div>
@@ -20,7 +20,7 @@
     color: #2c3e50;
 }
 
-#nav {
+.app-nav {
     padding: 30px;
 
     a {

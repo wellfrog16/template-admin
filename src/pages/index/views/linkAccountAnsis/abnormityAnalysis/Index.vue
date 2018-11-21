@@ -1,5 +1,6 @@
 <template>
     <div class="scene-config-page">
+        <bread-crumb :breadcrumbList="breadcrumbs"></bread-crumb>
         <s-card class="basic-info" :title="`客户群体选择`" :icon="`el-icon-edit`">
             <div slot="content">
                 <el-form ref="ruleForm" :model="ruleForm">
@@ -60,12 +61,21 @@
     </div>
 </template>
 <script>
-import STable from '@/components/index/common/STable';
-import SCard from '@/components/index/common/SCard';
 export default {
-    components: {STable, SCard},
+    components: {
+        BreadCrumb: () => import('@/components/index/home/breadCrumbs'),
+        STable: () => import('@/components/index/common/STable'),
+        SCard: () => import('@/components/index/common/SCard'),
+    },
     data() {
         return {
+            // 面包屑
+            breadcrumbs: [
+                {
+                    router: '',
+                    label: '分析工具'
+                }
+            ],
             ruleForm: {
                 a: '9'
             },

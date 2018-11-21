@@ -1,5 +1,5 @@
 <template>
-    <div :class="$style.nav">
+    <div :class="$style.headtop">
         <div :class="$style.nav_log"></div>
         <!-- <div :class="$style.user_role">
             <el-input :class="$style.search " type="text"></el-input>
@@ -24,7 +24,7 @@ export default {
     @import '../../../assets/style/config.less';
 
     @height: 60px;
-    .nav {
+    .headtop {
         width: 100%;
         height: @height;
         border-bottom: 1px solid #0763edf0;
