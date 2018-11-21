@@ -2,15 +2,20 @@
     <div :class="$style.container">
         <nav-top></nav-top>
         <div :class="$style.containers">
-            <el-aside :class="$style.aside" :width="width">
-                <aside-menu class="aside-menu" :data="menuData" :collapse="collapse" background-color="#1f2d3d"
-                            text-color="#fff"/>
-            </el-aside>
-            <el-main :class="$style.main">
-                <router-view/>
-            </el-main>
+            <div :class="$style.middle">
+                <el-aside :class="$style.aside" :width="width">
+                    <aside-menu
+                        class="aside-menu"
+                        :data="menuData"
+                        :collapse="collapse"
+                        background-color="#1f2d3d"
+                        text-color="#fff"/>
+                    </el-aside>
+                <el-main :class="$style.maicontainersn">
+                    <router-view/>
+                </el-main>
+            </div>
         </div>
-
     </div>
 </template>
 
@@ -25,7 +30,7 @@
         },
         data() {
             return {
-                width: 'auto',
+                width: '200',
                 collapse: false,
                 menuData: menu.filter(this.$router.options.routes)
             };
@@ -49,24 +54,40 @@
 
 <style>
     .aside-menu:not(.el-menu--collapse) {
-        width: 249px;
-        background-color: rgb(4, 28, 66);
+        width: 100%;
+        border-right: solid 0;
     }
 </style>
 
 <style lang="less" module>
     @import '../../../assets/style/config.less';
     @height: 60px;
+
     .container {
         width: 100%;
         height: 100vh;
     }
 
     .containers {
-        display: flex;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin: 0;
+        position: relative;
     }
     .aside {
+        background: url('../../../assets/img/common/meunbj.png') no-repeat;
+        height: 1080px;
         width: 200px;
+        box-shadow: 0 0 10px #326fcb;
+    }
+    .middle {
+        display: flex;
+    }
+    .maicontainersn {
+        width: calc(100% - 180px);
+        height: 100%;
+        color: #fff;
     }
 
     .switch {

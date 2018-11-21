@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Home from '../views/Home.vue';
+import LinkAccountAnsis from '../views/linkAccountAnsis/Index.vue';
 
 Vue.use(Router);
 
@@ -39,23 +40,46 @@ const router = new Router({
     routes: [
         {
             path: '',
-            name: '一级菜单',
+            name: '研究支撑平台',
             component: Home,
             icon: 'el-icon-setting',
             children: [
-                {path: 'demo', name: 'Demo', icon: 'el-icon-tickets', component: resolve => require(['../views/demo/Index.vue'], resolve)},
-                {path: 'log', name: '二级菜单2', icon: 'el-icon-document', component: Root},
-                {path: 'file', name: '二级菜单3', icon: 'menu-fix-icon fas fa-angry fa-lg', component: Root},
                 {
-                    path: 'config',
-                    name: '二级菜单4',
-                    component: Root,
-                    icon: 'el-icon-setting',
-                    children: [
-                        {path: 'dictionary', name: '三级菜单1', icon: 'el-icon-document', component: Root},
-                        {path: 'dictionary', name: '三级菜单2', icon: 'el-icon-document', component: Root}
-                    ]
-                }
+                    path: 'demo',
+                    name: 'Demo', icon: 'el-icon-tickets',
+                    component: resolve => require(['../views/demo/Index.vue'], resolve)
+                },
+                // {
+                //     path: 'log',
+                //     name: '二级菜单2',
+                //     icon: 'el-icon-document',
+                //     component: Root},
+                // {
+                //     path: 'file',
+                //     name: '二级菜单3',
+                //     icon: 'menu-fix-icon fas fa-angry fa-lg',
+                //     component: Root
+                // },
+                // {
+                //     path: 'config22',
+                //     name: '二级菜单4',
+                //     component: Root,
+                //     icon: 'el-icon-setting',
+                //     children: [
+                //         {
+                //             path: 'dictionary',
+                //             name: '三级菜单1',
+                //             icon: 'el-icon-document',
+                //             component: Root
+                //         },
+                //         {
+                //             path: 'dictionary1',
+                //             name: '三级菜单2',
+                //             icon: 'el-icon-document',
+                //             component: Root
+                //         }
+                //     ]
+                // }
             ]
         },
         {
@@ -64,19 +88,84 @@ const router = new Router({
             component: Home,
             icon: 'menu-fix-icon fas fa-sun fa-lg',
             children: [
-                {path: 'sceneConfig', name: '场景设置', icon: 'el-icon-document', component: resolve => require(['../views/sceneConfig/Index.vue'], resolve)},
-                {path: 'abnormityAnalysis', name: '异常行为分析', icon: 'el-icon-document', component: resolve => require(['../views/abnormityAnalysis/Index.vue'], resolve)},
                 {
                     path: '',
                     name: '关联账户分析',
-                    component: Root,
-                    icon: 'el-icon-setting',
+                    component: LinkAccountAnsis,
                     children: [
-                        {path: 'sceneConfig', name: '场景设置', icon: 'el-icon-document', component: Root},
-                        {path: 'abnormityAnalysis', name: '异常行为分析', icon: 'el-icon-document', component: Root}
+                        {
+                            path: '/sceneConfig',
+                            name: '分析向导',
+                            icon: 'el-icon-more',
+                            component: resolve => require(['../views/linkAccountAnsis/sceneConfig/Index.vue'], resolve)
+                        },
+                        {
+                            path: 'log',
+                            name: '关联账户组合并',
+                            icon: 'el-icon-more',
+                            component: Root
+                        },
+                        {
+                            path: 'file',
+                            name: '组合场景合并',
+                            icon: 'el-icon-more',
+                            component: Root
+                        },
+                        {
+                            path: 'dictionary',
+                            name: '异常交易分析',
+                            icon: 'el-icon-more',
+                            component: resolve => require(['../views/linkAccountAnsis/abnormityAnalysis/Index.vue'], resolve)
+                        },
+                        {
+                            path: 'dictionary1',
+                            name: '账户组画像',
+                            icon: 'el-icon-more',
+                            component: Root
+                        },
+                        {
+                            path: 'demo11',
+                            name: '客户信息查询',
+                            icon: 'el-icon-more',
+                            component: resolve => require(['../views/demo/Index.vue'], resolve)
+                        }
                     ]
                 }
             ]
+            // children: [
+            //     {
+            //         path: 'sceneConfig',
+            //         name: '场景设置',
+            //         icon: 'el-icon-document',
+            //         component: resolve => require(['../views/sceneConfig/Index.vue'], resolve)
+            //     },
+            //     {
+            //         path: 'abnormityAnalysis',
+            //         name: '异常行为分析',
+            //         icon: 'el-icon-document',
+            //         component: resolve => require(['../views/abnormityAnalysis/Index.vue'], resolve)
+            //     },
+            //     {
+            //         path: 'ssss',
+            //         name: '关联账户分析',
+            //         component: Root,
+            //         icon: 'el-icon-setting',
+            //         children: [
+            //             {
+            //                 path: 'sceneConfig',
+            //                 name: '场景设置',
+            //                 icon: 'el-icon-document',
+            //                 component: Root
+            //             },
+            //             {
+            //                 path: 'abnormityAnalysis',
+            //                 name: '异常行为分析',
+            //                 icon: 'el-icon-document',
+            //                 component: Root
+            //             }
+            //         ]
+            //     }
+            // ]
         },
         {
             path: '/about',
@@ -97,7 +186,7 @@ const router = new Router({
     ]
 });
 
-// todo
+
 router.beforeEach((to, from, next) => {
     // todo权限校验等
     next();

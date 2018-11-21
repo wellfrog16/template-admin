@@ -14,18 +14,26 @@
 
             <!-- 有二级子节点 -->
             <el-submenu v-if="item.children && !item.hidden" :index="item.name" :key="index">
-                <template slot="title"><i :class="item.icon"></i><span>{{ item.name }}</span></template>
+                <template slot="title">
+                    <i :class="item.icon"></i>
+                    <span>{{ item.name }}</span>
+                </template>
                 <template v-for="(item1, index1) in item.children">
                     <!-- 无三级菜单 -->
-                    <el-menu-item v-if="!item1.children" :index="`${item.path}/${item1.path}`" :key="index1"><i :class="item1.icon"></i>{{ item1.name }}</el-menu-item>
+                    <el-menu-item v-if="!item1.children" :index="`${item.path}${item1.path}`" :key="index1">
+                        <i :class="item1.icon"></i>{{ item1.name }}
+                    </el-menu-item>
 
                     <!-- 有三级菜单 -->
                     <template v-if="item1.children">
                         <el-submenu :index="item1.name" :key="index1">
-                            <template slot="title"><i :class="item1.icon"></i><span>{{ item1.name }}</span></template>
+                            <template slot="title">
+                                <i :class="item1.icon"></i>
+                                <span>{{ item1.name }}</span>
+                            </template>
                             <el-menu-item
                                 v-for="(item2, index2) in item1.children"
-                                :index="`${item.path}/${item1.path}/${item2.path}`"
+                                :index="`${item.path}${item1.path}${item2.path}`"
                                 :key="index2">
                                 <i :class="item2.icon"></i>{{ item2.name }}
                             </el-menu-item>
