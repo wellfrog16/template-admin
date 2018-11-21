@@ -7,13 +7,20 @@
                         <el-col :xl="12" :lg="12" :md="12" :sm="24" style="border-right:1px solid #ccc;">
                             <el-form-item prop="a">
                                 <el-radio-group v-model="ruleForm.exportType">
-                                    <el-radio>
+                                    <el-radio label="0">
                                         <el-form-item prop="resultName" label="导入结果集" label-width="140px" style="display:inline-block; padding: 5px 0;">
-                                            <el-select size="small" class="custom-width"></el-select>
+                                            <el-select class="custom-width" clearable size="small" v-model="ruleForm.b">
+                                                <el-option
+                                                    v-for="item in resultList"
+                                                    :key="item.value"
+                                                    :label="item.label"
+                                                    :value="item.value">
+                                                </el-option>
+                                            </el-select>
                                         </el-form-item>
                                     </el-radio>
                                     <br>
-                                    <el-radio>
+                                    <el-radio label="1">
                                         <el-form-item prop="resultName" label="导入CSV" label-width="140px" style="display:inline-block; padding: 5px 0;">
                                             <div>
                                                 <upload-common
@@ -31,11 +38,11 @@
                                         </el-form-item>
                                     </el-radio>
                                     <br>
-                                    <el-radio>
+                                    <el-radio label="2">
                                         <el-form-item prop="resultName" label="导入连续客户号" label-width="140px" style="display:inline-block; padding: 5px 0;">
-                                            <el-input size="small" v-model="ruleForm.a" style="width: 150px;"></el-input>
-                                            <span style="color: #fff; margin: 0 20px;">-</span>
-                                            <el-input size="small" v-model="ruleForm.a" style="width: 150px;"></el-input>
+                                            <el-input clearable size="small" v-model="ruleForm.a" style="width: 150px;"></el-input>
+                                            <span style="color: #fff; margin: 0 20px;">~</span>
+                                            <el-input clearable size="small" v-model="ruleForm.a" style="width: 150px;"></el-input>
                                         </el-form-item>
                                     </el-radio>
                                     <br>
@@ -56,7 +63,7 @@
                                 </div>
                             </el-form-item>
                             <el-form-item prop="a" label="合约代码" label-width="140px">
-                                <el-input size="small" v-model="ruleForm.a" class="custom-width"></el-input>
+                                <el-input clearable size="small" v-model="ruleForm.a" class="custom-width"></el-input>
                             </el-form-item>
                             <el-form-item prop="selectDateRange" label="时间区间" label-width="140px">
                                 <s-date-picker
@@ -70,15 +77,14 @@
                 </el-form>
             </div>
         </s-card>
-        <s-card class="table-container" :title="`场景配置`" :subTitle="`可多选`" :icon="`el-icon-edit`">
+        <s-card class="table-container" :title="`场景配置`" :subTitle="`（ * 场景可多选 ）`" :icon="`el-icon-setting`">
             <div slot="right">
                 <el-popover
                     placement="right"
-                    width="400"
+                    width="200"
                     trigger="click">
                     <el-radio-group v-model="createType" @change="handleRadioChange">
-                        <el-radio v-for="(item, index) in createTypeOptions" :key="index" :label="item.value">{{ item.label }}</el-radio>
-                        <br>
+                        <el-radio style="display:block; padding: 10px; margin: 0;" v-for="(item, index) in createTypeOptions" :key="index" :label="item.value">{{ item.label }}</el-radio>
                     </el-radio-group>
                     <el-button slot="reference" class="new-btn" type="primary" size="mini"><i class="el-icon-plus"></i>新增自定义场景</el-button>
                 </el-popover>
@@ -92,9 +98,9 @@
                         label="操作"
                         show-overflow-tooltip>
                         <template slot-scope="scope">
-                            <el-button type="primary" size="small" @click="openDialog(item, 1)">查看</el-button>
-                            <el-button type="warning" size="small" @click="openDialog(item, 2)">编辑</el-button>
-                            <el-button type="danger" size="small" v-if="scope.row.a === 1">删除</el-button>
+                            <el-button type="primary" size="small" @click="openDialog(scope.row, 1)" icon="el-icon-view">查看</el-button>
+                            <el-button type="warning" size="small" @click="openDialog(scope.row, 2)" icon="el-icon-edit">编辑</el-button>
+                            <el-button type="danger" size="small" v-if="scope.row.a === 1" icon="el-icon-delete">删除</el-button>
                         </template>
                     </el-table-column>
                 </s-table>
@@ -119,6 +125,7 @@ export default {
     data() {
         return {
             createTypeOptions,
+            resultList: [{label: '结果集1', value: '1'}],
             showDialog: false,
             uploadOption: {
                 name: '上传',
@@ -128,7 +135,9 @@ export default {
             uploadBasicUrl: '',
             defaultLimitFileType: ['xls', 'xlsx'],
             ruleForm: {
+                exportType: '',
                 a: '9',
+                b: '',
                 selectDateRange: []
             },
             tableData: [
@@ -177,13 +186,16 @@ export default {
         handleCloseDialog() {
             this.showDialog = false;
         },
-        openDialog(item, type) {
+        openDialog(item, type, createType) {
             this.showDialog = true;
             this.operateType = type;
             this.dialogItem = item;
         },
-        handleRadioChange() {
-            this.openDialog({}, 0);
+        handleRadioChange(val) {
+            if (val) {
+                this.openDialog({}, 0, val);
+                this.createType = '';
+            }
         }
     }
 };
