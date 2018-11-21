@@ -1,139 +1,49 @@
 <template>
-    <div class="scene-config-page">
+    <div :class="$style.abnormity_analysis">
         <bread-crumb :breadcrumbList="breadcrumbs"></bread-crumb>
-        <s-card class="basic-info" :title="`客户群体选择`" :icon="`el-icon-edit`">
-            <div slot="content">
-                <el-form ref="ruleForm" :model="ruleForm">
-                    <el-row>
-                        <el-col :xl="12" :lg="12" :md="12" :sm="24">
-                            <el-form-item prop="a">
-                                <el-radio-group v-model="ruleForm.exportType">
-                                    <el-radio>
-                                        <el-form-item prop="resultName" label="导入结果集" label-width="140px" style="display:inline-block; padding: 5px 0;">
-                                            <el-select size="small"></el-select>
-                                        </el-form-item>
-                                    </el-radio>
-                                    <br>
-                                    <el-radio>
-                                        <el-form-item prop="resultName" label="导入CSV" label-width="140px" style="display:inline-block; padding: 5px 0;">
-                                            <el-select size="small"></el-select>
-                                        </el-form-item>
-                                    </el-radio>
-                                    <br>
-                                    <el-radio>
-                                        <el-form-item prop="resultName" label="导入连续客户号" label-width="140px" style="display:inline-block; padding: 5px 0;">
-                                            <el-select size="small"></el-select>
-                                        </el-form-item>
-                                    </el-radio>
-                                    <br>
-                                </el-radio-group>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :xl="12" :lg="12" :md="12" :sm="24">
-                            <el-form-item prop="a" label="地区选择" label-width="140px">
-                                <div>
-                                    <el-tree
-                                        :props="defaultProps"
-                                        show-checkbox
-                                        :data="areaData"
-                                        node-key="id"
-                                        @check-change="handleCheckChange">
-                                    </el-tree>
-                                </div>
-                            </el-form-item>
-                            <el-form-item prop="a" label="合约代码" label-width="140px">
-                                <el-input size="small" v-model="ruleForm.a" style="width: 300px;"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                </el-form>
-            </div>
-        </s-card>
-        <s-card class="table-container" :title="`场景配置`" :subTitle="`可多选`" :icon="`el-icon-edit`">
-            <div slot="right">
-                <el-button class="new-btn" type="primary" size="mini"><i class="el-icon-plus"></i>新增自定义场景</el-button>
-                <el-input class="search-input" size="mini" prefix-icon="el-icon-search" placeholder="请输入账户号" v-model="searchAccountText"></el-input>
-            </div>
-            <div slot="content">
-                <s-table :columns="columns" :tableData="tableData"></s-table>
-            </div>
-        </s-card>
+        <card-form :class="$style.a_form_box"></card-form>
+        <card-table :class="$style.a_form_box"></card-table>
     </div>
 </template>
 <script>
 export default {
     components: {
         BreadCrumb: () => import('@/components/index/home/breadCrumbs'),
-        STable: () => import('@/components/index/common/STable'),
-        SCard: () => import('@/components/index/common/SCard'),
+        CardForm: () => import('../abnormityAnalysis/components/cardForm'),
+        CardTable: () => import('../abnormityAnalysis/components/cardTable')
+
     },
     data() {
         return {
             // 面包屑
             breadcrumbs: [
                 {
-                    router: '',
-                    label: '分析工具'
-                }
-            ],
-            ruleForm: {
-                a: '9'
-            },
-            tableData: [],
-            columns: [
+                    router: '/',
+                    label: '首页'
+                },
                 {
-                    label: '1', field: 'a'
+                    router: '',
+                    label: '数据分析工具'
+                },
+                {
+                    router: 'dictionary',
+                    label: '异常交易分析'
                 }
             ],
-            searchAccountText: '',
-            defaultProps: {
-                children: 'children',
-                label: 'label'
-            },
-            areaData: [
-                {id: 0, label: '北京', children: [{id: 1, label: '丰台区'}]}
-            ]
+
         };
     },
     methods: {
-        handleCheckChange(val) {
-            console.log(val);
-        }
+
     }
 };
 </script>
-<style lang="less" scoped>
-    .scene-config-page {
+<style lang="less" module>
+    .abnormity_analysis {
         color: #fff;
-
-        .el-form {
-            color: #fff;
-        }
-
-        .new-btn {
-            margin-left: 15px;
-        }
-
-        /deep/ .el-tree {
-            width: 300px;
-            max-height: 100px;
-            margin-top: 5px;
-            min-height: 30px;
-            padding-top: 5px;
-            border-radius: 3px;
-            overflow: auto;
-        }
-
-        .search-input {
-            width: 180px;
-
-            /deep/ input {
-                border-radius: 15px;
-            }
-
-            /deep/ i {
-                color: #3c70a5 !important;
-            }
+        .a_form_box {
+            box-shadow: 0 0 10px #326fcb;
+            margin-bottom: 20px;
         }
     }
 </style>
