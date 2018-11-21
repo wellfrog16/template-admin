@@ -24,7 +24,7 @@
                             </el-checkbox-group>
                         </el-form-item>
                         <p class="remark">* 缩小账户范围能提升计算效率</p>
-                        <el-form-item label-width="140px" prop="cc" label="统计频度" style="padding-left:23px;">
+                        <el-form-item label-width="140px" prop="cc" label="统计频度" style="padding-left:23px; margin-bottom: 30px;">
                             <el-select :disabled="disabled" :clearabled="!disabled" size="small" v-model="ruleForm.cc" class="custom-width">
                                 <el-option
                                     v-for="item in options"
@@ -36,11 +36,25 @@
                         </el-form-item>
                     </el-form>
                 </s-card>
+                <div style="margin-top:8px; text-align: left;">
+                    <el-button size="small" type="primary">恢复默认设置</el-button>
+                </div>
             </el-col>
-            <el-col :span='12'>
+            <el-col :span='12' class="right-block">
                 <s-card :title="`相关性指标选择`">
                     <el-row slot="content">
-                        <s-table :columns="columns" :tableData="tableData" :height="200"></s-table>
+                        <s-table :showHeader="false" :columns="correlationIndexColumns" :tableData="tableData" :height="200" :otherProps="{unit: '%', disabled: disabled}">
+                            <el-table-column
+                                :width="100"
+                                align="center"
+                                slot="tableColumnsPush"
+                                label="操作"
+                                show-overflow-tooltip>
+                                <template slot-scope="scope">
+                                    <el-button type="text" size="small" @click="handleInsert(scope.row)">插入</el-button>
+                                </template>
+                            </el-table-column>
+                        </s-table>
                     </el-row>
                 </s-card>
                 <div class="button-group">
@@ -49,15 +63,26 @@
                     <el-button @click="insertText('()')"  :disabled="disabled" size="mini" type="primary">(...)</el-button>
                 </div>
                 <div class="textarea-css">
-                    <el-input type="textarea" placeholder="示例" :readonly="disabled" id="textarea" v-model="textareaContent"></el-input>
+                    <el-input :rows="4" type="textarea" placeholder="示例" :readonly="disabled" id="textarea" v-model="textareaContent"></el-input>
+                </div>
+                <div style="margin-top:8px; text-align:right;">
+                    <el-button size="small" type="primary">语法检查</el-button>
                 </div>
             </el-col>
+        </el-row>
+        <el-row style="margin-top:10px; text-align:center;">
+            <el-input style="margin-right: 5px;" size="small" v-model="sceneName" placeholder="请输入场景名称" class="custom-width"></el-input>
+            <el-input style="margin-right: 5px;" size="small" v-model="sceneRemark" placeholder="请输入场景说明" class="custom-width"></el-input>
+            <el-button size="small" type="primary">保存场景</el-button>
+            <!-- <el-button size="small" type="primary">上一页</el-button> -->
+            <!-- <el-button size="small" type="primary">下一页</el-button> -->
         </el-row>
     </div>
 </template>
 <script>
 import SCard from '@/components/index/common/SCard';
 import STable from '@/components/index/common/STable';
+import {correlationIndexColumns} from './constants';
 export default {
     components: {SCard, STable},
     props: {
@@ -79,6 +104,7 @@ export default {
     },
     data() {
         return {
+            correlationIndexColumns,
             options: [{
                 value: '0', label: '按持仓量'
             }],
@@ -94,18 +120,19 @@ export default {
                 b: '',
                 cc: ''
             },
-            columns: [
-                {field: 'a', label: '指标名称'},
-                {field: 'b', label: '条件'},
-                {field: 'c', label: '值'},
-            ],
             tableData: [
-                {a: 1, b: 1, c: 2}
+                {a: '指标1', b: '>=', c: '90'}
             ],
-            textareaContent: ''
+            textareaContent: '',
+            sceneName: '',
+            sceneRemark: ''
         };
     },
     methods: {
+        handleInsert(item) {
+            let str = `${item.a} ${item.b} ${item.c}%`;
+            this.insertText(str);
+        },
         insertText(str, obj) {
             obj = obj || document.getElementById('textarea');
             if (document.selection) {
@@ -146,6 +173,9 @@ export default {
 </script>
 <style lang='less' scoped>
     .edit-scene-dialog {
+        .el-card {
+            background: #07182e;
+        }
         .unit-css {
             color: #fff;
             margin-left: 5px;
@@ -160,12 +190,20 @@ export default {
             margin-top: -17px;
             padding-left: 58px;
             font-size: 12px;
-            color: yellow;
+            color: rgb(239, 156, 0);
         }
         .el-table {
-            tr {
-                line-height: 20px;
-                height: 20px;
+            background: #07182e;
+            border: none;
+            /deep/ tr {
+                background: #07182e !important;
+                border: none;
+            }
+            /deep/ td {
+                border-color: #202a33;
+            }
+            button {
+                color: #0089ff;
             }
         }
         .button-group {
@@ -177,8 +215,14 @@ export default {
         }
         .textarea-css {
             /deep/ .el-textarea__inner {
-                background-color: rgb(7, 23, 46);
+                background-color: #07182e;
                 color: #fff;
+                border: none;
+            }
+        }
+        .right-block {
+            /deep/ .el-card__body {
+                padding: 0;
             }
         }
     }

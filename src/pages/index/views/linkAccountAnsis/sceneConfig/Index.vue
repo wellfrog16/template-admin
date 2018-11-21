@@ -45,13 +45,14 @@
                         <el-col :xl="12" :lg="12" :md="12" :sm="24">
                             <el-form-item prop="a" label="地区选择" label-width="140px">
                                 <div>
-                                    <el-tree
+                                    <!-- <el-tree
                                         :props="defaultProps"
                                         show-checkbox
                                         :data="areaData"
                                         node-key="id"
                                         @check-change="handleCheckChange">
-                                    </el-tree>
+                                    </el-tree> -->
+                                    <tree-common :isMultipleMode="true"></tree-common>
                                 </div>
                             </el-form-item>
                             <el-form-item prop="a" label="合约代码" label-width="140px">
@@ -71,7 +72,16 @@
         </s-card>
         <s-card class="table-container" :title="`场景配置`" :subTitle="`可多选`" :icon="`el-icon-edit`">
             <div slot="right">
-                <el-button class="new-btn" type="primary" size="mini" @click="openDialog({}, 0)"><i class="el-icon-plus"></i>新增自定义场景</el-button>
+                <el-popover
+                    placement="right"
+                    width="400"
+                    trigger="click">
+                    <el-radio-group v-model="createType" @change="handleRadioChange">
+                        <el-radio v-for="(item, index) in createTypeOptions" :key="index" :label="item.value">{{ item.label }}</el-radio>
+                        <br>
+                    </el-radio-group>
+                    <el-button slot="reference" class="new-btn" type="primary" size="mini"><i class="el-icon-plus"></i>新增自定义场景</el-button>
+                </el-popover>
                 <el-input class="search-input" size="mini" prefix-icon="el-icon-search" placeholder="请输入账户号" v-model="searchAccountText"></el-input>
             </div>
             <div slot="content">
@@ -90,7 +100,8 @@
                 </s-table>
             </div>
         </s-card>
-        <el-dialog class="edit-dialog" :visible="showDialog" width="85%" @close="handleCloseDialog" :title="`${operateType === 1 ? '查看' : operateType === 2 ? '编辑' : '新增'}场景配置`">
+        <el-dialog :close-on-click-modal="false" :close-on-press-escape="false" :custom-class="`self-dialog`"
+                   :visible="showDialog" width="85%" @close="handleCloseDialog" :title="`${operateType === 1 ? '查看' : operateType === 2 ? '编辑' : '新增'}场景配置`">
             <edit-scene-dialog :operateType="operateType" :dialogItem="dialogItem"></edit-scene-dialog>
         </el-dialog>
     </div>
@@ -100,12 +111,15 @@ import STable from '@/components/index/common/STable';
 import SCard from '@/components/index/common/SCard';
 import SDatePicker from '@/components/index/common/SDatePicker';
 import UploadCommon from '@/components/index/common/UploadCommon';
+import TreeCommon from '@/components/index/common/TreeCommon';
 import EditSceneDialog from './components/EditSceneDialog';
+import {createTypeOptions} from './components/constants';
 export default {
-    components: {STable, SCard, SDatePicker, UploadCommon, EditSceneDialog},
+    components: {STable, SCard, SDatePicker, UploadCommon, TreeCommon, EditSceneDialog},
     data() {
         return {
-            showDialog: true,
+            createTypeOptions,
+            showDialog: false,
             uploadOption: {
                 name: '上传',
                 size: 'small',
@@ -140,7 +154,8 @@ export default {
                 {id: 0, label: '北京', children: [{id: 1, label: '丰台区'}]}
             ],
             dialogItem: {},
-            operateType: 0
+            operateType: 0,
+            createType: ''
         };
     },
     methods: {
@@ -166,6 +181,9 @@ export default {
             this.showDialog = true;
             this.operateType = type;
             this.dialogItem = item;
+        },
+        handleRadioChange() {
+            this.openDialog({}, 0);
         }
     }
 };

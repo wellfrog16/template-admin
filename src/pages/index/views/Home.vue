@@ -10,7 +10,7 @@
                         :collapse="collapse"
                         background-color="#1f2d3d"
                         text-color="#fff"/>
-                    </el-aside>
+                </el-aside>
                 <el-main :class="$style.maicontainersn">
                     <router-view/>
                 </el-main>
@@ -20,36 +20,37 @@
 </template>
 
 <script>
-    import AsideMenu from '@/components/index/home/menu';
-    import menu from '@/helper/menu';
+import AsideMenu from '@/components/index/home/menu';
+import menu from '@/helper/menu';
 
-    export default {
-        components: {
-            AsideMenu,
-            NavTop: () => import("@/components/index/home/nav.vue"),
-        },
-        data() {
-            return {
-                width: '200',
-                collapse: false,
-                menuData: menu.filter(this.$router.options.routes)
-            };
-        },
-        methods: {
-            toggle() {
-                const swit = this.$jquery(`.${this.$style.switch}`);
-                const target = this.$jquery(`.${this.$style.logo} span`);
-                if (this.collapse) {
-                    setTimeout(() => target.show(), 100);
-                    swit.removeClass(this.$style['switch-tran']);
-                } else {
-                    target.hide();
-                    swit.addClass(this.$style['switch-tran']);
-                }
-                this.collapse = !this.collapse;
+export default {
+    components: {
+        AsideMenu,
+        NavTop: () => import('@/components/index/home/nav.vue'),
+    },
+    data() {
+        return {
+            width: '200',
+            collapse: false,
+            menuData: menu.filter(this.$router.options.routes)
+        };
+    },
+    methods: {
+        toggle() {
+            const swit = this.$jquery(`.${this.$style.switch}`);
+            const target = this.$jquery(`.${this.$style.logo} span`);
+            if (this.collapse) {
+                setTimeout(() => target.show(), 100);
+                swit.removeClass(this.$style['switch-tran']);
+            } else {
+                target.hide();
+                swit.addClass(this.$style['switch-tran']);
             }
+            this.collapse = !this.collapse;
         }
-    };
+    }
+};
+
 </script>
 
 <style>
@@ -101,6 +102,6 @@
     }
 
     .main {
-        background-color: #f0f2f5;
+        background-color: #0b2453;
     }
 </style>

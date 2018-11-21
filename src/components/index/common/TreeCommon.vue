@@ -17,15 +17,16 @@
             :width="popoverWidth"
             :disabled="disabled"
             trigger="click">
-            <div style=" height: 200px; overflow-y: scroll;">
+            <div style="height: 200px; overflow-y: scroll;">
                 <el-tree
+                    style="width:350px;"
                     ref="selectorDealer"
                     :show-checkbox="isMultipleMode"
                     :props="props"
                     :data="data"
                     accordion
                     :filter-node-method="filterNode"
-                    node-key="usercode"
+                    node-key="id"
                     :default-expanded-keys="defaultExpandedKeys"
                     @node-click="handlerNodeClick"
                     @check-change="handleMulitpleChange"
@@ -68,13 +69,30 @@ export default {
         return {
             names: [],
             value: '',
-            userCode: '',
-            popoverWidth: 270,
+            id: '',
+            popoverWidth: 326,
             props: {
                 children: 'children',
-                label: 'username'
+                label: 'label'
             },
-            data: [],
+            data: [
+                {
+                    label: '北京市',
+                    id: '10001',
+                    children: [
+                        {label: '丰台区', id: '100010'},
+                        {label: '海淀区', id: '100011'}
+                    ]
+                },
+                {
+                    label: '上海市',
+                    id: '10002',
+                    children: [
+                        {label: '徐汇区', id: '100020'},
+                        {label: '浦东新区', id: '100021'}
+                    ]
+                }
+            ],
             flag: true
         };
     },
@@ -84,7 +102,7 @@ export default {
                 return this.value;
             },
             set: function(value) {
-                this.$emit('node-click', this.userCode, value);
+                this.$emit('node-click', this.id, value);
             }
         }
     },
@@ -124,8 +142,8 @@ export default {
                     if (v.children) {
                         loop(v.children);
                     } else {
-                        if (v.username === value) {
-                            targetCode = v.usercode;
+                        if (v.label === value) {
+                            targetCode = v.id;
                             return true;
                         }
                     }
@@ -144,7 +162,7 @@ export default {
         },
         filterNode(value, data) {
             if (!value) return true;
-            return data.username.indexOf(value) !== -1;
+            return data.label.indexOf(value) !== -1;
         },
         handleMulitpleChange() {
             let code = [];
@@ -155,14 +173,14 @@ export default {
                         return !!v.children === false;
                     });
                     this.names = filterItem.map(v => {
-                        return v.username;
+                        return v.label;
                     });
                     code = filterItem.map(v => {
-                        return v.usercode;
+                        return v.id;
                     });
                     this.value = this.names.join(',');
-                    this.userCode = code.join(',');
-                    this.$emit('node-click', this.userCode, this.value);
+                    this.id = code.join(',');
+                    this.$emit('node-click', this.id, this.value);
                 } else {
                     this.$emit('node-click', '', '');
                 }
@@ -170,10 +188,10 @@ export default {
         },
         handlerNodeClick(item) {
             if (!item.children) {
-                this.value = item.username;
-                this.userCode = item.usercode;
+                this.value = item.label;
+                this.id = item.id;
             }
-            this.$emit('node-click', this.userCode, this.value);
+            this.$emit('node-click', this.id, this.value);
             this.flag = false; // 阻止blur事件
             setTimeout(() => {
                 this.flag = true;
@@ -197,7 +215,6 @@ export default {
         this.ajaxGetAllRoleOrgs();
     },
     mounted() {
-        this.popoverWidth = this.$refs.dealerInput.$el.scrollWidth - 40;
     },
     beforeDestroy() {
     }
@@ -205,4 +222,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+    .tree-common {
+        width: 350px;
+    }
 </style>

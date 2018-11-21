@@ -3,7 +3,9 @@
 .el-card {
     font-size: 14px;
     color: #fff;
-    background: @table-cell-bgcolor;
+    background: @g-card-bg;
+    border: none;
+    margin-top: 4px;
 
     /* .el-table {
         background-color: rgb(60, 112, 165);
@@ -26,6 +28,7 @@
     .el-card__header {
         padding: 8px 20px;
         line-height: 30px;
+        border: none;
 
         i {
             font-size: 14px;
@@ -59,7 +62,7 @@
 .el-table {
     // border: none !important;
     background-color: @table-cell-bgcolor;
-
+    border: none;
     thead, tbody {
         background-color: @table-thead-background !important;
         color: @font-input-header;
@@ -97,25 +100,29 @@
         td {
             padding: 8px 0;
             color: @font-sub;
-            border-bottom: 1px solid @table-cell-color;
-            border-right: 1px solid @table-cell-color;
+            border-bottom: 1px solid @g-table-border;
+            border-right: none;
         }
 
         td:last-child {
             padding: 8px 0;
             color: @font-sub;
-            border-bottom: 1px solid @table-cell-color;
+            border-bottom: 1px solid @g-table-border;
             border-right: none;
         }
 
         th.gutter:last-of-type {
-            border-bottom: 1px solid @table-cell-color !important;
+            border-bottom: 1px solid @g-table-cell-color !important;
         }
+    }
+
+    th.is-leaf {
+        border-bottom: 1px solid @g-table-border;
     }
 
     tr.current-row, tr:hover {
         td {
-            background-color: @table-highlight-color !important;
+            background-color: @g-table-highlight-color !important;
         }
     }
 
@@ -128,6 +135,19 @@
             }
         }
     }
+
+    &.el-table::before {
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 0;
+    }
+}
+.el-table--border::after, .el-table--group::after {
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 100%;
 }
 // 表单
 .el-form {
@@ -140,10 +160,44 @@
     background-color: rgb(10, 45, 92);
 }
 .el-menu-item:hover, .el-submenu__title:hover {
-    background-color: rgb(239, 156, 0);
+    background-color: @g-active-bg;
     color: #fff;
 }
 .el-menu-item.is-active {
-    background-color: rgb(239, 156, 0);
     color: #fff;
+    background-color: @g-active-bg;
+}
+
+// el-dialog
+.el-dialog__header, .el-dialog__body {
+    background: @g-dialog-bg;
+    color: #fff;
+    .el-card {
+        background: @g-dialog-bg;
+    }
+    .el-dialog__title {
+        color: #fff;
+    }
+}
+// el-input
+.el-input__inner {
+    background: transparent;
+    border-color: #9e9999;
+    color: #fff;
+}
+// el-checkbox
+.el-checkbox {
+    .el-checkbox__inner {
+        background: transparent;
+    }
+    .el-checkbox__input.is-checked {
+        .el-checkbox__inner {
+            background: @g-active-bg;
+        }
+    }
+    .el-checkbox__input.is-indeterminate {
+        .el-checkbox__inner {
+            background: @g-active-bg;
+        }
+    }
 }

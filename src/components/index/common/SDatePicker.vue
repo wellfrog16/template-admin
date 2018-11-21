@@ -23,7 +23,7 @@
 <template>
     <div class="s-date-picker">
         <template v-if="isRange">
-            <div v-if="type=='date'"
+            <div v-if="type==='date'"
                  :style="`width:${width}`"
                  class="el-date-editor el-range-editor el-input__inner el-date-editor--timerange el-range-editor--small"
                  :class="'el-range-editor--'+size">
@@ -64,7 +64,7 @@
                 <i class="el-input__icon el-range__close-icon" :class="clearIcon" v-if="clearable"
                    @click="clearDate"></i>
             </div>
-            <div v-if="type=='time'"
+            <div v-if="type==='time'"
                  :style="`width:${width}`"
                  class="el-date-editor el-range-editor el-input__inner el-date-editor--timerange el-range-editor--small"
                  :class="'el-range-editor--'+size">
@@ -101,10 +101,10 @@
                 <i class="el-input__icon el-range__close-icon el-icon-circle-close" v-if="clearable"
                    @click="clearDate"></i>
             </div>
-            <div v-if="type=='datetime'"></div>
+            <div v-if="type==='datetime'"></div>
         </template>
         <template v-else>
-            <div v-if="type=='date'">
+            <div v-if="type==='date'">
                 <el-date-picker
                     v-model="value1"
                     type="date"
@@ -135,7 +135,7 @@
                     :size="size"
                     @change="handlerChange"/>
             </div>
-            <div v-if="type=='datetime'">
+            <div v-if="type==='datetime'">
                 <el-date-picker
                     v-model="value1"
                     type="datetime"
@@ -286,7 +286,7 @@ export default {
                 } else {
                     this.value1 = this.value;
                 }
-                if (!Array.isArray(this.value) && this.isRange && this.type == 'time') {
+                if (!Array.isArray(this.value) && this.isRange && this.type === 'time') {
                     this.value1 = '09:30:00';
                     this.value2 = '15:00:00';
                 }

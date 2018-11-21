@@ -9,6 +9,7 @@
         element-loading-background="rgba(0,0,0,0.3)"
         :row-class-name="rowClassName"
         :cell-class-name="cellClassName"
+        :show-header="showHeader"
         :show-summary="showSummary"
         :summary-method="summaryMethod"
         :span-method="spanMethod"
@@ -102,6 +103,12 @@ export default {
             type: Boolean,
             default() {
                 return false;
+            }
+        },
+        showHeader: {
+            type: Boolean,
+            default() {
+                return true;
             }
         },
         loading: {
