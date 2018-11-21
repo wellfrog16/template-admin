@@ -1,6 +1,6 @@
 <template>
     <div :class="$style.container">
-        <nav-top></nav-top>
+        <head-top></head-top>
         <div :class="$style.containers">
             <div :class="$style.middle">
                 <el-aside :class="$style.aside" :width="width">
@@ -26,7 +26,7 @@ import menu from '@/helper/menu';
 export default {
     components: {
         AsideMenu,
-        NavTop: () => import('@/components/index/home/nav.vue'),
+        HeadTop: () => import('@/components/index/home/headTop.vue'),
     },
     data() {
         return {

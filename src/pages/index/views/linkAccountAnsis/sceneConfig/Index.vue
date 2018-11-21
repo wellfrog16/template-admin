@@ -191,7 +191,6 @@ export default {
 <style lang="less" scoped>
     .scene-config-page {
         color: #fff;
-
         .el-form {
             color: #fff;
         }

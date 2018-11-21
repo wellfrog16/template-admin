@@ -30,6 +30,8 @@ export default {
 </script>
 <style lang="less" scoped>
     .self-card-component {
+        box-shadow: 0 0 10px #326fcb;
+        margin-bottom: 20px;
         .card-header {
             display: flex;
 
