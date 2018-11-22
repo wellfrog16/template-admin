@@ -62,7 +62,7 @@
 </template>
 <script>
 // import {saveAuthedInfos, saveRealName} from '@/utils/storageUtil';
-// import {loginApi} from '@/api/modules/dataAnsis';
+import {getAccessToken} from '@/api/login';
 export default {
     data() {
         return {
@@ -91,27 +91,18 @@ export default {
             this.$refs.ruleForm.validate(valid => {
                 if (valid) {
                     // 请求token
-                    // this.getLogin();
+                    this.getLogin();
                     this.$router.push({path: '/index'});
                 }
             });
         },
         getLogin() {
-            /* let params = {
+            let params = {
                 username: this.ruleForm.userName.toLowerCase(),
                 password: this.ruleForm.password
-            }; */
+            };
             this.fullScreenLoading = true;
-            /* loginApi(params).then((resp) => {
-                this.fullScreenLoading = false;
-                console.log(resp);
-                // saveAuthedInfos(resp, params.username);
-                // saveRealName(res);
-                let redirect = decodeURIComponent(this.$router.currentRoute.query.redirect || '/index');
-                this.$router.push({path: redirect});
-            }, () => {
-                this.fullScreenLoading = false;
-            }) */
+            getAccessToken(params)
         }
     }
 };

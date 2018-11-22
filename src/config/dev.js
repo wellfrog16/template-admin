@@ -1,6 +1,6 @@
 const config = {
     server: {
-        api: 'localhost:8080'
+        api: 'http://172.25.61.19:18003/'
     }
 };
 
