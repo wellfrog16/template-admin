@@ -1,6 +1,6 @@
 <template>
     <el-card :class="$style.card_table">
-        <el-tabs v-model="activeName">
+        <el-tabs v-model="activeName" :class="$style.pane_titles">
             <el-tab-pane
                 v-for="active in activeNameList"
                 :label="active.label"
@@ -30,6 +30,7 @@
     import {
         tableColumns_1, tableColumns_2, tableColumns_3
     } from '../components/constants'
+
     export default {
         name: "cardTable",
         // 父传子！
@@ -82,9 +83,8 @@
 </script>
 
 <style lang="less" module>
-    .self-card-component {
-        box-shadow: 0 0 10px #326fcb;
-        margin-bottom: 20px;
+    .card_table {
+        color: #fff !important;
     }
 
 </style>

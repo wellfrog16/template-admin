@@ -53,7 +53,7 @@
         color: #fff;
         .bar_right {
             width: 100%;
-            height: 280px;
+            height: 600px;
             display: flex;
             justify-content: space-between;
             .a_form_table_bar {
