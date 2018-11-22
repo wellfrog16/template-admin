@@ -1,50 +1,58 @@
 import axios from 'axios';
 import {Loading, Notification} from 'element-ui';
 import config from '@/config';
-
 const instance = url => {
-    const instance = axios.create({
+    const urlParams = window.location.search.split('token=');
+    let urlToken = '';
+    if (urlParams.length > 0) {
+        urlToken = urlParams[1];
+    }
+    // 配置token到header中
+    const storeUserToken = localStorage.getItem('userToken') || urlToken;
+    let instance = axios.create({
         baseURL: url || config.server.api,
-        // withCredentials: true,
-        timeout: 5000
+        timeout: 20000,
+        headers: {Auth: storeUserToken}
     });
-
+    // request 拦截器
     let loadingInstancce = null;
-
-    // toto 根据项目实际调整
-    instance.interceptors.request.use(require => {
+    instance.interceptors.request.use(
         // 全屏遮罩
-        loadingInstancce = Loading.service({
-            fullscreen: true,
-            spinner: 'el-icon-loading',
-            text: '加载中'
-        });
-        return require;
-    });
-
-    instance.interceptors.request.use(async require => {
-        return require;
-    });
-
-    instance.interceptors.response.use(response => {
-        loadingInstancce.close();
-        const {data, config} = response;
-        // console.log(response);
-        if ((response.status === 200 || response.status === 201 || response.status === 204) && (config.method === 'post' || config.method === 'put' || config.method === 'delete')) {
-            Notification.success({
-                title: '操作成功'
+        require => {
+            loadingInstancce = Loading.service({
+                fullscreen: true,
+                spinner: 'el-icon-loading',
+                text: '加载中'
             });
-        } else if (response.status !== 200 && response.status !== 201 && response.status !== 204) {
-            Notification.error({
-                title: response.statusText
-            });
+            return require;
+        },
+        error => {
+            loadingInstancce.close();
+            return Promise.reject(error);
         }
-        return data;
-    }, error => {
-        return error;
-    });
-
+    );
+    // response 拦截器
+    instance.interceptors.response.use(
+        response => {
+            loadingInstancce.close();
+            const {data, status, statusText} = response;
+            // 需要后端定义一个异常的需要用户登录的状态码来判断，让用户重新登录
+            if ((status === 200 || status === 201 || status === 204) && (config.method === 'post' || config.method === 'put' || config.method === 'delete')) {
+                Notification.success({
+                    title: '操作成功'
+                });
+            } else if (status !== 200 && status !== 201 && status !== 204) {
+                Notification.error({
+                    title: statusText
+                });
+            }
+            return data;
+        },
+        error => {
+            loadingInstancce.close();
+            return Promise.reject(error.response);
+        }
+    );
     return instance;
 };
-
 export default instance;

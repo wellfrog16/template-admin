@@ -99,6 +99,13 @@ const router = new Router({
                     component: LinkAccountAnsis,
                     children: [
                         {
+                            path: '/index',
+                            name: 'index',
+                            label: '分析向导',
+                            icon: 'el-icon-more',
+                            component: resolve => require(['../views/linkAccountAnsis/sceneConfig/Index.vue'], resolve)
+                        },
+                        {
                             path: '/sceneConfig',
                             name: 'sceneConfig',
                             label: '分析向导',
