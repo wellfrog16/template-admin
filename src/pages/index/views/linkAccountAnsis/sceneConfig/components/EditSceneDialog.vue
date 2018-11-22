@@ -1,9 +1,9 @@
 <template>
     <div>
-        <sceneModel1 v-if="String(createType)==='0'" :confirmCommitMode="confirmCommitMode" :operateType="operateType" :dialogItem="dialogItem"></sceneModel1>
-        <sceneModel2 v-if="String(createType)==='1'" :confirmCommitMode="confirmCommitMode" :operateType="operateType" :dialogItem="dialogItem"></sceneModel2>
-        <sceneModel3 v-if="String(createType)==='2'" :confirmCommitMode="confirmCommitMode" :operateType="operateType" :dialogItem="dialogItem"></sceneModel3>
-        <sceneModel4 v-if="String(createType)==='3'" :confirmCommitMode="confirmCommitMode" :operateType="operateType" :dialogItem="dialogItem"></sceneModel4>
+        <sceneModel1 v-if="String(createType)==='1'" :confirmCommitMode="confirmCommitMode" :operateType="operateType" :dialogItem="dialogItem"></sceneModel1>
+        <sceneModel2 v-if="String(createType)==='2'" :confirmCommitMode="confirmCommitMode" :operateType="operateType" :dialogItem="dialogItem"></sceneModel2>
+        <sceneModel3 v-if="String(createType)==='3'" :confirmCommitMode="confirmCommitMode" :operateType="operateType" :dialogItem="dialogItem"></sceneModel3>
+        <sceneModel4 v-if="String(createType)==='4'" :confirmCommitMode="confirmCommitMode" :operateType="operateType" :dialogItem="dialogItem"></sceneModel4>
     </div>
 </template>
 <script>

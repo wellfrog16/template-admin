@@ -251,12 +251,12 @@ export default {
             this.selectList = val;
         },
         getTableData() {
-            getSceneList().then(resp => {
+            /* getSceneList().then(resp => {
+                this.tableData = resp
+            }) */
+            getSceneListById({sceneId: '101'}).then(resp => {
                 this.tableData = resp
             })
-            /* getSceneListById({sceneId: '102'}).then(resp => {
-                console.log(resp)
-            }) */
         }
     },
     mounted() {

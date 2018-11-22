@@ -8,11 +8,11 @@
                             <el-checkbox-group v-model="checkedList">
                                 <el-checkbox :disabled="disabled" :label="item.value" v-for="(item, index) in checkbox" :key="index">
                                     <el-form-item :prop="item.field" :label="item.label" label-width="140px" style="display:inline-block; padding: 5px 0;">
-                                        <el-input :disabled="disabled" :clearabled="!disabled" class="custom-width" size="small" v-model="ruleForm.a"></el-input>
+                                        <el-input :disabled="disabled" :clearabled="!disabled" class="custom-width" size="small" v-model="ruleForm[item.field]"></el-input>
                                         <span class="unit-css" v-if="item.unit">{{ item.unit }}</span>
-                                        <el-select :disabled="disabled" :clearabled="!disabled" size="small" v-if="index === checkbox.length - 1" v-model="ruleForm.b" class="custom-width" style="margin-left:3px;">
+                                        <el-select :disabled="disabled" :clearabled="!disabled" size="small" v-if="index === checkbox.length - 1" v-model="ruleForm.statAcctType" class="custom-width" style="margin-left:3px;">
                                             <el-option
-                                                v-for="item in options"
+                                                v-for="item in accountTotalTypeOptions"
                                                 :key="item.value"
                                                 :label="item.label"
                                                 :value="item.value">
@@ -25,9 +25,9 @@
                         </el-form-item>
                         <p class="remark">* 缩小账户范围能提升计算效率</p>
                         <el-form-item label-width="140px" prop="cc" label="统计频度" style="padding-left:23px; margin-bottom: 30px;">
-                            <el-select :disabled="disabled" :clearabled="!disabled" size="small" v-model="ruleForm.cc" class="custom-width">
+                            <el-select :disabled="disabled" :clearabled="!disabled" size="small" v-model="ruleForm.statFreq" class="custom-width">
                                 <el-option
-                                    v-for="item in options"
+                                    v-for="item in accountTotalFrepOptions"
                                     :key="item.value"
                                     :label="item.label"
                                     :value="item.value">
@@ -71,8 +71,8 @@
             </el-col>
         </el-row>
         <el-row style="margin-top:10px; text-align:center;">
-            <el-input :disabled="disabled" :clearable="!disabled" style="margin-right: 5px;" size="small" v-model="sceneName" placeholder="请输入场景名称" class="custom-width"></el-input>
-            <el-input :disabled="disabled" :clearable="!disabled" style="margin-right: 5px;" size="small" v-model="sceneRemark" placeholder="请输入场景说明" class="custom-width"></el-input>
+            <el-input :disabled="disabled" :clearable="!disabled" style="margin-right: 5px;" size="small" v-model="ruleForm.sceneName" placeholder="请输入场景名称" class="custom-width"></el-input>
+            <el-input :disabled="disabled" :clearable="!disabled" style="margin-right: 5px;" size="small" v-model="ruleForm.sceneComnt" placeholder="请输入场景说明" class="custom-width"></el-input>
             <el-button size="small" type="primary" :disabled="disabled">保存场景</el-button>
         </el-row>
         <el-row style="margin-top:30px; text-align:center;" v-if="confirmCommitMode">
@@ -83,7 +83,7 @@
 <script>
 import SCard from '@/components/index/common/SCard';
 import STable from '@/components/index/common/STable';
-import {correlationIndexColumns} from './constants';
+import {correlationIndexColumns, accountTotalTypeOptions, accountTotalFrepOptions} from './constants';
 export default {
     components: {SCard, STable},
     props: {
@@ -103,8 +103,8 @@ export default {
         }
     },
     watch: {
-        dialogItem(val) {
-            this.ruleForm = JSON.parse(JSON.stringify(val))
+        dialogItem() {
+            this.setRuleForm();
         }
     },
     computed: {
@@ -114,29 +114,25 @@ export default {
     },
     data() {
         return {
+            accountTotalTypeOptions,
+            accountTotalFrepOptions,
             correlationIndexColumns,
-            options: [{
-                value: '0', label: '按持仓量'
-            }],
-            checkedList: [],
+            checkedList: ['0'],
             checkbox: [
-                {field: '1', label: '账户持仓量 >=', value: '0', unit: '手'},
-                {field: '2', label: '账户成交量 >=', value: '1', unit: '手'},
-                {field: '3', label: '账户报单数 >=', value: '2', unit: '笔'},
-                {field: '4', label: '统计账户数 >=', value: '3', unit: ''}
+                {field: 'acctMakePosQtty', label: '账户持仓量 >=', value: '0', unit: '手'},
+                {field: 'acctBargainQtty', label: '账户成交量 >=', value: '1', unit: '手'},
+                {field: 'acctBillCnt', label: '账户报单数 >=', value: '2', unit: '笔'},
+                {field: 'statAcctCnt', label: '统计账户数 >=', value: '3', unit: ''}
             ],
             ruleForm: {
-                a: '',
-                b: '',
-                cc: '',
                 sceneComnt: '', // 场景说明
                 sceneName: '', // 场景名称
                 acctBargainQtty: '', // 账户成交量
                 acctBillCnt: '', // 账户报单量
                 acctMakePosQtty: '', // 账户持仓量
                 statAcctCnt: '', // 统计账户数
-                statAcctType: '', // 统计账户类型
-                statFreq: '' // 统计频度
+                statAcctType: '1', // 统计账户类型
+                statFreq: '0' // 统计频度
             },
             tableData: [
                 {a: '指标1', b: '>=', c: '90'}
@@ -183,9 +179,23 @@ export default {
             } else if (typeof obj.selectionStart === 'number' && typeof obj.selectionEnd === 'number') {
                 obj.selectionStart = obj.selectionEnd = len;
             }
+        },
+        setRuleForm() {
+            this.ruleForm = {
+                sceneComnt: this.dialogItem.sceneComnt || '', // 场景说明
+                sceneName: this.dialogItem.sceneName || '', // 场景名称
+                acctBargainQtty: this.dialogItem.acctBargainQtty || '1000', // 账户成交量
+                acctBillCnt: this.dialogItem.acctBillCnt || '100', // 账户报单量
+                acctMakePosQtty: this.dialogItem.acctMakePosQtty || '100', // 账户持仓量
+                statAcctCnt: this.dialogItem.statAcctCnt || '500', // 统计账户数
+                statAcctType: this.dialogItem.statAcctType || '1', // 统计账户类型
+                statFreq: this.dialogItem.statFreq || '0' // 统计频度
+            }
+            this.textareaContent = this.dialogItem.indexPara;
         }
     },
     mounted() {
+        this.setRuleForm();
     }
 };
 </script>
