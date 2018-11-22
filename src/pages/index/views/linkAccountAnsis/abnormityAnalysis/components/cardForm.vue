@@ -67,6 +67,7 @@
     import SDatePicker from '@/components/index/common/SDatePicker';
     // 导入CSV
     import UploadCommon from '@/components/index/common/UploadCommon';
+    import {postImportAccountGroup} from '@/api/dataAnsis/abnormityAnalysis';
 
     export default {
         name: "cardForm",
@@ -158,6 +159,9 @@
         },
         // 初始化数据
         mounted() {
+            postImportAccountGroup().then(resp => {
+                console.log(resp)
+            })
         },
         beforeDestroy() {
         }

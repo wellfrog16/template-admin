@@ -13,6 +13,7 @@
     </div>
 </template>
 <script>
+
     export default {
         components: {
             BreadCrumb: () => import('@/components/index/home/breadCrumbs'),
