@@ -68,7 +68,7 @@
                             <el-form-item prop="code" label="合约代码" label-width="140px">
                                 <el-input clearable size="small" v-model="ruleForm.code" class="custom-width"></el-input>
                             </el-form-item>
-                            <el-form-item prop="selectDateRange" label="时间区间" label-width="140px">
+                            <el-form-item prop="selectDateRange" label="统计区间" label-width="140px">
                                 <s-date-picker
                                     :value="ruleForm.selectDateRange"
                                     :isRange="true"
@@ -114,7 +114,7 @@
         </div>
         <el-dialog :close-on-click-modal="false" :close-on-press-escape="false" :custom-class="`self-dialog`"
                    :visible="showDialog" width="85%" @close="handleCloseDialog" :title="`${operateType === 1 ? '查看' : operateType === 2 ? '编辑' : '新增'}场景配置`">
-            <edit-scene-dialog :operateType="operateType" :dialogItem="dialogItem" :createType="dialogItem.createType || this.createType"></edit-scene-dialog>
+            <edit-scene-dialog :operateType="operateType" :dialogItem="dialogItem" :createType="dialogItem.sceneType || this.createType"></edit-scene-dialog>
         </el-dialog>
         <el-dialog :close-on-click-modal="false" :close-on-press-escape="false" :custom-class="`self-dialog`" :visible="showCarousel" width="85%" top="5%" @close="handleCloseCarousel">
             <el-carousel :interval="4000" height="600px">
@@ -157,20 +157,16 @@ export default {
                 area: '9',
                 selectDateRange: []
             },
-            tableData: [
-                {a: 1, createType: 1, c: 3},
-                {a: 1, createType: 2, c: 3},
-                {a: 1, createType: 0, c: 3},
-            ],
+            tableData: [],
             columns: [
                 {
-                    label: '场景名称', field: 'a'
+                    label: '场景名称', field: 'sceneName'
                 },
                 {
-                    label: '场景类型', field: 'createType'
+                    label: '场景类型', field: 'sceneType'
                 },
                 {
-                    label: '场景说明', field: 'c'
+                    label: '场景说明', field: 'sceneComnt'
                 }
             ],
             searchAccountText: '',
@@ -190,6 +186,9 @@ export default {
             rules: {
                 code: {
                     required: true, message: '请输入合约代码'
+                },
+                selectDateRange: {
+                    required: true, message: '请选择统计区间'
                 }
             }
         };
@@ -224,6 +223,7 @@ export default {
         },
         handleCloseDialog() {
             this.showDialog = false;
+            this.createType = ''
         },
         openDialog(item, type) {
             this.showDialog = true;
@@ -252,11 +252,11 @@ export default {
         },
         getTableData() {
             getSceneList().then(resp => {
-                console.log(resp)
+                this.tableData = resp
             })
-            getSceneListById({sceneId: '102'}).then(resp => {
+            /* getSceneListById({sceneId: '102'}).then(resp => {
                 console.log(resp)
-            })
+            }) */
         }
     },
     mounted() {
@@ -286,7 +286,7 @@ export default {
         }
 
         .search-input {
-            width: 180px;
+            width: 200px;
 
             /deep/ input {
                 border-radius: 15px;

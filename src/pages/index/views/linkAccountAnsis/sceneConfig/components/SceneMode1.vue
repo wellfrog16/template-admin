@@ -102,6 +102,11 @@ export default {
             }
         }
     },
+    watch: {
+        dialogItem(val) {
+            this.ruleForm = JSON.parse(JSON.stringify(val))
+        }
+    },
     computed: {
         disabled() {
             return String(this.operateType) === '1';
@@ -123,7 +128,15 @@ export default {
             ruleForm: {
                 a: '',
                 b: '',
-                cc: ''
+                cc: '',
+                sceneComnt: '', // 场景说明
+                sceneName: '', // 场景名称
+                acctBargainQtty: '', // 账户成交量
+                acctBillCnt: '', // 账户报单量
+                acctMakePosQtty: '', // 账户持仓量
+                statAcctCnt: '', // 统计账户数
+                statAcctType: '', // 统计账户类型
+                statFreq: '' // 统计频度
             },
             tableData: [
                 {a: '指标1', b: '>=', c: '90'}
