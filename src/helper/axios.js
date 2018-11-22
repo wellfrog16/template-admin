@@ -22,7 +22,6 @@ const instance = url => {
             return require;
         },
         error => {
-            loadingInstancce.close();
             return Promise.reject(error);
         }
     );
@@ -30,18 +29,24 @@ const instance = url => {
     instance.interceptors.response.use(
         response => {
             loadingInstancce.close();
-            const {data, status, statusText} = response;
+            const {data, config, status, statusText} = response;
             // 需要后端定义一个异常的需要用户登录的状态码来判断，让用户重新登录
             if ((status === 200 || status === 201 || status === 204) && (config.method === 'post' || config.method === 'put' || config.method === 'delete')) {
-                Notification.success({
-                    title: '操作成功'
-                });
+                if (data.success) {
+                    Notification.success({
+                        message: data.message
+                    });
+                } else {
+                    Notification.error({
+                        message: data.message
+                    });
+                }
             } else if (status !== 200 && status !== 201 && status !== 204) {
                 Notification.error({
-                    title: statusText
+                    message: statusText
                 });
             }
-            return data;
+            return data.resData;
         },
         error => {
             loadingInstancce.close();
