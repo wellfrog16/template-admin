@@ -47,16 +47,16 @@
                 activeNameList: [
                     {
                         name: 'first',
-                        label: '融资',
+                        label: '超仓分析',
                         tableColumns: tableColumns_1,
                         tableDataList: [],
                     }, {
-                        label: '融券',
+                        label: '频繁报撤销单分析',
                         name: 'second',
                         tableColumns: tableColumns_2,
                         tableDataList: [],
                     }, {
-                        label: '担保品',
+                        label: '自成交分析',
                         name: 'third',
                         tableColumns: tableColumns_3,
                         tableDataList: [],

@@ -1,54 +1,60 @@
 <template>
     <el-card :class="$style.card_form">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-            <el-form-item label="活动名称" prop="name">
-                <el-input v-model="ruleForm.name"></el-input>
-            </el-form-item>
-            <el-form-item label="活动区域" prop="region">
-                <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
-                    <el-option label="区域一" value="shanghai"></el-option>
-                    <el-option label="区域二" value="beijing"></el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item label="活动时间" required>
-                <el-col :span="11">
-                    <el-form-item prop="date1">
-                        <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date1"
-                                        style="width: 100%;"></el-date-picker>
+            <el-row>
+                <el-col :xl="10" :lg="10" :md="10" :sm="24">
+                    <el-form-item :class="$style.rul_form_iInput" prop="importAccountGroup" label="导入账户组"
+                                  label-width="100px">
+                        <el-select
+                            class="custom-width"
+                            clearable size="small"
+                            v-model="ruleForm.importAccountGroup">
+                            <el-option
+                                v-for="item in resultList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item prop="statisticalInterval" label="统计区间" label-width="100px">
+                        <s-date-picker
+                            :value="ruleForm.statisticalInterval"
+                            :isRange="true"
+                            @change="statisticalIntervalChange">
+                        </s-date-picker>
                     </el-form-item>
                 </el-col>
-                <el-col class="line" :span="2">-</el-col>
-                <el-col :span="11">
-                    <el-form-item prop="date2">
-                        <el-time-picker type="fixed-time" placeholder="选择时间" v-model="ruleForm.date2"
-                                        style="width: 100%;"></el-time-picker>
+                <el-col :xl="10" :lg="10" :md="10" :sm="24">
+                    <el-form-item prop="importCSV" label="导入CSV" label-width="120px">
+                        <div>
+                            <upload-common
+                                :showFileList="true"
+                                :actionUrl="uploadBasicUrl"
+                                :uploadOption="uploadOption"
+                                :limitFileType="defaultLimitFileType"
+                                :limitFileSize="1"
+                                :limit="1"
+                                @handlePreview="handlePreview"
+                                @handleRemove="handleRemove"
+                                @getTxtCon="getFileList"
+                            ></upload-common>
+                        </div>
+                    </el-form-item>
+                    <el-form-item prop="contractCode" label="合约代码" label-width="120px">
+                        <el-input
+                            clearable size="small"
+                            v-model="ruleForm.contractCode"
+                            class="custom-width">
+                        </el-input>
                     </el-form-item>
                 </el-col>
-            </el-form-item>
-            <el-form-item label="即时配送" prop="delivery">
-                <el-switch v-model="ruleForm.delivery"></el-switch>
-            </el-form-item>
-            <el-form-item label="活动性质" prop="type">
-                <el-checkbox-group v-model="ruleForm.type">
-                    <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
-                    <el-checkbox label="地推活动" name="type"></el-checkbox>
-                    <el-checkbox label="线下主题活动" name="type"></el-checkbox>
-                    <el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
-                </el-checkbox-group>
-            </el-form-item>
-            <el-form-item label="特殊资源" prop="resource">
-                <el-radio-group v-model="ruleForm.resource">
-                    <el-radio label="线上品牌商赞助"></el-radio>
-                    <el-radio label="线下场地免费"></el-radio>
-                </el-radio-group>
-            </el-form-item>
-            <el-form-item label="活动形式" prop="desc">
-                <el-input type="textarea" v-model="ruleForm.desc"></el-input>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
-                <el-button @click="resetForm('ruleForm')">重置</el-button>
-            </el-form-item>
+                <el-col :xl="4" :lg="4" :md="4" :sm="24">
+                    <el-form-item label-width="60px">
+                        <el-button type="primary" @click="generateReportsClick('ruleForm')">生成报告</el-button>
+                    </el-form-item>
+                </el-col>
+            </el-row>
         </el-form>
     </el-card>
 
@@ -56,51 +62,64 @@
 <script>
     // import BreadCrumb from '../components/commont/breadCrumbs.vue'
     // console.log(BreadCrumb)
+
+    // 时间区间
+    import SDatePicker from '@/components/index/common/SDatePicker';
+    // 导入CSV
+    import UploadCommon from '@/components/index/common/UploadCommon';
+
     export default {
         name: "cardForm",
         // 父传子！
         props: {},
 
-        components: {},
+        components: {
+            UploadCommon: () => import('@/components/index/common/UploadCommon'), // 导入CSV
+            SDatePicker: () => import('@/components/index/common/SDatePicker')   // 时间区间
+        },
         // 混入, 是一个类的继承，类似于一个公共的方法。
         mixins: [],
         // 存储数据
         data() {
             return {
                 ruleForm: {
-                    name: '',
-                    region: '',
-                    date1: '',
-                    date2: '',
-                    delivery: false,
-                    type: [],
-                    resource: '',
-                    desc: ''
+                    importAccountGroup: '',  // 导入账户组
+                    importCSV: '',           // 导入CSV
+                    statisticalInterval: [],  // 统计区间
+                    contractCode: '',    // 合约代码
                 },
                 rules: {
-                    name: [
-                        {required: true, message: '请输入活动名称', trigger: 'blur'},
-                        {min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur'}
-                    ],
-                    region: [
-                        {required: true, message: '请选择活动区域', trigger: 'change'}
-                    ],
-                    date1: [
-                        {type: 'date', required: true, message: '请选择日期', trigger: 'change'}
-                    ],
-                    date2: [
-                        {type: 'date', required: true, message: '请选择时间', trigger: 'change'}
-                    ],
-                    type: [
-                        {type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change'}
-                    ],
-                    resource: [
-                        {required: true, message: '请选择活动资源', trigger: 'change'}
-                    ],
-                    desc: [
-                        {required: true, message: '请填写活动形式', trigger: 'blur'}
-                    ]
-                }
+                    // name: [
+                    //     {required: true, message: '请输入活动名称', trigger: 'blur'},
+                    //     {min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur'}
+                    // ],
+                    // region: [
+                    //     {required: true, message: '请选择活动区域', trigger: 'change'}
+                    // ],
+                    // date1: [
+                    //     {type: 'date', required: true, message: '请选择日期', trigger: 'change'}
+                    // ],
+                    // date2: [
+                    //     {type: 'date', required: true, message: '请选择时间', trigger: 'change'}
+                    // ],
+                    // type: [
+                    //     {type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change'}
+                    // ],
+                    // resource: [
+                    //     {required: true, message: '请选择活动资源', trigger: 'change'}
+                    // ],
+                    // desc: [
+                    //     {required: true, message: '请填写活动形式', trigger: 'blur'}
+                    // ]
+                },
+                resultList: [],  // 导入账户组列表
+                uploadBasicUrl: '',  //  导入CSV
+                uploadOption: {
+                    name: '上传',
+                    size: 'small',
+                    type: 'primary'
+                },
+                defaultLimitFileType: ['xls', 'xlsx'],
             };
         },
         // 计算属性
@@ -108,7 +127,22 @@
         watch: {},
         //    数据交互  127662
         methods: {
-            submitForm(formName) {
+            // 统计区间
+            statisticalIntervalChange(val) {
+                this.ruleForm.statisticalInterval = val;
+            },
+            handlePreview(file) {
+                console.log(file);
+            },
+            handleRemove(file) {
+                console.log(file);
+            },
+            getFileList(val) {
+                console.log(val);
+            },
+
+            // 生成报告(查询)
+            generateReportsClick(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         alert('submit!');
@@ -118,9 +152,6 @@
                     }
                 });
             },
-            resetForm(formName) {
-                this.$refs[formName].resetFields();
-            }
         },
         // 在一个实例被创建之后执行代码
         created() {
@@ -132,7 +163,6 @@
         }
     };
 </script>
-
 <style lang="less" module>
     .card_form {
         color: #13ce66;

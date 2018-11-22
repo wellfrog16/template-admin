@@ -147,6 +147,15 @@
     width: 0;
     height: 100%;
 }
+// input
+.el-input__inner {
+    background-color: rgb(8, 46, 95);
+    border: 1px solid rgba(4, 58, 127, 0.92);
+}
+.el-range-editor--small.el-input__inner {
+    height: 35px !important;
+}
+
 // 表单
 .el-form {
     .el-form-item__label {
@@ -181,18 +190,13 @@
         color: #fff;
     }
 }
-// el-input
-.el-input__inner {
-    background: transparent;
-    border-color: #9e9999;
-    color: #fff;
-}
 .el-input.is-disabled .el-input__inner {
-    height: 32px;
-    background: transparent;
-    border-color: #9e9999;
+    height: 35px;
     color: #fff;
+    background-color: rgb(8, 46, 95);
+    border: 1px solid rgba(4, 58, 127, 0.92);
 }
+
 // el-checkbox
 .el-checkbox {
     .el-checkbox__inner {
@@ -208,7 +212,7 @@
             background: @g-active-bg;
         }
     }
-    .el-checkbox__input.is-disabled .el-checkbox__inner {
+    .el-checkbox__input.is-disabled.el-checkbox__inner {
         background: transparent;
     }
 }

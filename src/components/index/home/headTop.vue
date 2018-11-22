@@ -1,6 +1,6 @@
 <template>
-    <div :class="$style.headtop">
-        <div :class="$style.nav_log"></div>
+    <div :class="$style.head_top">
+        <div :class="$style.head_top_log"></div>
         <!-- <div :class="$style.user_role">
             <el-input :class="$style.search " type="text"></el-input>
             <p>
@@ -16,7 +16,7 @@
 
 <script>
 export default {
-    name: 'nav'
+    name: 'headTop'
 };
 </script>
 
@@ -24,11 +24,11 @@ export default {
     @import '../../../assets/style/config.less';
 
     @height: 60px;
-    .headtop {
+    .head_top {
         width: 100%;
         height: @height;
         border-bottom: 1px solid #0763edf0;
-        .nav_log {
+        .head_top_log {
             background: url('../../../assets/img/common/top.gif') no-repeat;
             width: 100%;
             height: 100%;
