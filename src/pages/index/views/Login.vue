@@ -92,7 +92,6 @@ export default {
                 if (valid) {
                     // 请求token
                     this.getLogin();
-                    this.$router.push({path: '/index'});
                 }
             });
         },
@@ -102,7 +101,10 @@ export default {
                 password: this.ruleForm.password
             };
             this.fullScreenLoading = true;
-            getAccessToken(params)
+            getAccessToken(params).then(resp => {
+                localStorage.setItem('ACCESS_TOKEN', resp.access_token)
+                this.$router.push({path: '/index'});
+            })
         }
     }
 };

@@ -2,7 +2,7 @@ import instance from '@/helper/axios';
 
 const axios = instance('');
 // 前缀
-export const requestPrefix = '';
+export const requestPrefix = '/api-service';
 /**
  * 封装的get请求
  * 返回结果层级为value层
@@ -25,6 +25,5 @@ export function get(url, params) {
  */
 export function post(url, params) {
     url = encodeURI(url);
-    console.log(axios);
     return axios.post(url, params);
 }

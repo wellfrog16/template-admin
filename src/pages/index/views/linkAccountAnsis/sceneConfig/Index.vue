@@ -1,14 +1,17 @@
 <template>
     <div class="scene-config-page">
-        <s-card class="basic-info" :title="`客户群体选择`" :icon="`fa-icon-user`">
+        <s-card class="basic-info" :title="`客户群体选择`" :icon="`fa fa-user-md`">
             <div slot="content">
-                <el-form ref="ruleForm" :model="ruleForm">
+                <el-form ref="ruleForm" :model="ruleForm" :rules="rules">
                     <el-row>
                         <el-col :xl="12" :lg="12" :md="12" :sm="24" style="border-right:1px solid #ccc;">
                             <el-form-item prop="a">
                                 <el-radio-group v-model="ruleForm.exportType">
                                     <el-radio label="0">
-                                        <el-form-item prop="resultName" label="导入结果集" label-width="140px" style="display:inline-block; padding: 5px 0;">
+                                        <el-form-item prop="resultName" label="导入结果集" label-width="140px" style="display:inline-block; padding: 5px 0;"
+                                        :rules="[{
+                                            required: String(ruleForm.exportType) === '0', message: '请选择结果集'
+                                        }]">
                                             <el-select class="custom-width" clearable size="small" v-model="ruleForm.b">
                                                 <el-option
                                                     v-for="item in resultList"
@@ -21,10 +24,14 @@
                                     </el-radio>
                                     <br>
                                     <el-radio label="1">
-                                        <el-form-item prop="resultName" label="导入CSV" label-width="140px" style="display:inline-block; padding: 5px 0;">
+                                        <el-form-item prop="fileList" label="导入CSV" label-width="140px" style="display:inline-block; padding: 5px 0;"
+                                        :rules="[{
+                                            required: String(ruleForm.exportType) === '1', message: '请上传附件'
+                                        }]">
                                             <div>
                                                 <upload-common
                                                     :showFileList="true"
+                                                    :fileList="fileList"
                                                     :actionUrl="uploadBasicUrl"
                                                     :uploadOption="uploadOption"
                                                     :limitFileType="defaultLimitFileType"
@@ -39,10 +46,13 @@
                                     </el-radio>
                                     <br>
                                     <el-radio label="2">
-                                        <el-form-item prop="resultName" label="导入连续客户号" label-width="140px" style="display:inline-block; padding: 5px 0;">
-                                            <el-input clearable size="small" v-model="ruleForm.a" style="width: 150px;"></el-input>
+                                        <el-form-item prop="customNoArray" label="导入连续客户号" label-width="140px" style="display:inline-block; padding: 5px 0;"
+                                        :rules="[{
+                                            validator: validateCustomNo, required: String(ruleForm.exportType) === '2'
+                                        }]">
+                                            <el-input clearable size="small" v-model="ruleForm.customNoArray[0]" style="width: 150px;"></el-input>
                                             <span style="color: #fff; margin: 0 20px;">~</span>
-                                            <el-input clearable size="small" v-model="ruleForm.a" style="width: 150px;"></el-input>
+                                            <el-input clearable size="small" v-model="ruleForm.customNoArray[1]" style="width: 150px;"></el-input>
                                         </el-form-item>
                                     </el-radio>
                                     <br>
@@ -50,20 +60,13 @@
                             </el-form-item>
                         </el-col>
                         <el-col :xl="12" :lg="12" :md="12" :sm="24">
-                            <el-form-item prop="a" label="地区选择" label-width="140px">
+                            <el-form-item prop="area" label="地区选择" label-width="140px">
                                 <div>
-                                    <!-- <el-tree
-                                        :props="defaultProps"
-                                        show-checkbox
-                                        :data="areaData"
-                                        node-key="id"
-                                        @check-change="handleCheckChange">
-                                    </el-tree> -->
                                     <tree-common :isMultipleMode="true"></tree-common>
                                 </div>
                             </el-form-item>
-                            <el-form-item prop="a" label="合约代码" label-width="140px">
-                                <el-input clearable size="small" v-model="ruleForm.a" class="custom-width"></el-input>
+                            <el-form-item prop="code" label="合约代码" label-width="140px">
+                                <el-input clearable size="small" v-model="ruleForm.code" class="custom-width"></el-input>
                             </el-form-item>
                             <el-form-item prop="selectDateRange" label="时间区间" label-width="140px">
                                 <s-date-picker
@@ -88,7 +91,7 @@
                     </el-radio-group>
                     <el-button slot="reference" class="new-btn" type="primary" size="mini"><i class="el-icon-plus"></i>新增自定义场景</el-button>
                 </el-popover>
-                <el-input class="search-input" size="mini" prefix-icon="el-icon-search" placeholder="请输入账户号" v-model="searchAccountText"></el-input>
+                <el-input class="search-input" size="mini" prefix-icon="el-icon-search" placeholder="请输入场景名称和场景说明" v-model="searchAccountText"></el-input>
             </div>
             <div slot="content">
                 <s-table :columns="columns" :tableData="tableData" :showSelectionColumn="true" @selection-change="handleSelectChange">
@@ -111,7 +114,7 @@
         </div>
         <el-dialog :close-on-click-modal="false" :close-on-press-escape="false" :custom-class="`self-dialog`"
                    :visible="showDialog" width="85%" @close="handleCloseDialog" :title="`${operateType === 1 ? '查看' : operateType === 2 ? '编辑' : '新增'}场景配置`">
-            <edit-scene-dialog :operateType="operateType" :dialogItem="dialogItem" :createType="dialogItem.createType"></edit-scene-dialog>
+            <edit-scene-dialog :operateType="operateType" :dialogItem="dialogItem" :createType="dialogItem.createType || this.createType"></edit-scene-dialog>
         </el-dialog>
         <el-dialog :close-on-click-modal="false" :close-on-press-escape="false" :custom-class="`self-dialog`" :visible="showCarousel" width="85%" top="5%" @close="handleCloseCarousel">
             <el-carousel :interval="4000" height="600px">
@@ -130,6 +133,8 @@ import UploadCommon from '@/components/index/common/UploadCommon';
 import TreeCommon from '@/components/index/common/TreeCommon';
 import EditSceneDialog from './components/EditSceneDialog';
 import {createTypeOptions} from './components/constants';
+import EditSceneDialogVue from './components/EditSceneDialog.vue';
+import {getSceneList, getSceneListById} from '@/api/dataAnsis/sceneConfig'
 export default {
     components: {STable, SCard, SDatePicker, UploadCommon, TreeCommon, EditSceneDialog},
     data() {
@@ -147,8 +152,9 @@ export default {
             defaultLimitFileType: ['xls', 'xlsx'],
             ruleForm: {
                 exportType: '',
-                a: '9',
-                b: '',
+                customNoArray: [],
+                code: '',
+                area: '9',
                 selectDateRange: []
             },
             tableData: [
@@ -178,10 +184,29 @@ export default {
             dialogItem: {},
             operateType: 0,
             createType: '',
-            selectList: []
+            selectList: [],
+            exportCustomNo: [],
+            fileList: [],
+            rules: {
+                code: {
+                    required: true, message: '请输入合约代码'
+                }
+            }
         };
     },
     methods: {
+        validateCustomNo(rule, value, callback) {
+            if (String(this.ruleForm.exportType) === '2') {
+                if (!value.length) {
+                    callback(new Error('请输入客户段号'))
+                } else if (!value[0] && value[0] !== 0) {
+                    callback(new Error('请输入客户段起始号'))
+                } else if (!value[1] && value[1] !== 0) {
+                    callback(new Error('请输入客户段结束号'))
+                }
+            }
+            callback()
+        },
         handleCheckChange(val) {
             console.log(val);
         },
@@ -200,15 +225,15 @@ export default {
         handleCloseDialog() {
             this.showDialog = false;
         },
-        openDialog(item, type, createType) {
+        openDialog(item, type) {
             this.showDialog = true;
             this.operateType = type;
             this.dialogItem = item;
         },
         handleRadioChange(val) {
+            console.log(val)
             if (val) {
                 this.openDialog({}, 0, val);
-                this.createType = '';
             }
         },
         handleCloseCarousel() {
@@ -224,7 +249,18 @@ export default {
         handleSelectChange(val) {
             console.log(val);
             this.selectList = val;
+        },
+        getTableData() {
+            getSceneList().then(resp => {
+                console.log(resp)
+            })
+            getSceneListById({sceneId: '102'}).then(resp => {
+                console.log(resp)
+            })
         }
+    },
+    mounted() {
+        this.getTableData()
     }
 };
 </script>

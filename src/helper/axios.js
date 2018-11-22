@@ -2,17 +2,12 @@ import axios from 'axios';
 import {Loading, Notification} from 'element-ui';
 import config from '@/config';
 const instance = url => {
-    const urlParams = window.location.search.split('token=');
-    let urlToken = '';
-    if (urlParams.length > 0) {
-        urlToken = urlParams[1];
-    }
     // 配置token到header中
-    const storeUserToken = localStorage.getItem('userToken') || urlToken;
+    const accessToken = localStorage.getItem('ACCESS_TOKEN');
     let instance = axios.create({
         baseURL: url || config.server.api,
         timeout: 20000,
-        headers: {Auth: storeUserToken}
+        headers: {Authorization: 'Bearer' + accessToken}
     });
     // request 拦截器
     let loadingInstancce = null;
