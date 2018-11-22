@@ -37,16 +37,23 @@ const instance = url => {
                         message: data.message
                     });
                 } else {
-                    Notification.error({
-                        message: data.message
-                    });
+                    // 处理登录接口
+                    if (data.access_token) {
+                        Notification.success({
+                            message: '登录成功'
+                        });
+                    } else {
+                        Notification.error({
+                            message: data.message
+                        });
+                    }
                 }
             } else if (status !== 200 && status !== 201 && status !== 204) {
                 Notification.error({
                     message: statusText
                 });
             }
-            return data.resData;
+            return data.resData || data;
         },
         error => {
             loadingInstancce.close();
