@@ -38,6 +38,8 @@ export default {
             .header-left {
                 flex: 1;
                 text-align: left;
+                background: url('../../../assets/img/usr/card_header_bg.png') no-repeat left bottom;
+                background-size: 200px;
 
                 .sub-title {
                     font-size: 12px;

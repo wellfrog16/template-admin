@@ -149,6 +149,7 @@
 }
 // input
 .el-input__inner {
+    color: #fff;
     background-color: rgb(8, 46, 95);
     border: 1px solid rgba(4, 58, 127, 0.92);
 }
@@ -213,6 +214,24 @@
         }
     }
     .el-checkbox__input.is-disabled.el-checkbox__inner {
+        background: transparent;
+    }
+}
+.el-radio {
+    .el-radio__inner {
+        background: transparent;
+    }
+    .el-radio__input.is-checked {
+        .el-radio__inner {
+            background: @g-active-bg;
+        }
+    }
+    .el-radio__input.is-indeterminate {
+        .el-radio__inner {
+            background: @g-active-bg;
+        }
+    }
+    .el-radio__input.is-disabled.el-radio__inner {
         background: transparent;
     }
 }
