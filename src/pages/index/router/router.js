@@ -90,61 +90,55 @@ const router = new Router({
             name: 'tools',
             label: '监管科技工具集',
             component: Home,
-            icon: 'menu-fix-icon fas fa-sun fa-lg',
+            icon: 'menu-fix-icon fa fa-eye',
             children: [
                 {
                     path: '',
                     name: 'linkAccountAnsis',
                     label: '关联账户分析',
+                    icon: 'menu-fix-icon fa fa-address-book',
                     component: LinkAccountAnsis,
                     children: [
-                        {
-                            path: '/index',
-                            name: 'index',
-                            label: '分析向导',
-                            icon: 'el-icon-more',
-                            component: resolve => require(['../views/linkAccountAnsis/sceneConfig/Index.vue'], resolve)
-                        },
                         {
                             path: '/sceneConfig',
                             name: 'sceneConfig',
                             label: '分析向导',
-                            icon: 'el-icon-more',
+                            icon: 'menu-fix-icon fa fa-atom',
                             component: resolve => require(['../views/linkAccountAnsis/sceneConfig/Index.vue'], resolve)
                         },
                         {
                             path: 'log',
                             name: 'log',
                             label: '关联账户组合并',
-                            icon: 'el-icon-more',
+                            icon: 'menu-fix-icon fa fa-venus-double',
                             component: Root
                         },
                         {
                             path: 'file',
                             name: 'file',
                             label: '组合场景合并',
-                            icon: 'el-icon-more',
+                            icon: 'menu-fix-icon fa fa-window-restore',
                             component: Root
                         },
                         {
                             path: 'dictionary',
                             name: 'dictionary',
                             label: '异常交易分析',
-                            icon: 'el-icon-more',
+                            icon: 'menu-fix-icon fas fa-broadcast-tower',
                             component: resolve => require(['../views/linkAccountAnsis/abnormityAnalysis/Index.vue'], resolve)
                         },
                         {
                             path: 'dictionary1',
                             name: 'dictionary1',
                             label: '账户组画像',
-                            icon: 'el-icon-more',
+                            icon: 'menu-fix-icon fa fa-android',
                             component: Root
                         },
                         {
                             path: 'demo11',
                             name: 'demo11',
                             label: '客户信息查询',
-                            icon: 'el-icon-more',
+                            icon: 'el-icon-search',
                             component: resolve => require(['../views/demo/Index.vue'], resolve)
                         }
                     ]

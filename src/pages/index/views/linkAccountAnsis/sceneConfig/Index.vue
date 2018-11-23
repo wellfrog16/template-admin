@@ -9,15 +9,15 @@
                                 <el-radio-group v-model="ruleForm.exportType">
                                     <el-radio label="0">
                                         <el-form-item prop="resultName" label="导入结果集" label-width="140px" style="display:inline-block; padding: 5px 0;"
-                                        :rules="[{
-                                            required: String(ruleForm.exportType) === '0', message: '请选择结果集'
-                                        }]">
-                                            <el-select class="custom-width" clearable size="small" v-model="ruleForm.b">
+                                                      :rules="[{
+                                                          required: String(ruleForm.exportType) === '0', message: '请选择结果集'
+                                                      }]">
+                                            <el-select class="custom-width" clearable size="small" v-model="ruleForm.resultId">
                                                 <el-option
                                                     v-for="item in resultList"
-                                                    :key="item.value"
-                                                    :label="item.label"
-                                                    :value="item.value">
+                                                    :key="item.resultId"
+                                                    :label="item.resultName"
+                                                    :value="item.resultId">
                                                 </el-option>
                                             </el-select>
                                         </el-form-item>
@@ -25,9 +25,9 @@
                                     <br>
                                     <el-radio label="1">
                                         <el-form-item prop="fileList" label="导入CSV" label-width="140px" style="display:inline-block; padding: 5px 0;"
-                                        :rules="[{
-                                            required: String(ruleForm.exportType) === '1', message: '请上传附件'
-                                        }]">
+                                                      :rules="[{
+                                                          required: String(ruleForm.exportType) === '1', message: '请上传附件'
+                                                      }]">
                                             <div>
                                                 <upload-common
                                                     :showFileList="true"
@@ -47,9 +47,9 @@
                                     <br>
                                     <el-radio label="2">
                                         <el-form-item prop="customNoArray" label="导入连续客户号" label-width="140px" style="display:inline-block; padding: 5px 0;"
-                                        :rules="[{
-                                            validator: validateCustomNo, required: String(ruleForm.exportType) === '2'
-                                        }]">
+                                                      :rules="[{
+                                                          validator: validateCustomNo, required: String(ruleForm.exportType) === '2'
+                                                      }]">
                                             <el-input clearable size="small" v-model="ruleForm.customNoArray[0]" style="width: 150px;"></el-input>
                                             <span style="color: #fff; margin: 0 20px;">~</span>
                                             <el-input clearable size="small" v-model="ruleForm.customNoArray[1]" style="width: 150px;"></el-input>
@@ -103,7 +103,7 @@
                         <template slot-scope="scope">
                             <el-button type="primary" size="small" @click="openDialog(scope.row, 1)" icon="el-icon-view">查看</el-button>
                             <el-button type="warning" size="small" @click="openDialog(scope.row, 2)" icon="el-icon-edit">编辑</el-button>
-                            <el-button type="danger" size="small" v-if="scope.row.a === 1" icon="el-icon-delete">删除</el-button>
+                            <el-button type="danger" size="small" v-if="scope.row.isDel === 0" icon="el-icon-delete" @click="handleDelete(item)">删除</el-button>
                         </template>
                     </el-table-column>
                 </s-table>
@@ -114,7 +114,7 @@
         </div>
         <el-dialog :close-on-click-modal="false" :close-on-press-escape="false" :custom-class="`self-dialog`"
                    :visible="showDialog" width="85%" @close="handleCloseDialog" :title="`${operateType === 1 ? '查看' : operateType === 2 ? '编辑' : '新增'}场景配置`">
-            <edit-scene-dialog :operateType="operateType" :dialogItem="dialogItem" :createType="dialogItem.sceneType || this.createType"></edit-scene-dialog>
+            <edit-scene-dialog :operateType="operateType" :dialogItem="dialogItem" :createType="dialogItem.sceneType || this.createType" @updateSceneList="getTableData"></edit-scene-dialog>
         </el-dialog>
         <el-dialog :close-on-click-modal="false" :close-on-press-escape="false" :custom-class="`self-dialog`" :visible="showCarousel" width="85%" top="5%" @close="handleCloseCarousel">
             <el-carousel :interval="4000" height="600px">
@@ -133,10 +133,16 @@ import UploadCommon from '@/components/index/common/UploadCommon';
 import TreeCommon from '@/components/index/common/TreeCommon';
 import EditSceneDialog from './components/EditSceneDialog';
 import {createTypeOptions} from './components/constants';
-import EditSceneDialogVue from './components/EditSceneDialog.vue';
-import {getSceneList, getSceneListById} from '@/api/dataAnsis/sceneConfig'
+import {getSceneList, deleteScene, getTlsResultInfo} from '@/api/dataAnsis/sceneConfig';
 export default {
-    components: {STable, SCard, SDatePicker, UploadCommon, TreeCommon, EditSceneDialog},
+    components: {
+        STable,
+        SCard,
+        SDatePicker,
+        UploadCommon,
+        TreeCommon,
+        EditSceneDialog
+    },
     data() {
         return {
             createTypeOptions,
@@ -152,6 +158,7 @@ export default {
             defaultLimitFileType: ['xls', 'xlsx'],
             ruleForm: {
                 exportType: '',
+                resultId: '',
                 customNoArray: [],
                 code: '',
                 area: '9',
@@ -160,13 +167,16 @@ export default {
             tableData: [],
             columns: [
                 {
-                    label: '场景名称', field: 'sceneName'
+                    label: '场景名称',
+                    field: 'sceneName'
                 },
                 {
-                    label: '场景类型', field: 'sceneType'
+                    label: '场景类型',
+                    field: 'sceneType'
                 },
                 {
-                    label: '场景说明', field: 'sceneComnt'
+                    label: '场景说明',
+                    field: 'sceneComnt'
                 }
             ],
             searchAccountText: '',
@@ -174,9 +184,7 @@ export default {
                 children: 'children',
                 label: 'label'
             },
-            areaData: [
-                {id: 0, label: '北京', children: [{id: 1, label: '丰台区'}]}
-            ],
+            areaData: [],
             dialogItem: {},
             operateType: 0,
             createType: '',
@@ -185,10 +193,12 @@ export default {
             fileList: [],
             rules: {
                 code: {
-                    required: true, message: '请输入合约代码'
+                    required: true,
+                    message: '请输入合约代码'
                 },
                 selectDateRange: {
-                    required: true, message: '请选择统计区间'
+                    required: true,
+                    message: '请选择统计区间'
                 }
             }
         };
@@ -197,14 +207,14 @@ export default {
         validateCustomNo(rule, value, callback) {
             if (String(this.ruleForm.exportType) === '2') {
                 if (!value.length) {
-                    callback(new Error('请输入客户段号'))
+                    callback(new Error('请输入客户段号'));
                 } else if (!value[0] && value[0] !== 0) {
-                    callback(new Error('请输入客户段起始号'))
+                    callback(new Error('请输入客户段起始号'));
                 } else if (!value[1] && value[1] !== 0) {
-                    callback(new Error('请输入客户段结束号'))
+                    callback(new Error('请输入客户段结束号'));
                 }
             }
-            callback()
+            callback();
         },
         handleCheckChange(val) {
             console.log(val);
@@ -223,7 +233,7 @@ export default {
         },
         handleCloseDialog() {
             this.showDialog = false;
-            this.createType = ''
+            this.createType = '';
         },
         openDialog(item, type) {
             this.showDialog = true;
@@ -231,7 +241,7 @@ export default {
             this.dialogItem = item;
         },
         handleRadioChange(val) {
-            console.log(val)
+            console.log(val);
             if (val) {
                 this.openDialog({}, 0, val);
             }
@@ -251,16 +261,32 @@ export default {
             this.selectList = val;
         },
         getTableData() {
-            /* getSceneList().then(resp => {
-                this.tableData = resp
-            }) */
-            getSceneListById({sceneId: '101'}).then(resp => {
-                this.tableData = resp
+            getSceneList().then(resp => {
+                this.tableData = resp;
+            });
+        },
+        handleDelete(item) {
+            this.$confirm('确定删除?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
             })
+                .then(() => {
+                    deleteScene(item.sceneId);
+                })
+                .catch(() => {
+                    this.$message.info('已取消删除');
+                });
+        },
+        getResultList() {
+            getTlsResultInfo().then(resp => {
+                this.resultList = resp;
+            });
         }
     },
     mounted() {
-        this.getTableData()
+        this.getTableData();
+        this.getResultList();
     }
 };
 </script>

@@ -37,7 +37,7 @@
                     </el-form>
                 </s-card>
                 <div style="margin-top:8px; text-align: left;">
-                    <el-button size="small" type="primary" :disabled="disabled">恢复默认设置</el-button>
+                    <el-button size="small" type="primary" :disabled="disabled" @click="handleReset">恢复默认设置</el-button>
                 </div>
             </el-col>
             <el-col :span='12' class="right-block">
@@ -63,7 +63,7 @@
                     <el-button @click="insertText('()')"  :disabled="disabled" size="mini" type="primary">(...)</el-button>
                 </div>
                 <div class="textarea-css">
-                    <el-input :rows="4" type="textarea" placeholder="示例" :readonly="disabled" id="textarea" v-model="textareaContent"></el-input>
+                    <el-input :rows="4" type="textarea" placeholder="示例：买入成交相关系数>=90% AND 卖出成交相关系数>90%" :readonly="disabled" id="textarea" v-model="ruleForm.indexPara"></el-input>
                 </div>
                 <div style="margin-top:8px; text-align:right;">
                     <el-button size="small" type="primary" :disabled="disabled">语法检查</el-button>
@@ -73,7 +73,7 @@
         <el-row style="margin-top:10px; text-align:center;">
             <el-input :disabled="disabled" :clearable="!disabled" style="margin-right: 5px;" size="small" v-model="ruleForm.sceneName" placeholder="请输入场景名称" class="custom-width"></el-input>
             <el-input :disabled="disabled" :clearable="!disabled" style="margin-right: 5px;" size="small" v-model="ruleForm.sceneComnt" placeholder="请输入场景说明" class="custom-width"></el-input>
-            <el-button size="small" type="primary" :disabled="disabled">保存场景</el-button>
+            <el-button size="small" type="primary" :disabled="disabled" @click="saveSceneConfig">保存场景</el-button>
         </el-row>
         <el-row style="margin-top:30px; text-align:center;" v-if="confirmCommitMode">
             <el-button size="small" type="primary" style="width: 100px;">确定</el-button>
@@ -83,6 +83,10 @@
 <script>
 import SCard from '@/components/index/common/SCard';
 import STable from '@/components/index/common/STable';
+import {
+    updateScene,
+    createScene
+} from '@/api/dataAnsis/sceneConfig';
 import {correlationIndexColumns, accountTotalTypeOptions, accountTotalFrepOptions} from './constants';
 export default {
     components: {SCard, STable},
@@ -124,20 +128,31 @@ export default {
                 {field: 'acctBillCnt', label: '账户报单数 >=', value: '2', unit: '笔'},
                 {field: 'statAcctCnt', label: '统计账户数 >=', value: '3', unit: ''}
             ],
+            defaultConfig: {
+                acctBargainQtty: '1000', // 账户成交量
+                acctBillCnt: '100', // 账户报单量
+                acctMakePosQtty: '100', // 账户持仓量
+                statAcctCnt: '500', // 统计账户数
+                statAcctType: '1', // 统计账户类型
+                statFreq: '0', // 统计频度
+                indexPara: '买入成交相关系数>=90% AND 卖出成交相关系数>90%' // 指数参数
+            },
             ruleForm: {
+                isDel: '1', // 可以删除
+                sceneId: '', // 场景id
                 sceneComnt: '', // 场景说明
                 sceneName: '', // 场景名称
                 acctBargainQtty: '', // 账户成交量
                 acctBillCnt: '', // 账户报单量
                 acctMakePosQtty: '', // 账户持仓量
                 statAcctCnt: '', // 统计账户数
-                statAcctType: '1', // 统计账户类型
-                statFreq: '0' // 统计频度
+                statAcctType: '', // 统计账户类型
+                statFreq: '', // 统计频度
+                indexPara: '' // 指数内容
             },
             tableData: [
                 {a: '指标1', b: '>=', c: '90'}
             ],
-            textareaContent: '',
             sceneName: '',
             sceneRemark: ''
         };
@@ -158,13 +173,13 @@ export default {
                 let cursorPos = startPos;
                 let tmpStr = obj.value;
                 obj.value = tmpStr.substring(0, startPos) + str + tmpStr.substring(endPos, tmpStr.length);
-                this.textareaContent = obj.value;
+                this.ruleForm.indexPara = obj.value;
                 cursorPos += str.length;
                 obj.focus();
                 obj.selectionStart = obj.selectionEnd = cursorPos;
             } else {
                 obj.value += str;
-                this.textareaContent = obj.value;
+                this.ruleForm.indexPara = obj.value;
             }
         },
         moveEnd(obj) {
@@ -182,16 +197,60 @@ export default {
         },
         setRuleForm() {
             this.ruleForm = {
+                isDel: '1',
+                sceneId: this.dialogItem.sceneId || '',
                 sceneComnt: this.dialogItem.sceneComnt || '', // 场景说明
                 sceneName: this.dialogItem.sceneName || '', // 场景名称
-                acctBargainQtty: this.dialogItem.acctBargainQtty || '1000', // 账户成交量
-                acctBillCnt: this.dialogItem.acctBillCnt || '100', // 账户报单量
-                acctMakePosQtty: this.dialogItem.acctMakePosQtty || '100', // 账户持仓量
-                statAcctCnt: this.dialogItem.statAcctCnt || '500', // 统计账户数
-                statAcctType: this.dialogItem.statAcctType || '1', // 统计账户类型
-                statFreq: this.dialogItem.statFreq || '0' // 统计频度
+                acctBargainQtty: this.dialogItem.acctBargainQtty || this.defaultConfig.acctBargainQtty, // 账户成交量
+                acctBillCnt: this.dialogItem.acctBillCnt || this.defaultConfig.acctBillCnt, // 账户报单量
+                acctMakePosQtty: this.dialogItem.acctMakePosQtty || this.defaultConfig.acctMakePosQtty, // 账户持仓量
+                statAcctCnt: this.dialogItem.statAcctCnt || this.defaultConfig.statAcctCnt, // 统计账户数
+                statAcctType: this.dialogItem.statAcctType || this.defaultConfig.statAcctType, // 统计账户类型
+                statFreq: this.dialogItem.statFreq || this.defaultConfig.statFreq, // 统计频度
+                indexPara: this.dialogItem.indexPara || this.defaultConfig.indexPara // 统计频度
+            };
+        },
+        handleReset() {
+            this.ruleForm = {
+                sceneComnt: this.ruleForm.sceneComnt, // 场景说明
+                sceneName: this.ruleForm.sceneName, // 场景名称
+                acctBargainQtty: this.defaultConfig.acctBargainQtty, // 账户成交量
+                acctBillCnt: this.defaultConfig.acctBillCnt, // 账户报单量
+                acctMakePosQtty: this.defaultConfig.acctMakePosQtty, // 账户持仓量
+                statAcctCnt: this.defaultConfig.statAcctCnt, // 统计账户数
+                statAcctType: this.defaultConfig.statAcctType, // 统计账户类型
+                statFreq: this.defaultConfig.statFreq, // 统计频度
+                indexPara: this.defaultConfig.indexPara // 统计频度
+            };
+        },
+        syntaxCheck(callback) {
+            callback && callback();
+        },
+        saveSceneConfig() {
+            if (!this.ruleForm.sceneName) {
+                this.$message.error('请输入场景名称');
             }
-            this.textareaContent = this.dialogItem.indexPara;
+            if (!this.ruleForm.sceneComnt) {
+                this.$message.error('请输入场景说明');
+            }
+            // 语法校验
+            this.syntaxCheck(() => {
+                this.$refs['ruleForm'].validate(valid => {
+                    if (valid) {
+                        if (this.ruleForm.sceneId) {
+                            // 编辑
+                            updateScene(this.ruleForm).then(() => {
+                                this.$emit('updateSceneList');
+                            });
+                        } else {
+                            // 新增
+                            createScene(this.ruleForm).then(() => {
+                                this.$emit('updateSceneList');
+                            });
+                        }
+                    }
+                });
+            });
         }
     },
     mounted() {

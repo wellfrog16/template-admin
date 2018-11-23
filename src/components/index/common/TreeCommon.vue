@@ -37,8 +37,7 @@
 </template>
 
 <script>
-// import { getAllRoleOrgs } from '@/service/knowledgeBase/EarlyWarningHistory/Index';
-
+import {getAreaTreeList} from  "@/api/common/index.js";
 export default {
     name: 'selector-dealer',
     props: {
@@ -153,9 +152,9 @@ export default {
             return targetCode;
         },
         ajaxGetAllRoleOrgs() {
-            // getAllRoleOrgs().then(res => {
-            //     this.data = res.children;
-            // });
+            getAreaTreeList().then(resp => {
+                this.data = resp
+            })
         },
         handlerInput(val) {
             this.$refs.selectorDealer.filter(val);

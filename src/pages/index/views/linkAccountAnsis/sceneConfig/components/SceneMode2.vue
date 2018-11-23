@@ -73,7 +73,7 @@
         <el-row style="margin-top:10px; text-align:center;">
             <el-input :disabled="disabled" :clearable="!disabled" style="margin-right: 5px;" size="small" v-model="ruleForm.sceneName" placeholder="请输入场景名称" class="custom-width"></el-input>
             <el-input :disabled="disabled" :clearable="!disabled" style="margin-right: 5px;" size="small" v-model="ruleForm.sceneComnt" placeholder="请输入场景说明" class="custom-width"></el-input>
-            <el-button size="small" type="primary" :disabled="disabled">保存场景</el-button>
+            <el-button size="small" type="primary" :disabled="disabled" @click="saveSceneConfig">保存场景</el-button>
         </el-row>
         <el-row style="margin-top:30px; text-align:center;" v-if="confirmCommitMode">
             <el-button size="small" type="primary" style="width: 100px;">确定</el-button>
@@ -83,6 +83,9 @@
 <script>
 import SCard from '@/components/index/common/SCard';
 import STable from '@/components/index/common/STable';
+import {
+    updateScene
+} from '@/api/dataAnsis/sceneConfig';
 import {correlationIndexColumns, accountTotalTypeOptions, accountTotalFrepOptions} from './constants';
 export default {
     components: {SCard, STable},
@@ -134,6 +137,8 @@ export default {
                 indexPara: '' // 指数参数
             },
             ruleForm: {
+                isDel: '1', // 可以删除
+                sceneId: '', // 场景id
                 sceneComnt: '', // 场景说明
                 sceneName: '', // 场景名称
                 acctBargainQtty: '', // 账户成交量
@@ -191,6 +196,8 @@ export default {
         },
         setRuleForm() {
             this.ruleForm = {
+                isDel: '1',
+                sceneId: this.dialogItem.sceneId || '',
                 sceneComnt: this.dialogItem.sceneComnt || '', // 场景说明
                 sceneName: this.dialogItem.sceneName || '', // 场景名称
                 acctBargainQtty: this.dialogItem.acctBargainQtty || this.defaultConfig.acctBargainQtty, // 账户成交量
@@ -200,7 +207,7 @@ export default {
                 statAcctType: this.dialogItem.statAcctType || this.defaultConfig.statAcctType, // 统计账户类型
                 statFreq: this.dialogItem.statFreq || this.defaultConfig.statFreq, // 统计频度
                 indexPara: this.dialogItem.indexPara || this.defaultConfig.indexPara // 统计频度
-            }
+            };
         },
         handleReset() {
             this.ruleForm = {
@@ -213,7 +220,28 @@ export default {
                 statAcctType: this.defaultConfig.statAcctType, // 统计账户类型
                 statFreq: this.defaultConfig.statFreq, // 统计频度
                 indexPara: this.defaultConfig.indexPara // 统计频度
+            };
+        },
+        syntaxCheck(callback) {
+            callback && callback();
+        },
+        saveSceneConfig() {
+            if (!this.ruleForm.sceneName) {
+                this.$message.error('请输入场景名称');
             }
+            if (!this.ruleForm.sceneComnt) {
+                this.$message.error('请输入场景说明');
+            }
+            // 语法校验
+            this.syntaxCheck(() => {
+                this.$refs['ruleForm'].validate(valid => {
+                    if (valid) {
+                        updateScene(this.ruleForm).then(() => {
+                            this.$emit('updateSceneList');
+                        });
+                    }
+                });
+            });
         }
     },
     mounted() {
