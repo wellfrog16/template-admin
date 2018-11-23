@@ -66,7 +66,7 @@
                     <el-input :rows="4" type="textarea" placeholder="示例：买入成交相关系数>=90% AND 卖出成交相关系数>90%" :readonly="disabled" id="textarea" v-model="ruleForm.indexPara"></el-input>
                 </div>
                 <div style="margin-top:8px; text-align:right;">
-                    <el-button size="small" type="primary" :disabled="disabled">语法检查</el-button>
+                    <el-button size="small" type="primary" :disabled="disabled" @click="syntaxCheck">语法检查</el-button>
                 </div>
             </el-col>
         </el-row>
@@ -75,28 +75,25 @@
             <el-input :disabled="disabled" :clearable="!disabled" style="margin-right: 5px;" size="small" v-model="ruleForm.sceneComnt" placeholder="请输入场景说明" class="custom-width"></el-input>
             <el-button size="small" type="primary" :disabled="disabled" @click="saveSceneConfig">保存场景</el-button>
         </el-row>
-        <el-row style="margin-top:30px; text-align:center;" v-if="confirmCommitMode">
-            <el-button size="small" type="primary" style="width: 100px;">确定</el-button>
-        </el-row>
     </div>
 </template>
 <script>
 import SCard from '@/components/index/common/SCard';
 import STable from '@/components/index/common/STable';
 import {
-    updateScene,
-    createScene
+    getTlsIndexTlb,
+    checkSql
 } from '@/api/dataAnsis/sceneConfig';
-import {correlationIndexColumns, accountTotalTypeOptions, accountTotalFrepOptions} from './constants';
+import {correlationIndexColumns, accountTotalTypeOptions, accountTotalFrepOptions, defaultConfig} from './constants';
 export default {
     components: {SCard, STable},
     props: {
-        confirmCommitMode: {
-            type: Boolean,
-            default: false
-        },
         operateType: {
-            type: Number,
+            type: [Number, String],
+            required: true
+        },
+        createType: {
+            type: [Number, String],
             required: true
         },
         dialogItem: {
@@ -118,6 +115,7 @@ export default {
     },
     data() {
         return {
+            defaultConfig,
             accountTotalTypeOptions,
             accountTotalFrepOptions,
             correlationIndexColumns,
@@ -128,16 +126,8 @@ export default {
                 {field: 'acctBillCnt', label: '账户报单数 >=', value: '2', unit: '笔'},
                 {field: 'statAcctCnt', label: '统计账户数 >=', value: '3', unit: ''}
             ],
-            defaultConfig: {
-                acctBargainQtty: '1000', // 账户成交量
-                acctBillCnt: '100', // 账户报单量
-                acctMakePosQtty: '100', // 账户持仓量
-                statAcctCnt: '500', // 统计账户数
-                statAcctType: '1', // 统计账户类型
-                statFreq: '0', // 统计频度
-                indexPara: '买入成交相关系数>=90% AND 卖出成交相关系数>90%' // 指数参数
-            },
             ruleForm: {
+                sceneType: '', // 场景类型
                 isDel: '1', // 可以删除
                 sceneId: '', // 场景id
                 sceneComnt: '', // 场景说明
@@ -152,9 +142,7 @@ export default {
             },
             tableData: [
                 {a: '指标1', b: '>=', c: '90'}
-            ],
-            sceneName: '',
-            sceneRemark: ''
+            ]
         };
     },
     methods: {
@@ -198,6 +186,7 @@ export default {
         setRuleForm() {
             this.ruleForm = {
                 isDel: '1',
+                sceneType: this.createType,
                 sceneId: this.dialogItem.sceneId || '',
                 sceneComnt: this.dialogItem.sceneComnt || '', // 场景说明
                 sceneName: this.dialogItem.sceneName || '', // 场景名称
@@ -212,6 +201,9 @@ export default {
         },
         handleReset() {
             this.ruleForm = {
+                isDel: '1',
+                sceneType: this.createType,
+                sceneId: this.ruleForm.sceneId || '',
                 sceneComnt: this.ruleForm.sceneComnt, // 场景说明
                 sceneName: this.ruleForm.sceneName, // 场景名称
                 acctBargainQtty: this.defaultConfig.acctBargainQtty, // 账户成交量
@@ -224,37 +216,48 @@ export default {
             };
         },
         syntaxCheck(callback) {
-            callback && callback();
+            checkSql(this.ruleForm.indexPara).then(resp => {
+                if (resp) {
+                    callback && callback();
+                } else {
+                    this.$message.error('请插入正确的指标');
+                }
+            });
         },
         saveSceneConfig() {
             if (!this.ruleForm.sceneName) {
                 this.$message.error('请输入场景名称');
+                return;
             }
             if (!this.ruleForm.sceneComnt) {
                 this.$message.error('请输入场景说明');
+                return;
             }
             // 语法校验
             this.syntaxCheck(() => {
                 this.$refs['ruleForm'].validate(valid => {
                     if (valid) {
-                        if (this.ruleForm.sceneId) {
-                            // 编辑
-                            updateScene(this.ruleForm).then(() => {
-                                this.$emit('updateSceneList');
-                            });
-                        } else {
-                            // 新增
-                            createScene(this.ruleForm).then(() => {
-                                this.$emit('updateSceneList');
-                            });
-                        }
+                        this.$emit('saveScene', this.ruleForm);
                     }
                 });
+            });
+        },
+        getTlsIndexTlb() {
+            getTlsIndexTlb(this.ruleForm.sceneType).then(resp => {
+                let data = resp.map(v => {
+                    return {
+                        indexName: v.indexName,
+                        indexValue: 90,
+                        indexCon: '>='
+                    };
+                });
+                this.tableData = data;
             });
         }
     },
     mounted() {
         this.setRuleForm();
+        this.getTlsIndexTlb();
     }
 };
 </script>
@@ -271,7 +274,7 @@ export default {
             margin-left: 0;
         }
         .custom-width {
-            width: 150px;
+            width: 180px;
         }
         .remark {
             margin-top: -17px;

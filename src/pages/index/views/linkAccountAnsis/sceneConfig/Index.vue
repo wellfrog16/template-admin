@@ -8,7 +8,7 @@
                             <el-form-item prop="a">
                                 <el-radio-group v-model="ruleForm.exportType">
                                     <el-radio label="0">
-                                        <el-form-item prop="resultName" label="导入结果集" label-width="140px" style="display:inline-block; padding: 5px 0;"
+                                        <el-form-item prop="resultId" label="导入结果集" label-width="140px" style="display:inline-block; padding: 5px 0;"
                                                       :rules="[{
                                                           required: String(ruleForm.exportType) === '0', message: '请选择结果集'
                                                       }]">
@@ -62,11 +62,11 @@
                         <el-col :xl="12" :lg="12" :md="12" :sm="24">
                             <el-form-item prop="area" label="地区选择" label-width="140px">
                                 <div>
-                                    <tree-common :isMultipleMode="true"></tree-common>
+                                    <tree-common ref="tree-components" :isMultipleMode="true"></tree-common>
                                 </div>
                             </el-form-item>
-                            <el-form-item prop="code" label="合约代码" label-width="140px">
-                                <el-input clearable size="small" v-model="ruleForm.code" class="custom-width"></el-input>
+                            <el-form-item prop="contractCode" label="合约代码" label-width="140px">
+                                <el-input clearable size="small" v-model="ruleForm.contractCode" class="custom-width"></el-input>
                             </el-form-item>
                             <el-form-item prop="selectDateRange" label="统计区间" label-width="140px">
                                 <s-date-picker
@@ -91,7 +91,7 @@
                     </el-radio-group>
                     <el-button slot="reference" class="new-btn" type="primary" size="mini"><i class="el-icon-plus"></i>新增自定义场景</el-button>
                 </el-popover>
-                <el-input class="search-input" size="mini" prefix-icon="el-icon-search" placeholder="请输入场景名称和场景说明" v-model="searchAccountText"></el-input>
+                <el-input class="search-input" size="mini" prefix-icon="el-icon-search" placeholder="请输入场景名称和场景说明" v-model="searchAccountText" @keyup.enter.native="handleSearch"></el-input>
             </div>
             <div slot="content">
                 <s-table :columns="columns" :tableData="tableData" :showSelectionColumn="true" @selection-change="handleSelectChange">
@@ -103,7 +103,7 @@
                         <template slot-scope="scope">
                             <el-button type="primary" size="small" @click="openDialog(scope.row, 1)" icon="el-icon-view">查看</el-button>
                             <el-button type="warning" size="small" @click="openDialog(scope.row, 2)" icon="el-icon-edit">编辑</el-button>
-                            <el-button type="danger" size="small" v-if="scope.row.isDel === 0" icon="el-icon-delete" @click="handleDelete(item)">删除</el-button>
+                            <el-button type="danger" size="small" v-if="scope.row.isDel === '1'" icon="el-icon-delete" @click="handleDelete(scope.row)">删除</el-button>
                         </template>
                     </el-table-column>
                 </s-table>
@@ -113,15 +113,18 @@
             <el-button size="small" type="primary" style="width: 100px;" @click="nextStep">下一步</el-button>
         </div>
         <el-dialog :close-on-click-modal="false" :close-on-press-escape="false" :custom-class="`self-dialog`"
-                   :visible="showDialog" width="85%" @close="handleCloseDialog" :title="`${operateType === 1 ? '查看' : operateType === 2 ? '编辑' : '新增'}场景配置`">
+                   :visible="showDialog" width="85%" @close="handleCloseDialog" :title="`${operateType === 1 ? '查看' : operateType === 2 ? '编辑' : '新增'}场景配置-${createTypeName}`">
             <edit-scene-dialog :operateType="operateType" :dialogItem="dialogItem" :createType="dialogItem.sceneType || this.createType" @updateSceneList="getTableData"></edit-scene-dialog>
         </el-dialog>
         <el-dialog :close-on-click-modal="false" :close-on-press-escape="false" :custom-class="`self-dialog`" :visible="showCarousel" width="85%" top="5%" @close="handleCloseCarousel">
             <el-carousel :interval="4000" height="600px">
                 <el-carousel-item v-for="(item, index) in selectList" :key="index">
-                    <edit-scene-dialog :confirmCommitMode="true" :operateType="1" :dialogItem="item" :createType="item.createType"></edit-scene-dialog>
+                    <edit-scene-dialog :operateType="1" :dialogItem="item" :createType="item.sceneType"></edit-scene-dialog>
                 </el-carousel-item>
             </el-carousel>
+            <el-row style="margin-top:30px; text-align:center;">
+                <el-button size="small" type="primary" style="width: 100px;" @click="handleNextStep">确定</el-button>
+            </el-row>
         </el-dialog>
     </div>
 </template>
@@ -133,7 +136,7 @@ import UploadCommon from '@/components/index/common/UploadCommon';
 import TreeCommon from '@/components/index/common/TreeCommon';
 import EditSceneDialog from './components/EditSceneDialog';
 import {createTypeOptions} from './components/constants';
-import {getSceneList, deleteScene, getTlsResultInfo} from '@/api/dataAnsis/sceneConfig';
+import {getSceneList, deleteScene, getTlsResultInfo, mergeAccount} from '@/api/dataAnsis/sceneConfig';
 export default {
     components: {
         STable,
@@ -155,12 +158,13 @@ export default {
                 type: 'primary'
             },
             uploadBasicUrl: '',
+            createTypeName: '相关性分析',
             defaultLimitFileType: ['xls', 'xlsx'],
             ruleForm: {
                 exportType: '',
                 resultId: '',
                 customNoArray: [],
-                code: '',
+                contractCode: '',
                 area: '9',
                 selectDateRange: []
             },
@@ -172,7 +176,7 @@ export default {
                 },
                 {
                     label: '场景类型',
-                    field: 'sceneType'
+                    field: 'sceneTypeName'
                 },
                 {
                     label: '场景说明',
@@ -192,7 +196,7 @@ export default {
             exportCustomNo: [],
             fileList: [],
             rules: {
-                code: {
+                contractCode: {
                     required: true,
                     message: '请输入合约代码'
                 },
@@ -239,11 +243,15 @@ export default {
             this.showDialog = true;
             this.operateType = type;
             this.dialogItem = item;
+            this.createTypeName = item.sceneTypeName || this.createTypeName;
         },
         handleRadioChange(val) {
-            console.log(val);
+            let index = this.createTypeOptions.findIndex(v => {
+                return v['value'] === val;
+            });
+            this.createTypeName = this.createTypeOptions[index]['label'];
             if (val) {
-                this.openDialog({}, 0, val);
+                this.openDialog({}, 0);
             }
         },
         handleCloseCarousel() {
@@ -260,27 +268,61 @@ export default {
             console.log(val);
             this.selectList = val;
         },
-        getTableData() {
-            getSceneList().then(resp => {
+        getTableData(params) {
+            this.showDialog = false;
+            getSceneList(params).then(resp => {
                 this.tableData = resp;
             });
         },
         handleDelete(item) {
+            debugger;
             this.$confirm('确定删除?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             })
                 .then(() => {
-                    deleteScene(item.sceneId);
-                })
-                .catch(() => {
-                    this.$message.info('已取消删除');
+                    deleteScene(item.sceneId).then(() => {
+                        this.getTableData();
+                    });
                 });
         },
         getResultList() {
             getTlsResultInfo().then(resp => {
                 this.resultList = resp;
+            });
+        },
+        handleSearch() {
+            this.getTableData({searchName: this.searchAccountText});
+        },
+        handleNextStep() {
+            this.showCarousel = false;
+            this.$refs['ruleForm'].validate(valid => {
+                if (valid) {
+                    let params = {
+                        // cityIds: this.$refs['tree-components'].getCheckedList(),
+                        cityIds: '',
+                        contractCode: this.ruleForm.contractCode,
+                        startDate: this.ruleForm.selectDateRange[0],
+                        endDate: this.ruleForm.selectDateRange[1],
+                        sceneIds: this.selectList.map(v => {
+                            return v.sceneId;
+                        }).join(',')
+                    };
+                    if (this.exportType === '0') {
+                        params.resultIds = this.ruleForm.resultId;
+                    }
+                    if (this.exportType === '1') {
+                    }
+                    if (this.exportType === '2') {
+                        params.accountStart = this.ruleForm.customNoArray[0];
+                        params.accountEnd = this.ruleForm.customNoArray[1];
+                    }
+                    console.log(params);
+                    mergeAccount(params).then(resp => {
+                        this.$router.push({name: ''});
+                    });
+                }
             });
         }
     },
@@ -312,7 +354,7 @@ export default {
         }
 
         .search-input {
-            width: 200px;
+            width: 240px;
 
             /deep/ input {
                 border-radius: 15px;
