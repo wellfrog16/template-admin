@@ -56,30 +56,30 @@ const router = new Router({
                 //     path: 'log',
                 //     name: '二级菜单2',
                 //     icon: 'el-icon-document',
-                //     component: Root},
+                //     components: Root},
                 // {
                 //     path: 'file',
                 //     name: '二级菜单3',
                 //     icon: 'menu-fix-icon fas fa-angry fa-lg',
-                //     component: Root
+                //     components: Root
                 // },
                 // {
                 //     path: 'config22',
                 //     name: '二级菜单4',
-                //     component: Root,
+                //     components: Root,
                 //     icon: 'el-icon-setting',
                 //     children: [
                 //         {
                 //             path: 'dictionary',
                 //             name: '三级菜单1',
                 //             icon: 'el-icon-document',
-                //             component: Root
+                //             components: Root
                 //         },
                 //         {
                 //             path: 'dictionary1',
                 //             name: '三级菜单2',
                 //             icon: 'el-icon-document',
-                //             component: Root
+                //             components: Root
                 //         }
                 //     ]
                 // }
@@ -120,11 +120,11 @@ const router = new Router({
                             component: Root
                         },
                         {
-                            path: 'file',
-                            name: 'file',
-                            label: '组合场景合并',
+                            path: 'abnormity',
+                            name: 'abnormity',
+                            label: '异常交易分析',
                             icon: 'el-icon-more',
-                            component: Root
+                            component: resolve => require(['../views/linkAccountAnsis/abnormitysAnalysis/Index.vue'], resolve)
                         },
                         {
                             path: 'dictionary',
@@ -155,31 +155,31 @@ const router = new Router({
             //         path: 'sceneConfig',
             //         name: '场景设置',
             //         icon: 'el-icon-document',
-            //         component: resolve => require(['../views/sceneConfig/Index.vue'], resolve)
+            //         components: resolve => require(['../views/sceneConfig/Index.vue'], resolve)
             //     },
             //     {
             //         path: 'abnormityAnalysis',
             //         name: '异常行为分析',
             //         icon: 'el-icon-document',
-            //         component: resolve => require(['../views/abnormityAnalysis/Index.vue'], resolve)
+            //         components: resolve => require(['../views/abnormityAnalysis/Index.vue'], resolve)
             //     },
             //     {
             //         path: 'ssss',
             //         name: '关联账户分析',
-            //         component: Root,
+            //         components: Root,
             //         icon: 'el-icon-setting',
             //         children: [
             //             {
             //                 path: 'sceneConfig',
             //                 name: '场景设置',
             //                 icon: 'el-icon-document',
-            //                 component: Root
+            //                 components: Root
             //             },
             //             {
             //                 path: 'abnormityAnalysis',
             //                 name: '异常行为分析',
             //                 icon: 'el-icon-document',
-            //                 component: Root
+            //                 components: Root
             //             }
             //         ]
             //     }

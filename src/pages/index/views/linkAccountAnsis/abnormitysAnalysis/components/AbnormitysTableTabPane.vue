@@ -10,7 +10,7 @@
                     <el-table
                         size="small"
                         ref="multipleTable" s
-                        height="410"
+                        height="450"
                         highlight-current-row
                         tooltip-effect="dark"
                         :data="active.tableDataList"
@@ -47,7 +47,7 @@
     } from '../components/constants'
 
     export default {
-        name: "cardTable",
+        name: "AbnormitysTableTabPane",
         // 父传子！
         props: {},
 
@@ -57,6 +57,7 @@
         // 存储数据
         data() {
             return {
+                tabPosition: 'top',
                 //  tab页
                 activeName: 'first',
                 //初始化表格信息
@@ -243,6 +244,7 @@
 <style lang="less" module>
     .card_table {
         color: #fff !important;
+        position: relative;
         .a_form_table_bar {
             box-shadow: 0 0 10px #326fcb !important;
             padding: 0 !important;
@@ -253,13 +255,15 @@
             .el-tabs__item .is-active {
                 color: #fff;
             }
-        }
-        .el-tabs--card > .el-tabs__header .el-tabs__nav {
-            border-bottom: 1px solid rgb(11, 54, 112);
-        }
-        :global(.el-tabs__nav) {
-            border-right: 1px solid #e4e7ed !important;
-            border-radius: 0 !important;
+            :global(.el-tabs__header) {
+                border-bottom: 1px solid #e4e7ed;
+                position: absolute;
+                top: -60px;
+            }
+            :global(.el-tabs__nav) {
+                border-right: 1px solid #e4e7ed !important;
+                border-radius: 0 !important;
+            }
         }
 
         .export_button {

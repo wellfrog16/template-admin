@@ -6,7 +6,9 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "eslint": "vue-cli-service lint",
-    "stylelint": "stylelint */**/*.{css,less,vue} --fix"
+    "stylelint": "stylelint */**/*.{css,less,vue} --fix",
+    "precommit": "stylelint css/*.scss",
+    "...": "..."
   },
   "dependencies": {
     "element-ui": "^2.4.9",

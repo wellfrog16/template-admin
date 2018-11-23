@@ -27,7 +27,6 @@ export default {
     .head_top {
         width: 100%;
         height: @height;
-        border-bottom: 1px solid #0763edf0;
         .head_top_log {
             background: url('../../../assets/img/common/top.gif') no-repeat;
             width: 100%;

@@ -5,9 +5,9 @@
                 <el-col :xl="10" :lg="10" :md="10" :sm="24">
                     <el-form-item :class="$style.rul_form_iInput" prop="importAccountGroup" label="导入账户组" label-width="100px">
                         <el-select :class="$style.select_option"
-                            class="custom-width"
-                            clearable size="small"
-                            v-model="ruleForm.importAccountGroup">
+                                   class="custom-width"
+                                   clearable size="small"
+                                   v-model="ruleForm.importAccountGroup">
                             <el-option
                                 v-for="item in resultList"
                                 :key="item.resultId"
@@ -42,9 +42,9 @@
                     </el-form-item>
                     <el-form-item prop="contractCode" label="合约代码" label-width="120px">
                         <el-input :class="$style.select_option"
-                            clearable size="small"
-                            v-model="ruleForm.contractCode"
-                            class="custom-width">
+                                  clearable size="small"
+                                  v-model="ruleForm.contractCode"
+                                  class="custom-width">
                         </el-input>
                     </el-form-item>
                 </el-col>
@@ -69,7 +69,7 @@
     import {postImportAccountGroup, postImportAccoun} from '@/api/dataAnsis/abnormityAnalysis';
 
     export default {
-        name: "cardForm",
+        name: "AbnormitysForm",
         // 父传子！
         props: {},
 
