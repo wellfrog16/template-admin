@@ -203,6 +203,9 @@
     .el-checkbox__inner {
         background: transparent;
     }
+    .el-checkbox__input.is-disabled .el-checkbox__inner {
+        background: transparent;
+    }
     .el-checkbox__input.is-checked {
         .el-checkbox__inner {
             background: @g-active-bg;
@@ -212,9 +215,6 @@
         .el-checkbox__inner {
             background: @g-active-bg;
         }
-    }
-    .el-checkbox__input.is-disabled.el-checkbox__inner {
-        background: transparent;
     }
 }
 .el-radio {
@@ -235,8 +235,6 @@
         background: transparent;
     }
 }
-
-// loading
 .el-loading-mask {
     background: rgb(0, 0, 0);
     opacity: 0.7;

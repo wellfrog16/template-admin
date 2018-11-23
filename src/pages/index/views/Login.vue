@@ -102,9 +102,9 @@ export default {
             };
             this.fullScreenLoading = true;
             getAccessToken(params).then(resp => {
-                localStorage.setItem('ACCESS_TOKEN', resp.access_token)
-                this.$router.push({path: '/index'});
-            })
+                localStorage.setItem('ACCESS_TOKEN', resp.access_token);
+                this.$router.push({path: '/sceneConfig'});
+            });
         }
     }
 };
