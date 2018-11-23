@@ -3,7 +3,8 @@
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
             <el-row>
                 <el-col :xl="10" :lg="10" :md="10" :sm="24">
-                    <el-form-item :class="$style.rul_form_iInput" prop="importAccountGroup" label="导入账户组" label-width="100px">
+                    <el-form-item :class="$style.rul_form_iInput" prop="importAccountGroup" label="导入账户组"
+                                  label-width="100px">
                         <el-select :class="$style.select_option"
                                    class="custom-width"
                                    clearable size="small"
@@ -61,12 +62,15 @@
 <script>
     // import BreadCrumb from '../components/commont/breadCrumbs.vue'
     // console.log(BreadCrumb)
-
+    import MixinVue1 from "../components/MixinsForm";
     // 时间区间
     import SDatePicker from '@/components/index/common/SDatePicker';
     // 导入CSV
     import UploadCommon from '@/components/index/common/UploadCommon';
-    import {postImportAccountGroup, postImportAccoun} from '@/api/dataAnsis/abnormityAnalysis';
+    import {
+        postImportAccountGroup,
+        postImportAccoun,
+    } from '@/api/dataAnsis/abnormityAnalysis';
 
     export default {
         name: "AbnormitysForm",
@@ -78,7 +82,7 @@
             SDatePicker: () => import('@/components/index/common/SDatePicker')   // 时间区间
         },
         // 混入, 是一个类的继承，类似于一个公共的方法。
-        mixins: [],
+        mixins: [MixinVue1],
         // 存储数据
         data() {
             return {
@@ -86,7 +90,7 @@
                     importAccountGroup: '',  // 导入账户组
                     importCSV: '',           // 导入CSV
                     statisticalInterval: [],  // 统计区间
-                    contractCode: '',    // 合约代码
+                    contractCode: '4635653',    // 合约代码
                 },
                 rules: {
                     // name: [
@@ -140,17 +144,6 @@
             getFileList(val) {
                 console.log(val);
             },
-            // 生成报告(查询)
-            generateReportsClick(formName) {
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        alert('submit!');
-                    } else {
-                        console.log('error submit!!');
-                        return false;
-                    }
-                });
-            },
         },
         // 在一个实例被创建之后执行代码
         created() {
@@ -164,7 +157,6 @@
             // postImportAccoun().then(resp => {
             //     console.log(resp);
             // });
-
         },
         beforeDestroy() {
         }

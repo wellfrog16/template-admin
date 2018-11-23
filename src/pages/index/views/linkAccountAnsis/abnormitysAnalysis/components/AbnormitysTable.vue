@@ -23,6 +23,7 @@
     </div>
 </template>
 <script>
+    import MixinVue1 from "../components/MixinsForm";
     export default {
         name: "AbnormitysTable",
         // 父传子！
@@ -30,78 +31,11 @@
 
         components: {},
         // 混入, 是一个类的继承，类似于一个公共的方法。
-        mixins: [],
+        mixins: [MixinVue1],
         // 存储数据
         data() {
             return {
-                tableDataList: [
-                    {
-                        "accountTeamNo": "日期",
-                        "customerNo": "日期",
-                        "customerName": "日期",
-                        "contractCode": "日期",
-                        "ccountTeamNetPosition": "日期",
-                        "accountNetPosition": "日期",
-                        "muiltInventory": "日期",
-                        "voidInventory": "日期",
-                        "overStoreTimeTaked": "日期",
-                    },
-                    {
-                        "accountTeamNo": "日期",
-                        "customerNo": "日期",
-                        "customerName": "日期",
-                        "contractCode": "日期",
-                        "ccountTeamNetPosition": "日期",
-                        "accountNetPosition": "日期",
-                        "muiltInventory": "日期",
-                        "voidInventory": "日期",
-                        "overStoreTimeTaked": "日期",
-                    },
-                    {
-                        "accountTeamNo": "日期",
-                        "customerNo": "日期",
-                        "customerName": "日期",
-                        "contractCode": "日期",
-                        "ccountTeamNetPosition": "日期",
-                        "accountNetPosition": "日期",
-                        "muiltInventory": "日期",
-                        "voidInventory": "日期",
-                        "overStoreTimeTaked": "日期",
-                    },
-                    {
-                        "accountTeamNo": "日期",
-                        "customerNo": "日期",
-                        "customerName": "日期",
-                        "contractCode": "日期",
-                        "ccountTeamNetPosition": "日期",
-                        "accountNetPosition": "日期",
-                        "muiltInventory": "日期",
-                        "voidInventory": "日期",
-                        "overStoreTimeTaked": "日期",
-                    },
-                    {
-                        "accountTeamNo": "日期",
-                        "customerNo": "日期",
-                        "customerName": "日期",
-                        "contractCode": "日期",
-                        "ccountTeamNetPosition": "日期",
-                        "accountNetPosition": "日期",
-                        "muiltInventory": "日期",
-                        "voidInventory": "日期",
-                        "overStoreTimeTaked": "日期",
-                    },
-                    {
-                        "accountTeamNo": "日期",
-                        "customerNo": "日期",
-                        "customerName": "日期",
-                        "contractCode": "日期",
-                        "ccountTeamNetPosition": "日期",
-                        "accountNetPosition": "日期",
-                        "muiltInventory": "日期",
-                        "voidInventory": "日期",
-                        "overStoreTimeTaked": "日期",
-                    },
-                ],
+                tableDataList: [],
                 tableColumns: [
                     {field: "accountTeamNo", title: "账户组号",width: 150, align: 'center'},
                     {field: "customerNo", title: "客户编号",width: 150, align: 'center'},

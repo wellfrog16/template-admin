@@ -6,7 +6,7 @@ const instance = url => {
     const accessToken = localStorage.getItem('ACCESS_TOKEN');
     let instance = axios.create({
         baseURL: url || config.server.api,
-        timeout: 20000,
+        timeout: 200000,
         headers: {Authorization: 'Bearer' + accessToken}
     });
     // request 拦截器

@@ -42,6 +42,7 @@
 <script>
     // import BreadCrumb from '../components/commont/breadCrumbs.vue'
     // console.log(BreadCrumb)
+    import MixinVue1 from "../components/MixinsForm";
     import {
         tableColumns_1, tableColumns_2, tableColumns_3
     } from '../components/constants'
@@ -53,7 +54,7 @@
 
         components: {},
         // 混入, 是一个类的继承，类似于一个公共的方法。
-        mixins: [],
+        mixins: [MixinVue1],
         // 存储数据
         data() {
             return {
@@ -66,145 +67,78 @@
                         name: 'first',
                         label: '超仓分析',
                         tableColumns: tableColumns_1,
-                        tableDataList: [
-                            {
-                                "accountTeamNo": "日期",
-                                "customerNo": "日期",
-                                "customerName": "日期",
-                                "contractCode": "日期",
-                                "ccountTeamNetPosition": "日期",
-                                "accountNetPosition": "日期",
-                                "muiltInventory": "日期",
-                                "voidInventory": "日期",
-                                "overStoreTimeTaked": "日期",
-                            },
-                            {
-                                "accountTeamNo": "日期",
-                                "customerNo": "日期",
-                                "customerName": "日期",
-                                "contractCode": "日期",
-                                "ccountTeamNetPosition": "日期",
-                                "accountNetPosition": "日期",
-                                "muiltInventory": "日期",
-                                "voidInventory": "日期",
-                                "overStoreTimeTaked": "日期",
-                            },
-                            {
-                                "accountTeamNo": "日期",
-                                "customerNo": "日期",
-                                "customerName": "日期",
-                                "contractCode": "日期",
-                                "ccountTeamNetPosition": "日期",
-                                "accountNetPosition": "日期",
-                                "muiltInventory": "日期",
-                                "voidInventory": "日期",
-                                "overStoreTimeTaked": "日期",
-                            },
-                            {
-                                "accountTeamNo": "日期",
-                                "customerNo": "日期",
-                                "customerName": "日期",
-                                "contractCode": "日期",
-                                "ccountTeamNetPosition": "日期",
-                                "accountNetPosition": "日期",
-                                "muiltInventory": "日期",
-                                "voidInventory": "日期",
-                                "overStoreTimeTaked": "日期",
-                            },
-                            {
-                                "accountTeamNo": "日期",
-                                "customerNo": "日期",
-                                "customerName": "日期",
-                                "contractCode": "日期",
-                                "ccountTeamNetPosition": "日期",
-                                "accountNetPosition": "日期",
-                                "muiltInventory": "日期",
-                                "voidInventory": "日期",
-                                "overStoreTimeTaked": "日期",
-                            },
-                            {
-                                "accountTeamNo": "日期",
-                                "customerNo": "日期",
-                                "customerName": "日期",
-                                "contractCode": "日期",
-                                "ccountTeamNetPosition": "日期",
-                                "accountNetPosition": "日期",
-                                "muiltInventory": "日期",
-                                "voidInventory": "日期",
-                                "overStoreTimeTaked": "日期",
-                            },
-                        ],
+                        tableDataList: [],
                     }, {
                         label: '频繁报撤销单分析',
                         name: 'second',
                         tableColumns: tableColumns_2,
                         tableDataList: [
-                            {
-                                "accountTeamNo": "日期",
-                                "customerNo": "日期",
-                                "customerName": "日期",
-                                "contractCode": "日期",
-                                "ccountTeamNetPosition": "日期",
-                                "accountNetPosition": "日期",
-                                "muiltInventory": "日期",
-                                "voidInventory": "日期",
-                                "overStoreTimeTaked": "日期",
-                            },
-                            {
-                                "accountTeamNo": "日期",
-                                "customerNo": "日期",
-                                "customerName": "日期",
-                                "contractCode": "日期",
-                                "ccountTeamNetPosition": "日期",
-                                "accountNetPosition": "日期",
-                                "muiltInventory": "日期",
-                                "voidInventory": "日期",
-                                "overStoreTimeTaked": "日期",
-                            },
-                            {
-                                "accountTeamNo": "日期",
-                                "customerNo": "日期",
-                                "customerName": "日期",
-                                "contractCode": "日期",
-                                "ccountTeamNetPosition": "日期",
-                                "accountNetPosition": "日期",
-                                "muiltInventory": "日期",
-                                "voidInventory": "日期",
-                                "overStoreTimeTaked": "日期",
-                            },
-                            {
-                                "accountTeamNo": "日期",
-                                "customerNo": "日期",
-                                "customerName": "日期",
-                                "contractCode": "日期",
-                                "ccountTeamNetPosition": "日期",
-                                "accountNetPosition": "日期",
-                                "muiltInventory": "日期",
-                                "voidInventory": "日期",
-                                "overStoreTimeTaked": "日期",
-                            },
-                            {
-                                "accountTeamNo": "日期",
-                                "customerNo": "日期",
-                                "customerName": "日期",
-                                "contractCode": "日期",
-                                "ccountTeamNetPosition": "日期",
-                                "accountNetPosition": "日期",
-                                "muiltInventory": "日期",
-                                "voidInventory": "日期",
-                                "overStoreTimeTaked": "日期",
-                            },
-                            {
-                                "accountTeamNo": "日期",
-                                "customerNo": "日期",
-                                "customerName": "日期",
-                                "contractCode": "日期",
-                                "ccountTeamNetPosition": "日期",
-                                "accountNetPosition": "日期",
-                                "muiltInventory": "日期",
-                                "voidInventory": "日期",
-                                "overStoreTimeTaked": "日期",
-                            },
+                            // {
+                            //     "accountTeamNo": "日期",
+                            //     "customerNo": "日期",
+                            //     "customerName": "日期",
+                            //     "contractCode": "日期",
+                            //     "ccountTeamNetPosition": "日期",
+                            //     "accountNetPosition": "日期",
+                            //     "muiltInventory": "日期",
+                            //     "voidInventory": "日期",
+                            //     "overStoreTimeTaked": "日期",
+                            // },
+                            // {
+                            //     "accountTeamNo": "日期",
+                            //     "customerNo": "日期",
+                            //     "customerName": "日期",
+                            //     "contractCode": "日期",
+                            //     "ccountTeamNetPosition": "日期",
+                            //     "accountNetPosition": "日期",
+                            //     "muiltInventory": "日期",
+                            //     "voidInventory": "日期",
+                            //     "overStoreTimeTaked": "日期",
+                            // },
+                            // {
+                            //     "accountTeamNo": "日期",
+                            //     "customerNo": "日期",
+                            //     "customerName": "日期",
+                            //     "contractCode": "日期",
+                            //     "ccountTeamNetPosition": "日期",
+                            //     "accountNetPosition": "日期",
+                            //     "muiltInventory": "日期",
+                            //     "voidInventory": "日期",
+                            //     "overStoreTimeTaked": "日期",
+                            // },
+                            // {
+                            //     "accountTeamNo": "日期",
+                            //     "customerNo": "日期",
+                            //     "customerName": "日期",
+                            //     "contractCode": "日期",
+                            //     "ccountTeamNetPosition": "日期",
+                            //     "accountNetPosition": "日期",
+                            //     "muiltInventory": "日期",
+                            //     "voidInventory": "日期",
+                            //     "overStoreTimeTaked": "日期",
+                            // },
+                            // {
+                            //     "accountTeamNo": "日期",
+                            //     "customerNo": "日期",
+                            //     "customerName": "日期",
+                            //     "contractCode": "日期",
+                            //     "ccountTeamNetPosition": "日期",
+                            //     "accountNetPosition": "日期",
+                            //     "muiltInventory": "日期",
+                            //     "voidInventory": "日期",
+                            //     "overStoreTimeTaked": "日期",
+                            // },
+                            // {
+                            //     "accountTeamNo": "日期",
+                            //     "customerNo": "日期",
+                            //     "customerName": "日期",
+                            //     "contractCode": "日期",
+                            //     "ccountTeamNetPosition": "日期",
+                            //     "accountNetPosition": "日期",
+                            //     "muiltInventory": "日期",
+                            //     "voidInventory": "日期",
+                            //     "overStoreTimeTaked": "日期",
+                            // },
                         ],
                     }, {
                         label: '自成交分析',
@@ -256,13 +190,18 @@
                 color: #fff;
             }
             :global(.el-tabs__header) {
-                border-bottom: 1px solid #e4e7ed;
+                border-bottom: 1px solid #0740a2ad;
                 position: absolute;
                 top: -60px;
             }
+            :global(.el-tabs__item) {
+                border-bottom: 0 solid #0740a2ad;
+                border-left: 1px solid #0740a2ad;
+                color: #fff;
+            }
             :global(.el-tabs__nav) {
-                border-right: 1px solid #e4e7ed !important;
-                border-radius: 0 !important;
+                color: #fff;
+                border: 1px solid #0740a2ad;
             }
         }
 

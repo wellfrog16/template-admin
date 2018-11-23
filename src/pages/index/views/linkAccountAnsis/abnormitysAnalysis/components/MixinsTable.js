@@ -31,6 +31,7 @@ export default {
         // this.getForm();
     },
     methods: {
+
         barEchartsDete() {
             let barEcharts = barEchartsA.init(document.getElementById('AbarEcharts'));
             let option = {
@@ -122,28 +123,31 @@ export default {
                                 color:'rgba(239, 156, 0)',  // 柱状图颜色 黄色
                             }
                         },
-                        label: {
-                            show: true,
-                            name: '限仓线',
-                            position: 'right',
-                            formatter: function() {
-                                return '限仓线';
+                        markLine: {
+                            itemStyle: {
+                                normal: {
+                                    lineStyle: {
+                                        type: 'solid', color: 'red'
+                                    }
+                                }
                             },
-                            normal: {
+                            label: {
                                 show: true,
-                                position: 'insideRight'
+                                formatter: function() {
+                                    return '限仓线';
+                                }
                             },
                             data: [
                                 [
                                     {
-                                        yAxis: '700',
+                                        yAxis: '300',
                                         symbol: 'none',
-                                        x: '5%'
+                                        x: '7%'
                                     },
                                     {
-                                        yAxis: '700',
+                                        yAxis: '300',
                                         symbol: 'none',
-                                        x: '96%'
+                                        x: '93%'
                                     }
                                 ]
                             ]

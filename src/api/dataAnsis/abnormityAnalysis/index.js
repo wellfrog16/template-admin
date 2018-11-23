@@ -17,8 +17,8 @@ export const postImportAccountGroup = params => {
     return post(`${requestPrefix}/test/result/query`, params);
 };
 // 查询
-export const postImportAccoun = params => {
-    return post(`${requestPrefix}/test/sql`, params);
+export const postIInquire = params => {
+    return post(`${requestPrefix}/operate/sql`, params);
 };
 // Bar 柱状图
 // export const postImportAccoun = params => {

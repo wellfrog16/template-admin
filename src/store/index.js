@@ -6,6 +6,9 @@ import demo1 from '@/store/module/index/demo1';
 import hehe from '@/store/module/index/demo2/hehe';
 import haha from '@/store/module/index/demo2/haha';
 
+// 异常交易分析
+// import abnormitysAnalysis from '@'
+
 Vue.use(Vuex);
 
 const state = {
