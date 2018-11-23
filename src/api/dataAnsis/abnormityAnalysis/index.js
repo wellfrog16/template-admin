@@ -16,3 +16,11 @@ export const getImportAccountGroup = params => {
 export const postImportAccountGroup = params => {
     return post(`${requestPrefix}/test/result/query`, params);
 };
+// 查询
+export const postImportAccoun = params => {
+    return post(`${requestPrefix}/test/sql`, params);
+};
+// Bar 柱状图
+// export const postImportAccoun = params => {
+//     return post(`${requestPrefix}/test/sql`, params);
+// };

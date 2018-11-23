@@ -6,10 +6,7 @@
             <card-table :class="$style.a_form_table_bar"></card-table>
             <bar-echarts :class="$style.a_form_table_bar"></bar-echarts>
         </div>
-        <div :class="$style.export_button">
-            <el-button :class="$style.export_bt" type="primary" @click="exportClick">导出CSV</el-button>
-        </div>
-        <a-t-details :class="$style.a_form_box"></a-t-details>
+        <a-t-details></a-t-details>
     </div>
 </template>
 <script>
@@ -44,8 +41,6 @@
             };
         },
         methods: {
-            // 导出CSV
-            exportClick(){},
         }
     };
 </script>
@@ -54,30 +49,15 @@
         color: #fff;
         .bar_right {
             width: 100%;
-            height: 600px;
             display: flex;
             justify-content: space-between;
             .a_form_table_bar {
                 width: 49.3%;
-                box-shadow: 0 0 10px #326fcb;
                 margin-bottom: 20px;
             }
         }
         .a_form_box {
-            box-shadow: 0 0 10px #326fcb;
             margin-bottom: 20px;
-        }
-        .export_button {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 25px;
-            .export_bt {
-                color: #fff;
-                background-color: rgb(7, 39, 89);
-                border: 1px solid rgb(0, 157, 224);
-                font-size: 13px;
-                padding: 10px 30px;
-            }
         }
     }
 

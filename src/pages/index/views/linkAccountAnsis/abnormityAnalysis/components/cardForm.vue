@@ -11,9 +11,9 @@
                             v-model="ruleForm.importAccountGroup">
                             <el-option
                                 v-for="item in resultList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
+                                :key="item.resultId"
+                                :label="item.resultName"
+                                :value="item.resultId">
                             </el-option>
                         </el-select>
                     </el-form-item>
@@ -67,7 +67,7 @@
     import SDatePicker from '@/components/index/common/SDatePicker';
     // 导入CSV
     import UploadCommon from '@/components/index/common/UploadCommon';
-    import {postImportAccountGroup} from '@/api/dataAnsis/abnormityAnalysis';
+    import {postImportAccountGroup, postImportAccoun} from '@/api/dataAnsis/abnormityAnalysis';
 
     export default {
         name: "cardForm",
@@ -141,7 +141,6 @@
             getFileList(val) {
                 console.log(val);
             },
-
             // 生成报告(查询)
             generateReportsClick(formName) {
                 this.$refs[formName].validate((valid) => {
@@ -159,9 +158,14 @@
         },
         // 初始化数据
         mounted() {
-            postImportAccountGroup().then(resp => {
-                console.log(resp)
-            })
+            // postImportAccountGroup().then(resp => {
+            //     console.log(resp);
+            //     this.resultList = resp;
+            // });
+            // postImportAccoun().then(resp => {
+            //     console.log(resp);
+            // });
+
         },
         beforeDestroy() {
         }
@@ -170,6 +174,8 @@
 <style lang="less" module>
     .card_form {
         color: #13ce66;
+        .el-card__body {
+            padding: 0 !important;
+        }
     }
-
 </style>

@@ -40,6 +40,8 @@
 </script>
 <style lang="less" module>
     .bar_echarts {
+        box-shadow: 0 0 10px #326fcb !important;
+        height: 500px;
         color: #13ce66;
     }
 </style>

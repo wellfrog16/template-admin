@@ -1,21 +1,26 @@
 <template>
-    <el-card :class="$style.abnormal_transaction_details">
-        <!--<div :class="$style.card_table_bt"></div>-->
-        <el-table
-            :data="tableDataList"
-            border
-            style="width: 100%;">
-            <el-table-column
-                v-for="(item,index) in tableColumns"
-                :key="item.field"
-                :prop="item.field"
-                :label="item.title"
-                :align="item.align"
-                :min-width="item.width">
-            </el-table-column>
-        </el-table>
-    </el-card>
-
+    <div :class="$style.abnormal_transaction_details">
+        <el-card :class="$style.a_form_table_bar ">
+            <el-table
+                :data="tableDataList"
+                border
+                height="410"
+                style="width: 100%;">
+                <el-table-column
+                    v-for="(item,index) in tableColumns"
+                    :key="item.field"
+                    :prop="item.field"
+                    :label="item.title"
+                    :align="item.align"
+                    :min-width="item.width">
+                </el-table-column>
+            </el-table>
+        </el-card>
+        <div :class="$style.export_button">
+            <el-button :class="$style.export_bt" type="primary" @click="backClick1">上一步</el-button>
+            <el-button :class="$style.export_bt" type="primary" @click="exportClick1">导出CSV</el-button>
+        </div>
+    </div>
 </template>
 <script>
     export default {
@@ -114,7 +119,14 @@
         computed: {},
         watch: {},
         //    数据交互  127662
-        methods: {},
+        methods: {
+            // 导出CSV
+            exportClick1() {
+            },
+            // 上一步
+            backClick1() {
+            },
+        },
         // 在一个实例被创建之后执行代码
         created() {
         },
@@ -126,6 +138,23 @@
     };
 </script>
 <style lang="less" module>
+    .a_form_table_bar {
+        box-shadow: 0 0 10px #326fcb !important;
+        padding: 0 !important;
+        color: #fff !important;
+    }
+    .export_button {
+        display: flex;
+        justify-content: center;
+        margin: 25px 0;
+        .export_bt {
+            color: #fff;
+            background-color: rgb(7, 39, 89);
+            border: 1px solid rgb(0, 157, 224);
+            font-size: 13px;
+            padding: 10px 30px;
+        }
+    }
     .abnormal_transaction_details {
         color: #13ce66;
     }
