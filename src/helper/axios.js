@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {Loading, Notification} from 'element-ui';
 import config from '@/config';
+import Vue from 'vue';
 const instance = url => {
     // 配置token到header中
     const accessToken = localStorage.getItem('ACCESS_TOKEN');
@@ -48,6 +49,8 @@ const instance = url => {
                         });
                     }
                 }
+            } else if (status === 401) {
+                Vue.prototype.$router.push({path: '/login'});
             } else if (status !== 200 && status !== 201 && status !== 204) {
                 Notification.error({
                     message: statusText

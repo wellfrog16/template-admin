@@ -20,7 +20,7 @@
             <div style="height: 200px; overflow-y: scroll;">
                 <el-tree
                     style="width:350px;"
-                    ref="selectorDealer"
+                    ref="tree-common"
                     :show-checkbox="isMultipleMode"
                     :props="props"
                     :data="data"
@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import {getAreaTreeList} from  "@/api/common/index.js";
+import {getAreaTreeList} from '@/api/common/index.js';
 export default {
     name: 'selector-dealer',
     props: {
@@ -153,8 +153,8 @@ export default {
         },
         ajaxGetAllRoleOrgs() {
             getAreaTreeList().then(resp => {
-                this.data = resp
-            })
+                this.data = resp;
+            });
         },
         handlerInput(val) {
             this.$refs.selectorDealer.filter(val);
@@ -166,7 +166,7 @@ export default {
         handleMulitpleChange() {
             let code = [];
             if (this.isMultipleMode) {
-                let checkedNodes = this.$refs['selectorDealer'].getCheckedNodes();
+                let checkedNodes = this.$refs['tree-common'].getCheckedNodes();
                 if (checkedNodes && checkedNodes.length) {
                     let filterItem = checkedNodes.filter(v => {
                         return !!v.children === false;
@@ -208,6 +208,9 @@ export default {
         },
         clearValue() {
             this.value = '';
+        },
+        getCheckedList() {
+            return this.$refs['tree-common'].getCheckedNodes();
         }
     },
     created() {

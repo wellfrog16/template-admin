@@ -41,33 +41,13 @@
                 </div>
             </el-col>
             <el-col :span='12' class="right-block">
-                <s-card :title="`相关性指标选择`">
-                    <el-row slot="content">
-                        <s-table :showHeader="false" :columns="correlationIndexColumns" :tableData="tableData" :height="200" :otherProps="{unit: '%', disabled: disabled}">
-                            <el-table-column
-                                :width="100"
-                                align="center"
-                                slot="tableColumnsPush"
-                                label="操作"
-                                show-overflow-tooltip>
-                                <template slot-scope="scope">
-                                    <el-button type="text" size="small" @click="handleInsert(scope.row)" :disabled="disabled">插入</el-button>
-                                </template>
-                            </el-table-column>
-                        </s-table>
+                <s-card :title="`算法参数配置`">
+                    <el-row slot="content" style="padding: 20px;">
+                        <el-radio-group v-model="ruleForm.sf">
+                            <el-radio v-for="(item, index) in sfOptions" :key="index" :label="item.value">{{ item.label }}</el-radio>
+                        </el-radio-group>
                     </el-row>
                 </s-card>
-                <div class="button-group">
-                    <el-button @click="insertText(' AND ')" :disabled="disabled" size="mini" type="primary">AND</el-button>
-                    <el-button @click="insertText(' OR ')"  :disabled="disabled" size="mini" type="primary">OR</el-button>
-                    <el-button @click="insertText('()')"  :disabled="disabled" size="mini" type="primary">(...)</el-button>
-                </div>
-                <div class="textarea-css">
-                    <el-input :rows="4" type="textarea" placeholder="示例" :readonly="disabled" id="textarea" v-model="ruleForm.indexPara"></el-input>
-                </div>
-                <div style="margin-top:8px; text-align:right;">
-                    <el-button size="small" type="primary" :disabled="disabled">语法检查</el-button>
-                </div>
             </el-col>
         </el-row>
         <el-row style="margin-top:10px; text-align:center;">
@@ -75,27 +55,20 @@
             <el-input :disabled="disabled" :clearable="!disabled" style="margin-right: 5px;" size="small" v-model="ruleForm.sceneComnt" placeholder="请输入场景说明" class="custom-width"></el-input>
             <el-button size="small" type="primary" :disabled="disabled" @click="saveSceneConfig">保存场景</el-button>
         </el-row>
-        <el-row style="margin-top:30px; text-align:center;" v-if="confirmCommitMode">
-            <el-button size="small" type="primary" style="width: 100px;">确定</el-button>
-        </el-row>
     </div>
 </template>
 <script>
 import SCard from '@/components/index/common/SCard';
-import STable from '@/components/index/common/STable';
-import {
-    updateScene
-} from '@/api/dataAnsis/sceneConfig';
-import {correlationIndexColumns, accountTotalTypeOptions, accountTotalFrepOptions} from './constants';
+import {correlationIndexColumns, accountTotalTypeOptions, accountTotalFrepOptions, defaultConfig, sfOptions} from './constants';
 export default {
-    components: {SCard, STable},
+    components: {SCard},
     props: {
-        confirmCommitMode: {
-            type: Boolean,
-            default: false
-        },
         operateType: {
-            type: Number,
+            type: [Number, String],
+            required: true
+        },
+        createType: {
+            type: [Number, String],
             required: true
         },
         dialogItem: {
@@ -120,6 +93,8 @@ export default {
             accountTotalTypeOptions,
             accountTotalFrepOptions,
             correlationIndexColumns,
+            defaultConfig,
+            sfOptions,
             checkedList: ['0'],
             checkbox: [
                 {field: 'acctMakePosQtty', label: '账户持仓量 >=', value: '0', unit: '手'},
@@ -127,15 +102,6 @@ export default {
                 {field: 'acctBillCnt', label: '账户报单数 >=', value: '2', unit: '笔'},
                 {field: 'statAcctCnt', label: '统计账户数 >=', value: '3', unit: ''}
             ],
-            defaultConfig: {
-                acctBargainQtty: '1000', // 账户成交量
-                acctBillCnt: '100', // 账户报单量
-                acctMakePosQtty: '100', // 账户持仓量
-                statAcctCnt: '500', // 统计账户数
-                statAcctType: '1', // 统计账户类型
-                statFreq: '0', // 统计频度
-                indexPara: '' // 指数参数
-            },
             ruleForm: {
                 isDel: '1', // 可以删除
                 sceneId: '', // 场景id
@@ -147,56 +113,16 @@ export default {
                 statAcctCnt: '', // 统计账户数
                 statAcctType: '', // 统计账户类型
                 statFreq: '', // 统计频度
+                sf: '', // 算法
                 indexPara: '' // 指数内容
-            },
-            tableData: [
-                {a: '指标1', b: '>=', c: '90'}
-            ],
-            sceneName: '',
-            sceneRemark: ''
+            }
         };
     },
     methods: {
-        handleInsert(item) {
-            let str = `${item.a} ${item.b} ${item.c}%`;
-            this.insertText(str);
-        },
-        insertText(str, obj) {
-            obj = obj || document.getElementById('textarea');
-            if (document.selection) {
-                let sel = document.selection.createRange();
-                sel.text = str;
-            } else if (typeof obj.selectionStart === 'number' && typeof obj.selectionEnd === 'number') {
-                let startPos = obj.selectionStart;
-                let endPos = obj.selectionEnd;
-                let cursorPos = startPos;
-                let tmpStr = obj.value;
-                obj.value = tmpStr.substring(0, startPos) + str + tmpStr.substring(endPos, tmpStr.length);
-                this.ruleForm.indexPara = obj.value;
-                cursorPos += str.length;
-                obj.focus();
-                obj.selectionStart = obj.selectionEnd = cursorPos;
-            } else {
-                obj.value += str;
-                this.ruleForm.indexPara = obj.value;
-            }
-        },
-        moveEnd(obj) {
-            obj = obj || document.getElementById('textarea');
-            obj.focus();
-            var len = obj.value.length;
-            if (document.selection) {
-                var sel = obj.createTextRange();
-                sel.moveStart('character', len);
-                sel.collapse();
-                sel.select();
-            } else if (typeof obj.selectionStart === 'number' && typeof obj.selectionEnd === 'number') {
-                obj.selectionStart = obj.selectionEnd = len;
-            }
-        },
         setRuleForm() {
             this.ruleForm = {
                 isDel: '1',
+                sceneType: this.createType,
                 sceneId: this.dialogItem.sceneId || '',
                 sceneComnt: this.dialogItem.sceneComnt || '', // 场景说明
                 sceneName: this.dialogItem.sceneName || '', // 场景名称
@@ -206,11 +132,13 @@ export default {
                 statAcctCnt: this.dialogItem.statAcctCnt || this.defaultConfig.statAcctCnt, // 统计账户数
                 statAcctType: this.dialogItem.statAcctType || this.defaultConfig.statAcctType, // 统计账户类型
                 statFreq: this.dialogItem.statFreq || this.defaultConfig.statFreq, // 统计频度
-                indexPara: this.dialogItem.indexPara || this.defaultConfig.indexPara // 统计频度
+                sf: this.dialogItem.sf || this.defaultConfig.sf // 算法
             };
         },
         handleReset() {
             this.ruleForm = {
+                isDel: '1',
+                sceneType: this.createType,
                 sceneComnt: this.ruleForm.sceneComnt, // 场景说明
                 sceneName: this.ruleForm.sceneName, // 场景名称
                 acctBargainQtty: this.defaultConfig.acctBargainQtty, // 账户成交量
@@ -219,7 +147,7 @@ export default {
                 statAcctCnt: this.defaultConfig.statAcctCnt, // 统计账户数
                 statAcctType: this.defaultConfig.statAcctType, // 统计账户类型
                 statFreq: this.defaultConfig.statFreq, // 统计频度
-                indexPara: this.defaultConfig.indexPara // 统计频度
+                sf: this.defaultConfig.sf // 算法
             };
         },
         syntaxCheck(callback) {
@@ -236,9 +164,7 @@ export default {
             this.syntaxCheck(() => {
                 this.$refs['ruleForm'].validate(valid => {
                     if (valid) {
-                        updateScene(this.ruleForm).then(() => {
-                            this.$emit('updateSceneList');
-                        });
+                        this.$emit('saveScene', this.ruleForm);
                     }
                 });
             });
@@ -262,41 +188,13 @@ export default {
             margin-left: 0;
         }
         .custom-width {
-            width: 150px;
+            width: 180px;
         }
         .remark {
             margin-top: -17px;
             padding-left: 58px;
             font-size: 12px;
             color: rgb(239, 156, 0);
-        }
-        .el-table {
-            background: #07182e;
-            border: none;
-            /deep/ tr {
-                background: #07182e !important;
-                border: none;
-            }
-            /deep/ td {
-                border-color: #202a33;
-            }
-            button {
-                color: #0089ff;
-            }
-        }
-        .button-group {
-            text-align: center;
-            padding: 10px 0;
-            button {
-                width: 70px;
-            }
-        }
-        .textarea-css {
-            /deep/ .el-textarea__inner {
-                background-color: #07182e;
-                color: #fff;
-                border: none;
-            }
         }
         .right-block {
             /deep/ .el-card__body {
