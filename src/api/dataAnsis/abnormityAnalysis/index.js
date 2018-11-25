@@ -6,9 +6,8 @@
 // 172.25.61.13 bdsp.gateway.com
 // 172.25.61.13 bdsp.register.com
 
-
 import {get, post, requestPrefix} from '@/utils/request';
-//导入账户组
+// 导入账户组
 export const getImportAccountGroup = params => {
     return get(`${requestPrefix}/test/result/query`, params);
 };
