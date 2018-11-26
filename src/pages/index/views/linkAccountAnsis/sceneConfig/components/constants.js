@@ -17,14 +17,15 @@ export const accountTotalTypeOptions = [
 ];
 export const accountTotalFrepOptions = [
     {label: '一日', value: '1'},
-    {label: '一周', value: '2'},
-    {label: '一小时', value: '3'}
+    {label: '两日', value: '2'},
+    {label: '一周', value: '3'}
 ];
 export const sfOptions = [
     {label: '谱聚类', value: '1'},
     {label: '密度聚类', value: '2'},
 ];
 export const defaultConfig = {
+    tableData: [],
     acctBargainQtty: '1000', // 账户成交量
     acctBillCnt: '100', // 账户报单量
     acctMakePosQtty: '100', // 账户持仓量
@@ -34,3 +35,9 @@ export const defaultConfig = {
     sf: '', // 算法
     indexPara: '买入成交相关系数>=90% AND 卖出成交相关系数>=90%' // 指数参数
 };
+export const checkbox = [
+    {field: 'acctMakePosQtty', label: '账户持仓量 >=', value: '1', unit: '手'},
+    {field: 'acctBargainQtty', label: '账户成交量 >=', value: '2', unit: '手'},
+    {field: 'acctBillCnt', label: '账户报单数 >=', value: '3', unit: '笔'},
+    {field: 'statAcctCnt', label: '统计账户数 >=', value: '4', unit: ''}
+];

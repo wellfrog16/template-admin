@@ -2,7 +2,7 @@ import Vue from 'vue';
 import ElementUI from 'element-ui';
 import filters from '@/utils/filters';
 import App from './App.vue';
-import router from './router/router';
+import router from './router';
 import store from '@/store';
 
 import jquery from 'jquery';

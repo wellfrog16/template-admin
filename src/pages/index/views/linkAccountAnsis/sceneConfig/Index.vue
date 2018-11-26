@@ -23,7 +23,7 @@
                                         </el-form-item>
                                     </el-radio>
                                     <br>
-                                    <el-radio label="1">
+                                    <el-radio label="1" class="self-radio">
                                         <el-form-item prop="fileList" label="导入CSV" label-width="140px" style="display:inline-block; padding: 5px 0;"
                                                       :rules="[{
                                                           required: String(ruleForm.exportType) === '1', message: '请上传附件'
@@ -91,7 +91,9 @@
                     </el-radio-group>
                     <el-button slot="reference" class="new-btn" type="primary" size="mini"><i class="el-icon-plus"></i>新增自定义场景</el-button>
                 </el-popover>
-                <el-input class="search-input" size="mini" prefix-icon="el-icon-search" placeholder="请输入场景名称或场景说明" v-model="searchAccountText" @keyup.enter.native="handleSearch"></el-input>
+                <el-input class="search-input" size="mini" placeholder="请输入场景名称或场景说明" v-model="searchAccountText" @keyup.enter.native="handleSearch">
+                    <i class="el-icon-search" slot="prefix" @click="handleSearch" style="margin-left:4px; cursor: pointer;"></i>
+                </el-input>
             </div>
             <div slot="content">
                 <s-table :columns="columns" :tableData="tableData" :showSelectionColumn="true" @selection-change="handleSelectChange">
@@ -160,7 +162,7 @@ export default {
             },
             uploadBasicUrl: getAccountsByUploadFile(),
             createTypeName: '相关性分析',
-            defaultLimitFileType: ['xls', 'xlsx', 'csv'],
+            defaultLimitFileType: ['csv'],
             ruleForm: {
                 exportType: '',
                 resultId: '',
@@ -232,9 +234,11 @@ export default {
         },
         handleRemove(file) {
             console.log(file);
+            this.resultId = '';
         },
         getFileList(val) {
             console.log(val);
+            this.resultId = val.join(',');
         },
         handleCloseDialog() {
             this.showDialog = false;
@@ -263,7 +267,11 @@ export default {
                 this.$message.error('请选择一个场景');
                 return;
             }
-            this.showCarousel = true;
+            this.$refs['ruleForm'].validate(valid => {
+                if (valid) {
+                    this.showCarousel = true;
+                }
+            });
         },
         handleSelectChange(val) {
             console.log(val);
@@ -297,33 +305,29 @@ export default {
             this.getTableData({searchName: this.searchAccountText});
         },
         handleNextStep() {
-            this.showCarousel = false;
-            this.$refs['ruleForm'].validate(valid => {
-                if (valid) {
-                    let params = {
-                        // cityIds: this.$refs['tree-components'].getCheckedList(),
-                        cityIds: '',
-                        contractCode: this.ruleForm.contractCode,
-                        startDate: this.ruleForm.selectDateRange[0],
-                        endDate: this.ruleForm.selectDateRange[1],
-                        sceneIds: this.selectList.map(v => {
-                            return v.sceneId;
-                        }).join(',')
-                    };
-                    if (this.exportType === '0') {
-                        params.resultIds = this.ruleForm.resultId;
-                    }
-                    if (this.exportType === '1') {
-                    }
-                    if (this.exportType === '2') {
-                        params.accountStart = this.ruleForm.customNoArray[0];
-                        params.accountEnd = this.ruleForm.customNoArray[1];
-                    }
-                    console.log(params);
-                    mergeAccount(params).then(resp => {
-                        this.$router.push({name: ''});
-                    });
-                }
+            let params = {
+                // cityIds: this.$refs['tree-components'].getCheckedList(),
+                cityIds: '',
+                contractCode: this.ruleForm.contractCode,
+                startDate: this.ruleForm.selectDateRange[0],
+                endDate: this.ruleForm.selectDateRange[1],
+                sceneIds: this.selectList.map(v => {
+                    return v.sceneId;
+                }).join(',')
+            };
+            if (this.exportType === '0') {
+                params.resultIds = this.ruleForm.resultId;
+            }
+            if (this.exportType === '1') {
+            }
+            if (this.exportType === '2') {
+                params.accountStart = this.ruleForm.customNoArray[0];
+                params.accountEnd = this.ruleForm.customNoArray[1];
+            }
+            console.log(params);
+            mergeAccount(params).then(resp => {
+                this.showCarousel = false;
+                this.$router.push({name: ''});
             });
         }
     },
@@ -370,6 +374,12 @@ export default {
         }
         /deep/ .el-carousel__container {
             min-height: 500px;
+        }
+        .self-radio {
+            /deep/.el-radio__input {
+                vertical-align: top;
+                margin-top: 20px;
+            }
         }
     }
 </style>

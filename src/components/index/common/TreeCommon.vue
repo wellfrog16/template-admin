@@ -199,7 +199,7 @@ export default {
         clearNodesOnMultiple() {
             if (this.isMultipleMode) {
                 this.names = [];
-                this.$refs['selectorDealer'] && this.$refs['selectorDealer'].setCheckedNodes([]);
+                this.$refs['tree-common'] && this.$refs['tree-common'].setCheckedNodes([]);
             }
         },
         handlerClear() {
