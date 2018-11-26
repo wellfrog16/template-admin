@@ -111,7 +111,7 @@ const router = new Router({
                             name: 'log',
                             label: '关联账户组合并',
                             icon: 'menu-fix-icon fa fa-venus-double',
-                            component: Root
+                            component: resolve => require(['../views/linkAccountAnsis/assoAccountGroupMerge/Index.vue'], resolve)
                         },
                         {
                             path: 'abnormity',

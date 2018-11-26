@@ -12,6 +12,7 @@
                         text-color="#fff"/>
                 </el-aside>
                 <el-main :class="$style.maicontainersn">
+                    <s-breadbreadcrumb :breadcrumbList="menuData"></s-breadbreadcrumb>
                     <router-view/>
                     <!-- <bottom-operate-button></bottom-operate-button> -->
                 </el-main>
@@ -24,10 +25,12 @@
 import AsideMenu from '@/components/index/home/menu';
 // import BottomOperateButton from '@/components/index/home/BottomOperateButton';
 import menu from '@/helper/menu';
+import SBreadbreadcrumb from '@/components/index/home/SBreadbreadcrumb';
 
 export default {
     components: {
         AsideMenu,
+        SBreadbreadcrumb,
         // BottomOperateButton,
         HeadTop: () => import('@/components/index/home/headTop.vue'),
     },
