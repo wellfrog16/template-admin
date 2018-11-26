@@ -91,7 +91,7 @@
                     </el-radio-group>
                     <el-button slot="reference" class="new-btn" type="primary" size="mini"><i class="el-icon-plus"></i>新增自定义场景</el-button>
                 </el-popover>
-                <el-input class="search-input" size="mini" prefix-icon="el-icon-search" placeholder="请输入场景名称和场景说明" v-model="searchAccountText" @keyup.enter.native="handleSearch"></el-input>
+                <el-input class="search-input" size="mini" prefix-icon="el-icon-search" placeholder="请输入场景名称或场景说明" v-model="searchAccountText" @keyup.enter.native="handleSearch"></el-input>
             </div>
             <div slot="content">
                 <s-table :columns="columns" :tableData="tableData" :showSelectionColumn="true" @selection-change="handleSelectChange">
@@ -136,7 +136,8 @@ import UploadCommon from '@/components/index/common/UploadCommon';
 import TreeCommon from '@/components/index/common/TreeCommon';
 import EditSceneDialog from './components/EditSceneDialog';
 import {createTypeOptions} from './components/constants';
-import {getSceneList, deleteScene, getTlsResultInfo, mergeAccount} from '@/api/dataAnsis/sceneConfig';
+import {getSceneList, deleteScene, mergeAccount} from '@/api/dataAnsis/sceneConfig';
+import {getAccountsByUploadFile, getTlsResultInfo} from '@/api/common';
 export default {
     components: {
         STable,
@@ -157,9 +158,9 @@ export default {
                 size: 'small',
                 type: 'primary'
             },
-            uploadBasicUrl: '',
+            uploadBasicUrl: getAccountsByUploadFile(),
             createTypeName: '相关性分析',
-            defaultLimitFileType: ['xls', 'xlsx'],
+            defaultLimitFileType: ['xls', 'xlsx', 'csv'],
             ruleForm: {
                 exportType: '',
                 resultId: '',

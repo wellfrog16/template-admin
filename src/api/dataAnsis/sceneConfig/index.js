@@ -15,10 +15,6 @@ export const updateScene = params => {
 export const createScene = params => {
     return post(`${requestPrefix}/operate/insertCfgScenePara`, params);
 };
-// 结果集列表
-export const getTlsResultInfo = () => {
-    return post(`${requestPrefix}/operate/getTlsResultInfo`, {});
-};
 // 指标列表
 export const getTlsIndexTlb = sceneType => {
     return post(`${requestPrefix}/operate/getTlsIndexTlb`, {indexType: sceneType});

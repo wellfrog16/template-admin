@@ -63,18 +63,12 @@ export default {
         },
         uploadName: {
             type: String,
-            default: 'uploadFile'
+            default: 'file'
         },
         uploadParams: {
             type: Object,
             default() {
                 return {
-                    parseRule: JSON.stringify(
-                        {
-                            delimiter: ',',
-                            verifies: []
-                        }
-                    )
                 };
             }
         },
@@ -182,9 +176,9 @@ export default {
             }
             const {success, value, message} = res;
             if (success) {
-                this.uploadParams.result = value.data || value;
+                let result = value.data || value;
                 this.$refs.upload.clearFiles();
-                this.$emit('getTxtCon', this.uploadParams.result, value);
+                this.$emit('getTxtCon', result, value);
                 if (this.isShowSuccessMessage) {
                     this.$message.success(`共计上传${value.totalLines}条，成功${value.totalLines - value.invalidLines}条，无效${value.invalidLines}条`);
                 }
