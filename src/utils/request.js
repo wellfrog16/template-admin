@@ -2,7 +2,7 @@ import instance from '@/helper/axios';
 
 const axios = instance('');
 // 前缀
-export const requestPrefix = '/api-service';
+export const requestPrefix = '/api-service/operate';
 /**
  * 封装的get请求
  * 返回结果层级为value层
