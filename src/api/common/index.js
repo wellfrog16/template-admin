@@ -6,7 +6,7 @@ export const getAreaTreeList = () => {
 };
 // 导入csv，输出账户号list
 export const getAccountsByUploadFile = () => {
-    return `${config.server.api}${requestPrefix}/uploadFiles`;
+    return `${config.server.api}${requestPrefix}/uploadFiles?access_token=${localStorage.getItem('ACCESS_TOKEN')}`;
 };
 // 结果集列表
 export const getTlsResultInfo = () => {
