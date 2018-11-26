@@ -1,15 +1,12 @@
 <template>
     <div :class="$style.abnormity_analysis">
-        <bread-crumb :breadcrumbList="breadcrumbs"></bread-crumb>
         <a-form :class="$style.a_form_box"></a-form>
-
     </div>
 </template>
 <script>
     export default {
         name: '',
         components: {
-            BreadCrumb: () => import('@/components/index/home/breadCrumbs'),
             AForm: () => import('../abnormitysAnalysis/components/AbnormitysForm'),
         },
         data() {
@@ -49,5 +46,4 @@
             }
         }
     }
-
 </style>

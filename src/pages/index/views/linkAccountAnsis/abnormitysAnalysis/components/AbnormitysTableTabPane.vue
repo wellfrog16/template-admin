@@ -3,76 +3,34 @@
         <div :class="$style.a_form_table_bar">
             <el-card :class="$style.a_form_box_shadow">
                 <el-tabs v-model="activeName" type="card" :class="$style.pane_titles">
-                    <el-tab-pane label="超仓分析" name="first"></el-tab-pane>
-                    <el-tab-pane label="频繁报撤销单分析" name="second"></el-tab-pane>
-                    <el-tab-pane label="自成交分析" name="thirdly"></el-tab-pane>
+                    <el-tab-pane
+                        v-for="active in activeNameList"
+                        :label="active.label"
+                        :key="active.name"
+                        :name="active.name">
+                        <el-table
+                            size="small"
+                            ref="multipleTable" s
+                            height="450"
+                            highlight-current-row
+                            tooltip-effect="dark"
+                            :data="active.tableDataList"
+                            border
+                            @row-click = "tableRowClick"
+                            @select="handleRowSelect"
+                            @selection-change="handleSelectionChange"
+                            style="width: 100%;">
+                            <el-table-column
+                                v-for="(item,index) in active.tableColumns"
+                                :key="item.field"
+                                :prop="item.field"
+                                :label="item.title"
+                                :align="item.align"
+                                :min-width="item.width">
+                            </el-table-column>
+                        </el-table>
+                    </el-tab-pane>
                 </el-tabs>
-                <el-table
-                    size="small"
-                    ref="multipleTable" s
-                    height="450"
-                    highlight-current-row
-                    tooltip-effect="dark"
-                    @row-click = "tableRowClick"
-                    :data="tablePaneData.overStoreAnalysis"
-                    v-if="activeName == 'first'"
-                    border
-                    @select="handleRowSelect"
-                    @selection-change="handleSelectionChange"
-                    style="width: 100%;">
-                    <el-table-column
-                        v-for="(item,index) in tableColumns1"
-                        :key="item.field"
-                        :prop="item.field"
-                        :label="item.title"
-                        :align="item.align"
-                        :min-width="item.width">
-                    </el-table-column>
-                </el-table>
-                <el-table
-                    size="small"
-                    ref="multipleTable" s
-                    height="450"
-                    highlight-current-row
-                    tooltip-effect="dark"
-                    :data="tablePaneData.frequentTrade"
-                    @row-click = "tableRowClick"
-                    v-if="activeName == 'second'"
-                    border
-                    @select="handleRowSelect"
-                    @selection-change="handleSelectionChange"
-                    style="width: 100%;">
-                    <el-table-column
-                        v-for="(item,index) in tableColumns2"
-                        :key="item.field"
-                        :prop="item.field"
-                        :label="item.title"
-                        :align="item.align"
-                        :min-width="item.width">
-                    </el-table-column>
-                </el-table>
-                <el-table
-                    size="small"
-                    ref="multipleTable" s
-                    height="450"
-                    highlight-current-row
-                    tooltip-effect="dark"
-                    @row-click = "tableRowClick"
-                    :data="tablePaneData.autoTrade"
-                    v-if="activeName == 'thirdly'"
-                    border
-                    @select="handleRowSelect"
-                    @selection-change="handleSelectionChange"
-                    style="width: 100%;">
-                    <el-table-column
-                        v-for="(item,index) in tableColumns3"
-                        :key="item.field"
-                        :prop="item.field"
-                        :label="item.title"
-                        :align="item.align"
-                        :min-width="item.width">
-                    </el-table-column>
-                </el-table>
             </el-card>
             <div :class="$style.export_button">
                 <el-button :class="$style.export_bt" type="primary" @click="exportClick">导出CSV</el-button>
@@ -90,7 +48,6 @@
     import {
         postImportAccounBar     // Bar 柱状图
     } from '@/api/dataAnsis/abnormityAnalysis';
-
     export default {
         name: "AbnormitysTableTabPane",
         // 父传子！
@@ -111,62 +68,77 @@
         // 存储数据
         data() {
             return {
+                tabPosition: 'top',
                 //  tab页
                 activeName: 'first',
-                //初始化表格信息  超仓分析
-                // overStoreAnalysis
-                tableColumns1: [
-                    {field: "acctNum", title: "账户组号", width: 150, align: 'center'},
-                    {field: "custId", title: "客户编号", width: 150, align: 'center'},
-                    {field: "custName", title: "客户名称", width: 150, align: 'center'},
-                    {field: "contrCd", title: "合约代码", width: 150, align: 'center'},
-                    {field: "acctCurrNetMake", title: "账户组当前净持仓", width: 150, align: 'center'},
-                    {field: "acctCurrNetPos", title: "账户当前净持仓", width: 150, align: 'center'},
-                    {field: "multiBillMakePosQtty", title: "多单持仓量", width: 150, align: 'center'},
-                    {field: "billMakePosQtty", title: "空单持仓量", width: 150, align: 'center'},
-                    {field: "statBosomDays", title: "统计区间超仓天数", width: 150, align: 'center'}
-                ],
-                // frequentTrade  频繁报撤销单分析
-                tableColumns2: [
-                    {field: "acctNum", title: "账户组号", width: 150, align: 'center'},
-                    {field: "custId", title: "客户编号", width: 150, align: 'center'},
-                    {field: "custName", title: "客户名称", width: 150, align: 'center'},
-                    {field: "contrCd", title: "合约代码", width: 150, align: 'center'},
-                    {field: "txDt", title: "交易日期", width: 150, align: 'center'},
-                    {field: "mergeBillCnt", title: "合并撤单次数", width: 150, align: 'center'},
-                    {field: "acctBillCnt", title: "账户撤单次数", width: 150, align: 'center'},
-                    {field: "mergeMaAmtBillCnt", title: "合并大额撤单次数", width: 150, align: 'center'},
-                    {field: "acctMaAmtBillCnt", title: "账户大额撤单次数", width: 150, align: 'center'},
-                ],
-                // autoTrade  自成交分析
-                tableColumns3: [
-                    {field: "acctNum", title: "账户组号", width: 150, align: 'center'},
-                    {field: "custId", title: "客户编号", width: 150, align: 'center'},
-                    {field: "custName", title: "客户名称", width: 150, align: 'center'},
-                    {field: "contrCd", title: "合约代码", width: 150, align: 'center'},
-                    {field: "txDt", title: "交易日期", width: 150, align: 'center'},
-                    {field: "mergeBargainCnt", title: "合并自成交次数", width: 150, align: 'center'},
-                    {field: "acctBargainCnt", title: "账户自成交次数", width: 150, align: 'center'},
-                    {field: "mergeBargainQtty", title: "合并自成交数量", width: 150, align: 'center'},
-                    {field: "acctBargainQtty", title: "账户自成交数量", width: 150, align: 'center'},
-                ],
-                barEchartsDeteList: []
+                //初始化表格信息
+                activeNameList: [
+                    {
+                        name: 'first',
+                        label: '超仓分析',   // overStoreAnalysis
+                        tableColumns: [
+                            {field: "acctNum", title: "账户组号", width: 150, align: 'center'},
+                            {field: "custId", title: "客户编号", width: 150, align: 'center'},
+                            {field: "custName", title: "客户名称", width: 150, align: 'center'},
+                            {field: "contrCd", title: "合约代码", width: 150, align: 'center'},
+                            {field: "acctCurrNetMake", title: "账户组当前净持仓", width: 150, align: 'center'},
+                            {field: "acctCurrNetPos", title: "账户当前净持仓", width: 150, align: 'center'},
+                            {field: "multiBillMakePosQtty", title: "多单持仓量", width: 150, align: 'center'},
+                            {field: "billMakePosQtty", title: "空单持仓量", width: 150, align: 'center'},
+                            {field: "statBosomDays", title: "统计区间超仓天数", width: 150, align: 'center'}
+                        ],
+                        tableDataList:  [],
+                    }, {
+                        label: '频繁报撤销单分析',  // frequentTrade
+                        name: 'second',
+                        tableColumns: [
+                            {field: "acctNum", title: "账户组号", width: 150, align: 'center'},
+                            {field: "custId", title: "客户编号", width: 150, align: 'center'},
+                            {field: "custName", title: "客户名称", width: 150, align: 'center'},
+                            {field: "contrCd", title: "合约代码", width: 150, align: 'center'},
+                            {field: "txDt", title: "交易日期", width: 150, align: 'center'},
+                            {field: "mergeBillCnt", title: "合并撤单次数", width: 150, align: 'center'},
+                            {field: "acctBillCnt", title: "账户撤单次数", width: 150, align: 'center'},
+                            {field: "mergeMaAmtBillCnt", title: "合并大额撤单次数", width: 150, align: 'center'},
+                            {field: "acctMaAmtBillCnt", title: "账户大额撤单次数", width: 150, align: 'center'},
+                        ],
+                        tableDataList: [],
+                    }, {
+                        label: '自成交分析',   // autoTrade
+                        name: 'third',
+                        tableColumns: [
+                            {field: "acctNum", title: "账户组号", width: 150, align: 'center'},
+                            {field: "custId", title: "客户编号", width: 150, align: 'center'},
+                            {field: "custName", title: "客户名称", width: 150, align: 'center'},
+                            {field: "contrCd", title: "合约代码", width: 150, align: 'center'},
+                            {field: "txDt", title: "交易日期", width: 150, align: 'center'},
+                            {field: "mergeBargainCnt", title: "合并自成交次数", width: 150, align: 'center'},
+                            {field: "acctBargainCnt", title: "账户自成交次数", width: 150, align: 'center'},
+                            {field: "mergeBargainQtty", title: "合并自成交数量", width: 150, align: 'center'},
+                            {field: "acctBargainQtty", title: "账户自成交数量", width: 150, align: 'center'},
+                        ],
+                        tableDataList: [] ,
+                    }
+                ]
             }
 
         },
         // 计算属性
-        computed: {}
-        ,
+        computed: {
+
+            //初始化表格信息
+
+        },
         watch: {
             tablePaneData: {
                 handler(val) {
-                    console.log(val);
-                    this.tableDataList = val;
+                    this.activeNameList[0].tableDataList = val.overStoreAnalysis;
+                    this.activeNameList[1].tableDataList = val.frequentTrade;
+                    this.activeNameList[2].tableDataList = val.autoTrade;
                 },
                 deep: true
             }
-        }
-        ,
+        },
         //    数据交互  127662
         methods: {
             // tap 类型
@@ -197,39 +169,27 @@
                 })
             },
             handleRowSelect(selection, row) {
-                console.log(row);
-            }
-            ,
+            },
             handleSelectionChange(selection, row) {
-                console.log(row);
-            }
-            ,
+            },
             exportClick1(selection, row) {
-                console.log(row);
-            }
-            ,
+            },
             // 导出CSV
             exportClick() {
                 console.log(this.tablePaneData);
                 console.log(this.tablePaneData.autoTrade);
-            }
-            ,
-            tabHandleClick(){}
-        }
-        ,
+            },
+        },
         // 在一个实例被创建之后执行代码
         created() {
-        }
-        ,
+        },
         // 初始化数据
         mounted() {
             this.barEchartsDete();
-        }
-        ,
+        },
         beforeDestroy() {
         }
-    }
-    ;
+    };
 </script>
 <style lang="less" module>
     .card_table {

@@ -98,8 +98,8 @@
                 ruleForm: {
                     importAccountGroup: '',  // 导入账户组
                     importCSV: '',           // 导入CSV
-                    statisticalInterval: [],  // 统计区间
-                    contractCode: '4635653',    // 合约代码
+                    statisticalInterval: ['2017-02-20', '2018-11-25'],  // 统计区间
+                    contractCode: 'cu1712',    // 合约代码
                 },
                 rules: {
                     // name: [
@@ -152,11 +152,11 @@
                     }
                 }else {
                     params = {
-                        "resultSetNo": this.ruleForm.importAccountGroup,          // 导入账户组
+                        "resultId": this.ruleForm.importAccountGroup,          // 导入账户组
                         "statTimeBegin": this.ruleForm.statisticalInterval[0],      // 统计起始日
                         "statTimeEnd": this.ruleForm.statisticalInterval[1],        // 统计截止日
                         "contrCode": this.ruleForm.contractCode,        //合约代码
-                        "type":"1"                    // 表示导入结果集， '2'--表示导入csv文件
+                        "type":"1"            // 表示导入结果集， '2'--表示导入csv文件
                     }
                 }
                 return params;
