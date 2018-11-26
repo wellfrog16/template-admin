@@ -7,7 +7,7 @@ export default {
     // 状态（存储对象或数组或方法）
     state: {
         count: 0,
-        showFooter: 'fsfsdf',
+        showFooter: true,
         changableNum: 0    //要设置的初始属性值
     },
     // 变化（在 store 上注册 mutation，

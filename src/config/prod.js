@@ -1,6 +1,6 @@
 const config = {
     server: {
-        api: 'localhost:8080'
+        api: 'http://bdsp.gateway.com:18003'
     }
 };
 
