@@ -8,19 +8,19 @@
 
 
 import {get, post, requestPrefix} from '@/utils/request';
-//导入账户组
-export const getImportAccountGroup = params => {
-    return get(`${requestPrefix}/test/result/query`, params);
-};
 
+// export const getImportAccountGroup = params => {
+//     return get(`${requestPrefix}/operate/result/query`, params);
+// };
+//导入账户组
 export const postImportAccountGroup = params => {
-    return post(`${requestPrefix}/test/result/query`, params);
+    return post(`${requestPrefix}/operate/result/query`, params);
 };
 // 查询
 export const postIInquire = params => {
     return post(`${requestPrefix}/operate/sql`, params);
 };
 // Bar 柱状图
-// export const postImportAccoun = params => {
-//     return post(`${requestPrefix}/test/sql`, params);
-// };
+export const postImportAccounBar = params => {
+    return post(`${requestPrefix}/operate/exceptionInfo/pic`, params);
+};

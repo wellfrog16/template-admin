@@ -31,8 +31,8 @@ export default {
         // this.getForm();
     },
     methods: {
-
-        barEchartsDete() {
+        barEchartsDete(val) {
+            console.log(val);
             let barEcharts = barEchartsA.init(document.getElementById('AbarEcharts'));
             let option = {
                 backgroundColor:['rgba(7, 39, 89)'],

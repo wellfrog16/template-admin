@@ -1,13 +1,15 @@
 <template>
     <el-card :class="$style.card_form">
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+        <el-form :class="$style.a_form" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px"
+                 class="demo-ruleForm">
             <el-row>
                 <el-col :xl="10" :lg="10" :md="10" :sm="24">
-                    <el-form-item :class="$style.rul_form_iInput" prop="importAccountGroup" label="导入账户组" label-width="100px">
+                    <el-form-item :class="$style.rul_form_iInput" prop="importAccountGroup" label="导入账户组"
+                                  label-width="100px">
                         <el-select :class="$style.select_option"
-                            class="custom-width"
-                            clearable size="small"
-                            v-model="ruleForm.importAccountGroup">
+                                   class="custom-width"
+                                   clearable size="small"
+                                   v-model="ruleForm.importAccountGroup">
                             <el-option
                                 v-for="item in resultList"
                                 :key="item.resultId"
@@ -42,9 +44,9 @@
                     </el-form-item>
                     <el-form-item prop="contractCode" label="合约代码" label-width="120px">
                         <el-input :class="$style.select_option"
-                            clearable size="small"
-                            v-model="ruleForm.contractCode"
-                            class="custom-width">
+                                  clearable size="small"
+                                  v-model="ruleForm.contractCode"
+                                  class="custom-width">
                         </el-input>
                     </el-form-item>
                 </el-col>
@@ -55,6 +57,8 @@
                 </el-col>
             </el-row>
         </el-form>
+        <a-table-tab-pane :class="$style.a_form_table_bar" :tablePaneData="tablePaneList"></a-table-tab-pane>
+        <a-table :tableData="tableList"></a-table>
     </el-card>
 
 </template>
@@ -66,27 +70,35 @@
     import SDatePicker from '@/components/index/common/SDatePicker';
     // 导入CSV
     import UploadCommon from '@/components/index/common/UploadCommon';
-    import {postImportAccountGroup, postImportAccoun} from '@/api/dataAnsis/abnormityAnalysis';
+    import {
+        postImportAccountGroup,   //导入账户组
+        postIInquire,            // 查询
+        postImportAccounBar     // Bar 柱状图
+    } from '@/api/dataAnsis/abnormityAnalysis';
 
     export default {
-        name: "cardForm",
+        name: "AbnormitysForm",
         // 父传子！
         props: {},
 
         components: {
             UploadCommon: () => import('@/components/index/common/UploadCommon'), // 导入CSV
-            SDatePicker: () => import('@/components/index/common/SDatePicker')   // 时间区间
+            SDatePicker: () => import('@/components/index/common/SDatePicker'),   // 时间区间
+            ATableTabPane: () => import('../../abnormitysAnalysis/components/AbnormitysTableTabPane'),
+            ATable: () => import('../../abnormitysAnalysis/components/AbnormitysTable'),
         },
         // 混入, 是一个类的继承，类似于一个公共的方法。
         mixins: [],
         // 存储数据
         data() {
             return {
+                tablePaneList: {},
+                tableList: [],
                 ruleForm: {
                     importAccountGroup: '',  // 导入账户组
                     importCSV: '',           // 导入CSV
                     statisticalInterval: [],  // 统计区间
-                    contractCode: '',    // 合约代码
+                    contractCode: '4635653',    // 合约代码
                 },
                 rules: {
                     // name: [
@@ -142,28 +154,92 @@
             },
             // 生成报告(查询)
             generateReportsClick(formName) {
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        alert('submit!');
-                    } else {
-                        console.log('error submit!!');
-                        return false;
-                    }
-                });
+
+                // this.$refs[formName].validate((valid) => {
+                //     if (valid) {
+                //         alert('submit!');
+                //     } else {
+                //         console.log('error submit!!');
+                //         return false;
+                //     }
+                // });
+
+                let params = {
+                    "accountTeamNo": "",   // 账户组号
+                    "custId": "",              // 客户编号
+                    // "statTimeBegin": "",      // 统计起始日
+                    // "statTimeEnd": "",        // 统计截止日
+                }
+                postIInquire(params).then(resp => {
+                    // overStoreAnalysis ： 超仓分析，
+                    // frequentTrade      : 频繁报撤单，
+                    // autoTrade：          自成交
+                    // report
+
+                    // this.activeNameList[index].tableDataList = resp.overStoreAnalysis;
+                    // this.activeNameList[index].tableDataList = resp.frequentTrade;
+                    // this.activeNameList[index].tableDataList = resp.autoTrade;
+                    // this.tableDataList = resp.report;
+
+                    this.tablePaneList = resp;
+                    this.tableList = resp.report;
+                    // if (resp) {
+                    //     let params = {
+                    //         "accountTeamNo": '',    // 账户组号
+                    //         "custId": "",           // 客户编号
+                    //         "statTimeBegin": "",    // 统计起始日
+                    //         "statTimeEnd": "",      // 统计截止日
+                    //         "contrCode": "",        // 合约代码
+                    //         "type": "1",            // ---取值 '1':超仓分析
+                    //     }
+                    //     postImportAccounBar(params).then(resp => {
+                    //         console.log(resp);
+                    //     })
+                    // } else {
+                    //     console.log(222);
+                    // }
+                    // console.log(resp.overStoreAnalysis);
+                    //
+                    // console.log(this.$store.commit('setStepOneParams'));
+
+                    // setStepOneParams
+                    // this.$store.commit('setStepOneParams',
+                    //     {startDate: this.stepOneParams.startDate,
+                    //         endDate: this.stepOneParams.endDate,})
+
+
+                })
             },
+
+
         },
         // 在一个实例被创建之后执行代码
         created() {
         },
         // 初始化数据
         mounted() {
+            // console.log(this.$store.commit('setStepOneParams'));
+            // 导入账户组
             // postImportAccountGroup().then(resp => {
             //     console.log(resp);
             //     this.resultList = resp;
             // });
+            // Bar 柱状图
             // postImportAccoun().then(resp => {
             //     console.log(resp);
             // });
+            // Bar 查询
+            // postIInquire().then(resp => {
+            //     console.log(resp);
+            // });
+            // console.log(this.$store.commit('hide'));
+            // return this.$store.state.realTimeMonitorAnalysisToll.superpositionGraphKData
+            // return this.$store.state.realTimeMonitorAnalysisToll.timeSpan
+            // console.log(this.$store.commit);
+            // console.log(this.$store.getters.isShow);
+            // console.log(this.$store.getters.getChangedNum);
+            // console.log(this.$store.mutations.newNum);
+            // console.log(this.$store.actions.hideFooter);
 
         },
         beforeDestroy() {
@@ -174,13 +250,13 @@
     .card_form {
         color: #13ce66;
         :global(.el-card__body) {
-            padding: 15px 0 0 0;
+            padding: 4px;
             .el-form-item {
                 margin-bottom: 15px;
             }
         }
-        .select_option {
-            width: 82%;
+        .a_form {
+            margin-bottom: 65px;
         }
     }
 </style>

@@ -121,13 +121,6 @@ const router = new Router({
                             component: resolve => require(['../views/linkAccountAnsis/abnormitysAnalysis/Index.vue'], resolve)
                         },
                         {
-                            path: 'dictionary',
-                            name: 'dictionary',
-                            label: '异常交易分析',
-                            icon: 'menu-fix-icon fas fa-broadcast-tower',
-                            component: resolve => require(['../views/linkAccountAnsis/abnormityAnalysis/Index.vue'], resolve)
-                        },
-                        {
                             path: 'dictionary1',
                             name: 'dictionary1',
                             label: '账户组画像',
