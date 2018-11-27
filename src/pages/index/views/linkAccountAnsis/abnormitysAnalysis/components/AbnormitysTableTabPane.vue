@@ -14,9 +14,10 @@
                             height="450"
                             highlight-current-row
                             tooltip-effect="dark"
+                            :span-method="arraySpanMethod"
                             :data="active.tableDataList"
                             border
-                            @row-click = "tableRowClick"
+                            @row-click="tableRowClick"
                             @select="handleRowSelect"
                             @selection-change="handleSelectionChange"
                             style="width: 100%;">
@@ -48,6 +49,7 @@
     import {
         postImportAccounBar     // Bar 柱状图
     } from '@/api/dataAnsis/abnormityAnalysis';
+
     export default {
         name: "AbnormitysTableTabPane",
         // 父传子！
@@ -87,7 +89,7 @@
                             {field: "billMakePosQtty", title: "空单持仓量", width: 150, align: 'center'},
                             {field: "statBosomDays", title: "统计区间超仓天数", width: 150, align: 'center'}
                         ],
-                        tableDataList:  [],
+                        tableDataList: [],
                     }, {
                         label: '频繁报撤销单分析',  // frequentTrade
                         name: 'second',
@@ -117,9 +119,10 @@
                             {field: "mergeBargainQtty", title: "合并自成交数量", width: 150, align: 'center'},
                             {field: "acctBargainQtty", title: "账户自成交数量", width: 150, align: 'center'},
                         ],
-                        tableDataList: [] ,
+                        tableDataList: [],
                     }
-                ]
+                ],
+
             }
 
         },
@@ -130,6 +133,7 @@
 
         },
         watch: {
+            // 表格数据
             tablePaneData: {
                 handler(val) {
                     this.activeNameList[0].tableDataList = val.overStoreAnalysis;
@@ -142,30 +146,52 @@
         //    数据交互  127662
         methods: {
             // tap 类型
-            tabPane(){
+            tabPane() {
                 let tabPaneActiveName = '';
-                if(this.activeName === 'first'){
+                if (this.activeName === 'first') {
                     tabPaneActiveName = '1';
-                }else if(this.activeName === 'second'){
+                } else if (this.activeName === 'second') {
                     tabPaneActiveName = '2';
-                }else {
+                } else {
                     tabPaneActiveName = '3';
                 }
                 return tabPaneActiveName;
             },
             // Bar 柱状图
-            tableRowClick(row){
+            tableRowClick(row) {
+                let rowCustId = [];
+                if (this.activeName === 'first') {
+                    for (let i = 0; i < this.activeNameList[0].tableDataList.length; i++) {
+                        if (this.activeNameList[0].tableDataList[i].acctNum == row.acctNum) {
+                            rowCustId.push(this.activeNameList[0].tableDataList[i].custId)
+                        }
+                    }
+                } else if (this.activeName === 'second') {
+                    for (let i = 0; i < this.activeNameList[1].tableDataList.length; i++) {
+                        if (this.activeNameList[1].tableDataList[i].acctNum == row.acctNum) {
+                            rowCustId.push(this.activeNameList[1].tableDataList[i].custId)
+                        }
+                    }
+                } else {
+                    for (let i = 0; i < this.activeNameList[2].tableDataList.length; i++) {
+                        if (this.activeNameList[2].tableDataList[i].acctNum == row.acctNum) {
+                            rowCustId.push(this.activeNameList[2].tableDataList[i].custId)
+                        }
+                    }
+                }
+
                 let params = {
-                    "accountTeamNo": row.acctNum,    // 账户组号
-                    "custId": row.custId,           // 客户编号
+                    "accountTeamNo": row.acctNum,                    // 账户组号
+                    // "custId": rowCustId,                           // 客户编号
+                    "arrCustId": rowCustId,                           // 客户编号
                     "statTimeBegin": this.formData.statTimeBegin,    // 统计起始日
-                    "statTimeEnd": this.formData.statTimeEnd,      // 统计截止日
-                    "contrCode": row.contrCd,        // 合约代码
+                    "statTimeEnd": this.formData.statTimeEnd,        // 统计截止日
+                    "contrCode": row.contrCd,                        // 合约代码
                     "type": this.tabPane(),            // ---取值 '1':超仓分析
                 }
                 postImportAccounBar(params).then(resp => {
                     this.barEchartsDeteList = resp;
-                    this.barEchartsDete(this.barEchartsDeteList);
+                    this.barEchartsDete(this.barEchartsDeteList, rowCustId);
                 })
             },
             handleRowSelect(selection, row) {
@@ -176,9 +202,39 @@
             },
             // 导出CSV
             exportClick() {
-                console.log(this.tablePaneData);
-                console.log(this.tablePaneData.autoTrade);
             },
+            // 合并列表
+            /**
+             * 表格合并
+             * @param {*} param0
+             * row 表格每一行的数据
+             * column 表格每一列的数据
+             * rowIndex 表格的行索引,不包括表头,从0开始
+             * columnIndex 表格的列索引,从0开始
+             */
+
+            arraySpanMethod({row, column, rowIndex, columnIndex}) {
+                // console.log(row);
+                // console.log(column);
+                // console.log(rowIndex);
+                // console.log(columnIndex);
+
+                //用于设置要合并的列
+                //     if (columnIndex === 0) {
+                //         //用于设置合并开始的行号
+                //         if (rowIndex % 2 === 0) {
+                //             return {
+                //                 rowspan: 3,    // 合并的行数
+                //                 colspan: 2     // 合并的列数，设为０则直接不显示
+                //             };
+                //         } else {
+                //             return {
+                //                 rowspan: 0,
+                //                 colspan: 0
+                //             };
+                //         }
+                //     }
+            }
         },
         // 在一个实例被创建之后执行代码
         created() {

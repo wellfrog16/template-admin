@@ -1,4 +1,4 @@
-// 异常交易分析 Bar 堆叠柱状图
+// 异常交易分析 Bar1 图
 import barEchartsA from 'echarts';
 export default {
     name: 'mixin.js',
@@ -6,62 +6,56 @@ export default {
     components: {},
     mixins: [],
     data() {
-        return {};
+        return {
+            option: {
+                title: {
+                    text: 'ECharts 入门示例'
+                },
+                tooltip: {},
+                legend: {
+                    data: ['销量']
+                },
+                xAxis: {
+                    data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
+                },
+                yAxis: {},
+                series: [{
+                    name: '销量',
+                    type: 'bar',
+                    data: [5, 20, 36, 10, 10, 20]
+                }]
+            }
+        };
     },
     create() {
         // this.getForm();
     },
     methods: {
-        barEchartsDete(val, CustId) {
-            // console.log(CustId);
-            let valData = [];     // 日期
-            let valName = [];     // 账户
-            let valDataArr = [];  // 数据
-           if(val){
-               for (let i = 0; i < val.length; i++){
-                   if(val[i].custId){
-                       console.log(val)
-                       console.log(CustId)
-                       // console.log(valData.push(val[i].txDay));
-                       // console.log(valName.push(val[i].qtty));
-                       // console.log(valDataArr.push(val[i].custId));
-
-                       // console.log(val[i].netMarkPosQtty);
-                       // console.log(val[i].qtty);
-                       // console.log(val[i].txDay);
-                   }else {
-                       console.log(222);
-                   }
-               }
-           }else {
-               console.log('无结果');
-           }
-
-
-
+        barEchartsDete(val) {
+            // console.log(val);
             let barEcharts = barEchartsA.init(document.getElementById('AbarEcharts'));
             let option = {
                 backgroundColor:['rgba(7, 39, 89)'],
-                color: ['rgba(239, 156, 0)', 'rgba(16, 148, 119)', '#4162ff'],
-                barWidth:50,   // 柱状图的宽度
                 tooltip: {
                     trigger: 'axis',
                     axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-                        type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                        type: 'line'        // 默认为直线，可选为：'line' | 'shadow'
                     }
                 },
                 legend: {
-                    inactiveColor: '#455579',
-                    width: '80%',
-                    top: '5',
+                    data: ['账户1', '账户2', '账户3'],
                     textStyle: {
+                        fontWeight: 'normal',
                         color: '#ffffff',
                         fontSize: 12,
-                    }
+                    },
                 },
-
                 // 柱状图高度
                 grid: {
+                    // left: '3%',
+                    // right: '4%',
+                    // bottom: '3%',
+                    // containLabel: true,
                     left: '4%',
                     right: '5%',
                     bottom: '8%',
@@ -111,12 +105,6 @@ export default {
                             fontSize: 12
                         }
                     },
-                    label: {
-                        normal: {
-                            show: true,
-                            position: 'insideRight'
-                        }
-                    },
                     axisLine: {
                         lineStyle: {
                             color: '#0087ED',
@@ -129,10 +117,10 @@ export default {
                         name: '账户1',
                         type: 'bar',
                         stack: '总量',
-                        label: {
-                            normal: {
-                                show: true,
-                                position: 'insideRight'
+                        barWidth:50,   // 柱状图的宽度
+                        itemStyle:{
+                            normal:{
+                                color:'rgba(239, 156, 0)',  // 柱状图颜色 黄色
                             }
                         },
                         markLine: {
@@ -170,6 +158,12 @@ export default {
                         name: '账户2',
                         type: 'bar',
                         stack: '总量',
+                        barWidth:50,   // 柱状图的宽度
+                        itemStyle:{
+                            normal:{
+                                color:'rgba(4, 109, 154)',  // 柱状图颜色 蓝色
+                            }
+                        },
                         label: {
                             normal: {
                                 show: true,
@@ -182,6 +176,12 @@ export default {
                         name: '账户3',
                         type: 'bar',
                         stack: '总量',
+                        barWidth:50,   // 柱状图的宽度
+                        itemStyle:{
+                            normal:{
+                                color:'rgba(16, 148, 119)',  // 柱状图颜色 绿色
+                            }
+                        },
                         label: {
                             normal: {
                                 show: true,

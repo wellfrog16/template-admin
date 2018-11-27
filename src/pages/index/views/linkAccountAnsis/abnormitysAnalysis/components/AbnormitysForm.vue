@@ -1,58 +1,77 @@
 <template>
     <el-card :class="$style.card_form">
-        <el-form :class="$style.a_form" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px"
-                 class="demo-ruleForm">
+        <el-form ref="ruleForm" :model="ruleForm" :rules="rules">
             <el-row>
-                <el-col :xl="10" :lg="10" :md="10" :sm="24">
-                    <el-form-item :class="$style.rul_form_iInput" prop="importAccountGroup" label="导入账户组"
-                                  label-width="100px">
-                        <el-select :class="$style.select_option"
-                                   class="custom-width"
-                                   clearable size="small"
-                                   v-model="ruleForm.importAccountGroup">
-                            <el-option
-                                v-for="item in resultList"
-                                :key="item.resultId"
-                                :label="item.resultName"
-                                :value="item.resultId">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item prop="statisticalInterval" label="统计区间" label-width="100px">
-                        <s-date-picker
-                            :value="ruleForm.statisticalInterval"
-                            :isRange="true"
-                            @change="statisticalIntervalChange">
-                        </s-date-picker>
+                <el-col :xl="12" :lg="12" :md="12" :sm="24" style="border-right:1px solid #ccc;">
+                    <el-form-item prop="a">
+                        <el-radio-group v-model="ruleForm.exportType">
+                            <el-radio label="0">
+                                <el-form-item prop="resultId" label="导入结果集" label-width="140px" style="display:inline-block; padding: 5px 0;"
+                                              :rules="[{
+                                                          required: String(ruleForm.exportType) === '0', message: '请选择结果集'
+                                                      }]">
+                                    <el-select class="custom-width" clearable size="small" v-model="ruleForm.resultId">
+                                        <el-option
+                                            v-for="item in resultList"
+                                            :key="item.resultId"
+                                            :label="item.resultName"
+                                            :value="item.resultId">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
+                            </el-radio>
+                            <br>
+                            <el-radio label="1">
+                                <el-form-item prop="fileList" label="导入CSV" label-width="140px" style="display:inline-block; padding: 5px 0;"
+                                              :rules="[{
+                                                          required: String(ruleForm.exportType) === '1', message: '请上传附件'
+                                                      }]">
+                                    <div>
+                                        <upload-common
+                                            :showFileList="true"
+                                            :fileList="fileList"
+                                            :actionUrl="uploadBasicUrl"
+                                            :uploadOption="uploadOption"
+                                            :limitFileType="defaultLimitFileType"
+                                            :limitFileSize="1"
+                                            :limit="1"
+                                            @handlePreview="handlePreview"
+                                            @handleRemove="handleRemove"
+                                            @getTxtCon="getFileList"
+                                        ></upload-common>
+                                    </div>
+                                </el-form-item>
+                            </el-radio>
+                            <br>
+                            <el-radio label="2">
+                                <el-form-item prop="customNoArray" label="导入连续客户号" label-width="140px" style="display:inline-block; padding: 5px 0;"
+                                              :rules="[{
+                                                          validator: validateCustomNo, required: String(ruleForm.exportType) === '2'
+                                                      }]">
+                                    <el-input clearable size="small" v-model="ruleForm.customNoArray[0]" style="width: 150px;"></el-input>
+                                    <span style="color: #fff; margin: 0 20px;">~</span>
+                                    <el-input clearable size="small" v-model="ruleForm.customNoArray[1]" style="width: 150px;"></el-input>
+                                </el-form-item>
+                            </el-radio>
+                            <br>
+                        </el-radio-group>
                     </el-form-item>
                 </el-col>
-                <el-col :xl="10" :lg="10" :md="10" :sm="24">
-                    <el-form-item prop="importCSV" label="导入CSV" label-width="120px">
+                <el-col :xl="12" :lg="12" :md="12" :sm="24">
+                    <el-form-item prop="area" label="地区选择" label-width="140px">
                         <div>
-                            <upload-common
-                                :showFileList="true"
-                                :actionUrl="uploadBasicUrl"
-                                :uploadOption="uploadOption"
-                                :limitFileType="defaultLimitFileType"
-                                :limitFileSize="1"
-                                :limit="1"
-                                @handlePreview="handlePreview"
-                                @handleRemove="handleRemove"
-                                @getTxtCon="getFileList"
-                            ></upload-common>
+                            <tree-common ref="tree-components" :isMultipleMode="true"></tree-common>
                         </div>
                     </el-form-item>
-                    <el-form-item prop="contractCode" label="合约代码" label-width="120px">
-                        <el-input :class="$style.select_option"
-                                  clearable size="small"
-                                  v-model="ruleForm.contractCode"
-                                  class="custom-width">
-                        </el-input>
+                    <el-form-item prop="contractCode" label="合约代码" label-width="140px">
+                        <el-input clearable size="small" v-model="ruleForm.contractCode" class="custom-width"></el-input>
                     </el-form-item>
-                </el-col>
-                <el-col :xl="4" :lg="4" :md="4" :sm="24">
-                    <el-form-item label-width="60px">
-                        <el-button type="primary" @click="generateReportsClick('ruleForm')">生成报告</el-button>
+                    <el-form-item prop="selectDateRange" label="统计区间" label-width="140px">
+                        <s-date-picker
+                            :value="ruleForm.selectDateRange"
+                            :isRange="true"
+                            @change="handleSdatePickerDateRangeChange"
+                        ></s-date-picker>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -92,47 +111,112 @@
         // 存储数据
         data() {
             return {
-                tablePaneList: {},
-                formDataList: {},
-                tableList: [],
-                ruleForm: {
-                    importAccountGroup: '',  // 导入账户组
-                    importCSV: '',           // 导入CSV
-                    statisticalInterval: ['2017-02-20', '2018-11-25'],  // 统计区间
-                    contractCode: 'cu1712',    // 合约代码
-                },
-                rules: {
-                    // name: [
-                    //     {required: true, message: '请输入活动名称', trigger: 'blur'},
-                    //     {min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur'}
-                    // ],
-                    // region: [
-                    //     {required: true, message: '请选择活动区域', trigger: 'change'}
-                    // ],
-                    // date1: [
-                    //     {type: 'date', required: true, message: '请选择日期', trigger: 'change'}
-                    // ],
-                    // date2: [
-                    //     {type: 'date', required: true, message: '请选择时间', trigger: 'change'}
-                    // ],
-                    // type: [
-                    //     {type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change'}
-                    // ],
-                    // resource: [
-                    //     {required: true, message: '请选择活动资源', trigger: 'change'}
-                    // ],
-                    // desc: [
-                    //     {required: true, message: '请填写活动形式', trigger: 'blur'}
-                    // ]
-                },
-                resultList: [],  // 导入账户组列表
-                uploadBasicUrl: '',  //  导入CSV
+                createTypeOptions,
+                resultList: [{label: '结果集1', value: '1'}],
+                showDialog: false,
+                showCarousel: false,
                 uploadOption: {
                     name: '上传',
                     size: 'small',
                     type: 'primary'
                 },
-                defaultLimitFileType: ['xls', 'xlsx'],
+                uploadBasicUrl: getAccountsByUploadFile(),
+                createTypeName: '相关性分析',
+                defaultLimitFileType: ['xls', 'xlsx', 'csv'],
+                ruleForm: {
+                    exportType: '',
+                    resultId: '',
+                    customNoArray: [],
+                    contractCode: '',
+                    area: '9',
+                    selectDateRange: []
+                },
+                tableData: [],
+                columns: [
+                    {
+                        label: '场景名称',
+                        field: 'sceneName'
+                    },
+                    {
+                        label: '场景类型',
+                        field: 'sceneTypeName'
+                    },
+                    {
+                        label: '场景说明',
+                        field: 'sceneComnt'
+                    }
+                ],
+                searchAccountText: '',
+                defaultProps: {
+                    children: 'children',
+                    label: 'label'
+                },
+                areaData: [],
+                dialogItem: {},
+                operateType: 0,
+                createType: '',
+                selectList: [],
+                exportCustomNo: [],
+                fileList: [],
+                rules: {
+                    contractCode: {
+                        required: true,
+                        message: '请输入合约代码'
+                    },
+                    selectDateRange: {
+                        required: true,
+                        message: '请选择统计区间'
+                    }
+                },
+
+
+
+
+
+                //
+                // isImportAccountGroup: false,
+                // isImportCSV: false,
+                // tablePaneList: {},
+                // formDataList: {},
+                // tableList: [],
+                // ruleForm: {
+                //     importAccountGroup: '',  // 导入账户组
+                //     importCSV: '',           // 导入CSV
+                //     statisticalInterval: ['2017-02-20', '2018-11-25'],  // 统计区间
+                //     contractCode: 'cu1712',    // 合约代码
+                // },
+                // rules: {
+                //     // name: [
+                //     //     {required: true, message: '请输入活动名称', trigger: 'blur'},
+                //     //     {min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur'}
+                //     // ],
+                //     // region: [
+                //     //     {required: true, message: '请选择活动区域', trigger: 'change'}
+                //     // ],
+                //     // date1: [
+                //     //     {type: 'date', required: true, message: '请选择日期', trigger: 'change'}
+                //     // ],
+                //     // date2: [
+                //     //     {type: 'date', required: true, message: '请选择时间', trigger: 'change'}
+                //     // ],
+                //     // type: [
+                //     //     {type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change'}
+                //     // ],
+                //     // resource: [
+                //     //     {required: true, message: '请选择活动资源', trigger: 'change'}
+                //     // ],
+                //     // desc: [
+                //     //     {required: true, message: '请填写活动形式', trigger: 'blur'}
+                //     // ]
+                // },
+                // resultList: [],  // 导入账户组列表
+                // uploadBasicUrl: '',  //  导入CSV
+                // uploadOption: {
+                //     name: '上传',
+                //     size: 'small',
+                //     type: 'primary'
+                // },
+                // defaultLimitFileType: ['xls', 'xlsx'],
             };
         },
         // 计算属性
@@ -145,18 +229,18 @@
                 let params = {};
                 if(this.ruleForm.importAccountGroup == ''){
                     params  = {          // 导入账户组
-                        "statTimeBegin": this.ruleForm.statisticalInterval[0],      // 统计起始日
-                        "statTimeEnd": this.ruleForm.statisticalInterval[1],        // 统计截止日
-                        "contrCode": this.ruleForm.contractCode,        //合约代码
+                        "statTimeBegin": this.ruleForm.statisticalInterval[0],  // 统计起始日
+                        "statTimeEnd": this.ruleForm.statisticalInterval[1],    // 统计截止日
+                        "contrCode": this.ruleForm.contractCode,                // 合约代码
                         "type":"2"
                     }
                 }else {
                     params = {
-                        "resultId": this.ruleForm.importAccountGroup,          // 导入账户组
-                        "statTimeBegin": this.ruleForm.statisticalInterval[0],      // 统计起始日
-                        "statTimeEnd": this.ruleForm.statisticalInterval[1],        // 统计截止日
-                        "contrCode": this.ruleForm.contractCode,        //合约代码
-                        "type":"1"            // 表示导入结果集， '2'--表示导入csv文件
+                        "resultSetNo": this.ruleForm.importAccountGroup,       // 导入结果集
+                        "statTimeBegin": this.ruleForm.statisticalInterval[0], // 统计起始日
+                        "statTimeEnd": this.ruleForm.statisticalInterval[1],   // 统计截止日
+                        "contrCode": this.ruleForm.contractCode,               // 合约代码
+                        "type":"1"        // 表示导入结果集， '2'--表示导入csv文件
                     }
                 }
                 return params;
@@ -229,10 +313,10 @@
         },
         // 初始化数据
         mounted() {
-            // 导入账户组
-            postImportAccountGroup().then(resp => {
-                this.resultList = resp;
-            });
+            // 导入结果集
+            // postImportAccountGroup().then(resp => {
+            //     this.resultList = resp;
+            // });
         },
         beforeDestroy() {
         }

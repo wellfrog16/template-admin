@@ -118,7 +118,7 @@ const router = new Router({
                             name: 'abnormity',
                             label: '异常交易分析',
                             icon: 'menu-fix-icon fas fa-broadcast-tower',
-                            component: resolve => require(['../views/linkAccountAnsis/abnormitysAnalysis/Index.vue'], resolve)
+                            component: resolve => require(['../views/linkAccountAnsis/abnormityAnalysis/Index.vue'], resolve)
                         },
                         {
                             path: 'dictionary1',
@@ -128,11 +128,11 @@ const router = new Router({
                             component: Root
                         },
                         {
-                            path: 'demo11',
-                            name: 'demo11',
+                            path: 'customerInformationInquiry',
+                            name: 'customerInformationInquiry',
                             label: '客户信息查询',
-                            icon: 'el-icon-search',
-                            component: resolve => require(['../views/demo/Index.vue'], resolve)
+                            icon: 'el-icon-search',  // customer_information_inquiry
+                            component: resolve => require(['../views/linkAccountAnsis/customerInformationInquiry/Index.vue'], resolve)
                         }
                     ]
                 }

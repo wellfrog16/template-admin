@@ -10,24 +10,7 @@
             AForm: () => import('../abnormitysAnalysis/components/AbnormitysForm'),
         },
         data() {
-            return {
-                // 面包屑
-                breadcrumbs: [
-                    {
-                        router: '/',
-                        label: '首页'
-                    },
-                    {
-                        router: '',
-                        label: '数据分析工具'
-                    },
-                    {
-                        router: 'dictionary',
-                        label: '异常交易分析'
-                    }
-                ],
-
-            };
+            return {};
         },
         methods: {
         }
