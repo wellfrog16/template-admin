@@ -357,12 +357,13 @@ export default {
                     });
                 }
             }
-        },
-        mounted() {
-            this.getTableData();
-            this.getResultList();
         }
+    },
+    mounted() {
+        this.getTableData();
+        this.getResultList();
     }
+
 };
 </script>
 <style lang="less" scoped>
