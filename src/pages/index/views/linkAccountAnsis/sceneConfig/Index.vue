@@ -29,7 +29,7 @@
                                                           required: String(ruleForm.exportType) === '1', message: '请上传附件'
                                                       }]">
                                             <div>
-                                                <upload-common
+                                                <!-- <upload-common
                                                     :showFileList="true"
                                                     :fileList="fileList"
                                                     :actionUrl="uploadBasicUrl"
@@ -40,7 +40,19 @@
                                                     @handlePreview="handlePreview"
                                                     @handleRemove="handleRemove"
                                                     @getTxtCon="getFileList"
-                                                ></upload-common>
+                                                ></upload-common> -->
+                                                <upload-file-to-server
+                                                    class="upload-file"
+                                                    style="max-width: 444px;"
+                                                    ref="uploadFile"
+                                                    :actionUrl="actionUrl"
+                                                    :fileListProps="ruleForm.fileList"
+                                                    :uploadParams="uploadParams"
+                                                    :showSubmitUploadBtn="false"
+                                                    :autoUploadMode="false"
+                                                    @getTxtCon="handleUploadSuccess"
+                                                    @currentFileList="currentFileList"
+                                                ></upload-file-to-server>
                                             </div>
                                         </el-form-item>
                                     </el-radio>
@@ -134,7 +146,7 @@
 import STable from '@/components/index/common/STable';
 import SCard from '@/components/index/common/SCard';
 import SDatePicker from '@/components/index/common/SDatePicker';
-import UploadCommon from '@/components/index/common/UploadCommon';
+import UploadFileToServer from '@/components/index/common/UploadFileToServer';
 import TreeCommon from '@/components/index/common/TreeCommon';
 import EditSceneDialog from './components/EditSceneDialog';
 import {createTypeOptions} from './components/constants';
@@ -145,9 +157,9 @@ export default {
         STable,
         SCard,
         SDatePicker,
-        UploadCommon,
         TreeCommon,
-        EditSceneDialog
+        EditSceneDialog,
+        UploadFileToServer
     },
     data() {
         return {
@@ -160,10 +172,12 @@ export default {
                 size: 'small',
                 type: 'primary'
             },
-            uploadBasicUrl: getAccountsByUploadFile(),
+            actionUrl: getAccountsByUploadFile(),
+            uploadParams: {}, // 上传文件body参数
             createTypeName: '相关性分析',
             defaultLimitFileType: ['csv'],
             ruleForm: {
+                fileList: [],
                 exportType: '',
                 resultId: '',
                 customNoArray: [],
@@ -197,7 +211,6 @@ export default {
             createType: '',
             selectList: [],
             exportCustomNo: [],
-            fileList: [],
             rules: {
                 contractCode: {
                     required: true,
@@ -239,6 +252,9 @@ export default {
         getFileList(val) {
             console.log(val);
             this.resultId = val.join(',');
+        },
+        currentFileList(fileList) {
+            this.ruleForm.fileList = fileList;
         },
         handleCloseDialog() {
             this.showDialog = false;
@@ -284,7 +300,6 @@ export default {
             });
         },
         handleDelete(item) {
-            debugger;
             this.$confirm('确定删除?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
@@ -304,6 +319,10 @@ export default {
         handleSearch() {
             this.getTableData({searchName: this.searchAccountText});
         },
+        handleUploadSuccess() {
+            this.showCarousel = false;
+            this.$router.push({name: ''});
+        },
         handleNextStep() {
             let params = {
                 // cityIds: this.$refs['tree-components'].getCheckedList(),
@@ -315,25 +334,34 @@ export default {
                     return v.sceneId;
                 }).join(',')
             };
-            if (this.exportType === '0') {
+            if (!this.ruleForm.exportType) {
+                this.$message.error('请选择一种导入客户的方式');
+                return;
+            }
+            if (this.ruleForm.exportType === '0') {
                 params.resultIds = this.ruleForm.resultId;
+
+                if (this.ruleForm.exportType === '2') {
+                    params.accountStart = this.ruleForm.customNoArray[0];
+                    params.accountEnd = this.ruleForm.customNoArray[1];
+                }
+                console.log(params);
+                // 导入csv
+                if (this.ruleForm.exportType === '1') {
+                    this.uploadParams = {...this.uploadParams, ...params};
+                    this.$refs['uploadFile'].submitUpload();
+                } else {
+                    mergeAccount(params).then(resp => {
+                        this.showCarousel = false;
+                        this.$router.push({name: ''});
+                    });
+                }
             }
-            if (this.exportType === '1') {
-            }
-            if (this.exportType === '2') {
-                params.accountStart = this.ruleForm.customNoArray[0];
-                params.accountEnd = this.ruleForm.customNoArray[1];
-            }
-            console.log(params);
-            mergeAccount(params).then(resp => {
-                this.showCarousel = false;
-                this.$router.push({name: ''});
-            });
+        },
+        mounted() {
+            this.getTableData();
+            this.getResultList();
         }
-    },
-    mounted() {
-        this.getTableData();
-        this.getResultList();
     }
 };
 </script>

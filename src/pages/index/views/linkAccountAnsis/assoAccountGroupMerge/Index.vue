@@ -1,22 +1,8 @@
 <template>
     <div class="asso-account-group-merge">
         <div class="top-nav">
-            <el-tabs type="card">
+            <el-tabs type="card" v-model="activeTab">
                 <el-tab-pane v-for="(item, index) in tabs" :key="index" :name="item.name" :label="item.label">
-                    <el-row>
-                        <el-col :span="12">
-                            <echarts-common ref="chart1" div="chart1" :defaultOption="chartOption1" :propsChartHeight="400"></echarts-common>
-                        </el-col>
-                        <el-col :span="12">
-                            <echarts-common ref="chart2" div="chart2" :defaultOption="chartOption2" :propsChartHeight="400"></echarts-common>
-                        </el-col>
-                        <el-col :span="12">
-                            <echarts-common ref="chart3" div="chart3" :defaultOption="chartOption3" :propsChartHeight="400"></echarts-common>
-                        </el-col>
-                        <el-col :span="12">
-                            <echarts-common ref="chart4" div="chart4" :defaultOption="chartOption4" :propsChartHeight="400"></echarts-common>
-                        </el-col>
-                    </el-row>
                 </el-tab-pane>
             </el-tabs>
             <div class="tabs-button">
@@ -33,11 +19,27 @@
                 </el-row>
             </div>
         </div>
+        <div v-if="activeTab==='0'">
+            <el-row>
+                <el-col :span="12">
+                    <echarts-common ref="chart1" domId="chart1" :defaultOption="chartOption1" :propsChartHeight="400"></echarts-common>
+                </el-col>
+                <el-col :span="12">
+                    <echarts-common ref="chart2" domId="chart2" :defaultOption="chartOption2" :propsChartHeight="400"></echarts-common>
+                </el-col>
+                <el-col :span="12">
+                    <echarts-common ref="chart3" domId="chart3" :defaultOption="chartOption3" :propsChartHeight="400"></echarts-common>
+                </el-col>
+                <el-col :span="12">
+                    <echarts-common ref="chart4" domId="chart4" :defaultOption="chartOption4" :propsChartHeight="400"></echarts-common>
+                </el-col>
+            </el-row>
+        </div>
     </div>
 </template>
 <script>
-import EchartsCommon from '@/components/index/common/EchartsCommon'
-import {chartOption1, chartOption2, chartOption3, chartOption4} from './components/constants'
+import EchartsCommon from '@/components/index/common/EchartsCommon';
+import {chartOption1, chartOption2, chartOption3, chartOption4} from './components/constants';
 export default {
     components: {EchartsCommon},
     data() {
@@ -46,6 +48,7 @@ export default {
             chartOption2,
             chartOption3,
             chartOption4,
+            activeTab: '0',
             tabs: [
                 {name: '0', label: '场景名称1'},
                 {name: '1', label: '场景名称2'},

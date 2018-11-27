@@ -6,7 +6,6 @@
 </template>
 <script>
 import echarts from 'echarts';
-
 export default {
     props: {
         defaultOption: {
@@ -34,22 +33,23 @@ export default {
             // this.echart.dispatchAction({
             //   type: 'restore'
             // })
-            if (mark != 'init') {
+            if (mark !== 'init') {
                 //   this.gfnEchartShowLoading(this.echart)
             }
+            this.echart.clear();
             this.echart.setOption(this.defaultOption);
-            window.onresize = this.echart.resize;
-            /* 解除绑定事件 */
-            this.echart.off('dblclick');
-            this.echart.off('brushselected');
-            /* 绑定双击事件 */
-            this.echart.on('dblclick', params => {
-                this.$emit('handleEchartDblClickEvent', params);
-            });
-            /* 绑定框选结束事件 */
-            this.echart.on('brushselected', params => {
-                this.$emit('handleBrushSelectedEvent', params);
-            });
+            // window.onresize = this.echart.resize;
+            // /* 解除绑定事件 */
+            // this.echart.off('dblclick');
+            // this.echart.off('brushselected');
+            // /* 绑定双击事件 */
+            // this.echart.on('dblclick', params => {
+            //     this.$emit('handleEchartDblClickEvent', params);
+            // });
+            // /* 绑定框选结束事件 */
+            // this.echart.on('brushselected', params => {
+            //     this.$emit('handleBrushSelectedEvent', params);
+            // });
         }
     },
     watch: {
