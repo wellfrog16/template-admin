@@ -192,15 +192,15 @@ export default {
                 indexPara: this.dialogItem.indexPara || this.defaultConfig.indexPara // 统计频度
             };
             if (this.ruleForm.sceneId) {
-                let checkedList = []
+                let checkedList = [];
                 if (this.dialogItem.acctMakePosQtty) {
-                    checkedList.push('1')
+                    checkedList.push('1');
                 } else if (this.dialogItem.acctBargainQtty) {
-                    checkedList.push('2')
+                    checkedList.push('2');
                 } else if (this.dialogItem.acctBillCnt) {
-                    checkedList.push('3')
+                    checkedList.push('3');
                 } else if (this.dialogItem.statAcctCnt) {
-                    checkedList.push('4')
+                    checkedList.push('4');
                 }
                 this.checkedList = checkedList;
             }
@@ -244,18 +244,18 @@ export default {
             this.syntaxCheck(() => {
                 this.$refs['ruleForm'].validate(valid => {
                     if (valid) {
-                        let params = JSON.parse(JSON.stringify(this.ruleForm))
+                        let params = JSON.parse(JSON.stringify(this.ruleForm));
                         if (this.checkedList.indexOf('1') === -1) {
-                            params.acctMakePosQtty = ''
+                            params.acctMakePosQtty = '';
                         }
                         if (this.checkedList.indexOf('2') === -1) {
-                            params.acctBargainQtty = ''
+                            params.acctBargainQtty = '';
                         }
                         if (this.checkedList.indexOf('3') === -1) {
-                            params.acctBillCnt = ''
+                            params.acctBillCnt = '';
                         }
                         if (this.checkedList.indexOf('4') === -1) {
-                            params.statAcctCnt = ''
+                            params.statAcctCnt = '';
                         }
                         this.$emit('saveScene', params);
                     }
@@ -272,7 +272,7 @@ export default {
                     };
                 });
                 this.tableData = data;
-                this.defaultConfig.tableDara = data;
+                this.defaultConfig.tableData = JSON.parse(JSON.stringify(data));
             });
         }
     },
