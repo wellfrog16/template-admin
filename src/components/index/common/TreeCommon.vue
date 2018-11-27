@@ -6,7 +6,7 @@
             placement="right"
             :disabled="!names.length"
             trigger="hover">
-            <el-input slot="reference" :value="val" ref="dealerInput" :clearable="true" @clear="handlerClear" size="small" :disabled="disabled"
+            <el-input :readonly="true" slot="reference" :value="inputData" ref="dealerInput" :clearable="true" @clear="handlerClear" size="small" :disabled="disabled"
                       @input="handlerInput" v-popover:popover1 @blur="handleBlur"></el-input>
             <div style="max-height: 200px; overflow: auto;">
                 <el-tag class="tag-css" v-for="(item, index) in names" :key="index" style="margin:2px 5px;">{{ item }}</el-tag>
@@ -74,24 +74,7 @@ export default {
                 children: 'children',
                 label: 'label'
             },
-            data: [
-                {
-                    label: '北京市',
-                    id: '10001',
-                    children: [
-                        {label: '丰台区', id: '100010'},
-                        {label: '海淀区', id: '100011'}
-                    ]
-                },
-                {
-                    label: '上海市',
-                    id: '10002',
-                    children: [
-                        {label: '徐汇区', id: '100020'},
-                        {label: '浦东新区', id: '100021'}
-                    ]
-                }
-            ],
+            data: [],
             flag: true
         };
     },
@@ -103,36 +86,43 @@ export default {
             set: function(value) {
                 this.$emit('node-click', this.id, value);
             }
+        },
+        inputData() {
+            if (this.isMultipleMode) {
+                return this.names.join(',');
+            } else {
+                return this.val;
+            }
         }
     },
     watch: {
         selectItem: function() {
             this.value = this.selectItem;
             if (!this.value.length) {
-                this.clearNodesOnMultiple();
+                this.handlerClear();
             }
         }
     },
     methods: {
         handleBlur() {
-            setTimeout(() => {
-                if (this.flag && !this.isMultipleMode) {
-                    let value = this.$refs['dealerInput']['$refs']['input']['value'];
-                    if (!value) {
-                        this.$emit('node-click', '', '');
-                        return;
-                    }
-                    let code = this.getCodeByName(value);
-                    if (!code) {
-                        this.$message.error('请输入或选择有效人员');
-                        this.handlerInput('');
-                        this.$emit('node-click', '', '');
-                    } else {
-                        // 输入姓名
-                        this.$emit('node-click', code, value);
-                    }
-                }
-            }, 500);
+            // setTimeout(() => {
+            //     if (this.flag && !this.isMultipleMode) {
+            //         let value = this.$refs['dealerInput']['$refs']['input']['value'];
+            //         if (!value) {
+            //             this.$emit('node-click', '', '');
+            //             return;
+            //         }
+            //         let code = this.getCodeByName(value);
+            //         if (!code) {
+            //             this.$message.error('请输入或选择有效人员');
+            //             this.handlerInput('');
+            //             this.$emit('node-click', '', '');
+            //         } else {
+            //             // 输入姓名
+            //             this.$emit('node-click', code, value);
+            //         }
+            //     }
+            // }, 500);
         },
         getCodeByName(value) {
             let targetCode = '';
@@ -153,11 +143,18 @@ export default {
         },
         ajaxGetAllRoleOrgs() {
             getAreaTreeList().then(resp => {
-                this.data = resp;
+                let data = [
+                    {
+                        label: '全国',
+                        id: '0',
+                        children: resp
+                    }
+                ];
+                this.data = data;
             });
         },
         handlerInput(val) {
-            this.$refs.selectorDealer.filter(val);
+            this.$refs['tree-common'].filter(val);
         },
         filterNode(value, data) {
             if (!value) return true;
@@ -181,25 +178,29 @@ export default {
                     this.id = code.join(',');
                     this.$emit('node-click', this.id, this.value);
                 } else {
-                    this.$emit('node-click', '', '');
+                    setTimeout(() => {
+                        this.handlerClear();
+                    });
                 }
             }
         },
         handlerNodeClick(item) {
-            if (!item.children) {
-                this.value = item.label;
-                this.id = item.id;
+            if (!this.isMultipleMode) {
+                if (!item.children) {
+                    this.value = item.label;
+                    this.id = item.id;
+                }
+                this.$emit('node-click', this.id, this.value);
+                this.flag = false; // 阻止blur事件
+                setTimeout(() => {
+                    this.flag = true;
+                }, 1000);
             }
-            this.$emit('node-click', this.id, this.value);
-            this.flag = false; // 阻止blur事件
-            setTimeout(() => {
-                this.flag = true;
-            }, 1000);
         },
         clearNodesOnMultiple() {
             if (this.isMultipleMode) {
                 this.names = [];
-                this.$refs['selectorDealer'] && this.$refs['selectorDealer'].setCheckedNodes([]);
+                this.$refs['tree-common'] && this.$refs['tree-common'].setCheckedNodes([]);
             }
         },
         handlerClear() {

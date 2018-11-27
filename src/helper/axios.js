@@ -1,10 +1,11 @@
 import axios from 'axios';
 import {Loading, Notification} from 'element-ui';
 import config from '@/config';
-import Vue from 'vue';
+import store from '../store';
 const instance = url => {
     // 配置token到header中
-    const accessToken = localStorage.getItem('ACCESS_TOKEN');
+    let accessToken = localStorage.getItem('ACCESS_TOKEN');
+    accessToken = accessToken || store.state.login.accessToken;
     let instance = axios.create({
         baseURL: url || config.server.api,
         timeout: 200000,
@@ -14,13 +15,16 @@ const instance = url => {
     let loadingInstancce = null;
     instance.interceptors.request.use(
         // 全屏遮罩
-        require => {
+        config => {
+            let accessToken = localStorage.getItem('ACCESS_TOKEN');
+            accessToken = accessToken || store.state.login.accessToken;
+            config.headers.Authorization = 'Bearer' + accessToken;
             loadingInstancce = Loading.service({
                 fullscreen: true,
                 spinner: 'el-icon-loading',
                 text: '加载中'
             });
-            return require;
+            return config;
         },
         error => {
             return Promise.reject(error);
@@ -29,7 +33,7 @@ const instance = url => {
     // response 拦截器
     instance.interceptors.response.use(
         response => {
-            loadingInstancce.close();
+            loadingInstancce && loadingInstancce.close();
             const {data, config, status, statusText} = response;
             // 需要后端定义一个异常的需要用户登录的状态码来判断，让用户重新登录
             if ((status === 200 || status === 201 || status === 204) && (config.method === 'post' || config.method === 'put' || config.method === 'delete')) {
@@ -50,7 +54,7 @@ const instance = url => {
                     }
                 }
             } else if (status === 401) {
-                Vue.prototype.$router.push({path: '/login'});
+                // router.push({path: '/login'});
             } else if (status !== 200 && status !== 201 && status !== 204) {
                 Notification.error({
                     message: statusText
@@ -59,7 +63,7 @@ const instance = url => {
             return data.resData || data;
         },
         error => {
-            loadingInstancce.close();
+            loadingInstancce && loadingInstancce.close();
             return Promise.reject(error.response);
         }
     );

@@ -23,13 +23,13 @@
                                         </el-form-item>
                                     </el-radio>
                                     <br>
-                                    <el-radio label="1">
+                                    <el-radio label="1" class="self-radio">
                                         <el-form-item prop="fileList" label="导入CSV" label-width="140px" style="display:inline-block; padding: 5px 0;"
                                                       :rules="[{
                                                           required: String(ruleForm.exportType) === '1', message: '请上传附件'
                                                       }]">
                                             <div>
-                                                <upload-common
+                                                <!-- <upload-common
                                                     :showFileList="true"
                                                     :fileList="fileList"
                                                     :actionUrl="uploadBasicUrl"
@@ -40,7 +40,19 @@
                                                     @handlePreview="handlePreview"
                                                     @handleRemove="handleRemove"
                                                     @getTxtCon="getFileList"
-                                                ></upload-common>
+                                                ></upload-common> -->
+                                                <upload-file-to-server
+                                                    class="upload-file"
+                                                    style="max-width: 444px;"
+                                                    ref="uploadFile"
+                                                    :actionUrl="actionUrl"
+                                                    :fileListProps="ruleForm.fileList"
+                                                    :uploadParams="uploadParams"
+                                                    :showSubmitUploadBtn="false"
+                                                    :autoUploadMode="false"
+                                                    @getTxtCon="handleUploadSuccess"
+                                                    @currentFileList="currentFileList"
+                                                ></upload-file-to-server>
                                             </div>
                                         </el-form-item>
                                     </el-radio>
@@ -91,7 +103,9 @@
                     </el-radio-group>
                     <el-button slot="reference" class="new-btn" type="primary" size="mini"><i class="el-icon-plus"></i>新增自定义场景</el-button>
                 </el-popover>
-                <el-input class="search-input" size="mini" prefix-icon="el-icon-search" placeholder="请输入场景名称或场景说明" v-model="searchAccountText" @keyup.enter.native="handleSearch"></el-input>
+                <el-input class="search-input" size="mini" placeholder="请输入场景名称或场景说明" v-model="searchAccountText" @keyup.enter.native="handleSearch">
+                    <i class="el-icon-search" slot="prefix" @click="handleSearch" style="margin-left:4px; cursor: pointer;"></i>
+                </el-input>
             </div>
             <div slot="content">
                 <s-table :columns="columns" :tableData="tableData" :showSelectionColumn="true" @selection-change="handleSelectChange">
@@ -132,7 +146,7 @@
 import STable from '@/components/index/common/STable';
 import SCard from '@/components/index/common/SCard';
 import SDatePicker from '@/components/index/common/SDatePicker';
-import UploadCommon from '@/components/index/common/UploadCommon';
+import UploadFileToServer from '@/components/index/common/UploadFileToServer';
 import TreeCommon from '@/components/index/common/TreeCommon';
 import EditSceneDialog from './components/EditSceneDialog';
 import {createTypeOptions} from './components/constants';
@@ -143,9 +157,9 @@ export default {
         STable,
         SCard,
         SDatePicker,
-        UploadCommon,
         TreeCommon,
-        EditSceneDialog
+        EditSceneDialog,
+        UploadFileToServer
     },
     data() {
         return {
@@ -158,10 +172,12 @@ export default {
                 size: 'small',
                 type: 'primary'
             },
-            uploadBasicUrl: getAccountsByUploadFile(),
+            actionUrl: getAccountsByUploadFile(),
+            uploadParams: {}, // 上传文件body参数
             createTypeName: '相关性分析',
-            defaultLimitFileType: ['xls', 'xlsx', 'csv'],
+            defaultLimitFileType: ['csv'],
             ruleForm: {
+                fileList: [],
                 exportType: '',
                 resultId: '',
                 customNoArray: [],
@@ -195,7 +211,6 @@ export default {
             createType: '',
             selectList: [],
             exportCustomNo: [],
-            fileList: [],
             rules: {
                 contractCode: {
                     required: true,
@@ -232,9 +247,14 @@ export default {
         },
         handleRemove(file) {
             console.log(file);
+            this.resultId = '';
         },
         getFileList(val) {
             console.log(val);
+            this.resultId = val.join(',');
+        },
+        currentFileList(fileList) {
+            this.ruleForm.fileList = fileList;
         },
         handleCloseDialog() {
             this.showDialog = false;
@@ -263,7 +283,11 @@ export default {
                 this.$message.error('请选择一个场景');
                 return;
             }
-            this.showCarousel = true;
+            this.$refs['ruleForm'].validate(valid => {
+                if (valid) {
+                    this.showCarousel = true;
+                }
+            });
         },
         handleSelectChange(val) {
             console.log(val);
@@ -276,7 +300,6 @@ export default {
             });
         },
         handleDelete(item) {
-            debugger;
             this.$confirm('确定删除?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
@@ -296,40 +319,49 @@ export default {
         handleSearch() {
             this.getTableData({searchName: this.searchAccountText});
         },
-        handleNextStep() {
+        handleUploadSuccess() {
             this.showCarousel = false;
-            this.$refs['ruleForm'].validate(valid => {
-                if (valid) {
-                    let params = {
-                        // cityIds: this.$refs['tree-components'].getCheckedList(),
-                        cityIds: '',
-                        contractCode: this.ruleForm.contractCode,
-                        startDate: this.ruleForm.selectDateRange[0],
-                        endDate: this.ruleForm.selectDateRange[1],
-                        sceneIds: this.selectList.map(v => {
-                            return v.sceneId;
-                        }).join(',')
-                    };
-                    if (this.exportType === '0') {
-                        params.resultIds = this.ruleForm.resultId;
-                    }
-                    if (this.exportType === '1') {
-                    }
-                    if (this.exportType === '2') {
-                        params.accountStart = this.ruleForm.customNoArray[0];
-                        params.accountEnd = this.ruleForm.customNoArray[1];
-                    }
-                    console.log(params);
+            this.$router.push({name: ''});
+        },
+        handleNextStep() {
+            let params = {
+                // cityIds: this.$refs['tree-components'].getCheckedList(),
+                cityIds: '',
+                contractCode: this.ruleForm.contractCode,
+                startDate: this.ruleForm.selectDateRange[0],
+                endDate: this.ruleForm.selectDateRange[1],
+                sceneIds: this.selectList.map(v => {
+                    return v.sceneId;
+                }).join(',')
+            };
+            if (!this.ruleForm.exportType) {
+                this.$message.error('请选择一种导入客户的方式');
+                return;
+            }
+            if (this.ruleForm.exportType === '0') {
+                params.resultIds = this.ruleForm.resultId;
+
+                if (this.ruleForm.exportType === '2') {
+                    params.accountStart = this.ruleForm.customNoArray[0];
+                    params.accountEnd = this.ruleForm.customNoArray[1];
+                }
+                console.log(params);
+                // 导入csv
+                if (this.ruleForm.exportType === '1') {
+                    this.uploadParams = {...this.uploadParams, ...params};
+                    this.$refs['uploadFile'].submitUpload();
+                } else {
                     mergeAccount(params).then(resp => {
+                        this.showCarousel = false;
                         this.$router.push({name: ''});
                     });
                 }
-            });
+            }
+        },
+        mounted() {
+            this.getTableData();
+            this.getResultList();
         }
-    },
-    mounted() {
-        this.getTableData();
-        this.getResultList();
     }
 };
 </script>
@@ -370,6 +402,12 @@ export default {
         }
         /deep/ .el-carousel__container {
             min-height: 500px;
+        }
+        .self-radio {
+            /deep/.el-radio__input {
+                vertical-align: top;
+                margin-top: 20px;
+            }
         }
     }
 </style>

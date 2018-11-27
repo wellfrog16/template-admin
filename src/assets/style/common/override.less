@@ -256,9 +256,11 @@
     border-color: @g-tabs-color;
 }
 .el-tabs__item {
-    border-bottom: 0;
-    border-left: 1px solid @g-tabs-color;
+    border: none;
     color: #fff;
+}
+.el-tabs--card > .el-tabs__header .el-tabs__item {
+    border: none;
 }
 .el-tabs--card > .el-tabs__header .el-tabs__item.is-active {
     background: @g-active-bg;
