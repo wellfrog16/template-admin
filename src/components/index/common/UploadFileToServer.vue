@@ -63,9 +63,7 @@ export default {
         uploadParams: {
             type: Object,
             default() {
-                return {
-                    bodyParams: JSON.stringify({})
-                };
+                return {};
             }
         },
         actionUrl: {

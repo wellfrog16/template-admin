@@ -283,6 +283,10 @@ export default {
                 this.$message.error('请选择一个场景');
                 return;
             }
+            if (!this.ruleForm.exportType) {
+                this.$message.error('请选择一种导入客户的方式');
+                return;
+            }
             this.$refs['ruleForm'].validate(valid => {
                 if (valid) {
                     this.showCarousel = true;
@@ -334,28 +338,26 @@ export default {
                     return v.sceneId;
                 }).join(',')
             };
-            if (!this.ruleForm.exportType) {
-                this.$message.error('请选择一种导入客户的方式');
-                return;
-            }
             if (this.ruleForm.exportType === '0') {
                 params.resultIds = this.ruleForm.resultId;
-
-                if (this.ruleForm.exportType === '2') {
-                    params.accountStart = this.ruleForm.customNoArray[0];
-                    params.accountEnd = this.ruleForm.customNoArray[1];
-                }
-                console.log(params);
-                // 导入csv
-                if (this.ruleForm.exportType === '1') {
-                    this.uploadParams = {...this.uploadParams, ...params};
+            }
+            if (this.ruleForm.exportType === '2') {
+                params.accountStart = this.ruleForm.customNoArray[0];
+                params.accountEnd = this.ruleForm.customNoArray[1];
+            }
+            console.log(params);
+            // 导入csv
+            if (this.ruleForm.exportType === '1') {
+                this.uploadParams = {...this.uploadParams, ...params};
+                console.log(this.uploadParams);
+                this.$nextTick(() => {
                     this.$refs['uploadFile'].submitUpload();
-                } else {
-                    mergeAccount(params).then(resp => {
-                        this.showCarousel = false;
-                        this.$router.push({name: ''});
-                    });
-                }
+                });
+            } else {
+                mergeAccount(params).then(resp => {
+                    this.showCarousel = false;
+                    this.$router.push({name: ''});
+                });
             }
         }
     },
