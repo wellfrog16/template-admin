@@ -151,7 +151,7 @@ import TreeCommon from '@/components/index/common/TreeCommon';
 import EditSceneDialog from './components/EditSceneDialog';
 import {createTypeOptions} from './components/constants';
 import {getSceneList, deleteScene, mergeAccount} from '@/api/dataAnsis/sceneConfig';
-import {getAccountsByUploadFile, getTlsResultInfo} from '@/api/common';
+import {uploadFileByBodyInfo, getTlsResultInfo} from '@/api/common';
 export default {
     components: {
         STable,
@@ -172,7 +172,7 @@ export default {
                 size: 'small',
                 type: 'primary'
             },
-            actionUrl: getAccountsByUploadFile(),
+            actionUrl: uploadFileByBodyInfo(),
             uploadParams: {}, // 上传文件body参数
             createTypeName: '相关性分析',
             defaultLimitFileType: ['csv'],
