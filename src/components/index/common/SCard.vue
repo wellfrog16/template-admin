@@ -31,7 +31,7 @@ export default {
 <style lang="less" scoped>
     .self-card-component {
         box-shadow: 0 0 10px #326fcb;
-        margin-bottom: 20px;
+        margin-bottom: 15px;
         .card-header {
             display: flex;
 

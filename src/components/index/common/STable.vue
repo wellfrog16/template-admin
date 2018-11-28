@@ -158,6 +158,7 @@ export default {
                     columnsArr.push(key);
                 }
             }
+            console.log(columnsArr);
             return columnsArr;
         }
     },

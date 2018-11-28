@@ -38,18 +38,30 @@ export default {
             }
             this.echart.clear();
             this.echart.setOption(this.defaultOption);
-            // window.onresize = this.echart.resize;
-            // /* 解除绑定事件 */
-            // this.echart.off('dblclick');
-            // this.echart.off('brushselected');
-            // /* 绑定双击事件 */
-            // this.echart.on('dblclick', params => {
-            //     this.$emit('handleEchartDblClickEvent', params);
-            // });
-            // /* 绑定框选结束事件 */
-            // this.echart.on('brushselected', params => {
-            //     this.$emit('handleBrushSelectedEvent', params);
-            // });
+            window.onresize = this.echart.resize;
+            /* 解除绑定事件 */
+            this.echart.off('click');
+            this.echart.off('dblclick');
+            this.echart.off('brushselected');
+            /* 绑定单击事件 */
+            let timeFn = null;
+            this.echart.on('click', params => {
+                clearTimeout(timeFn);
+                timeFn = setTimeout(() => {
+                    console.log(params);
+                    this.$emit('handleEchartClickEvent', params, this.domId);
+                }, 300);
+            });
+            /* 绑定双击事件 */
+            this.echart.on('dblclick', params => {
+                clearTimeout(timeFn);
+                console.log(params);
+                this.$emit('handleEchartDblClickEvent', params, this.domId);
+            });
+            /* 绑定框选结束事件 */
+            this.echart.on('brushselected', params => {
+                this.$emit('handleBrushSelectedEvent', params, this.domId);
+            });
         }
     },
     watch: {
@@ -71,6 +83,7 @@ export default {
         });
     },
     beforeDestroy() {
+        this.echart.off('click');
         this.echart.off('dblclick');
         this.echart.off('brushselected');
     }

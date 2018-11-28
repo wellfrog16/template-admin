@@ -4,7 +4,7 @@
             <div slot="content">
                 <el-form ref="ruleForm" :model="ruleForm" :rules="rules">
                     <el-row>
-                        <el-col :xl="12" :lg="12" :md="12" :sm="24" style="border-right:1px solid #ccc;">
+                        <el-col :xl="12" :lg="12" :md="12" :sm="24" style="border-right:1px solid rgb(0, 160, 213);">
                             <el-form-item prop="a">
                                 <el-radio-group v-model="ruleForm.exportType">
                                     <el-radio label="0">
@@ -123,7 +123,7 @@
                 </s-table>
             </div>
         </s-card>
-        <div style="text-align:center; margin: 30px 0;">
+        <div style="text-align:center; margin: 20px 0;">
             <el-button size="small" type="primary" style="width: 100px;" @click="nextStep">下一步</el-button>
         </div>
         <el-dialog :close-on-click-modal="false" :close-on-press-escape="false" :custom-class="`self-dialog`"
@@ -328,14 +328,20 @@ export default {
             this.$router.push({name: ''});
         },
         handleNextStep() {
+            let cityIds = this.$refs['tree-components'].getCheckedList().map(v => {
+                return v.id;
+            });
             let params = {
-                // cityIds: this.$refs['tree-components'].getCheckedList(),
-                cityIds: '',
-                contractCode: this.ruleForm.contractCode,
-                startDate: this.ruleForm.selectDateRange[0],
-                endDate: this.ruleForm.selectDateRange[1],
+                exportType: this.ruleForm.exportType,
+                cityIds: cityIds,
+                contrCd: this.ruleForm.contractCode,
+                statStartDt: this.ruleForm.selectDateRange[0],
+                statStopDay: this.ruleForm.selectDateRange[1],
                 sceneIds: this.selectList.map(v => {
                     return v.sceneId;
+                }).join(','),
+                sceneTyps: this.selectList.map(v => {
+                    return v.sceneTyp;
                 }).join(',')
             };
             if (this.ruleForm.exportType === '0') {
@@ -349,7 +355,6 @@ export default {
             // 导入csv
             if (this.ruleForm.exportType === '1') {
                 this.uploadParams = {...this.uploadParams, ...params};
-                console.log(this.uploadParams);
                 this.$nextTick(() => {
                     this.$refs['uploadFile'].submitUpload();
                 });

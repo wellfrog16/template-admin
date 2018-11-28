@@ -3,6 +3,7 @@
     * uploadParams: 上传文件附加参数。 type: Object
     * actionUrl: 上传地址，公共方法参考utils/global/gfnFileSteamUtil.js。type: String
     * limitFileType: 限制上传文件类型。type: Array  小写字母['txt', 'csv']
+    * defaultAccept: 打开文件限制。MIME类型参考：https://blog.csdn.net/libinemail/article/details/51022922
     * limit: 最大上传条目。type: Number
     * multiple: 是否支持文件多选，按ctrl 或 shift。 type: Boolean
     * disabled: 是否禁用。 type: Boolean
@@ -23,6 +24,7 @@
             <el-form-item prop="name" style="margin-bottom: 0;">
                 <el-upload
                     ref="upload"
+                    :accept="defaultAccept"
                     :name="uploadName"
                     :action="actionUrl"
                     :limit="limit"
@@ -86,6 +88,12 @@ export default {
             type: Array,
             default() {
                 return ['csv'];
+            }
+        },
+        defaultAccept: {
+            type: String,
+            default() {
+                return 'text/csv';
             }
         },
         disabled: {

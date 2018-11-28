@@ -1,23 +1,26 @@
 <template>
     <div :class="$style.container">
         <head-top></head-top>
-        <div :class="$style.containers">
-            <div :class="$style.middle">
-                <el-aside :class="$style.aside" :width="width">
-                    <aside-menu
-                        class="aside-menu"
-                        :data="menuData"
-                        :collapse="collapse"
-                        background-color="#1f2d3d"
-                        text-color="#fff"/>
-                </el-aside>
-                <el-main :class="$style.maicontainersn">
-                    <s-breadbreadcrumb :breadcrumbList="menuData"></s-breadbreadcrumb>
+        <el-container :class="$style.containers">
+            <el-aside :class="$style.aside" :style="{'width': width}">
+                <aside-menu
+                    class="aside-menu"
+                    :data="menuData"
+                    :collapse="collapse"
+                    background-color="#1f2d3d"
+                    text-color="#fff"
+                    @toggleMode="toggleMode"/>
+            </el-aside>
+            <div :class="[$style.bread_css]" :style="{'left': width, 'width': `calc(100% - ${width})`}">
+                <s-breadbreadcrumb :breadcrumbList="menuData"></s-breadbreadcrumb>
+            </div>
+            <div :class="[$style.maicontainersn]" :style=" {'width': `calc(100% - ${width})`}">
+                <el-main>
                     <router-view/>
                     <!-- <bottom-operate-button></bottom-operate-button> -->
                 </el-main>
             </div>
-        </div>
+        </el-container>
     </div>
 </template>
 
@@ -36,13 +39,13 @@ export default {
     },
     data() {
         return {
-            width: '200',
+            width: '200px',
             collapse: false,
             menuData: menu.filter(this.$router.options.routes)
         };
     },
     methods: {
-        toggle() {
+        toggleMode() {
             const swit = this.$jquery(`.${this.$style.switch}`);
             const target = this.$jquery(`.${this.$style.logo} span`);
             if (this.collapse) {
@@ -53,7 +56,14 @@ export default {
                 swit.addClass(this.$style['switch-tran']);
             }
             this.collapse = !this.collapse;
+            if (this.collapse) {
+                this.width = '64px';
+            } else {
+                this.width = '200px';
+            }
         }
+    },
+    mounted() {
     }
 };
 </script>
@@ -68,6 +78,7 @@ export default {
 <style lang="less" module>
     @import '../../../assets/style/config.less';
     @height: 60px;
+    @width: 200px;
 
     .container {
         width: 100%;
@@ -82,24 +93,22 @@ export default {
         padding: 0;
         margin: 0;
         position: relative;
-        overflow: auto;
     }
     .aside {
         background: url('../../../assets/img/common/meunbj.png') no-repeat;
         height: 1080px;
-        width: 200px;
         box-shadow: 0 0 10px #326fcb;
-        position: fixed;
     }
-    .middle {
-        display: flex;
+    .bread_css {
+        position: absolute;
+        top: 0;
     }
     .maicontainersn {
-        width: calc(100% - 180px);
-        height: 100%;
         color: #fff;
-        margin-left: 200px;
-        margin-bottom: 30px;
+        overflow: auto;
+        margin-bottom: 50px;
+        margin-top: 40px;
+        width: calc(100% - @width);
     }
 
     .switch {

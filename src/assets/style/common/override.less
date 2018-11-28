@@ -170,13 +170,19 @@
 // 菜单
 .el-menu {
     background-color: rgb(10, 45, 92);
+    border: none;
+}
+.el-menu-item {
+    &:focus {
+        background: @g-active-bg;
+    }
 }
 .el-menu-item:hover, .el-submenu__title:hover, .el-menu-item:active, .el-submenu__title:active, .el-menu-item:visited, .el-submenu__title:visited {
     background-color: @g-active-bg;
     color: #fff;
 }
 .el-menu-item.is-active {
-    color: #fff;
+    color: #fff !important;
     background-color: @g-active-bg;
 }
 

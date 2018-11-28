@@ -2,6 +2,8 @@ import axios from 'axios';
 import {Loading, Notification} from 'element-ui';
 import config from '@/config';
 import store from '../store';
+// import router from '../router';
+import Vue from 'vue';
 const instance = url => {
     // 配置token到header中
     let accessToken = localStorage.getItem('ACCESS_TOKEN');
@@ -27,6 +29,10 @@ const instance = url => {
             return config;
         },
         error => {
+            loadingInstancce && loadingInstancce.close();
+            Notification.error({
+                message: '加载超时'
+            });
             return Promise.reject(error);
         }
     );
@@ -54,16 +60,27 @@ const instance = url => {
                     }
                 }
             } else if (status === 401) {
-                // router.push({path: '/login'});
+                localStorage.removeItem('ACCESS_TOKEN');
+                Vue.prototype.router.replace({
+                    path: '/login',
+                    query: {redirect: Vue.prototype.router.currentRoute.fullPath}
+                });
             } else if (status !== 200 && status !== 201 && status !== 204) {
                 Notification.error({
                     message: statusText
                 });
             }
-            return data.resData || data;
+            if (data.success) {
+                return data.resData || data;
+            } else {
+                return Promise.reject(data);
+            }
         },
         error => {
             loadingInstancce && loadingInstancce.close();
+            Notification.error({
+                message: '加载失败'
+            });
             return Promise.reject(error.response);
         }
     );

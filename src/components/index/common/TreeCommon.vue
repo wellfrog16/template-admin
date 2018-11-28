@@ -50,7 +50,7 @@ export default {
         defaultExpandedKeys: {
             type: Array,
             default() {
-                return [];
+                return ['0'];
             }
         },
         disabled: {
