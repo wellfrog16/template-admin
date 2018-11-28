@@ -134,9 +134,9 @@ export default {
                         ]
                     }
                 };
-                console.log(ss.mainData);
-                let mainData = ss.mainData;
-                // let mainData = val.mainData;
+                // console.log(ss.mainData);
+                // let mainData = ss.mainData;
+                let mainData = val.mainData;
                 let temp = [];
                 // console.log(Object.keys(mainData))
                 Object.keys(mainData).forEach(v => {

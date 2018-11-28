@@ -155,7 +155,7 @@
                     exportType: '',       // 导入结果集按钮
                     contractCode: 'cu1712',        // 合约代码
                     resultId: '',         // 导入结果集
-                    selectDateRange: ['2017-02-20', '2018-11-25']   // 统计区间
+                    selectDateRange: ['2017-02-20', '2017-10-09']   // 统计区间
                 },
                 rules: {
                     contractCode: {

@@ -5,8 +5,8 @@
             <el-form ref="ruleForm" :model="ruleForm" :rules="rules">
                 <el-row>
                     <el-col :xl="7" :lg="7" :md="7" :sm="24">
-                        <el-form-item prop="contractCode" label="客户编码：" label-width="100px">
-                            <el-input clearable size="small" v-model="ruleForm.contractCode"
+                        <el-form-item prop="customerID" label="客户编码：" label-width="100px">
+                            <el-input clearable size="small" v-model="ruleForm.customerID"
                                       style="width: 100%;" class="custom-width"></el-input>
                         </el-form-item>
                     </el-col>
@@ -59,7 +59,7 @@
 
                 // form 表单绑定值
                 ruleForm: {
-                    contractCode: '',      // 客户编码
+                    customerID: '',      // 客户编码
                 },
                 // 校验
                 rules: {
@@ -76,18 +76,20 @@
 
             // 客户地址清除数据
             customerClearClick() {
+                this.tableData1 = [];
             },
 
             // 客户地址查询(生成报告)
             customerAddressClick(){
                 this.$refs['ruleForm'].validate(valid => {
                     if(valid){
-                        console.log(valid);
-                        console.log(111);
-                        this.tableData1 = tableData1;
-                    }else {
-                        console.log(222);
-                        console.log(valid);
+                        let params = {
+                            "id": this.ruleForm.customerID,   // 客户编码
+                        }
+                        postCustomerAddress(params).then(resp => {
+                            this.tableData1 = tableData1;
+
+                        })
                     }
                 })
 

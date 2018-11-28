@@ -5,8 +5,8 @@
             <el-form ref="ruleForm" :model="ruleForm" :rules="rules">
                 <el-row>
                     <el-col :xl="7" :lg="7" :md="7" :sm="24">
-                        <el-form-item prop="contractCode" label="客户编码：" label-width="100px">
-                            <el-input clearable size="small" v-model="ruleForm.contractCode"
+                        <el-form-item prop="customerID" label="客户编码：" label-width="100px">
+                            <el-input clearable size="small" v-model="ruleForm.customerID"
                                       style="width: 100%;"  class="custom-width"></el-input>
                         </el-form-item>
                     </el-col>
@@ -66,10 +66,7 @@
                 resultList: [{label: '结果集1', value: '1'}],
                 // form 表单绑定值
                 ruleForm: {
-                    fileList: [],          // 导入CSV
-                    exportType: '',       // 导入结果集按钮
-                    contractCode: 'cu1712',        // 合约代码
-                    resultId: '',         // 导入结果集
+                    customerID: 'cu1712',        // 合约代码
                     selectDateRange: ['2017-02-20', '2018-11-25']   // 统计区间
                 },
                 rules: {
@@ -88,18 +85,30 @@
         //    数据交互  127662
         methods: {
             // 时间
-            handleSdatePickerDateRangeChange() {
+            handleSdatePickerDateRangeChange(val) {
+                this.ruleForm.selectDateRange = val;
             },
 
 
             // 客户交易信息查询(生成报告)
             customerTransactionsClick(){
-                this.tableData2 = tableData2;
+                this.$refs['ruleForm'].validate(valid => {
+                    if(valid){
+                        let params = {
+                            "custId": this.ruleForm.customerID,       // 客户编码
+                            "timeBegin": this.ruleForm.selectDateRange[0],   // 统计区间(开始)
+                            "timeEnd": this.ruleForm.selectDateRange[1],   // 统计区间(结束)
+                        }
+                        postCustomerTransactions(params).then(resp => {
+                            this.tableData2 = tableData2;
+                        })
+                    }
+                })
             },
         },
         // 初始化数据
         mounted() {
-            this.customerTransactionsClick();
+            // this.customerTransactionsClick();
         },
     }
 </script>

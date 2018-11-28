@@ -46,9 +46,7 @@
         </s-card>
     </div>
 </template>
-
 <script>
-
 
     import {
         postPreciseInformation,      // 精确信息查询(生成报告接口)
@@ -74,13 +72,13 @@
             return {
                 tableData3: [],                // 精确信息查数据
                 columnsCTrI3: columnsCTrI3,    // 精确信息查(列表头)
-                resultList: [{label: '结果集1', value: '1'}],
+
                 // form 表单绑定值
                 ruleForm: {
                     indexSelection: '1',          // 指标选择
-                    contractCode: 'cu1712',        // 合约代码
+                    contractCode: 'cu1712',        // 指标内容
                 },
-                indexSelectionOptions: [],
+                indexSelectionOptions: [],   // 指标选择
                 rules: {
                     contractCode: {
                         required: true,
@@ -90,19 +88,27 @@
             }
 
         },
-        //    数据交互  127662
+        // 数据交互
         methods: {
-            // 时间
-            handleSdatePickerDateRangeChange() {
-            },
 
             // 精确信息查询清除数据
             preciseClearClick() {
+                this.tableData3 = [];
             },
 
             // 精确信息查询(生成报告)
             preciseInformationClick(){
-                this.tableData3 = tableData3;
+                this.$refs['ruleForm'].validate(valid => {
+                    if(valid){
+                        let params = {
+                            "indexName": this.ruleForm.indexSelection,      // 指标名称
+                            "indexValue": this.ruleForm.contractCode,         // 指标值
+                        }
+                        postPreciseInformation(params).then(resp => {
+                            this.tableData3 = tableData3;
+                        })
+                    }
+                })
             },
         },
         // 初始化数据
