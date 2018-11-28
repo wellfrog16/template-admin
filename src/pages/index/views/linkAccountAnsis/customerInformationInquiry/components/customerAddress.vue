@@ -12,7 +12,7 @@
                     </el-col>
                     <el-col :xl="2" :lg="2" :md="2" :sm="24">
                         <el-form-item label-width="60px">
-                            <el-button type="primary" @click="generateReportsClick('ruleForm')">生成报告</el-button>
+                            <el-button type="primary" @click="customerAddressClick('ruleForm')">生成报告</el-button>
                         </el-form-item>
                     </el-col>
                     <el-col :xl="2" :lg="2" :md="2" :sm="24">
@@ -40,7 +40,6 @@
     import {
         columnsCTrI1,    // 客户地址查询  (假数据)
         tableData1,    // 客户地址查询(列表头)
-        indexSelectionOptions  // 指标选择
     } from '../../customerInformationInquiry/components/constants';
 
     export default {
@@ -57,15 +56,16 @@
             return {
                 tableData1: [],               // 客户地址查询数据
                 columnsCTrI1: columnsCTrI1,   // 客户地址查询(列表头)
-                resultList: [{label: '结果集1', value: '1'}],
+
                 // form 表单绑定值
                 ruleForm: {
-                    contractCode: 'cu1712',      // 合约代码
+                    contractCode: '',      // 客户编码
                 },
+                // 校验
                 rules: {
                     contractCode: {
                         required: true,
-                        message: '请输入合约代码'
+                        message: '请输入客户编码'
                     }
                 }
             }
@@ -80,12 +80,22 @@
 
             // 客户地址查询(生成报告)
             customerAddressClick(){
-                this.tableData1 = tableData1;
+                this.$refs['ruleForm'].validate(valid => {
+                    if(valid){
+                        console.log(valid);
+                        console.log(111);
+                        this.tableData1 = tableData1;
+                    }else {
+                        console.log(222);
+                        console.log(valid);
+                    }
+                })
+
             },
         },
         // 初始化数据
         mounted() {
-            this.customerAddressClick();
+            // this.customerAddressClick();
         },
     }
 </script>
