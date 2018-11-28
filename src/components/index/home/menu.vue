@@ -1,9 +1,14 @@
 <template>
     <el-menu router
-             :collapse="collapse"
-             :text-color="textColor"
-             :active-text-color="activeTextColor"
+            :collapse="collapse"
+            :text-color="textColor"
+            :active-text-color="activeTextColor"
     >
+        <el-menu-item @click="toggleMode" index="" class="col-button">
+            <i class="fas fa-bars fa-lg"></i>
+            <span slot="title" style="margin-left:20px;">折叠</span>
+        </el-menu-item>
+
         <template v-for="(item, index) in data">
 
             <!-- 无二级子节点 -->
@@ -54,6 +59,38 @@ export default {
         'collapse': {type: Boolean, default: false},
         'text-color': {type: String, default: '#303133'},
         'active-text-color': {type: String, default: '#409eff'}
+    },
+    data() {
+        return {
+            // collapse: false
+        }
+    },
+    methods: {
+        toggleMode() {
+            this.$emit('toggleMode');
+            // this.collapse = !this.collapse;
+        }
     }
 };
 </script>
+<style lang="less">
+    .col-button {
+        background: transparent;
+        &.is-active {
+            background: transparent;
+        }
+        &:hover {
+            background: transparent;
+        }
+        &:focus {
+            background: transparent;
+        }
+        &:active {
+            background: transparent;
+        }
+        &:visited {
+            background: transparent;
+        }
+    }
+</style>
+

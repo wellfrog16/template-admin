@@ -2,7 +2,7 @@
     <div :class="$style.breadcrumb">
         <el-breadcrumb separator-class="el-icon-arrow-right">
             <!-- 路由生成菜单-->
-            当前位置：
+            <span :class="$style.brliet">当前位置：</span>
             <el-breadcrumb-item
                 v-for="(item, index) in currentBreamList"
                 :to="{path: item.path}"
@@ -78,8 +78,13 @@ export default {
 <style lang="less" module>
     .breadcrumb {
         height: 35px;
+        line-height: 35px;
         display: flex;
         justify-content: space-between;
+        align-items: center;
+        margin: 0 20px;
+        padding-left: 20px;
+        box-shadow: 0 0 10px #326fcb;
         .brliet {
             color: #fff !important;
         }

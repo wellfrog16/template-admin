@@ -5,6 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "upload": "vue-cli-service build && gulp",
     "eslint": "vue-cli-service lint",
     "stylelint": "stylelint */**/*.{css,less,vue} --fix",
     "precommit": "stylelint css/*.scss",
@@ -24,6 +25,8 @@
     "babel-eslint": "^10.0.1",
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0-0",
+    "gulp": "^3.9.1",
+    "gulp-sftp": "^0.1.5",
     "less": "^3.0.4",
     "less-loader": "^4.1.0",
     "less-plugin-functions": "^1.0.0",

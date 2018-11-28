@@ -131,7 +131,7 @@ const router = new Router({
                             path: 'customerInformationInquiry',
                             name: 'customerInformationInquiry',
                             label: '客户信息查询',
-                            icon: 'el-icon-search',  // customer_information_inquiry
+                            icon: 'el-icon-search', // customer_information_inquiry
                             component: resolve => require(['../views/linkAccountAnsis/customerInformationInquiry/Index.vue'], resolve)
                         }
                     ]
@@ -195,7 +195,15 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
     // todo权限校验等
-    next();
+    let accessToken = localStorage.getItem('ACCESS_TOKEN');
+    if (accessToken) {
+        next();
+    } else {
+        next({
+            path: '/login',
+            query: {redirect: to.fullPath} // 将跳转的路由path作为参数，登录成功后跳转到该路由
+        });
+    }
 });
 
 export default router;

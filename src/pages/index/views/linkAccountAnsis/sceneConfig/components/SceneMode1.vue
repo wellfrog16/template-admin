@@ -105,6 +105,7 @@ export default {
     },
     watch: {
         dialogItem() {
+            debugger;
             this.setRuleForm();
         }
     },
@@ -183,26 +184,28 @@ export default {
                 sceneId: this.dialogItem.sceneId || '',
                 sceneComnt: this.dialogItem.sceneComnt || '', // 场景说明
                 sceneName: this.dialogItem.sceneName || '', // 场景名称
-                acctBargainQtty: this.dialogItem.acctBargainQtty || this.defaultConfig.acctBargainQtty, // 账户成交量
-                acctBillCnt: this.dialogItem.acctBillCnt || this.defaultConfig.acctBillCnt, // 账户报单量
-                acctMakePosQtty: this.dialogItem.acctMakePosQtty || this.defaultConfig.acctMakePosQtty, // 账户持仓量
-                statAcctCnt: this.dialogItem.statAcctCnt || this.defaultConfig.statAcctCnt, // 统计账户数
-                statAcctType: this.dialogItem.statAcctType || this.defaultConfig.statAcctType, // 统计账户类型
-                statFreq: this.dialogItem.statFreq || this.defaultConfig.statFreq, // 统计频度
-                indexPara: this.dialogItem.indexPara || this.defaultConfig.indexPara // 统计频度
+                acctBargainQtty: this.dialogItem.sceneId ? this.dialogItem.acctBargainQtty : this.defaultConfig.acctBargainQtty, // 账户成交量
+                acctBillCnt: this.dialogItem.sceneId ? this.dialogItem.acctBillCnt : this.defaultConfig.acctBillCnt, // 账户报单量
+                acctMakePosQtty: this.dialogItem.sceneId ? this.dialogItem.acctMakePosQtty : this.defaultConfig.acctMakePosQtty, // 账户持仓量
+                statAcctCnt: this.dialogItem.sceneId ? this.dialogItem.statAcctCnt : this.defaultConfig.statAcctCnt, // 统计账户数
+                statAcctType: this.dialogItem.sceneId ? this.dialogItem.statAcctType : this.defaultConfig.statAcctType, // 统计账户类型
+                statFreq: this.dialogItem.sceneId ? this.dialogItem.statFreq : this.defaultConfig.statFreq, // 统计频度
+                indexPara: this.dialogItem.sceneId ? this.dialogItem.indexPara : this.defaultConfig.indexPara // 统计频度
             };
-            if (this.ruleForm.sceneId) {
-                let checkedList = []
+            if (this.dialogItem.sceneId) {
+                let checkedList = [];
                 if (this.dialogItem.acctMakePosQtty) {
-                    checkedList.push('1')
+                    checkedList.push('1');
                 } else if (this.dialogItem.acctBargainQtty) {
-                    checkedList.push('2')
+                    checkedList.push('2');
                 } else if (this.dialogItem.acctBillCnt) {
-                    checkedList.push('3')
+                    checkedList.push('3');
                 } else if (this.dialogItem.statAcctCnt) {
-                    checkedList.push('4')
+                    checkedList.push('4');
                 }
                 this.checkedList = checkedList;
+            } else {
+                this.checkedList = this.defaultConfig.checkedList;
             }
         },
         handleReset() {
@@ -220,7 +223,7 @@ export default {
                 statFreq: this.defaultConfig.statFreq, // 统计频度
                 indexPara: this.defaultConfig.indexPara // 语法
             };
-            this.tableData = this.defaultConfig.tableData; // 指标列表
+            this.tableData = JSON.parse(JSON.stringify(this.defaultConfig.tableData)); // 指标列表
         },
         syntaxCheck(callback) {
             checkSql(this.ruleForm.indexPara).then(resp => {
@@ -244,18 +247,18 @@ export default {
             this.syntaxCheck(() => {
                 this.$refs['ruleForm'].validate(valid => {
                     if (valid) {
-                        let params = JSON.parse(JSON.stringify(this.ruleForm))
+                        let params = JSON.parse(JSON.stringify(this.ruleForm));
                         if (this.checkedList.indexOf('1') === -1) {
-                            params.acctMakePosQtty = ''
+                            params.acctMakePosQtty = '';
                         }
                         if (this.checkedList.indexOf('2') === -1) {
-                            params.acctBargainQtty = ''
+                            params.acctBargainQtty = '';
                         }
                         if (this.checkedList.indexOf('3') === -1) {
-                            params.acctBillCnt = ''
+                            params.acctBillCnt = '';
                         }
                         if (this.checkedList.indexOf('4') === -1) {
-                            params.statAcctCnt = ''
+                            params.statAcctCnt = '';
                         }
                         this.$emit('saveScene', params);
                     }
@@ -272,7 +275,7 @@ export default {
                     };
                 });
                 this.tableData = data;
-                this.defaultConfig.tableDara = data;
+                this.defaultConfig.tableData = JSON.parse(JSON.stringify(data));
             });
         }
     },
@@ -312,9 +315,6 @@ export default {
             }
             /deep/ td {
                 border-color: #202a33;
-            }
-            button {
-                color: #0089ff;
             }
         }
         .button-group {

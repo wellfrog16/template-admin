@@ -25,6 +25,7 @@ export const sfOptions = [
     {label: '密度聚类', value: '2'},
 ];
 export const defaultConfig = {
+    checkedList: ['1', '2', '3', '4'],
     tableData: [],
     acctBargainQtty: '1000', // 账户成交量
     acctBillCnt: '100', // 账户报单量
