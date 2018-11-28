@@ -17,7 +17,7 @@
                                                     v-for="item in resultList"
                                                     :key="item.resultId"
                                                     :label="item.resultName"
-                                                    :value="item.resultId">
+                                                    uploadFileByBodyInfo                                    :value="item.resultId">
                                                 </el-option>
                                             </el-select>
                                         </el-form-item>

@@ -1,23 +1,21 @@
 
-// 异常交易分析    172.25.61.13:18003
-// 172.25.61.95 bdsp.redis.com
-// 172.25.61.95 bdsp.mysql.com
-// 172.25.61.13 bdsp.gateway.com
-// 172.25.61.13 bdsp.register.com
-
+// 异常交易分析
 import {post, requestPrefix} from '@/utils/request';
 
 // export const getImportAccountGroup = params => {
-//     return get(`${requestPrefix}/operate/result/query`, params);
+//     return get(`${requestPrefix}/result/query`, params);
 // };
-
-// 导入账户组
-export const postImportAccountGroup = params => {
+//导入结果集
+export const postTlsResultInfo = params => {
     return post(`${requestPrefix}/result/query`, params);
 };
-// 查询
-export const postIInquire = params => {
-    return post(`${requestPrefix}/sql`, params);
+// 当选择结果集时的生成报告接口
+export const postExportType = params => {
+    return post(`${requestPrefix}/exceptionInfo/resultSet`, params);
+};
+// 当选择导入csv时的生成报告接口
+export const postExceptionInfo = params => {
+    return post(`${requestPrefix}/exceptionInfo/csv`, params);
 };
 // Bar 柱状图
 export const postImportAccounBar = params => {

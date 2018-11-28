@@ -14,7 +14,6 @@
                             height="450"
                             highlight-current-row
                             tooltip-effect="dark"
-                            :span-method="arraySpanMethod"
                             :data="active.tableDataList"
                             border
                             @row-click="tableRowClick"
@@ -127,18 +126,16 @@
 
         },
         // 计算属性
-        computed: {
-
-            //初始化表格信息
-
-        },
+        computed: {},
         watch: {
             // 表格数据
             tablePaneData: {
                 handler(val) {
-                    this.activeNameList[0].tableDataList = val.overStoreAnalysis;
-                    this.activeNameList[1].tableDataList = val.frequentTrade;
-                    this.activeNameList[2].tableDataList = val.autoTrade;
+                    if(val){
+                        this.activeNameList[0].tableDataList = val.overStoreAnalysis;
+                        this.activeNameList[1].tableDataList = val.frequentTrade;
+                        this.activeNameList[2].tableDataList = val.autoTrade;
+                    }
                 },
                 deep: true
             }
@@ -179,7 +176,6 @@
                         }
                     }
                 }
-
                 let params = {
                     "accountTeamNo": row.acctNum,                    // 账户组号
                     // "custId": rowCustId,                           // 客户编号
@@ -203,38 +199,6 @@
             // 导出CSV
             exportClick() {
             },
-            // 合并列表
-            /**
-             * 表格合并
-             * @param {*} param0
-             * row 表格每一行的数据
-             * column 表格每一列的数据
-             * rowIndex 表格的行索引,不包括表头,从0开始
-             * columnIndex 表格的列索引,从0开始
-             */
-
-            arraySpanMethod({row, column, rowIndex, columnIndex}) {
-                // console.log(row);
-                // console.log(column);
-                // console.log(rowIndex);
-                // console.log(columnIndex);
-
-                //用于设置要合并的列
-                //     if (columnIndex === 0) {
-                //         //用于设置合并开始的行号
-                //         if (rowIndex % 2 === 0) {
-                //             return {
-                //                 rowspan: 3,    // 合并的行数
-                //                 colspan: 2     // 合并的列数，设为０则直接不显示
-                //             };
-                //         } else {
-                //             return {
-                //                 rowspan: 0,
-                //                 colspan: 0
-                //             };
-                //         }
-                //     }
-            }
         },
         // 在一个实例被创建之后执行代码
         created() {
@@ -249,10 +213,10 @@
 </script>
 <style lang="less" module>
     .card_table {
+        margin-top: 80px;
         width: 100%;
         display: flex;
         justify-content: space-between;
-        margin-top: 17px;
         position: relative;
         .a_form_table_bar {
             padding: 0;
