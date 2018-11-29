@@ -173,7 +173,7 @@ export default {
                 size: 'small',
                 type: 'primary'
             },
-            actionUrl: uploadFileByBodyInfo(),
+            actionUrl: uploadFileByBodyInfo('/accountMerge/csv'),
             uploadParams: {}, // 上传文件body参数
             createTypeName: '相关性分析',
             defaultLimitFileType: ['csv'],

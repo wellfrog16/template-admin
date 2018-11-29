@@ -21,13 +21,11 @@ const instance = url => {
             let accessToken = localStorage.getItem('ACCESS_TOKEN');
             accessToken = accessToken || store.state.login.accessToken;
             config.headers.Authorization = 'Bearer' + accessToken;
-            if (location.href.indexOf('login') > -1) { // 登录接口开启全屏loading，其他情况自己添加loading
-                loadingInstancce = Loading.service({
-                    fullscreen: true,
-                    spinner: 'el-icon-loading',
-                    text: '加载中'
-                });
-            }
+            loadingInstancce = Loading.service({
+                fullscreen: true,
+                spinner: 'el-icon-loading',
+                text: '加载中'
+            });
             return config;
         },
         error => {
@@ -72,7 +70,7 @@ const instance = url => {
                     message: statusText
                 });
             }
-            if (data.success) {
+            if (data.success || data.access_token) {
                 return data.resData || data;
             } else {
                 return Promise.reject(data);
