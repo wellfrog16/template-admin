@@ -108,7 +108,7 @@
                 </el-input>
             </div>
             <div slot="content">
-                <s-table :columns="columns" :tableData="tableData" :showSelectionColumn="true" @selection-change="handleSelectChange">
+                <s-table :columns="columns" :tableData="tableData" :showSelectionColumn="true" :loading="loading" @selection-change="handleSelectChange">
                     <el-table-column
                         :width="300"
                         slot="tableColumnsPush"
@@ -167,6 +167,7 @@ export default {
             resultList: [{label: '结果集1', value: '1'}],
             showDialog: false,
             showCarousel: false,
+            loading: false,
             uploadOption: {
                 name: '上传',
                 size: 'small',
@@ -299,9 +300,14 @@ export default {
         },
         getTableData(params) {
             this.showDialog = false;
+            this.loading = true;
             getSceneList(params).then(resp => {
+                this.loading = false;
                 this.tableData = resp;
-            });
+            }).catch(e => {
+                this.loading = false;
+                console.error(e);
+            })
         },
         handleDelete(item) {
             this.$confirm('确定删除?', '提示', {

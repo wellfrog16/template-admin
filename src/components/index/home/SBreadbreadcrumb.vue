@@ -2,7 +2,7 @@
     <div :class="$style.breadcrumb">
         <el-breadcrumb separator-class="el-icon-arrow-right">
             <!-- 路由生成菜单-->
-            <span :class="$style.brliet">当前位置：</span>
+            <span :class="$style.brliet"><i class="el-icon-location-outline" style="margin-right: 8px;"></i>当前位置：</span>
             <el-breadcrumb-item
                 v-for="(item, index) in currentBreamList"
                 :to="{path: item.path}"

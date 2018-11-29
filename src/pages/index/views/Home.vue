@@ -46,15 +46,15 @@ export default {
     },
     methods: {
         toggleMode() {
-            const swit = this.$jquery(`.${this.$style.switch}`);
-            const target = this.$jquery(`.${this.$style.logo} span`);
-            if (this.collapse) {
-                setTimeout(() => target.show(), 100);
-                swit.removeClass(this.$style['switch-tran']);
-            } else {
-                target.hide();
-                swit.addClass(this.$style['switch-tran']);
-            }
+            // const swit = this.$jquery(`.${this.$style.switch}`);
+            // const target = this.$jquery(`.${this.$style.logo} span`);
+            // if (this.collapse) {
+            //     setTimeout(() => target.show(), 100);
+            //     swit.removeClass(this.$style['switch-tran']);
+            // } else {
+            //     target.hide();
+            //     swit.addClass(this.$style['switch-tran']);
+            // }
             this.collapse = !this.collapse;
             if (this.collapse) {
                 this.width = '64px';

@@ -13,6 +13,6 @@ export const getTlsResultInfo = () => {
     return post(`${requestPrefix}/getTlsResultInfo`, {});
 };
 // 上传文件；file + body
-export const uploadFileByBodyInfo = (url) => {
-    return `${config.server.api}${requestPrefix}/${url ? url: 'exceptionInfo/csv'}?access_token=${localStorage.getItem('ACCESS_TOKEN')}`;
+export const uploadFileByBodyInfo = url => {
+    return `${config.server.api}${requestPrefix}/${url || 'exceptionInfo/csv'}?access_token=${localStorage.getItem('ACCESS_TOKEN')}`;
 };
