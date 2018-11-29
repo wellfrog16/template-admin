@@ -117,13 +117,13 @@
                     address: '',         // 地址
                 },
                 rules: {
-                    contractCode: {
+                    nationy: {
                         required: true,
-                        message: '请输入合约代码'
+                        message: '请选择国家'
                     },
-                    selectDateRange: {
+                    address: {
                         required: true,
-                        message: '请选择统计区间'
+                        message: '请选输入地址'
                     }
                 }
             }

@@ -1,120 +1,189 @@
-           // 客户地址查询
+// 客户地址查询
 export const columnsCTrI1 = [
-    {field: "acctNum1", label: "客户地址查询", width: '', align: ''},
+    {field: "custId", label: "客户编号", width: '', align: ''},
+    {field: "custName", label: "客户名称", width: '', align: ''},
+    {field: "custType", label: "客户类型", width: '', align: ''},
+    {field: "bankSwift", label: "开户银行", width: '', align: ''},
+    {field: "bankAcct", label: "银行帐号", width: '', align: ''},
+    {field: "bankday", label: "开户日期", width: '', align: ''},
+    {field: "addr", label: "地址", width: '', align: ''},
+    {field: "zipCd", label: "邮编", width: '', align: ''},
+    {field: "phone", label: "电话号码", width: '', align: ''},
+    {field: "sex", label: "性别", width: '', align: ''},
+    {field: "birthdt", label: "出生日期", width: '', align: ''},
+    {field: "localTaxid", label: "当地纳税号", width: '', align: ''},
+    {field: "localSocialsecurityid", label: "当地", width: '', align: ''},
+    {field: "localId", label: "当地身份证号", width: '', align: ''},
+    {field: "licenceid", label: "驾照号", width: '', align: ''},
+    {field: "hkMacaoPass", label: "港澳居民来往内地通行证", width: '', align: ''},
+    {field: "workUnit", label: "工作单位", width: '', align: ''},
+    {field: "position", label: "职位", width: '', align: ''},
+    {field: "corpChar", label: "单位性质", width: '', align: ''},
+    {field: "email", label: "电子邮件", width: '', align: ''},
+    {field: "zdxSoloName", label: "指定下单人姓名", width: '', align: ''},
+    {field: "zdxSoloDoctype", label: "指定下单人证件类型", width: '', align: ''},
+    {field: "zdxSoloDocid", label: "指定下单人证件号码", width: '', align: ''},
+    {field: "zdxSoloAddr", label: "指定下单人地址", width: '', align: ''},
+    {field: "zdxSoloZipCd", label: "指定下单人邮编", width: '', align: ''},
+    {field: "fundTranpername", label: "资金调拨人姓名", width: '', align: ''},
+    {field: "fundTranperaddr", label: "资金调拨人地址", width: '', align: ''},
+    {field: "fundTranperzipCd", label: "资金调拨人邮编", width: '', align: ''},
+    {field: "statCfmname", label: "结算单确认人姓名", width: '', align: ''},
+    {field: "statCfmaddr", label: "结算单确认人地址", width: '', align: ''},
+    {field: "statCfmzipCd", label: "结算单确认人邮编", width: '', align: ''},
+    {field: "custOpenmodel", label: "客户开户模式", width: '', align: ''},
+    {field: "oaiName", label: "开户或中介机构名称", width: '', align: ''},
+    {field: "oaiFilingid", label: "开户或中介机构备案号", width: '', align: ''},
+
 ];
-           // 客户交易信息查询
+
+// 客户交易信息查询
 export const columnsCTrI2 = [
-    {field: "acctNum1", label: "客户交易信息查询", width: '', align: ''},
+    {field: "acctum1", label: "", width: '', align: ''},
 ];
 export const activeNameList = [
     {
         name: 'first',
-        label: '超仓分析',              // overStoreAnalysis
+        label: '客户持仓明细',                   // overStoreAnalysis
         tableColumns: [
-            {field: "acctNum1", label: "客户交易信息查询", width: '', align: ''},
+            {field: "tradingDay", label: "交易日", width: '', align: ''},
+            {field: "custName", label: "客户名称", width: '', align: ''},
+            {field: "orgrumentId", label: "合约代码", width: '', align: ''},
+            {field: "clientId", label: "客户代码", width: '', align: ''},
+            {field: "posMultiQtty", label: "持多单量", width: '', align: ''},
+            {field: "posBillQtty", label: "持空单量", width: '', align: ''},
+            {field: "hedgeflag", label: "投机套保标志", width: '', align: ''},
+            {field: "positionsum", label: "当前持仓金额", width: '', align: ''},
+            {field: "openprofit", label: "浮动盈亏", width: '', align: ''},
+            {field: "margin", label: "保证金", width: '', align: ''},
+            {field: "duemargin", label: "应收保证金", width: '', align: ''},
         ],
         tableDataList: [],
     },
     {
-        label: '频繁报撤销单分析',             // frequentTrade
+        label: '客户报单明细',
         name: 'second',
         tableColumns: [
-            {field: "acctNum1", label: "客户交易信息查询", width: '', align: ''},
+            {field: "custCode", label: "客户编号", width: '', align: ''},
+            {field: "custName", label: "客户名称", width: '', align: ''},
+            {field: "tradingDay", label: "交易日", width: '', align: ''},
+            {field: "declDay", label: "报单日期", width: '', align: ''},
+            {field: "reportid", label: "报单编号", width: '', align: ''},
+            {field: "contrCode", label: "合约代码", width: '', align: ''},
+            {field: "declPriceCond", label: "报单价格条件", width: '', align: ''},
+            {field: "buySell", label: "买卖方向", width: '', align: ''},
+            {field: "comHedgeflag", label: "组合投机套保标志", width: '', align: ''},
+            {field: "price", label: "价格", width: '', align: ''},
+            {field: "quantity", label: "数量", width: '', align: ''},
+            {field: "volType", label: "成交量类型", width: '', align: ''},
+            {field: "declType", label: "报单类型", width: '', align: ''},
+            {field: "todayVolQuantity", label: "今成交数量", width: '', align: ''},
+            {field: "residueQuantity", label: "剩余数量", width: '', align: ''},
+            {field: "changeTime", label: "最后修改时间", width: '', align: ''},
+            {field: "cancelTime", label: "撤销时间", width: '', align: ''},
         ],
         tableDataList: [],
     }, {
-        label: '自成交分析',              // autoTrade
+        label: '客户成交明细',
         name: 'third',
         tableColumns: [
-            {field: "acctNum1", label: "客户交易信息查询", width: '', align: ''},
+            {field: "custCode", label: "客户编号", width: '', align: ''},
+            {field: "custName", label: "客户名称", width: '', align: ''},
+            {field: "tranId", label: "成交编号", width: '', align: ''},
+            {field: "buySell", label: "买卖方向", width: '', align: ''},
+            {field: "hedgeFlag", label: "组合投机套保标志", width: '', align: ''},
+            {field: "reportId", label: "报单编号", width: '', align: ''},
+            {field: "tradeRole", label: "交易角色", width: '', align: ''},
+            {field: "contrCode", label: "合约代码", width: '', align: ''},
+            {field: "kaipingFlag", label: "开平标志", width: '', align: ''},
+            {field: "price", label: "价格", width: '', align: ''},
+            {field: "quantity", label: "数量", width: '', align: ''},
+            {field: "tranday", label: "成交时间", width: '', align: ''},
         ],
         tableDataList: [],
     }
 ];
-           // 精确信息查询
+// 精确信息查询
 export const columnsCTrI3 = [
     {field: "acctNum1", label: "精确信息查询", width: '', align: ''},
+    {field: "custId", label: "客户号", width: '', align: ''},
+    {field: "custName", label: "客户名称", width: '', align: ''},
+    {field: "custType", label: "客户类型", width: '', align: ''},
+    {field: "bankSwift", label: "开户银行", width: '', align: ''},
+    {field: "bankIacct", label: "银行帐号", width: '', align: ''},
+    {field: "bankDay", label: "开户日期", width: '', align: ''},
+    {field: "addr", label: "地址", width: '', align: ''},
+    {field: "zipCd", label: "邮编", width: '', align: ''},
+    {field: "phone", label: "电话号码", width: '', align: ''},
+    {field: "sex", label: "性别", width: '', align: ''},
+    {field: "birthdt", label: "出生日期", width: '', align: ''},
+    {field: "localTaxid", label: "当地纳税号", width: '', align: ''},
+    {field: "localSocialsecurityid", label: "当地社保id", width: '', align: ''},
+    {field: "localId", label: "当地身份证号", width: '', align: ''},
+    {field: "licenceId", label: "驾照号", width: '', align: ''},
+    {field: "hkMacaoPass", label: "港澳居民来往内地通行证", width: '', align: ''},
+    {field: "workUnit", label: "工作单位", width: '', align: ''},
+    {field: "position", label: "职位", width: '', align: ''},
+    {field: "corpChar", label: "单位性质", width: '', align: ''},
+    {field: "email", label: "电子邮件", width: '', align: ''},
+    {field: "zdxSoloName", label: "指定下单人姓名", width: '', align: ''},
+    {field: "zdxSoloDoctype", label: "指定下单人证件类型", width: '', align: ''},
+    {field: "zdxSoloDocid", label: "指定下单人证件号码", width: '', align: ''},
+    {field: "zdxoloddr", label: "指定下单人地址", width: '', align: ''},
+    {field: "zdxoloZipCd", label: "指定下单人邮编", width: '', align: ''},
+    {field: "fundTranpername", label: "资金调拨人姓名", width: '', align: ''},
+    {field: "fundSasTranperaddr", label: "资金调拨人地址", width: '', align: ''},
+    {field: "fundTranperzipCd", label: "资金调拨人邮编", width: '', align: ''},
+    {field: "statCfmname", label: "结算单确认人姓名", width: '', align: ''},
+    {field: "statCfmaddr", label: "结算单确认人地址", width: '', align: ''},
+    {field: "statCfmzipCd", label: "结算单确认人邮编", width: '', align: ''},
+    {field: "custOpenmodel", label: "客户开户模式", width: '', align: ''},
+    {field: "oaiName", label: "开户或中介机构名称", width: '', align: ''},
+    {field: "oaiFilingid", label: "开户或中介机构备案号", width: '', align: ''},
 ];
-           // 指标选择
+
+// 指标选择
 export const indexSelectionOptions = [
     {value: '1', label: '1'},
     {value: '2', label: '2'},
     {value: '3', label: '3'},
     {value: '4', label: '4'},
 ];
-           // 模糊地址查询
+// 模糊地址查询
 export const columnsCTrI4 = [
-    {field: "acctNum1", label: "模糊地址查询模糊地址查询", width: '', align: ''},
-    {field: "", label: "", width: '', align: ''},
-    {field: "", label: "", width: '', align: ''},
-    {field: "", label: "", width: '', align: ''},
-    {field: "", label: "", width: '', align: ''},
-    {field: "", label: "", width: '', align: ''},
-    {field: "", label: "", width: '', align: ''},
-    {field: "", label: "", width: '', align: ''},
-    {field: "", label: "", width: '', align: ''},
-    {field: "", label: "", width: '', align: ''},
-    {field: "", label: "", width: '', align: ''},
-    {field: "", label: "", width: '', align: ''},
-    {field: "", label: "", width: '', align: ''},
-    {field: "", label: "", width: '', align: ''},
-    {field: "", label: "", width: '', align: ''},
-    {field: "", label: "", width: '', align: ''},
-    {field: "", label: "", width: '', align: ''},
-    {field: "", label: "", width: '', align: ''},
-    {field: "", label: "", width: '', align: ''},
-    {field: "", label: "", width: '', align: ''},
-    {field: "", label: "", width: '', align: ''},
-    {field: "", label: "", width: '', align: ''},
-    {field: "", label: "", width: '', align: ''},
-    {field: "", label: "", width: '', align: ''},
-    {field: "", label: "", width: '', align: ''},
-    {field: "", label: "", width: '', align: ''},
-    {field: "", label: "", width: '', align: ''},
-    {field: "", label: "", width: '', align: ''},
-    {field: "", label: "", width: '', align: ''},
-    {field: "", label: "", width: '', align: ''},
-    {field: "", label: "", width: '', align: ''},
-    {field: "", label: "", width: '', align: ''},
-    {field: "", label: "", width: '', align: ''},
+    {field: "custName", label: "客户名称", width: '', align: ''},
+    {field: "custType", label: "客户类型", width: '', align: ''},
+    {field: "bankSwift", label: "开户银行", width: '', align: ''},
+    {field: "bankAcct", label: "银行帐号", width: '', align: ''},
+    {field: "bankDay", label: "开户日期", width: '', align: ''},
+    {field: "addr", label: "地址", width: '', align: ''},
+    {field: "zipCd", label: "邮编", width: '', align: ''},
+    {field: "phone", label: "电话号码", width: '', align: ''},
+    {field: "sex", label: "性别", width: '', align: ''},
+    {field: "birthdt", label: "出生日期", width: '', align: ''},
+    {field: "localTaxid", label: "客户号", width: '', align: ''},
+    {field: "localSocialsecurityid", label: "客户名称", width: '', align: ''},
+    {field: "localId", label: "客户类型", width: '', align: ''},
+    {field: "licenceId", label: "开户银行", width: '', align: ''},
+    {field: "hkMacaoPass", label: "银行帐号", width: '', align: ''},
+    {field: "workUnit", label: "开户日期", width: '', align: ''},
+    {field: "position", label: "地址", width: '', align: ''},
+    {field: "corpChar", label: "邮编", width: '', align: ''},
+    {field: "email", label: "电话号码", width: '', align: ''},
+    {field: "zdxSoloName", label: "性别", width: '', align: ''},
+    {field: "zdxSoloDoctype", label: "出生日期", width: '', align: ''},
+    {field: "zdxSoloDocid", label: "当地纳税号", width: '', align: ''},
+    {field: "zdxSoloAddr", label: "当地社保id", width: '', align: ''},
+    {field: "zdxSoloZipCd", label: "当地身份证号", width: '', align: ''},
+    {field: "fundTranpername", label: "驾照号", width: '', align: ''},
+    {field: "fundTranperaddr", label: "港澳居民来往内地通行", width: '', align: ''},
+    {field: "fundTranperzipCd", label: "工作单位", width: '', align: ''},
+    {field: "statCfmname", label: "职位", width: '', align: ''},
+    {field: "statCfmaddr", label: "单位性质", width: '', align: ''},
+    {field: "statCfmzipCd", label: "电子邮件", width: '', align: ''},
+    {field: "custOpenmodel", label: "指定下单人姓名", width: '', align: ''},
+    {field: "oaiName", label: "指定下单人证件类型", width: '', align: ''},
 ];
-//
-// ---客户号
-// 客户名称
-// 客户类型
-// 开户银行
-// 银行帐号
-// 开户日期
-// 地址
-// 邮编
-// 电话号码
-// 性别
-// 出生日期
-// localTaxid;           //----当地纳税号
-// localSocialsecurityid;           //----当地社保id
-// localId;           //----当地身份证号
-// licenceId;           //----驾照号
-// hkMacaoPass;           //----港澳居民来往内地通行证
-// workUnit;           //----工作单位
-// position;           //----职位
-// corpChar;           //----单位性质
-// email;           //----电子邮件
-// zdxSoloName;           //----指定下单人姓名
-// zdxSoloDoctype;           //----指定下单人证件类型
-// zdxSoloDocid;           //----指定下单人证件号码
-// zdxSoloAddr;           //----指定下单人地址
-// zdxSoloZipCd;           //----指定下单人邮编
-// fundTranpername;           //----资金调拨人姓名
-// fundTranperaddr;           //----资金调拨人地址
-// fundTranperzipCd;           //----资金调拨人邮编
-// statCfmname;           //----结算单确认人姓名
-// statCfmaddr;           //----结算单确认人地址
-// statCfmzipCd;           //----结算单确认人邮编
-// custOpenmodel;           //----客户开户模式
-// oaiName;           //	----开户或中介机构名称
-// oaiFilingid;           //----开户或中介机构备案号
-
-
 
 export const tableData1 = [
     {"acctNum1": "客户地址查询1", "acctNum2": "23234", "acctNum3": "23234", "acctNum4": "23234"},

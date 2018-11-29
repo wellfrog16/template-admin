@@ -1,5 +1,5 @@
 <template>
-    <div  :class="$style.card_table">
+    <div :class="$style.card_table">
         <!--客户地址查询-->
         <s-c-add></s-c-add>
         <!--客户交易信息查询-->

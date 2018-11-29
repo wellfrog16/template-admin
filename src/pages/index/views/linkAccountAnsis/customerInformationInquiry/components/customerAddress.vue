@@ -63,7 +63,7 @@
                 },
                 // 校验
                 rules: {
-                    contractCode: {
+                    customerID: {
                         required: true,
                         message: '请输入客户编码'
                     }

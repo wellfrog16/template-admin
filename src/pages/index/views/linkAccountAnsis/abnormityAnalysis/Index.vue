@@ -1,6 +1,6 @@
 <template>
     <div class="scene-config-page">
-        <s-card>
+        <s-card :title="`异常交易分析查询`" :icon="`fa fa-user-md`">
             <div slot="content">
                 <el-form ref="ruleForm" :model="ruleForm" :rules="rules">
                     <el-row>
@@ -74,13 +74,14 @@
         </s-card>
         <a-table-tab-pane class="a_form_table_bar" :tablePaneData="tablePaneList"
                           :formData="formDataList"></a-table-tab-pane>
-        <el-card class="a_form_table_bars ">
+        <el-card  class="a_form_table_bars ">
             <el-table
                 :data="tableData"
                 border
                 height="410"
                 style="width: 100%;">
                 <el-table-column
+                    sortable
                     v-for="(item,index) in tableColumns"
                     :key="item.field" :prop="item.field" :label="item.title" :align="item.align"
                     :min-width="item.width">
