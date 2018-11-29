@@ -69,7 +69,6 @@
         // 存储数据
         data() {
             return {
-                tabPosition: 'top',
                 //  tab页
                 activeName: 'first',
                 //初始化表格信息
@@ -88,7 +87,78 @@
                             {field: "billMakePosQtty", title: "空单持仓量", width: 150, align: 'center'},
                             {field: "statBosomDays", title: "统计区间超仓天数", width: 150, align: 'center'}
                         ],
-                        tableDataList: [],
+                        tableDataList: [
+                            {
+                                acctNum: "XG00002",
+                                custId: "20180002255",
+                                custName: null,
+                                contrCd: "cu1712",
+                                acctCurrNetMake: 30441
+                            },
+                            {
+                                acctNum: "XG00002",
+                                custId: "20180001736",
+                                custName: null,
+                                contrCd: "cu1712",
+                                acctCurrNetMake: 30441
+                            },
+                            {
+                                acctNum: "XG00002",
+                                custId: "20180004643",
+                                custName: null,
+                                contrCd: "cu1712",
+                                acctCurrNetMake: 30441
+                            },
+                            {
+                                acctNum: "XG00002",
+                                custId: "20180002294",
+                                custName: null,
+                                contrCd: "cu1712",
+                                acctCurrNetMake: 30441
+                            },
+                            {
+                                acctNum: "XG00002",
+                                custId: "20180005147",
+                                custName: null,
+                                contrCd: "cu1712",
+                                acctCurrNetMake: 30441
+                            },
+                            {
+                                acctNum: "XG000012",
+                                custId: "20180000038",
+                                custName: null,
+                                contrCd: "cu1712",
+                                acctCurrNetMake: 34959
+                            },
+                            {
+                                acctNum: "XG000012",
+                                custId: "20180015777",
+                                custName: null,
+                                contrCd: "cu1712",
+                                acctCurrNetMake: 34959
+                            },
+                            {
+                                acctNum: "XG000012",
+                                custId: "20180014640",
+                                custName: null,
+                                contrCd: "cu1712",
+                                acctCurrNetMake: 34959
+                            },
+                            {
+                                acctNum: "XG000012",
+                                custId: "20180000048",
+                                custName: null,
+                                contrCd: "cu1712",
+                                acctCurrNetMake: 34959
+                            },
+                            {
+                                acctNum: "XG000012",
+                                custId: "20180002930",
+                                custName: null,
+                                contrCd: "cu1712",
+                                acctCurrNetMake: 34959
+                            }
+                        ],
                     }, {
                         label: '频繁报撤销单分析',  // frequentTrade
                         name: 'second',
@@ -121,7 +191,6 @@
                         tableDataList: [],
                     }
                 ],
-
             }
 
         },
@@ -131,7 +200,7 @@
             // 表格数据
             tablePaneData: {
                 handler(val) {
-                    if(val){
+                    if (val) {
                         this.activeNameList[0].tableDataList = val.overStoreAnalysis;
                         this.activeNameList[1].tableDataList = val.frequentTrade;
                         this.activeNameList[2].tableDataList = val.autoTrade;
@@ -263,7 +332,7 @@
         }
         .bar_echarts {
             box-shadow: 0 0 10px #326fcb !important;
-            height: 450px;
+            height: 100%;
             color: #13ce66;
         }
     }

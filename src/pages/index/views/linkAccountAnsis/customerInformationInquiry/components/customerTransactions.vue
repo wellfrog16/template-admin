@@ -30,8 +30,34 @@
         </el-card>
         <s-card :title="`客户交易信息查询`" :icon="`fa fa-user-md`">
             <div slot="content">
-                <s-table :columns="this.columnsCTrI2" :tableData="tableData2">
-                </s-table>
+                <el-tabs v-model="activeName" type="card">
+                    <el-tab-pane
+                        v-for="active in activeNameList"
+                        :label="active.label"
+                        :key="active.name"
+                        :name="active.name">
+                        <!--<s-table :columns="active.columnsCTrI2" :tableData="active.tableData2">-->
+                        <!--</s-table>-->
+                        <el-table
+                            size="small"
+                            ref="multipleTable"
+                            height="450"
+                            highlight-current-row
+                            tooltip-effect="dark"
+                            :data="active.tableDataList"
+                            border
+                            style="width: 100%;">
+                            <el-table-column
+                                v-for="(item,index) in active.tableColumns"
+                                :key="item.field"
+                                :prop="item.field"
+                                :label="item.label"
+                                :align="item.align"
+                                :min-width="item.width">
+                            </el-table-column>
+                        </el-table>
+                    </el-tab-pane>
+                </el-tabs>
             </div>
         </s-card>
     </div>
@@ -44,9 +70,9 @@
     } from '@/api/dataAnsis/customerInformationInquiry';
 
     import {
+        activeNameList,
         columnsCTrI2,    // 客户交易信息查询 (假数据)
         tableData2,    // 客户交易信息查询(列表头)
-        indexSelectionOptions
     } from '../../customerInformationInquiry/components/constants';
 
     export default {
@@ -61,6 +87,8 @@
         // 存储数据
         data() {
             return {
+                activeName: activeNameList[0].name,
+                activeNameList: activeNameList,
                 tableData2: [],                // 客户交易信息查询
                 columnsCTrI2: columnsCTrI2,    // 客户交易信息查询(列表头)
                 resultList: [{label: '结果集1', value: '1'}],
