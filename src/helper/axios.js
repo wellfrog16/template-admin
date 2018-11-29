@@ -21,11 +21,13 @@ const instance = url => {
             let accessToken = localStorage.getItem('ACCESS_TOKEN');
             accessToken = accessToken || store.state.login.accessToken;
             config.headers.Authorization = 'Bearer' + accessToken;
-            loadingInstancce = Loading.service({
-                fullscreen: true,
-                spinner: 'el-icon-loading',
-                text: '加载中'
-            });
+            if (location.href.indexOf('login') > -1) { // 登录接口开启全屏loading，其他情况自己添加loading
+                loadingInstancce = Loading.service({
+                    fullscreen: true,
+                    spinner: 'el-icon-loading',
+                    text: '加载中'
+                });
+            }
             return config;
         },
         error => {
