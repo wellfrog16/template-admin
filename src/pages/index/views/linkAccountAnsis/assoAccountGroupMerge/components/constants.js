@@ -46,12 +46,13 @@ let itemStyle = {
         shadowColor: 'rgba(0, 0, 0, 0.5)'
     }
 };
+let markValue = 1000;
 let symbolSize = data => {
-    return data[2];
+    return data[2] > 40 ? 40 : data[2];
 };
 export const chartOption1 = {
     color: [
-        '#dd4444', '#fec42c', '#80F1BE'
+        '#fec42c'
     ],
     // legend: {
     //     y: 'top',
@@ -62,24 +63,62 @@ export const chartOption1 = {
     //     }
     // },
     grid: {
-        x: 80,
+        x: 40,
         x2: 100,
-        y: 50,
+        y: 40,
         y2: 60
     },
     tooltip: {
         padding: 10,
         backgroundColor: '#222',
         borderColor: '#777',
-        borderWidth: 1
+        borderWidth: 1,
+        position: function(point, params, dom, rect, size) {
+            // 其中point为当前鼠标的位置，size中有两个属性：viewSize和contentSize，分别为外层div和tooltip提示框的大小
+            let divWidth = size.viewSize[0];
+            let divHeight = size.viewSize[1];
+            var x = point[0];
+            var y = point[1];
+            var boxWidth = size.contentSize[0];
+            var boxHeight = size.contentSize[1];
+            var posX = 0;// x坐标位置
+            var posY = 0;// y坐标位置
+            if (divWidth - x < boxWidth) { // 右边放不开
+                posX = x - boxWidth - 10;
+            } else { // 右边放的下
+                posX = x + 10;
+            }
+            if (divHeight - y < boxHeight) { // 下边放不开
+                posY = y - boxHeight - 10;
+            } else { // 下边放得下
+                posY = y + 10;
+            }
+            return [posX, posY];
+        },
+        extraCssText: 'width:150px; white-space:pre-wrap;',
+        formatter: data => {
+            if (data.componentType === 'markLine' || data.componentType === 'markPoint') {
+                return '';
+            }
+            let {value} = data;
+            let str = '';
+            str += `账户组号：${value[3]} \n`;
+            str += `持仓量：${value[0]} \n`;
+            str += `相关系数：${value[1]} \n`;
+            str += `子账户数：${value[2]} \n`;
+            str += `合约代码：${value[4]} \n`;
+            // str += `子账户号：${value[5].replace(',', \n')} \n`;
+            return str;
+        }
     },
     xAxis: {
         type: 'value',
         name: '持仓量',
         nameGap: 16,
+        minInterval: 1,
         nameTextStyle: {
             color: '#fff',
-            fontSize: 14
+            fontSize: 12
         },
         splitLine: {
             show: false
@@ -88,16 +127,21 @@ export const chartOption1 = {
             lineStyle: {
                 color: '#eee'
             }
-        }
+        },
+        axisLabel: {
+            show: true,
+            verticalAlign: 'middle'
+        },
     },
-    yAxis: {
+    yAxis: [{
         type: 'value',
         name: '相关系数',
+        minInterval: 0.1,
         nameLocation: 'end',
         nameGap: 20,
         nameTextStyle: {
             color: '#fff',
-            fontSize: 16
+            fontSize: 12
         },
         axisLine: {
             lineStyle: {
@@ -107,7 +151,7 @@ export const chartOption1 = {
         splitLine: {
             show: false
         }
-    },
+    }],
     dataZoom: [
         {
             type: 'slider',
@@ -117,26 +161,26 @@ export const chartOption1 = {
             // start: 1,
             // end: 35
         },
-        {
-            type: 'slider',
-            show: true,
-            yAxisIndex: [0],
-            right: 0,
-            // start: 29,
-            // end: 36
-        },
+        // {
+        //     type: 'slider',
+        //     show: true,
+        //     yAxisIndex: [0],
+        //     right: 0,
+        //     // start: 29,
+        //     // end: 36
+        // },
         {
             type: 'inside',
             xAxisIndex: [0],
             // start: 1,
             // end: 35
         },
-        {
-            type: 'inside',
-            yAxisIndex: [0],
-            // start: 29,
-            // end: 36
-        }
+        // {
+        //     type: 'inside',
+        //     yAxisIndex: [0],
+        //     // start: 29,
+        //     // end: 36
+        // }
     ],
     /* visualMap: [
         {
@@ -202,17 +246,39 @@ export const chartOption1 = {
     ], */
     series: [
         {
-            name: '北京',
-            type: 'scatter',
+            name: '账户组持仓量相关系数',
+            type: 'effectScatter',
+            showEffectOn: 'hover',
+            rippleEffect: {
+                scale: 2
+            },
             itemStyle: itemStyle,
             symbolSize: symbolSize,
-            data: [
-                [1, 0.2, 9],
-                [2, 0.4, 11],
-                [3, 0.8, 7],
-                [4, 0.4, 7],
-                [5, 0.7, 24],
-            ]
+            data: [],
+            markLine: { // 标记线设置
+                lineStyle: {
+                    normal: {
+                        type: 'dashed'
+                    }
+                },
+                label: {
+                    formatter: params => {
+                        return `超仓线：${params.value}`;
+                    }
+                },
+                symbolSize: 0, // 控制箭头和原点的大小、官方默认的标准线会带远点和箭头
+                data: [ // 设置条标准线——x=10
+                    {xAxis: markValue || 1000}
+                ]
+            },
+            markPoint: {
+                symbol: 'arrow',
+                symbolSize: 10,
+                data: [],
+                itemStyle: {
+                    color: '#fff'
+                }
+            }
         }
     ]
 };
@@ -311,12 +377,12 @@ export const charts = [
     {title: '账户组分时成交', icon: 'el-icon-edit', toggleDetailFlags: false}
 ];
 export const chartTableColumns1 = [
-    {label: '账户组编号', field: '', minWidth: 130},
-    {label: '子账户数量', field: '', minWidth: 130},
-    {label: '交易日', field: '', minWidth: 100},
-    {label: '合约代码', field: '', minWidth: 100},
-    {label: '当前净持仓量', field: '', minWidth: 140},
-    {label: '相关系数', field: '', minWidth: 100}
+    {label: '账户组编号', field: 'acctId', minWidth: 130},
+    {label: '子账户数量', field: 'custQtty', minWidth: 130},
+    {label: '合约代码', field: 'contrCd', minWidth: 100},
+    {label: '当前净持仓量', field: 'acctGroOpenInt', minWidth: 140},
+    {label: '相关系数', field: 'acctGroAvgRela', minWidth: 100},
+    {field: 'custIds', label: '子账户编号', minWidth: 130}
 ];
 export const chartTableColumns2 = [
     {label: '账户组编号', field: '', minWidth: 130},
@@ -363,64 +429,227 @@ export const chartTableColumns4 = [
 ];
 export const mainTableColumns = [
     {
-        field: 'accountId',
+        field: 'acctId',
         label: '账户组号',
         minWidth: '80',
     },
     {
-        field: 'customId',
+        field: 'custId',
         label: '客户编号'
     },
     {
-        field: 'customName',
+        field: 'custName',
         label: '客户名称'
     },
     {
-        field: '',
+        field: 'acctGroAvgRelaCoef',
         label: '账户组平均相关系数',
     },
     {
-        field: '',
+        field: 'acctAvgRelaCoef',
         label: '账户平均相关系数',
     },
     {
-        field: '',
+        field: 'contrCd',
         label: '合约代码',
     },
     {
-        field: '',
+        field: 'acctGroNetOpenInt',
         label: '账户组净持仓量',
     },
     {
-        field: '',
+        field: 'acctNetOpenInt',
         label: '账户净持仓量',
     },
     {
-        field: '',
+        field: 'custWheOtherGro',
         label: '客户所在其他组',
     },
     {
-        field: '',
+        field: 'buyBargainRela',
         label: '买入成交相关系数',
     },
     {
-        field: '',
+        field: 'sellBargainRela',
         label: '卖出成交相关系数',
     },
     {
-        field: '',
+        field: 'netBuyBargainRela',
         label: '净买入成交相关系数',
     },
     {
-        field: '',
+        field: 'longPosMakePosRela',
         label: '多头持仓相关系数',
     },
     {
-        field: '',
+        field: 'shortPosMakePosRela',
         label: '空头持仓相关系数',
     },
     {
-        field: '',
+        field: 'floatPrftLossRela',
         label: '浮动盈亏相关系数',
     }
 ];
+export const resData = {
+    'mainTableData': [
+        {
+            id: 1885,
+            acctId: 'AA001',
+            children: [
+                {
+                    'id': 292073,
+                    'acctId': 'AA001',
+                    'custId': '20180000002',
+                    'custName': null,
+                    'acctGroAvgRelaCoef': 0,
+                    'acctAvgRelaCoef': 0,
+                    'contrCd': 'cu1712',
+                    'acctGroNetOpenInt': 500,
+                    'acctNetOpenInt': 100,
+                    'custWheOtherGro': 'BB001',
+                    'buyBargainRela': 0,
+                    'sellBargainRela': 0,
+                    'netBuyBargainRela': 0,
+                    'longPosMakePosRela': 0,
+                    'shortPosMakePosRela': 0,
+                    'floatPrftLossRela': 0
+                }
+            ]
+        },
+        {
+            'id': 46357,
+            'acctId': 'CC001',
+            'children': [
+                {
+                    'id': 185878,
+                    'acctId': 'CC001',
+                    'custId': '20180000005',
+                    'custName': null,
+                    'acctGroAvgRelaCoef': 0,
+                    'acctAvgRelaCoef': 0,
+                    'contrCd': 'cu1712',
+                    'acctGroNetOpenInt': 500,
+                    'acctNetOpenInt': 100,
+                    'custWheOtherGro': 'BB001',
+                    'buyBargainRela': 0,
+                    'sellBargainRela': 0,
+                    'netBuyBargainRela': 0,
+                    'longPosMakePosRela': 0,
+                    'shortPosMakePosRela': 0,
+                    'floatPrftLossRela': 0
+                },
+                {
+                    'id': 205179,
+                    'acctId': 'CC001',
+                    'custId': '20180000007',
+                    'custName': null,
+                    'acctGroAvgRelaCoef': 0,
+                    'acctAvgRelaCoef': 0,
+                    'contrCd': 'cu1712',
+                    'acctGroNetOpenInt': 500,
+                    'acctNetOpenInt': 100,
+                    'custWheOtherGro': 'BB001',
+                    'buyBargainRela': 0,
+                    'sellBargainRela': 0,
+                    'netBuyBargainRela': 0,
+                    'longPosMakePosRela': 0,
+                    'shortPosMakePosRela': 0,
+                    'floatPrftLossRela': 0
+                }
+            ]
+        },
+        {
+            'id': 92527,
+            'acctId': 'BB001',
+            'children': [
+                {
+                    'id': 109006,
+                    'acctId': 'BB001',
+                    'custId': '20180000003',
+                    'custName': null,
+                    'acctGroAvgRelaCoef': 0,
+                    'acctAvgRelaCoef': 0,
+                    'contrCd': 'cu1712',
+                    'acctGroNetOpenInt': 500,
+                    'acctNetOpenInt': 100,
+                    'custWheOtherGro': 'AA001',
+                    'buyBargainRela': 0,
+                    'sellBargainRela': 0,
+                    'netBuyBargainRela': 0,
+                    'longPosMakePosRela': 0,
+                    'shortPosMakePosRela': 0,
+                    'floatPrftLossRela': 0
+                },
+                {
+                    'id': 299236,
+                    'acctId': 'BB001',
+                    'custId': '20180000006',
+                    'custName': null,
+                    'acctGroAvgRelaCoef': 0,
+                    'acctAvgRelaCoef': 0,
+                    'contrCd': 'cu1712',
+                    'acctGroNetOpenInt': 500,
+                    'acctNetOpenInt': 100,
+                    'custWheOtherGro': 'AA001',
+                    'buyBargainRela': 0,
+                    'sellBargainRela': 0,
+                    'netBuyBargainRela': 0,
+                    'longPosMakePosRela': 0,
+                    'shortPosMakePosRela': 0,
+                    'floatPrftLossRela': 0
+                }
+            ]
+        }
+    ],
+    'chartData': [
+        {
+            'acctId': 'AA001',
+            'contrCd': 'CU1712',
+            'acctGroAvgRela': 0.2,
+            'acctGroOpenInt': 1000,
+            'custQtty': 20
+        },
+        {
+            'acctId': 'BB001',
+            'contrCd': 'CU1712',
+            'acctGroAvgRela': 0.4,
+            'acctGroOpenInt': 3000,
+            'custQtty': 200
+        },
+        {
+            'acctId': 'CC001',
+            'contrCd': 'CU1712',
+            'acctGroAvgRela': -0.4,
+            'acctGroOpenInt': 6000,
+            'custQtty': 100
+        },
+        {
+            'acctId': 'CDD001',
+            'contrCd': 'CU1712',
+            'acctGroAvgRela': -0.4,
+            'acctGroOpenInt': 1000,
+            'custQtty': 100
+        },
+        {
+            'acctId': 'EE001',
+            'contrCd': 'CU1712',
+            'acctGroAvgRela': -0.4,
+            'acctGroOpenInt': 1200,
+            'custQtty': 40
+        },
+        {
+            'acctId': 'FF001',
+            'contrCd': 'CU1712',
+            'acctGroAvgRela': -0.1,
+            'acctGroOpenInt': 5000,
+            'custQtty': 10
+        },
+        {
+            'acctId': 'GG001',
+            'contrCd': 'CU1712',
+            'acctGroAvgRela': -0.42,
+            'acctGroOpenInt': 2000,
+            'custQtty': 70
+        }
+    ]
+};

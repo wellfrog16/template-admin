@@ -20,8 +20,8 @@
                 @check-change="handleTreeCheckedChange"
                 :expand-on-click-node="false">
                 <span class="custom-tree-node" slot-scope="{ node, data }">
-                    <div v-for="(item, index) in columns" :key="index">
-                        {{ data[item.field] || '' }}
+                    <div v-for="(item, index) in columns" :key="index" style="text-align: center;">
+                        {{ (data[item.field] === null || data[item.field] === undefined) ?  '' :  data[item.field] }}
                     </div>
                 </span>
             </el-tree>
@@ -79,15 +79,18 @@ export default {
             }
             this.isIndeterminate = false;
         },
-        handleTreeCheckedChange(value) {
+        handleTreeCheckedChange() {
+            this.$emit('updateCheckedList', this.$refs['tree-table'].getCheckedNodes(), this.$refs['tree-table'].getCheckedKeys());
             let checkedCount = this.$refs['tree-table'].getCheckedNodes(true).length;
             this.isIndeterminate =
                 checkedCount > 0 && checkedCount < this.allArray.length;
         },
         filterMethods(value, data) {
             if (!value) return true;
-            return (data['accountId'] && data['accountId'].indexOf(value) !== -1) || (data['customId'] && data['customId'].indexOf(value) !== -1);
+            return (data['acctId'] && data['acctId'].indexOf(value) !== -1) || (data['custId'] && data['custId'].indexOf(value) !== -1);
         }
+    },
+    mounted() {
     }
 };
 </script>
@@ -128,7 +131,7 @@ export default {
 
         .tree-table {
             color: #fff;
-            width: 3000px;
+            width: 2300px;
             overflow: auto;
             .custom-tree-node {
                 flex: 1;
@@ -174,6 +177,8 @@ export default {
                 align-items: center;
                 justify-content: space-between;
                 font-size: 14px;
+                text-align: center;
+                margin-left: 50px;
 
                 > div {
                     flex: 1;

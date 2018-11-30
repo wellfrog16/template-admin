@@ -1,7 +1,10 @@
 <!--图表公共组件-->
 <template>
-    <div :id="domId" class="echarts-container" :style="{'height': propsChartHeight + 'px'}" style="width: 100%;">
-        <!--<div v-if="!defaultOption.dataset.source.length" class="placeholder-text">暂无数据</div>-->
+    <div v-loading="loading"
+         element-loading-text="数据加载中，请耐心等待..."
+         element-loading-background="rgba(0,0,0,0.3)"
+         :id="domId" class="echarts-container" :style="{'height': propsChartHeight + 'px'}" style="width: 100%;">
+         <!--<div v-if="!defaultOption.dataset.source.length" class="placeholder-text">暂无数据</div>-->
     </div>
 </template>
 <script>
@@ -19,6 +22,10 @@ export default {
         domId: {
             type: String,
             default: 'echartsContainer'
+        },
+        loading: {
+            type: Boolean,
+            default: false
         }
     },
     data() {

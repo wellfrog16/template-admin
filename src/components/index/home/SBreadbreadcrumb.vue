@@ -87,6 +87,7 @@ export default {
         box-shadow: 0 0 10px #326fcb;
         .brliet {
             color: #fff !important;
+            font-weight: 700;
         }
     }
 </style>

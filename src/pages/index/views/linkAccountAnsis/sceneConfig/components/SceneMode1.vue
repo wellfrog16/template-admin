@@ -43,7 +43,7 @@
             <el-col :span='12' class="right-block">
                 <s-card :title="`相关性指标选择`">
                     <el-row slot="content">
-                        <s-table :showHeader="false" :columns="correlationIndexColumns" :tableData="tableData" :height="200" :otherProps="{unit: '%', disabled: disabled}">
+                        <s-table :loading="loading" :showHeader="false" :columns="correlationIndexColumns" :tableData="tableData" :height="200" :otherProps="{unit: '%', disabled: disabled}">
                             <el-table-column
                                 :width="100"
                                 align="center"
@@ -105,7 +105,6 @@ export default {
     },
     watch: {
         dialogItem() {
-            debugger;
             this.setRuleForm();
         }
     },
@@ -121,6 +120,7 @@ export default {
             accountTotalTypeOptions,
             accountTotalFrepOptions,
             correlationIndexColumns,
+            loading: false,
             checkedList: ['1', '2', '3', '4'],
             ruleForm: {
                 sceneType: '', // 场景类型
@@ -194,13 +194,16 @@ export default {
             };
             if (this.dialogItem.sceneId) {
                 let checkedList = [];
-                if (this.dialogItem.acctMakePosQtty) {
+                if (this.dialogItem.acctMakePosQtty !== null) {
                     checkedList.push('1');
-                } else if (this.dialogItem.acctBargainQtty) {
+                }
+                if (this.dialogItem.acctBargainQtty !== null) {
                     checkedList.push('2');
-                } else if (this.dialogItem.acctBillCnt) {
+                }
+                if (this.dialogItem.acctBillCnt !== null) {
                     checkedList.push('3');
-                } else if (this.dialogItem.statAcctCnt) {
+                }
+                if (this.dialogItem.statAcctCnt !== null) {
                     checkedList.push('4');
                 }
                 this.checkedList = checkedList;
@@ -266,7 +269,9 @@ export default {
             });
         },
         getTlsIndexTlb() {
+            this.loading = true;
             getTlsIndexTlb(this.ruleForm.sceneType).then(resp => {
+                this.loading = false;
                 let data = resp.map(v => {
                     return {
                         indexName: v.indexName,
@@ -276,6 +281,9 @@ export default {
                 });
                 this.tableData = data;
                 this.defaultConfig.tableData = JSON.parse(JSON.stringify(data));
+            }).catch(e => {
+                this.loading = false;
+                console.error(e);
             });
         }
     },
