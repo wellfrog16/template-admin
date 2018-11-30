@@ -40,7 +40,10 @@
         </el-card>
         <s-card :title="`精确信息查询`" :icon="`fa fa-user-md`">
             <div slot="content">
-                <s-table :columns="this.columnsCTrI3" :tableData="tableData3">
+                <s-table
+                    :loading="loadingPreciseClear"
+                    :columns="columnsCTrI3"
+                    :tableData="tableData3">
                 </s-table>
             </div>
         </s-card>
@@ -53,8 +56,7 @@
     } from '@/api/dataAnsis/customerInformationInquiry';
 
     import {
-        columnsCTrI3,    // 精确信息查询  (假数据)
-        tableData3,    // 精确信息查询(列表头)
+        columnsCTrI3,     // 精确信息查询(列表头)
         indexSelectionOptions  // 指标选择
     } from '../../customerInformationInquiry/components/constants';
 
@@ -70,13 +72,14 @@
         // 存储数据
         data() {
             return {
+                loadingPreciseClear: false,
                 tableData3: [],                // 精确信息查数据
                 columnsCTrI3: columnsCTrI3,    // 精确信息查(列表头)
 
                 // form 表单绑定值
                 ruleForm: {
                     indexSelection: '1',          // 指标选择
-                    contractCode: 'cu1712',        // 指标内容
+                    contractCode: ''      // 指标内容   -- 玉田新村105号101室
                 },
                 indexSelectionOptions: [],   // 指标选择
                 rules: {
@@ -104,8 +107,10 @@
                             "indexName": this.ruleForm.indexSelection,      // 指标名称
                             "indexValue": this.ruleForm.contractCode,         // 指标值
                         }
+                        this.loadingPreciseClear = true;
                         postPreciseInformation(params).then(resp => {
-                            this.tableData3 = tableData3;
+                            this.loadingPreciseClear = false;
+                            this.tableData3 = this.tableData3.concat(resp);
                         })
                     }
                 })
@@ -113,7 +118,6 @@
         },
         // 初始化数据
         mounted() {
-            this.preciseInformationClick();
             this.indexSelectionOptions = indexSelectionOptions;
         },
     }

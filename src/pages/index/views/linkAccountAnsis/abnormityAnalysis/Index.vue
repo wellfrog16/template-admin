@@ -1,6 +1,6 @@
 <template>
     <div class="scene-config-page">
-        <s-card :title="`异常交易分析查询`" :icon="`fa fa-user-md`">
+        <s-card :title="`查询`" :icon="`fa fa-user-md`">
             <div slot="content">
                 <el-form ref="ruleForm" :model="ruleForm" :rules="rules">
                     <el-row>
@@ -8,11 +8,14 @@
                             <el-form-item prop="a">
                                 <el-radio-group v-model="ruleForm.exportType">
                                     <el-radio label="0">
-                                        <el-form-item prop="resultId" label="导入结果集" label-width="140px"
-                                                      style="display:inline-block; padding: 5px 0;"
-                                                      :rules="[{
-                                                          required: String(ruleForm.exportType) === '0', message: '请选择结果集'
-                                                      }]">
+                                        <el-form-item
+                                            prop="resultId"
+                                            label="导入结果集"
+                                            label-width="140px"
+                                            style="display:inline-block; padding: 5px 0;"
+                                            :rules="[
+                                            {required: String(ruleForm.exportType) === '0', message: '请选择结果集'}
+                                                      ]">
                                             <el-select class="custom-width" clearable size="small"
                                                        v-loading="fullScreenLoading"
                                                        element-loading-text="数据加载中，请耐心等待..."
@@ -66,7 +69,7 @@
                                           class="custom-width"></el-input>
                             </el-form-item>
                         </el-col>
-                        <el-col :xl="4" :lg="4" :md="4" :sm="24">
+                        <el-col :xl="4" :lg="4" :md="4" :sm="24" class="generate">
                             <el-form-item label-width="60px">
                                 <el-button type="primary" @click="generateReportsClick('ruleForm')">生成报告</el-button>
                             </el-form-item>
@@ -75,25 +78,21 @@
                 </el-form>
             </div>
         </s-card>
-        <a-table-tab-pane class="a_form_table_bar" :tablePaneData="tablePaneList" :dealWithIsLoading="dealWithIsLoading2"
-                          :formData="formDataList"></a-table-tab-pane>
-        <el-card  class="a_form_table_bars ">
-            <el-table
-                v-loading="dealWithIsLoading2"
-                element-loading-text="数据加载中，请耐心等待..."
-                element-loading-background="rgba(0,0,0,0.3)"
-                :data="tableData"
-                border
-                height="410"
-                style="width: 100%;">
-                <el-table-column
-                    sortable
-                    v-for="(item,index) in tableColumns"
-                    :key="item.field" :prop="item.field" :label="item.title" :align="item.align"
-                    :min-width="item.width">
-                </el-table-column>
-            </el-table>
-        </el-card>
+        <a-table-tab-pane
+            class="a_form_table_bar"
+            :tablePaneData="tablePaneList"
+            :dealWithIsLoading="dealWithIsLoading2"
+            :formData="formDataList">
+        </a-table-tab-pane>
+        <s-card :title="`协查报告`" :icon="`fa fa-user-md`">
+            <div slot="content">
+                <s-table
+                    :loading="dealWithIsLoading2"
+                    :columns="tableColumns"
+                    :tableData="tableData">
+                </s-table>
+            </div>
+        </s-card>
         <div style="text-align:center; margin: 30px 0;">
             <el-button size="small" type="primary" @click="backClick1">上一步</el-button>
             <el-button size="small" type="primary" @click="exportClick1">导出CSV</el-button>
@@ -101,6 +100,7 @@
     </div>
 </template>
 <script>
+    import MixinVue from "./components/MixinsTable";
     import SCard from '@/components/index/common/SCard';
     import UploadFileToServer from '@/components/index/common/UploadFileToServer'; // 导入CSV
     import SDatePicker from '@/components/index/common/SDatePicker';    // 日期
@@ -122,8 +122,10 @@
             UploadFileToServer,
             SDatePicker,
             UploadCommon,
+            STable: () => import('@/components/index/common/STable'),             // 列表
             ATableTabPane: () => import('../abnormityAnalysis/components/AbnormitysTableTabPane'),
         },
+        mixins: [MixinVue],
         data() {
             return {
                 fullScreenLoading: false,  // 加载 (结果集加载)
@@ -132,16 +134,16 @@
                 tablePaneList: {},
                 // 底部列表
                 tableColumns: [
-                    {field: "acctNum", title: "账户组号", width: 150, align: 'center'},
-                    {field: "custId", title: "客户编号", width: 150, align: 'center'},
-                    {field: "custName", title: "客户名称", width: 150, align: 'center'},
-                    {field: "memCd", title: "会员代码", width: 150, align: 'center'},
-                    {field: "memName", title: "会员名称", width: 150, align: 'center'},
-                    {field: "breed", title: "协查品种", width: 150, align: 'center'},
-                    {field: "contrCd", title: "合约代码", width: 150, align: 'center'},
-                    {field: "supSto", title: "超仓", width: 150, align: 'center'},
-                    {field: "freDraBill", title: "频繁报撤单", width: 150, align: 'center'},
-                    {field: "bargain", title: "自成交", width: 150, align: 'center'},
+                    {field: "acctNum", label: "账户组号", width: 150, align: 'center'},
+                    {field: "custId", label: "客户编号", width: 150, align: 'center'},
+                    {field: "custName", label: "客户名称", width: 150, align: 'center'},
+                    {field: "memCd", label: "会员代码", width: 150, align: 'center'},
+                    {field: "memName", label: "会员名称", width: 150, align: 'center'},
+                    {field: "breed", label: "协查品种", width: 150, align: 'center'},
+                    {field: "contrCd", label: "合约代码", width: 150, align: 'center'},
+                    {field: "supSto", label: "超仓", width: 150, align: 'center'},
+                    {field: "freDraBill", label: "频繁报撤单", width: 150, align: 'center'},
+                    {field: "bargain", label: "自成交", width: 150, align: 'center'},
                 ],
                 tableData: [],
                 formDataList: {},
@@ -160,9 +162,9 @@
                 ruleForm: {
                     fileList: [],          // 导入CSV
                     exportType: '',       // 导入结果集按钮
-                    contractCode: 'cu1712',        // 合约代码
+                    contractCode: 'cu1712',        // 合约代码  cu1712
                     resultId: '',         // 导入结果集
-                    selectDateRange: ['2017-02-20', '2017-10-09']   // 统计区间
+                    selectDateRange: ['2017-02-20', '2017-10-09']   // 统计区间  '2017-02-20', '2017-10-09'
                 },
                 rules: {
                     contractCode: {
@@ -190,6 +192,7 @@
             },
             // 底部上一步按钮
             backClick1() {
+                console.log(new Date());
                 console.log(this.tableData);
             },
 
@@ -214,6 +217,8 @@
                     if (valid) {
                         //  0是结果集； 1是导入csv
                         if (this.ruleForm.exportType === '1') {
+                            this.tablePaneList = [];
+                            this.tablePaneList = [];
                             let params = {
                                 contrCode: this.ruleForm.contractCode, // 合约代码
                                 statTimeBegin: this.ruleForm.selectDateRange[0], // 统计起始日
@@ -234,10 +239,10 @@
                             // });
                         } else {
                             let params = {
-                                contrCode: this.ruleForm.contractCode, // 合约代码
-                                statTimeBegin: this.ruleForm.selectDateRange[0], // 统计起始日
-                                statTimeEnd: this.ruleForm.selectDateRange[1],  // 统计截止日
-                                resultSetNo: this.ruleForm.resultId   //结果集编号
+                                contrCode: this.ruleForm.contractCode,             // 合约代码
+                                statTimeBegin: this.ruleForm.selectDateRange[0],   // 统计起始日
+                                statTimeEnd: this.ruleForm.selectDateRange[1],     // 统计截止日
+                                resultSetNo: this.ruleForm.resultId                // 结果集编号
                             };
                             this.dealWithIsLoading2 = true;
                             postExportType(params).then(resp => {
@@ -269,9 +274,10 @@
             color: #fff;
         }
 
-        .a_form_table_bars {
-            box-shadow: 0 0 10px #326fcb;
-            padding: 0;
+        .generate {
+            position: relative;
+            top: -50px;
+            right: -70px;
         }
         .new-btn {
             margin-left: 15px;

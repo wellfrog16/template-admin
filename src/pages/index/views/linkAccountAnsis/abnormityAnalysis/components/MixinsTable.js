@@ -62,7 +62,7 @@ export default {
                 // 柱状图高度
                 grid: {
                     left: '4%',
-                    right: '7%',
+                    right: '5%',
                     bottom: '9%',
                     width: 'auto',
                     height: 'auto',

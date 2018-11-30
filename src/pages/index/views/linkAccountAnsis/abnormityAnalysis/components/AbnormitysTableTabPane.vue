@@ -142,6 +142,29 @@
                         this.activeNameList[0].tableDataList = val.overStoreAnalysis;
                         this.activeNameList[1].tableDataList = val.frequentTrade;
                         this.activeNameList[2].tableDataList = val.autoTrade;
+                        if(val && val.overStoreAnalysis){
+                            for(let i = 0; i < this.activeNameList[0].tableDataList.length; i++){
+
+                            }
+                            // console.log(this.activeNameList[0].tableDataList.acctNum);
+                            // console.log(this.activeNameList[0].tableDataList.contrCd);
+                            // console.log(this.activeNameList[0].tableDataList.contrCd);
+                            // let params = {
+                            //     "accountTeamNo": row.acctNum,                     // 账户组号
+                            //     "arrCustId": rowCustId,                           // 客户编号
+                            //     "statTimeBegin": this.formData.statTimeBegin,     // 统计起始日
+                            //     "statTimeEnd": this.formData.statTimeEnd,         // 统计截止日
+                            //     "contrCode": row.contrCd,                         // 合约代码
+                            //     "type": this.tabPane(),                           // 取值 '1':超仓分析
+                            // };
+                            // this.fullScreenLoading1 = true;
+                            // // Bar 柱状图接口
+                            // postImportAccounBar(params).then(resp => {
+                            //     this.fullScreenLoading1 = false;
+                            //     this.barEchartsDete(resp);
+                            //
+                            // })
+                        }
                     }
                 },
                 deep: true

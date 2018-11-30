@@ -16,13 +16,13 @@ export const postCustomerTransactions = params => {
 };
 // 精确信息查询(生成报告接口)
 export const postPreciseInformation = params => {
-    return post(`${requestPrefix}/customer/account/query`, params);
+    return post(`${requestPrefix}/customer/precise/query`, params);
 };
 // 模糊地址查询(生成报告接口)
 export const postFuzzyAddress = params => {
-    return post(`${requestPrefix}/customer/account/query`, params);
+    return post(`${requestPrefix}/customer/address/query`, params);
 };
 // 模糊地址(接口)  // 获取地区树形列表
 export const postFuzzyAddressData = params => {
-    return post(`${requestPrefix}/cfgZoneInfo`, params);
+    return post(`${requestPrefix}/cfgZoneInfo`, {});
 };

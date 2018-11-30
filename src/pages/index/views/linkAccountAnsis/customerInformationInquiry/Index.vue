@@ -30,24 +30,10 @@
         },
         // 计算属性
         computed: {},
-        watch: {},
         //    数据交互  127662
         methods: {
-            // 客户地址查询
-
-            // 客户交易信息查询
-
-            // 精确信息查询
-
-            // 模糊地址查询
-
         },
-        // 在一个实例被创建之后执行代码
-        created() {
-        },
-        // 初始化数据
-        mounted() {},
-        beforeDestroy() {}
+
     };
 </script>
 <style lang="less" module>

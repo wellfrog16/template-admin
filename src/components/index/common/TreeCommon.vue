@@ -146,7 +146,7 @@ export default {
                 let data = [
                     {
                         label: '全国',
-                        id: '0',
+                        value: '0',
                         children: resp
                     }
                 ];

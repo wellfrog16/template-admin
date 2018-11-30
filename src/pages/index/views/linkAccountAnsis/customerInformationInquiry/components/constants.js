@@ -1,3 +1,4 @@
+
 // 客户地址查询
 export const columnsCTrI1 = [
     {field: "custId", label: "客户编号", width: '', align: ''},
@@ -38,71 +39,7 @@ export const columnsCTrI1 = [
 ];
 
 // 客户交易信息查询
-export const columnsCTrI2 = [
-    {field: "acctum1", label: "", width: '', align: ''},
-];
-export const activeNameList = [
-    {
-        name: 'first',
-        label: '客户持仓明细',                   // overStoreAnalysis
-        tableColumns: [
-            {field: "tradingDay", label: "交易日", width: '', align: ''},
-            {field: "custName", label: "客户名称", width: '', align: ''},
-            {field: "orgrumentId", label: "合约代码", width: '', align: ''},
-            {field: "clientId", label: "客户代码", width: '', align: ''},
-            {field: "posMultiQtty", label: "持多单量", width: '', align: ''},
-            {field: "posBillQtty", label: "持空单量", width: '', align: ''},
-            {field: "hedgeflag", label: "投机套保标志", width: '', align: ''},
-            {field: "positionsum", label: "当前持仓金额", width: '', align: ''},
-            {field: "openprofit", label: "浮动盈亏", width: '', align: ''},
-            {field: "margin", label: "保证金", width: '', align: ''},
-            {field: "duemargin", label: "应收保证金", width: '', align: ''},
-        ],
-        tableDataList: [],
-    },
-    {
-        label: '客户报单明细',
-        name: 'second',
-        tableColumns: [
-            {field: "custCode", label: "客户编号", width: '', align: ''},
-            {field: "custName", label: "客户名称", width: '', align: ''},
-            {field: "tradingDay", label: "交易日", width: '', align: ''},
-            {field: "declDay", label: "报单日期", width: '', align: ''},
-            {field: "reportid", label: "报单编号", width: '', align: ''},
-            {field: "contrCode", label: "合约代码", width: '', align: ''},
-            {field: "declPriceCond", label: "报单价格条件", width: '', align: ''},
-            {field: "buySell", label: "买卖方向", width: '', align: ''},
-            {field: "comHedgeflag", label: "组合投机套保标志", width: '', align: ''},
-            {field: "price", label: "价格", width: '', align: ''},
-            {field: "quantity", label: "数量", width: '', align: ''},
-            {field: "volType", label: "成交量类型", width: '', align: ''},
-            {field: "declType", label: "报单类型", width: '', align: ''},
-            {field: "todayVolQuantity", label: "今成交数量", width: '', align: ''},
-            {field: "residueQuantity", label: "剩余数量", width: '', align: ''},
-            {field: "changeTime", label: "最后修改时间", width: '', align: ''},
-            {field: "cancelTime", label: "撤销时间", width: '', align: ''},
-        ],
-        tableDataList: [],
-    }, {
-        label: '客户成交明细',
-        name: 'third',
-        tableColumns: [
-            {field: "custCode", label: "客户编号", width: '', align: ''},
-            {field: "custName", label: "客户名称", width: '', align: ''},
-            {field: "tranId", label: "成交编号", width: '', align: ''},
-            {field: "buySell", label: "买卖方向", width: '', align: ''},
-            {field: "hedgeFlag", label: "组合投机套保标志", width: '', align: ''},
-            {field: "reportId", label: "报单编号", width: '', align: ''},
-            {field: "tradeRole", label: "交易角色", width: '', align: ''},
-            {field: "contrCode", label: "合约代码", width: '', align: ''},
-            {field: "kaipingFlag", label: "开平标志", width: '', align: ''},
-            {field: "price", label: "价格", width: '', align: ''},
-            {field: "quantity", label: "数量", width: '', align: ''},
-            {field: "tranday", label: "成交时间", width: '', align: ''},
-        ],
-        tableDataList: [],
-    }
-];
+
 // 精确信息查询
 export const columnsCTrI3 = [
     {field: "acctNum1", label: "精确信息查询", width: '', align: ''},
@@ -183,17 +120,4 @@ export const columnsCTrI4 = [
     {field: "statCfmzipCd", label: "电子邮件", width: '', align: ''},
     {field: "custOpenmodel", label: "指定下单人姓名", width: '', align: ''},
     {field: "oaiName", label: "指定下单人证件类型", width: '', align: ''},
-];
-
-export const tableData1 = [
-    {"acctNum1": "客户地址查询1", "acctNum2": "23234", "acctNum3": "23234", "acctNum4": "23234"},
-];
-export const tableData2 = [
-    {"acctNum1": "客户交易信息查询2", "acctNum2": "23234", "acctNum3": "23234", "acctNum4": "23234"},
-];
-export const tableData3 = [
-    {"acctNum1": "精确信息查询3", "acctNum2": "23234", "acctNum3": "23234", "acctNum4": "23234"},
-];
-export const tableData4 = [
-    {"acctNum1": "模糊地址查询4", "acctNum2": "23234", "acctNum3": "23234", "acctNum4": "23234"},
 ];

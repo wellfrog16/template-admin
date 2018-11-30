@@ -7,22 +7,23 @@
                     <el-col :xl="7" :lg="7" :md="7" :sm="24">
                         <el-form-item prop="customerID" label="客户编码：" label-width="100px">
                             <el-input clearable size="small" v-model="ruleForm.customerID"
-                                      style="width: 100%;"  class="custom-width"></el-input>
+                                      style="width: 100%;" class="custom-width"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xl="7" :lg="7" :md="7" :sm="24">
                         <el-form-item prop="selectDateRange" label="统计区间" label-width="100px">
-                        <s-date-picker
-                        :value="ruleForm.selectDateRange"
-                        :isRange="true"
-                        @change="handleSdatePickerDateRangeChange"
-                        ></s-date-picker>
+                            <s-date-picker
+                                :value="ruleForm.selectDateRange"
+                                :isRange="true"
+                                @change="handleSdatePickerDateRangeChange"
+                            ></s-date-picker>
                         </el-form-item>
                     </el-col>
                     <el-col :xl="2" :lg="2" :md="2" :sm="24">
                         <el-form-item label-width="60px">
                             <el-button type="primary"
-                                       @click="customerTransactionsClick('ruleForm')">生成报告</el-button>
+                                       @click="customerTransactionsClick('ruleForm')">生成报告
+                            </el-button>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -30,32 +31,17 @@
         </el-card>
         <s-card :title="`客户交易信息查询`" :icon="`fa fa-user-md`">
             <div slot="content">
-                <el-tabs v-model="activeName" type="card">
+                <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
                     <el-tab-pane
                         v-for="active in activeNameList"
                         :label="active.label"
                         :key="active.name"
                         :name="active.name">
-                        <!--<s-table :columns="active.columnsCTrI2" :tableData="active.tableData2">-->
-                        <!--</s-table>-->
-                        <el-table
-                            size="small"
-                            ref="multipleTable"
-                            height="450"
-                            highlight-current-row
-                            tooltip-effect="dark"
-                            :data="active.tableDataList"
-                            border
-                            style="width: 100%;">
-                            <el-table-column
-                                v-for="(item,index) in active.tableColumns"
-                                :key="item.field"
-                                :prop="item.field"
-                                :label="item.label"
-                                :align="item.align"
-                                :min-width="item.width">
-                            </el-table-column>
-                        </el-table>
+                        <s-table
+                            :loading="loadingCustomerAddress"
+                            :columns="active.tableColumns"
+                            :tableData="active.tableData">
+                        </s-table>
                     </el-tab-pane>
                 </el-tabs>
             </div>
@@ -69,12 +55,6 @@
         postCustomerTransactions,     // 客户交易信息查询(生成报告接口)
     } from '@/api/dataAnsis/customerInformationInquiry';
 
-    import {
-        activeNameList,
-        columnsCTrI2,    // 客户交易信息查询 (假数据)
-        tableData2,    // 客户交易信息查询(列表头)
-    } from '../../customerInformationInquiry/components/constants';
-
     export default {
         name: "customerAddress",
         // 父传子！
@@ -87,15 +67,77 @@
         // 存储数据
         data() {
             return {
-                activeName: activeNameList[0].name,
-                activeNameList: activeNameList,
-                tableData2: [],                // 客户交易信息查询
-                columnsCTrI2: columnsCTrI2,    // 客户交易信息查询(列表头)
-                resultList: [{label: '结果集1', value: '1'}],
+                loadingCustomerAddress: false,
+                activeName: 'first',
+
+                // 客户交易信息查询
+                activeNameList: [
+                    {
+                        name: 'first',
+                        label: '客户持仓明细',                   // overStoreAnalysis
+                        tableColumns: [
+                            {field: "tradingDay", label: "交易日", width: '', align: ''},
+                            {field: "custName", label: "客户名称", width: '', align: ''},
+                            {field: "orgrumentId", label: "合约代码", width: '', align: ''},
+                            {field: "clientId", label: "客户代码", width: '', align: ''},
+                            {field: "posMultiQtty", label: "持多单量", width: '', align: ''},
+                            {field: "posBillQtty", label: "持空单量", width: '', align: ''},
+                            {field: "hedgeflag", label: "投机套保标志", width: '', align: ''},
+                            {field: "positionsum", label: "当前持仓金额", width: '', align: ''},
+                            {field: "openprofit", label: "浮动盈亏", width: '', align: ''},
+                            {field: "margin", label: "保证金", width: '', align: ''},
+                            {field: "duemargin", label: "应收保证金", width: '', align: ''},
+                        ],
+                        tableData: [],
+                    },
+                    {
+                        label: '客户报单明细',
+                        name: 'second',
+                        tableColumns: [
+                            {field: "custCode", label: "客户编号", width: '', align: ''},
+                            {field: "custName", label: "客户名称", width: '', align: ''},
+                            {field: "tradingDay", label: "交易日", width: '', align: ''},
+                            {field: "declDay", label: "报单日期", width: '', align: ''},
+                            {field: "reportid", label: "报单编号", width: '', align: ''},
+                            {field: "contrCode", label: "合约代码", width: '', align: ''},
+                            {field: "declPriceCond", label: "报单价格条件", width: '', align: ''},
+                            {field: "buySell", label: "买卖方向", width: '', align: ''},
+                            {field: "comHedgeflag", label: "组合投机套保标志", width: '', align: ''},
+                            {field: "price", label: "价格", width: '', align: ''},
+                            {field: "quantity", label: "数量", width: '', align: ''},
+                            {field: "volType", label: "成交量类型", width: '', align: ''},
+                            {field: "declType", label: "报单类型", width: '', align: ''},
+                            {field: "todayVolQuantity", label: "今成交数量", width: '', align: ''},
+                            {field: "residueQuantity", label: "剩余数量", width: '', align: ''},
+                            {field: "changeTime", label: "最后修改时间", width: '', align: ''},
+                            {field: "cancelTime", label: "撤销时间", width: '', align: ''},
+                        ],
+                        tableData: [],
+                    }, {
+                        label: '客户成交明细',
+                        name: 'third',
+                        tableColumns: [
+                            {field: "custCode", label: "客户编号", width: '', align: ''},
+                            {field: "custName", label: "客户名称", width: '', align: ''},
+                            {field: "tranId", label: "成交编号", width: '', align: ''},
+                            {field: "buySell", label: "买卖方向", width: '', align: ''},
+                            {field: "hedgeFlag", label: "组合投机套保标志", width: '', align: ''},
+                            {field: "reportId", label: "报单编号", width: '', align: ''},
+                            {field: "tradeRole", label: "交易角色", width: '', align: ''},
+                            {field: "contrCode", label: "合约代码", width: '', align: ''},
+                            {field: "kaipingFlag", label: "开平标志", width: '', align: ''},
+                            {field: "price", label: "价格", width: '', align: ''},
+                            {field: "quantity", label: "数量", width: '', align: ''},
+                            {field: "tranday", label: "成交时间", width: '', align: ''},
+                        ],
+                        tableData: [],
+                    }
+                ],
+
                 // form 表单绑定值
                 ruleForm: {
-                    customerID: 'cu1712',        // 合约代码
-                    selectDateRange: ['2017-02-20', '2018-11-25']   // 统计区间
+                    customerID: '',        // 合约代码   20180000025
+                    selectDateRange: []   // 统计区间    '2017-02-01', '2018-12-31'
                 },
                 rules: {
                     contractCode: {
@@ -116,19 +158,25 @@
             handleSdatePickerDateRangeChange(val) {
                 this.ruleForm.selectDateRange = val;
             },
-
+            handleClick(val){
+                // console.log(this.activeName);
+            },
 
             // 客户交易信息查询(生成报告)
-            customerTransactionsClick(){
+            customerTransactionsClick() {
                 this.$refs['ruleForm'].validate(valid => {
-                    if(valid){
+                    if (valid) {
                         let params = {
                             "custId": this.ruleForm.customerID,       // 客户编码
                             "timeBegin": this.ruleForm.selectDateRange[0],   // 统计区间(开始)
                             "timeEnd": this.ruleForm.selectDateRange[1],   // 统计区间(结束)
                         }
+                        this.loadingCustomerAddress = true;
                         postCustomerTransactions(params).then(resp => {
-                            this.tableData2 = tableData2;
+                            this.loadingCustomerAddress = false;
+                            this.activeNameList[0].tableData = resp.tradeInfoList;
+                            this.activeNameList[1].tableData = resp.tradeInfoDeal;
+                            this.activeNameList[2].tableData = resp.tradeInfoFormList;
                         })
                     }
                 })

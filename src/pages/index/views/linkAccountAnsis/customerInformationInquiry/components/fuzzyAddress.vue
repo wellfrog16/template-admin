@@ -11,10 +11,10 @@
                                 class="custom-width" clearable size="small"
                                 placeholder="请选择国家">
                                 <el-option
-                                    v-for="item in nationyOptions"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
+                                    v-for="items in nationyOptions"
+                                    :key="items.value"
+                                    :label="items.label"
+                                    :value="items.value">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -71,7 +71,10 @@
         </el-card>
         <s-card :title="`模糊地址查询`" :icon="`fa fa-user-md`">
             <div slot="content">
-                <s-table :columns="this.columnsCTrI4" :tableData="tableData4">
+                <s-table
+                    :loading="loadingFuzzyClear"
+                    :columns="columnsCTrI4"
+                    :tableData="tableData4">
                 </s-table>
             </div>
         </s-card>
@@ -85,8 +88,7 @@
         postFuzzyAddress,           // 模糊地址查询(生成报告接口)
     } from '@/api/dataAnsis/customerInformationInquiry';
     import {
-        columnsCTrI4,     // 模糊地址查询数据  (假数据)
-        tableData4,    // 模糊地址查询(列表头)
+        columnsCTrI4,      // 模糊地址查询(列表头)
     } from '../../customerInformationInquiry/components/constants';
 
     export default {
@@ -101,20 +103,23 @@
         // 存储数据
         data() {
             return {
+                loadingFuzzyClear: false,
                 tableData4: [],                // 模糊地址查询数据
                 columnsCTrI4: columnsCTrI4,    // 模糊地址查询(列表头)
 
                 // form 表单绑定值
-                nationyOptions: [],   // 国家
+                nationyOptions: [
+                    {label: '中国', value: '0'},
+                ],   // 国家
                 provinceOptions:[],   // 省
                 cityOptions:[],       // 市
 
 
                 ruleForm: {
-                    nationy: '',         // 国家
+                    nationy: '0',         // 国家
                     province: '',        // 省
                     city: '',            // 市
-                    address: '',         // 地址
+                    address: '',         // 地址   玉田新村105号101室
                 },
                 rules: {
                     nationy: {
@@ -123,7 +128,7 @@
                     },
                     address: {
                         required: true,
-                        message: '请选输入地址'
+                        message: '请输入详细地址'
                     }
                 }
             }
@@ -134,8 +139,16 @@
             // 模糊地址(接口)
             fuzzyAddressData(){
                 postFuzzyAddressData().then(resp => {
-                    this.nationyOptions = [];  // 国家
-                    this.provinceOptions = [];  // 省
+                    let data = [
+                        {
+                            label: '全国',
+                            id: '0',
+                            children: resp
+                        }
+                    ];
+                    this.nationyOptions = data;
+                    // this.nationyOptions = [];  // 国家
+                    this.provinceOptions = resp;  // 省
                     this.cityOptions = [];  // 市
                 })
             },
@@ -155,8 +168,12 @@
                             "cityName": this.ruleForm.city,      // 市
                             "address": this.ruleForm.address,   // 地址
                         }
+                        this.loadingFuzzyClear = true;
                         postFuzzyAddress(params).then(resp => {
-                            this.tableData4 = tableData4;
+                            this.loadingFuzzyClear = false;
+                            if(resp){
+                                this.tableData4 = this.tableData4.concat(resp);
+                            }
                         })
                     }
                 })
@@ -164,7 +181,6 @@
         },
         // 初始化数据
         mounted() {
-            this.fuzzyAddressClick();
             this.fuzzyAddressData();
         },
     }

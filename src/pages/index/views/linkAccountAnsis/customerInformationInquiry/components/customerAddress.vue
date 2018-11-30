@@ -25,7 +25,10 @@
         </el-card>
         <s-card :title="`客户地址查询`" :icon="`fa fa-user-md`">
             <div slot="content">
-                <s-table :columns="this.columnsCTrI1" :tableData="tableData1">
+                <s-table
+                    :loading="loadingCustomerAddress"
+                    :columns="this.columnsCTrI1"
+                    :tableData="tableData1">
                 </s-table>
             </div>
         </s-card>
@@ -38,8 +41,7 @@
     } from '@/api/dataAnsis/customerInformationInquiry';
 
     import {
-        columnsCTrI1,    // 客户地址查询  (假数据)
-        tableData1,    // 客户地址查询(列表头)
+        columnsCTrI1,    // 客户地址查询(列表头)
     } from '../../customerInformationInquiry/components/constants';
 
     export default {
@@ -54,12 +56,13 @@
         // 存储数据
         data() {
             return {
+                loadingCustomerAddress: false,
                 tableData1: [],               // 客户地址查询数据
                 columnsCTrI1: columnsCTrI1,   // 客户地址查询(列表头)
 
                 // form 表单绑定值
                 ruleForm: {
-                    customerID: '',      // 客户编码
+                    customerID: '',      // 客户编码  20180000025
                 },
                 // 校验
                 rules: {
@@ -84,11 +87,14 @@
                 this.$refs['ruleForm'].validate(valid => {
                     if(valid){
                         let params = {
-                            "id": this.ruleForm.customerID,   // 客户编码
+                            "custId": this.ruleForm.customerID   // 客户编码
                         }
+                        this.loadingCustomerAddress = true;
                         postCustomerAddress(params).then(resp => {
-                            this.tableData1 = tableData1;
-
+                            if(resp){
+                                this.loadingCustomerAddress = false;
+                                this.tableData1 = this.tableData1.concat(resp);
+                            }
                         })
                     }
                 })
@@ -97,7 +103,6 @@
         },
         // 初始化数据
         mounted() {
-            // this.customerAddressClick();
         },
     }
 </script>
