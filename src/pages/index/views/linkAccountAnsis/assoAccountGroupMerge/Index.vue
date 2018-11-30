@@ -22,7 +22,7 @@
         <div v-if="activeTab==='0'">
             <el-row :gutter="10">
                 <el-col :span="12" v-for="(item, index) in charts" :key="index">
-                    <s-card :title="item.title" :icon="item.icon">
+                    <s-card :title="item.title" :icon="item.icon" class="self-card-css">
                         <div slot="right">
                             <el-button type="text" @click="toggleDetail(item)">明细<i class="el-icon-plus" style="margign-left: 5px;"></i></el-button>
                         </div>
@@ -76,13 +76,16 @@ import EchartsCommon from '@/components/index/common/EchartsCommon';
 import SCard from '@/components/index/common/SCard';
 import STable from '@/components/index/common/STable';
 import TreeTable from '@/components/index/common/TreeTable';
-import {chartOption1, chartOption2, chartOption3, chartOption4, charts, mainTableColumns, chartTableColumns1, chartTableColumns2, chartTableColumns3, chartTableColumns4, resData} from './components/constants';
+import _ from 'lodash';
+import {chartOption1, chartOption2, chartOption3, chartOption4, charts, mainTableColumns, chartTableColumns1, chartTableColumns2, chartTableColumns3, chartTableColumns4, resData1, resData2} from './components/constants';
 export default {
     components: {EchartsCommon, SCard, STable, TreeTable},
     data() {
         return {
-            resData,
+            resData1,
+            resData2,
             mainTableColumns,
+            accountIdPre: 'XG',
             charts: charts,
             chartLoading: [false, false, false, false],
             chartTableColumns: [chartTableColumns1, chartTableColumns2, chartTableColumns3, chartTableColumns4],
@@ -162,11 +165,9 @@ export default {
                 break;
             }
         },
-        handleDelete() {
-            let checkedNodes = this.getCheckedNodes();
-            console.log(checkedNodes);
+        deleteMethods(deleteList) {
             let list = JSON.parse(JSON.stringify(this.mainTableData));
-            checkedNodes.forEach(v => {
+            deleteList.forEach(v => {
                 if (v.children) {
                     list = list.filter(l => {
                         return l.acctId !== v.acctId;
@@ -180,55 +181,152 @@ export default {
                 }
             });
             this.mainTableData = JSON.parse(JSON.stringify(list));
-            console.log(list);
+        },
+        handleDelete() {
+            let checkedNodes = this.getCheckedNodes();
+            console.log(checkedNodes);
+            this.deleteMethods(checkedNodes);
+        },
+        getMaxAccountId() {
+            let acctIds = [...new Set(this.mainTableData.map(v => {
+                return +v.acctId.slice(2);
+            }))];
+            return _.max(acctIds);
+        },
+        createAccountId(propsNew) {
+            let newId = propsNew || this.getMaxAccountId() + 1;
+            return this.accountIdPre + (('0000' + newId).slice(-5));
+        },
+        createTreeId() {
+            return new Date().getTime();
         },
         getCheckedNodes(flag) {
             return this.$refs['self-tree-table'].$refs['tree-table'].getCheckedNodes(flag);
         },
         handleSplit() {
-            // let checkedNodes = this.getCheckedNodes();
+            let checkedNodes = this.getCheckedNodes();
+            let acctIds = checkedNodes.map(v => {
+                return v.acctId;
+            });
+            acctIds = [...new Set(acctIds)];
+            if (!acctIds.length) {
+                this.$message.error('请选择子账户号');
+                return;
+            }
+            console.log(checkedNodes);
+            if (acctIds.length > 1) {
+                this.$message.error('请选择一个账户组内的子账户号');
+                return;
+            }
+            let checkedChildren = this.getCheckedNodes(true);
+            this.deleteMethods(checkedNodes);
+            checkedChildren.forEach(v => {
+                v.acctId = this.createAccountId();
+            });
+            this.mainTableData.push({
+                id: this.createTreeId(),
+                acctId: this.createAccountId(),
+                children: checkedChildren
+            });
+            this.sortByAccountId();
+        },
+        sortByAccountId() {
+            this.mainTableData = _.sortBy(this.mainTableData, item => {
+                return item.acctId;
+            });
         },
         handleMerge() {
-
+            let checkedNodes = this.getCheckedNodes();
+            let checkedChildren = this.getCheckedNodes(true);
+            let acctGroups = [];
+            let acctIds = [];
+            checkedNodes.forEach(v => {
+                if (v.acctId && !v.custId) {
+                    acctGroups.push(v);
+                    acctIds.push(v.acctId);
+                }
+            });
+            if (!(acctGroups.length && acctGroups.length > 1)) {
+                this.$message.error('请选择多个账户组');
+                return;
+            }
+            let acctIdsNO = acctIds.map(v => {
+                return v.slice(2);
+            });
+            let minNo = _.min(acctIdsNO);
+            this.deleteMethods(checkedNodes);
+            checkedChildren.forEach(v => {
+                v.acctId = this.createAccountId(minNo);
+            });
+            this.mainTableData.push({
+                id: this.createTreeId(),
+                acctId: this.createAccountId(minNo),
+                children: checkedChildren
+            });
+            this.sortByAccountId();
         },
-        handleExportResult() {
-
-        },
+        handleExportResult() {},
         handleExportCsv() {},
-        createNewData() {}
+        createNewData() {},
+        initPage() {
+            this.drewChart1();
+            this.drewChart2();
+        },
+        drewChart1() {
+            let {mainTableData, chartData} = resData1;
+            this.mainTableData = mainTableData;
+            let allLeaf = [];
+            mainTableData.forEach(v => {
+                if (v.children && v.children.length) {
+                    let custIds = v.children.map(v => {
+                        return v.custId;
+                    });
+                    let childIds = v.children.map(v => {
+                        return v.id;
+                    });
+                    allLeaf.push({
+                        acctId: v.acctId,
+                        custIds: custIds,
+                        id: v.id
+                    });
+                    this.childrenMap[v.id] = childIds;
+                }
+            });
+            chartData.forEach(v => {
+                let index = allLeaf.findIndex(i => {
+                    return i.acctId === v.acctId;
+                });
+                v.custIds = index > -1 ? allLeaf[index]['custIds'].join(',') : '';
+                v.id = index > -1 ? allLeaf[index]['id'] : '';
+            });
+            this.chartOptions[0]['series'][0]['data'] = chartData.map(v => {
+                return [v.acctGroOpenInt, v.acctGroAvgRela, v.custQtty, v.acctId, v.contrCd, v.custIds, v.id];
+            });
+            this.chartTableData[0] = chartData;
+            console.log(this.chartOptions[0]);
+        },
+        drewChart2() {
+            let {qtty, mainData} = resData2;
+            this.chartOptions[1]['markLine']['data']['yAxis'] = qtty;
+            let series = [];
+            let date = [];
+            Object.keys(mainData).forEach(v => {
+                series.push({
+                    name: v,
+                    type: 'bar',
+                    barMaxWidth: '45',
+                    stack: '总量',
+                    data: mainData[v].map(m => { return m.value; })
+                });
+                date = mainData[v].map(m => { return m.date; });
+            });
+            this.chartOptions[1]['series'] = series;
+            this.chartOptions[1]['xAxis'][0]['data'] = date;
+            console.log(this.chartOptions[1]);
+        },
     },
     mounted() {
-        let {mainTableData, chartData} = resData;
-        this.mainTableData = mainTableData;
-        let allLeaf = [];
-        mainTableData.forEach(v => {
-            if (v.children && v.children.length) {
-                let custIds = v.children.map(v => {
-                    return v.custId;
-                });
-                let childIds = v.children.map(v => {
-                    return v.id;
-                });
-                allLeaf.push({
-                    acctId: v.acctId,
-                    custIds: custIds,
-                    id: v.id
-                });
-                this.childrenMap[v.id] = childIds;
-            }
-        });
-        chartData.forEach(v => {
-            let index = allLeaf.findIndex(i => {
-                return i.acctId === v.acctId;
-            });
-            v.custIds = index > -1 ? allLeaf[index]['custIds'].join(',') : '';
-            v.id = index > -1 ? allLeaf[index]['id'] : '';
-        });
-        this.chartOptions[0]['series'][0]['data'] = chartData.map(v => {
-            return [v.acctGroOpenInt, v.acctGroAvgRela, v.custQtty, v.acctId, v.contrCd, v.custIds, v.id];
-        });
-        this.chartTableData[0] = chartData;
-        console.log(this.chartOptions[0]);
+        this.initPage();
     }
 };
 </script>
@@ -262,6 +360,11 @@ export default {
             flex-direction: column;
             align-items: center;
             justify-content: center;
+        }
+        .self-card-css {
+            /deep/.el-card__body {
+                padding: 10px;
+            }
         }
     }
 </style>
