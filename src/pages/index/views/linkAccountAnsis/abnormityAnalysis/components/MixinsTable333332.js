@@ -8,6 +8,37 @@ export default {
     mixins: [],
     data() {
         return {
+            markLingOping: {
+                markLine: {
+                    itemStyle: {
+                        normal: {
+                            lineStyle: {
+                                type: 'solid', color: 'red'
+                            }
+                        }
+                    },
+                    label: {
+                        show: true,
+                        formatter: function () {
+                            return'限仓线';
+                        }
+                    },
+                    data: [
+
+                        {
+                            yAxis: '',
+                            symbol: 'none',
+                            x: '7%'
+                        },
+                        {
+                            yAxis: '',
+                            symbol: 'none',
+                            x: '93%'
+                        }
+
+                    ]
+                },
+            },
             chartOptions: {
                 backgroundColor: ['rgba(7, 39, 89)'],
                 color: ['rgba(239, 156, 0)', 'rgba(16, 148, 119)', '#4162ff'],
@@ -120,51 +151,35 @@ export default {
                 let mainData = [];
                 let temp = [];
                 mainData = val.mainData;
+
+                let basicOptions = {
+                    type: 'bar',
+                    barMaxWidth: '30',
+                    stack: '总量'
+                }
+                if (val && val.tyq) {
+                    basicOptions = {...basicOptions, ...this.markLingOping}
+                    console.log();
+                }
+
+
                 Object.keys(mainData).forEach(v => {
                     temp.push(
                         {
-                            name: v,
-                            type: 'bar',
-                            barMaxWidth: '30',
-                            stack: '总量',
-                            markLine: {
-                                itemStyle: {
-                                    normal: {
-                                        lineStyle: {
-                                            type: 'solid', color: 'red'
-                                        }
-                                    }
-                                },
-                                label: {
-                                    show: true,
-                                    formatter: function () {
-                                        return val ? '限仓线' : '';
-                                    }
-                                },
-                                data: [
-
-                                    {
-                                        yAxis: val ? val.qtty : '0',
-                                        symbol: 'none',
-                                        x: '7%'
-                                    },
-                                    {
-                                        yAxis: val ? val.qtty : '0',
-                                        symbol: 'none',
-                                        x: '93%'
-                                    }
-
-                                ]
-                            },
-                            data: mainData[v].map(m => {
-                                // 超仓分析
-                                // 频繁报撤销单分析
-                                // 自成交分析
-                                return m.netMarkPosQtty;
-                            })
+                            ...{
+                                name: v,
+                                //
+                                data: mainData[v].map(m => {
+                                    // 超仓分析
+                                    // 频繁报撤销单分析
+                                    // 自成交分析
+                                    return m.netMarkPosQtty;
+                                })
+                            }, ...basicOptions
                         }
                     )
                 });
+                console.log(temp);
                 this.chartOptions.series = temp;
                 this.chartOptions.xAxis.data = val ? val.dateList : [];
                 let barEcharts = barEchartsA.init(document.getElementById('AbarEcharts'));

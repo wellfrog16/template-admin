@@ -14,6 +14,7 @@
                                                           required: String(ruleForm.exportType) === '0', message: '请选择结果集'
                                                       }]">
                                             <el-select class="custom-width" clearable size="small"
+                                                       v-loading.fullscreen.lock="fullScreenLoading"
                                                        v-model="ruleForm.resultId">
                                                 <el-option
                                                     v-for="item in resultList"
@@ -72,10 +73,13 @@
                 </el-form>
             </div>
         </s-card>
-        <a-table-tab-pane class="a_form_table_bar" :tablePaneData="tablePaneList"
+        <a-table-tab-pane class="a_form_table_bar" :tablePaneData="tablePaneList" :dealWithIsLoading="dealWithIsLoading2"
                           :formData="formDataList"></a-table-tab-pane>
         <el-card  class="a_form_table_bars ">
             <el-table
+                v-loading="dealWithIsLoading2"
+                element-loading-text="数据加载中，请耐心等待..."
+                element-loading-background="rgba(0,0,0,0.3)"
                 :data="tableData"
                 border
                 height="410"
@@ -120,6 +124,8 @@
         },
         data() {
             return {
+                fullScreenLoading: false,  // 加载 (结果集加载)
+                dealWithIsLoading2: false,  // 加载(表格加载)
                 // teb 列表数据
                 tablePaneList: {},
                 // 底部列表
@@ -171,7 +177,9 @@
         methods: {
             //  结果集列表
             getResultList() {
+                this.fullScreenLoading = true;
                 postTlsResultInfo().then(resp => {
+                    this.fullScreenLoading = false;
                     this.resultList = resp;
                 });
             },
@@ -229,8 +237,9 @@
                                 statTimeEnd: this.ruleForm.selectDateRange[1],  // 统计截止日
                                 resultSetNo: this.ruleForm.resultId   //结果集编号
                             };
+                            this.dealWithIsLoading2 = true;
                             postExportType(params).then(resp => {
-
+                                this.dealWithIsLoading2 = false;
                                 this.$router.push({name: ''});
                                 this.tableData = resp.report;
                                 this.tablePaneList = resp;

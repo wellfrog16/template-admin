@@ -8,6 +8,38 @@ export default {
     mixins: [],
     data() {
         return {
+            barEcharts: null,
+            markLingOping: {
+                markLine: {
+                    itemStyle: {
+                        normal: {
+                            lineStyle: {
+                                type: 'solid', color: 'red'
+                            }
+                        }
+                    },
+                    label: {
+                        show: true,
+                        formatter: function () {
+                            return '限仓线';
+                        }
+                    },
+                    data: [
+
+                        {
+                            yAxis: '',
+                            symbol: 'none',
+                            x: '7%'
+                        },
+                        {
+                            yAxis: '',
+                            symbol: 'none',
+                            x: '93%'
+                        }
+
+                    ]
+                },
+            },
             chartOptions: {
                 backgroundColor: ['rgba(7, 39, 89)'],
                 color: ['rgba(239, 156, 0)', 'rgba(16, 148, 119)', '#4162ff'],
@@ -30,8 +62,8 @@ export default {
                 // 柱状图高度
                 grid: {
                     left: '4%',
-                    right: '5%',
-                    bottom: '8%',
+                    right: '7%',
+                    bottom: '9%',
                     width: 'auto',
                     height: 'auto',
                     containLabel: true,
@@ -59,7 +91,6 @@ export default {
                 xAxis: {
                     type: 'category',
                     data: [],
-                    name: '日期',
                     left: 'left',
                     axisTick: {show: false},
                     boundaryGap: true,
@@ -92,114 +123,69 @@ export default {
                     }
                 },
                 series: [],
+                // 横向滚动条
                 dataZoom: [
                     {
                         type: 'slider',
                         show: true,
                         xAxisIndex: [0],
-                        bottom: 0
+                        bottom: 0,
+                        start: 1,
+                        end: 10
                     },
                     {
                         type: 'inside',
-                        xAxisIndex: [0]
+                        xAxisIndex: [0],
+                        left: '93%',
+                        start: 29,
+                        end: 36
                     }
-                ]
+                ],
             }
         };
     },
     create() {
     },
     methods: {
-        barEchartsDete(val, cra) {
-            if (!val) {
-                // console.log(val);
-                // console.log(val.dateList); // 日期
-                // console.log(val.qtty);  // 限仓线
+        clearChartData() {
+            this.barEcharts = barEchartsA.init(document.getElementById('AbarEcharts'));
+            this.barEcharts.clear();
+        },
 
-                // netMarkPosQtty;//净持仓数量  111
-                // qtty;//限仓数量
-
-
-
-
-                // cy:
-                //     acctBillCnt;// 账户撤单次数
-                // acctMajorAmtBill;//账户大额撤单次数
-
-                // acctBillCnt: 0
-                // acctMajorAmtBill: 0
-                // custId: "20180000012"
-                // txDay: "2017-04-17T16:00:00.000+0000"
-                //
-                // cy:
-                //     bargainCnt;//自成交次数
-                // bargainQtty;//账户自成交数量
-
-                // bargainCnt: 0
-                // bargainQtty: 0
-                // custId: "20180000175"
-                // txDay: "2017-08-20T16:00:00.000+0000"
-
-
-                // let mainData = ss.mainData;
-                let mainData = val.mainData;
+        barEchartsDete(val) {
+            if (val) {
+                let mainData = [];
                 let temp = [];
+                mainData = val.mainData;
+                let basicOptions = {
+                    type: 'bar',
+                    barMaxWidth: '30',
+                    stack: '总量'
+                }
+                if (val && val.qtty) {
+                    this.markLingOping.markLine.data[0].yAxis = val.qtty;
+                    this.markLingOping.markLine.data[1].yAxis = val.qtty;
+                    basicOptions = {...basicOptions, ...this.markLingOping};
+                }
                 Object.keys(mainData).forEach(v => {
-                    console.log(v.txDay);
-                    this.chartOptions.xAxis.data.push(v.txDay);
                     temp.push(
                         {
-                            name: v,
-                            type: 'bar',
-                            barMaxWidth: '30',
-                            stack: '总量',
-                            label: {
-                                normal: {
-                                    show: true,
-                                    position: 'insideRight'
-                                }
-                            },
-                            markLine: {
-                                itemStyle: {
-                                    normal: {
-                                        lineStyle: {
-                                            type: 'solid', color: 'red'
-                                        }
-                                    }
-                                },
-                                label: {
-                                    show: true,
-                                    formatter: function () {
-                                        return '限仓线';
-                                    }
-                                },
-                                data: [
-                                    [
-                                        {
-                                            yAxis: val ? val.qtty : '2000',
-                                            symbol: 'none',
-                                            x: '7%'
-                                        },
-                                        {
-                                            yAxis: val ? val.qtty : '2000',
-                                            symbol: 'none',
-                                            x: '93%'
-                                        }
-                                    ]
-                                ]
-                            },
-                            data: mainData[v].map(m => {
-                                return m.netMarkPosQtty;
-                            })
+                            ...{
+                                name: v,
+                                //
+                                data: mainData[v].map(m => {
+                                    // 超仓分析
+                                    // 频繁报撤销单分析
+                                    // 自成交分析
+                                    return m.netMarkPosQtty || m.acctBillCnt || m.bargainCnt;
+                                })
+                            }, ...basicOptions
                         }
                     )
-                })
+                });
                 this.chartOptions.series = temp;
-                this.chartOptions.xAxis.data = val ? val.dataList : [];
-
-                let barEcharts = barEchartsA.init(document.getElementById('AbarEcharts'));
-                barEcharts.clear();
-                barEcharts.setOption(this.chartOptions);
+                this.chartOptions.xAxis.data = val ? val.dateList : [];
+                this.barEcharts.setOption(this.chartOptions);
             }
         }
         ,
