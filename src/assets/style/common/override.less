@@ -46,14 +46,17 @@
         }
     }
 }
-
-::-ms-scrollbar-thumb {
-    background-color: @card-split-line-color;
+::-webkit-scrollbar {
+    width: 8px;
+    height: 1px;
+}
+::-webkit-scrollbar-thumb {
+    background-color: @scrollbar-thumb;
+    border-color: @scrollbar-thumb-border;
     border-radius: 10px;
 }
-
-::-ms-scrollbar-button {
-    background-color: @card-split-line-color;
+::-webkit-scrollbar-track {
+    background-color: transparent;
 }
 
 // 表格公共样式

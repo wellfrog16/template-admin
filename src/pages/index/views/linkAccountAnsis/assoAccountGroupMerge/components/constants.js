@@ -1,42 +1,4 @@
-
-export const chartOption2 = {
-    tooltip: {
-    },
-    legend: {
-        data: ['Myriel1', 'Myriel2', 'Myriel3', 'Myriel4', 'Myriel5']
-    },
-    series: [
-        {
-            name: 'Les Miserables',
-            type: 'graph',
-            layout: 'force',
-            data: JSON.parse(JSON.stringify([
-                {attributes: {}, category: 0, draggable: true, id: '0', itemStyle: null, name: 'Myriel1', symbolSize: 10, value: 10, x: null, y: null},
-                {attributes: {}, category: 0, draggable: true, id: '1', itemStyle: null, name: 'Myriel2', symbolSize: 10, value: 10, x: null, y: null},
-                {attributes: {}, category: 0, draggable: true, id: '2', itemStyle: null, name: 'Myriel3', symbolSize: 10, value: 10, x: null, y: null},
-                {attributes: {}, category: 0, draggable: true, id: '3', itemStyle: null, name: 'Myriel4', symbolSize: 10, value: 10, x: null, y: null},
-                {attributes: {}, category: 0, draggable: true, id: '4', itemStyle: null, name: 'Myriel5', symbolSize: 10, value: 10, x: null, y: null},
-                {attributes: {}, category: 0, draggable: true, id: '5', itemStyle: null, name: 'Myriel6', symbolSize: 10, value: 10, x: null, y: null},
-            ])),
-            links: JSON.parse(JSON.stringify([
-                {source: 'Myriel1', target: 'Myriel2'},
-                {source: 'Myriel1', target: 'Myriel3'},
-                {source: 'Myriel4', target: 'Myriel5'},
-                {source: 'Myriel4', target: 'Myriel6'},
-            ])),
-            categories: ['Myriel1', 'Myriel4'],
-            roam: true,
-            label: {
-                normal: {
-                    position: 'right'
-                }
-            },
-            force: {
-                repulsion: 100
-            }
-        }
-    ]
-};
+import {dataZoomCommonCss, chartMainColors} from '@/utils/constants';
 let itemStyle = {
     normal: {
         opacity: 0.8,
@@ -51,9 +13,7 @@ let symbolSize = data => {
     return data[2] > 40 ? 40 : data[2];
 };
 export const chartOption1 = {
-    color: [
-        '#fec42c'
-    ],
+    ...chartMainColors,
     // legend: {
     //     y: 'top',
     //     data: ['北京', '上海', '广州'],
@@ -64,8 +24,8 @@ export const chartOption1 = {
     // },
     grid: {
         x: 40,
-        x2: 100,
-        y: 40,
+        x2: 60,
+        y: 35,
         y2: 60
     },
     tooltip: {
@@ -158,6 +118,7 @@ export const chartOption1 = {
             show: true,
             xAxisIndex: [0],
             bottom: 0,
+            ...dataZoomCommonCss
             // start: 1,
             // end: 35
         },
@@ -281,6 +242,96 @@ export const chartOption1 = {
             }
         }
     ]
+};
+
+export const chartOption2 = {
+    ...chartMainColors,
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: { // 坐标轴指示器，坐标轴触发有效
+            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+        }
+    },
+    legend: {
+        data: [],
+        textStyle: {
+            color: '#eee'
+        }
+    },
+    grid: {
+        left: 30,
+        right: 45,
+        top: 30,
+        bottom: 35,
+        containLabel: true
+    },
+    xAxis: [
+        {
+            name: '日期',
+            type: 'category',
+            data: [],
+            nameTextStyle: {
+                color: '#fff',
+                fontSize: 12,
+            },
+            axisLine: {
+                lineStyle: {
+                    color: '#eee',
+                    width: 1
+                }
+            }
+        }
+    ],
+    yAxis: [
+        {
+            name: '持仓量',
+            type: 'value',
+            nameTextStyle: {
+                color: '#fff',
+                fontSize: 12
+            },
+            axisLine: {
+                lineStyle: {
+                    color: '#eee',
+                    width: 1
+                }
+            }
+        }
+    ],
+    markLine: { // 标记线设置
+        lineStyle: {
+            normal: {
+                type: 'dashed'
+            }
+        },
+        label: {
+            formatter: params => {
+                return `超仓线：${params.value}`;
+            }
+        },
+        symbolSize: 0, // 控制箭头和原点的大小、官方默认的标准线会带远点和箭头
+        data: [ // 设置条标准线——x=10
+            {yAxis: markValue || 1000}
+        ]
+    },
+    dataZoom: [
+        {
+            type: 'slider',
+            show: true,
+            xAxisIndex: [0],
+            bottom: 0,
+            ...dataZoomCommonCss
+            // start: 1,
+            // end: 35
+        },
+        {
+            type: 'inside',
+            xAxisIndex: [0],
+            // start: 1,
+            // end: 35
+        }
+    ],
+    series: []
 };
 export const chartOption3 = {
     tooltip: {
@@ -490,15 +541,15 @@ export const mainTableColumns = [
         label: '浮动盈亏相关系数',
     }
 ];
-export const resData = {
+export const resData1 = {
     'mainTableData': [
         {
             id: 1885,
-            acctId: 'AA001',
+            acctId: 'XG00001',
             children: [
                 {
                     'id': 292073,
-                    'acctId': 'AA001',
+                    'acctId': 'XG00001',
                     'custId': '20180000002',
                     'custName': null,
                     'acctGroAvgRelaCoef': 0,
@@ -518,11 +569,11 @@ export const resData = {
         },
         {
             'id': 46357,
-            'acctId': 'CC001',
+            'acctId': 'XG00002',
             'children': [
                 {
                     'id': 185878,
-                    'acctId': 'CC001',
+                    'acctId': 'XG00002',
                     'custId': '20180000005',
                     'custName': null,
                     'acctGroAvgRelaCoef': 0,
@@ -530,7 +581,7 @@ export const resData = {
                     'contrCd': 'cu1712',
                     'acctGroNetOpenInt': 500,
                     'acctNetOpenInt': 100,
-                    'custWheOtherGro': 'BB001',
+                    'custWheOtherGro': 'XG00002',
                     'buyBargainRela': 0,
                     'sellBargainRela': 0,
                     'netBuyBargainRela': 0,
@@ -540,7 +591,7 @@ export const resData = {
                 },
                 {
                     'id': 205179,
-                    'acctId': 'CC001',
+                    'acctId': 'XG00002',
                     'custId': '20180000007',
                     'custName': null,
                     'acctGroAvgRelaCoef': 0,
@@ -548,7 +599,7 @@ export const resData = {
                     'contrCd': 'cu1712',
                     'acctGroNetOpenInt': 500,
                     'acctNetOpenInt': 100,
-                    'custWheOtherGro': 'BB001',
+                    'custWheOtherGro': 'XG00002',
                     'buyBargainRela': 0,
                     'sellBargainRela': 0,
                     'netBuyBargainRela': 0,
@@ -560,11 +611,11 @@ export const resData = {
         },
         {
             'id': 92527,
-            'acctId': 'BB001',
+            'acctId': 'XG00003',
             'children': [
                 {
                     'id': 109006,
-                    'acctId': 'BB001',
+                    'acctId': 'XG00003',
                     'custId': '20180000003',
                     'custName': null,
                     'acctGroAvgRelaCoef': 0,
@@ -572,7 +623,7 @@ export const resData = {
                     'contrCd': 'cu1712',
                     'acctGroNetOpenInt': 500,
                     'acctNetOpenInt': 100,
-                    'custWheOtherGro': 'AA001',
+                    'custWheOtherGro': 'XG00003',
                     'buyBargainRela': 0,
                     'sellBargainRela': 0,
                     'netBuyBargainRela': 0,
@@ -582,7 +633,7 @@ export const resData = {
                 },
                 {
                     'id': 299236,
-                    'acctId': 'BB001',
+                    'acctId': 'XG00003',
                     'custId': '20180000006',
                     'custName': null,
                     'acctGroAvgRelaCoef': 0,
@@ -590,7 +641,7 @@ export const resData = {
                     'contrCd': 'cu1712',
                     'acctGroNetOpenInt': 500,
                     'acctNetOpenInt': 100,
-                    'custWheOtherGro': 'AA001',
+                    'custWheOtherGro': 'XG00003',
                     'buyBargainRela': 0,
                     'sellBargainRela': 0,
                     'netBuyBargainRela': 0,
@@ -603,53 +654,72 @@ export const resData = {
     ],
     'chartData': [
         {
-            'acctId': 'AA001',
+            'acctId': 'XG00001',
             'contrCd': 'CU1712',
             'acctGroAvgRela': 0.2,
             'acctGroOpenInt': 1000,
             'custQtty': 20
         },
         {
-            'acctId': 'BB001',
+            'acctId': 'XG00002',
             'contrCd': 'CU1712',
             'acctGroAvgRela': 0.4,
             'acctGroOpenInt': 3000,
             'custQtty': 200
         },
         {
-            'acctId': 'CC001',
+            'acctId': 'XG00003',
             'contrCd': 'CU1712',
             'acctGroAvgRela': -0.4,
             'acctGroOpenInt': 6000,
             'custQtty': 100
         },
         {
-            'acctId': 'CDD001',
+            'acctId': 'XG00004',
             'contrCd': 'CU1712',
             'acctGroAvgRela': -0.4,
             'acctGroOpenInt': 1000,
             'custQtty': 100
         },
         {
-            'acctId': 'EE001',
+            'acctId': 'XG00005',
             'contrCd': 'CU1712',
             'acctGroAvgRela': -0.4,
             'acctGroOpenInt': 1200,
             'custQtty': 40
         },
         {
-            'acctId': 'FF001',
+            'acctId': 'XG00006',
             'contrCd': 'CU1712',
             'acctGroAvgRela': -0.1,
             'acctGroOpenInt': 5000,
             'custQtty': 10
         },
         {
-            'acctId': 'GG001',
+            'acctId': 'XG00007',
             'contrCd': 'CU1712',
             'acctGroAvgRela': -0.42,
             'acctGroOpenInt': 2000,
             'custQtty': 70
         }
     ]
+};
+export const resData2 = {
+    qtty: 3000,
+    mainData: {
+        '20180909': [
+            {date: '2018-11-08', value: '1122'},
+            {date: '2018-11-02', value: '4444'},
+            {date: '2018-11-05', value: '1122'},
+            {date: '2018-11-04', value: '1122'},
+            {date: '2018-11-05', value: '1122'},
+        ],
+        '20180911': [
+            {date: '2018-11-01', value: '1122'},
+            {date: '2018-11-02', value: '4444'},
+            {date: '2018-11-03', value: '1122'},
+            {date: '2018-11-04', value: '1122'},
+            {date: '2018-11-05', value: '1122'},
+        ]
+    }
 };

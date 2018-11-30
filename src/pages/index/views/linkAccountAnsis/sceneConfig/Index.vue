@@ -4,7 +4,7 @@
             <div slot="content">
                 <el-form ref="ruleForm" :model="ruleForm" :rules="rules">
                     <el-row>
-                        <el-col :xl="12" :lg="12" :md="12" :sm="24" style="border-right:1px solid rgb(0, 160, 213);">
+                        <el-col :xl="12" :lg="12" :md="12" :sm="24" style="border-right:1px solid rgba(4, 58, 127, 0.92);">
                             <el-form-item prop="a">
                                 <el-radio-group v-model="ruleForm.exportType">
                                     <el-radio label="0">
@@ -17,7 +17,7 @@
                                                     v-for="item in resultList"
                                                     :key="item.resultId"
                                                     :label="item.resultName"
-                                                    uploadFileByBodyInfo                                    :value="item.resultId">
+                                                    :value="item.resultId">
                                                 </el-option>
                                             </el-select>
                                         </el-form-item>
@@ -152,6 +152,7 @@ import EditSceneDialog from './components/EditSceneDialog';
 import {createTypeOptions} from './components/constants';
 import {getSceneList, deleteScene, mergeAccount} from '@/api/dataAnsis/sceneConfig';
 import {uploadFileByBodyInfo, getTlsResultInfo} from '@/api/common';
+import moment from 'moment';
 export default {
     components: {
         STable,
@@ -184,7 +185,7 @@ export default {
                 customNoArray: [],
                 contractCode: '',
                 area: '9',
-                selectDateRange: []
+                selectDateRange: [new Date(moment().subtract(1, 'months').format('YYYY-MM-DD')), new Date(moment().subtract(1, 'days').format('YYYY-MM-DD'))]
             },
             tableData: [],
             columns: [
@@ -355,6 +356,9 @@ export default {
                 }).join(','),
                 sceneTypes: this.selectList.map(v => {
                     return v.sceneType;
+                }).join(','),
+                statFreq: this.selectList.map(v => {
+                    return v.statFreq;
                 }).join(',')
             };
             if (this.ruleForm.exportType === '0') {

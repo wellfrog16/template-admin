@@ -171,7 +171,12 @@ export default {
             type: Boolean,
             default: false
         },
-        value: [String, Array, Date],
+        value: {
+            type: [String, Array, Date],
+            default() {
+                return [];
+            }
+        },
         type: {
             type: String,
             default() {
@@ -236,7 +241,17 @@ export default {
                 return false;
             }
         },
-        shortcuts: [Array],
+        shortcuts: {
+            type: [Array],
+            default() {
+                return [{
+                    text: '今天',
+                    onClick(picker) {
+                        picker.$emit('pick', new Date());
+                    }
+                }];
+            }
+        },
         propsUpDisabledTime: {
             type: [Number, String],
             default: 0

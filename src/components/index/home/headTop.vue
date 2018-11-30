@@ -28,7 +28,7 @@ export default {
         width: 100%;
         height: @height;
         .head_top_log {
-            background: url('../../../assets/img/common/top.gif') no-repeat;
+            background: url('../../../assets/img/common/atop.png') no-repeat;
             width: 100%;
             height: 100%;
             min-width: 1000px;
