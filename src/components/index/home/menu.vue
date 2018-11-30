@@ -1,8 +1,8 @@
 <template>
     <el-menu router
-            :collapse="collapse"
-            :text-color="textColor"
-            :active-text-color="activeTextColor"
+             :collapse="collapse"
+             :text-color="textColor"
+             :active-text-color="activeTextColor"
     >
         <el-menu-item @click="toggleMode" index="" class="col-button">
             <i class="fas fa-bars fa-lg"></i>
@@ -63,7 +63,7 @@ export default {
     data() {
         return {
             // collapse: false
-        }
+        };
     },
     methods: {
         toggleMode() {
@@ -93,4 +93,3 @@ export default {
         }
     }
 </style>
-

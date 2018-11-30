@@ -30,7 +30,7 @@
                             <div v-if="item['toggleDetailFlags']">
                                 <s-table :height="300" :columns="chartTableColumns[index]" :tableData="chartTableData[index]"></s-table>
                             </div>
-                            <echarts-common v-else :ref="`chart${index}`" :domId="`chart${index}`" :defaultOption="chartOptions[index]" :propsChartHeight="300" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></echarts-common>
+                            <echarts-common v-else :loading="chartLoading[index]" :ref="`chart${index}`" :domId="`chart${index}`" :defaultOption="chartOptions[index]" :propsChartHeight="300" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></echarts-common>
                         </div>
                     </s-card>
                 </el-col>
@@ -46,22 +46,22 @@
                         <el-row :gutter="20">
                             <el-col :span="21">
                                 <div style="overflow:auto; max-height:400px;">
-                                    <tree-table :filterText="searchText" :columns="mainTableColumns" :tableData="mainTableData"></tree-table>
+                                    <tree-table ref="self-tree-table" :filterText="searchText" :columns="mainTableColumns" :tableData="mainTableData" @updateCheckedList="updateCheckedList"></tree-table>
                                 </div>
                             </el-col>
                             <el-col :span="3">
                                 <div class="operate-button-group">
-                                    <el-button type="danger" size="small">删除</el-button>
+                                    <el-button type="danger" size="small" @click="handleDelete">删除</el-button>
                                     <br>
-                                    <el-button type="warning" size="small">拆分</el-button>
+                                    <el-button type="warning" size="small" @click="handleSplit">拆分</el-button>
                                     <br>
-                                    <el-button type="warning" size="small">合并</el-button>
+                                    <el-button type="warning" size="small" @click="handleMerge">合并</el-button>
                                     <br>
-                                    <el-button type="primary" size="small">导出到结果集</el-button>
+                                    <el-button type="primary" size="small" @click="handleExportResult">导出到结果集</el-button>
                                     <br>
-                                    <el-button type="primary" size="small">导出到csv</el-button>
+                                    <el-button type="primary" size="small" @click="handleExportCsv">导出到csv</el-button>
                                     <br>
-                                    <el-button type="primary" size="small">重新生成数据</el-button>
+                                    <el-button type="primary" size="small" @click="createNewData">重新生成数据</el-button>
                                 </div>
                             </el-col>
                         </el-row>
@@ -76,13 +76,15 @@ import EchartsCommon from '@/components/index/common/EchartsCommon';
 import SCard from '@/components/index/common/SCard';
 import STable from '@/components/index/common/STable';
 import TreeTable from '@/components/index/common/TreeTable';
-import {chartOption1, chartOption2, chartOption3, chartOption4, charts, mainTableColumns, chartTableColumns1, chartTableColumns2, chartTableColumns3, chartTableColumns4} from './components/constants';
+import {chartOption1, chartOption2, chartOption3, chartOption4, charts, mainTableColumns, chartTableColumns1, chartTableColumns2, chartTableColumns3, chartTableColumns4, resData} from './components/constants';
 export default {
     components: {EchartsCommon, SCard, STable, TreeTable},
     data() {
         return {
+            resData,
             mainTableColumns,
             charts: charts,
+            chartLoading: [false, false, false, false],
             chartTableColumns: [chartTableColumns1, chartTableColumns2, chartTableColumns3, chartTableColumns4],
             chartOptions: [chartOption1, chartOption2, chartOption3, chartOption4],
             activeTab: '0',
@@ -94,61 +96,15 @@ export default {
             resultIds: '',
             resultList: [],
             searchText: '',
-            mainTableData: [
-
-                {
-                    id: 1,
-                    accountId: '1111',
-                    children: [
-                        {
-                            id: 4,
-                            accountId: '1111',
-                            customId: '11111',
-                            customName: '张三11'
-                        }
-                    ]
-                },
-                {
-                    id: 2,
-                    accountId: '2222',
-                    children: [
-                        {
-                            id: 5,
-                            accountId: '2222',
-                            customId: '22221',
-                            customName: '张三21'
-                        },
-                        {
-                            id: 6,
-                            accountId: '2222',
-                            customId: '22222',
-                            customName: '张三22'
-                        }
-                    ]
-                },
-                {
-                    id: 3,
-                    accountId: '3333',
-                    children: [
-                        {
-                            id: 7,
-                            accountId: '3333',
-                            customId: '33331',
-                            customName: '张三31'
-                        },
-                        {
-                            id: 8,
-                            accountId: '3333',
-                            customId: '33332',
-                            customName: '张三32'
-                        }
-                    ]
-                }
-
-            ]
+            selectAccountGroupList: [],
+            mainTableData: [],
+            childrenMap: {} // 账户组id和子客户号id的maping
         };
     },
     methods: {
+        updateCheckedList(checkedNodes, checkedKeys) {
+            this.selectAccountGroupList = checkedKeys;
+        },
         handleTabClick(tab) {
             this.activeTab = tab.name;
         },
@@ -162,29 +118,117 @@ export default {
 
         },
         handleEchartClickEvent(params, domId) {
-            console.log(params)
-            console.log(domId)
-            switch(domId) {
-                case 'chart0':
-                    // get chart2
-                    break;
+            console.log(params);
+            switch (domId) {
+            case 'chart0':
+                // get chart2
+                let currentId = params['data'][6];
+                if (this.selectAccountGroupList.indexOf(currentId) > -1) { // 取消选中
+                    // markPoint 样式
+                    this.chartOptions[0]['series'][0]['markPoint']['data'] = this.chartOptions[0]['series'][0]['markPoint']['data'].filter(v => {
+                        return v.coord[0] !== params['data'][0] && v.coord[1] !== params['data'][1];
+                    });
+                    // table勾选状态
+                    this.selectAccountGroupList = this.selectAccountGroupList.filter(v => {
+                        return v !== currentId && this.childrenMap[currentId].indexOf(v) === -1;
+                    });
+                    console.log(this.chartOptions[0]);
+                } else { // 选中
+                    // markPoint 样式
+                    this.chartOptions[0]['series'][0]['markPoint']['data'].push({
+                        coord: [params['data'][0], params['data'][1]]
+                    });
+                    // table勾选状态
+                    this.selectAccountGroupList.push(currentId);
+                }
+                this.$refs['chart0'][0].initChart();
+                console.log(this.selectAccountGroupList);
+                this.$refs['self-tree-table'].$refs['tree-table'].setCheckedKeys(this.selectAccountGroupList);
+                break;
             }
         },
         handleEchartDblClickEvent(params, domId) {
-            console.log(params)
-            console.log(domId)
-            switch(domId) {
-                case 'chart0':
-                    // get chart2
-                    break;
-                case 'chart1':
-                    // get chart3
-                    break;
-                case 'chart2':
-                    // get chart4
-                    break;
+            console.log(params);
+            console.log(domId);
+            switch (domId) {
+            case 'chart0':
+                // get chart2
+                break;
+            case 'chart1':
+                // get chart3
+                break;
+            case 'chart2':
+                // get chart4
+                break;
             }
-        }
+        },
+        handleDelete() {
+            let checkedNodes = this.getCheckedNodes();
+            console.log(checkedNodes);
+            let list = JSON.parse(JSON.stringify(this.mainTableData));
+            checkedNodes.forEach(v => {
+                if (v.children) {
+                    list = list.filter(l => {
+                        return l.acctId !== v.acctId;
+                    });
+                } else {
+                    list.forEach(l => {
+                        if (l.children && l.acctId === v.acctId) {
+                            l.children.splice(l.children.findIndex(f => { return f.custId === v.custId; }), 1);
+                        }
+                    });
+                }
+            });
+            this.mainTableData = JSON.parse(JSON.stringify(list));
+            console.log(list);
+        },
+        getCheckedNodes(flag) {
+            return this.$refs['self-tree-table'].$refs['tree-table'].getCheckedNodes(flag);
+        },
+        handleSplit() {
+            // let checkedNodes = this.getCheckedNodes();
+        },
+        handleMerge() {
+
+        },
+        handleExportResult() {
+
+        },
+        handleExportCsv() {},
+        createNewData() {}
+    },
+    mounted() {
+        let {mainTableData, chartData} = resData;
+        this.mainTableData = mainTableData;
+        let allLeaf = [];
+        mainTableData.forEach(v => {
+            if (v.children && v.children.length) {
+                let custIds = v.children.map(v => {
+                    return v.custId;
+                });
+                let childIds = v.children.map(v => {
+                    return v.id;
+                });
+                allLeaf.push({
+                    acctId: v.acctId,
+                    custIds: custIds,
+                    id: v.id
+                });
+                this.childrenMap[v.id] = childIds;
+            }
+        });
+        chartData.forEach(v => {
+            let index = allLeaf.findIndex(i => {
+                return i.acctId === v.acctId;
+            });
+            v.custIds = index > -1 ? allLeaf[index]['custIds'].join(',') : '';
+            v.id = index > -1 ? allLeaf[index]['id'] : '';
+        });
+        this.chartOptions[0]['series'][0]['data'] = chartData.map(v => {
+            return [v.acctGroOpenInt, v.acctGroAvgRela, v.custQtty, v.acctId, v.contrCd, v.custIds, v.id];
+        });
+        this.chartTableData[0] = chartData;
+        console.log(this.chartOptions[0]);
     }
 };
 </script>

@@ -4,7 +4,7 @@
         ref="selfTable"
         :data="newData"
         :height="height"
-        v-loading="dealWithIsLoading"
+        v-loading="loading"
         element-loading-text="数据加载中，请耐心等待..."
         element-loading-background="rgba(0,0,0,0.3)"
         :row-class-name="rowClassName"
@@ -142,14 +142,6 @@ export default {
         newData() {
             return this.tableData;
         },
-        dealWithIsLoading: {
-            get() {
-                return this.isLoading;
-            },
-            set(bool) {
-                this.isLoading = bool;
-            }
-        },
         newColumns() {
             let columnsArr = [];
             for (let key of this.refreshColumns) {
@@ -162,12 +154,6 @@ export default {
         }
     },
     watch: {
-        loading: {
-            handler() {
-                this.isLoading = this.loading;
-            },
-            immediate: true
-        },
         columns: {
             handler() {
                 this.refreshColumns = this.columns;

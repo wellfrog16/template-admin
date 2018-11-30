@@ -173,7 +173,7 @@ export default {
                 size: 'small',
                 type: 'primary'
             },
-            actionUrl: uploadFileByBodyInfo('/accountMerge/csv'),
+            actionUrl: uploadFileByBodyInfo('accountMerge/csv'),
             uploadParams: {}, // 上传文件body参数
             createTypeName: '相关性分析',
             defaultLimitFileType: ['csv'],
@@ -284,6 +284,10 @@ export default {
                 this.$message.error('请选择一个场景');
                 return;
             }
+            if (this.selectList.length > 4) {
+                this.$message.error('最多选择四个场景');
+                return;
+            }
             if (!this.ruleForm.exportType) {
                 this.$message.error('请选择一种导入客户的方式');
                 return;
@@ -307,7 +311,7 @@ export default {
             }).catch(e => {
                 this.loading = false;
                 console.error(e);
-            })
+            });
         },
         handleDelete(item) {
             this.$confirm('确定删除?', '提示', {
@@ -334,20 +338,23 @@ export default {
             this.$router.push({name: ''});
         },
         handleNextStep() {
-            let cityIds = this.$refs['tree-components'].getCheckedList().map(v => {
-                return v.id;
-            });
+            // let cityIds = this.$refs['tree-components'].getCheckedList().map(v => {
+            //     return v.id;
+            // });
             let params = {
                 exportType: this.ruleForm.exportType,
-                cityIds: cityIds,
+                cityIds: '80',
                 contrCd: this.ruleForm.contractCode,
                 statStartDt: this.ruleForm.selectDateRange[0],
                 statStopDay: this.ruleForm.selectDateRange[1],
                 sceneIds: this.selectList.map(v => {
                     return v.sceneId;
                 }).join(','),
-                sceneTyps: this.selectList.map(v => {
-                    return v.sceneTyp;
+                sceneNames: this.selectList.map(v => {
+                    return v.sceneName;
+                }).join(','),
+                sceneTypes: this.selectList.map(v => {
+                    return v.sceneType;
                 }).join(',')
             };
             if (this.ruleForm.exportType === '0') {

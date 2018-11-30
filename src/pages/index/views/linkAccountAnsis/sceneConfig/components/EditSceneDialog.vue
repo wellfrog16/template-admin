@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-loading="loading">
         <sceneModel1 v-if="String(createType)==='1'" :operateType="operateType" :createType="1" :dialogItem="dialogItem" @saveScene="saveScene"></sceneModel1>
         <sceneModel2 v-if="String(createType)==='2'" :operateType="operateType" :createType="2" :dialogItem="dialogItem" @saveScene="saveScene"></sceneModel2>
         <sceneModel3 v-if="String(createType)==='3'" :operateType="operateType" :createType="3" :dialogItem="dialogItem" @saveScene="saveScene"></sceneModel3>
@@ -33,17 +33,31 @@ export default {
             }
         }
     },
+    data() {
+        return {
+            loading: false
+        };
+    },
     methods: {
         saveScene(ruleForm) {
+            this.loading = true;
             if (ruleForm.sceneId) {
                 // 编辑
                 updateScene(ruleForm).then(() => {
+                    this.loading = false;
                     this.$emit('updateSceneList');
+                }).catch(e => {
+                    this.loading = false;
+                    console.error(e);
                 });
             } else {
                 // 新增
                 createScene(ruleForm).then(() => {
+                    this.loading = false;
                     this.$emit('updateSceneList');
+                }).catch(e => {
+                    this.loading = false;
+                    console.error(e);
                 });
             }
         }
