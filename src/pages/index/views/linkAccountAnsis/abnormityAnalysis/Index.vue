@@ -14,7 +14,9 @@
                                                           required: String(ruleForm.exportType) === '0', message: '请选择结果集'
                                                       }]">
                                             <el-select class="custom-width" clearable size="small"
-                                                       v-loading.fullscreen.lock="fullScreenLoading"
+                                                       v-loading="fullScreenLoading"
+                                                       element-loading-text="数据加载中，请耐心等待..."
+                                                       element-loading-background="rgba(0,0,0,0.3)"
                                                        v-model="ruleForm.resultId">
                                                 <el-option
                                                     v-for="item in resultList"
