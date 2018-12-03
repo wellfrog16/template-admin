@@ -42,7 +42,8 @@ export default {
             },
             chartOptions: {
                 backgroundColor: ['rgba(7, 39, 89)'],
-                color: ['rgba(239, 156, 0)', 'rgba(16, 148, 119)', '#4162ff'],
+                // color: ['rgba(239, 156, 0)', 'rgba(16, 148, 119)', '#4162ff'],
+                color: ['#00709e', '#007520', '#a7a400', '#ef9c00', '#e8641b', '#df0024', '#009f3c', '#f8f400', '#004e49', '#004e49'],
                 tooltip: {
                     trigger: 'axis',
                     axisPointer: {            // 坐标轴指示器，坐标轴触发有效

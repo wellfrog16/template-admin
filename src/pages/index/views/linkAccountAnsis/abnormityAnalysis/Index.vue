@@ -71,7 +71,7 @@
                         </el-col>
                         <el-col :xl="4" :lg="4" :md="4" :sm="24" class="generate">
                             <el-form-item label-width="60px">
-                                <el-button type="primary" @click="generateReportsClick('ruleForm')">生成报告</el-button>
+                                <el-button type="primary" @click="generateReportsClick('ruleForm')">生成协查报告</el-button>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -213,12 +213,12 @@
             },
             // 生成报告
             generateReportsClick() {
+                this.tableData = [];
+                this.tablePaneList = [];
                 this.$refs['ruleForm'].validate(valid => {
                     if (valid) {
                         //  0是结果集； 1是导入csv
                         if (this.ruleForm.exportType === '1') {
-                            this.tablePaneList = [];
-                            this.tablePaneList = [];
                             let params = {
                                 contrCode: this.ruleForm.contractCode, // 合约代码
                                 statTimeBegin: this.ruleForm.selectDateRange[0], // 统计起始日
@@ -248,9 +248,9 @@
                             postExportType(params).then(resp => {
                                 this.dealWithIsLoading2 = false;
                                 this.$router.push({name: ''});
-                                this.tableData = resp.report;
-                                this.tablePaneList = resp;
-                                this.formDataList = params;
+                                this.tableData = resp.report;  // 协查报告数据
+                                this.tablePaneList = resp;    // tab 表格数据
+                                this.formDataList = params; // 生成协查报告的参数
                             });
                         }
 

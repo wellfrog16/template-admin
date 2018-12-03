@@ -58,14 +58,17 @@
         name: "AbnormitysTableTabPane",
         // 父传子！
         props: {
+            // tab 表格数据
             tablePaneData: {
                 type: Object,
                 default: true
             },
+            // 生成协查报告的参数
             formData: {
                 type: Object,
                 default: true
             },
+            // 加载
             dealWithIsLoading: {
                 ttype: Boolean,
                 default: false
