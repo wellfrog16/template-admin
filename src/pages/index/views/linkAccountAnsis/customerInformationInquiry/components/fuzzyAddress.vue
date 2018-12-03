@@ -72,6 +72,7 @@
         <s-card :title="`模糊地址查询`" :icon="`fa fa-user-md`">
             <div slot="content">
                 <s-table
+                    :height="230"
                     :loading="loadingFuzzyClear"
                     :columns="columnsCTrI4"
                     :tableData="tableData4">

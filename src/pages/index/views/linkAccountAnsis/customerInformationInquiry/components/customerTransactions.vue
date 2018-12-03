@@ -38,6 +38,7 @@
                         :key="active.name"
                         :name="active.name">
                         <s-table
+                            :height="350"
                             :loading="loadingCustomerAddress"
                             :columns="active.tableColumns"
                             :tableData="active.tableData">
@@ -76,17 +77,17 @@
                         name: 'first',
                         label: '客户持仓明细',                   // overStoreAnalysis
                         tableColumns: [
-                            {field: "tradingDay", label: "交易日", width: '', align: ''},
-                            {field: "custName", label: "客户名称", width: '', align: ''},
-                            {field: "orgrumentId", label: "合约代码", width: '', align: ''},
-                            {field: "clientId", label: "客户代码", width: '', align: ''},
-                            {field: "posMultiQtty", label: "持多单量", width: '', align: ''},
-                            {field: "posBillQtty", label: "持空单量", width: '', align: ''},
-                            {field: "hedgeflag", label: "投机套保标志", width: '', align: ''},
-                            {field: "positionsum", label: "当前持仓金额", width: '', align: ''},
-                            {field: "openprofit", label: "浮动盈亏", width: '', align: ''},
-                            {field: "margin", label: "保证金", width: '', align: ''},
-                            {field: "duemargin", label: "应收保证金", width: '', align: ''},
+                            {field: "tradingDay", label: "交易日", width: '200', align: ''},
+                            {field: "custName", label: "客户名称", width: '200', align: ''},
+                            {field: "orgrumentId", label: "合约代码", width: '200', align: ''},
+                            {field: "clientId", label: "客户代码", width: '200', align: ''},
+                            {field: "posMultiQtty", label: "持多单量", width: '200', align: ''},
+                            {field: "posBillQtty", label: "持空单量", width: '200', align: ''},
+                            {field: "hedgeflag", label: "投机套保标志", width: '200', align: ''},
+                            {field: "positionsum", label: "当前持仓金额", width: '200', align: ''},
+                            {field: "openprofit", label: "浮动盈亏", width: '200', align: ''},
+                            {field: "margin", label: "保证金", width: '200', align: ''},
+                            {field: "duemargin", label: "应收保证金", width: '200', align: ''},
                         ],
                         tableData: [],
                     },
@@ -94,41 +95,41 @@
                         label: '客户报单明细',
                         name: 'second',
                         tableColumns: [
-                            {field: "custCode", label: "客户编号", width: '', align: ''},
-                            {field: "custName", label: "客户名称", width: '', align: ''},
-                            {field: "tradingDay", label: "交易日", width: '', align: ''},
-                            {field: "declDay", label: "报单日期", width: '', align: ''},
-                            {field: "reportid", label: "报单编号", width: '', align: ''},
-                            {field: "contrCode", label: "合约代码", width: '', align: ''},
-                            {field: "declPriceCond", label: "报单价格条件", width: '', align: ''},
-                            {field: "buySell", label: "买卖方向", width: '', align: ''},
-                            {field: "comHedgeflag", label: "组合投机套保标志", width: '', align: ''},
-                            {field: "price", label: "价格", width: '', align: ''},
-                            {field: "quantity", label: "数量", width: '', align: ''},
-                            {field: "volType", label: "成交量类型", width: '', align: ''},
-                            {field: "declType", label: "报单类型", width: '', align: ''},
-                            {field: "todayVolQuantity", label: "今成交数量", width: '', align: ''},
-                            {field: "residueQuantity", label: "剩余数量", width: '', align: ''},
-                            {field: "changeTime", label: "最后修改时间", width: '', align: ''},
-                            {field: "cancelTime", label: "撤销时间", width: '', align: ''},
+                            {field: "custCode", label: "客户编号", width: '200', align: ''},
+                            {field: "custName", label: "客户名称", width: '200', align: ''},
+                            {field: "tradingDay", label: "交易日", width: '200', align: ''},
+                            {field: "declDay", label: "报单日期", width: '200', align: ''},
+                            {field: "reportid", label: "报单编号", width: '200', align: ''},
+                            {field: "contrCode", label: "合约代码", width: '200', align: ''},
+                            {field: "declPriceCond", label: "报单价格条件", width: '200', align: ''},
+                            {field: "buySell", label: "买卖方向", width: '200', align: ''},
+                            {field: "comHedgeflag", label: "组合投机套保标志", width: '200', align: ''},
+                            {field: "price", label: "价格", width: '200', align: ''},
+                            {field: "quantity", label: "数量", width: '200', align: ''},
+                            {field: "volType", label: "成交量类型", width: '200', align: ''},
+                            {field: "declType", label: "报单类型", width: '200', align: ''},
+                            {field: "todayVolQuantity", label: "今成交数量", width: '200', align: ''},
+                            {field: "residueQuantity", label: "剩余数量", width: '200', align: ''},
+                            {field: "changeTime", label: "最后修改时间", width: '200', align: ''},
+                            {field: "cancelTime", label: "撤销时间", width: '200', align: ''},
                         ],
                         tableData: [],
                     }, {
                         label: '客户成交明细',
                         name: 'third',
                         tableColumns: [
-                            {field: "custCode", label: "客户编号", width: '', align: ''},
-                            {field: "custName", label: "客户名称", width: '', align: ''},
-                            {field: "tranId", label: "成交编号", width: '', align: ''},
-                            {field: "buySell", label: "买卖方向", width: '', align: ''},
-                            {field: "hedgeFlag", label: "组合投机套保标志", width: '', align: ''},
-                            {field: "reportId", label: "报单编号", width: '', align: ''},
-                            {field: "tradeRole", label: "交易角色", width: '', align: ''},
-                            {field: "contrCode", label: "合约代码", width: '', align: ''},
-                            {field: "kaipingFlag", label: "开平标志", width: '', align: ''},
-                            {field: "price", label: "价格", width: '', align: ''},
-                            {field: "quantity", label: "数量", width: '', align: ''},
-                            {field: "tranday", label: "成交时间", width: '', align: ''},
+                            {field: "custCode", label: "客户编号", width: '200', align: ''},
+                            {field: "custName", label: "客户名称", width: '200', align: ''},
+                            {field: "tranId", label: "成交编号", width: '200', align: ''},
+                            {field: "buySell", label: "买卖方向", width: '200', align: ''},
+                            {field: "hedgeFlag", label: "组合投机套保标志", width: '200', align: ''},
+                            {field: "reportId", label: "报单编号", width: '200', align: ''},
+                            {field: "tradeRole", label: "交易角色", width: '200', align: ''},
+                            {field: "contrCode", label: "合约代码", width: '200', align: ''},
+                            {field: "kaipingFlag", label: "开平标志", width: '200', align: ''},
+                            {field: "price", label: "价格", width: '200', align: ''},
+                            {field: "quantity", label: "数量", width: '200', align: ''},
+                            {field: "tranday", label: "成交时间", width: '200', align: ''},
                         ],
                         tableData: [],
                     }
@@ -136,8 +137,9 @@
 
                 // form 表单绑定值
                 ruleForm: {
-                    customerID: '',        // 合约代码   20180000025
-                    selectDateRange: []   // 统计区间    '2017-02-01', '2018-12-31'
+                    customerID: '',        // 客户编号   20180000025
+                    selectDateRange: [new Date(moment().subtract(1, 'months').format('YYYY-MM-DD')), new Date(moment().subtract(1, 'days').format('YYYY-MM-DD'))]
+                    // selectDateRange: []   // 统计区间    '2017-02-01', '2018-12-31'
                 },
                 rules: {
                     contractCode: {
@@ -184,7 +186,7 @@
         },
         // 初始化数据
         mounted() {
-            // this.customerTransactionsClick();
+            this.ruleForm.customerID = this.$route.query.custId ? this.$route.query.custId : '';
         },
     }
 </script>

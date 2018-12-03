@@ -19,10 +19,34 @@
                             tooltip-effect="dark"
                             :data="active.tableDataList"
                             border
-                            @row-click="tableRowClick"
+                            @cell-click="tableCellClick"
                             @select="handleRowSelect"
                             @selection-change="handleSelectionChange"
                             style="width: 100%;">
+                            <!--@row-click="tableRowClick"-->
+                            <el-table-column
+                                sortable
+                                key="acctNum"
+                                prop="acctNum"
+                                label="账户组号"
+                                align="center"
+                                min-width="150">
+                            </el-table-column>
+                            <el-table-column
+                                sortable
+                                prop="custId"
+                                label="客户编号"
+                                align="center"
+                                min-width="150">
+                                <template scope="scope">
+                                    <el-button
+                                        :class="$style.button_span"
+                                        type="text"
+                                        @click="jumpHref(scope.row.custId)">
+                                        {{scope.row.custId}}
+                                    </el-button>
+                                </template>
+                            </el-table-column>
                             <el-table-column
                                 sortable
                                 v-for="(item,index) in active.tableColumns"
@@ -90,38 +114,34 @@
                         name: 'first',
                         label: '超仓分析',   // overStoreAnalysis
                         tableColumns: [
-                            {field: "acctNum", title: "账户组号", width: 150, align: 'center'},
-                            {field: "custId", title: "客户编号", width: 150, align: 'center'},
+                            // {field: "acctNum", title: "账户组号", width: 150, align: 'center'},
+                            // {field: "custId", title: "客户编号", width: 150, align: 'center'},
                             {field: "custName", title: "客户名称", width: 150, align: 'center'},
                             {field: "contrCd", title: "合约代码", width: 150, align: 'center'},
-                            {field: "acctCurrNetMake", title: "账户组当前净持仓", width: 150, align: 'center'},
-                            {field: "acctCurrNetPos", title: "账户当前净持仓", width: 150, align: 'center'},
+                            {field: "acctCurrNetMake", title: "账户组当前净持仓", width: 200, align: 'center'},
+                            {field: "acctCurrNetPos", title: "账户当前净持仓", width: 200, align: 'center'},
                             {field: "multiBillMakePosQtty", title: "多单持仓量", width: 150, align: 'center'},
                             {field: "billMakePosQtty", title: "空单持仓量", width: 150, align: 'center'},
-                            {field: "statBosomDays", title: "统计区间超仓天数", width: 150, align: 'center'}
+                            {field: "statBosomDays", title: "统计区间超仓天数", width: 200, align: 'center'}
                         ],
                         tableDataList: [],
                     }, {
                         label: '频繁报撤销单分析',  // frequentTrade
                         name: 'second',
                         tableColumns: [
-                            {field: "acctNum", title: "账户组号", width: 150, align: 'center'},
-                            {field: "custId", title: "客户编号", width: 150, align: 'center'},
                             {field: "custName", title: "客户名称", width: 150, align: 'center'},
                             {field: "contrCd", title: "合约代码", width: 150, align: 'center'},
                             {field: "txDt", title: "交易日期", width: 150, align: 'center'},
                             {field: "mergeBillCnt", title: "合并撤单次数", width: 150, align: 'center'},
                             {field: "acctBillCnt", title: "账户撤单次数", width: 150, align: 'center'},
-                            {field: "mergeMaAmtBillCnt", title: "合并大额撤单次数", width: 150, align: 'center'},
-                            {field: "acctMaAmtBillCnt", title: "账户大额撤单次数", width: 150, align: 'center'},
+                            {field: "mergeMaAmtBillCnt", title: "合并大额撤单次数", width: 200, align: 'center'},
+                            {field: "acctMaAmtBillCnt", title: "账户大额撤单次数", width: 200, align: 'center'},
                         ],
                         tableDataList: [],
                     }, {
                         label: '自成交分析',   // autoTrade
                         name: 'third',
                         tableColumns: [
-                            {field: "acctNum", title: "账户组号", width: 150, align: 'center'},
-                            {field: "custId", title: "客户编号", width: 150, align: 'center'},
                             {field: "custName", title: "客户名称", width: 150, align: 'center'},
                             {field: "contrCd", title: "合约代码", width: 150, align: 'center'},
                             {field: "txDt", title: "交易日期", width: 150, align: 'center'},
@@ -145,28 +165,34 @@
                         this.activeNameList[0].tableDataList = val.overStoreAnalysis;
                         this.activeNameList[1].tableDataList = val.frequentTrade;
                         this.activeNameList[2].tableDataList = val.autoTrade;
-                        if(val && val.overStoreAnalysis){
-                            for(let i = 0; i < this.activeNameList[0].tableDataList.length; i++){
+                        if (val && val.overStoreAnalysis) {
 
+                            let rowCustIds = [];
+                            if (this.activeName === 'first') {
+                                for (let i = 0; i < this.activeNameList[0].tableDataList.length; i++) {
+                                    let acctNums = this.activeNameList[0].tableDataList[1].acctNum;  // 账户组号
+                                    let contrCds = this.activeNameList[0].tableDataList[1].contrCd;   // 合约代码
+                                    if (this.activeNameList[0].tableDataList[i].acctNum == row.acctNum) {
+                                        rowCustId.push(this.activeNameList[0].tableDataList[i].custId)
+                                    }
+                                    let params = {
+                                        "accountTeamNo": acctNums,                     // 账户组号
+                                        "arrCustId": rowCustIds,                           // 客户编号
+                                        "statTimeBegin": this.formData.statTimeBegin,     // 统计起始日
+                                        "statTimeEnd": this.formData.statTimeEnd,         // 统计截止日
+                                        "contrCode": contrCds,                         // 合约代码
+                                        "type": this.tabPane(),                           // 取值 '1':超仓分析
+                                    };
+                                    this.fullScreenLoading1 = true;
+                                    // Bar 柱状图接口
+                                    postImportAccounBar(params).then(resp => {
+                                        this.fullScreenLoading1 = false;
+                                        this.barEchartsDete(resp);
+
+                                    })
+                                }
                             }
-                            // console.log(this.activeNameList[0].tableDataList.acctNum);
-                            // console.log(this.activeNameList[0].tableDataList.contrCd);
-                            // console.log(this.activeNameList[0].tableDataList.contrCd);
-                            // let params = {
-                            //     "accountTeamNo": row.acctNum,                     // 账户组号
-                            //     "arrCustId": rowCustId,                           // 客户编号
-                            //     "statTimeBegin": this.formData.statTimeBegin,     // 统计起始日
-                            //     "statTimeEnd": this.formData.statTimeEnd,         // 统计截止日
-                            //     "contrCode": row.contrCd,                         // 合约代码
-                            //     "type": this.tabPane(),                           // 取值 '1':超仓分析
-                            // };
-                            // this.fullScreenLoading1 = true;
-                            // // Bar 柱状图接口
-                            // postImportAccounBar(params).then(resp => {
-                            //     this.fullScreenLoading1 = false;
-                            //     this.barEchartsDete(resp);
-                            //
-                            // })
+
                         }
                     }
                 },
@@ -175,6 +201,12 @@
         },
         //    数据交互  127662
         methods: {
+            jumpHref(val) {
+                console.log(val);
+                let custIdParams = "custId=" + val;
+                let dp = '#/customerInformationInquiry?';
+                window.open(dp + custIdParams)
+            },
             // tap 类型
             tabPane() {
                 let tabPaneActiveName = '';
@@ -187,8 +219,8 @@
                 }
                 return tabPaneActiveName;
             },
-            // Bar 柱状图
-            tableRowClick(row) {
+            // // Bar 柱状图
+            tableCellClick(row) {
                 this.clearChartData();
                 let rowCustId = [];
                 if (this.activeName === 'first') {
@@ -218,6 +250,7 @@
                     "contrCode": row.contrCd,                         // 合约代码
                     "type": this.tabPane(),                           // 取值 '1':超仓分析
                 };
+
                 this.fullScreenLoading1 = true;
                 // Bar 柱状图接口
                 postImportAccounBar(params).then(resp => {
@@ -240,14 +273,10 @@
             }
             ,
         },
-        // 在一个实例被创建之后执行代码
-        created() {
-        },
         // 初始化数据
         mounted() {
+
         },
-        beforeDestroy() {
-        }
     };
 </script>
 <style lang="less" module>
@@ -284,6 +313,10 @@
                     border: 1px solid #0740a2ad;
                 }
             }
+        }
+        .button_span {
+            text-decoration: underline;
+            color: #4d9df0;
         }
         .export_button {
             display: flex;

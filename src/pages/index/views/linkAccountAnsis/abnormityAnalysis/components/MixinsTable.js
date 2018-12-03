@@ -42,8 +42,8 @@ export default {
             },
             chartOptions: {
                 backgroundColor: ['rgba(7, 39, 89)'],
-                // color: ['rgba(239, 156, 0)', 'rgba(16, 148, 119)', '#4162ff'],
-                color: ['#00709e', '#007520', '#a7a400', '#ef9c00', '#e8641b', '#df0024', '#009f3c', '#f8f400', '#004e49', '#004e49'],
+                // color: ['#00709e', '#007520', '#a7a400', '#ef9c00', '#e8641b', '#df0024', '#009f3c', '#f8f400', '#004e49', '#004e49'],
+                color: ['#00709e', '#f8f400', '#ac10ce', '#ff0000', '#00a8ec', '#ff8a00', '#006624', '#e3007b', '#1929b3', '#b69913'],
                 tooltip: {
                     trigger: 'axis',
                     axisPointer: {            // 坐标轴指示器，坐标轴触发有效
@@ -127,19 +127,21 @@ export default {
                 // 横向滚动条
                 dataZoom: [
                     {
-                        type: 'slider',
-                        show: true,
+                        type: 'slider',   // 图表下方的伸缩条
+                        show: true,       // 是否显示
                         xAxisIndex: [0],
                         bottom: 0,
-                        start: 1,
-                        end: 10
+                        start: 92,     // 伸缩条开始位置（1-100），可以随时更改
+                        end: 100       // 伸缩条结束位置（1-100），可以随时更改
                     },
                     {
-                        type: 'inside',
+                        type: 'inside',    // 鼠标滚轮
                         xAxisIndex: [0],
                         left: '93%',
-                        start: 29,
-                        end: 36
+                        start: 92,     // 伸缩条开始位置（1-100），可以随时更改
+                        end: 100       // 伸缩条结束位置（1-100），可以随时更改
+                        // start: 29,
+                        // end: 36
                     }
                 ],
             }

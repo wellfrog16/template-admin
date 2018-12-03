@@ -41,6 +41,7 @@
         <s-card :title="`精确信息查询`" :icon="`fa fa-user-md`">
             <div slot="content">
                 <s-table
+                    :height="230"
                     :loading="loadingPreciseClear"
                     :columns="columnsCTrI3"
                     :tableData="tableData3">

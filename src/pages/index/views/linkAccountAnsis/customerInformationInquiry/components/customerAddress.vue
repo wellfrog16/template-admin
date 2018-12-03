@@ -26,6 +26,7 @@
         <s-card :title="`客户地址查询`" :icon="`fa fa-user-md`">
             <div slot="content">
                 <s-table
+                    :height="230"
                     :loading="loadingCustomerAddress"
                     :columns="this.columnsCTrI1"
                     :tableData="tableData1">
@@ -103,6 +104,9 @@
         },
         // 初始化数据
         mounted() {
+           this.ruleForm.customerID = this.$route.query.custId ? this.$route.query.custId : '';
+
+            // console.log(this.custId);
         },
     }
 </script>

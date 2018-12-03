@@ -17,6 +17,7 @@
                                             {required: String(ruleForm.exportType) === '0', message: '请选择结果集'}
                                                       ]">
                                             <el-select class="custom-width" clearable size="small"
+                                                       @change="resultChange"
                                                        v-loading="fullScreenLoading"
                                                        element-loading-text="数据加载中，请耐心等待..."
                                                        element-loading-background="rgba(0,0,0,0.3)"
@@ -147,7 +148,27 @@
                 ],
                 tableData: [],
                 formDataList: {},
-                resultList: [{label: '结果集1', value: '1'}],
+                resultList: [
+                    {
+                        resultId: "AA0001",
+                        resultName: "AA",
+                        resultType: "5",
+                        setupTm: "2018-11-21T16:00:00.000+0000",
+                        setupUser: "appadmin"
+                    },{
+                        resultId: "BB0001",
+                        resultName: "BB",
+                        resultType: "6",
+                        setupTm: "2018-11-22T16:00:00.000+0000",
+                        setupUser: "appadmin"
+                    },{
+                        resultId: "CC0001",
+                        resultName: "CC",
+                        resultType: "7",
+                        setupTm: "2018-11-23T16:00:00.000+0000",
+                        setupUser: "appadmin"
+                    }
+                ],
                 uploadOption: {
                     name: '上传',
                     size: 'small',
@@ -164,7 +185,8 @@
                     exportType: '',       // 导入结果集按钮
                     contractCode: 'cu1712',        // 合约代码  cu1712
                     resultId: '',         // 导入结果集
-                    selectDateRange: ['2017-02-20', '2017-10-09']   // 统计区间  '2017-02-20', '2017-10-09'
+                    // selectDateRange: ['2017-02-20', '2017-10-09']   // 统计区间  '2017-02-20', '2017-10-09'
+                    selectDateRange: [new Date(moment().subtract(1, 'months').format('YYYY-MM-DD')), new Date(moment().subtract(1, 'days').format('YYYY-MM-DD'))]
                 },
                 rules: {
                     contractCode: {
@@ -187,6 +209,16 @@
                     this.resultList = resp;
                 });
             },
+            // 选择结果集的按钮 -- 二选一
+            resultChange(val){
+                if(val){
+                    if(this.ruleForm.exportType !== '0') {
+                        this.ruleForm.exportType = '0'
+                    }
+                }else {
+                    this.ruleForm.exportType = '';
+                }
+            },
             // 底部导出CSV按钮
             exportClick1() {
             },
@@ -202,7 +234,6 @@
             },
             // 导入CSV
             handleUploadSuccess() {
-                this.showCarousel = false;
                 this.$router.push({name: ''});
             },
 
@@ -214,7 +245,7 @@
             // 生成报告
             generateReportsClick() {
                 this.tableData = [];
-                this.tablePaneList = [];
+                this.tablePaneList = {};
                 this.$refs['ruleForm'].validate(valid => {
                     if (valid) {
                         //  0是结果集； 1是导入csv
@@ -263,7 +294,7 @@
         },
         mounted() {
             //  结果集列表
-            this.getResultList();
+            // this.getResultList();
         }
     };
 </script>
@@ -277,7 +308,7 @@
         .generate {
             position: relative;
             top: -50px;
-            right: -70px;
+            right: -25px;
         }
         .new-btn {
             margin-left: 15px;
