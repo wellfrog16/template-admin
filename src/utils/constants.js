@@ -14,3 +14,15 @@ export let dataZoomCommonCss = {
 export let chartMainColors = {
     color: ['#fec42c', '#88efed']
 };
+export let xyAxisLineCss = {
+    nameTextStyle: {
+        color: '#fff',
+        fontSize: 12,
+    },
+    axisLine: {
+        lineStyle: {
+            color: '#eee',
+            width: 1
+        }
+    }
+};

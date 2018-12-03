@@ -1,62 +1,103 @@
 <template>
-    <el-table
-        border
-        ref="selfTable"
-        :data="newData"
-        :height="height"
-        v-loading="loading"
-        element-loading-text="数据加载中，请耐心等待..."
-        element-loading-background="rgba(0,0,0,0.3)"
-        :row-class-name="rowClassName"
-        :cell-class-name="cellClassName"
-        :show-header="showHeader"
-        :show-summary="showSummary"
-        :summary-method="summaryMethod"
-        :span-method="spanMethod"
-        :highlight-current-row="highlightCurrentRow"
-        @header-contextmenu="headerRightClick"
-        @select="handleSelectedRow"
-        @select-all="handleSelectedAllRow"
-        @selection-change="handleSelectionChange"
-        @row-click="handleRowClick"
-        @row-contextmenu="handleRowContextMenu"
-        @row-dblclick="handleRowDbClick"
-        @sort-change="sortChange"
-        @current-change="handleCurrentChange"
-        style="width: 100%; overflow:visible;">
-        <slot name="tableColumnsUnshift"></slot>
-        <el-table-column
-            v-if="showSelectionColumn"
-            type="selection"
-            align="center"
-            width="55">
-        </el-table-column>
-        <el-table-column
-            v-if="showIndexColumn"
-            type="index"
-            width="80"
-            align="center"
-            label="序号">
-        </el-table-column>
-        <div slot="empty">
-            <span>
-                <i class="fa fa-bar-chart fa-lg"></i>
-            </span>
-            暂无数据
-        </div>
-        <s-table-columns v-for="(item,index) in newColumns"
-                         :key="index"
-                         :item="item"
-                         :otherProps="otherProps"
-                         @handlerChange="handlerChange"/>
-        <slot name="tableColumnsPush"></slot>
-    </el-table>
+    <div>
+        <el-table
+            border
+            ref="selfTable"
+            :data="newData"
+            :height="height"
+            v-loading="loading"
+            element-loading-text="数据加载中，请耐心等待..."
+            element-loading-background="rgba(0,0,0,0.3)"
+            :row-class-name="rowClassName"
+            :cell-class-name="cellClassName"
+            :show-header="showHeader"
+            :show-summary="showSummary"
+            :summary-method="summaryMethod"
+            :span-method="spanMethod"
+            :highlight-current-row="highlightCurrentRow"
+            @header-contextmenu="headerRightClick"
+            @select="handleSelectedRow"
+            @select-all="handleSelectedAllRow"
+            @selection-change="handleSelectionChange"
+            @row-click="handleRowClick"
+            @row-contextmenu="handleRowContextMenu"
+            @row-dblclick="handleRowDbClick"
+            @sort-change="sortChange"
+            @current-change="handleCurrentChange"
+            style="width: 100%; overflow:visible;">
+            <slot name="tableColumnsUnshift"></slot>
+            <el-table-column
+                v-if="showSelectionColumn"
+                type="selection"
+                align="center"
+                width="55">
+            </el-table-column>
+            <el-table-column
+                v-if="showIndexColumn"
+                type="index"
+                width="80"
+                align="center"
+                label="序号">
+            </el-table-column>
+            <div slot="empty">
+                <span>
+                    <i class="fa fa-bar-chart fa-lg"></i>
+                </span>
+                暂无数据
+            </div>
+            <s-table-columns v-for="(item,index) in newColumns"
+                             :key="index"
+                             :item="item"
+                             :otherProps="otherProps"
+                             @handlerChange="handlerChange"/>
+            <slot name="tableColumnsPush"></slot>
+        </el-table>
+        <el-row>
+            <el-col :span="24">
+                <pagination
+                    v-if="showPagination"
+                    @getPagination="getPagination"
+                    :paginationProps="pagination"
+                    :pageSizes="pageSizes"
+                    :layout="paginationLayout"
+                    :pageTotal="Number(totalNum) || 0"></pagination>
+            </el-col>
+        </el-row>
+    </div>
 </template>
 <script>
 import STableColumns from './STableColumns';
+import Pagination from './Pagination'; // 分页组件引入
 export default {
     name: 'self-table',
     props: {
+        showPagination: {
+            type: Boolean,
+            default: false
+        },
+        totalNum: {
+            type: Number,
+            default: 0
+        },
+        pagination: {
+            type: Object,
+            default() {
+                return {
+                    pageIndex: 1,
+                    pageRows: 10
+                };
+            }
+        },
+        pageSizes: {
+            type: Array,
+            default() {
+                return [10, 20, 50, 100];
+            }
+        },
+        paginationLayout: {
+            type: String,
+            default: 'total, sizes, prev, pager, next'
+        },
         showSelectionColumn: {
             type: Boolean,
             default: false
@@ -132,7 +173,8 @@ export default {
         }
     },
     components: {
-        STableColumns // 表格列
+        STableColumns, // 表格列
+        Pagination
     },
     mixins: [],
     data() {
@@ -220,7 +262,10 @@ export default {
         },
         setCurrentRow(row) {
             this.$refs.selfTable.setCurrentRow(row);
-        }
+        },
+        getPagination(pagination) {
+            this.$emit('handlePaginationChange', pagination);
+        },
     }
 };
 </script>

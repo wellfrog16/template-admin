@@ -46,20 +46,20 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-    // 权限校验等
-    let accessToken = localStorage.getItem('ACCESS_TOKEN');
-    if (accessToken) {
+    if (to.name === 'login') {
         next();
     } else {
-        if (to.name === '/login') {
-            next();
-        } else {
+        // 权限校验等
+        let accessToken = localStorage.getItem('ACCESS_TOKEN');
+        if (!accessToken) {
             Notification.error('您的登陆已过期，请重新登录!');
             localStorage.removeItem('ACCESS_TOKEN');
             next({
                 path: '/login',
                 query: {redirect: to.fullPath} // 将跳转的路由path作为参数，登录成功后跳转到该路由
             });
+        } else {
+            next();
         }
     }
 });
