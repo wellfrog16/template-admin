@@ -24,6 +24,9 @@ export const checkSql = indexPara => {
     return post(`${requestPrefix}/checkSql`, {indexPara});
 };
 // 下一步-合并
+export const mergeAccountByFile = params => {
+    return post(`${requestPrefix}/accountMerge/csv`, params);
+};
 export const mergeAccount = params => {
     return post(`${requestPrefix}/accountMerge`, params);
 };

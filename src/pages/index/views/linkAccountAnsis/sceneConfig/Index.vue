@@ -137,7 +137,7 @@
                 </el-carousel-item>
             </el-carousel>
             <el-row style="margin-top:30px; text-align:center;">
-                <el-button size="small" type="primary" style="width: 100px;" @click="handleNextStep">确定</el-button>
+                <el-button size="small" type="primary" style="width: 100px;" @click="handleNextStep" :loading="loading">确定</el-button>
             </el-row>
         </el-dialog>
     </div>
@@ -150,7 +150,7 @@ import UploadFileToServer from '@/components/index/common/UploadFileToServer';
 import TreeCommon from '@/components/index/common/TreeCommon';
 import EditSceneDialog from './components/EditSceneDialog';
 import {createTypeOptions} from './components/constants';
-import {getSceneList, deleteScene, mergeAccount} from '@/api/dataAnsis/sceneConfig';
+import {getSceneList, deleteScene, mergeAccount, mergeAccountByFile} from '@/api/dataAnsis/sceneConfig';
 import {uploadFileByBodyInfo, getTlsResultInfo} from '@/api/common';
 import moment from 'moment';
 export default {
@@ -334,9 +334,11 @@ export default {
         handleSearch() {
             this.getTableData({searchName: this.searchAccountText});
         },
-        handleUploadSuccess() {
+        handleUploadSuccess(resp) {
+            this.loading = false;
             this.showCarousel = false;
-            this.$router.push({name: ''});
+            this.$store.commit('saveSceneCommitResp', resp);
+            this.$router.push({name: 'assoAccountGroupMerge'});
         },
         handleNextStep() {
             // let cityIds = this.$refs['tree-components'].getCheckedList().map(v => {
@@ -346,8 +348,8 @@ export default {
                 exportType: this.ruleForm.exportType,
                 cityIds: '80',
                 contrCd: this.ruleForm.contractCode,
-                statStartDt: this.ruleForm.selectDateRange[0],
-                statStopDay: this.ruleForm.selectDateRange[1],
+                statStartDt: moment(this.ruleForm.selectDateRange[0]).format('YYYY-MM-DD'),
+                statStopDay: moment(this.ruleForm.selectDateRange[1]).format('YYYY-MM-DD'),
                 sceneIds: this.selectList.map(v => {
                     return v.sceneId;
                 }).join(','),
@@ -357,9 +359,9 @@ export default {
                 sceneTypes: this.selectList.map(v => {
                     return v.sceneType;
                 }).join(','),
-                statFreq: this.selectList.map(v => {
-                    return v.statFreq;
-                }).join(',')
+                // statFreq: this.selectList.map(v => {
+                //     return v.statFreq;
+                // }).join(',')
             };
             if (this.ruleForm.exportType === '0') {
                 params.resultIds = this.ruleForm.resultId;
@@ -370,6 +372,7 @@ export default {
             }
             console.log(params);
             // 导入csv
+            this.loading = true;
             if (this.ruleForm.exportType === '1') {
                 this.uploadParams = {...this.uploadParams, ...params};
                 this.$nextTick(() => {
@@ -377,8 +380,13 @@ export default {
                 });
             } else {
                 mergeAccount(params).then(resp => {
+                    this.loading = false;
                     this.showCarousel = false;
-                    this.$router.push({name: ''});
+                    this.$store.commit('saveSceneCommitResp', resp);
+                    this.$router.push({name: 'assoAccountGroupMerge'});
+                }).catch(e => {
+                    console.error(e);
+                    this.loading = false;
                 });
             }
         }

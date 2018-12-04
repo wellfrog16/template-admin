@@ -6,6 +6,7 @@ import demo1 from '@/store/module/index/demo1';
 import hehe from '@/store/module/index/demo2/hehe';
 import haha from '@/store/module/index/demo2/haha';
 import login from '@/store/module/index/login';
+import sceneConfig from '@/store/module/index/sceneConfig';
 
 Vue.use(Vuex);
 
@@ -27,6 +28,7 @@ export default new Vuex.Store({
         demo1,
         hehe,
         haha,
-        login
+        login,
+        sceneConfig
     }
 });
