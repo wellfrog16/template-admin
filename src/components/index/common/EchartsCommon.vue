@@ -8,7 +8,7 @@
     </div>
 </template>
 <script>
-import echarts from 'echarts';
+// import {echartDefault} from '@/utils/con'
 export default {
     props: {
         defaultOption: {
@@ -36,7 +36,9 @@ export default {
     methods: {
         initChart(mark) {
             let myChart = document.getElementById(this.domId);
-            this.echart = echarts.init(myChart);
+            this.echart = this.$echarts.init(myChart, this.theme);
+            console.log(this.echart);
+            console.log('**********');
             // this.echart.dispatchAction({
             //   type: 'restore'
             // })

@@ -1,4 +1,3 @@
-import {dataZoomCommonCss, chartMainColors, xyAxisLineCss} from '@/utils/constants';
 let itemStyle = {
     normal: {
         opacity: 0.8,
@@ -13,7 +12,6 @@ let symbolSize = data => {
     return data[2] > 40 ? 40 : data[2];
 };
 export const chartOption1 = {
-    ...chartMainColors,
     // legend: {
     //     y: 'top',
     //     data: ['北京', '上海', '广州'],
@@ -72,7 +70,6 @@ export const chartOption1 = {
         }
     },
     xAxis: {
-        ...xyAxisLineCss,
         type: 'value',
         name: '持仓量',
         nameGap: 16,
@@ -86,7 +83,6 @@ export const chartOption1 = {
         }
     },
     yAxis: [{
-        ...xyAxisLineCss,
         type: 'value',
         name: '相关系数',
         minInterval: 0.1,
@@ -102,7 +98,6 @@ export const chartOption1 = {
             show: true,
             xAxisIndex: [0],
             bottom: 0,
-            ...dataZoomCommonCss,
             start: 50,
             end: 100
         },
@@ -230,7 +225,6 @@ export const chartOption1 = {
 };
 
 export const chartOption2 = {
-    ...chartMainColors,
     tooltip: {
         trigger: 'axis',
         axisPointer: { // 坐标轴指示器，坐标轴触发有效
@@ -255,14 +249,12 @@ export const chartOption2 = {
             name: '日期',
             type: 'category',
             data: [],
-            ...xyAxisLineCss
         }
     ],
     yAxis: [
         {
             name: '持仓量',
             type: 'value',
-            ...xyAxisLineCss
         }
     ],
     dataZoom: [
@@ -271,7 +263,6 @@ export const chartOption2 = {
             show: true,
             xAxisIndex: [0],
             bottom: 0,
-            ...dataZoomCommonCss,
             start: 50,
             end: 100
         },
@@ -374,11 +365,9 @@ export const chartOption3 = {
         splitNumber: 20,
         min: 'dataMin',
         max: 'dataMax',
-        ...xyAxisLineCss,
     },
     yAxis: {
         name: '成交价',
-        ...xyAxisLineCss,
         scale: true,
         splitArea: {
             show: true,
@@ -399,7 +388,6 @@ export const chartOption3 = {
             y: '90%',
             start: 50,
             end: 100,
-            ...dataZoomCommonCss
         }
     ],
     visualMap: [
@@ -594,7 +582,6 @@ export const chartOption3 = {
     ]
 };
 export const chartOption4 = {
-    ...chartMainColors,
     grid: {
         x: 40,
         x2: 60,
@@ -603,16 +590,28 @@ export const chartOption4 = {
     },
     tooltip: {
         trigger: 'item',
-        formatter: '{a} <br/>{b}: {c}'
+        formatter: param => {
+            if (param.seriesIndex === 0) {
+                console.log(param);
+                return `
+                    时间点： ${param.name}<br>
+                    价格： ${param.value}<br>
+                `;
+            } else {
+                return `
+                    时间点： ${param.value[0]}<br>
+                    账户号： ${param.value[4]}<br>
+                    ${param.value[3]}交易量： ${param.value[2]}<br>
+                `;
+            }
+        }
     },
     xAxis: {
         type: 'category',
-        ...xyAxisLineCss,
         data: []
     },
     yAxis: {
         type: 'value',
-        ...xyAxisLineCss
     },
     dataZoom: [
         {
@@ -626,7 +625,6 @@ export const chartOption4 = {
             y: '90%',
             start: 50,
             end: 100,
-            ...dataZoomCommonCss
         }
     ],
     series: [
@@ -963,8 +961,8 @@ export const chart3ScatterData = [
     {date: '2013-01-06', open: '2300', close: '2362.94', highest: '2588.26', lowest: '2320.26', count1: 9, count2: 4},
 ];
 export const chart4Data = [
-    {time: '12:29', price: 123},
-    {time: '12:30', price: 111},
-    {time: '12:31', price: 103},
-    {time: '12:32', price: 130}
+    {time: '12:29', price: 123, count: 1, type: '买入量'},
+    {time: '12:30', price: 111, count: 4, type: '卖出量'},
+    {time: '12:31', price: 103, count: 11, type: '卖出量'},
+    {time: '12:32', price: 130, count: 8, type: '卖出量'},
 ];

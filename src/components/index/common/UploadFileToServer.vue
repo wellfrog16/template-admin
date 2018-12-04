@@ -164,12 +164,9 @@ export default {
                 this.$emit('getTxtCon', [file], true);
                 return;
             }
-            const {success, value, message} = res;
+            const {success, resData, message} = res;
             if (success) {
-                this.$emit('getTxtCon', value.data, success);
-                if (this.isShowSuccessMessage) {
-                    this.$message.success(`共计上传${value.totalLines}条，成功${value.totalLines - value.invalidLines}条，无效${value.invalidLines}条`);
-                }
+                this.$emit('getTxtCon', resData, success);
                 // this.$refs.upload.clearFiles()
             } else {
                 this.$message.error(message || '上传失败');

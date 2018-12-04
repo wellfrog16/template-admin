@@ -81,19 +81,20 @@ import EchartsCommon from '@/components/index/common/EchartsCommon';
 import SCard from '@/components/index/common/SCard';
 import STable from '@/components/index/common/STable';
 import TreeTable from '@/components/index/common/TreeTable';
+import {getChart2Data} from '@/api/dataAnsis/assoAccountGroupMerge';
 import _ from 'lodash';
-import {chartOption1, chartOption2, chartOption3, chartOption4, charts, mainTableColumns, chartTableColumns1, chartTableColumns2, chartTableColumns3, chartTableColumns4, resData1, resData2, chart3Data, table3Options, chart3ScatterData, chart4Data} from './components/constants';
+import {chartOption1, chartOption2, chartOption3, chartOption4, charts, mainTableColumns, chartTableColumns1, chartTableColumns2, chartTableColumns3, chartTableColumns4, resData2, chart3Data, table3Options, chart3ScatterData, chart4Data} from './components/constants';
 export default {
     components: {EchartsCommon, SCard, STable, TreeTable},
     data() {
         return {
-            resData1,
             resData2,
             chart3Data,
             table3Options,
             chart3ScatterData,
             mainTableColumns,
             chart4Data,
+            resData1: {},
             accountIdPre: 'XG',
             charts: charts,
             chartLoading: [false, false, false, false],
@@ -111,7 +112,7 @@ export default {
             selectAccountGroupList: [],
             mainTableData: [],
             currentAccountGroupId: '',
-            currentIds: [], // 当前账户组下的客户号
+            currentCustIds: [], // 当前账户组下的客户号
             table3CurrentType: 'buy',
             childrenMap: {} // 账户组id和子客户号id的maping
         };
@@ -167,8 +168,8 @@ export default {
             switch (domId) {
             case 'chart0':
                 this.currentAccountGroupId = params['data'][6];
-                this.currentIds = params.data[5].split(',');
-                this.chartTableColumns[2] = this.currentIds.map(v => {
+                this.currentCustIds = params.data[5].split(',');
+                this.chartTableColumns[2] = this.currentCustIds.map(v => {
                     return {
                         'label': v,
                         'field': v,
@@ -180,6 +181,7 @@ export default {
                     'field': 'date',
                     'minWdith': 120
                 });
+                this.drewChart2();
                 // get chart2
                 break;
             case 'chart1':
@@ -300,7 +302,7 @@ export default {
             this.drewChart4();
         },
         drewChart1() {
-            let {mainTableData, chartData} = resData1;
+            let {mainTableData, chartData} = this.resData1;
             this.mainTableData = mainTableData;
             let allLeaf = [];
             mainTableData.forEach(v => {
@@ -333,6 +335,16 @@ export default {
             console.log(this.chartOptions[0]);
         },
         drewChart2() {
+            let params = {
+                accountTeamNo: this.currentAccountGroupId,
+                custId: this.currentCustIds.join(','),
+                statTimeBegin: '2018-02-02',
+                endTimeEnd: '2018-02-02',
+                contrCode: '111'
+            };
+            getChart2Data(params).then(resp => {
+                console.log(resp);
+            });
             let {qtty, mainData} = resData2;
             let series = [];
             let date = [];
@@ -383,8 +395,8 @@ export default {
                 );
             });
             scatterData.forEach(v => {
-                scatterData1.push([v.date, v.highest, v.count1, '卖出', this.currentIds]);
-                scatterData2.push([v.date, v.lowest, v.count2, '买入', this.currentIds]);
+                scatterData1.push([v.date, v.highest, v.count1, '卖出', this.currentCustIds]);
+                scatterData2.push([v.date, v.lowest, v.count2, '买入', this.currentCustIds]);
             });
             this.chartOptions[2]['series'][0]['data'] = seriesData;
             this.chartOptions[2]['series'][1]['data'] = scatterData1;
@@ -396,8 +408,6 @@ export default {
             let data = chart4Data;
             let lineData = [];
             let timeData = [];
-            let scatterData1 = [];
-            let scatterData2 = [];
             let itemStyleArray = [{
                 normal: {
                     color: 'green',
@@ -420,19 +430,17 @@ export default {
             data.forEach(v => {
                 timeData.push(v.time);
                 lineData.push(v.price);
-                scatterData1.push(v.account1);
-                scatterData2.push(v.account2);
             });
             this.chartOptions[3]['series'][0]['data'] = lineData;
             itemStyleArray.forEach((f, i) => {
                 this.chartOptions[3]['series'].push({
-                    name: `账户${i}`,
+                    name: `账户号${i}`,
                     type: 'scatter',
                     symbol: 'triangle',
                     symbolSize: 10,
                     itemStyle: f,
-                    data: data.map(v => {
-                        return [v.time, v.price + i * 20];
+                    data: data.map(d => {
+                        return [d.time, d.price + i * 8, d.count, d.type, i];
                     }),
                     smooth: true,
                     lineStyle: {
@@ -440,12 +448,12 @@ export default {
                     }
                 });
             });
-            this.chartOptions[3]['series'][2]['data'] = scatterData2;
             this.chartOptions[3]['xAxis']['data'] = timeData;
             console.log(this.chartOptions[3]);
         }
     },
     mounted() {
+        this.resData1 = this.$store.getters.sceneCommitResp;
         this.initPage();
     }
 };
