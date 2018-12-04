@@ -54,6 +54,12 @@ const Index = {
                     label: '客户信息查询',
                     icon: 'el-icon-search', // customer_information_inquiry
                     component: resolve => require(['@/pages/index/views/linkAccountAnsis/customerInformationInquiry/Index.vue'], resolve)
+                }, {
+                    path: 'knowledgeAtlas',
+                    name: 'knowledgeAtlas',
+                    label: '知识图库',
+                    icon: 'el-icon-search', // customer_information_inquiry
+                    component: resolve => require(['@/pages/index/views/linkAccountAnsis/knowledgeAtlas/Index.vue'], resolve)
                 }
             ]
         }

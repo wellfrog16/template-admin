@@ -149,25 +149,25 @@
                 tableData: [],
                 formDataList: {},
                 resultList: [
-                    {
-                        resultId: "AA0001",
-                        resultName: "AA",
-                        resultType: "5",
-                        setupTm: "2018-11-21T16:00:00.000+0000",
-                        setupUser: "appadmin"
-                    },{
-                        resultId: "BB0001",
-                        resultName: "BB",
-                        resultType: "6",
-                        setupTm: "2018-11-22T16:00:00.000+0000",
-                        setupUser: "appadmin"
-                    },{
-                        resultId: "CC0001",
-                        resultName: "CC",
-                        resultType: "7",
-                        setupTm: "2018-11-23T16:00:00.000+0000",
-                        setupUser: "appadmin"
-                    }
+                    // {
+                    //     resultId: "AA0001",
+                    //     resultName: "AA",
+                    //     resultType: "5",
+                    //     setupTm: "2018-11-21T16:00:00.000+0000",
+                    //     setupUser: "appadmin"
+                    // },{
+                    //     resultId: "BB0001",
+                    //     resultName: "BB",
+                    //     resultType: "6",
+                    //     setupTm: "2018-11-22T16:00:00.000+0000",
+                    //     setupUser: "appadmin"
+                    // },{
+                    //     resultId: "CC0001",
+                    //     resultName: "CC",
+                    //     resultType: "7",
+                    //     setupTm: "2018-11-23T16:00:00.000+0000",
+                    //     setupUser: "appadmin"
+                    // }
                 ],
                 uploadOption: {
                     name: '上传',
@@ -183,7 +183,7 @@
                 ruleForm: {
                     fileList: [],          // 导入CSV
                     exportType: '',       // 导入结果集按钮
-                    contractCode: 'cu1712',        // 合约代码  cu1712
+                    contractCode: '',        // 合约代码  cu1712
                     resultId: '',         // 导入结果集
                     // selectDateRange: ['2017-02-20', '2017-10-09']   // 统计区间  '2017-02-20', '2017-10-09'
                     selectDateRange: [new Date(moment().subtract(1, 'months').format('YYYY-MM-DD')), new Date(moment().subtract(1, 'days').format('YYYY-MM-DD'))]
@@ -196,6 +196,12 @@
                     selectDateRange: {
                         required: true,
                         message: '请选择统计区间'
+                    },
+                    exportType: {
+                        message: '请选择结果集'
+                    },
+                    fileList: {
+                        message: '请导入CSV'
                     }
                 }
             };
@@ -224,8 +230,6 @@
             },
             // 底部上一步按钮
             backClick1() {
-                console.log(new Date());
-                console.log(this.tableData);
             },
 
             // 统计区间事件
@@ -248,7 +252,6 @@
                 this.tablePaneList = {};
                 this.$refs['ruleForm'].validate(valid => {
                     if (valid) {
-                        //  0是结果集； 1是导入csv
                         if (this.ruleForm.exportType === '1') {
                             let params = {
                                 contrCode: this.ruleForm.contractCode, // 合约代码
@@ -257,7 +260,6 @@
                                 file: ''
                             }
                             this.uploadParams = {...this.uploadParams, ...params};
-
                             this.$nextTick(() => {
                                 this.$refs['uploadFile'].submitUpload();
                             });
@@ -275,6 +277,7 @@
                                 statTimeEnd: this.ruleForm.selectDateRange[1],     // 统计截止日
                                 resultSetNo: this.ruleForm.resultId                // 结果集编号
                             };
+
                             this.dealWithIsLoading2 = true;
                             postExportType(params).then(resp => {
                                 this.dealWithIsLoading2 = false;
@@ -284,17 +287,13 @@
                                 this.formDataList = params; // 生成协查报告的参数
                             });
                         }
-
-                    } else {
-                        console.log(' 0是结果集； 1是导入csv');
-
                     }
                 });
             }
         },
         mounted() {
             //  结果集列表
-            // this.getResultList();
+            this.getResultList();
         }
     };
 </script>

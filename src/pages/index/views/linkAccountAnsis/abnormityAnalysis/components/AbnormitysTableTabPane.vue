@@ -38,7 +38,7 @@
                                 label="客户编号"
                                 align="center"
                                 min-width="150">
-                                <template scope="scope">
+                                <template slot-scope="scope">
                                     <el-button
                                         :class="$style.button_span"
                                         type="text"
@@ -68,7 +68,8 @@
             <div :class="$style.bar_echarts"
                  v-loading="fullScreenLoading1"
                  element-loading-text="数据加载中，请耐心等待..."
-                 element-loading-background="rgba(0,0,0,0.3)" id="AbarEcharts"></div>
+                 element-loading-background="rgba(0,0,0,0.3)"
+                 id="AbarEcharts"></div>
         </div>
     </div>
 </template>
@@ -165,42 +166,47 @@
                         this.activeNameList[0].tableDataList = val.overStoreAnalysis;
                         this.activeNameList[1].tableDataList = val.frequentTrade;
                         this.activeNameList[2].tableDataList = val.autoTrade;
-                        if (val && val.overStoreAnalysis) {
-
-                            let rowCustIds = [];
-                            if (this.activeName === 'first') {
-                                for (let i = 0; i < this.activeNameList[0].tableDataList.length; i++) {
-                                    let acctNums = this.activeNameList[0].tableDataList[1].acctNum;  // 账户组号
-                                    let contrCds = this.activeNameList[0].tableDataList[1].contrCd;   // 合约代码
-                                    if (this.activeNameList[0].tableDataList[i].acctNum == row.acctNum) {
-                                        rowCustId.push(this.activeNameList[0].tableDataList[i].custId)
-                                    }
-                                    let params = {
-                                        "accountTeamNo": acctNums,                     // 账户组号
-                                        "arrCustId": rowCustIds,                           // 客户编号
-                                        "statTimeBegin": this.formData.statTimeBegin,     // 统计起始日
-                                        "statTimeEnd": this.formData.statTimeEnd,         // 统计截止日
-                                        "contrCode": contrCds,                         // 合约代码
-                                        "type": this.tabPane(),                           // 取值 '1':超仓分析
-                                    };
-                                    this.fullScreenLoading1 = true;
-                                    // Bar 柱状图接口
-                                    postImportAccounBar(params).then(resp => {
-                                        this.fullScreenLoading1 = false;
-                                        this.barEchartsDete(resp);
-
-                                    })
-                                }
-                            }
-
-                        }
+                        this.variationData();
                     }
                 },
                 deep: true
             }
         },
-        //    数据交互  127662
+        //    数据交互
         methods: {
+            // 初始化柱状图
+            variationData(){
+                this.clearChartData();
+                if (this.activeNameList[0].tableDataList) {
+                    var rowCustIds = [];
+                    if (this.activeName === 'first') {
+                        var acctNums = this.activeNameList[0].tableDataList[1].acctNum;  // 账户组号
+                        var contrCds = this.activeNameList[0].tableDataList[1].contrCd;   // 合约代码
+                        for (let i = 0; i < this.activeNameList[0].tableDataList.length; i++) {
+                            if (this.activeNameList[0].tableDataList[i].acctNum == acctNums) {
+                                rowCustIds.push(this.activeNameList[0].tableDataList[i].custId)
+                            }
+                        }
+                        let params = {
+                            "accountTeamNo": acctNums,                     // 账户组号
+                            "arrCustId": rowCustIds,                           // 客户编号
+                            "statTimeBegin": this.formData.statTimeBegin,     // 统计起始日
+                            "statTimeEnd": this.formData.statTimeEnd,         // 统计截止日
+                            "contrCode": contrCds,                         // 合约代码
+                            "type": '1',                           // 取值 '1':超仓分析
+                        };
+                        this.fullScreenLoading1 = true;
+                        // Bar 柱状图接口
+                        postImportAccounBar(params).then(resp => {
+                            this.fullScreenLoading1 = false;
+                            this.barEchartsDete(resp);
+
+                        })
+                    }
+
+                }
+            },
+            // 跳转页面
             jumpHref(val) {
                 console.log(val);
                 let custIdParams = "custId=" + val;
@@ -275,7 +281,6 @@
         },
         // 初始化数据
         mounted() {
-
         },
     };
 </script>
