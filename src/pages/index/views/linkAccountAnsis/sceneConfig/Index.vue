@@ -12,14 +12,7 @@
                                                       :rules="[{
                                                           required: String(ruleForm.exportType) === '0', message: '请选择结果集'
                                                       }]">
-                                            <el-select class="custom-width" clearable size="small" v-model="ruleForm.resultId">
-                                                <el-option
-                                                    v-for="item in resultList"
-                                                    :key="item.resultId"
-                                                    :label="item.resultName"
-                                                    :value="item.resultId">
-                                                </el-option>
-                                            </el-select>
+                                            <resultSelectComponent :resultIdProps="ruleForm.resultId" @selectResultId="selectResultId"></resultSelectComponent>
                                         </el-form-item>
                                     </el-radio>
                                     <br>
@@ -150,8 +143,9 @@ import UploadFileToServer from '@/components/index/common/UploadFileToServer';
 import TreeCommon from '@/components/index/common/TreeCommon';
 import EditSceneDialog from './components/EditSceneDialog';
 import {createTypeOptions} from './components/constants';
-import {getSceneList, deleteScene, mergeAccount, mergeAccountByFile} from '@/api/dataAnsis/sceneConfig';
-import {uploadFileByBodyInfo, getTlsResultInfo} from '@/api/common';
+import {getSceneList, deleteScene, mergeAccount} from '@/api/dataAnsis/sceneConfig';
+import {uploadFileByBodyInfo} from '@/api/common';
+import resultSelectComponent from '@/components/index/common/ResultSelectComponent';
 import moment from 'moment';
 export default {
     components: {
@@ -160,12 +154,12 @@ export default {
         SDatePicker,
         TreeCommon,
         EditSceneDialog,
-        UploadFileToServer
+        UploadFileToServer,
+        resultSelectComponent
     },
     data() {
         return {
             createTypeOptions,
-            resultList: [{label: '结果集1', value: '1'}],
             showDialog: false,
             showCarousel: false,
             loading: false,
@@ -181,9 +175,9 @@ export default {
             ruleForm: {
                 fileList: [],
                 exportType: '',
-                resultId: '',
+                resultId: 'AA0001',
                 customNoArray: [],
-                contractCode: '',
+                contractCode: 'cu1712',
                 area: '9',
                 selectDateRange: [new Date(moment().subtract(1, 'months').format('YYYY-MM-DD')), new Date(moment().subtract(1, 'days').format('YYYY-MM-DD'))]
             },
@@ -226,6 +220,9 @@ export default {
         };
     },
     methods: {
+        selectResultId(val) {
+            this.ruleForm.resultId = val;
+        },
         validateCustomNo(rule, value, callback) {
             if (String(this.ruleForm.exportType) === '2') {
                 if (!value.length) {
@@ -326,11 +323,6 @@ export default {
                     });
                 });
         },
-        getResultList() {
-            getTlsResultInfo().then(resp => {
-                this.resultList = resp;
-            });
-        },
         handleSearch() {
             this.getTableData({searchName: this.searchAccountText});
         },
@@ -373,6 +365,7 @@ export default {
             console.log(params);
             // 导入csv
             this.loading = true;
+            this.$store.commit('saveSceneCommitParams', params);
             if (this.ruleForm.exportType === '1') {
                 this.uploadParams = {...this.uploadParams, ...params};
                 this.$nextTick(() => {
@@ -393,7 +386,6 @@ export default {
     },
     mounted() {
         this.getTableData();
-        this.getResultList();
     }
 
 };

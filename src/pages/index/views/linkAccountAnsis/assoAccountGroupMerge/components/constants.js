@@ -938,9 +938,9 @@ export const resData2 = {
     }
 };
 export const table3Options = [
-    {label: '买入量', field: 'buy', minWidth: 100},
-    {label: '卖出量', field: '', minWidth: 100},
-    {label: '多头持仓量', field: '', minWidth: 130},
+    {label: '买入量', field: 'a', minWidth: 100},
+    {label: '卖出量', field: 'b', minWidth: 100},
+    {label: '多头持仓量', field: 'c', minWidth: 130},
     {label: '多头持仓量', field: '', minWidth: 130},
     {label: '盈亏', field: '', minWidth: 90},
     {label: '净买入量', field: '', minWidth: 100},

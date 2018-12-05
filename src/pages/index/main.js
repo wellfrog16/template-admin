@@ -12,9 +12,7 @@ import {echartsDefault} from '@/assets/style/common/theme/echart';
 
 Vue.config.productionTip = false;
 // echarts 默认样式
-console.log(echartsDefault);
 echarts.registerTheme('df_theme', echartsDefault);
-console.log(echarts);
 // 过滤器
 Vue.filter('currency', filters.currency);
 
