@@ -8,14 +8,7 @@
             <div class="tabs-button">
                 <el-row>
                     <span style="margin-right: 10px;">导入结果集：</span>
-                    <el-select class="custom-width" clearable size="small" v-model="resultIds">
-                        <el-option
-                            v-for="item in resultList"
-                            :key="item.resultId"
-                            :label="item.resultName"
-                            :value="item.resultId">
-                        </el-option>
-                    </el-select>
+                    <resultSelectComponent :resultIdProps="resultIds" @selectResultId="selectResultId"></resultSelectComponent>
                 </el-row>
             </div>
         </div>
@@ -27,7 +20,7 @@
                             <el-button type="text" @click="toggleDetail(item)">明细<i class="el-icon-plus" style="margign-left: 5px;"></i></el-button>
                         </div>
                         <div slot="content">
-                            <div v-if="item['toggleDetailFlags']">
+                            <div v-show="item['toggleDetailFlags']">
                                 <div v-if="index===2">
                                     <el-select class="custom-width" clearable size="small" v-model="table3CurrentType">
                                         <el-option v-for="(o, oi) in table3Options" :key="oi" :label="o.label" :value="o.field"></el-option>
@@ -35,7 +28,13 @@
                                 </div>
                                 <s-table :height="index === 2 ? 268 : 300" :columns="chartTableColumns[index]" :tableData="chartTableData[index]"></s-table>
                             </div>
-                            <echarts-common v-else :loading="chartLoading[index]" :ref="`chart${index}`" :domId="`chart${index}`" :defaultOption="chartOptions[index]" :propsChartHeight="300" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></echarts-common>
+                            <div v-show="!item['toggleDetailFlags']">
+                                <chart1 :ref="`chartComponent${index + 1}`" v-if="index === 0" :childrenMap="childrenMap" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData" @updateMainTableData="updateMainTableData" @drewChart2="drewChart2"></chart1>
+                                <chart2 :ref="`chartComponent${index + 1}`" v-if="index === 1" :commonReqParams="commonReqParams()" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData" @drewChart3="drewChart3"></chart2>
+                                <chart3 :ref="`chartComponent${index + 1}`" v-if="index === 2" :commonReqParams="commonReqParams()" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData" @drewChart4="drewChart4"></chart3>
+                                <chart4 :ref="`chartComponent${index + 1}`" v-if="index === 3" :commonReqParams="commonReqParams()" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData"></chart4>
+                            </div>
+                            <!-- <echarts-common v-else :loading="chartLoading[index]" :ref="`chart${index}`" :domId="`chart${index}`" :defaultOption="chartOptions[index]" :propsChartHeight="300" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></echarts-common> -->
                         </div>
                     </s-card>
                 </el-col>
@@ -43,8 +42,8 @@
             <div class="main-table">
                 <s-card title="账户组信息" icon="el-icon-edit">
                     <div slot="right">
-                        <el-input class="search-input" size="mini" placeholder="请输入账户组或客户编号" v-model="searchText" @keyup.enter.native="handleSearch">
-                            <i class="el-icon-search" slot="prefix" @click="handleSearch" style="margin-left:4px; cursor: pointer;"></i>
+                        <el-input class="search-input" size="mini" placeholder="请输入账户组或客户编号" v-model="searchText">
+                            <i class="el-icon-search" slot="prefix" style="margin-left:4px; cursor: pointer;"></i>
                         </el-input>
                     </div>
                     <div slot="content">
@@ -77,15 +76,42 @@
     </div>
 </template>
 <script>
-import EchartsCommon from '@/components/index/common/EchartsCommon';
+// import EchartsCommon from '@/components/index/common/EchartsCommon';
 import SCard from '@/components/index/common/SCard';
 import STable from '@/components/index/common/STable';
 import TreeTable from '@/components/index/common/TreeTable';
-import {getChart2Data} from '@/api/dataAnsis/assoAccountGroupMerge';
+import ResultSelectComponent from '@/components/index/common/ResultSelectComponent';
+// import {getChart2Data} from '@/api/dataAnsis/assoAccountGroupMerge';
+import chart1 from './components/chart1';
+import chart2 from './components/chart2';
+import chart3 from './components/chart3';
+import chart4 from './components/chart4';
 import _ from 'lodash';
-import {chartOption1, chartOption2, chartOption3, chartOption4, charts, mainTableColumns, chartTableColumns1, chartTableColumns2, chartTableColumns3, chartTableColumns4, resData2, chart3Data, table3Options, chart3ScatterData, chart4Data} from './components/constants';
+import {charts, mainTableColumns, chartTableColumns1, chartTableColumns2, chartTableColumns4, resData2, chart3Data, table3Options, chart3ScatterData, chart4Data} from './components/constants';
 export default {
-    components: {EchartsCommon, SCard, STable, TreeTable},
+    components: {chart1, chart2, chart3, chart4, SCard, STable, TreeTable, ResultSelectComponent},
+    watch: {
+        currentCustIds: {
+            handler(val) {
+                this.chartTableColumns[2] = val.map(v => {
+                    return {
+                        'label': v,
+                        'field': v,
+                        'minWdith': 120,
+                        'formatter': item => {
+                            return item[v] ? item[v][this.table3CurrentType] : '';
+                        }
+                    };
+                });
+                this.chartTableColumns[2].unshift({
+                    'label': '交易日',
+                    'field': 'date',
+                    'minWdith': 120
+                });
+            },
+            deep: true
+        }
+    },
     data() {
         return {
             resData2,
@@ -95,11 +121,10 @@ export default {
             mainTableColumns,
             chart4Data,
             resData1: {},
+            sceneCommitParams: {},
             accountIdPre: 'XG',
             charts: charts,
-            chartLoading: [false, false, false, false],
-            chartTableColumns: [chartTableColumns1, chartTableColumns2, chartTableColumns3, chartTableColumns4],
-            chartOptions: [chartOption1, chartOption2, chartOption3, chartOption4],
+            chartTableColumns: [chartTableColumns1, chartTableColumns2, [], chartTableColumns4],
             activeTab: '0',
             tabs: [
                 {name: '0', label: '场景名称1'},
@@ -107,17 +132,26 @@ export default {
             ],
             chartTableData: [[], [], [], []],
             resultIds: '',
-            resultList: [],
             searchText: '',
             selectAccountGroupList: [],
             mainTableData: [],
             currentAccountGroupId: '',
             currentCustIds: [], // 当前账户组下的客户号
-            table3CurrentType: 'buy',
+            table3CurrentType: 'a',
             childrenMap: {} // 账户组id和子客户号id的maping
         };
     },
     methods: {
+        selectResultId(val) {
+            this.resultIds = val;
+        },
+        updateMainTableData(val) {
+            this.mainTableData = val;
+        },
+        updateTableData(value, index) {
+            console.log(this.chartTableData[2]);
+            this.chartTableData[index] = value;
+        },
         updateCheckedList(checkedNodes, checkedKeys) {
             this.selectAccountGroupList = checkedKeys;
         },
@@ -130,64 +164,53 @@ export default {
             });
             this.charts[index]['toggleDetailFlags'] = !item.toggleDetailFlags;
         },
-        handleSearch() {
-
-        },
-        handleEchartClickEvent(params, domId) {
+        handleEchartClickEvent(params, index) {
             console.log(params);
-            switch (domId) {
-            case 'chart0':
+            switch (String(index)) {
+            case '0':
                 // get chart2
                 let currentId = params['data'][6];
+                let markPointData = this.$refs['chartComponent1'][0].chartOptions['series'][0]['markPoint']['data'];
                 if (this.selectAccountGroupList.indexOf(currentId) > -1) { // 取消选中
                     // markPoint 样式
-                    this.chartOptions[0]['series'][0]['markPoint']['data'] = this.chartOptions[0]['series'][0]['markPoint']['data'].filter(v => {
+                    this.$refs['chartComponent1'][0].chartOptions['series'][0]['markPoint']['data'] = markPointData.filter(v => {
                         return v.coord[0] !== params['data'][0] && v.coord[1] !== params['data'][1];
                     });
                     // table勾选状态
                     this.selectAccountGroupList = this.selectAccountGroupList.filter(v => {
                         return v !== currentId && this.childrenMap[currentId].indexOf(v) === -1;
                     });
-                    console.log(this.chartOptions[0]);
                 } else { // 选中
                     // markPoint 样式
-                    this.chartOptions[0]['series'][0]['markPoint']['data'].push({
+                    this.$refs['chartComponent1'][0].chartOptions['series'][0]['markPoint']['data'].push({
                         coord: [params['data'][0], params['data'][1]]
                     });
+                    console.log(this.$refs['chartComponent1'][0].chartOptions['series'][0]['markPoint']);
                     // table勾选状态
                     this.selectAccountGroupList.push(currentId);
                 }
-                this.$refs['chart0'][0].initChart();
+                this.drewChart1();
                 console.log(this.selectAccountGroupList);
                 this.$refs['self-tree-table'].$refs['tree-table'].setCheckedKeys(this.selectAccountGroupList);
                 break;
             }
         },
-        handleEchartDblClickEvent(params, domId) {
+        handleEchartDblClickEvent(params, index) {
             console.log(params);
-            switch (domId) {
-            case 'chart0':
+            switch (String(index)) {
+            case '0':
                 this.currentAccountGroupId = params['data'][6];
                 this.currentCustIds = params.data[5].split(',');
-                this.chartTableColumns[2] = this.currentCustIds.map(v => {
-                    return {
-                        'label': v,
-                        'field': v,
-                        'minWdith': 120
-                    };
-                });
-                this.chartTableColumns[2].unshift({
-                    'label': '交易日',
-                    'field': 'date',
-                    'minWdith': 120
-                });
+
                 this.drewChart2();
                 // get chart2
                 break;
-            case 'chart1':
+            case '1':
+                this.drewChart3();
                 // get chart3
                 break;
-            case 'chart2':
+            case '2':
+                this.drewChart4();
                 // get chart4
                 break;
             }
@@ -295,166 +318,31 @@ export default {
         handleExportResult() {},
         handleExportCsv() {},
         createNewData() {},
-        initPage() {
-            this.drewChart1();
-            this.drewChart2();
-            this.drewChart3();
-            this.drewChart4();
+        commonReqParams() {
+            return {
+                accountTeamNo: this.currentAccountGroupId || 'XG00001',
+                custId: this.currentCustIds.join(',') || '20180001716,20180000025,20180001461',
+                statTimeBegin: this.sceneCommitParams.statStartDt || '2017-02-20',
+                endTimeEnd: this.sceneCommitParams.statStopDay || '2017-10-09',
+                contrCode: this.sceneCommitParams.contrCd || 'cu1712'
+            };
         },
         drewChart1() {
-            let {mainTableData, chartData} = this.resData1;
-            this.mainTableData = mainTableData;
-            let allLeaf = [];
-            mainTableData.forEach(v => {
-                if (v.children && v.children.length) {
-                    let custIds = v.children.map(v => {
-                        return v.custId;
-                    });
-                    let childIds = v.children.map(v => {
-                        return v.id;
-                    });
-                    allLeaf.push({
-                        acctId: v.acctId,
-                        custIds: custIds,
-                        id: v.id
-                    });
-                    this.childrenMap[v.id] = childIds;
-                }
-            });
-            chartData.forEach(v => {
-                let index = allLeaf.findIndex(i => {
-                    return i.acctId === v.acctId;
-                });
-                v.custIds = index > -1 ? allLeaf[index]['custIds'].join(',') : '';
-                v.id = index > -1 ? allLeaf[index]['id'] : '';
-            });
-            this.chartOptions[0]['series'][0]['data'] = chartData.map(v => {
-                return [v.acctGroOpenInt, v.acctGroAvgRela, v.custQtty, v.acctId, v.contrCd, v.custIds, v.id];
-            });
-            this.chartTableData[0] = chartData;
-            console.log(this.chartOptions[0]);
+            this.$refs['chartComponent1'] && this.$refs['chartComponent1'][0] && this.$refs['chartComponent1'][0].getData();
         },
         drewChart2() {
-            let params = {
-                accountTeamNo: this.currentAccountGroupId,
-                custId: this.currentCustIds.join(','),
-                statTimeBegin: '2018-02-02',
-                endTimeEnd: '2018-02-02',
-                contrCode: '111'
-            };
-            getChart2Data(params).then(resp => {
-                console.log(resp);
-            });
-            let {qtty, mainData} = resData2;
-            let series = [];
-            let date = [];
-            Object.keys(mainData).forEach(v => {
-                series.push({
-                    name: v,
-                    type: 'bar',
-                    barMaxWidth: '45',
-                    stack: '总量',
-                    markLine: { // 标记线设置
-                        lineStyle: {
-                            normal: {
-                                type: 'dashed',
-                                color: '#ec0000'
-                            }
-                        },
-                        label: {
-                            position: 'middle',
-                            formatter: params => {
-                                return `超仓线：${params.value}`;
-                            }
-                        },
-                        symbolSize: 0, // 控制箭头和原点的大小、官方默认的标准线会带远点和箭头
-                        data: [ // 设置条标准线——x=10
-                            {yAxis: qtty}
-                        ]
-                    },
-                    data: mainData[v].map(m => { return m.value; })
-                });
-                date = mainData[v].map(m => { return m.date; });
-            });
-            this.chartOptions[1]['legend']['data'] = series.map(m => { return m.name; });
-            this.chartOptions[1]['series'] = series;
-            this.chartOptions[1]['xAxis'][0]['data'] = date;
-            console.log(this.chartOptions[1]);
+            this.$refs['chartComponent2'] && this.$refs['chartComponent2'][0] && this.$refs['chartComponent2'][0].getData();
         },
         drewChart3() {
-            let data = chart3Data;
-            let scatterData = chart3ScatterData;
-            let seriesData = [];
-            let scatterData1 = [];
-            let scatterData2 = [];
-            let date = [];
-            data.forEach(v => {
-                date.push(v.date);
-                seriesData.push(
-                    [v.open, v.close, v.lowest, v.highest, v.date]
-                );
-            });
-            scatterData.forEach(v => {
-                scatterData1.push([v.date, v.highest, v.count1, '卖出', this.currentCustIds]);
-                scatterData2.push([v.date, v.lowest, v.count2, '买入', this.currentCustIds]);
-            });
-            this.chartOptions[2]['series'][0]['data'] = seriesData;
-            this.chartOptions[2]['series'][1]['data'] = scatterData1;
-            this.chartOptions[2]['series'][2]['data'] = scatterData2;
-            this.chartOptions[2]['xAxis']['data'] = date;
-            console.log(this.chartOptions[2]);
+            this.$refs['chartComponent3'] && this.$refs['chartComponent3'][0] && this.$refs['chartComponent3'][0].getData();
         },
         drewChart4() {
-            let data = chart4Data;
-            let lineData = [];
-            let timeData = [];
-            let itemStyleArray = [{
-                normal: {
-                    color: 'green',
-                    opacity: 0.8,
-                    shadowBlur: 10,
-                    shadowOffsetX: 0,
-                    shadowOffsetY: 0,
-                    shadowColor: 'rgba(0, 0, 0, 0.5)'
-                }
-            }, {
-                normal: {
-                    color: 'red',
-                    opacity: 0.8,
-                    shadowBlur: 10,
-                    shadowOffsetX: 0,
-                    shadowOffsetY: 0,
-                    shadowColor: 'rgba(0, 0, 0, 0.5)'
-                }
-            }];
-            data.forEach(v => {
-                timeData.push(v.time);
-                lineData.push(v.price);
-            });
-            this.chartOptions[3]['series'][0]['data'] = lineData;
-            itemStyleArray.forEach((f, i) => {
-                this.chartOptions[3]['series'].push({
-                    name: `账户号${i}`,
-                    type: 'scatter',
-                    symbol: 'triangle',
-                    symbolSize: 10,
-                    itemStyle: f,
-                    data: data.map(d => {
-                        return [d.time, d.price + i * 8, d.count, d.type, i];
-                    }),
-                    smooth: true,
-                    lineStyle: {
-                        normal: {opacity: 0.5}
-                    }
-                });
-            });
-            this.chartOptions[3]['xAxis']['data'] = timeData;
-            console.log(this.chartOptions[3]);
+            this.$refs['chartComponent4'] && this.$refs['chartComponent4'][0] && this.$refs['chartComponent4'][0].getData();
         }
     },
     mounted() {
         this.resData1 = this.$store.getters.sceneCommitResp;
-        this.initPage();
+        this.sceneCommitParams = this.$store.getters.sceneCommitParams;
     }
 };
 </script>

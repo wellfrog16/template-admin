@@ -37,8 +37,6 @@ export default {
         initChart(mark) {
             let myChart = document.getElementById(this.domId);
             this.echart = this.$echarts.init(myChart, this.theme);
-            console.log(this.echart);
-            console.log('**********');
             // this.echart.dispatchAction({
             //   type: 'restore'
             // })
