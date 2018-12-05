@@ -5,7 +5,8 @@
 </template>
 <script>
 import EchartsCommon from '@/components/index/common/EchartsCommon';
-import {chart3ScatterData} from './constants';
+import {getChart3Data} from '@/api/dataAnsis/assoAccountGroupMerge';
+// import {respData3} from './constants';
 export default {
     components: {EchartsCommon},
     props: {
@@ -76,16 +77,14 @@ export default {
                             return schema.map((v, i) => {
                                 return v.text + ': ' + param.value[i === 0 ? 5 : i];
                             }).join('<br>');
-                        } else if (param.seriesIndex === 1) {
+                        } else if (param.seriesIndex === 1 || param.seriesIndex === 2) {
                             return param.value[4].map(v => {
                                 return `
-                        客户编号： ${param.value[4]}<br>
-                        ${param.value[3]}笔数： ${param.value[2]}<br>
-                        ${param.value[3]}数量 ${param.value[2]}<br>
-                    `;
+                                    交易日: ${param.value[0]}<br>
+                                    客户编号: ${v}<br>
+                                    ${param.value[2]}数量: ${param.value[3]}<br>
+                                `;
                             }).join('<br>');
-                        } else if (param.seriesIndex === 2) {
-
                         }
                     }
                 },
@@ -133,14 +132,14 @@ export default {
                 dataZoom: [
                     {
                         type: 'inside',
-                        start: 50,
+                        start: 90,
                         end: 100
                     },
                     {
                         show: true,
                         type: 'slider',
                         y: '90%',
-                        start: 50,
+                        start: 90,
                         end: 100,
                     }
                 ],
@@ -148,9 +147,9 @@ export default {
                     {
                         left: 'right',
                         top: '3%',
-                        dimension: 2,
+                        dimension: 3,
                         min: 0,
-                        max: 50,
+                        max: 20,
                         itemHeight: 80,
                         itemWidth: 10,
                         calculable: true,
@@ -183,9 +182,9 @@ export default {
                         inverse: true,
                         textGap: 5,
                         bottom: '24%',
-                        dimension: 2,
+                        dimension: 3, // 注意：对应映射索引
                         min: 0,
-                        max: 50,
+                        max: 20,
                         seriesIndex: 2,
                         itemHeight: 80,
                         itemWidth: 10,
@@ -340,37 +339,44 @@ export default {
     },
     methods: {
         getData() {
+            // this.initChart(respData3);
             this.loading = true;
-            this.loading = false;
-            let tableData = [
-                {date: '2012-01-01', 20180000005: {a: 1, b: 2}}
-            ];
-            let scatterData = chart3ScatterData;
+            let params = this.commonReqParams;
+            getChart3Data(params).then(resp => {
+                this.loading = false;
+                console.log(resp);
+                this.initChart(resp);
+            }).catch(e => {
+                this.loading = false;
+                console.error(e);
+            });
+        },
+        initChart(resp) {
+            let {mainData, tableData} = resp;
             let seriesData = [];
             let scatterData1 = [];
             let scatterData2 = [];
             let date = [];
-            chart3ScatterData.forEach(v => {
-                date.push(v.date);
+            mainData.forEach(v => {
+                date.push(v.txDt);
                 seriesData.push(
-                    [v.open, v.close, v.lowest, v.highest, v.date]
+                    [v.openQuotPrice, v.closeQuotPrice, v.lowestPrice, v.highestPrice, v.txDt]
                 );
             });
-            scatterData.forEach(v => {
-                scatterData1.push([v.date, v.highest, v.count1, '卖出', this.currentCustIds]);
-                scatterData2.push([v.date, v.lowest, v.count2, '买入', this.currentCustIds]);
+            mainData.forEach(v => {
+                scatterData1.push([v.txDt, (v.highestPrice + 20), '卖出', v.sellAcctCnt, this.currentCustIds]);
+                scatterData2.push([v.txDt, (v.lowestPrice - 20), '买入', v.buyAcctCnt, this.currentCustIds]);
             });
             this.chartOptions['series'][0]['data'] = seriesData;
             this.chartOptions['series'][1]['data'] = scatterData1;
             this.chartOptions['series'][2]['data'] = scatterData2;
             this.chartOptions['xAxis']['data'] = date;
             console.log(this.chartOptions);
-            this.initChart();
-            this.$emit('updateTableData', tableData, this.index);
-            this.$emit('drewChart4');
-        },
-        initChart() {
-            this.$refs['chart2'].initChart();
+            this.$emit('updateTableData', tableData.slice(0, 101), this.index);
+            this.$refs['chart2'] && this.$refs['chart2'].initChart();
+            this.$nextTick(() => {
+                this.$emit('drewChart4');
+            });
         },
         handleEchartClickEvent(val) {
             this.$emit('handleEchartClickEvent', val, this.index);

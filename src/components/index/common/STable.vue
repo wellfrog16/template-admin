@@ -185,41 +185,7 @@ export default {
             return this.tableData;
         },
         newColumns() {
-            let columnsArr = [];
-            for (let key of this.refreshColumns) {
-                if (key.isActive === undefined || key.isActive) {
-                    key.isActive = true;
-                    columnsArr.push(key);
-                }
-            }
-            return columnsArr;
-        }
-    },
-    watch: {
-        columns: {
-            handler() {
-                this.refreshColumns = this.columns;
-            },
-            immediate: true,
-            deep: true
-        },
-        newData: {
-            handler() {
-                if (this.isPageination && this.uniqueKey) {
-                    for (let key of this.allMultipleSelection) {
-                        let index = this.newData.findIndex(item => {
-                            return item[this.uniqueKey] === key[this.uniqueKey];
-                        });
-                        if (index !== -1) {
-                            this.$nextTick(function() {
-                                this.$refs.selfTable.toggleRowSelection(this.newData[index]);
-                            });
-                        }
-                    }
-                }
-            },
-            immediate: true,
-            deep: true
+            return this.columns;
         }
     },
     created() {},
