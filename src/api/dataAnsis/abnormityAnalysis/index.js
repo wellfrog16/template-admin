@@ -6,9 +6,13 @@ import {post, requestPrefix} from '@/utils/request';
 //     return get(`${requestPrefix}/result/query`, params);
 // };
 //导入结果集
+// export const postTlsResultInfo = params => {
+//     return post(`${requestPrefix}/result/query`, params);
+// };
 export const postTlsResultInfo = params => {
-    return post(`${requestPrefix}/result/query`, params);
+    return post(`${requestPrefix}/getTlsResultInfo`, {});
 };
+
 // 当选择结果集时的生成报告接口
 export const postExportType = params => {
     return post(`${requestPrefix}/exceptionInfo/resultSet`, params);

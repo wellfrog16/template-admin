@@ -51,7 +51,7 @@
         watch: {},
         //    数据交互  127662
         methods: {
-            barEchartsDete() {
+             barEchartsDete() {
                 // this.barEcharts = barEchartsA.init(document.getElementById('knowledgeAtlas'));
 
                 // this.barEcharts.clear();
@@ -137,6 +137,7 @@
         },
         // 初始化数据
         mounted() {
+            // this.barEchartsDete();
         },
         beforeDestroy() {
         }
