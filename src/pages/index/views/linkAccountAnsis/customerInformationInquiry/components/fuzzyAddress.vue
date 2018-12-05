@@ -49,15 +49,15 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col :xl="8" :lg="8" :md="8" :sm="24">
-                        <el-form-item prop="address" label="地址" label-width="70px">
+                    <el-col :xl="7" :lg="7" :md="7" :sm="24">
+                        <el-form-item prop="address" label="地址" label-width="50px">
                             <el-input clearable size="small" v-model="ruleForm.address"
-                                      style="width: 100%;" class="custom-width">
+                                      style="width: 95%;" class="custom-width">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xl="2" :lg="2" :md="2" :sm="24">
-                        <el-form-item label-width="45px">
+                        <el-form-item label-width="15px">
                             <el-button type="primary" @click="fuzzyAddressClick('ruleForm')">生成报告</el-button>
                         </el-form-item>
                     </el-col>

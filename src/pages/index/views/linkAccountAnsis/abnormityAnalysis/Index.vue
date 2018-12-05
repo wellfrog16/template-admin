@@ -11,7 +11,7 @@
                                         <el-form-item
                                             prop="resultId"
                                             label="导入结果集"
-                                            label-width="140px"
+                                            label-width="100px"
                                             style="display:inline-block; padding: 5px 0;"
                                             :rules="[
                                             {required: String(ruleForm.exportType) === '0', message: '请选择结果集'}
@@ -33,7 +33,7 @@
                                     </el-radio>
                                     <br>
                                     <el-radio label="1">
-                                        <el-form-item prop="fileList" label="导入CSV" label-width="140px"
+                                        <el-form-item prop="fileList" label="导入CSV" label-width="87px"
                                                       style="display:inline-block; padding: 5px 0;"
                                                       :rules="[{
                                                           required: String(ruleForm.exportType) === '1', message: '请上传附件'
@@ -71,8 +71,9 @@
                             </el-form-item>
                         </el-col>
                         <el-col :xl="4" :lg="4" :md="4" :sm="24" class="generate">
-                            <el-form-item label-width="60px">
-                                <el-button type="primary" @click="generateReportsClick('ruleForm')">生成协查报告</el-button>
+                            <el-form-item label-width="20px">
+                                <el-button type="primary"
+                                           @click="generateReportsClick('ruleForm')">生成协查报告</el-button>
                             </el-form-item>
                         </el-col>
                     </el-row>

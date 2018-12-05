@@ -20,7 +20,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :xl="2" :lg="2" :md="2" :sm="24">
-                        <el-form-item label-width="60px">
+                        <el-form-item label-width="200px">
                             <el-button type="primary"
                                        @click="customerTransactionsClick('ruleForm')">生成报告
                             </el-button>
@@ -230,12 +230,12 @@
                 this.loadingCustomerAddress = true;
                 postCustomerTransactions(params).then(resp => {
                     this.loadingCustomerAddress = false;
-                    this.activeNameList[0].tableData = resp.tradeInfoList;
-                    this.activeNameList[1].tableData = resp.tradeInfoDeal;
-                    this.activeNameList[2].tableData = resp.tradeInfoFormList;
-                    this.totalNum[0] = resp.tradeInfoVOListTotal;   // 持仓明细记录总数
-                    this.totalNum[1] = resp.tradeInfoFormVOSTotal;   // 报单明细记录总数
-                    this.totalNum[2] = resp.tradeInfoDealTotal;      // 成交明细记录总数
+                    this.activeNameList[0].tableData = resp.tradeInfoList ? resp.tradeInfoList :this.activeNameList[0].tableData;
+                    this.activeNameList[1].tableData = resp.tradeInfoDeal ? resp.tradeInfoDeal : this.activeNameList[1].tableData;
+                    this.activeNameList[2].tableData = resp.tradeInfoFormList ? resp.tradeInfoFormList : this.activeNameList[2].tableData;
+                    this.totalNum[0] = resp.tradeInfoVOListTotal === 0 ? this.totalNum[0] : resp.tradeInfoVOListTotal;   // 持仓明细记录总数
+                    this.totalNum[1] = resp.tradeInfoFormVOSTotal === 0 ? this.totalNum[1] : resp.tradeInfoFormVOSTotal;   // 报单明细记录总数
+                    this.totalNum[2] = resp.tradeInfoDealTotal === 0 ? this.totalNum[2] : resp.tradeInfoDealTotal;      // 成交明细记录总数
                 })
             }
         },

@@ -26,7 +26,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :xl="2" :lg="2" :md="2" :sm="24">
-                        <el-form-item label-width="60px">
+                        <el-form-item label-width="25px">
                             <el-button type="primary" @click="preciseInformationClick('ruleForm')">生成报告</el-button>
                         </el-form-item>
                     </el-col>

@@ -3,22 +3,12 @@
         <s-card :title="`关系图库`" :icon="`fa fa-user-md`">
             <div slot="content">
                 <el-button size="small" type="primary" @click="clearChartData">erwerw</el-button>
-                <!--<div :class="$style.bar_echarts"-->
-                <!--id="knowledgeAtlas"-->
-                <!--v-loading="chartLoading"-->
-                <!--element-loading-text="数据加载中，请耐心等待..."-->
-                <!--element-loading-background="rgba(0,0,0,0.3)">3524352-->
-                <!--</div>-->
-
-                <div>
-
-                    <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
-                    <div id="main" :class="$style.bar_echarts">
-
-                    </div>
-
+                <div :class="$style.bar_echarts"
+                id="knowledgeAtlas"
+                v-loading="chartLoading"
+                element-loading-text="数据加载中，请耐心等待..."
+                element-loading-background="rgba(0,0,0,0.3)">3524352
                 </div>
-
             </div>
         </s-card>
     </div>
@@ -59,7 +49,7 @@
             },
 
             clearChartData(val) {
-                var myChart = echarts.init(document.getElementById('main'), 'macarons');
+                this.barEcharts = barEchartsA.init(document.getElementById('knowledgeAtlas'));
                 var webkitDep = {
                     "type": "force",
                     "categories": [//关系网类别，可以写多组
@@ -94,14 +84,11 @@
                         {
                             "source": 0,
                             "target": 2
-                        }, {
-                            "source": 0,
-                            "target": 3
                         }
                     ]
                 };
 
-                var option = {
+               var option = {
                     legend: {
                         data: ['人物关系']//此处的数据必须和关系网类别中name相对应
                     },
@@ -128,10 +115,13 @@
                         edges: webkitDep.links
                     }]
                 };
-                myChart.setOption(option);
+                this.barEcharts.setOption(option);
 
-            }
+
+
+            },
         },
+
         // 在一个实例被创建之后执行代码
         created() {
         },
