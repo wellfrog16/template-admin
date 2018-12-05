@@ -5,8 +5,8 @@
 </template>
 <script>
 import EchartsCommon from '@/components/index/common/EchartsCommon';
-// import {getChart2Data} from '@/api/dataAnsis/assoAccountGroupMerge';
-import {resData2} from './constants';
+import {getChart2Data} from '@/api/dataAnsis/assoAccountGroupMerge';
+// import {resData2} from './constants';
 
 export default {
     components: {EchartsCommon},
@@ -64,13 +64,13 @@ export default {
                         show: true,
                         xAxisIndex: [0],
                         bottom: 0,
-                        start: 50,
+                        start: 90,
                         end: 100
                     },
                     {
                         type: 'inside',
                         xAxisIndex: [0],
-                        start: 50,
+                        start: 90,
                         end: 100
                     }
                 ],
@@ -82,16 +82,19 @@ export default {
     methods: {
         getData() {
             this.loading = true;
-            this.loading = false;
-            this.initChart(resData2);
-            // let params = this.commonReqParams;
-            // getChart2Data(params).then(resp => {
-            //     console.log(resp);
-            //     this.initChart(resp);
-            // });
+            // this.initChart(resData2);
+            let params = this.commonReqParams;
+            getChart2Data(params).then(resp => {
+                this.loading = false;
+                console.log(resp);
+                this.initChart(resp);
+            }).catch(e => {
+                this.loading = false;
+                console.error(e);
+            });
         },
         initChart(resData) {
-            let {qtty, mainData} = resData;
+            let {qtty, mainData, tableData} = resData;
             let series = [];
             let date = [];
             Object.keys(mainData).forEach(v => {
@@ -115,7 +118,7 @@ export default {
                         },
                         symbolSize: 0, // 控制箭头和原点的大小、官方默认的标准线会带远点和箭头
                         data: [ // 设置条标准线——x=10
-                            {yAxis: qtty}
+                            {yAxis: qtty || ''}
                         ]
                     },
                     data: mainData[v].map(m => { return m.value; })
@@ -126,8 +129,11 @@ export default {
             this.chartOptions['series'] = series;
             this.chartOptions['xAxis'][0]['data'] = date;
             console.log(this.chartOptions);
-            this.$refs['chart1'].initChart();
-            this.$emit('drewChart3');
+            this.$refs['chart1'] && this.$refs['chart1'].initChart();
+            this.$emit('updateTableData', tableData.slice(0, 101), this.index);
+            this.$nextTick(() => {
+                this.$emit('drewChart4');
+            });
         },
         handleEchartClickEvent(val) {
             this.$emit('handleEchartClickEvent', val, this.index);

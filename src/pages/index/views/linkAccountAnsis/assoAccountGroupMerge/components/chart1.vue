@@ -5,7 +5,7 @@
 </template>
 <script>
 import EchartsCommon from '@/components/index/common/EchartsCommon';
-import {resData1} from './constants';
+// import {resData1} from './constants';
 export default {
     components: {EchartsCommon},
     props: {
@@ -30,7 +30,6 @@ export default {
                 shadowColor: 'rgba(0, 0, 0, 0.5)'
             }
         };
-        let markValue = 1000;
         let symbolSize = data => {
             return data[2] > 40 ? 40 : data[2];
         };
@@ -150,7 +149,7 @@ export default {
                             },
                             symbolSize: 0, // 控制箭头和原点的大小、官方默认的标准线会带远点和箭头
                             data: [ // 设置条标准线——x=10
-                                {xAxis: markValue || 1000}
+                                {xAxis: 5000}
                             ]
                         },
                         markPoint: {
@@ -169,10 +168,8 @@ export default {
     },
     methods: {
         getData() {
-            this.loading = true;
-            this.loading = false;
-            // let resData = this.$store.getters.sceneCommitResp;
-            let resData = resData1;
+            let resData = this.$store.getters.sceneCommitResp;
+            // let resData = resData1;
             this.initChart(resData);
         },
         initChart(resData) {
@@ -202,14 +199,22 @@ export default {
                 v.custIds = index > -1 ? allLeaf[index]['custIds'].join(',') : '';
                 v.id = index > -1 ? allLeaf[index]['id'] : '';
             });
+            // let selectMax = _.max(chartData, v => {
+            //     return v.custQtty
+            // })
             this.chartOptions['series'][0]['data'] = chartData.map(v => {
                 return [v.acctGroOpenInt, v.acctGroAvgRela, v.custQtty, v.acctId, v.contrCd, v.custIds, v.id];
             });
             console.log(this.chartOptions);
             this.$emit('updateTableData', chartData, this.index);
             this.$emit('updateMainTableData', mainTableData, this.index);
-            this.$refs['chart0'].initChart();
-            this.$emit('drewChart2');
+            // select max
+            this.$emit('updateAccountGroupAndCustIds', 'XG000001', ['80001716', '80000025', '80001461']);
+            this.$refs['chart0'] && this.$refs['chart0'].initChart();
+            this.$nextTick(() => {
+                this.$emit('drewChart2');
+                this.$emit('drewChart3');
+            });
         },
         handleEchartClickEvent(val) {
             this.$emit('handleEchartClickEvent', val, this.index);

@@ -176,7 +176,7 @@ export default {
                 fileList: [],
                 exportType: '',
                 resultId: 'AA0001',
-                customNoArray: [],
+                customNoArray: ['80004448', '80010237'],
                 contractCode: 'cu1712',
                 area: '9',
                 selectDateRange: [new Date(moment().subtract(1, 'months').format('YYYY-MM-DD')), new Date(moment().subtract(1, 'days').format('YYYY-MM-DD'))]
@@ -333,12 +333,12 @@ export default {
             this.$router.push({name: 'assoAccountGroupMerge'});
         },
         handleNextStep() {
-            // let cityIds = this.$refs['tree-components'].getCheckedList().map(v => {
-            //     return v.id;
-            // });
+            let cityIds = this.$refs['tree-components'].getCheckedList().map(v => {
+                return v.id;
+            });
             let params = {
                 exportType: this.ruleForm.exportType,
-                cityIds: '80',
+                cityIds: cityIds.join(','),
                 contrCd: this.ruleForm.contractCode,
                 statStartDt: moment(this.ruleForm.selectDateRange[0]).format('YYYY-MM-DD'),
                 statStopDay: moment(this.ruleForm.selectDateRange[1]).format('YYYY-MM-DD'),

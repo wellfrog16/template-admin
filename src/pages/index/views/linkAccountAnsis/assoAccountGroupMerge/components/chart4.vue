@@ -5,7 +5,7 @@
 </template>
 <script>
 import EchartsCommon from '@/components/index/common/EchartsCommon';
-import {chart4Data} from './constants';
+import {respData4} from './constants';
 export default {
     components: {EchartsCommon},
     props: {
@@ -58,14 +58,14 @@ export default {
                 dataZoom: [
                     {
                         type: 'inside',
-                        start: 50,
+                        start: 90,
                         end: 100
                     },
                     {
                         show: true,
                         type: 'slider',
                         y: '90%',
-                        start: 50,
+                        start: 90,
                         end: 100,
                     }
                 ],
@@ -84,44 +84,57 @@ export default {
         getData() {
             this.loading = true;
             this.loading = false;
-            let tableData = [];
-            let data = chart4Data;
+            let {mainData, tableData, buy, sail} = respData4;
             let lineData = [];
             let timeData = [];
-            let itemStyleArray = [{
-                normal: {
-                    color: 'green',
-                    opacity: 0.8,
-                    shadowBlur: 10,
-                    shadowOffsetX: 0,
-                    shadowOffsetY: 0,
-                    shadowColor: 'rgba(0, 0, 0, 0.5)'
-                }
-            }, {
-                normal: {
-                    color: 'red',
-                    opacity: 0.8,
-                    shadowBlur: 10,
-                    shadowOffsetX: 0,
-                    shadowOffsetY: 0,
-                    shadowColor: 'rgba(0, 0, 0, 0.5)'
-                }
-            }];
-            data.forEach(v => {
+            let colors = [];
+            let itemStyleCommon = i => {
+                return {
+                    normal: {
+                        color: colors[i],
+                        opacity: 0.8,
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowOffsetY: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                };
+            };
+            mainData.forEach(v => {
                 timeData.push(v.time);
                 lineData.push(v.price);
             });
             this.chartOptions['series'][0]['data'] = lineData;
-            itemStyleArray.forEach((f, i) => {
-                this.chartOptions['series'].push({
-                    name: `账户号${i}`,
+            let series = this.chartOptions['series'];
+            Object.keys(buy).forEach((v, i) => {
+                let data = buy[v].map(m => {
+                    return [m.time, m.price - (i + 1) * 2, m.count, '买入', v];
+                });
+                series.push({
+                    name: `${v}`,
                     type: 'scatter',
                     symbol: 'triangle',
                     symbolSize: 10,
-                    itemStyle: f,
-                    data: data.map(d => {
-                        return [d.time, d.price + (i + 1) * 8, d.count, d.type, i];
-                    }),
+                    itemStyle: itemStyleCommon(i),
+                    data: data,
+                    smooth: true,
+                    lineStyle: {
+                        normal: {opacity: 0.5}
+                    }
+                });
+            });
+            Object.keys(sail).forEach((v, i) => {
+                let data = sail[v].map(m => {
+                    return [m.time, m.price + (i + 1) * 2, m.count, '卖出', v];
+                });
+                series.push({
+                    name: `${v}`,
+                    type: 'scatter',
+                    symbol: 'triangle',
+                    symbolRotate: 180,
+                    symbolSize: 10,
+                    itemStyle: itemStyleCommon(i),
+                    data: data,
                     smooth: true,
                     lineStyle: {
                         normal: {opacity: 0.5}
@@ -129,12 +142,14 @@ export default {
                 });
             });
             this.chartOptions['xAxis']['data'] = timeData;
+            this.chartOptions['series'] = series;
             console.log(this.chartOptions);
+            console.log(4444444444);
             this.initChart();
             this.$emit('updateTableData', tableData, this.index);
         },
         initChart() {
-            this.$refs['chart3'].initChart();
+            this.$refs['chart3'] && this.$refs['chart3'].initChart();
         },
         handleEchartClickEvent(val) {
             this.$emit('handleEchartClickEvent', val, this.index);

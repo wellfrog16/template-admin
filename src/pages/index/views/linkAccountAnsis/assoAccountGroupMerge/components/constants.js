@@ -650,15 +650,15 @@ export const chartTableColumns1 = [
     {field: 'custIds', label: '子账户编号', minWidth: 130}
 ];
 export const chartTableColumns2 = [
-    {label: '账户组编号', field: '', minWidth: 130},
-    {label: '子账户编号', field: '', minWidth: 130},
-    {label: '交易日', field: '', minWidth: 100},
-    {label: '合约代码', field: '', minWidth: 100},
-    {label: '当前净持仓量', field: '', minWidth: 140},
-    {label: '当前净持仓金额', field: '', minWidth: 150},
-    {label: '账户组净持仓量', field: '', minWidth: 150},
-    {label: '空单净持仓量', field: '', minWidth: 140},
-    {label: '多单净持仓量', field: '', minWidth: 140}
+    {label: '账户组编号', field: 'acctId', minWidth: 130},
+    {label: '子账户编号', field: 'custId', minWidth: 130},
+    {label: '交易日', field: 'txDay', minWidth: 100},
+    {label: '合约代码', field: 'contrCd', minWidth: 100},
+    {label: '当前净持仓量', field: 'acctNetOpenInt', minWidth: 140},
+    {label: '当前净持仓金额', field: 'posLimQtty', minWidth: 150},
+    {label: '账户组净持仓量', field: 'acctGroNetOpenInt', minWidth: 150},
+    {label: '空单净持仓量', field: 'nuBillOpenInt', minWidth: 140},
+    {label: '多单净持仓量', field: 'multiBillOpenInt', minWidth: 140}
 ];
 export const chartTableColumns3 = [
     {label: '账户组编号', field: '', minWidth: 130},
@@ -935,34 +935,75 @@ export const resData2 = {
             {date: '2018-11-04', value: '1122'},
             {date: '2018-11-05', value: '1122'},
         ]
-    }
+    },
+    tableData: [{
+        acctGroNetOpenInt: 193496715,
+        acctId: 'XG00001',
+        acctNetOpenInt: -2573,
+        contrCd: 'cu1712',
+        custId: '80000025',
+        multiBillOpenInt: 0,
+        nuBillOpenInt: 2573,
+        posLimQtty: 10000,
+        txDay: '2017-02-19'
+    }]
 };
 export const table3Options = [
-    {label: '买入量', field: 'a', minWidth: 100},
-    {label: '卖出量', field: 'b', minWidth: 100},
-    {label: '多头持仓量', field: 'c', minWidth: 130},
-    {label: '多头持仓量', field: '', minWidth: 130},
-    {label: '盈亏', field: '', minWidth: 90},
-    {label: '净买入量', field: '', minWidth: 100},
-    {label: '净持仓量', field: '', minWidth: 100}
+    {label: '买入量', field: 'buyCnt', minWidth: 100},
+    {label: '卖出量', field: 'sellCnt', minWidth: 100},
+    {label: '多头持仓量', field: 'longPosOpenInt', minWidth: 130},
+    {label: '多头持仓金额', field: '', minWidth: 130},
+    {label: '盈亏', field: 'prftLoss', minWidth: 90},
+    {label: '净买入量', field: 'netBuyQtty', minWidth: 100},
+    {label: '净持仓量', field: 'netOpenInt', minWidth: 100}
 ];
-export const chart3Data = [
-    {date: '2013-01-02', open: '2320.26', close: '2320.26', highest: '2987.3', lowest: '2362.94'},
-    {date: '2013-01-03', open: '2300', close: '2300', highest: '2288.26', lowest: '2288.26'},
-    {date: '2013-01-04', open: '2288.26', close: '2320.26', highest: '2400', lowest: '2362.94'},
-    {date: '2013-01-05', open: '2300', close: '2288.26', highest: '2420.26', lowest: '2362.94'},
-    {date: '2013-01-06', open: '2300', close: '2362.94', highest: '2588.26', lowest: '2320.26'},
-];
-export const chart3ScatterData = [
-    {date: '2013-01-02', open: '2320.26', close: '2320.26', highest: '2987.3', lowest: '2362.94', count1: 3, count2: 22},
-    {date: '2013-01-03', open: '2300', close: '2300', highest: '2288.26', lowest: '2288.26', count1: 2, count2: 3},
-    {date: '2013-01-04', open: '2288.26', close: '2320.26', highest: '2400', lowest: '2362.94', count1: 6, count2: 9},
-    {date: '2013-01-05', open: '2300', close: '2288.26', highest: '2420.26', lowest: '2362.94', count1: 32, count2: 2},
-    {date: '2013-01-06', open: '2300', close: '2362.94', highest: '2588.26', lowest: '2320.26', count1: 9, count2: 4},
-];
-export const chart4Data = [
-    {time: '12:29', price: 123, count: 1, type: '买入量'},
-    {time: '12:30', price: 111, count: 4, type: '卖出量'},
-    {time: '12:31', price: 103, count: 11, type: '卖出量'},
-    {time: '12:32', price: 130, count: 8, type: '卖出量'},
-];
+export const respData3 = {
+    mainData: [
+        {txDt: '2013-01-02', openQuotPrice: '2320.26', closeQuotPrice: '2320.26', highestPrice: '2987.3', lowestPrice: '2362.94', sellAcctCnt: 3, buyAcctCnt: 22},
+        {txDt: '2013-01-03', openQuotPrice: '2300', closeQuotPrice: '2300', highestPrice: '2288.26', lowestPrice: '2288.26', sellAcctCnt: 2, buyAcctCnt: 3},
+        {txDt: '2013-01-04', openQuotPrice: '2288.26', closeQuotPrice: '2320.26', highestPrice: '2400', lowestPrice: '2362.94', sellAcctCnt: 6, buyAcctCnt: 9},
+        {txDt: '2013-01-05', openQuotPrice: '2300', closeQuotPrice: '2288.26', highestPrice: '2420.26', lowestPrice: '2362.94', sellAcctCnt: 32, buyAcctCnt: 2},
+        {txDt: '2013-01-06', openQuotPrice: '2300', closeQuotPrice: '2362.94', highestPrice: '2588.26', lowestPrice: '2320.26', sellAcctCnt: 9, buyAcctCnt: 4},
+    ],
+    tableData: [
+        {
+            date: '2017-04-14',
+            map: {
+                80000025: {
+                    acctId: '11111',
+                    buyCnt: '11111',
+                    buyQtty: '11111',
+                    contrCd: '11111',
+                    custId: '11111',
+                    longPosOpenInt: '11111',
+                    netBuyQtty: '11111',
+                    netOpenInt: '11111',
+                    prftLoss: '11111',
+                    sellCnt: '11111',
+                    sellQtty: '11111',
+                    shortPosOpenInt: '11111',
+                    txDay: '11111'
+                }
+            }
+        }
+    ]
+};
+export const respData4 = {
+    mainData: [
+        {time: '12:09', price: 12},
+        {time: '12:19', price: 22}
+    ],
+    buy: {
+        20189898: [{time: '12:09', price: 12, count: 3}, {time: '12:19', price: 22, count: 9}],
+        20189897: [{time: '12:09', price: 12, count: 3}, {time: '12:19', price: 22, count: 9}],
+        20189896: [{time: '12:09', price: 12, count: 3}, {time: '12:19', price: 22, count: 9}],
+    },
+    sail: {
+        20189898: [{time: '12:09', price: 12, count: 3}, {time: '12:19', price: 22, count: 9}],
+        20189897: [{time: '12:09', price: 12, count: 3}, {time: '12:19', price: 22, count: 9}],
+        20189896: [{time: '12:09', price: 12, count: 3}, {time: '12:19', price: 22, count: 9}],
+    },
+    tableData: [
+        {a: 1, b: 2}
+    ]
+};

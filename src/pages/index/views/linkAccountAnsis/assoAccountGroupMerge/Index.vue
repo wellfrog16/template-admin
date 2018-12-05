@@ -2,7 +2,7 @@
     <div class="asso-account-group-merge">
         <div class="top-nav">
             <el-tabs type="card" v-model="activeTab" @tab-click="handleTabClick">
-                <el-tab-pane v-for="(item, index) in tabs" :key="index" :name="item.name" :label="item.label">
+                <el-tab-pane v-for="(item, index) in tabs" :key="index" :name="String(index)" :label="item.label || item">
                 </el-tab-pane>
             </el-tabs>
             <div class="tabs-button">
@@ -12,7 +12,7 @@
                 </el-row>
             </div>
         </div>
-        <div v-if="activeTab==='0'">
+        <div v-if="activeTab==='0' || !sceneNameList.length">
             <el-row :gutter="10">
                 <el-col :span="12" v-for="(item, index) in charts" :key="index">
                     <s-card :title="item.title" :icon="item.icon" class="self-card-css">
@@ -29,8 +29,8 @@
                                 <s-table :height="index === 2 ? 268 : 300" :columns="chartTableColumns[index]" :tableData="chartTableData[index]"></s-table>
                             </div>
                             <div v-show="!item['toggleDetailFlags']">
-                                <chart1 :ref="`chartComponent${index + 1}`" v-if="index === 0" :childrenMap="childrenMap" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData" @updateMainTableData="updateMainTableData" @drewChart2="drewChart2"></chart1>
-                                <chart2 :ref="`chartComponent${index + 1}`" v-if="index === 1" :commonReqParams="commonReqParams()" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData" @drewChart3="drewChart3"></chart2>
+                                <chart1 :ref="`chartComponent${index + 1}`" v-if="index === 0" :childrenMap="childrenMap" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData" @updateMainTableData="updateMainTableData" @updateAccountGroupAndCustIds="updateAccountGroupAndCustIds" @drewChart2="drewChart2"  @drewChart3="drewChart3"></chart1>
+                                <chart2 :ref="`chartComponent${index + 1}`" v-if="index === 1" :commonReqParams="commonReqParams()" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData" @drewChart4="drewChart4"></chart2>
                                 <chart3 :ref="`chartComponent${index + 1}`" v-if="index === 2" :commonReqParams="commonReqParams()" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData" @drewChart4="drewChart4"></chart3>
                                 <chart4 :ref="`chartComponent${index + 1}`" v-if="index === 3" :commonReqParams="commonReqParams()" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData"></chart4>
                             </div>
@@ -40,7 +40,7 @@
                 </el-col>
             </el-row>
             <div class="main-table">
-                <s-card title="账户组信息" icon="el-icon-edit">
+                <s-card title="账户组信息" icon="el-icon-edit" :minHeight="300">
                     <div slot="right">
                         <el-input class="search-input" size="mini" placeholder="请输入账户组或客户编号" v-model="searchText">
                             <i class="el-icon-search" slot="prefix" style="margin-left:4px; cursor: pointer;"></i>
@@ -93,21 +93,7 @@ export default {
     watch: {
         currentCustIds: {
             handler(val) {
-                this.chartTableColumns[2] = val.map(v => {
-                    return {
-                        'label': v,
-                        'field': v,
-                        'minWdith': 120,
-                        'formatter': item => {
-                            return item[v] ? item[v][this.table3CurrentType] : '';
-                        }
-                    };
-                });
-                this.chartTableColumns[2].unshift({
-                    'label': '交易日',
-                    'field': 'date',
-                    'minWdith': 120
-                });
+                this.createChart3Columnn(val);
             },
             deep: true
         }
@@ -137,19 +123,30 @@ export default {
             mainTableData: [],
             currentAccountGroupId: '',
             currentCustIds: [], // 当前账户组下的客户号
-            table3CurrentType: 'a',
+            table3CurrentType: 'buyCnt',
             childrenMap: {} // 账户组id和子客户号id的maping
         };
+    },
+    computed: {
+        sceneNameList() {
+            return this.sceneCommitParams.sceneNames ? this.sceneCommitParams.sceneNames.split(',') : [];
+        }
     },
     methods: {
         selectResultId(val) {
             this.resultIds = val;
         },
+        updateAccountGroupAndCustIds(groupId, custIds) {
+            this.currentAccountGroupId = groupId;
+            this.currentCustIds = custIds;
+        },
         updateMainTableData(val) {
             this.mainTableData = val;
         },
         updateTableData(value, index) {
-            console.log(this.chartTableData[2]);
+            if (index === 2) {
+                this.createChart3Columnn(this.currentCustIds);
+            }
             this.chartTableData[index] = value;
         },
         updateCheckedList(checkedNodes, checkedKeys) {
@@ -201,12 +198,12 @@ export default {
             case '0':
                 this.currentAccountGroupId = params['data'][6];
                 this.currentCustIds = params.data[5].split(',');
-
                 this.drewChart2();
+                this.drewChart3();
                 // get chart2
                 break;
             case '1':
-                this.drewChart3();
+                this.drewChart4();
                 // get chart3
                 break;
             case '2':
@@ -321,9 +318,9 @@ export default {
         commonReqParams() {
             return {
                 accountTeamNo: this.currentAccountGroupId || 'XG00001',
-                custId: this.currentCustIds.join(',') || '20180001716,20180000025,20180001461',
+                custId: this.currentCustIds.join(',') || '80001716,80000025,80001461',
                 statTimeBegin: this.sceneCommitParams.statStartDt || '2017-02-20',
-                endTimeEnd: this.sceneCommitParams.statStopDay || '2017-10-09',
+                statTimeEnd: this.sceneCommitParams.statStopDay || '2017-10-09',
                 contrCode: this.sceneCommitParams.contrCd || 'cu1712'
             };
         },
@@ -338,11 +335,32 @@ export default {
         },
         drewChart4() {
             this.$refs['chartComponent4'] && this.$refs['chartComponent4'][0] && this.$refs['chartComponent4'][0].getData();
+        },
+        createChart3Columnn(val) {
+            let chart3Column = val.map(v => {
+                return {
+                    'label': v,
+                    'field': v,
+                    'minWdith': 120,
+                    'formatter': item => {
+                        item = item.map;
+                        return item[v] ? item[v][this.table3CurrentType] : '';
+                    }
+                };
+            });
+            chart3Column.unshift({
+                'label': '交易日',
+                'field': 'date',
+                'minWdith': 120
+            });
+            this.chartTableColumns.splice(2, 1, chart3Column);
         }
     },
     mounted() {
         this.resData1 = this.$store.getters.sceneCommitResp;
         this.sceneCommitParams = this.$store.getters.sceneCommitParams;
+        // test
+        this.drewChart4();
     }
 };
 </script>
