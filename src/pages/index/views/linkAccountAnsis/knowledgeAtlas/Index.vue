@@ -21,29 +21,43 @@
 
             </div>
         </s-card>
+        <group-infor></group-infor>
+        </div>
     </div>
 
 </template>
 <script>
     import barEchartsA from 'echarts';
-
     export default {
         name: "Index",
         // 父传子！
         props: {},
 
         components: {
-            SCard: () => import('@/components/index/common/SCard'),               // 边框
+            groupInfor: () => import('../knowledgeAtlas/components/groupaddInformation'),
+            SCard: () => import('@/components/index/common/SCard'),  // 边框
+            UploadFileToServer: () => '@/components/index/common/UploadFileToServer',  // 导入CSV
         },
         // 混入, 是一个类的继承，类似于一个公共的方法。
         mixins: [],
         // 存储数据
         data() {
             return {
+
                 chartLoading: false,
-                // chartOptions: {
-                //
-                // }
+
+
+
+                chartOptions: {
+                    backgroundColor: ['rgba(7, 39, 89)'],
+                    title: {
+                        text: '知识图库',
+                        subtext: 'Default layout',
+                        top: 'top',
+                        left: 'left'
+                    },
+                    tooltip: {},
+                }
             };
         },
         // 计算属性
@@ -51,13 +65,13 @@
         watch: {},
         //    数据交互  127662
         methods: {
+            clearChartData(){},
              barEchartsDete() {
                 // this.barEcharts = barEchartsA.init(document.getElementById('knowledgeAtlas'));
 
                 // this.barEcharts.clear();
 
             },
-
             clearChartData(val) {
                 var myChart = echarts.init(document.getElementById('main'), 'macarons');
                 var webkitDep = {
@@ -70,19 +84,35 @@
                         }
                     ],
                     "nodes": [//展示的节点
+
                         {
-                            "name": "刘烨",//节点名称
-                            "value": 3,
+                            "name": "XG0001",//节点名称
+                            "id": 0,
                             "category": 0//与关系网类别索引对应，此处只有一个关系网所以这里写0
                         },
                         {
-                            "name": "霓娜",
-                            "value": 1,
+                            "name": "XG0002",
+                            "id": 1,
                             "category": 0
                         },
                         {
-                            "name": "诺一",
-                            "value": 1,
+                            "name": "XG0003",
+                            "id": 2,
+                            "category": 0
+                        },
+                        {
+                            "name": "XG0004",
+                            "id": 3,
+                            "category": 0
+                        },
+                        {
+                            "name": "XG0005",
+                            "id": 4,
+                            "category": 0
+                        },
+                        {
+                            "name": "XG0006",
+                            "id": 5,
                             "category": 0
                         }
                     ],
@@ -95,10 +125,20 @@
                             "source": 0,
                             "target": 2
                         }, {
-                            "source": 0,
+                            "source": 1,
+                            "target": 2
+                        }, {
+                            "source": 1,
                             "target": 3
+                        }, {
+                            "source": 1,
+                            "target": 4
+                        }, {
+                            "source": 3,
+                            "target": 5
                         }
-                    ]
+                    ],
+
                 };
 
                 var option = {
@@ -130,7 +170,8 @@
                 };
                 myChart.setOption(option);
 
-            }
+            },
+
         },
         // 在一个实例被创建之后执行代码
         created() {
@@ -147,7 +188,7 @@
     .knowledge_atlas {
         color: #13ce66;
         .bar_echarts {
-            height: 600px;
+            height: 300px;
         }
     }
 

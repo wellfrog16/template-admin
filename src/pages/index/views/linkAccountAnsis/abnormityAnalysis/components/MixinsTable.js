@@ -131,17 +131,15 @@ export default {
                         show: true,       // 是否显示
                         xAxisIndex: [0],
                         bottom: 0,
-                        start: 92,     // 伸缩条开始位置（1-100），可以随时更改
+                        start: 99,     // 伸缩条开始位置（1-100），可以随时更改
                         end: 100       // 伸缩条结束位置（1-100），可以随时更改
                     },
                     {
                         type: 'inside',    // 鼠标滚轮
                         xAxisIndex: [0],
                         left: '93%',
-                        start: 92,     // 伸缩条开始位置（1-100），可以随时更改
+                        start: 99,     // 伸缩条开始位置（1-100），可以随时更改
                         end: 100       // 伸缩条结束位置（1-100），可以随时更改
-                        // start: 29,
-                        // end: 36
                     }
                 ],
             }
@@ -175,12 +173,11 @@ export default {
                         {
                             ...{
                                 name: v,
-                                //
                                 data: mainData[v].map(m => {
                                     // 超仓分析
                                     // 频繁报撤销单分析
                                     // 自成交分析
-                                    return m.netMarkPosQtty || m.acctBillCnt || m.bargainCnt;
+                                    return m.netMarkPosQtty || m.acctBillCnt || m.bargainCnt || 0;
                                 })
                             }, ...basicOptions
                         }

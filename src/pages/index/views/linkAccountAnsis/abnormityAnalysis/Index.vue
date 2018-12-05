@@ -304,7 +304,6 @@
         .el-form {
             color: #fff;
         }
-
         .generate {
             position: relative;
             top: -50px;

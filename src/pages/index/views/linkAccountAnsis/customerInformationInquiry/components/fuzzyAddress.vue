@@ -8,7 +8,8 @@
                         <el-form-item prop="nationy" label="国家：" label-width="70px">
                             <el-select style="width: 100%;"
                                 v-model="ruleForm.nationy"
-                                class="custom-width" clearable size="small"
+                                class="custom-width"
+                                size="small"
                                 placeholder="请选择国家">
                                 <el-option
                                     v-for="items in nationyOptions"
@@ -24,6 +25,7 @@
                             <el-select style="width: 100%;"
                                 v-model="ruleForm.province"
                                 class="custom-width" clearable size="small"
+
                                 placeholder="请选择省">
                                 <el-option
                                     v-for="item in provinceOptions"
@@ -123,10 +125,6 @@
                     address: '',         // 地址   玉田新村105号101室
                 },
                 rules: {
-                    nationy: {
-                        required: true,
-                        message: '请选择国家'
-                    },
                     address: {
                         required: true,
                         message: '请输入详细地址'
@@ -153,7 +151,9 @@
                     this.cityOptions = [];  // 市
                 })
             },
-
+            proviceChenge(val){
+                console.log(this.ruleForm.province);
+            },
             // 模糊地址查询清除数据
             fuzzyClearClick() {
                 this.tableData4 = [];

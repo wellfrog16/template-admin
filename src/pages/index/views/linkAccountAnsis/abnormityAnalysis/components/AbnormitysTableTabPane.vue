@@ -208,7 +208,6 @@
             },
             // 跳转页面
             jumpHref(val) {
-                console.log(val);
                 let custIdParams = "custId=" + val;
                 let dp = '#/customerInformationInquiry?';
                 window.open(dp + custIdParams)

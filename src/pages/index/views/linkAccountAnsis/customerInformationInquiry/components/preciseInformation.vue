@@ -86,7 +86,7 @@
                 rules: {
                     indexSelection: {
                         required: true,
-                        message: '请输入合约代码'
+                        message: '请选择指标选择'
                     }
                 }
             }

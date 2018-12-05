@@ -13,7 +13,7 @@ export const columnsCTrI1 = [
     {field: "sex", label: "性别", width: '200', align: ''},
     {field: "birthdt", label: "出生日期", width: '200', align: ''},
     {field: "localTaxid", label: "当地纳税号", width: '200', align: ''},
-    {field: "localSocialsecurityid", label: "当地", width: '200', align: ''},
+    {field: "localSocialsecurityid", label: "当地社保ID", width: '200', align: ''},
     {field: "localId", label: "当地身份证号", width: '250', align: ''},
     {field: "licenceid", label: "驾照号", width: '200', align: ''},
     {field: "hkMacaoPass", label: "港澳居民来往内地通行证", width: '250', align: ''},
@@ -42,7 +42,6 @@ export const columnsCTrI1 = [
 
 // 精确信息查询
 export const columnsCTrI3 = [
-    {field: "acctNum1", label: "精确信息查询", width: '200', align: ''},
     {field: "custId", label: "客户号", width: '200', align: ''},
     {field: "custName", label: "客户名称", width: '200', align: ''},
     {field: "custType", label: "客户类型", width: '200', align: ''},
