@@ -14,7 +14,7 @@
             <div :class="[$style.bread_css]" :style="{'left': width, 'width': `calc(100% - ${width})`}">
                 <s-breadbreadcrumb :breadcrumbList="menuData"></s-breadbreadcrumb>
             </div>
-            <div :class="[$style.maicontainersn]" :style=" {'width': `calc(100% - ${width})`}">
+            <div :class="[$style.maicontainersn]" :style=" {'width': `calc(100% - ${width})`}" id="main-container">
                 <el-main>
                     <router-view/>
                     <!-- <bottom-operate-button></bottom-operate-button> -->

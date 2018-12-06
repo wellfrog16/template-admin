@@ -71,6 +71,9 @@
                         </el-row>
                     </div>
                 </s-card>
+                <div style="text-align:center; margin: 20px 0;">
+                    <el-button size="small" type="primary" style="width: 100px;" @click="nextStep">下一步</el-button>
+                </div>
             </div>
         </div>
     </div>
@@ -192,11 +195,11 @@ export default {
                 this.currentCustIds = params.data[5].split(',');
                 this.drewChart2();
                 this.drewChart3();
-                // get chart2
+                // get chart2 chart3
                 break;
             case '1':
                 this.drewChart4();
-                // get chart3
+                // get chart4
                 break;
             case '2':
                 this.drewChart4();
@@ -346,6 +349,9 @@ export default {
                 'minWdith': 120
             });
             this.chartTableColumns.splice(2, 1, chart3Column);
+        },
+        nextStep() {
+            this.$router.push({name: 'abnormity'});
         }
     },
     mounted() {

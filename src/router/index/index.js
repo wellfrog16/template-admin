@@ -21,6 +21,7 @@ const Index = {
             component: LinkAccountAnsis,
             children: [
                 {
+                    meta: 'scrollTop',
                     path: '/sceneConfig',
                     name: 'sceneConfig',
                     label: '分析向导',
@@ -28,6 +29,7 @@ const Index = {
                     component: resolve => require(['@/pages/index/views/linkAccountAnsis/sceneConfig/Index.vue'], resolve)
                 },
                 {
+                    meta: 'scrollTop',
                     path: 'assoAccountGroupMerge',
                     name: 'assoAccountGroupMerge',
                     label: '关联账户组合并',
@@ -35,6 +37,7 @@ const Index = {
                     component: resolve => require(['@/pages/index/views/linkAccountAnsis/assoAccountGroupMerge/Index.vue'], resolve)
                 },
                 {
+                    meta: 'scrollTop',
                     path: 'abnormity',
                     name: 'abnormity',
                     label: '异常交易分析',
@@ -42,6 +45,7 @@ const Index = {
                     component: resolve => require(['@/pages/index/views/linkAccountAnsis/abnormityAnalysis/Index.vue'], resolve)
                 },
                 {
+                    meta: 'scrollTop',
                     path: 'dictionary1',
                     name: 'dictionary1',
                     label: '账户组画像',
@@ -49,12 +53,14 @@ const Index = {
                     component: Root
                 },
                 {
+                    meta: 'scrollTop',
                     path: 'customerInformationInquiry',
                     name: 'customerInformationInquiry',
                     label: '客户信息查询',
                     icon: 'menu-fix-icon fa fa-search', // customer_information_inquiry
                     component: resolve => require(['@/pages/index/views/linkAccountAnsis/customerInformationInquiry/Index.vue'], resolve)
                 }, {
+                    meta: 'scrollTop',
                     path: 'knowledgeAtlas',
                     name: 'knowledgeAtlas',
                     label: '组合场景整合',
