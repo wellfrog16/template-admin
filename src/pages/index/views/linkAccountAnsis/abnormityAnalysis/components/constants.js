@@ -12,7 +12,69 @@ export const activeNameList = [
             {field: "billMakePosQtty", title: "空单持仓量", width: 150, align: 'center'},
             {field: "statBosomDays", title: "统计区间超仓天数", width: 200, align: 'center'}
         ],
-        tableDataList: [],
+        tableDataList: [
+            {
+                acctCurrNetMake: 374673,
+                acctCurrNetPos: 0,
+                acctNum: "XG00008",
+                billMakePosQtty: 0,
+                contrCd: "cu1712",
+                custId: "80005147",
+                custName: '',
+                multiBillMakePosQtty: 0,
+                statBosomDays: 150,
+            },{
+                acctCurrNetMake: 374673,
+                acctCurrNetPos: 0,
+                acctNum: "XG00008",
+                billMakePosQtty: 0,
+                contrCd: "cu1712",
+                custId: "80008229",
+                custName: '',
+                multiBillMakePosQtty: 0,
+                statBosomDays: 150,
+            },{
+                acctCurrNetMake: 374673,
+                acctCurrNetPos: 0,
+                acctNum: "XG00008",
+                billMakePosQtty: 0,
+                contrCd: "cu1712",
+                custId: "80005237",
+                custName: null,
+                multiBillMakePosQtty: 0,
+                statBosomDays: 150,
+            },{
+                acctCurrNetMake: 374673,
+                acctCurrNetPos: 0,
+                acctNum: "XG00003",
+                billMakePosQtty: 0,
+                contrCd: "cu1712",
+                custId: "80005146",
+                custName: '',
+                multiBillMakePosQtty: 0,
+                statBosomDays: 150,
+            },{
+                acctCurrNetMake: 374673,
+                acctCurrNetPos: 0,
+                acctNum: "XG00003",
+                billMakePosQtty: 0,
+                contrCd: "cu1712",
+                custId: "80008229",
+                custName: '',
+                multiBillMakePosQtty: 0,
+                statBosomDays: 150,
+            },{
+                acctCurrNetMake: 374673,
+                acctCurrNetPos: 0,
+                acctNum: "XG00003",
+                billMakePosQtty: 0,
+                contrCd: "cu1712",
+                custId: "80005257",
+                custName: null,
+                multiBillMakePosQtty: 0,
+                statBosomDays: 150,
+            }
+        ],
     }, {
         label: '频繁报撤单分析',  // frequentTrade
         name: '1',
@@ -25,7 +87,31 @@ export const activeNameList = [
             {field: "mergeMaAmtBillCnt", title: "合并大额撤单次数", width: 200, align: 'center'},
             {field: "acctMaAmtBillCnt", title: "账户大额撤单次数", width: 200, align: 'center'},
         ],
-        tableDataList: [],
+        tableDataList: [
+            {
+                acctBillCnt: 104,
+                acctMaAmtBillCnt: 51,
+                acctNum: "XG00005",
+                contrCd: "cu1712",
+                custId: "80015120",
+                custName: '',
+                mergeBillCnt: 104,
+                mergeMaAmtBillCnt: 51,
+                txDate: "2017-03-06T16:00:00.000+0000",
+                txDt: "2017-03-07"
+            },{
+                acctBillCnt: 8,
+                acctMaAmtBillCnt: 6,
+                acctNum: "XG000010",
+                contrCd: "cu1712",
+                custId: "80013155",
+                custName: '',
+                mergeBillCnt: 152,
+                mergeMaAmtBillCnt: 7,
+                txDate: "2017-07-25T16:00:00.000+0000",
+                txDt: "2017-07-26",
+            }
+        ],
     }, {
         label: '自成交分析',   // autoTrade
         name: '2',
@@ -38,7 +124,61 @@ export const activeNameList = [
             {field: "mergeBargainQtty", title: "合并自成交数量", width: 150, align: 'center'},
             {field: "acctBargainQtty", title: "账户自成交数量", width: 150, align: 'center'},
         ],
-        tableDataList: [],
+        tableDataList: [
+            {
+                acctBargainCnt: 130,
+                acctBargainQtty: 67592,
+                acctNum: "XG000012",
+                contrCd: "cu1712",
+                custId: "80004448",
+                custName: '',
+                mergeBargainCnt: 70,
+                mergeBargainQtty: 36629,
+                txDate: "2017-01-02T16:00:00.000+0000",
+                txDt: "2017-01-03"
+            },{
+                acctBargainCnt: 10,
+                acctBargainQtty: 5666,
+                acctNum: "XG000012",
+                contrCd: "cu1712",
+                custId: "80003819",
+                custName: '',
+                mergeBargainCnt: 70,
+                mergeBargainQtty: 36629,
+                txDate: "2017-01-02T16:00:00.000+0000",
+                txDt: "2017-01-03"
+            },{
+                acctCurrNetMake: 374673,
+                acctCurrNetPos: 0,
+                acctNum: "XG00003",
+                billMakePosQtty: 0,
+                contrCd: "cu1712",
+                custId: "80005146",
+                custName: '',
+                multiBillMakePosQtty: 0,
+                statBosomDays: 150,
+            },{
+                acctCurrNetMake: 374673,
+                acctCurrNetPos: 0,
+                acctNum: "XG00003",
+                billMakePosQtty: 0,
+                contrCd: "cu1712",
+                custId: "80008229",
+                custName: '',
+                multiBillMakePosQtty: 0,
+                statBosomDays: 150,
+            },{
+                acctCurrNetMake: 374673,
+                acctCurrNetPos: 0,
+                acctNum: "XG00003",
+                billMakePosQtty: 0,
+                contrCd: "cu1712",
+                custId: "80005257",
+                custName: null,
+                multiBillMakePosQtty: 0,
+                statBosomDays: 150,
+            }
+        ],
     }
 ];
 export const tableColumns = [

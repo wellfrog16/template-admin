@@ -36,9 +36,7 @@ export default {
             zoom: 1;
             background-color: #fff;
             background-repeat: no-repeat;
-            background-size: cover;
-            -webkit-background-size: cover;
-            -o-background-size: cover;
+            background-size: contain;
             background-position: center 0;
         }
         .user_role {

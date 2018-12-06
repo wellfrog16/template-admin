@@ -21,7 +21,7 @@
                     </el-col>
                     <el-col :xl="2" :lg="2" :md="2" :sm="24">
                         <el-form-item label-width="200px">
-                            <el-button type="primary"
+                            <el-button type="primary" size="small"
                                        @click="customerTransactionsClick('ruleForm')">生成报告
                             </el-button>
                         </el-form-item>
@@ -31,14 +31,18 @@
         </el-card>
         <s-card :title="`客户交易信息查询`" :icon="`fa fa-user-md`">
             <div slot="content">
-                <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+                <el-tabs
+                    v-model="activeName"
+                    type="card" @tab-click="handleClick">
                     <el-tab-pane
                         v-for="(active, i) in activeNameList"
                         :label="active.label"
                         :key="active.name"
                         :name="active.name">
+                        <!--<div>{{JSON.stringify(active.tableColumns)}}</div>-->
+                        <!--<div>{{JSON.stringify(active.tableData)}}</div>-->
                         <s-table
-                            :height="650"
+                            :height="320"
                             :loading="loadingCustomerAddress"
                             :columns="active.tableColumns"
                             :tableData="active.tableData"
@@ -60,6 +64,8 @@
     import {
         postCustomerTransactions,     // 客户交易信息查询(生成报告接口)
     } from '@/api/dataAnsis/customerInformationInquiry';
+
+    import {activeNameList} from '../components/constants';
 
     export default {
         name: "customerAddress",
@@ -89,72 +95,7 @@
                 totalNum: [0, 0, 0],
 
                 // 客户交易信息查询
-                activeNameList: [
-                    {
-                        name: '1',
-                        label: '客户持仓明细',                   // overStoreAnalysis
-                        tableColumns: [
-                            {field: "clientId", label: "客户编号", width: '200', align: ''},
-                            {field: "custName", label: "客户名称", width: '200', align: ''},
-                            {field: "tradingDay", label: "交易日期", width: '200', align: ''},
-                            {field: "orgrumentId", label: "合约代码", width: '200', align: ''},
-                            {field: "posMultiQtty", label: "持多单量", width: '200', align: ''},
-                            {field: "posBillQtty", label: "持空单量", width: '200', align: ''},
-                            {field: "positionsum", label: "持仓金额", width: '200', align: ''},
-                            {field: "margin", label: "保证金", width: '200', align: ''},
-                            {field: "duemargin", label: "应收保证金", width: '200', align: ''},
-                            {field: "openprofit", label: "浮动盈亏", width: '200', align: ''},
-                            {field: "hedgeflag", label: "投机套保标志", width: '200', align: ''},
-
-                        ],
-                        tableData: [],
-                    },
-                    {
-                        label: '客户报单明细',
-                        name: '2',
-                        tableColumns: [
-                            {field: "custCode", label: "客户编号", width: '200', align: ''},
-                            {field: "custName", label: "客户名称", width: '200', align: ''},
-                            {field: "tradingDay", label: "交易日", width: '200', align: ''},
-                            {field: "declDay", label: "报单日期", width: '200', align: ''},
-                            {field: "reportid", label: "报单编号", width: '200', align: ''},
-                            {field: "contrCode", label: "合约代码", width: '200', align: ''},
-                            {field: "declPriceCond", label: "报单价格条件", width: '200', align: ''},
-                            {field: "buySell", label: "买卖方向", width: '200', align: ''},
-                            {field: "comHedgeflag", label: "组合投机套保标志", width: '200', align: ''},
-                            {field: "price", label: "价格", width: '200', align: ''},
-                            {field: "quantity", label: "数量", width: '200', align: ''},
-                            {field: "volType", label: "成交量类型", width: '200', align: ''},
-                            {field: "declType", label: "报单类型", width: '200', align: ''},
-                            {field: "todayVolQuantity", label: "今成交数量", width: '200', align: ''},
-                            {field: "residueQuantity", label: "剩余数量", width: '200', align: ''},
-                            {field: "changeTime", label: "最后修改时间", width: '200', align: ''},
-                            {field: "cancelTime", label: "撤销时间", width: '200', align: ''},
-
-                        ],
-                        tableData: [],
-                    }, {
-                        label: '客户成交明细',
-                        name: '3',
-                        tableColumns: [
-                            {field: "custCode", label: "客户编号", width: '200', align: ''},
-                            {field: "custName", label: "客户名称", width: '200', align: ''},
-                            {field: "tranId", label: "成交编号", width: '200', align: ''},
-                            {field: "buySell", label: "买卖方向", width: '200', align: ''},
-                            {field: "reportId", label: "报单编号", width: '200', align: ''},
-                            {field: "tradeRole", label: "交易角色", width: '200', align: ''},
-                            {field: "contrCode", label: "合约代码", width: '200', align: ''},
-                            {field: "kaipingFlag", label: "开平标志", width: '200', align: ''},
-                            {field: "hedgeFlag", label: "投机套保标志", width: '200', align: ''},
-                            {field: "price", label: "价格", width: '200', align: ''},
-                            {field: "quantity", label: "数量", width: '200', align: ''},
-                            {field: "tranday", label: "成交时间", width: '200', align: ''},
-                            {field: "tranType", label: "成交类型", width: '200', align: ''},
-
-                        ],
-                        tableData: [],
-                    }
-                ],
+                activeNameList: activeNameList,
 
                 // form 表单绑定值
                 ruleForm: {
@@ -204,8 +145,9 @@
                         postCustomerTransactions(params).then(resp => {
                             this.loadingCustomerAddress = false;
                             this.activeNameList[0].tableData = resp.tradeInfoList;
-                            this.activeNameList[1].tableData = resp.tradeInfoDeal;
-                            this.activeNameList[2].tableData = resp.tradeInfoFormList;
+                            this.activeNameList[1].tableData = resp.tradeInfoFormList;
+                            this.activeNameList[2].tableData = resp.tradeInfoDeal;
+
                             this.totalNum[0] = resp.tradeInfoVOListTotal;   // 持仓明细记录总数
                             this.totalNum[1] = resp.tradeInfoFormVOSTotal;   // 报单明细记录总数
                             this.totalNum[2] = resp.tradeInfoDealTotal;      // 成交明细记录总数
@@ -235,8 +177,10 @@
                 postCustomerTransactions(params).then(resp => {
                     this.loadingCustomerAddress = false;
                     this.activeNameList[0].tableData = resp.tradeInfoList ? resp.tradeInfoList :this.activeNameList[0].tableData;
-                    this.activeNameList[1].tableData = resp.tradeInfoDeal ? resp.tradeInfoDeal : this.activeNameList[1].tableData;
-                    this.activeNameList[2].tableData = resp.tradeInfoFormList ? resp.tradeInfoFormList : this.activeNameList[2].tableData;
+                    this.activeNameList[1].tableData = resp.tradeInfoFormList ? resp.tradeInfoFormList : this.activeNameList[1].tableData;
+                    this.activeNameList[2].tableData = resp.tradeInfoDeal ? resp.tradeInfoDeal : this.activeNameList[2].tableData;
+
+
                     this.totalNum[0] = resp.tradeInfoVOListTotal === 0 ? this.totalNum[0] : resp.tradeInfoVOListTotal;   // 持仓明细记录总数
                     this.totalNum[1] = resp.tradeInfoFormVOSTotal === 0 ? this.totalNum[1] : resp.tradeInfoFormVOSTotal;   // 报单明细记录总数
                     this.totalNum[2] = resp.tradeInfoDealTotal === 0 ? this.totalNum[2] : resp.tradeInfoDealTotal;      // 成交明细记录总数

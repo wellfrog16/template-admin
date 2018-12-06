@@ -12,7 +12,7 @@
                     </el-col>
                     <el-col :xl="2" :lg="2" :md="2" :sm="24">
                         <el-form-item label-width="30px">
-                            <el-button type="primary" @click="customerAddressClick('ruleForm')">生成报告</el-button>
+                            <el-button size="small" type="primary" @click="customerAddressClick('ruleForm')">生成报告</el-button>
                         </el-form-item>
                     </el-col>
                     <el-col :xl="2" :lg="2" :md="2" :sm="24">
@@ -63,7 +63,7 @@
 
                 // form 表单绑定值
                 ruleForm: {
-                    customerID: '',      // 客户编码  20180000025
+                    customerID: '',      // 客户编码  20180000025  / 80000012
                 },
                 // 校验
                 rules: {
