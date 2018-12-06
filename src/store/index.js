@@ -2,9 +2,6 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 
 // 模块
-import demo1 from '@/store/module/index/demo1';
-import hehe from '@/store/module/index/demo2/hehe';
-import haha from '@/store/module/index/demo2/haha';
 import login from '@/store/module/index/login';
 import sceneConfig from '@/store/module/index/sceneConfig';
 
@@ -25,9 +22,6 @@ export default new Vuex.Store({
     getters,
     actions,
     modules: {
-        demo1,
-        hehe,
-        haha,
         login,
         sceneConfig
     }

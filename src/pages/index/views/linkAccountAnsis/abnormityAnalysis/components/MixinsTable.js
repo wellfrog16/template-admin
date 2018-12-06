@@ -129,16 +129,12 @@ export default {
                         type: 'slider',   // 图表下方的伸缩条
                         show: true,       // 是否显示
                         xAxisIndex: [0],
-                        bottom: 0,
-                        start: 93,     // 伸缩条开始位置（1-100），可以随时更改
-                        end: 100       // 伸缩条结束位置（1-100），可以随时更改
+                        bottom: 0
                     },
                     {
                         type: 'inside',    // 鼠标滚轮
                         xAxisIndex: [0],
-                        left: '93%',
-                        start: 93,     // 伸缩条开始位置（1-100），可以随时更改
-                        end: 100       // 伸缩条结束位置（1-100），可以随时更改
+                        left: '93%'
                     }
                 ],
             }
@@ -157,6 +153,13 @@ export default {
                 let mainData = [];
                 let temp = [];
                 mainData = val.mainData;
+                // set datazoom
+                let dataZoomStartValue = val.dateList.length > 20 ? val.dateList[val.dateList.length - 20] : 0;
+                let dataZoomEndValue = val.dateList[val.dateList.length - 1];
+                this.chartOptions['dataZoom'][0]['startValue'] = dataZoomStartValue;
+                this.chartOptions['dataZoom'][1]['startValue'] = dataZoomStartValue;
+                this.chartOptions['dataZoom'][0]['endValue'] = dataZoomEndValue;
+                this.chartOptions['dataZoom'][1]['endValue'] = dataZoomEndValue;
                 let basicOptions = {
                     type: 'bar',
                     barMaxWidth: '30',
