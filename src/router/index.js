@@ -37,10 +37,26 @@ const router = new Router({
             path: '/login',
             name: 'login',
             label: 'login',
+            isNotMenu: true,
             // route level code-splitting
             // this generates a separate chunk (login.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
             component: () => import(/* webpackChunkName: "login" */ '@/pages/index/views/Login.vue')
+        },
+        {
+            path: '/notFound',
+            name: 'notFound',
+            label: 'notFound',
+            isNotMenu: true,
+            // route level code-splitting
+            // this generates a separate chunk (notFound.[hash].js) for this route
+            // which is lazy-loaded when the route is visited.
+            component: () => import(/* webpackChunkName: "notFound" */ '@/pages/index/views/NotFound.vue')
+        },
+        {
+            path: '*',
+            isNotMenu: true,
+            redirect: '/notFound'
         }
     ]
 });
@@ -64,5 +80,7 @@ router.beforeEach((to, from, next) => {
         }
     }
 });
-
+router.afterEach((to, from, next) => {
+    Vue.prototype.$jquery('#main-container').scrollTop(0);
+});
 export default router;
