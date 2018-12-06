@@ -3,6 +3,7 @@
         <div :class="$style.a_form_table_bar">
             <el-card :class="$style.a_form_box_shadow">
                 <el-tabs
+                    size="small"
                     @tab-click="handleTabClick"
                     v-model="activeName"
                     type="card" :class="$style.pane_titles">

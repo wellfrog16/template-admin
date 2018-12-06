@@ -40,6 +40,72 @@ export const columnsCTrI1 = [
 ];
 
 // 客户交易信息查询
+export const activeNameList = [
+    {
+        name: '1',
+        label: '客户持仓明细',                   // overStoreAnalysis
+        tableColumns: [
+            {field: "clientId", label: "客户编号", width: '200', align: ''},
+            {field: "custName", label: "客户名称", width: '200', align: ''},
+            {field: "tradingDay", label: "交易日期", width: '200', align: ''},
+            {field: "orgrumentId", label: "合约代码", width: '200', align: ''},
+            {field: "posMultiQtty", label: "持多单量", width: '200', align: ''},
+            {field: "posBillQtty", label: "持空单量", width: '200', align: ''},
+            {field: "positionsum", label: "持仓金额", width: '200', align: ''},
+            {field: "margin", label: "保证金", width: '200', align: ''},
+            {field: "duemargin", label: "应收保证金", width: '200', align: ''},
+            {field: "openprofit", label: "浮动盈亏", width: '200', align: ''},
+            {field: "hedgeflag", label: "投机套保标志", width: '200', align: ''},
+
+        ],
+        tableData: [],
+    },
+    {
+        label: '客户报单明细',
+        name: '2',
+        tableColumns: [
+            {field: "custCode", label: "客户编号", width: '200', align: ''},
+            {field: "custName", label: "客户名称", width: '200', align: ''},
+            {field: "tradingDay", label: "交易日", width: '200', align: ''},
+            {field: "declDay", label: "报单日期", width: '200', align: ''},
+            {field: "reportid", label: "报单编号", width: '200', align: ''},
+            {field: "contrCode", label: "合约代码", width: '200', align: ''},
+            {field: "declPriceCond", label: "报单价格条件", width: '200', align: ''},
+            {field: "buySell", label: "买卖方向", width: '200', align: ''},
+            {field: "comHedgeflag", label: "组合投机套保标志", width: '200', align: ''},
+            {field: "price", label: "价格", width: '200', align: ''},
+            {field: "quantity", label: "数量", width: '200', align: ''},
+            {field: "volType", label: "成交量类型", width: '200', align: ''},
+            {field: "declType", label: "报单类型", width: '200', align: ''},
+            {field: "todayVolQuantity", label: "今成交数量", width: '200', align: ''},
+            {field: "residueQuantity", label: "剩余数量", width: '200', align: ''},
+            {field: "changeTime", label: "最后修改时间", width: '200', align: ''},
+            {field: "cancelTime", label: "撤销时间", width: '200', align: ''},
+
+        ],
+        tableData: [],
+    }, {
+        label: '客户成交明细',
+        name: '3',
+        tableColumns: [
+            {field: "custCode", label: "客户编号", width: '200', align: ''},
+            {field: "custName", label: "客户名称", width: '200', align: ''},
+            {field: "tranId", label: "成交编号", width: '200', align: ''},
+            {field: "buySell", label: "买卖方向", width: '200', align: ''},
+            {field: "reportId", label: "报单编号", width: '200', align: ''},
+            {field: "tradeRole", label: "交易角色", width: '200', align: ''},
+            {field: "contrCode", label: "合约代码", width: '200', align: ''},
+            {field: "kaipingFlag", label: "开平标志", width: '200', align: ''},
+            {field: "hedgeFlag", label: "投机套保标志", width: '200', align: ''},
+            {field: "price", label: "价格", width: '200', align: ''},
+            {field: "quantity", label: "数量", width: '200', align: ''},
+            {field: "tranday", label: "成交时间", width: '200', align: ''},
+            {field: "tranType", label: "成交类型", width: '200', align: ''},
+
+        ],
+        tableData: [],
+    }
+];
 
 // 精确信息查询
 export const columnsCTrI3 = [
