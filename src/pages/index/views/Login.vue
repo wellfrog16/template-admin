@@ -115,6 +115,8 @@ export default {
     .login-page {
         width: 100%;
         height: 100%;
+        background: #fff;
+        color: #000;
 
         .login-dialog {
             background: transparent;
@@ -128,8 +130,6 @@ export default {
             width: 100%;
             height: 60px;
             line-height: 60px;
-            background: url('../../../assets/img/usr/login/banner_bg.png') no-repeat;
-            background-size: cover;
             overflow: hidden;
             display: flex;
             justify-content: space-between;

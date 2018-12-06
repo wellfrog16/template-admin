@@ -11,7 +11,7 @@ const Index = {
     name: 'tools',
     label: '监管科技工具集',
     component: Home,
-    icon: 'menu-fix-icon fa fa-eye',
+    icon: 'menu-fix-icon fa fa-toolbox',
     children: [
         {
             path: '',
@@ -24,7 +24,7 @@ const Index = {
                     path: '/sceneConfig',
                     name: 'sceneConfig',
                     label: '分析向导',
-                    icon: 'menu-fix-icon fa fa-atom',
+                    icon: 'menu-fix-icon fa fa-location-arrow',
                     component: resolve => require(['@/pages/index/views/linkAccountAnsis/sceneConfig/Index.vue'], resolve)
                 },
                 {
@@ -38,27 +38,27 @@ const Index = {
                     path: 'abnormity',
                     name: 'abnormity',
                     label: '异常交易分析',
-                    icon: 'menu-fix-icon fas fa-broadcast-tower',
+                    icon: 'menu-fix-icon fa fa-broadcast-tower',
                     component: resolve => require(['@/pages/index/views/linkAccountAnsis/abnormityAnalysis/Index.vue'], resolve)
                 },
                 {
                     path: 'dictionary1',
                     name: 'dictionary1',
                     label: '账户组画像',
-                    icon: 'menu-fix-icon fa fa-android',
+                    icon: 'menu-fix-icon fa fa-street-view',
                     component: Root
                 },
                 {
                     path: 'customerInformationInquiry',
                     name: 'customerInformationInquiry',
                     label: '客户信息查询',
-                    icon: 'el-icon-search', // customer_information_inquiry
+                    icon: 'menu-fix-icon fa fa-search', // customer_information_inquiry
                     component: resolve => require(['@/pages/index/views/linkAccountAnsis/customerInformationInquiry/Index.vue'], resolve)
                 }, {
                     path: 'knowledgeAtlas',
                     name: 'knowledgeAtlas',
                     label: '知识图库',
-                    icon: 'el-icon-search', // customer_information_inquiry
+                    icon: 'menu-fix-icon fa fa-code-branch', // customer_information_inquiry
                     component: resolve => require(['@/pages/index/views/linkAccountAnsis/knowledgeAtlas/Index.vue'], resolve)
                 }
             ]

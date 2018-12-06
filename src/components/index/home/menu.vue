@@ -1,5 +1,6 @@
 <template>
     <el-menu router
+             unique-opened
              :collapse="collapse"
              :text-color="textColor"
              :active-text-color="activeTextColor"

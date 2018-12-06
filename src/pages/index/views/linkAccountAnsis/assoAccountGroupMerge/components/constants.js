@@ -755,16 +755,18 @@ export const mainTableColumns = [
         label: '浮动盈亏相关系数',
     }
 ];
-export const resData1 = {
-    'mainTableData': [
-        {
-            id: 1885,
-            acctId: 'XG00001',
-            children: [
-                {
-                    'id': 292073,
-                    'acctId': 'XG00001',
-                    'custId': '20180000002',
+let ddd = [];
+for (let i = 0; i < 21; i++) {
+    ddd.push({
+        'id': i,
+        'acctId': 'XG' + i,
+        'children': (() => {
+            let d = [];
+            for (let ii = 0; ii < 11; ii++) {
+                d.push({
+                    'id': String(i) + String(ii),
+                    'acctId': 'XG' + i,
+                    'custId': '80' + String(i) + String(ii),
                     'custName': null,
                     'acctGroAvgRelaCoef': 0,
                     'acctAvgRelaCoef': 0,
@@ -778,94 +780,15 @@ export const resData1 = {
                     'longPosMakePosRela': 0,
                     'shortPosMakePosRela': 0,
                     'floatPrftLossRela': 0
-                }
-            ]
-        },
-        {
-            'id': 46357,
-            'acctId': 'XG00002',
-            'children': [
-                {
-                    'id': 185878,
-                    'acctId': 'XG00002',
-                    'custId': '20180000005',
-                    'custName': null,
-                    'acctGroAvgRelaCoef': 0,
-                    'acctAvgRelaCoef': 0,
-                    'contrCd': 'cu1712',
-                    'acctGroNetOpenInt': 500,
-                    'acctNetOpenInt': 100,
-                    'custWheOtherGro': 'XG00002',
-                    'buyBargainRela': 0,
-                    'sellBargainRela': 0,
-                    'netBuyBargainRela': 0,
-                    'longPosMakePosRela': 0,
-                    'shortPosMakePosRela': 0,
-                    'floatPrftLossRela': 0
-                },
-                {
-                    'id': 205179,
-                    'acctId': 'XG00002',
-                    'custId': '20180000007',
-                    'custName': null,
-                    'acctGroAvgRelaCoef': 0,
-                    'acctAvgRelaCoef': 0,
-                    'contrCd': 'cu1712',
-                    'acctGroNetOpenInt': 500,
-                    'acctNetOpenInt': 100,
-                    'custWheOtherGro': 'XG00002',
-                    'buyBargainRela': 0,
-                    'sellBargainRela': 0,
-                    'netBuyBargainRela': 0,
-                    'longPosMakePosRela': 0,
-                    'shortPosMakePosRela': 0,
-                    'floatPrftLossRela': 0
-                }
-            ]
-        },
-        {
-            'id': 92527,
-            'acctId': 'XG00003',
-            'children': [
-                {
-                    'id': 109006,
-                    'acctId': 'XG00003',
-                    'custId': '20180000003',
-                    'custName': null,
-                    'acctGroAvgRelaCoef': 0,
-                    'acctAvgRelaCoef': 0,
-                    'contrCd': 'cu1712',
-                    'acctGroNetOpenInt': 500,
-                    'acctNetOpenInt': 100,
-                    'custWheOtherGro': 'XG00003',
-                    'buyBargainRela': 0,
-                    'sellBargainRela': 0,
-                    'netBuyBargainRela': 0,
-                    'longPosMakePosRela': 0,
-                    'shortPosMakePosRela': 0,
-                    'floatPrftLossRela': 0
-                },
-                {
-                    'id': 299236,
-                    'acctId': 'XG00003',
-                    'custId': '20180000006',
-                    'custName': null,
-                    'acctGroAvgRelaCoef': 0,
-                    'acctAvgRelaCoef': 0,
-                    'contrCd': 'cu1712',
-                    'acctGroNetOpenInt': 500,
-                    'acctNetOpenInt': 100,
-                    'custWheOtherGro': 'XG00003',
-                    'buyBargainRela': 0,
-                    'sellBargainRela': 0,
-                    'netBuyBargainRela': 0,
-                    'longPosMakePosRela': 0,
-                    'shortPosMakePosRela': 0,
-                    'floatPrftLossRela': 0
-                }
-            ]
-        }
-    ],
+                });
+            }
+            return d;
+        })()
+    });
+}
+console.log(ddd);
+export const resData1 = {
+    'mainTableData': ddd,
     'chartData': [
         {
             'acctId': 'XG00001',
@@ -878,42 +801,42 @@ export const resData1 = {
             'acctId': 'XG00002',
             'contrCd': 'CU1712',
             'acctGroAvgRela': 0.4,
-            'acctGroOpenInt': 3000,
+            'acctGroOpenInt': 2000,
             'custQtty': 200
         },
         {
             'acctId': 'XG00003',
             'contrCd': 'CU1712',
             'acctGroAvgRela': -0.4,
-            'acctGroOpenInt': 6000,
+            'acctGroOpenInt': 3000,
             'custQtty': 100
         },
         {
             'acctId': 'XG00004',
             'contrCd': 'CU1712',
             'acctGroAvgRela': -0.4,
-            'acctGroOpenInt': 1000,
+            'acctGroOpenInt': 4000,
             'custQtty': 100
         },
         {
             'acctId': 'XG00005',
             'contrCd': 'CU1712',
             'acctGroAvgRela': -0.4,
-            'acctGroOpenInt': 1200,
+            'acctGroOpenInt': 5000,
             'custQtty': 40
         },
         {
             'acctId': 'XG00006',
             'contrCd': 'CU1712',
             'acctGroAvgRela': -0.1,
-            'acctGroOpenInt': 5000,
+            'acctGroOpenInt': 6000,
             'custQtty': 10
         },
         {
             'acctId': 'XG00007',
             'contrCd': 'CU1712',
             'acctGroAvgRela': -0.42,
-            'acctGroOpenInt': 2000,
+            'acctGroOpenInt': 7000,
             'custQtty': 70
         }
     ]
@@ -997,11 +920,15 @@ export const respData4 = {
         20189898: [{time: '12:09', price: 12, count: 3}, {time: '12:19', price: 22, count: 9}],
         20189897: [{time: '12:09', price: 12, count: 3}, {time: '12:19', price: 22, count: 9}],
         20189896: [{time: '12:09', price: 12, count: 3}, {time: '12:19', price: 22, count: 9}],
+        20189895: [{time: '12:09', price: 12, count: 3}, {time: '12:19', price: 22, count: 9}],
+        20189894: [{time: '12:09', price: 12, count: 3}, {time: '12:19', price: 22, count: 9}],
     },
     sail: {
         20189898: [{time: '12:09', price: 12, count: 3}, {time: '12:19', price: 22, count: 9}],
         20189897: [{time: '12:09', price: 12, count: 3}, {time: '12:19', price: 22, count: 9}],
         20189896: [{time: '12:09', price: 12, count: 3}, {time: '12:19', price: 22, count: 9}],
+        20189895: [{time: '12:09', price: 12, count: 3}, {time: '12:19', price: 22, count: 9}],
+        20189894: [{time: '12:09', price: 12, count: 3}, {time: '12:19', price: 22, count: 9}],
     },
     tableData: [
         {a: 1, b: 2}

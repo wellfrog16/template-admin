@@ -30,6 +30,9 @@ export default {
                     y: 35,
                     y2: 60
                 },
+                legend: {
+                    data: []
+                },
                 tooltip: {
                     trigger: 'item',
                     formatter: param => {
@@ -49,24 +52,22 @@ export default {
                     }
                 },
                 xAxis: {
+                    name: '时间点',
                     type: 'category',
                     data: []
                 },
                 yAxis: {
+                    name: '价格',
                     type: 'value',
                 },
                 dataZoom: [
                     {
-                        type: 'inside',
-                        start: 90,
-                        end: 100
+                        type: 'inside'
                     },
                     {
                         show: true,
                         type: 'slider',
-                        y: '90%',
-                        start: 90,
-                        end: 100,
+                        y: '90%'
                     }
                 ],
                 series: [
@@ -104,6 +105,13 @@ export default {
                 timeData.push(v.time);
                 lineData.push(v.price);
             });
+            // set datazoom
+            let dataZoomStartValue = mainData[mainData.length > 20 ? mainData.length - 20 : 0]['time'];
+            let dataZoomEndValue = mainData[mainData.length - 1]['time'];
+            this.chartOptions['dataZoom'][0]['startValue'] = dataZoomStartValue;
+            this.chartOptions['dataZoom'][1]['startValue'] = dataZoomStartValue;
+            this.chartOptions['dataZoom'][0]['endValue'] = dataZoomEndValue;
+            this.chartOptions['dataZoom'][1]['endValue'] = dataZoomEndValue;
             this.chartOptions['series'][0]['data'] = lineData;
             let series = this.chartOptions['series'];
             Object.keys(buy).forEach((v, i) => {
@@ -143,10 +151,11 @@ export default {
             });
             this.chartOptions['xAxis']['data'] = timeData;
             this.chartOptions['series'] = series;
-            console.log(this.chartOptions);
-            console.log(4444444444);
             this.initChart();
             this.$emit('updateTableData', tableData, this.index);
+            this.chartOptions['legend']['data'] = series.map(v => {
+                return v.name;
+            });
         },
         initChart() {
             this.$refs['chart3'] && this.$refs['chart3'].initChart();
