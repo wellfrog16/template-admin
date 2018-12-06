@@ -24,14 +24,15 @@
                         <el-form-item prop="province" label="省：" label-width="50px">
                             <el-select style="width: 100%;"
                                 v-model="ruleForm.province"
-                                class="custom-width" clearable size="small"
-
+                                class="custom-width"
+                                       clearable size="small"
+                                @change="customChange"
                                 placeholder="请选择省">
                                 <el-option
                                     v-for="item in provinceOptions"
-                                    :key="item.value"
+                                    :key="item.id"
                                     :label="item.label"
-                                    :value="item.value">
+                                    :value="item.id">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -44,9 +45,9 @@
                                 placeholder="请选择市">
                                 <el-option
                                     v-for="item in cityOptions"
-                                    :key="item.value"
+                                    :key="item.id"
                                     :label="item.label"
-                                    :value="item.value">
+                                    :value="item.id">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -103,6 +104,19 @@
             SDatePicker: () => import('@/components/index/common/SDatePicker'),   // 时间区间
             STable: () => import('@/components/index/common/STable'),             // 列表
         },
+        watch: {
+            'ruleForm.province': {
+                handler(val) {
+                    this.cityOptions = [];
+                    this.ruleForm.city = '';
+                    let filterItem = this.provinceOptions.filter(v => {
+                        return v.id === val
+                    })
+                    console.log(filterItem)
+                    this.cityOptions = filterItem[0].children
+                }
+            }
+        },
         // 存储数据
         data() {
             return {
@@ -113,6 +127,7 @@
                 // form 表单绑定值
                 nationyOptions: [
                     {label: '中国', value: '0'},
+
                 ],   // 国家
                 provinceOptions:[],   // 省
                 cityOptions:[],       // 市
@@ -140,7 +155,7 @@
                 postFuzzyAddressData().then(resp => {
                     let data = [
                         {
-                            label: '全国',
+                            label: '中国',
                             id: '0',
                             children: resp
                         }
@@ -151,8 +166,8 @@
                     this.cityOptions = [];  // 市
                 })
             },
-            proviceChenge(val){
-                console.log(this.ruleForm.province);
+            customChange(val){
+                this.ruleForm.province = val;
             },
             // 模糊地址查询清除数据
             fuzzyClearClick() {

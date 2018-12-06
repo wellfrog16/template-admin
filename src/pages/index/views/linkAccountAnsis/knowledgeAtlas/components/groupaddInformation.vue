@@ -104,8 +104,12 @@
     } from '@/api/common';
 
     import {
-        postTlsResultInfo,    //  结果集列表
+        postTlsResultInfo,    //  结果集列表接口
     } from '@/api/dataAnsis/abnormityAnalysis';
+
+    import {
+        postCsvData    // 导入 CSV
+    } from '@/api/dataAnsis/knowledgeAtlas';
 
     import SCard from '@/components/index/common/SCard';
     import UploadFileToServer from '@/components/index/common/UploadFileToServer';

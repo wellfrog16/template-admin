@@ -1,30 +1,8 @@
 <template>
     <div :class="$style.knowledge_atlas">
-        <!--<s-card :title="`关系图库`" :icon="`fa fa-user-md`">-->
-            <!--<div slot="content">-->
-                <!--<el-button size="small" type="primary" @click="clearChartData">erwerw</el-button>-->
-                <!--&lt;!&ndash;<div :class="$style.bar_echarts"&ndash;&gt;-->
-                <!--&lt;!&ndash;id="knowledgeAtlas"&ndash;&gt;-->
-                <!--&lt;!&ndash;v-loading="chartLoading"&ndash;&gt;-->
-                <!--&lt;!&ndash;element-loading-text="数据加载中，请耐心等待..."&ndash;&gt;-->
-                <!--&lt;!&ndash;element-loading-background="rgba(0,0,0,0.3)">3524352&ndash;&gt;-->
-                <!--&lt;!&ndash;</div>&ndash;&gt;-->
-
-                <!--&lt;!&ndash;<div>&ndash;&gt;-->
-
-                    <!--&lt;!&ndash;&lt;!&ndash; 为 ECharts 准备一个具备大小（宽高）的 DOM &ndash;&gt;&ndash;&gt;-->
-                    <!--&lt;!&ndash;<div id="main" :class="$style.bar_echarts">&ndash;&gt;-->
-
-                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
-
-                <!--&lt;!&ndash;</div>&ndash;&gt;-->
-
-            <!--</div>-->
-        <!--</s-card>-->
         <knowledge-echarts :echartsData="echartsData"></knowledge-echarts>
         <group-infor @generateEvent="generateEvent"></group-infor>
     </div>
-
 </template>
 <script>
     import KnowledgeEcharts from '../knowledgeAtlas/components/knowledgeEcharts';  // 知识库图表
