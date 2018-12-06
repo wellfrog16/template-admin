@@ -1,7 +1,7 @@
 <template>
     <div class="asso-account-group-merge">
         <div class="top-nav">
-            <el-tabs type="card" v-model="activeTab" @tab-click="handleTabClick">
+            <el-tabs type="card" v-model="activeTab" @tab-click="handleTabClick" v-if="sceneNameList.length">
                 <el-tab-pane v-for="(item, index) in sceneNameList" :key="index" :name="String(index)" :label="item">
                 </el-tab-pane>
             </el-tabs>
@@ -40,7 +40,7 @@
                 </el-col>
             </el-row>
             <div class="main-table">
-                <s-card title="账户组信息" icon="el-icon-edit" :minHeight="300">
+                <s-card title="账户组信息" icon="fa fa-layer-group" :minHeight="300">
                     <div slot="right">
                         <el-input class="search-input" size="mini" placeholder="请输入账户组号或客户编号" v-model="searchText">
                             <i class="el-icon-search" slot="prefix" style="margin-left:4px; cursor: pointer;"></i>

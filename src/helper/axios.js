@@ -63,6 +63,7 @@ const instance = url => {
                 }
             } else if (status === 401) {
                 localStorage.removeItem('ACCESS_TOKEN');
+                localStorage.removeItem('USER_NAME');
                 Vue.prototype.router.replace({
                     path: '/login',
                     query: {redirect: Vue.prototype.router.currentRoute.fullPath}

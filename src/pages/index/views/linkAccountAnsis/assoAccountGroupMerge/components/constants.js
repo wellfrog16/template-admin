@@ -636,10 +636,10 @@ export const chartOption4 = {
     ]
 };
 export const charts = [
-    {title: '账户组相关性概览', icon: 'el-icon-edit', toggleDetailFlags: false},
-    {title: '账户组历史持仓', icon: 'el-icon-edit', toggleDetailFlags: false},
-    {title: '账户组历史成交', icon: 'el-icon-edit', toggleDetailFlags: false},
-    {title: '账户组分时成交', icon: 'el-icon-edit', toggleDetailFlags: false}
+    {title: '账户组相关性概览', icon: 'fa fa-globe', toggleDetailFlags: false},
+    {title: '账户组历史持仓', icon: 'fa fa-chart-bar', toggleDetailFlags: false},
+    {title: '账户组历史成交', icon: 'fa fa-handshake', toggleDetailFlags: false},
+    {title: '账户组分时成交', icon: 'fa fa-chart-line', toggleDetailFlags: false}
 ];
 export const chartTableColumns1 = [
     {label: '账户组编号', field: 'acctId', minWidth: 130},

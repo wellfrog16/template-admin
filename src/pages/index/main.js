@@ -11,6 +11,8 @@ import moment from 'moment';
 import {echartsDefault} from '@/assets/style/common/theme/echart';
 
 Vue.config.productionTip = false;
+Vue.config.devtools = true;
+
 // echarts 默认样式
 echarts.registerTheme('df_theme', echartsDefault);
 // 过滤器

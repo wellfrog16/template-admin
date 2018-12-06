@@ -58,7 +58,7 @@ export default {
                 },
                 yAxis: {
                     name: '价格',
-                    type: 'value',
+                    type: 'value'
                 },
                 dataZoom: [
                     {

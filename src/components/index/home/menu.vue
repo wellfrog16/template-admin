@@ -6,8 +6,9 @@
              :active-text-color="activeTextColor"
     >
         <el-menu-item @click="toggleMode" index="" class="col-button">
-            <i class="fas fa-bars fa-lg"></i>
-            <span slot="title" style="margin-left:20px;">折叠</span>
+            <i class="fas fa-minus-square menu-fix-icon" v-if="!collapse"></i>
+            <i class="fas fa-minus menu-fix-icon" v-else></i>
+            <span slot="title">折叠</span>
         </el-menu-item>
 
         <template v-for="(item, index) in data">
@@ -49,6 +50,10 @@
             </el-submenu>
             <!--  -->
         </template>
+        <el-menu-item @click="handleLoginOut" index="" class="col-button">
+            <i class="fas fa-sign-out-alt menu-fix-icon"></i>
+            <span slot="title">登出</span>
+        </el-menu-item>
     </el-menu>
 </template>
 
@@ -70,6 +75,11 @@ export default {
         toggleMode() {
             this.$emit('toggleMode');
             // this.collapse = !this.collapse;
+        },
+        handleLoginOut() {
+            localStorage.removeItem('ACCESS_TOKEN');
+            localStorage.removeItem('USER_NAME');
+            this.$router.push({name: 'login'});
         }
     }
 };

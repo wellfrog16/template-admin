@@ -28,18 +28,13 @@ export default {
         width: 100%;
         height: @height;
         .head_top_log {
-            background: url('../../../assets/img/common/atop.png') no-repeat;
+            background: url('../../../assets/img/common/topp.png') no-repeat;
             width: 100%;
-            height: 100%;
-            min-width: 1000px;
+            height: @height;
             z-index: -10;
             zoom: 1;
-            background-color: #fff;
-            background-repeat: no-repeat;
             background-size: cover;
-            -webkit-background-size: cover;
-            -o-background-size: cover;
-            background-position: center 0;
+            background-position: center center;
         }
         .user_role {
             float: right;

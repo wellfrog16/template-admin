@@ -54,6 +54,7 @@ router.beforeEach((to, from, next) => {
         if (!accessToken) {
             Notification.error('您的登陆已过期，请重新登录!');
             localStorage.removeItem('ACCESS_TOKEN');
+            localStorage.removeItem('USER_NAME');
             next({
                 path: '/login',
                 query: {redirect: to.fullPath} // 将跳转的路由path作为参数，登录成功后跳转到该路由

@@ -9,6 +9,11 @@ let axisCommon = () => {
                 color: '#eee',
                 width: 1
             }
+        },
+        splitLine: {
+            lineStyle: {
+                color: '#21446a'
+            }
         }
     };
 };

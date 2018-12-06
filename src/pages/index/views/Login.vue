@@ -103,6 +103,7 @@ export default {
             this.fullScreenLoading = true;
             getAccessToken(params).then(resp => {
                 localStorage.setItem('ACCESS_TOKEN', resp.access_token);
+                localStorage.setItem('USER_NAME', params.username);
                 this.$store.commit('saveAccessToken', resp.access_token);
                 this.$router.push({path: '/sceneConfig'});
             });
