@@ -72,7 +72,7 @@
                         </el-col>
                         <el-col :xl="4" :lg="4" :md="4" :sm="24" class="generate">
                             <el-form-item label-width="20px">
-                                <el-button type="primary"
+                                <el-button type="primary" size="small"
                                            @click="generateReportsClick('ruleForm')">生成协查报告</el-button>
                             </el-form-item>
                         </el-col>
@@ -102,6 +102,7 @@
     </div>
 </template>
 <script>
+    import {tableColumns} from '../abnormityAnalysis/components/constants';
     import MixinVue from "./components/MixinsTable";
     import SCard from '@/components/index/common/SCard';
     import UploadFileToServer from '@/components/index/common/UploadFileToServer'; // 导入CSV
@@ -135,41 +136,10 @@
                 // teb 列表数据
                 tablePaneList: {},
                 // 底部列表
-                tableColumns: [
-                    {field: "acctNum", label: "账户组号", width: 150, align: 'center'},
-                    {field: "custId", label: "客户编号", width: 150, align: 'center'},
-                    {field: "custName", label: "客户名称", width: 150, align: 'center'},
-                    {field: "memCd", label: "会员代码", width: 150, align: 'center'},
-                    {field: "memName", label: "会员名称", width: 150, align: 'center'},
-                    {field: "breed", label: "协查品种", width: 150, align: 'center'},
-                    {field: "contrCd", label: "合约代码", width: 150, align: 'center'},
-                    {field: "supSto", label: "超仓", width: 150, align: 'center'},
-                    {field: "freDraBill", label: "频繁报撤单", width: 150, align: 'center'},
-                    {field: "bargain", label: "自成交", width: 150, align: 'center'},
-                ],
+                tableColumns: tableColumns,
                 tableData: [],
                 formDataList: {},
-                resultList: [
-                    // {
-                    //     resultId: "AA0001",
-                    //     resultName: "AA",
-                    //     resultType: "5",
-                    //     setupTm: "2018-11-21T16:00:00.000+0000",
-                    //     setupUser: "appadmin"
-                    // },{
-                    //     resultId: "BB0001",
-                    //     resultName: "BB",
-                    //     resultType: "6",
-                    //     setupTm: "2018-11-22T16:00:00.000+0000",
-                    //     setupUser: "appadmin"
-                    // },{
-                    //     resultId: "CC0001",
-                    //     resultName: "CC",
-                    //     resultType: "7",
-                    //     setupTm: "2018-11-23T16:00:00.000+0000",
-                    //     setupUser: "appadmin"
-                    // }
-                ],
+                resultList: [],
                 uploadOption: {
                     name: '上传',
                     size: 'small',
@@ -187,7 +157,7 @@
                     contractCode: '',        // 合约代码  cu1712
                     resultId: '',         // 导入结果集
                     // selectDateRange: ['2017-02-20', '2017-10-09']   // 统计区间  '2017-02-20', '2017-10-09'
-                    selectDateRange: [new Date(moment().subtract(1, 'months').format('YYYY-MM-DD')), new Date(moment().subtract(1, 'days').format('YYYY-MM-DD'))]
+                    selectDateRange: [new Date(this.$moment().subtract(1, 'months').format('YYYY-MM-DD')), new Date(this.$moment().subtract(1, 'days').format('YYYY-MM-DD'))]
                 },
                 rules: {
                     contractCode: {

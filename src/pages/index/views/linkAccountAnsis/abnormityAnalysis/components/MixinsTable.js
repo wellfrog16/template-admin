@@ -1,5 +1,4 @@
 // 异常交易分析 Bar 堆叠柱状图
-import barEchartsA from 'echarts';
 
 export default {
     name: 'mixin.js',
@@ -149,7 +148,7 @@ export default {
     },
     methods: {
         clearChartData() {
-            this.barEcharts = barEchartsA.init(document.getElementById('AbarEcharts'));
+            this.barEcharts = this.$echarts.init(document.getElementById('AbarEcharts'));
             this.barEcharts.clear();
         },
 

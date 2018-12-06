@@ -57,7 +57,7 @@ const Index = {
                 }, {
                     path: 'knowledgeAtlas',
                     name: 'knowledgeAtlas',
-                    label: '知识图库',
+                    label: '组合场景合并整合-手工',
                     icon: 'el-icon-search', // customer_information_inquiry
                     component: resolve => require(['@/pages/index/views/linkAccountAnsis/knowledgeAtlas/Index.vue'], resolve)
                 }

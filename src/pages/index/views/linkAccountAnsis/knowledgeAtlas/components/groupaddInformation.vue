@@ -1,126 +1,44 @@
 <template>
-    <el-card :class="$style.groupadd_information">
+    <div :class="$style.groupadd_information">
         <s-card :title="`客户群体选择`" :icon="`fa fa-user-md`">
             <div slot="content">
-                <el-form ref="ruleForm" :model="ruleForm" :rules="rules">
-                    <el-form-item prop="resource">
-                        <el-radio-group
-                            :class="$style.group_pos"
-                            v-model="ruleForm.exportType">
-                            <el-radio label="0" :class="$style.radio_pos">
-                                <el-form-item
-                                    :class="$style.resul"
-                                    prop="resultId"
-                                    label="导入结果集"
-                                    label-width="90px">
-                                    <el-select
-                                        clearable size="small"
-                                        :disabled="ruleForm.exportType === '1'"
-                                        v-loading="fullScreenLoading"
-                                        element-loading-text="数据加载中，请耐心等待..."
-                                        element-loading-background="rgba(0,0,0,0.3)"
-                                        v-model="ruleForm.resultId">
-                                        <el-option
-                                            v-for="item in resultList"
-                                            :key="item.resultId"
-                                            :label="item.resultName"
-                                            :value="item.resultId">
-                                        </el-option>
-                                    </el-select>
-                                </el-form-item>
-                                <el-button
-                                    :class="$style.radio_button"
-                                    type="primary"
-                                    @click="ascertainUPClick">确定
-                                </el-button>
-                            </el-radio>
+                <el-row>
+                    <el-col :span="15">
+                        <el-col :span="16">
+                            <span>导入结果集：</span>
+                            <resultSelectComponent
+                                :resultIdProps="resultIds"
+                                @selectResultId="selectResultId">
+                            </resultSelectComponent>
+                        </el-col>
+                        <el-col :span="2">
+                            <el-button size="small" type="primary" @click="ascertainUPClick">确认</el-button>
+                        </el-col>
+                    </el-col>
+                    <el-col :span="8" :class="$style.rigth">
+                        <el-col :span="5" :class="$style.leading">
+                            <span>导入 CSV：</span>
+                        </el-col>
+                        <el-col :span="10" :class="$style.up_loading">
+                            <upload-file-to-server
+                                class="upload-file"
+                                style="max-width: 444px;"
+                                ref="uploadFile"
+                                :actionUrl="actionUrl"
+                                :fileListProps="ruleForm.fileList"
+                                :uploadParams="uploadParams"
+                                :showSubmitUploadBtn="false"
+                                :autoUploadMode="false"
+                                @getTxtCon="handleUploadSuccess"
+                                @currentFileList="currentFileList"
+                            ></upload-file-to-server>
+                        </el-col>
+                        <el-col :span="2">
+                            <el-button size="small" type="primary" @click="ascertainUPClick">确认</el-button>
+                        </el-col>
 
-                            <el-radio label="1" :class="$style.radio_pos">
-                                <el-form-item
-                                    :class="$style.resuls"
-                                    prop="fileList"
-                                    label="导入CSV"
-                                    label-width="87px">
-                                    <div>
-                                        <upload-file-to-server
-                                            :disabled="ruleForm.exportType === '0'"
-                                            class="upload-file"
-                                            style="max-width: 444px;"
-                                            ref="uploadFile"
-                                            :actionUrl="actionUrl"
-                                            :fileListProps="ruleForm.fileList"
-                                            :uploadParams="uploadParams"
-                                            :showSubmitUploadBtn="false"
-                                            :autoUploadMode="false"
-                                            @getTxtCon="handleUploadSuccess"
-                                            @currentFileList="currentFileList"
-                                        ></upload-file-to-server>
-                                    </div>
-                                </el-form-item>
-                                <el-button
-                                    :class="$style.radio_buttons"
-                                    type="primary"
-                                    @click="ascertainUPClick">确定
-                                </el-button>
-                            </el-radio>
-                        </el-radio-group>
-                    </el-form-item>
-                    <!--<el-row>-->
-                    <!--<el-col>-->
-                    <!--<el-form-item prop="a">-->
-                    <!--<el-radio-group v-model="ruleForm.exportType">-->
-                    <!--<el-radio label="0">-->
-                    <!--<el-form-item-->
-                    <!--prop="resultId"-->
-                    <!--label="导入结果集"-->
-                    <!--label-width="100px"-->
-                    <!--style="display:inline-block; padding: 5px 0;"-->
-                    <!--:rules="[-->
-                    <!--{required: String(ruleForm.exportType) === '0', message: '请选择结果集'}-->
-                    <!--]">-->
-                    <!--<el-select class="custom-width" clearable size="small"-->
-                    <!--@change="resultChange"-->
-                    <!--v-loading="fullScreenLoading"-->
-                    <!--element-loading-text="数据加载中，请耐心等待..."-->
-                    <!--element-loading-background="rgba(0,0,0,0.3)"-->
-                    <!--v-model="ruleForm.resultId">-->
-                    <!--<el-option-->
-                    <!--v-for="item in resultList"-->
-                    <!--:key="item.resultId"-->
-                    <!--:label="item.resultName"-->
-                    <!--:value="item.resultId">-->
-                    <!--</el-option>-->
-                    <!--</el-select>-->
-                    <!--</el-form-item>-->
-                    <!--</el-radio>-->
-                    <!--<br>-->
-                    <!--<el-radio label="1">-->
-                    <!--<el-form-item prop="fileList" label="导入CSV" label-width="87px"-->
-                    <!--style="display:inline-block; padding: 5px 0;"-->
-                    <!--:rules="[{-->
-                    <!--required: String(ruleForm.exportType) === '1', message: '请上传附件'-->
-                    <!--}]">-->
-                    <!--<div>-->
-                    <!--<upload-file-to-server-->
-                    <!--class="upload-file"-->
-                    <!--style="max-width: 444px;"-->
-                    <!--ref="uploadFile"-->
-                    <!--:actionUrl="actionUrl"-->
-                    <!--:fileListProps="ruleForm.fileList"-->
-                    <!--:uploadParams="uploadParams"-->
-                    <!--:showSubmitUploadBtn="false"-->
-                    <!--:autoUploadMode="false"-->
-                    <!--@getTxtCon="handleUploadSuccess"-->
-                    <!--@currentFileList="currentFileList"-->
-                    <!--&gt;</upload-file-to-server>-->
-                    <!--</div>-->
-                    <!--</el-form-item>-->
-                    <!--</el-radio>-->
-                    <!--</el-radio-group>-->
-                    <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--</el-row>-->
-                </el-form>
+                    </el-col>
+                </el-row>
             </div>
         </s-card>
 
@@ -148,24 +66,36 @@
                         </div>
                     </el-col>
                     <el-col :span="3">
-                        <div class="operate-button-group">
-                            <el-button type="danger" size="small" @click="handleDelete">删除</el-button>
+                        <div>
+                            <el-button :class="$style.operate_button_group" type="danger" size="small" @click="handleDelete">删除</el-button>
                             <br>
-                            <el-button type="warning" size="small" @click="handleSplit">拆分</el-button>
+                            <el-button :class="$style.operate_button_group" type="warning" size="small" @click="handleSplit">拆分</el-button>
                             <br>
-                            <el-button type="warning" size="small" @click="handleMerge">合并</el-button>
+                            <el-button :class="$style.operate_button_group" type="warning" size="small" @click="handleMerge">合并</el-button>
                             <br>
-                            <el-button type="primary" size="small" @click="handleExportResult">导出到结果集</el-button>
+                            <el-button :class="$style.operate_button_group" type="primary" size="small" @click="handleExportResult">导出到结果集</el-button>
                             <br>
-                            <el-button type="primary" size="small" @click="handleExportCsv">导出到csv</el-button>
+                            <el-button :class="$style.operate_button_group" type="primary" size="small" @click="handleExportCsv">导出到csv</el-button>
                             <br>
-                            <el-button type="primary" size="small" @click="createNewData">重新生成数据</el-button>
+                            <el-button :class="$style.operate_button_group" type="primary" size="small" @click="createNewData">重新生成数据</el-button>
                         </div>
                     </el-col>
                 </el-row>
             </div>
         </s-card>
-    </el-card>
+        <div :class="$style.groupadd_button">
+            <el-button
+                size="small"
+                type="primary"
+                @click="generateReportsClick">生成报告
+            </el-button>
+            <el-button
+                size="small"
+                type="primary"
+                @click="nextClick">下一步
+            </el-button>
+        </div>
+    </div>
 
 </template>
 <script>
@@ -177,17 +107,21 @@
         postTlsResultInfo,    //  结果集列表
     } from '@/api/dataAnsis/abnormityAnalysis';
 
-
+    import SCard from '@/components/index/common/SCard';
+    import UploadFileToServer from '@/components/index/common/UploadFileToServer';
     import TreeTable from '@/components/index/common/TreeTable';
+    import ResultSelectComponent from '@/components/index/common/ResultSelectComponent';
+
     export default {
         name: "groupaddInformation",
         // 父传子！
         props: {},
 
         components: {
-            SCard: () => import('@/components/index/common/SCard'),  // 边框
-            UploadFileToServer: () => '@/components/index/common/UploadFileToServer',  // 导入CSV
+            SCard,  // 边框
+            UploadFileToServer,  // 导入CSV
             TreeTable,
+            ResultSelectComponent
         },
         // 混入, 是一个类的继承，类似于一个公共的方法。
         mixins: [],
@@ -259,10 +193,8 @@
                         field: 'floatPrftLossRela',
                         label: '浮动盈亏相关系数',
                     }
-                    ],
-                mainTableData: [
-
                 ],
+                mainTableData: [],
                 // form 表单绑定值
                 ruleForm: {
                     fileList: [],          // 导入CSV
@@ -277,7 +209,7 @@
                     }
                 },
                 resultList: [],
-
+                resultIds: '',
                 uploadOption: {
                     name: '上传',
                     size: 'small',
@@ -297,10 +229,26 @@
         watch: {},
         //    数据交互  127662
         methods: {
+            // 导入结果集
+            selectResultId(val) {
+                this.resultIds = val;
+            },
+            // 生成报告
+            generateReportsClick() {
+                let sdf = [
+                    {
+                        "name": "XG0001"
+                    }
+                ];
+                this.$emit("generateEvent", sdf)
+            },
+            // 下一步
+            nextClick() {
+            },
 
             // 确认结果集导入 // 确认上次SVG
             ascertainUPClick() {
-                console.log(this.ruleForm.exportType);
+                // console.log(this.ruleForm.exportType);
             },
             // 选择结果集的按钮 -- 二选一
             resultChange(val) {
@@ -364,36 +312,23 @@
 </script>
 <style lang="less" module>
     .groupadd_information {
-        color: #13ce66;
-        .group_pos {
-            width: 100%;
-        }
-        .resul {
+        .rigth {
             position: relative;
-            top: -28px;
-            left: 20px;
         }
-        .resuls {
+        .leading {
             position: relative;
-            top: -15px;
-            left: 20px;
+            top: 9px;
         }
-        .radio_pos {
-            width: 500px;
-        }
-        .radio_button {
+        .up_loading {
             position: relative;
-            float: right;
-            top: -69px;
-            right: 70px;
+            top: -4px;
         }
-        .radio_buttons {
-            position: relative;
-            top: -55px;
-            left: 200px;
+        .operate_button_group {
+            margin: 10px 0;
         }
-        .el-radio-group {
-            display: flex;
+        .groupadd_button {
+            text-align: center;
+            margin-bottom: 26px;
         }
     }
 
