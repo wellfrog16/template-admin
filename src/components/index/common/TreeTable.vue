@@ -21,7 +21,13 @@
                 :expand-on-click-node="false">
                 <span class="custom-tree-node" slot-scope="{ node, data }">
                     <div v-for="(item, index) in columns" :key="index" style="text-align: center;">
-                        {{ (data[item.field] === null || data[item.field] === undefined) ?  '' :  data[item.field] }}
+                        <el-popover placement="top-end" trigger="hover">
+                            <div>
+                                <p v-if="data.acctId" style="margin:0;">账户组号：{{ data.acctId }}</p>
+                                <p v-if="data.custId" style="margin:0;">客户编号：{{ data.custId }}</p>
+                            </div>
+                            <span slot="reference">{{ (data[item.field] === null || data[item.field] === undefined) ?  '' :  data[item.field] }}</span>
+                        </el-popover>
                     </div>
                 </span>
             </el-tree>
@@ -57,6 +63,9 @@ export default {
     watch: {
         filterText(val) {
             this.$refs['tree-table'].filter(val);
+        },
+        allArray() {
+            this.isIndeterminate = false;
         }
     },
     computed: {

@@ -33,10 +33,7 @@ export default {
                     }
                 },
                 legend: {
-                    data: [],
-                    textStyle: {
-                        color: '#eee'
-                    }
+                    data: []
                 },
                 grid: {
                     left: 30,
@@ -63,15 +60,11 @@ export default {
                         type: 'slider',
                         show: true,
                         xAxisIndex: [0],
-                        bottom: 0,
-                        start: 90,
-                        end: 100
+                        bottom: 0
                     },
                     {
                         type: 'inside',
-                        xAxisIndex: [0],
-                        start: 90,
-                        end: 100
+                        xAxisIndex: [0]
                     }
                 ],
                 series: []
@@ -95,6 +88,13 @@ export default {
         },
         initChart(resData) {
             let {qtty, mainData, tableData} = resData;
+            // set datazoom
+            let dataZoomStartValue = mainData[mainData.length > 20 ? mainData.length - 20 : 0]['date'];
+            let dataZoomEndValue = mainData[mainData.length - 1]['date'];
+            this.chartOptions['dataZoom'][0]['startValue'] = dataZoomStartValue;
+            this.chartOptions['dataZoom'][1]['startValue'] = dataZoomStartValue;
+            this.chartOptions['dataZoom'][0]['endValue'] = dataZoomEndValue;
+            this.chartOptions['dataZoom'][1]['endValue'] = dataZoomEndValue;
             let series = [];
             let date = [];
             Object.keys(mainData).forEach(v => {
@@ -130,7 +130,7 @@ export default {
             this.chartOptions['xAxis'][0]['data'] = date;
             console.log(this.chartOptions);
             this.$refs['chart1'] && this.$refs['chart1'].initChart();
-            this.$emit('updateTableData', tableData.slice(0, 101), this.index);
+            this.$emit('updateTableData', tableData.slice(0, 100), this.index);
             this.$nextTick(() => {
                 this.$emit('drewChart4');
             });

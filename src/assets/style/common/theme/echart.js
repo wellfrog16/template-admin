@@ -13,11 +13,16 @@ let axisCommon = () => {
     };
 };
 export const echartsDefault = {
-    color: ['#fec42c', '#88efed'],
+    color: ['#fec42c', 'rgb(159, 240, 72)', 'rgb(37, 198, 252)', 'rgb(255, 83, 77)', 'rgb(237, 308, 190)', 'rgb(246, 214, 255)'],
     timeAxis: axisCommon(),
-    logAxis: axisCommon(),
+    // logAxis: axisCommon(),
     valueAxis: axisCommon(),
     categoryAxis: axisCommon(),
+    legend: {
+        textStyle: {
+            color: '#eee'
+        }
+    },
     dataZoom: {
         backgroundColor: '#001c4c',
         borderColor: '#092b66',

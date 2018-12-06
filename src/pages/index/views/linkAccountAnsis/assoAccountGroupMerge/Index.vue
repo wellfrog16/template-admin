@@ -2,7 +2,7 @@
     <div class="asso-account-group-merge">
         <div class="top-nav">
             <el-tabs type="card" v-model="activeTab" @tab-click="handleTabClick">
-                <el-tab-pane v-for="(item, index) in tabs" :key="index" :name="String(index)" :label="item.label || item">
+                <el-tab-pane v-for="(item, index) in sceneNameList" :key="index" :name="String(index)" :label="item">
                 </el-tab-pane>
             </el-tabs>
             <div class="tabs-button">
@@ -42,7 +42,7 @@
             <div class="main-table">
                 <s-card title="账户组信息" icon="el-icon-edit" :minHeight="300">
                     <div slot="right">
-                        <el-input class="search-input" size="mini" placeholder="请输入账户组或客户编号" v-model="searchText">
+                        <el-input class="search-input" size="mini" placeholder="请输入账户组号或客户编号" v-model="searchText">
                             <i class="el-icon-search" slot="prefix" style="margin-left:4px; cursor: pointer;"></i>
                         </el-input>
                     </div>
@@ -87,7 +87,7 @@ import chart2 from './components/chart2';
 import chart3 from './components/chart3';
 import chart4 from './components/chart4';
 import _ from 'lodash';
-import {charts, mainTableColumns, chartTableColumns1, chartTableColumns2, chartTableColumns4, resData2, chart3Data, table3Options, chart3ScatterData, chart4Data} from './components/constants';
+import {charts, mainTableColumns, chartTableColumns1, chartTableColumns2, chartTableColumns4, table3Options} from './components/constants';
 export default {
     components: {chart1, chart2, chart3, chart4, SCard, STable, TreeTable, ResultSelectComponent},
     watch: {
@@ -100,22 +100,14 @@ export default {
     },
     data() {
         return {
-            resData2,
-            chart3Data,
             table3Options,
-            chart3ScatterData,
             mainTableColumns,
-            chart4Data,
-            resData1: {},
             sceneCommitParams: {},
             accountIdPre: 'XG',
             charts: charts,
             chartTableColumns: [chartTableColumns1, chartTableColumns2, [], chartTableColumns4],
             activeTab: '0',
-            tabs: [
-                {name: '0', label: '场景名称1'},
-                {name: '1', label: '场景名称2'},
-            ],
+            tabs: ['场景名称1', '场景名称2'],
             chartTableData: [[], [], [], []],
             resultIds: '',
             searchText: '',
@@ -357,7 +349,6 @@ export default {
         }
     },
     mounted() {
-        this.resData1 = this.$store.getters.sceneCommitResp;
         this.sceneCommitParams = this.$store.getters.sceneCommitParams;
         // test
         this.drewChart4();
@@ -369,6 +360,7 @@ export default {
         background: transparent;
         .top-nav {
             position: relative;
+            min-height: 56px;
         }
         .tabs-button {
             position: absolute;

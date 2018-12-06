@@ -84,7 +84,7 @@ export default {
         align-items: center;
         margin: 0 20px;
         padding-left: 20px;
-        box-shadow: 0 0 10px #326fcb;
+        box-shadow: 0 0 10px rgba(31, 82, 170, 0.75);
         .brliet {
             color: #fff !important;
             font-weight: 700;

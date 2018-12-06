@@ -97,7 +97,7 @@ export default {
     .aside {
         background: url('../../../assets/img/common/meunbj.png') no-repeat;
         height: 1080px;
-        box-shadow: 0 0 10px #326fcb;
+        box-shadow: 0 0 10px rgba(31, 82, 170, 0.75);
     }
     .bread_css {
         position: absolute;

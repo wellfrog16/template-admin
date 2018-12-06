@@ -6,6 +6,7 @@
 <script>
 import EchartsCommon from '@/components/index/common/EchartsCommon';
 import {getChart3Data} from '@/api/dataAnsis/assoAccountGroupMerge';
+import _ from 'lodash';
 // import {respData3} from './constants';
 export default {
     components: {EchartsCommon},
@@ -73,18 +74,17 @@ export default {
                         type: 'cross'
                     },
                     formatter: param => {
-                        if (param.seriesIndex === 0) {
-                            return schema.map((v, i) => {
-                                return v.text + ': ' + param.value[i === 0 ? 5 : i];
-                            }).join('<br>');
-                        } else if (param.seriesIndex === 1 || param.seriesIndex === 2) {
-                            return param.value[4].map(v => {
+                        if (param.seriesIndex === 1 || param.seriesIndex === 2) {
+                            return `交易日: ${param.value[0]}<br><br>` + param.value[4].map((v, i) => {
                                 return `
-                                    交易日: ${param.value[0]}<br>
                                     客户编号: ${v}<br>
-                                    ${param.value[2]}数量: ${param.value[3]}<br>
+                                    ${param.value[2]}数量: ${param.value[3]}
                                 `;
                             }).join('<br>');
+                        } else {
+                            return schema.map((v, i) => {
+                                return v.text + ': ' + param.value[i === 0 ? 5 : i];
+                            }).join('');
                         }
                     }
                 },
@@ -96,10 +96,7 @@ export default {
                     }
                 },
                 legend: {
-                    data: ['日K', '卖出', '买入'],
-                    textStyle: {
-                        color: '#eee'
-                    }
+                    data: ['日K', '卖出', '买入']
                 },
                 grid: {
                     x: 40,
@@ -353,6 +350,13 @@ export default {
         },
         initChart(resp) {
             let {mainData, tableData} = resp;
+            // set datazoom
+            let dataZoomStartValue = mainData[mainData.length > 20 ? mainData.length - 20 : 0]['txDt'];
+            let dataZoomEndValue = mainData[mainData.length - 1]['txDt'];
+            this.chartOptions['dataZoom'][0]['startValue'] = dataZoomStartValue;
+            this.chartOptions['dataZoom'][1]['startValue'] = dataZoomStartValue;
+            this.chartOptions['dataZoom'][0]['endValue'] = dataZoomEndValue;
+            this.chartOptions['dataZoom'][1]['endValue'] = dataZoomEndValue;
             let seriesData = [];
             let scatterData1 = [];
             let scatterData2 = [];
@@ -372,9 +376,15 @@ export default {
             this.chartOptions['series'][2]['data'] = scatterData2;
             this.chartOptions['xAxis']['data'] = date;
             console.log(this.chartOptions);
-            this.$emit('updateTableData', tableData.slice(0, 101), this.index);
+            this.$emit('updateTableData', tableData.slice(0, 100), this.index);
             this.$refs['chart2'] && this.$refs['chart2'].initChart();
             this.$nextTick(() => {
+                // 最近交易日，包含买入或卖出
+                let selectMax = _.maxBy(mainData, v => {
+                    return v.txDt && (v.sellAcctCnt || v.buyAcctCnt);
+                });
+                console.log(selectMax);
+                console.log(88888888888);
                 this.$emit('drewChart4');
             });
         },

@@ -2,7 +2,7 @@
 
 .el-card {
     font-size: 14px;
-    color: #fff;
+    color: @g-color;
     background: @g-card-bg;
     border: none;
 
@@ -10,13 +10,13 @@
         background-color: rgb(60, 112, 165);
 
         th {
-            color: #fff;
+            color: @g-color;
             background-color: rgb(60, 112, 165);
         }
 
         tr {
             background-color: rgb(60, 112, 165);
-            color: #fff;
+            color: @g-color;
 
             &:hover {
                 color: #000;
@@ -31,13 +31,13 @@
 
         i {
             font-size: 14px;
-            color: #fff;
+            color: @g-color;
             margin-right: 5px;
         }
 
         button {
             float: right;
-            color: #fff;
+            color: @g-color;
 
             i {
                 font-size: 12px;
@@ -46,9 +46,10 @@
         }
     }
 }
+// 滚动条
 ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
 }
 ::-webkit-scrollbar-thumb {
     background-color: @scrollbar-thumb;
@@ -62,11 +63,11 @@
 // 表格公共样式
 .el-table {
     // border: none !important;
-    background-color: @table-cell-bgcolor;
+    background-color: @g-table-background;
     border: none;
     thead, tbody {
         background-color: @g-table-background !important;
-        color: @font-input-header;
+        color: @g-color;
 
         .el-table__header-wrapper {
             .el-table__header {
@@ -152,18 +153,45 @@
 }
 // input
 .el-input__inner {
-    color: #fff;
-    background-color: rgb(8, 46, 95);
-    border: 1px solid rgba(4, 58, 127, 0.92);
+    color: @g-color;
+    background-color: @g-form-bg;
+    border-color: @g-form-border;
+    &:hover {
+        border-color: @g-form-border-focus;
+    }
+    &:focus {
+        border-color: @g-form-border-focus;
+    }
+    &:visited {
+        border-color: @g-form-border-focus;
+    }
+    &:active {
+        border-color: @g-form-border-focus;
+    }
 }
 .el-range-editor--small.el-input__inner {
     height: 35px !important;
 }
-
+// select
+.el-select {
+    border-color: @g-form-border;
+    &:hover {
+        border-color: @g-form-border-focus;
+    }
+    &:focus {
+        border-color: @g-form-border-focus;
+    }
+    &:visited {
+        border-color: @g-form-border-focus;
+    }
+    &:active {
+        border-color: @g-form-border-focus;
+    }
+}
 // 表单
 .el-form {
     .el-form-item__label {
-        color: #fff;
+        color: @g-color;
     }
 }
 // 面包屑
@@ -182,27 +210,27 @@
 }
 .el-menu-item:hover, .el-submenu__title:hover, .el-menu-item:active, .el-submenu__title:active, .el-menu-item:visited, .el-submenu__title:visited {
     background-color: @g-active-bg;
-    color: #fff;
+    color: @g-color;
 }
 .el-menu-item.is-active {
-    color: #fff !important;
+    color: @g-color !important;
     background-color: @g-active-bg;
 }
 
 // el-dialog
 .el-dialog__header, .el-dialog__body {
     background: @g-dialog-bg;
-    color: #fff;
+    color: @g-color;
     .el-card {
         background: @g-dialog-bg;
     }
     .el-dialog__title {
-        color: #fff;
+        color: @g-color;
     }
 }
 .el-input.is-disabled .el-input__inner {
     height: 35px;
-    color: #fff;
+    color: @g-color;
     background-color: rgb(8, 46, 95);
     border: 1px solid rgba(4, 58, 127, 0.92);
 }
@@ -251,12 +279,12 @@
 
 .el-loading-spinner {
     .el-icon-loading, .el-loading-text {
-        color: #fff;
+        color: @g-color;
     }
 }
 // tabs {
 .el-date-editor .el-range-separator {
-    color: #fff;
+    color: @g-color;
 }
 .el-tabs--card > .el-tabs__header {
     border-color: @g-tabs-color;
@@ -265,8 +293,12 @@
     border-color: @g-tabs-color;
 }
 .el-tabs__item {
+    background: #082e60;
     border: none;
-    color: #fff;
+    color: @g-color;
+    &:hover {
+        color: @g-active-bg;
+    }
 }
 .el-tabs--card > .el-tabs__header .el-tabs__item {
     border: none;
@@ -274,12 +306,17 @@
 .el-tabs--card > .el-tabs__header .el-tabs__item.is-active {
     background: @g-active-bg;
     border: none;
-    color: #fff;
+    color: @g-color;
 }
 // 分页
 .el-pagination button:disabled {
     background: transparent;
 }
 .el-pagination__total {
-    color: #fff;
+    color: @g-color;
+}
+// button
+.el-button--primary {
+    background-color: @g-btn-bg;
+    border-color: @g-btn-border;
 }
