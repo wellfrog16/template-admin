@@ -66,7 +66,7 @@
                 </el-tabs>
             </el-card>
             <div :class="$style.export_button">
-                <el-button :class="$style.export_bt" type="primary" size="small" @click="exportClick">导出CSV</el-button>
+                <el-button :class="$style.export_bt" type="primary" size="small" @click="exporstClick">导出CSV</el-button>
             </div>
         </div>
         <div :class="$style.a_form_table_bar">
@@ -236,14 +236,15 @@
             }
             ,
             // 导出CSV
-            exportClick() {
-                let params = {
-                    "downloadType": "",
-                    "assistReportVOList": []
-                }
-                postExportAnalysis(params).then(resp => {
-                    console.log(resp);
-                })
+            exporstClick() {
+                console.log(111);
+                // let params = {
+                //     "downloadType": "",
+                //     "assistReportVOList": []
+                // }
+                // postExportAnalysis(params).then(resp => {
+                //     console.log(resp);
+                // })
 
             }
             ,

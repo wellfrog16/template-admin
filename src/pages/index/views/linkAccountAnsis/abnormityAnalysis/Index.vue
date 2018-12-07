@@ -199,13 +199,78 @@
             },
             // 底部导出CSV按钮
             exportClick1() {
+                console.log(22);
                 let params = {
                     "downloadType": "3",
-                    "assistReportVOList": this.tableData ? this.tableData : []
+                    // "assistReportVOList": this.tableData ? this.tableData : []
+                    "assistReportVOList": [
+                        {
+                            acctCurrNetMake: 374673,
+                            acctCurrNetPos: 0,
+                            acctNum: "XG00008",
+                            billMakePosQtty: 0,
+                            contrCd: "cu1712",
+                            custId: "80005147",
+                            custName: '',
+                            multiBillMakePosQtty: 0,
+                            statBosomDays: 150,
+                        },{
+                            acctCurrNetMake: 374673,
+                            acctCurrNetPos: 0,
+                            acctNum: "XG00008",
+                            billMakePosQtty: 0,
+                            contrCd: "cu1712",
+                            custId: "80008229",
+                            custName: '',
+                            multiBillMakePosQtty: 0,
+                            statBosomDays: 150,
+                        },{
+                            acctCurrNetMake: 374673,
+                            acctCurrNetPos: 0,
+                            acctNum: "XG00008",
+                            billMakePosQtty: 0,
+                            contrCd: "cu1712",
+                            custId: "80005237",
+                            custName: null,
+                            multiBillMakePosQtty: 0,
+                            statBosomDays: 150,
+                        },{
+                            acctCurrNetMake: 374673,
+                            acctCurrNetPos: 0,
+                            acctNum: "XG00003",
+                            billMakePosQtty: 0,
+                            contrCd: "cu1712",
+                            custId: "80005146",
+                            custName: '',
+                            multiBillMakePosQtty: 0,
+                            statBosomDays: 150,
+                        },{
+                            acctCurrNetMake: 374673,
+                            acctCurrNetPos: 0,
+                            acctNum: "XG00003",
+                            billMakePosQtty: 0,
+                            contrCd: "cu1712",
+                            custId: "80008229",
+                            custName: '',
+                            multiBillMakePosQtty: 0,
+                            statBosomDays: 150,
+                        },{
+                            acctCurrNetMake: 374673,
+                            acctCurrNetPos: 0,
+                            acctNum: "XG00003",
+                            billMakePosQtty: 0,
+                            contrCd: "cu1712",
+                            custId: "80005257",
+                            custName: null,
+                            multiBillMakePosQtty: 0,
+                            statBosomDays: 150,
+                        }
+                    ]
                 };
                 postExportAnalysis(params).then(resp => {
                     console.log(resp);
                 })
+                console.log(params);
             },
             // 底部上一步按钮
             backClick1() {

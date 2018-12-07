@@ -693,67 +693,16 @@ export const chartTableColumns4 = [
     {label: '撤单数量', field: '', minWidth: 100}
 ];
 export const mainTableColumns = [
-    {
-        field: 'acctId',
-        label: '账户组号',
-        minWidth: '80',
-    },
-    {
-        field: 'custId',
-        label: '客户编号'
-    },
-    {
-        field: 'custName',
-        label: '客户名称'
-    },
-    {
-        field: 'acctGroAvgRelaCoef',
-        label: '账户组平均相关系数',
-    },
-    {
-        field: 'acctAvgRelaCoef',
-        label: '账户平均相关系数',
-    },
-    {
-        field: 'contrCd',
-        label: '合约代码',
-    },
-    {
-        field: 'acctGroNetOpenInt',
-        label: '账户组净持仓量',
-    },
-    {
-        field: 'acctNetOpenInt',
-        label: '账户净持仓量',
-    },
-    {
-        field: 'custWheOtherGro',
-        label: '客户所在其他组',
-    },
-    {
-        field: 'buyBargainRela',
-        label: '买入成交相关系数',
-    },
-    {
-        field: 'sellBargainRela',
-        label: '卖出成交相关系数',
-    },
-    {
-        field: 'netBuyBargainRela',
-        label: '净买入成交相关系数',
-    },
-    {
-        field: 'longPosMakePosRela',
-        label: '多头持仓相关系数',
-    },
-    {
-        field: 'shortPosMakePosRela',
-        label: '空头持仓相关系数',
-    },
-    {
-        field: 'floatPrftLossRela',
-        label: '浮动盈亏相关系数',
-    }
+    {field: '', label: '结果集名称', minWidth: '80',},
+    {field: '', label: '账户组号', minWidth: '80',},
+    {field: '', label: '客户编号', minWidth: '80',},
+    {field: '', label: '客户名称', minWidth: '80',},
+    {field: '', label: '合约代码', minWidth: '80',},
+    {field: '', label: '账户组持仓量', minWidth: '80',},
+    {field: '', label: '账户持仓量', minWidth: '80',},
+    {field: '', label: '客户所在其他组', minWidth: '80',},
+    {field: '', label: '账户组来源', minWidth: '80',},
+
 ];
 export const resData1 = {
     'mainTableData': [
