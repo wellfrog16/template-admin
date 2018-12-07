@@ -149,7 +149,7 @@
                 },
                 // 导入csv，输出账户号list 接口
                 uploadParams: {}, // 上传文件body参数
-                actionUrl: uploadFileByBodyInfo(),
+                actionUrl: uploadFileByBodyInfo('exceptionInfo/csv'),
                 defaultLimitFileType: ['csv'],
 
                 // form 表单绑定值
@@ -307,13 +307,6 @@
                             this.$nextTick(() => {
                                 this.$refs['uploadFile'].submitUpload();
                             });
-                            // postExceptionInfo(params).then(resp => {
-                            //
-                            //     this.$router.push({name: ''});
-                            //     this.tableData = resp.report;
-                            //     this.tablePaneList = resp;
-                            //     this.formDataList = params;
-                            // });
                         } else {
                             let params = {
                                 contrCode: this.ruleForm.contractCode,             // 合约代码

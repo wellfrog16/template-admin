@@ -378,7 +378,6 @@ export default {
                     this.$store.commit('saveSceneCommitResp', resp);
                     this.$router.push({name: 'assoAccountGroupMerge'});
                 }).catch(e => {
-                    console.error(e);
                     this.loading = false;
                 });
             }

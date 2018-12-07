@@ -12,7 +12,7 @@
                             </resultSelectComponent>
                         </el-col>
                         <el-col :span="2">
-                            <el-button size="small" type="primary" @click="ascertainUPClick">确认</el-button>
+                            <el-button size="small" type="primary" @click="ascertainUPClick1">确认</el-button>
                         </el-col>
                     </el-col>
                     <el-col :span="8" :class="$style.rigth">
@@ -161,10 +161,10 @@
                 },
                 // 导入csv，输出账户号list 接口
                 uploadParams: {}, // 上传文件body参数
-                actionUrl: uploadFileByBodyInfo(),
+                actionUrl: uploadFileByBodyInfo('customer/combinedscence/csv'),
                 defaultLimitFileType: ['csv'],
 
-
+                counter: 0,  // 导入csv 表格push结果集名称
                 searchText: '',  // 请输入账户组或客户编号
                 mainTableDataClick: [] // 确认按钮
             };
@@ -175,9 +175,11 @@
         //    数据交互  127662
         methods: {
             // 导入结果集数据
-            selectResultId(val) {
+            selectResultId(val, fff) {
                 this.resultIds = val;
                 if(val){
+                    console.log(val);
+                    console.log(this.resultList);
                     let params = {
                         "resultId": val,     // 结果集编号
                         "resultName": "AA",   // 结果集名称
@@ -193,30 +195,22 @@
             },
 
             // 确认结果集导入 // 确认上次SVG
+            ascertainUPClick1(){
+                this.mainTableData =  this.mainTableData.conca(this.mainTableDataClick);
+            },
             ascertainUPClick() {
-                this.mainTableData = this.mainTableDataClick;
+                this.$refs['uploadFile'].submitUpload();
             },
-            // 选择结果集的按钮 -- 二选一
-            resultChange(val) {
-                if (val) {
-                    if (this.ruleForm.exportType !== '0') {
-                        this.ruleForm.exportType = '0'
-                    }
-                } else {
-                    this.ruleForm.exportType = '';
-                }
-            },
-            //  结果集列表
-            getResultList() {
-                this.fullScreenLoading = true;
-                postTlsResultInfo().then(resp => {
-                    this.fullScreenLoading = false;
-                    this.resultList = resp;
-                });
-            },
+
+
             // 导入CSV
-            handleUploadSuccess() {
-                this.$router.push({name: ''});
+            handleUploadSuccess(resp) {
+                let psa = {
+                    "resultSetName": "01"
+                };
+                    // let sdd = (..)
+               let sss = resp.push(psa);
+                this.mainTableData = this.mainTableData.conca(sss);
             },
             // 导入CSV
             currentFileList(fileList) {
@@ -260,8 +254,6 @@
         },
         // 初始化数据
         mounted() {
-            //  结果集列表
-            // this.getResultList();
         },
         beforeDestroy() {
         }

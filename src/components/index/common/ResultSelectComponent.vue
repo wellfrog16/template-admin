@@ -31,7 +31,7 @@ export default {
     },
     methods: {
         handleChange() {
-            this.$emit('selectResultId', this.resultId);
+            this.$emit('selectResultId', this.resultId, this.resultList,);
         },
         getResultList() {
             this.loading = true;
@@ -40,7 +40,6 @@ export default {
                 this.resultList = resp;
             }).catch(e => {
                 this.loading = false;
-                console.error(e);
             });
         }
     },
