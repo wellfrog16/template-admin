@@ -20,6 +20,7 @@
             @select-all="handleSelectedAllRow"
             @selection-change="handleSelectionChange"
             @row-click="handleRowClick"
+            @cell-click="handleCellClick"
             @row-contextmenu="handleRowContextMenu"
             @row-dblclick="handleRowDbClick"
             @sort-change="sortChange"
@@ -176,6 +177,7 @@ export default {
         STableColumns, // 表格列
         Pagination
     },
+    watch: {},
     mixins: [],
     data() {
         return {};
@@ -200,7 +202,11 @@ export default {
             this.$emit('selection-change', val);
         },
         handleRowClick(row, event, column) {
-            this.$emit('row-click', row, event, column);
+            this.$emit('rowClick', row, event, column);
+        },
+        handleCellClick(row) {
+            // console.log(row);
+            this.$emit('celCick', row);
         },
         headerRightClick(column, event) {
             this.$emit('headerRightClick', column, event);

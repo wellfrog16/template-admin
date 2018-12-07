@@ -112,7 +112,6 @@
                     let filterItem = this.provinceOptions.filter(v => {
                         return v.id === val
                     })
-                    console.log(filterItem)
                     this.cityOptions = filterItem[0].children
                 }
             }
@@ -186,10 +185,15 @@
                         }
                         this.loadingFuzzyClear = true;
                         postFuzzyAddress(params).then(resp => {
-                            this.loadingFuzzyClear = false;
-                            if(resp){
+                            if(resp && resp.resData !== null){
+                                this.loadingFuzzyClear = false;
                                 this.tableData4 = this.tableData4.concat(resp);
+                            }else {
+                                this.loadingFuzzyClear = false;
+                                return []
                             }
+
+
                         })
                     }
                 })

@@ -16,7 +16,7 @@
                         </el-col>
                     </el-col>
                     <el-col :span="8" :class="$style.rigth">
-                        <el-col :span="5" :class="$style.leading">
+                        <el-col :span="6" :class="$style.leading">
                             <span>导入 CSV：</span>
                         </el-col>
                         <el-col :span="10" :class="$style.up_loading">
@@ -100,7 +100,7 @@
 </template>
 <script>
     import {
-        uploadFileByBodyInfo    // 导入csv，输出账户号list
+        uploadFileByBodyInfo    // 导入csv，输出账户号list 接口
     } from '@/api/common';
 
     import {
@@ -108,7 +108,8 @@
     } from '@/api/dataAnsis/abnormityAnalysis';
 
     import {
-        postCsvData    // 导入 CSV
+        postCsvData,    // 导入 CSV接口
+        postResultList  // 导入结果集的树状列表(齐宁19)
     } from '@/api/dataAnsis/knowledgeAtlas';
 
     import SCard from '@/components/index/common/SCard';
@@ -116,6 +117,7 @@
     import TreeTable from '@/components/index/common/TreeTable';
     import ResultSelectComponent from '@/components/index/common/ResultSelectComponent';
 
+    import { mainTableColumns } from '../components/constants'
     export default {
         name: "groupaddInformation",
         // 父传子！
@@ -125,7 +127,7 @@
             SCard,  // 边框
             UploadFileToServer,  // 导入CSV
             TreeTable,
-            ResultSelectComponent
+            ResultSelectComponent   // 导入结果集的树状列表
         },
         // 混入, 是一个类的继承，类似于一个公共的方法。
         mixins: [],
@@ -135,69 +137,7 @@
 
                 fullScreenLoading: false,  // 加载 (结果集加载)
 
-                mainTableColumns: [
-                    {
-                        field: 'acctId',
-                        label: '账户组号',
-                        minWidth: '80',
-                    },
-                    {
-                        field: 'custId',
-                        label: '客户编号'
-                    },
-                    {
-                        field: 'custName',
-                        label: '客户名称'
-                    },
-                    {
-                        field: 'acctGroAvgRelaCoef',
-                        label: '账户组平均相关系数',
-                    },
-                    {
-                        field: 'acctAvgRelaCoef',
-                        label: '账户平均相关系数',
-                    },
-                    {
-                        field: 'contrCd',
-                        label: '合约代码',
-                    },
-                    {
-                        field: 'acctGroNetOpenInt',
-                        label: '账户组净持仓量',
-                    },
-                    {
-                        field: 'acctNetOpenInt',
-                        label: '账户净持仓量',
-                    },
-                    {
-                        field: 'custWheOtherGro',
-                        label: '客户所在其他组',
-                    },
-                    {
-                        field: 'buyBargainRela',
-                        label: '买入成交相关系数',
-                    },
-                    {
-                        field: 'sellBargainRela',
-                        label: '卖出成交相关系数',
-                    },
-                    {
-                        field: 'netBuyBargainRela',
-                        label: '净买入成交相关系数',
-                    },
-                    {
-                        field: 'longPosMakePosRela',
-                        label: '多头持仓相关系数',
-                    },
-                    {
-                        field: 'shortPosMakePosRela',
-                        label: '空头持仓相关系数',
-                    },
-                    {
-                        field: 'floatPrftLossRela',
-                        label: '浮动盈亏相关系数',
-                    }
-                ],
+                mainTableColumns: mainTableColumns,
                 mainTableData: [],
                 // form 表单绑定值
                 ruleForm: {
@@ -226,6 +166,7 @@
 
 
                 searchText: '',  // 请输入账户组或客户编号
+                mainTableDataClick: [] // 确认按钮
             };
         },
         // 计算属性
@@ -233,26 +174,27 @@
         watch: {},
         //    数据交互  127662
         methods: {
-            // 导入结果集
+            // 导入结果集数据
             selectResultId(val) {
                 this.resultIds = val;
-            },
-            // 生成报告
-            generateReportsClick() {
-                let sdf = [
-                    {
-                        "name": "XG0001"
+                if(val){
+                    let params = {
+                        "resultId": val,     // 结果集编号
+                        "resultName": "AA",   // 结果集名称
+                        "resultType": "5",   // 结果集类型
+                        "setupUser": "appadmin",   // 创建用户
                     }
-                ];
-                this.$emit("generateEvent", sdf)
-            },
-            // 下一步
-            nextClick() {
+                    postResultList(params).then(resp => {
+                        this.fullScreenLoading = false;
+                        this.mainTableDataClick = resp;
+                    });
+                }
+
             },
 
             // 确认结果集导入 // 确认上次SVG
             ascertainUPClick() {
-                // console.log(this.ruleForm.exportType);
+                this.mainTableData = this.mainTableDataClick;
             },
             // 选择结果集的按钮 -- 二选一
             resultChange(val) {
@@ -300,7 +242,18 @@
             createNewData() {
             },
             updateCheckedList() {
-            }
+            },
+            // 生成报告
+            generateReportsClick() {
+                let sdf = [
+                    {
+                        "name": "XG0001"
+                    }
+                ];
+                this.$emit("generateEvent", sdf)
+            },
+            // 下一步
+            nextClick() {},
         },
         // 在一个实例被创建之后执行代码
         created() {

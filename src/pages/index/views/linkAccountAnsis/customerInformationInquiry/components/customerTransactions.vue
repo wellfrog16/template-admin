@@ -46,7 +46,6 @@
                             :loading="loadingCustomerAddress"
                             :columns="active.tableColumns"
                             :tableData="active.tableData"
-
                             :showPagination="true"
                             @handlePaginationChange="getPagination"
                             :pagination="pagination[i]"

@@ -92,9 +92,12 @@
                         }
                         this.loadingCustomerAddress = true;
                         postCustomerAddress(params).then(resp => {
-                            if(resp){
+                            if(resp && resp.resData !== null){
                                 this.loadingCustomerAddress = false;
                                 this.tableData1 = this.tableData1.concat(resp);
+                            }else {
+                                this.loadingCustomerAddress = false;
+                                return [];
                             }
                         })
                     }

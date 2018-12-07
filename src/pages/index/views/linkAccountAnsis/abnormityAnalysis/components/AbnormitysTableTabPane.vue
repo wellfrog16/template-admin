@@ -12,56 +12,14 @@
                         :label="active.label"
                         :key="active.name"
                         :name="active.name">
-                        <el-table
-                            v-loading="dealWithIsLoading"
-                            element-loading-text="数据加载中，请耐心等待..."
-                            element-loading-background="rgba(0,0,0,0.3)"
-                            size="small"
-                            ref="multipleTable"
-                            height="450"
-                            highlight-current-row
-                            tooltip-effect="dark"
-                            :data="active.tableDataList"
-                            border
-                            @row-click="tableCellClick"
-                            @cell-click="tableCellClick"
-                            @select="handleRowSelect"
-                            @selection-change="handleSelectionChange"
-                            style="width: 100%;">
-                            <!--@row-click="tableRowClick"-->
-                            <el-table-column
-                                sortable
-                                key="acctNum"
-                                prop="acctNum"
-                                label="账户组号"
-                                align="center"
-                                min-width="150">
-                            </el-table-column>
-                            <el-table-column
-                                sortable
-                                prop="custId"
-                                label="客户编号"
-                                align="center"
-                                min-width="150">
-                                <template slot-scope="scope">
-                                    <el-button
-                                        :class="$style.button_span"
-                                        type="text"
-                                        @click="jumpHref(scope.row.custId)">
-                                        {{scope.row.custId}}
-                                    </el-button>
-                                </template>
-                            </el-table-column>
-                            <el-table-column
-                                sortable
-                                v-for="(item,index) in active.tableColumns"
-                                :key="item.field"
-                                :prop="item.field"
-                                :label="item.title"
-                                :align="item.align"
-                                :min-width="item.width">
-                            </el-table-column>
-                        </el-table>
+                        <s-table
+                            sortable
+                            :height="450"
+                            :loading="dealWithIsLoading"
+                            :columns="active.tableColumns"
+                            :tableData="active.tableDataList"
+                            @celCick="tableCellClick">
+                        </s-table>
                     </el-tab-pane>
                 </el-tabs>
             </el-card>
@@ -107,7 +65,9 @@
             }
         },
 
-        components: {},
+        components: {
+            STable: () => import('@/components/index/common/STable'), // 列表
+        },
         // 混入, 是一个类的继承，类似于一个公共的方法。
         mixins: [MixinVue],
         // 存储数据
@@ -146,7 +106,7 @@
                     }
                 },
                 deep: true
-            }
+            },
         },
         //    数据交互
         methods: {
@@ -191,17 +151,9 @@
                     this.tabsData()
                 }
             },
-
-            // 跳转页面
-            jumpHref(val) {
-                let custIdParams = "custId=" + val;
-                let dp = '#/customerInformationInquiry?';
-                window.open(dp + custIdParams)
-            },
-
             // // Bar 柱状图
             tableCellClick(row) {
-                if(Object.keys(this.tablePaneData).length !== 0) {
+                if(Object.keys(row).length !== 0) {
                     this.clearChartData();
                     let rowCustId = [];
                     for (let i = 0; i < this.activeNameList[this.activeName].tableDataList.length; i++) {
@@ -229,28 +181,24 @@
                     })
                 }
             },
-            handleRowSelect(selection, row) {
-            }
-            ,
-            handleSelectionChange(selection, row) {
-            }
-            ,
+
             // 导出CSV
             exporstClick() {
                 console.log(111);
-                // let params = {
-                //     "downloadType": "",
-                //     "assistReportVOList": []
-                // }
-                // postExportAnalysis(params).then(resp => {
-                //     console.log(resp);
-                // })
+                let params = {
+                    "downloadType": "",
+                    "assistReportVOList": []
+                }
+                postExportAnalysis(params).then(resp => {
+                    console.log(resp);
+                })
 
             }
             ,
         },
         // 初始化数据
         mounted() {
+            console.log(this.dealWithIsLoading);
         },
     };
 </script>

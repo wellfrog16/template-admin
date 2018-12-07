@@ -693,16 +693,15 @@ export const chartTableColumns4 = [
     {label: '撤单数量', field: '', minWidth: 100}
 ];
 export const mainTableColumns = [
-    {field: '', label: '结果集名称', minWidth: '80',},
-    {field: '', label: '账户组号', minWidth: '80',},
-    {field: '', label: '客户编号', minWidth: '80',},
-    {field: '', label: '客户名称', minWidth: '80',},
-    {field: '', label: '合约代码', minWidth: '80',},
-    {field: '', label: '账户组持仓量', minWidth: '80',},
-    {field: '', label: '账户持仓量', minWidth: '80',},
-    {field: '', label: '客户所在其他组', minWidth: '80',},
-    {field: '', label: '账户组来源', minWidth: '80',},
-
+    {field: 'resultSetName', label: '结果集名称', minWidth: '80',},
+    {field: 'acctGroup', label: '账户组号', minWidth: '80',},
+    {field: 'customerID', label: '客户编号', minWidth: '80',},
+    {field: 'customerName', label: '客户名称', minWidth: '80',},
+    {field: 'contractCode', label: '合约代码', minWidth: '80',},
+    {field: 'acctGroupHold', label: '账户组持仓量', minWidth: '80',},
+    {field: 'customerHold', label: '账户持仓量', minWidth: '80',},
+    {field: 'custWheOtherGro', label: '客户所在其他组', minWidth: '80',},
+    {field: 'acctGroSrc', label: '账户组来源', minWidth: '80',},
 ];
 export const resData1 = {
     'mainTableData': [

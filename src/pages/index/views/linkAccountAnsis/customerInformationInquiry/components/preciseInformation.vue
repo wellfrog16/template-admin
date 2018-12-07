@@ -110,8 +110,14 @@
                         }
                         this.loadingPreciseClear = true;
                         postPreciseInformation(params).then(resp => {
-                            this.loadingPreciseClear = false;
-                            this.tableData3 = this.tableData3.concat(resp);
+                            if(resp && resp.resData !== null){
+                                this.loadingPreciseClear = false;
+                                this.tableData3 = this.tableData3.concat(resp);
+                            }else {
+                                this.loadingPreciseClear = false;
+                                return [];
+                            }
+
                         })
                     }
                 })

@@ -70,6 +70,7 @@
                                           class="custom-width"></el-input>
                             </el-form-item>
                         </el-col>
+
                         <el-col :xl="4" :lg="4" :md="4" :sm="24" class="generate">
                             <el-form-item label-width="20px">
                                 <el-button type="primary" size="small"
@@ -83,13 +84,13 @@
         <a-table-tab-pane
             class="a_form_table_bar"
             :tablePaneData="tablePaneList"
-            :dealWithIsLoading="dealWithIsLoading2"
+            :dealWithIsLoading="dealWithIsLoading"
             :formData="formDataList">
         </a-table-tab-pane>
         <s-card :title="`协查报告`" :icon="`fa fa-user-md`">
             <div slot="content">
                 <s-table
-                    :loading="dealWithIsLoading2"
+                    :loading="dealWithIsLoading"
                     :columns="tableColumns"
                     :tableData="tableData">
                 </s-table>
@@ -133,7 +134,7 @@
         data() {
             return {
                 fullScreenLoading: false,  // 加载 (结果集加载)
-                dealWithIsLoading2: false,  // 加载(表格加载)
+                dealWithIsLoading: false,  // 加载(表格加载)
                 // teb 列表数据
                 tablePaneList: {},
                 // 底部列表
@@ -155,10 +156,10 @@
                 ruleForm: {
                     fileList: [],          // 导入CSV
                     exportType: '',       // 导入结果集按钮
-                    contractCode: '',        // 合约代码  cu1712
+                    contractCode: 'cu1712',        // 合约代码  cu1712
                     resultId: '',         // 导入结果集
-                    // selectDateRange: ['2017-02-20', '2017-10-09']   // 统计区间  '2017-02-20', '2017-10-09'
-                    selectDateRange: [new Date(this.$moment().subtract(1, 'months').format('YYYY-MM-DD')), new Date(this.$moment().subtract(1, 'days').format('YYYY-MM-DD'))]
+                    selectDateRange: ['2017-10-01', '2017-12-31']   // 统计区间  '2017-02-20', '2017-10-09'
+                    // selectDateRange: [new Date(this.$moment().subtract(1, 'months').format('YYYY-MM-DD')), new Date(this.$moment().subtract(1, 'days').format('YYYY-MM-DD'))]
                 },
                 rules: {
                     contractCode: {
@@ -285,7 +286,6 @@
                 this.$router.push({name: ''});
             },
 
-
             // 导入CSV
             currentFileList(fileList) {
                 this.ruleForm.fileList = fileList;
@@ -322,9 +322,9 @@
                                 resultSetNo: this.ruleForm.resultId                // 结果集编号
                             };
 
-                            this.dealWithIsLoading2 = true;
+                            this.dealWithIsLoading = true;
                             postExportType(params).then(resp => {
-                                this.dealWithIsLoading2 = false;
+                                this.dealWithIsLoading = false;
                                 this.$router.push({name: ''});
                                 this.tableData = resp.report;  // 协查报告数据
                                 this.tablePaneList = resp;    // tab 表格数据
