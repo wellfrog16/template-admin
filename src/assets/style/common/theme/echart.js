@@ -1,5 +1,8 @@
 let axisCommon = () => {
     return {
+        axisLabel: {
+            rotate: 320
+        },
         nameTextStyle: {
             color: '#fff',
             fontSize: 12,
@@ -24,9 +27,18 @@ export const echartsDefault = {
     valueAxis: axisCommon(),
     categoryAxis: axisCommon(),
     legend: {
+        itemWidth: 16,
+        itemGap: 6,
         textStyle: {
             color: '#eee'
         }
+    },
+    grid: {
+        x: 40,
+        x2: 60,
+        y: 35,
+        y2: 60,
+        containLabel: true
     },
     dataZoom: {
         backgroundColor: '#001c4c',

@@ -36,7 +36,7 @@ export default {
         let chart3SymbolSize = 15;
         let itemStyleArray = [{
             normal: {
-                color: 'green',
+                color: '#28c76f',
                 opacity: 0.8,
                 shadowBlur: 10,
                 shadowOffsetX: 0,
@@ -45,7 +45,7 @@ export default {
             }
         }, {
             normal: {
-                color: 'red',
+                color: '#f6416c',
                 opacity: 0.8,
                 shadowBlur: 10,
                 shadowOffsetX: 0,
@@ -98,12 +98,6 @@ export default {
                 legend: {
                     data: ['日K', '卖出', '买入']
                 },
-                grid: {
-                    x: 40,
-                    x2: 60,
-                    y: 35,
-                    y2: 60
-                },
                 xAxis: {
                     name: '日期',
                     type: 'category',
@@ -128,16 +122,12 @@ export default {
                 },
                 dataZoom: [
                     {
-                        type: 'inside',
-                        start: 90,
-                        end: 100
+                        type: 'inside'
                     },
                     {
                         show: true,
                         type: 'slider',
-                        y: '90%',
-                        start: 90,
-                        end: 100,
+                        y: '90%'
                     }
                 ],
                 visualMap: [
@@ -158,7 +148,7 @@ export default {
                         },
                         seriesIndex: 1,
                         inRange: {
-                            color: ['green'],
+                            color: ['#28c76f'],
                             colorLightness: [1, 0.5]
                         },
                         outOfRange: {
@@ -167,7 +157,7 @@ export default {
                         },
                         controller: {
                             inRange: {
-                                color: ['green']
+                                color: ['#28c76f']
                             },
                             outOfRange: {
                                 color: '#444'
@@ -192,7 +182,7 @@ export default {
                             color: '#fff'
                         },
                         inRange: {
-                            color: ['red'],
+                            color: ['#f6416c'],
                             colorLightness: [1, 0.5]
                         },
                         outOfRange: {
@@ -201,7 +191,7 @@ export default {
                         },
                         controller: {
                             inRange: {
-                                color: ['red']
+                                color: ['#f6416c']
                             },
                             outOfRange: {
                                 color: '#444'
@@ -351,8 +341,10 @@ export default {
         initChart(resp) {
             let {mainData, tableData} = resp;
             // set datazoom
-            let dataZoomStartValue = mainData[mainData.length > 20 ? mainData.length - 20 : 0]['txDt'];
+            let dataZoomStartValue = mainData[mainData.length > 50 ? mainData.length - 50 : 0]['txDt'];
             let dataZoomEndValue = mainData[mainData.length - 1]['txDt'];
+            console.log(dataZoomStartValue);
+            console.log(dataZoomEndValue);
             this.chartOptions['dataZoom'][0]['startValue'] = dataZoomStartValue;
             this.chartOptions['dataZoom'][1]['startValue'] = dataZoomStartValue;
             this.chartOptions['dataZoom'][0]['endValue'] = dataZoomEndValue;

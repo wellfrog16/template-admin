@@ -273,9 +273,9 @@ export default {
             this.sortByAccountId();
         },
         sortByAccountId() {
-            this.mainTableData = _.sortBy(this.mainTableData, item => {
+            this.mainTableData = _.sortBy(this.mainTableData, [item => {
                 return item.acctId;
-            });
+            }]);
         },
         handleMerge() {
             let checkedNodes = this.getCheckedNodes();
@@ -303,7 +303,7 @@ export default {
             this.mainTableData.push({
                 id: this.createTreeId(),
                 acctId: this.createAccountId(minNo),
-                children: checkedChildren
+                children: _.unionBy(checkedChildren)
             });
             this.sortByAccountId();
         },

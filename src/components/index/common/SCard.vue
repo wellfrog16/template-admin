@@ -32,15 +32,15 @@ export default {
     .self-card-component {
         box-shadow: 0 0 10px rgba(31, 82, 170, 0.75);
         margin-bottom: 15px;
+        /deep/.el-card__header {
+            background: url('../../../assets/img/usr/card_header_bg.png') no-repeat left bottom;
+            background-size: 200px;
+        }
         .card-header {
             display: flex;
-
             .header-left {
                 flex: 1;
                 text-align: left;
-                background: url('../../../assets/img/usr/card_header_bg.png') no-repeat left bottom;
-                background-size: 200px;
-
                 .sub-title {
                     font-size: 12px;
                     margin-left: 10px;

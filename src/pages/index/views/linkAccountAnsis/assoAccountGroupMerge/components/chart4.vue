@@ -5,7 +5,9 @@
 </template>
 <script>
 import EchartsCommon from '@/components/index/common/EchartsCommon';
-import {respData4} from './constants';
+// import {respData4} from './constants';
+import {getChart4Data} from '@/api/dataAnsis/assoAccountGroupMerge';
+
 export default {
     components: {EchartsCommon},
     props: {
@@ -27,7 +29,7 @@ export default {
                 grid: {
                     x: 40,
                     x2: 60,
-                    y: 35,
+                    y: 60,
                     y2: 60
                 },
                 legend: {
@@ -84,11 +86,48 @@ export default {
     methods: {
         getData() {
             this.loading = true;
-            this.loading = false;
-            let {mainData, tableData, buy, sail} = respData4;
+            // let params = this.commonReqParams;
+            let params = {
+                contrCode: 'cu1712',
+                statTimeBegin: '2017-02-20',
+                statTimeEnd: '2017-10-09',
+                accountTeamNo: 'XG00001',
+                custId: '80006298, 80003998, 80003172'
+            };
+            params.txDt = '2017-03-16';
+            getChart4Data(params).then(resp => {
+                this.loading = false;
+                this.initChart(resp);
+            }).catch(e => {
+                this.loading = false;
+                console.error(e);
+            });
+        },
+        initChart(resp) {
+            let {mainData, buysail} = resp;
             let lineData = [];
             let timeData = [];
             let colors = [];
+            let buy = {};
+            let sail = {};
+            let buyArray = buysail.filter(v => {
+                return v.bizDir === '买';
+            });
+            let sailArray = buysail.filter(v => {
+                return v.bizDir === '卖';
+            });
+            buyArray.forEach(v => {
+                if (!buy[v.custId]) {
+                    buy[v.custId] = [];
+                }
+                buy[v.custId].push(v);
+            });
+            sailArray.forEach(v => {
+                if (!sail[v.custId]) {
+                    sail[v.custId] = [];
+                }
+                sail[v.custId].push(v);
+            });
             let itemStyleCommon = i => {
                 return {
                     normal: {
@@ -102,21 +141,21 @@ export default {
                 };
             };
             mainData.forEach(v => {
-                timeData.push(v.time);
+                timeData.push(v.time.slice(-5));
                 lineData.push(v.price);
             });
             // set datazoom
-            let dataZoomStartValue = mainData[mainData.length > 20 ? mainData.length - 20 : 0]['time'];
-            let dataZoomEndValue = mainData[mainData.length - 1]['time'];
-            this.chartOptions['dataZoom'][0]['startValue'] = dataZoomStartValue;
-            this.chartOptions['dataZoom'][1]['startValue'] = dataZoomStartValue;
-            this.chartOptions['dataZoom'][0]['endValue'] = dataZoomEndValue;
-            this.chartOptions['dataZoom'][1]['endValue'] = dataZoomEndValue;
+            // let dataZoomStartValue = mainData[mainData.length > 50 ? mainData.length - 50 : 0]['time'];
+            // let dataZoomEndValue = mainData[mainData.length - 1]['time'];
+            // this.chartOptions['dataZoom'][0]['startValue'] = dataZoomStartValue;
+            // this.chartOptions['dataZoom'][1]['startValue'] = dataZoomStartValue;
+            // this.chartOptions['dataZoom'][0]['endValue'] = dataZoomEndValue;
+            // this.chartOptions['dataZoom'][1]['endValue'] = dataZoomEndValue;
             this.chartOptions['series'][0]['data'] = lineData;
             let series = this.chartOptions['series'];
             Object.keys(buy).forEach((v, i) => {
                 let data = buy[v].map(m => {
-                    return [m.time, m.price - (i + 1) * 2, m.count, '买入', v];
+                    return [m.declBillTm2.slice(-5), m.declBillPrice - (i + 1) * 2, m.declBillQtty, '买入', v];
                 });
                 series.push({
                     name: `${v}`,
@@ -133,7 +172,7 @@ export default {
             });
             Object.keys(sail).forEach((v, i) => {
                 let data = sail[v].map(m => {
-                    return [m.time, m.price + (i + 1) * 2, m.count, '卖出', v];
+                    return [m.declBillTm2.slice(-5), m.declBillPrice + (i + 1) * 2, m.declBillQtty, '卖出', v];
                 });
                 series.push({
                     name: `${v}`,
@@ -151,13 +190,11 @@ export default {
             });
             this.chartOptions['xAxis']['data'] = timeData;
             this.chartOptions['series'] = series;
-            this.initChart();
-            this.$emit('updateTableData', tableData, this.index);
+            console.log(this.chartOptions);
+            // this.$emit('updateTableData', tableData, this.index);
             this.chartOptions['legend']['data'] = series.map(v => {
                 return v.name;
             });
-        },
-        initChart() {
             this.$refs['chart3'] && this.$refs['chart3'].initChart();
         },
         handleEchartClickEvent(val) {
@@ -166,6 +203,9 @@ export default {
         handleEchartDblClickEvent(val) {
             this.$emit('handleEchartDblClickEvent', val, this.index);
         }
+    },
+    mounted() {
+        this.getData();
     }
 };
 </script>

@@ -123,13 +123,13 @@
                    :visible="showDialog" width="85%" @close="handleCloseDialog" :title="`${operateType === 1 ? '查看' : operateType === 2 ? '编辑' : '新增'}场景配置-${createTypeName}`">
             <edit-scene-dialog :operateType="operateType" :dialogItem="dialogItem" :createType="dialogItem.sceneType || this.createType" @updateSceneList="getTableData"></edit-scene-dialog>
         </el-dialog>
-        <el-dialog :close-on-click-modal="false" :close-on-press-escape="false" :custom-class="`self-dialog`" :visible="showCarousel" width="85%" top="5%" @close="handleCloseCarousel">
-            <el-carousel :interval="4000" height="600px">
+        <el-dialog v-loading.fullscreen.lock="loading" :close-on-click-modal="false" :close-on-press-escape="false" :custom-class="`self-dialog`" :visible="showCarousel" width="85%" top="3%" @close="handleCloseCarousel">
+            <el-carousel :interval="4000" height="555px">
                 <el-carousel-item v-for="(item, index) in selectList" :key="index">
                     <edit-scene-dialog :operateType="1" :dialogItem="item" :createType="item.sceneType"></edit-scene-dialog>
                 </el-carousel-item>
             </el-carousel>
-            <el-row style="margin-top:30px; text-align:center;">
+            <el-row style="margin-top:20px; text-align:center;">
                 <el-button size="small" type="primary" style="width: 100px;" @click="handleNextStep" :loading="loading">确定</el-button>
             </el-row>
         </el-dialog>
@@ -176,7 +176,7 @@ export default {
                 fileList: [],
                 exportType: '',
                 resultId: 'AA0001',
-                customNoArray: ['80004448', '80010237'],
+                customNoArray: ['80000012', '80010237'],
                 contractCode: 'cu1712',
                 area: '9',
                 selectDateRange: [new Date(moment().subtract(1, 'months').format('YYYY-MM-DD')), new Date(moment().subtract(1, 'days').format('YYYY-MM-DD'))]
@@ -333,18 +333,22 @@ export default {
             this.$router.push({name: 'assoAccountGroupMerge'});
         },
         handleNextStep() {
-            let cityIds = this.$refs['tree-components'].getCheckedList().map(v => {
-                return v.id;
-            });
+            // let cityIds = this.$refs['tree-components'].getCheckedList(true).map(v => {
+            //     return v.id;
+            // });
             let params = {
                 exportType: this.ruleForm.exportType,
-                cityIds: cityIds.join(','),
+                cityIds: '00',
+                // cityIds: cityIds.join(','),
                 contrCd: this.ruleForm.contractCode,
-                statStartDt: moment(this.ruleForm.selectDateRange[0]).format('YYYY-MM-DD'),
-                statStopDay: moment(this.ruleForm.selectDateRange[1]).format('YYYY-MM-DD'),
-                sceneIds: this.selectList.map(v => {
-                    return v.sceneId;
-                }).join(','),
+                // statStartDt: moment(this.ruleForm.selectDateRange[0]).format('YYYY-MM-DD'),
+                statStartDt: '2017-03-01',
+                statStopDay: '2017-03-31',
+                // statStopDay: moment(this.ruleForm.selectDateRange[1]).format('YYYY-MM-DD'),
+                sceneIds: '3333333333',
+                // sceneIds: this.selectList.map(v => {
+                //     return v.sceneId;
+                // }).join(','),
                 sceneNames: this.selectList.map(v => {
                     return v.sceneName;
                 }).join(','),

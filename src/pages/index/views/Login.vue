@@ -1,41 +1,46 @@
 <template>
     <div class="login-page">
-        <div class="banner">
-            <div class="logo">
-                <img src="../../../assets/img/usr/login/logo.png" alt="">
-            </div>
-            <div class="login-btn" @click="handleLogin">
-                <img src="../../../assets/img/usr/login/login.png" alt=""><span>登录</span>
+        <div class="banner" style="position:fixed; top: 0; left:0; z-index:111; background: rgba(2, 49, 88, 0.6); padding: 10px 0;">
+            <div class="main-width">
+                <div class="logo">
+                    <img src="../../../assets/img/usr/login/logo.png" alt="">
+                </div>
+                <div class="login-btn" @click="handleLogin">
+                    <el-button type="primary">登录</el-button>
+                    <!-- <img src="../../../assets/img/usr/login/login.png" alt=""><span>登录</span> -->
+                </div>
             </div>
         </div>
         <div class="main-content">
-            <div class="top-content">
-                <h3>上期所大数据监管科技平台</h3>
-                <h5>数字上期 智慧期市</h5>
-                <el-button size="small" @click="handleDetail">了解详情</el-button>
-                <div class="login-area" v-if="showLoginDialog">
-                    <el-form ref="ruleForm" :model="ruleForm" label-width="70px" @keyup.enter.native="handleConfirm('loginFormId')">
-                        <el-form-item prop="userName" label="用户名:" :rules="[{
-                            required: true, message: '请输入用户名'
-                        }]">
-                            <el-input class="custom-width" size="small" v-model="ruleForm.userName" clearable></el-input>
-                        </el-form-item>
-                        <el-form-item prop="password" label="密码:" :rules="[{
-                            required: true, message: '请输入密码'
-                        }]">
-                            <el-input class="custom-width" size="small" v-model="ruleForm.password" clearable type="password"></el-input>
-                        </el-form-item>
-                    </el-form>
-                    <div style="text-align:center;">
-                        <el-button type="primary" @click="handleConfirm" :loading="fullScreenLoading">登录</el-button>
+            <div class="main-width">
+                <div class="top-content">
+                    <h3>上期所大数据监管科技平台</h3>
+                    <h5>数字上期 智慧期市</h5>
+                    <el-button size="small" @click="handleDetail">了解详情</el-button>
+                    <div class="login-area" v-if="showLoginDialog">
+                        <el-form ref="ruleForm" :model="ruleForm" label-width="70px" @keyup.enter.native="handleConfirm('loginFormId')">
+                            <el-form-item prop="userName" label="用户名:" :rules="[{
+                                required: true, message: '请输入用户名'
+                            }]">
+                                <el-input class="custom-width" size="small" v-model="ruleForm.userName" clearable></el-input>
+                            </el-form-item>
+                            <el-form-item prop="password" label="密码:" :rules="[{
+                                required: true, message: '请输入密码'
+                            }]">
+                                <el-input class="custom-width" size="small" v-model="ruleForm.password" clearable type="password"></el-input>
+                            </el-form-item>
+                        </el-form>
+                        <div style="text-align:center;">
+                            <el-button type="primary" @click="handleConfirm" :loading="fullScreenLoading">登录</el-button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="bottom-content">
-                <div class="div1">研究支撑平台</div>
-                <div class="div2">监管科技工具集</div>
-                <div class="div3">国际化应用</div>
-                <div class="div4">行业应用</div>
+                <div class="bottom-content">
+                    <div class="div1">研究支撑平台</div>
+                    <div class="div2">监管科技工具集</div>
+                    <div class="div3">国际化应用</div>
+                    <div class="div4">行业应用</div>
+                </div>
             </div>
         </div>
         <!-- <el-dialog :visible="showLoginDialog" center @close="handleCloseDialog" top="10%">
@@ -116,9 +121,12 @@ export default {
     .login-page {
         width: 100%;
         height: 100%;
-        background: #fff;
-        color: #000;
-
+        color: #fff;
+        position: relative;
+        .main-width {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
         .login-dialog {
             background: transparent;
 
@@ -129,11 +137,11 @@ export default {
 
         .banner {
             width: 100%;
-            height: 60px;
-            line-height: 60px;
             overflow: hidden;
-            display: flex;
-            justify-content: space-between;
+            .main-width {
+                display: flex;
+                justify-content: space-between;
+            }
 
             .logo {
                 flex: 1;
@@ -141,8 +149,6 @@ export default {
                 margin-left: 20px;
 
                 img {
-                    width: 50px;
-                    height: 40px;
                     vertical-align: middle;
                 }
             }
@@ -176,14 +182,13 @@ export default {
 
             .top-content {
                 text-align: center;
-                margin-top: 100px;
 
                 h3 {
                     color: #d7e7fa;
                     font-size: 72px;
                     font-weight: 400;
                     opacity: 0.9;
-                    margin: 100px 0 50px 0;
+                    margin: 160px 0 50px 0;
                 }
 
                 h5 {
@@ -228,9 +233,9 @@ export default {
 
             .bottom-content {
                 position: absolute;
-                bottom: 100px;
+                bottom: 80px;
                 display: flex;
-                width: 100%;
+                max-width: 1280px;
                 height: 100px;
                 line-height: 100px;
 
