@@ -21,12 +21,15 @@
                 :expand-on-click-node="false">
                 <span class="custom-tree-node" slot-scope="{ node, data }">
                     <div v-for="(item, index) in columns" :key="index" style="text-align: center;">
-                        <el-popover placement="top-end" trigger="hover">
+                        <el-popover placement="top-end" trigger="hover" :disabled="index < 5">
                             <div>
                                 <p v-if="data.acctId" style="margin:0;">账户组号：{{ data.acctId }}</p>
                                 <p v-if="data.custId" style="margin:0;">客户编号：{{ data.custId }}</p>
                             </div>
-                            <span slot="reference">{{ (data[item.field] === null || data[item.field] === undefined) ?  '' :  data[item.field] }}</span>
+                            <span slot="reference">
+                                <span v-if="item.field !== 'custId'">{{ (data[item.field] === null || data[item.field] === undefined) ?  '' :  data[item.field] }}</span>
+                                <custIdColumn v-else :scope="{row: data}"></custIdColumn>
+                            </span>
                         </el-popover>
                     </div>
                 </span>
@@ -35,6 +38,7 @@
     </el-container>
 </template>
 <script>
+import custIdColumn from '@/components/index/common/CustIdColumn';
 export default {
     data() {
         return {
@@ -42,6 +46,7 @@ export default {
             checkedAll: false
         };
     },
+    components: {custIdColumn},
     props: {
         columns: {
             type: Array,

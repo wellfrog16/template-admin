@@ -1,3 +1,4 @@
+import custIdColumn from '@/components/index/common/CustIdColumn';
 let itemStyle = {
     normal: {
         opacity: 0.8,
@@ -647,11 +648,11 @@ export const chartTableColumns1 = [
     {label: '合约代码', field: 'contrCd', minWidth: 100},
     {label: '当前净持仓量', field: 'acctGroOpenInt', minWidth: 140},
     {label: '相关系数', field: 'acctGroAvgRela', minWidth: 100},
-    {field: 'custIds', label: '子账户编号', minWidth: 130}
+    {label: '所属客户编号', field: 'custIds', minWidth: 130}
 ];
 export const chartTableColumns2 = [
     {label: '账户组编号', field: 'acctId', minWidth: 130},
-    {label: '子账户编号', field: 'custId', minWidth: 130},
+    {label: '客户编号', field: 'custId', minWidth: 130, template: custIdColumn},
     {label: '交易日', field: 'txDay', minWidth: 100},
     {label: '合约代码', field: 'contrCd', minWidth: 100},
     {label: '当前净持仓量', field: 'acctNetOpenInt', minWidth: 140},
@@ -662,7 +663,7 @@ export const chartTableColumns2 = [
 ];
 export const chartTableColumns3 = [
     {label: '账户组编号', field: '', minWidth: 130},
-    {label: '子账户编号', field: '', minWidth: 130},
+    {label: '客户编号', field: '', minWidth: 130, template: custIdColumn},
     {label: '交易日', field: '', minWidth: 100},
     {label: '合约代码', field: '', minWidth: 100},
     {label: '买入量', field: '', minWidth: 100},
@@ -677,7 +678,7 @@ export const chartTableColumns4 = [
     {label: '交易日', field: '', minWidth: 100},
     {label: '报单编号', field: '', minWidth: 100},
     {label: '账户组编号', field: '', minWidth: 100},
-    {label: '子账户编号', field: '', minWidth: 100},
+    {label: '客户编号', field: '', minWidth: 100, template: custIdColumn},
     {label: '合约代码', field: '', minWidth: 100},
     {label: '买卖方向', field: '', minWidth: 100},
     {label: '开平标志', field: '', minWidth: 100},
