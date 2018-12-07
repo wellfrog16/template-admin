@@ -95,9 +95,8 @@ export default {
         position: relative;
     }
     .aside {
-        background: url('../../../assets/img/common/meunbj.png') no-repeat;
+        background-color: rgba(0, 11, 32, 0.4);
         height: 1080px;
-        box-shadow: 0 0 10px rgba(31, 82, 170, 0.75);
     }
     .bread_css {
         position: absolute;
@@ -107,7 +106,7 @@ export default {
         color: #fff;
         overflow: auto;
         margin-bottom: 50px;
-        margin-top: 40px;
+        margin-top: 45px;
         width: calc(100% - @width);
     }
 
@@ -122,6 +121,6 @@ export default {
     }
 
     .main {
-        background-color: #0b2453;
+        background-color: hsl(219, 77%, 18%);
     }
 </style>

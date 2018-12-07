@@ -45,12 +45,6 @@ export default {
                 //         fontSize: 16
                 //     }
                 // },
-                grid: {
-                    x: 40,
-                    x2: 60,
-                    y: 35,
-                    y2: 60
-                },
                 tooltip: {
                     padding: 10,
                     backgroundColor: '#222',

@@ -82,9 +82,9 @@ export default {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin: 0 20px;
+        margin: 10px 15px;
         padding-left: 20px;
-        box-shadow: 0 0 10px rgba(31, 82, 170, 0.75);
+        background: url('../../../assets/img/usr/breadcrumb_bg.png') no-repeat center center;
         .brliet {
             color: #fff !important;
             font-weight: 700;

@@ -210,8 +210,8 @@ export default {
         clearValue() {
             this.value = '';
         },
-        getCheckedList() {
-            return this.$refs['tree-common'].getCheckedNodes();
+        getCheckedList(flag) {
+            return this.$refs['tree-common'].getCheckedNodes(flag);
         }
     },
     created() {

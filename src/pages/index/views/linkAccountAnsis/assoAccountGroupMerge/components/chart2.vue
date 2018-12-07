@@ -35,13 +35,6 @@ export default {
                 legend: {
                     data: []
                 },
-                grid: {
-                    left: 30,
-                    right: 45,
-                    top: 30,
-                    bottom: 35,
-                    containLabel: true
-                },
                 xAxis: [
                     {
                         name: '日期',
@@ -88,13 +81,6 @@ export default {
         },
         initChart(resData) {
             let {qtty, mainData, tableData} = resData;
-            // set datazoom
-            let dataZoomStartValue = mainData[mainData.length > 20 ? mainData.length - 20 : 0]['date'];
-            let dataZoomEndValue = mainData[mainData.length - 1]['date'];
-            this.chartOptions['dataZoom'][0]['startValue'] = dataZoomStartValue;
-            this.chartOptions['dataZoom'][1]['startValue'] = dataZoomStartValue;
-            this.chartOptions['dataZoom'][0]['endValue'] = dataZoomEndValue;
-            this.chartOptions['dataZoom'][1]['endValue'] = dataZoomEndValue;
             let series = [];
             let date = [];
             Object.keys(mainData).forEach(v => {
@@ -128,6 +114,13 @@ export default {
             this.chartOptions['legend']['data'] = series.map(m => { return m.name; });
             this.chartOptions['series'] = series;
             this.chartOptions['xAxis'][0]['data'] = date;
+            // set datazoom
+            let dataZoomStartValue = date[date.length > 50 ? date.length - 50 : 0];
+            let dataZoomEndValue = date[date.length - 1];
+            this.chartOptions['dataZoom'][0]['startValue'] = dataZoomStartValue;
+            this.chartOptions['dataZoom'][1]['startValue'] = dataZoomStartValue;
+            this.chartOptions['dataZoom'][0]['endValue'] = dataZoomEndValue;
+            this.chartOptions['dataZoom'][1]['endValue'] = dataZoomEndValue;
             console.log(this.chartOptions);
             this.$refs['chart1'] && this.$refs['chart1'].initChart();
             this.$emit('updateTableData', tableData.slice(0, 100), this.index);

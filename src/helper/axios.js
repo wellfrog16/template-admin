@@ -10,7 +10,7 @@ const instance = url => {
     accessToken = accessToken || store.state.login.accessToken;
     let instance = axios.create({
         baseURL: url || config.server.api,
-        timeout: 200000,
+        timeout: 0,
         headers: {Authorization: 'Bearer' + accessToken}
     });
     // request 拦截器
