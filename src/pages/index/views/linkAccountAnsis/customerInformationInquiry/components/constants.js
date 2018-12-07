@@ -109,7 +109,7 @@ export const activeNameList = [
 
 // 精确信息查询
 export const columnsCTrI3 = [
-    {field: "custd", label: "客户编号", width: '200', align: ''},
+    {field: "custId", label: "客户编号", width: '200', align: ''},
     {field: "custName", label: "客户名称", width: '200', align: ''},
     {field: "custType", label: "客户类型", width: '200', align: ''},
     {field: "bankSwift", label: "开户银行", width: '200', align: ''},

@@ -25,3 +25,7 @@ export const postExceptionInfo = params => {
 export const postImportAccounBar = params => {
     return post(`${requestPrefix}/exceptionInfo/pic`, params);
 };
+// 导出 CSV 的生成报告接口
+export const postExportAnalysis = params => {
+    return g(`${requestPrefix}/export/analysis`, params);
+};

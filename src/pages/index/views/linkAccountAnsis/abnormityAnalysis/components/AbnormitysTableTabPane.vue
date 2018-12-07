@@ -82,7 +82,8 @@
     import { activeNameList } from '../components/constants';
     import MixinVue from "../components/MixinsTable";
     import {
-        postImportAccounBar     // Bar 柱状图
+        postImportAccounBar,     // Bar 柱状图
+        postExportAnalysis      // 导出 CSV
     } from '@/api/dataAnsis/abnormityAnalysis';
 
     export default {
@@ -234,11 +235,16 @@
             handleSelectionChange(selection, row) {
             }
             ,
-            exportClick1(selection, row) {
-            }
-            ,
             // 导出CSV
             exportClick() {
+                let params = {
+                    "downloadType": "",
+                    "assistReportVOList": []
+                }
+                postExportAnalysis(params).then(resp => {
+                    console.log(resp);
+                })
+
             }
             ,
         },

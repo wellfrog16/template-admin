@@ -116,7 +116,8 @@
         postTlsResultInfo,    //  结果集列表
         postExportType,  // 当选择结果集时的生成报告接口
         postExceptionInfo,  // 当选择导入csv时的生成报告接口
-        postImportAccounBar  // Bar 柱状图
+        postImportAccounBar,  // Bar 柱状图
+        postExportAnalysis    // 导出 CSV
     } from '@/api/dataAnsis/abnormityAnalysis';
 
     export default {
@@ -174,7 +175,7 @@
                     fileList: {
                         message: '请导入CSV'
                     }
-                }
+                },
             };
         },
         methods: {
@@ -198,6 +199,13 @@
             },
             // 底部导出CSV按钮
             exportClick1() {
+                let params = {
+                    "downloadType": "3",
+                    "assistReportVOList": this.tableData ? this.tableData : []
+                };
+                postExportAnalysis(params).then(resp => {
+                    console.log(resp);
+                })
             },
             // 底部上一步按钮
             backClick1() {
