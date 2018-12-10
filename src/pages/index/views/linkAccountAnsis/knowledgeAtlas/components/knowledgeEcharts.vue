@@ -36,7 +36,7 @@
         // 父传子！
         props: {
             echartsData: {
-                type: Array,
+                type: Object,
                 required: true
             },
 

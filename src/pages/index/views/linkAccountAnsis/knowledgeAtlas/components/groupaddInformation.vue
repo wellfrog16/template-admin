@@ -67,27 +67,44 @@
                     </el-col>
                     <el-col :span="3">
                         <div>
-                            <el-button :class="$style.operate_button_group" type="danger" size="small" @click="handleDelete">删除</el-button>
+                            <el-button :class="$style.operate_button_group" type="danger" size="small"
+                                       @click="handleDelete">删除
+                            </el-button>
                             <br>
-                            <el-button :class="$style.operate_button_group" type="warning" size="small" @click="handleSplit">拆分</el-button>
+                            <el-button :class="$style.operate_button_group" type="warning" size="small"
+                                       @click="handleSplit">拆分
+                            </el-button>
                             <br>
-                            <el-button :class="$style.operate_button_group" type="warning" size="small" @click="handleMerge">合并</el-button>
+                            <el-button :class="$style.operate_button_group" type="warning" size="small"
+                                       @click="handleMerge">合并
+                            </el-button>
                             <br>
-                            <el-button :class="$style.operate_button_group" type="primary" size="small" @click="handleExportResult">导出到结果集</el-button>
+                            <el-button :class="$style.operate_button_group" type="primary" size="small"
+                                       @click="handleExportResult">导出到结果集
+                            </el-button>
                             <br>
-                            <el-button :class="$style.operate_button_group" type="primary" size="small" @click="handleExportCsv">导出到csv</el-button>
+                            <el-button :class="$style.operate_button_group" type="primary" size="small"
+                                       @click="handleExportCsv">导出到csv
+                            </el-button>
                             <br>
-                            <el-button :class="$style.operate_button_group" type="primary" size="small" @click="createNewData">重新生成数据</el-button>
+                            <el-button :class="$style.operate_button_group" type="primary" size="small"
+                                       @click="createNewData">重新生成数据
+                            </el-button>
                         </div>
                     </el-col>
                 </el-row>
             </div>
         </s-card>
         <div :class="$style.groupadd_button">
+            <!--<el-button-->
+            <!--size="small"-->
+            <!--type="primary"-->
+            <!--@click="generateReportsClick">生成报告-->
+            <!--</el-button>-->
             <el-button
                 size="small"
                 type="primary"
-                @click="generateReportsClick">生成报告
+                @click="dialogFormVisible = true">生成报告
             </el-button>
             <el-button
                 size="small"
@@ -95,6 +112,40 @@
                 @click="nextClick">下一步
             </el-button>
         </div>
+        <el-dialog
+            :before-close="closeData"
+            title="客户历史交易查询"
+            :visible.sync="dialogFormVisible"
+            :class="$style.dia_name">
+            <el-form ref="ruleForms" :model="ruleForms" :rules="rulesAll">
+                <el-form-item
+                    prop="contractCode"
+                    label="合约代码："
+                    label-width="100px">
+                    <el-input
+                        style="width: 80%;"
+                        v-model="ruleForms.contractCode"
+                        clearable size="small"
+                        auto-complete="off">
+                    </el-input>
+                </el-form-item>
+                <el-form-item label-width="130px">
+                    <!--<div slot="footer" class="dialog-footer">-->
+                    <el-button
+                        type="warning"
+                        size="small"
+                        @click="dialogFormVisibl">取 消
+                    </el-button>
+                    <el-button
+                        type="primary"
+                        size="small"
+                        @click="generateReportsClick('ruleForms')">确 定
+                    </el-button>
+                    <!--</div>-->
+                </el-form-item>
+            </el-form>
+
+        </el-dialog>
     </div>
 
 </template>
@@ -108,7 +159,7 @@
     } from '@/api/dataAnsis/abnormityAnalysis';
 
     import {
-        postCsvData,    // 导入 CSV接口
+        postRegenerate,   // 生成报告（知识库图表）（文革7）
         postResultList  // 导入结果集的树状列表(齐宁19)
     } from '@/api/dataAnsis/knowledgeAtlas';
 
@@ -117,7 +168,8 @@
     import TreeTable from '@/components/index/common/TreeTable';
     import ResultSelectComponent from '@/components/index/common/ResultSelectComponent';
 
-    import { mainTableColumns } from '../components/constants'
+    import {mainTableColumns} from '../components/constants'
+
     export default {
         name: "groupaddInformation",
         // 父传子！
@@ -134,6 +186,17 @@
         // 存储数据
         data() {
             return {
+                dialogFormVisible: false,
+                ruleForms: {
+                    contractCode: ''  // 合约代码
+                },
+
+                rulesAll: {
+                    contractCode: {
+                        required: true,
+                        message: '请输入合约代码'
+                    }
+                },
 
                 fullScreenLoading: false,  // 加载 (结果集加载)
 
@@ -166,7 +229,9 @@
 
                 counter: 0,  // 导入csv 表格push结果集名称
                 searchText: '',  // 请输入账户组或客户编号
-                mainTableDataClick: [] // 确认按钮
+                mainTableDataClick: [], // 确认按钮
+
+
             };
         },
         // 计算属性
@@ -177,7 +242,7 @@
             // 导入结果集数据
             selectResultId(val, fff) {
                 this.resultIds = val;
-                if(val){
+                if (val) {
                     console.log(val);
                     console.log(this.resultList);
                     let params = {
@@ -195,8 +260,8 @@
             },
 
             // 确认结果集导入 // 确认上次SVG
-            ascertainUPClick1(){
-                this.mainTableData =  this.mainTableData.conca(this.mainTableDataClick);
+            ascertainUPClick1() {
+                this.mainTableData = this.mainTableData.concat(this.mainTableDataClick);
             },
             ascertainUPClick() {
                 this.$refs['uploadFile'].submitUpload();
@@ -205,12 +270,7 @@
 
             // 导入CSV
             handleUploadSuccess(resp) {
-                let psa = {
-                    "resultSetName": "01"
-                };
-                    // let sdd = (..)
-               let sss = resp.push(psa);
-                this.mainTableData = this.mainTableData.conca(sss);
+                this.mainTableData = this.mainTableData.concat(resp);
             },
             // 导入CSV
             currentFileList(fileList) {
@@ -238,16 +298,73 @@
             updateCheckedList() {
             },
             // 生成报告
+            dialogFormVisibl() {
+                this.dialogFormVisible = false;
+                this.ruleForms.contractCode = '';
+
+            },
+            closeData(done) {
+                done();
+                this.ruleForms.contractCode = this.ruleForms.contractCode;
+            },
             generateReportsClick() {
-                let sdf = [
-                    {
-                        "name": "XG0001"
+                this.$refs['ruleForms'].validate(valid => {
+                    if (valid) {
+                        if (this.ruleForms.contractCode !== '') {
+                            // let params = [
+                            //     {
+                            //         "resultSetID": "",
+                            //         "resultSetName": "",
+                            //         "acctGroup": "XG000004",
+                            //         "acctGroupHold": "",
+                            //         "children": [
+                            //             {
+                            //                 "customerID": "80010634",
+                            //                 "customerName": "",
+                            //                 "customerHold": 0,
+                            //                 "accountOptCnt": 0,
+                            //                 "contractCode": this.ruleForms.contractCode    //"cu1712"
+                            //             }
+                            //         ],
+                            //         "contractCode": "",
+                            //         "custWheOtherGro": "",
+                            //         "acctGroSrc": ""
+                            //     }
+                            // ];
+
+                            let sss = [];
+                            let dd = [];
+                            this.mainTableData.forEach(v => {
+                                v.contractCode = this.ruleForms.contractCode;
+                                // if(v.contractCode.children == null){
+                                //     v.contractCode.children.forEach(m => {
+                                //         m.contractCode = this.ruleForms.contractCode;
+                                //         console.log(m.contractCode);
+                                //     })
+                                // }
+                                return v.contractCode
+                            });
+
+                            // this.mainTableData.map(m => {
+                            //     this.mainTableData.contractCode = this.ruleForms.contractCode;
+                            // });
+                            // let params = this.mainTableData;
+                            console.log(this.mainTableData);
+
+
+
+                            this.dialogFormVisible = false;
+                            // postRegenerate(params).then(resp => {
+                            //     this.$emit("generateEvent", resp.kmap);   // 知识库图表
+                            //     this.mainTableData = resp.resultSetList;  // 账户组信息
+                            // })
+                        }
                     }
-                ];
-                this.$emit("generateEvent", sdf)
+                })
             },
             // 下一步
-            nextClick() {},
+            nextClick() {
+            },
         },
         // 在一个实例被创建之后执行代码
         created() {
@@ -278,6 +395,9 @@
         .groupadd_button {
             text-align: center;
             margin-bottom: 26px;
+        }
+        .dia_name {
+            width: 65%;
         }
     }
 

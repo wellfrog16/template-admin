@@ -21,6 +21,7 @@
             @selection-change="handleSelectionChange"
             @row-click="handleRowClick"
             @cell-click="handleCellClick"
+            @cell-dblclick="handleCellDblClick"
             @row-contextmenu="handleRowContextMenu"
             @row-dblclick="handleRowDbClick"
             @sort-change="sortChange"
@@ -207,6 +208,9 @@ export default {
         handleCellClick(row) {
             // console.log(row);
             this.$emit('celCick', row);
+        },
+        handleCellDblClick(row){
+            this.$emit('cellDblClick', row);
         },
         headerRightClick(column, event) {
             this.$emit('headerRightClick', column, event);

@@ -190,7 +190,7 @@ export default {
             });
             this.chartOptions['xAxis']['data'] = timeData;
             this.chartOptions['series'] = series;
-            console.log(this.chartOptions);
+            // console.log(this.chartOptions);
             // this.$emit('updateTableData', tableData, this.index);
             this.chartOptions['legend']['data'] = series.map(v => {
                 return v.name;

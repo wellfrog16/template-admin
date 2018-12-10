@@ -24,7 +24,7 @@
         // 存储数据
         data() {
             return {
-                echartsData: []
+                echartsData: {}
             };
         },
         // 计算属性

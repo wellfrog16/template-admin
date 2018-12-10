@@ -18,7 +18,7 @@
                             :loading="dealWithIsLoading"
                             :columns="active.tableColumns"
                             :tableData="active.tableDataList"
-                            @celCick="tableCellClick">
+                            @cellDblClick="tableellDblClick">
                         </s-table>
                     </el-tab-pane>
                 </el-tabs>
@@ -32,13 +32,15 @@
                  v-loading="fullScreenLoading1"
                  element-loading-text="数据加载中，请耐心等待..."
                  element-loading-background="rgba(0,0,0,0.3)"
-                 id="AbarEcharts"></div>
+                 id="AbarEcharts">
+            </div>
         </div>
     </div>
 </template>
 <script>
-    import { activeNameList } from '../components/constants';
+    import {activeNameList} from '../components/constants';
     import MixinVue from "../components/MixinsTable";
+
     import {
         postImportAccounBar,     // Bar 柱状图
         postExportAnalysis      // 导出 CSV
@@ -91,16 +93,17 @@
                         this.activeNameList[0].tableDataList = val.overStoreAnalysis;
                         this.activeNameList[1].tableDataList = val.frequentTrade;
                         this.activeNameList[2].tableDataList = val.autoTrade;
-                        if(Object.keys(this.tablePaneData).length !== 0){
-                            this.tabsData()
+                        if (Object.keys(this.tablePaneData && this.tablePaneData).length !== 0) {
+                        // if (!$.isEmptyObject(this.tablePaneData)) {
+                            this.tabsData();
                         }
                     }
                 },
                 deep: true
             },
             formData: {
-                handler(val){
-                    if(val){
+                handler(val) {
+                    if (val) {
                         this.statTimeBegin = val.statTimeBegin;
                         this.statTimeEnd = val.statTimeEnd;
                     }
@@ -111,49 +114,73 @@
         //    数据交互
         methods: {
             // 柱状图
-            tabsData(){
-                    this.clearChartData();
-                    let accountTeamNo = '';   // 账户组号
-                    let arrCustId = [];  // 客户编号
-                    let contrCd = '';  // 合约代码
-
-                    let tableDataListData = this.activeNameList[this.activeName].tableDataList;
-                    for (let i = 0; i < tableDataListData.length; i++) {
-                        accountTeamNo = this.activeNameList[this.activeName].tableDataList[i].acctNum;          // 账户组号
-                        let a_acctNum = tableDataListData = this.activeNameList[this.activeName].tableDataList;  // 合约代码
-                        if (accountTeamNo ==  a_acctNum[this.activeName].acctNum ) {
-                            contrCd =  a_acctNum[this.activeName].contrCd;
-                            arrCustId.push(this.activeNameList[this.activeName].tableDataList[i].custId)
-                        }
+            tabsData(propsData) {
+                this.clearChartData();
+                let accountTeamNo = '';   // 账户组号
+                let arrCustId = [];  // 客户编号
+                let contrCd = '';  // 合约代码
+                let tableDataListData = this.activeNameList[this.activeName].tableDataList;
+                for (let i = 0; i < tableDataListData.length; i++) {
+                    accountTeamNo = this.activeNameList[this.activeName].tableDataList[i].acctNum;          // 账户组号
+                    let a_acctNum = this.activeNameList[this.activeName].tableDataList;  // 合约代码
+                    if (accountTeamNo == a_acctNum[this.activeName].acctNum) {
+                        contrCd = a_acctNum[this.activeName].contrCd;
+                        arrCustId.push(this.activeNameList[this.activeName].tableDataList[i].custId)
                     }
-                    let params = {
-                        "accountTeamNo": accountTeamNo,                     // 账户组号
-                        "arrCustId": arrCustId,                           // 客户编号
-                        "contrCode": contrCd,                         // 合约代码
-                        "statTimeBegin": this.statTimeBegin ,     // 统计起始日
-                        // "statTimeBegin": '2017-10-01',     // 统计起始日
-                        // "statTimeEnd": '2017-12-31',         // 统计截止日
-                        "statTimeEnd": this.statTimeEnd,         // 统计截止日
-                        "type": this.activeName,                     // 取值 '1':超仓分析
-                    };
+                }
+                let params = {
+                    "accountTeamNo": accountTeamNo,                     // 账户组号
+                    "arrCustId": arrCustId,                           // 客户编号
+                    "contrCode": contrCd,                         // 合约代码
+                    "statTimeBegin": this.statTimeBegin,     // 统计起始日
+                    // "statTimeBegin": '2017-10-01',     // 统计起始日
+                    // "statTimeEnd": '2017-12-31',         // 统计截止日
+                    "statTimeEnd": this.statTimeEnd,         // 统计截止日
+                    "type": this.activeName,                     // 取值 '1':超仓分析
+                };
+
+                // Bar 柱状图接口
+                if (propsData && Object.keys(propsData).length) {
+                    // store中获取缓存
+                    this.barEchartsDete(propsData);  // 对象
+                } else {
                     this.fullScreenLoading1 = true;
-                    // Bar 柱状图接口
                     postImportAccounBar(params).then(resp => {
                         this.fullScreenLoading1 = false;
+                        if (this.activeName == '0') {
+                            this.$store.commit('overStoreMut', resp);
+                        } else if (this.activeName == '1') {
+                            this.$store.commit('frequentMut', resp);
+                        } else {
+                            this.$store.commit('autoTradeMut', resp);
+                        }
                         this.barEchartsDete(resp);
 
                     })
+                }
+
             },
 
             // tab 切换
-            handleTabClick(){
-                if(Object.keys(this.tablePaneData).length !== 0){
-                    this.tabsData()
+            handleTabClick() {
+                // if (!$.isEmptyObject(this.tablePaneData)) {
+                if (Object.keys(this.tablePaneData).length !== 0) {
+                    this.fullScreenLoading1 = false;
+                    if (this.activeName == '0') {
+                        let storeData = this.$store.getters.overStoreGetters;
+                        this.tabsData(storeData || {});
+                    } else if (this.activeName == '1') {
+                        let storeData = this.$store.getters.frequentGetters;
+                        this.tabsData(storeData || {});
+                    } else {
+                        let storeData = this.$store.getters.autoTradeGetters;
+                        this.tabsData(storeData || {});
+                    }
                 }
             },
             // // Bar 柱状图
-            tableCellClick(row) {
-                if(Object.keys(row).length !== 0) {
+            tableellDblClick(row) {
+                if (Object.keys(row).length !== 0) {
                     this.clearChartData();
                     let rowCustId = [];
                     for (let i = 0; i < this.activeNameList[this.activeName].tableDataList.length; i++) {
@@ -176,6 +203,13 @@
                     // Bar 柱状图接口
                     postImportAccounBar(params).then(resp => {
                         this.fullScreenLoading1 = false;
+                        if (this.activeName == '0') {
+                            this.$store.commit('overStoreMut', resp);
+                        } else if (this.activeName == '1') {
+                            this.$store.commit('frequentMut', resp);
+                        } else {
+                            this.$store.commit('autoTradeMut', resp);
+                        }
                         this.barEchartsDete(resp);
 
                     })
@@ -198,7 +232,6 @@
         },
         // 初始化数据
         mounted() {
-            console.log(this.dealWithIsLoading);
         },
     };
 </script>

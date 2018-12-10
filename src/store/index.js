@@ -4,6 +4,7 @@ import Vuex from 'vuex';
 // 模块
 import login from '@/store/module/index/login';
 import sceneConfig from '@/store/module/index/sceneConfig';
+import abnormitysAnalysis from '@/store/module/index/abnormitysAnalysis';
 
 Vue.use(Vuex);
 
@@ -23,6 +24,7 @@ export default new Vuex.Store({
     actions,
     modules: {
         login,
-        sceneConfig
+        sceneConfig,
+        abnormitysAnalysis
     }
 });
