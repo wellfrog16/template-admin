@@ -675,23 +675,15 @@ export const chartTableColumns3 = [
     {label: '净持仓量', field: '', minWidth: 100}
 ];
 export const chartTableColumns4 = [
-    {label: '交易日', field: '', minWidth: 100},
-    {label: '报单编号', field: '', minWidth: 100},
-    {label: '账户组编号', field: '', minWidth: 100},
-    {label: '客户编号', field: '', minWidth: 100, template: custIdColumn},
-    {label: '合约代码', field: '', minWidth: 100},
-    {label: '买卖方向', field: '', minWidth: 100},
-    {label: '开平标志', field: '', minWidth: 100},
-    {label: '数量', field: '', minWidth: 100},
-    {label: '成交量', field: '', minWidth: 100},
-    {label: '报单时间', field: '', minWidth: 100},
-    {label: '报单数量', field: '', minWidth: 100},
-    {label: '报单价格', field: '', minWidth: 100},
+    {label: '客户编号', field: 'custId', minWidth: 100, template: custIdColumn},
+    {label: '买卖方向', field: 'bizDir', minWidth: 100},
+    {label: '报单时间1', field: 'declBillTm1', minWidth: 100},
+    {label: '报单时间2', field: 'declBillTm2', minWidth: 100},
+    {label: '报单数量', field: 'declBillQtty', minWidth: 100},
+    {label: '报单价格', field: 'declBillPrice', minWidth: 100},
     {label: '成交时间', field: '', minWidth: 100},
-    {label: '成交数量', field: '', minWidth: 100},
-    {label: '成交价格', field: '', minWidth: 100},
-    {label: '撤单时间', field: '', minWidth: 100},
-    {label: '撤单数量', field: '', minWidth: 100}
+    {label: '成交数量', field: 'bargainQtty', minWidth: 100},
+    {label: '成交价格', field: '', minWidth: 100}
 ];
 export const mainTableColumns = [
     {

@@ -31,7 +31,11 @@ export default {
     },
     methods: {
         handleChange() {
-            this.$emit('selectResultId', this.resultId, this.resultList,);
+            let index = this.resultList.findIndex(item => {
+                return item.resultId === this.resultId;
+            });
+            let resultType = this.resultList[index]['resultType'];
+            this.$emit('selectResultId', this.resultId, resultType, this.resultList);
         },
         getResultList() {
             this.loading = true;

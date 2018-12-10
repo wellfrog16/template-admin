@@ -27,7 +27,7 @@
                                 <p v-if="data.custId" style="margin:0;">客户编号：{{ data.custId }}</p>
                             </div>
                             <span slot="reference">
-                                <span v-if="item.field !== 'custId'">{{ (data[item.field] === null || data[item.field] === undefined) ?  '' :  data[item.field] }}</span>
+                                <span v-if="item.field !== 'custId'" style="max-width:120px;">{{ (data[item.field] === null || data[item.field] === undefined) ?  '' :  data[item.field] }}</span>
                                 <custIdColumn v-else :scope="{row: data}"></custIdColumn>
                             </span>
                         </el-popover>

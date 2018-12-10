@@ -182,13 +182,17 @@ export default {
 
             .top-content {
                 text-align: center;
+                position: absolute;
+                top: 32%;
+                left: 50%;
+                width: 100%;
+                transform: translate(-50%, -32%);
 
                 h3 {
                     color: #d7e7fa;
                     font-size: 72px;
                     font-weight: 400;
                     opacity: 0.9;
-                    margin: 160px 0 50px 0;
                 }
 
                 h5 {

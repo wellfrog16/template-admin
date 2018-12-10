@@ -84,7 +84,7 @@ export default {
         align-items: center;
         margin: 10px 15px;
         padding-left: 20px;
-        background: url('../../../assets/img/usr/breadcrumb_bg.png') no-repeat center center;
+        background: url('../../../assets/img/usr/breadcrumb_bg.png') no-repeat left;
         .brliet {
             color: #fff !important;
             font-weight: 700;
