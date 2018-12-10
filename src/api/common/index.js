@@ -16,3 +16,7 @@ export const getTlsResultInfo = () => {
 export const uploadFileByBodyInfo = url => {
     return `${config.server.api}${requestPrefix}/${url || 'exceptionInfo/csv'}?access_token=${localStorage.getItem('ACCESS_TOKEN')}`;
 };
+// 导出csv
+export const exportCsv = url => {
+    return `${config.server.api}${requestPrefix}/${url || 'export/analysis2'}?access_token=${localStorage.getItem('ACCESS_TOKEN')}`;
+};

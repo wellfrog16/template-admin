@@ -198,11 +198,11 @@ export default {
                 // get chart2 chart3
                 break;
             case '1':
-                this.drewChart4();
+                this.drewChart4(params['name']);
                 // get chart4
                 break;
             case '2':
-                this.drewChart4();
+                this.drewChart4(params['data'][0]);
                 // get chart4
                 break;
             }
@@ -307,8 +307,55 @@ export default {
             });
             this.sortByAccountId();
         },
-        handleExportResult() {},
-        handleExportCsv() {},
+        handleExportResult() {
+            this.$prompt('请输入结果集名称', '导出到结果集', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                inputPattern: /^[A-Za-z0-9\u4e00-\u9fa5]{1,30}$/,
+                inputErrorMessage: '结果集名称只能输入汉字、字母或者数字，长度30个字符以内'
+            }).then(({value}) => {
+                console.log(value);
+            }).catch(() => {});
+        },
+        handleExportCsv() {
+            // let tableData = [];
+            // this.mainTableData.forEach(v => {
+            //     if (v.children) {
+            //         tableData = tableData.concat(v.children);
+            //     }
+            // });
+            // console.log(tableData);
+            let params = {
+                fileName: '账户组信息',
+                tableColumns: mainTableColumns,
+                tableData: (() => {
+                    let d = [];
+                    for (let ii = 0; ii < 11; ii++) {
+                        d.push({
+                            'id': String(ii),
+                            'acctId': 'XG' + ii,
+                            'custId': '80' + String(ii),
+                            'custName': '客户' + ii,
+                            'acctGroAvgRelaCoef': 0,
+                            'acctAvgRelaCoef': 0,
+                            'contrCd': 'cu1712',
+                            'acctGroNetOpenInt': 500,
+                            'acctNetOpenInt': 100,
+                            'custWheOtherGro': 'BB001',
+                            'buyBargainRela': 0,
+                            'sellBargainRela': 0,
+                            'netBuyBargainRela': 0,
+                            'longPosMakePosRela': 0,
+                            'shortPosMakePosRela': 0,
+                            'floatPrftLossRela': 0
+                        });
+                    }
+                    return d;
+                })()
+            };
+            console.log(params);
+            this.gfnExportFileWithForm(params);
+        },
         createNewData() {},
         commonReqParams() {
             return {
@@ -357,7 +404,10 @@ export default {
     mounted() {
         this.sceneCommitParams = this.$store.getters.sceneCommitParams;
         // test
-        this.drewChart4();
+        // this.drewChart1();
+        // this.drewChart2();
+        // this.drewChart3();
+        // this.drewChart4();
     }
 };
 </script>

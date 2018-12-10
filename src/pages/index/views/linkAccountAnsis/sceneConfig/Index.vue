@@ -108,9 +108,9 @@
                         label="操作"
                         show-overflow-tooltip>
                         <template slot-scope="scope">
-                            <el-button type="primary" size="small" @click="openDialog(scope.row, 1)" icon="el-icon-view">查看</el-button>
-                            <el-button type="warning" size="small" @click="openDialog(scope.row, 2)" icon="el-icon-edit">编辑</el-button>
-                            <el-button type="danger" size="small" v-if="scope.row.isDel === '1'" icon="el-icon-delete" @click="handleDelete(scope.row)">删除</el-button>
+                            <el-button type="primary" size="small" @click.stop="openDialog(scope.row, 1)" icon="el-icon-view">查看</el-button>
+                            <el-button type="warning" size="small" @click.stop="openDialog(scope.row, 2)" icon="el-icon-edit">编辑</el-button>
+                            <el-button type="danger" size="small" v-if="scope.row.isDel === '1'" icon="el-icon-delete" @click.stop="handleDelete(scope.row)">删除</el-button>
                         </template>
                     </el-table-column>
                 </s-table>
@@ -176,6 +176,7 @@ export default {
                 fileList: [],
                 exportType: '',
                 resultId: 'AA0001',
+                resultType: '',
                 customNoArray: ['80000012', '80010237'],
                 contractCode: 'cu1712',
                 area: '9',
@@ -208,10 +209,16 @@ export default {
             selectList: [],
             exportCustomNo: [],
             rules: {
-                contractCode: {
-                    required: true,
-                    message: '请输入合约代码'
-                },
+                contractCode: [
+                    {
+                        required: true,
+                        message: '请输入合约代码',
+                    },
+                    {
+                        pattern: /^[A-Za-z0-9]{1,30}$/,
+                        message: '只能输入字母和数字，30个字符以内'
+                    }
+                ],
                 selectDateRange: {
                     required: true,
                     message: '请选择统计区间'
@@ -220,10 +227,12 @@ export default {
         };
     },
     methods: {
-        selectResultId(val) {
+        selectResultId(val, valType) {
             this.ruleForm.resultId = val;
+            this.ruleForm.resultType = valType;
         },
         validateCustomNo(rule, value, callback) {
+            let reg = /^[0-9]+$/;
             if (String(this.ruleForm.exportType) === '2') {
                 if (!value.length) {
                     callback(new Error('请输入客户段号'));
@@ -231,6 +240,8 @@ export default {
                     callback(new Error('请输入客户段起始号'));
                 } else if (!value[1] && value[1] !== 0) {
                     callback(new Error('请输入客户段结束号'));
+                } else if (!reg.test(value[0] || !reg.test(value[1]))) {
+                    callback(new Error('客户编号只能为数字'));
                 }
             }
             callback();
@@ -338,7 +349,7 @@ export default {
             // });
             let params = {
                 exportType: this.ruleForm.exportType,
-                cityIds: '00',
+                cityIds: '11',
                 // cityIds: cityIds.join(','),
                 contrCd: this.ruleForm.contractCode,
                 // statStartDt: moment(this.ruleForm.selectDateRange[0]).format('YYYY-MM-DD'),
@@ -361,6 +372,7 @@ export default {
             };
             if (this.ruleForm.exportType === '0') {
                 params.resultIds = this.ruleForm.resultId;
+                params.resultType = this.ruleForm.resultType;
             }
             if (this.ruleForm.exportType === '2') {
                 params.accountStart = this.ruleForm.customNoArray[0];

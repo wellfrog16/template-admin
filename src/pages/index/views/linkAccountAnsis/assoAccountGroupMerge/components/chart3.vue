@@ -33,7 +33,7 @@ export default {
         let upBorderColor = '#8A0000';
         let downColor = '#00da3c';
         let downBorderColor = '#008F28';
-        let chart3SymbolSize = 15;
+        let chart3SymbolSize = 8;
         let itemStyleArray = [{
             normal: {
                 color: '#28c76f',
@@ -84,7 +84,7 @@ export default {
                         } else {
                             return schema.map((v, i) => {
                                 return v.text + ': ' + param.value[i === 0 ? 5 : i];
-                            }).join('');
+                            }).join('<br>');
                         }
                     }
                 },
@@ -168,7 +168,7 @@ export default {
                         left: 'right',
                         inverse: true,
                         textGap: 5,
-                        bottom: '24%',
+                        bottom: '22%',
                         dimension: 3, // 注意：对应映射索引
                         min: 0,
                         max: 20,
@@ -203,7 +203,7 @@ export default {
                     {
                         name: '日K',
                         type: 'candlestick',
-                        barMaxWidth: 20,
+                        barMaxWidth: 50,
                         data: [],
                         itemStyle: {
                             normal: {
@@ -340,15 +340,18 @@ export default {
         },
         initChart(resp) {
             let {mainData, tableData} = resp;
+            mainData = _.sortBy(mainData, [item => {
+                return item.txDt;
+            }]);
             // set datazoom
-            let dataZoomStartValue = mainData[mainData.length > 50 ? mainData.length - 50 : 0]['txDt'];
-            let dataZoomEndValue = mainData[mainData.length - 1]['txDt'];
-            console.log(dataZoomStartValue);
-            console.log(dataZoomEndValue);
-            this.chartOptions['dataZoom'][0]['startValue'] = dataZoomStartValue;
-            this.chartOptions['dataZoom'][1]['startValue'] = dataZoomStartValue;
-            this.chartOptions['dataZoom'][0]['endValue'] = dataZoomEndValue;
-            this.chartOptions['dataZoom'][1]['endValue'] = dataZoomEndValue;
+            // let dataZoomStartValue = mainData[mainData.length > 50 ? mainData.length - 50 : 0]['txDt'];
+            // let dataZoomEndValue = mainData[mainData.length - 1]['txDt'];
+            // console.log(dataZoomStartValue);
+            // console.log(dataZoomEndValue);
+            // this.chartOptions['dataZoom'][0]['startValue'] = dataZoomStartValue;
+            // this.chartOptions['dataZoom'][1]['startValue'] = dataZoomStartValue;
+            // this.chartOptions['dataZoom'][0]['endValue'] = dataZoomEndValue;
+            // this.chartOptions['dataZoom'][1]['endValue'] = dataZoomEndValue;
             let seriesData = [];
             let scatterData1 = [];
             let scatterData2 = [];
@@ -373,7 +376,9 @@ export default {
             this.$nextTick(() => {
                 // 最近交易日，包含买入或卖出
                 let selectMax = _.maxBy(mainData, v => {
-                    return v.txDt && (v.sellAcctCnt || v.buyAcctCnt);
+                    if (!!v.sellAcctCnt || !!v.buyAcctCnt) {
+                        return v.txDt;
+                    }
                 });
                 console.log(selectMax);
                 console.log(88888888888);

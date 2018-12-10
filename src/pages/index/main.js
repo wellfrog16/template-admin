@@ -9,6 +9,7 @@ import jquery from 'jquery';
 import echarts from 'echarts';
 import moment from 'moment';
 import {echartsDefault} from '@/assets/style/common/theme/echart';
+import '@/utils/globle';
 
 Vue.config.productionTip = false;
 Vue.config.devtools = true;

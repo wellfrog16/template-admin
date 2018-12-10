@@ -25,6 +25,7 @@ export default {
     data() {
         return {
             loading: false,
+            txDt: '', // 选择的日期
             chartOptions: {
                 grid: {
                     x: 40,
@@ -37,9 +38,12 @@ export default {
                 },
                 tooltip: {
                     trigger: 'item',
+                    enterable: true, // 鼠标进入浮层
                     formatter: param => {
                         if (param.seriesIndex === 0) {
                             console.log(param);
+                            // let url = 'https://www.baidu.com';
+                            // <a href="${url}" target="_blank" style="cursor:pointer;">百度</a>;
                             return `
                                 时间点： ${param.name}<br>
                                 价格： ${param.value}<br>
@@ -60,7 +64,14 @@ export default {
                 },
                 yAxis: {
                     name: '价格',
-                    type: 'value'
+                    type: 'value',
+                    min: value => {
+                        return value.min;
+                    },
+                    max: value => {
+                        return value.max;
+                    },
+                    splitNumber: 2
                 },
                 dataZoom: [
                     {
@@ -79,12 +90,11 @@ export default {
                         type: 'line'
                     }
                 ]
-
             }
         };
     },
     methods: {
-        getData() {
+        getData(propsDate) {
             this.loading = true;
             // let params = this.commonReqParams;
             let params = {
@@ -94,7 +104,8 @@ export default {
                 accountTeamNo: 'XG00001',
                 custId: '80006298, 80003998, 80003172'
             };
-            params.txDt = '2017-03-16';
+            this.txDt = propsDate || '2017-03-16';
+            params.txDt = this.txDt;
             getChart4Data(params).then(resp => {
                 this.loading = false;
                 this.initChart(resp);
@@ -110,6 +121,7 @@ export default {
             let colors = [];
             let buy = {};
             let sail = {};
+            let tableData = JSON.parse(JSON.stringify(buysail));
             let buyArray = buysail.filter(v => {
                 return v.bizDir === '买';
             });
@@ -141,12 +153,14 @@ export default {
                 };
             };
             mainData.forEach(v => {
-                timeData.push(v.time.slice(-5));
+                timeData.push(v.time.slice(0, 5));
                 lineData.push(v.price);
             });
             // set datazoom
-            // let dataZoomStartValue = mainData[mainData.length > 50 ? mainData.length - 50 : 0]['time'];
-            // let dataZoomEndValue = mainData[mainData.length - 1]['time'];
+            // let dataZoomStartValue = timeData[timeData.length > 50 ? timeData.length - 50 : 0];
+            // let dataZoomEndValue = timeData[timeData.length - 1];
+            // console.log(dataZoomStartValue);
+            // console.log(dataZoomEndValue);
             // this.chartOptions['dataZoom'][0]['startValue'] = dataZoomStartValue;
             // this.chartOptions['dataZoom'][1]['startValue'] = dataZoomStartValue;
             // this.chartOptions['dataZoom'][0]['endValue'] = dataZoomEndValue;
@@ -190,8 +204,8 @@ export default {
             });
             this.chartOptions['xAxis']['data'] = timeData;
             this.chartOptions['series'] = series;
-            // console.log(this.chartOptions);
-            // this.$emit('updateTableData', tableData, this.index);
+            console.log(this.chartOptions);
+            this.$emit('updateTableData', tableData, this.index);
             this.chartOptions['legend']['data'] = series.map(v => {
                 return v.name;
             });
@@ -203,9 +217,6 @@ export default {
         handleEchartDblClickEvent(val) {
             this.$emit('handleEchartDblClickEvent', val, this.index);
         }
-    },
-    mounted() {
-        this.getData();
     }
 };
 </script>
