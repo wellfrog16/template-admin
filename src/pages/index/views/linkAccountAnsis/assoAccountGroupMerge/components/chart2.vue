@@ -87,7 +87,7 @@ export default {
                 console.error(e);
             });
         },
-        initChart(resData) {
+        initChart(resData, flag) {
             resData = resData || this.storeData;
             console.log(resData);
             if (!Object.keys(resData).length) {
@@ -137,9 +137,11 @@ export default {
             console.log(this.chartOptions);
             this.$refs['chart1'] && this.$refs['chart1'].initChart();
             this.$emit('updateTableData', tableData.slice(0, 100), this.index);
-            this.$nextTick(() => {
-                this.$emit('drewChart4');
-            });
+            if (!flag) {
+                this.$nextTick(() => {
+                    this.$emit('drewChart4');
+                });
+            }
         },
         handleEchartClickEvent(val) {
             this.$emit('handleEchartClickEvent', val, this.index);

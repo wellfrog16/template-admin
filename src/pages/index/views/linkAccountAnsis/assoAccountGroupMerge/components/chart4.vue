@@ -116,7 +116,7 @@ export default {
                 console.error(e);
             });
         },
-        initChart(resData) {
+        initChart(resData, flag) {
             resData = resData || this.storeData;
             if (!Object.keys(resData).length) {
                 return;

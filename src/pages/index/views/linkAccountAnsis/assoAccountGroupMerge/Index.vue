@@ -151,7 +151,7 @@ export default {
             this.charts[index]['toggleDetailFlags'] = !item.toggleDetailFlags;
             if (!item.toggleDetailFlags) {
                 this.$nextTick(() => {
-                    this.getChart()[index]();
+                    this.getChart()[index](null, true);
                 });
             }
         },

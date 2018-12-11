@@ -340,7 +340,7 @@ export default {
                 console.error(e);
             });
         },
-        initChart(resData) {
+        initChart(resData, flag) {
             resData = resData || this.storeData;
             if (!Object.keys(resData).length) {
                 return;
@@ -388,7 +388,11 @@ export default {
                 });
                 console.log(selectMax);
                 console.log(88888888888);
-                this.$emit('drewChart4');
+                if (!flag) {
+                    this.$nextTick(() => {
+                        this.$emit('drewChart4');
+                    });
+                }
             });
         },
         handleEchartClickEvent(val) {

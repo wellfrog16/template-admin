@@ -5,7 +5,7 @@
 </template>
 <script>
 import EchartsCommon from '@/components/index/common/EchartsCommon';
-import {resData1} from './constants';
+// import {resData1} from './constants';
 import _ from 'lodash';
 export default {
     components: {EchartsCommon},
@@ -160,8 +160,8 @@ export default {
     },
     methods: {
         getData() {
-            // let resData = this.$store.getters.sceneCommitResp;
-            let resData = resData1;
+            let resData = this.$store.getters.sceneCommitResp;
+            // let resData = resData1;
             this.storeData = resData;
             this.initChart(resData);
         },
@@ -170,7 +170,7 @@ export default {
                 return item.acctId;
             }]);
         },
-        initChart(resData) {
+        initChart(resData, flag) {
             resData = resData || this.storeData;
             if (!Object.keys(resData).length) {
                 return;
@@ -217,10 +217,12 @@ export default {
             // select max
             this.$emit('updateAccountGroupAndCustIds', selectMax ? selectMax.acctId : '', selectMax ? selectMax.custIds.split(',') : []);
             this.$refs['chart0'] && this.$refs['chart0'].initChart();
-            this.$nextTick(() => {
-                this.$emit('drewChart2');
-                this.$emit('drewChart3');
-            });
+            if (!flag) {
+                this.$nextTick(() => {
+                    this.$emit('drewChart2');
+                    this.$emit('drewChart3');
+                });
+            }
         },
         handleEchartClickEvent(val) {
             this.$emit('handleEchartClickEvent', val, this.index);
