@@ -865,10 +865,12 @@ export const resData2 = {
     }]
 };
 export const table3Options = [
-    {label: '买入量', field: 'buyCnt', minWidth: 100},
-    {label: '卖出量', field: 'sellCnt', minWidth: 100},
+    {label: '买入数量', field: 'buyQtty', minWidth: 100},
+    {label: '卖出数量', field: 'sellQtty', minWidth: 100},
+    {label: '买入笔数', field: 'buyCnt', minWidth: 100},
+    {label: '卖出笔数', field: 'sellCnt', minWidth: 100},
     {label: '多头持仓量', field: 'longPosOpenInt', minWidth: 130},
-    {label: '多头持仓金额', field: '', minWidth: 130},
+    {label: '空头持仓量', field: 'shortPosOpenInt', minWidth: 130},
     {label: '盈亏', field: 'prftLoss', minWidth: 90},
     {label: '净买入量', field: 'netBuyQtty', minWidth: 100},
     {label: '净持仓量', field: 'netOpenInt', minWidth: 100}

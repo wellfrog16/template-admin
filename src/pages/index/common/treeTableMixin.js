@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import {exportResultSet} from '@/api/common';
 export default {
     data() {
         return {
@@ -116,23 +117,47 @@ export default {
             });
             this.sortByAccountId();
         },
-        handleExportResult() {
-            this.$prompt('请输入结果集名称', '导出到结果集', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                inputPattern: /^[A-Za-z0-9\u4e00-\u9fa5]{1,30}$/,
-                inputErrorMessage: '结果集名称只能输入汉字、字母或者数字，长度30个字符以内'
-            }).then(({value}) => {
-                console.log(value);
-            }).catch(() => {});
-        },
-        handleExportCsv(fileName, mainTableColumns) {
+        dealMainData() { //  将树形结构处理为list
             let tableData = [];
             this.mainTableData.forEach(v => {
                 if (v.children) {
                     tableData = tableData.concat(v.children);
                 }
             });
+            return tableData;
+        },
+        handleExportResult(propsResultType) {
+            this.$prompt('请输入结果集名称', '导出到结果集', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                inputPattern: /^[A-Za-z0-9\u4e00-\u9fa5]{1,30}$/,
+                inputErrorMessage: '结果集名称只能输入汉字、字母或者数字，长度30个字符以内'
+            }).then(({value}) => {
+                let params = {
+                    resultType: propsResultType || '5', // 结果集类型（1：相关性；5：合并）
+                    resultName: value,
+                    resultList: this.dealMainData()
+                };
+                if (params.resultType === '1') {
+                    params.statStartDt = this.sceneCommitParams.statStartDt;
+                    params.statStopDay = this.sceneCommitParams.statStopDay;
+                    params.statFreq = this.sceneCommitParams.statFreq;
+                }
+                console.log(params);
+                exportResultSet(params).then(resp => {
+                    console.log(resp);
+                    if (this.$route.name === 'assoAccountGroupMerge') {
+                        this.updateResultList();
+                    }
+                });
+            }).catch(() => {});
+        },
+        handleExportCsv(fileName, mainTableColumns) {
+            let tableData = this.dealMainData();
+            if (tableData && !tableData.length) {
+                this.$message.error('暂无数据');
+                return;
+            }
             // console.log(tableData);
             let params = {
                 fileName: fileName || '测试',

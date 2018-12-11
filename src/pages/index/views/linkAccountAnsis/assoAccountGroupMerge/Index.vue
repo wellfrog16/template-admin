@@ -8,7 +8,7 @@
             <div class="tabs-button">
                 <el-row>
                     <span style="margin-right: 10px;">导入结果集：</span>
-                    <resultSelectComponent :resultIdProps="resultIds" @selectResultId="selectResultId"></resultSelectComponent>
+                    <resultSelectComponent ref="resultSelectComponent" :resultIdProps="resultIds" @selectResultId="selectResultId"></resultSelectComponent>
                 </el-row>
             </div>
         </div>
@@ -17,10 +17,10 @@
                 <el-col :span="12" v-for="(item, index) in charts" :key="index">
                     <s-card :title="item.title" :icon="item.icon" class="self-card-css">
                         <div slot="right">
-                            <el-button type="text" @click="toggleDetail(item)">明细<i class="el-icon-plus" style="margign-left: 5px;"></i></el-button>
+                            <el-button type="text" @click="toggleDetail(item, index)">明细<i class="el-icon-plus" style="margign-left: 5px;"></i></el-button>
                         </div>
                         <div slot="content">
-                            <div v-show="item['toggleDetailFlags']">
+                            <div v-if="item['toggleDetailFlags']">
                                 <div v-if="index===2">
                                     <el-select class="custom-width" clearable size="small" v-model="table3CurrentType">
                                         <el-option v-for="(o, oi) in table3Options" :key="oi" :label="o.label" :value="o.field"></el-option>
@@ -28,7 +28,7 @@
                                 </div>
                                 <s-table :height="index === 2 ? 268 : 300" :columns="chartTableColumns[index]" :tableData="chartTableData[index]"></s-table>
                             </div>
-                            <div v-show="!item['toggleDetailFlags']">
+                            <div v-else>
                                 <chart1 :ref="`chartComponent${index + 1}`" v-if="index === 0" :childrenMap="childrenMap" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData" @updateMainTableData="updateMainTableData" @updateAccountGroupAndCustIds="updateAccountGroupAndCustIds" @drewChart2="drewChart2"  @drewChart3="drewChart3"></chart1>
                                 <chart2 :ref="`chartComponent${index + 1}`" v-if="index === 1" :commonReqParams="commonReqParams()" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData" @drewChart4="drewChart4"></chart2>
                                 <chart3 :ref="`chartComponent${index + 1}`" v-if="index === 2" :commonReqParams="commonReqParams()" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData" @drewChart4="drewChart4"></chart3>
@@ -61,7 +61,7 @@
                                     <br>
                                     <el-button type="warning" size="small" @click="handleMerge">合并</el-button>
                                     <br>
-                                    <el-button type="primary" size="small" @click="handleExportResult">导出到结果集</el-button>
+                                    <el-button type="primary" size="small" @click="handleExportResult('1')">导出到结果集</el-button>
                                     <br>
                                     <el-button type="primary" size="small" @click="handleExportCsv('账户组信息', mainTableColumns)">导出到csv</el-button>
                                     <br>
@@ -127,8 +127,12 @@ export default {
         }
     },
     methods: {
+        updateResultList() {
+            this.$refs['resultSelectComponent'].getResultList();
+        },
         selectResultId(val) {
             this.resultIds = val;
+            // 导入结果集
         },
         updateAccountGroupAndCustIds(groupId, custIds) {
             this.currentAccountGroupId = groupId;
@@ -143,11 +147,13 @@ export default {
         handleTabClick(tab) {
             this.activeTab = tab.name;
         },
-        toggleDetail(item) {
-            let index = this.charts.findIndex(v => {
-                return v.title === item.title;
-            });
+        toggleDetail(item, index) {
             this.charts[index]['toggleDetailFlags'] = !item.toggleDetailFlags;
+            if (!item.toggleDetailFlags) {
+                this.$nextTick(() => {
+                    this.getChart()[index]();
+                });
+            }
         },
         handleEchartClickEvent(params, index) {
             console.log(params);
@@ -209,17 +215,32 @@ export default {
                 contrCode: this.sceneCommitParams.contrCd || 'cu1712'
             };
         },
+        getChart() {
+            return [this.getChart1, this.getChart2, this.getChart3, this.getChart4];
+        },
         drewChart1() {
             this.$refs['chartComponent1'] && this.$refs['chartComponent1'][0] && this.$refs['chartComponent1'][0].getData();
+        },
+        getChart1() {
+            this.$refs['chartComponent1'] && this.$refs['chartComponent1'][0] && this.$refs['chartComponent1'][0].initChart();
         },
         drewChart2() {
             this.$refs['chartComponent2'] && this.$refs['chartComponent2'][0] && this.$refs['chartComponent2'][0].getData();
         },
+        getChart2() {
+            this.$refs['chartComponent2'] && this.$refs['chartComponent2'][0] && this.$refs['chartComponent2'][0].initChart();
+        },
         drewChart3() {
             this.$refs['chartComponent3'] && this.$refs['chartComponent3'][0] && this.$refs['chartComponent3'][0].getData();
         },
+        getChart3() {
+            this.$refs['chartComponent3'] && this.$refs['chartComponent3'][0] && this.$refs['chartComponent3'][0].initChart();
+        },
         drewChart4() {
             this.$refs['chartComponent4'] && this.$refs['chartComponent4'][0] && this.$refs['chartComponent4'][0].getData();
+        },
+        getChart4() {
+            this.$refs['chartComponent4'] && this.$refs['chartComponent4'][0] && this.$refs['chartComponent4'][0].initChart();
         },
         createChart3Columnn(val) {
             let chart3Column = val.map(v => {

@@ -25,6 +25,7 @@ export default {
     data() {
         return {
             loading: false,
+            storeData: {},
             txDt: '', // 选择的日期
             chartOptions: {
                 grid: {
@@ -108,14 +109,19 @@ export default {
             params.txDt = this.txDt;
             getChart4Data(params).then(resp => {
                 this.loading = false;
+                this.storeData = resp;
                 this.initChart(resp);
             }).catch(e => {
                 this.loading = false;
                 console.error(e);
             });
         },
-        initChart(resp) {
-            let {mainData, buysail} = resp;
+        initChart(resData) {
+            resData = resData || this.storeData;
+            if (!Object.keys(resData).length) {
+                return;
+            }
+            let {mainData, buysail} = resData;
             let lineData = [];
             let timeData = [];
             let colors = [];
@@ -169,7 +175,7 @@ export default {
             let series = this.chartOptions['series'];
             Object.keys(buy).forEach((v, i) => {
                 let data = buy[v].map(m => {
-                    return [m.declBillTm2.slice(-5), m.declBillPrice - (i + 1) * 2, m.declBillQtty, '买入', v];
+                    return [m.declBillTm2.slice(-5), m.currPrice - (i + 1) * 2, m.declBillQtty, '买入', v];
                 });
                 series.push({
                     name: `${v}`,
@@ -186,7 +192,7 @@ export default {
             });
             Object.keys(sail).forEach((v, i) => {
                 let data = sail[v].map(m => {
-                    return [m.declBillTm2.slice(-5), m.declBillPrice + (i + 1) * 2, m.declBillQtty, '卖出', v];
+                    return [m.declBillTm2.slice(-5), m.currPrice + (i + 1) * 2, m.declBillQtty, '卖出', v];
                 });
                 series.push({
                     name: `${v}`,

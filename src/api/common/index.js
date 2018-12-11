@@ -20,3 +20,7 @@ export const uploadFileByBodyInfo = url => {
 export const exportCsv = url => {
     return `${config.server.api}${requestPrefix}/${url || 'export/analysis'}?access_token=${localStorage.getItem('ACCESS_TOKEN')}`;
 };
+// 导出结果集
+export const exportResultSet = params => {
+    return post(`${requestPrefix}/getAcctExportResultSet`, params || {});
+};

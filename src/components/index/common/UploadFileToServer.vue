@@ -181,9 +181,7 @@ export default {
         },
         handleRemove(file, fileList) {
             console.log(file, fileList);
-            if (!fileList.length) {
-                this.$emit('getTxtCon', [], false);
-            }
+            this.$emit('currentFileList', []);
         },
         submitUpload() {
             this.$refs.upload.submit();

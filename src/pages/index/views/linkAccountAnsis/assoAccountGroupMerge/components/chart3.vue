@@ -62,6 +62,7 @@ export default {
         ];
         return {
             loading: false,
+            storeData: {},
             chartOptions: {
                 animation: false,
                 // color: ['transparent', '#8A0000'],
@@ -332,14 +333,19 @@ export default {
             getChart3Data(params).then(resp => {
                 this.loading = false;
                 console.log(resp);
+                this.storeData = resp;
                 this.initChart(resp);
             }).catch(e => {
                 this.loading = false;
                 console.error(e);
             });
         },
-        initChart(resp) {
-            let {mainData, tableData} = resp;
+        initChart(resData) {
+            resData = resData || this.storeData;
+            if (!Object.keys(resData).length) {
+                return;
+            }
+            let {mainData, tableData} = resData;
             mainData = _.sortBy(mainData, [item => {
                 return item.txDt;
             }]);
