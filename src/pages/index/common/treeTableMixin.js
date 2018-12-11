@@ -134,13 +134,15 @@ export default {
                 inputErrorMessage: '结果集名称只能输入汉字、字母或者数字，长度30个字符以内'
             }).then(({value}) => {
                 let params = {
-                    statStartDt: this.sceneCommitParams.statStartDt || '2017-02-20',
-                    statStopDay: this.sceneCommitParams.statStopDay || '2017-10-09',
-                    statFreq: this.sceneCommitParams.statFreq || '11',
                     resultType: propsResultType || '5', // 结果集类型（1：相关性；5：合并）
                     resultName: value,
                     resultList: this.dealMainData()
                 };
+                if (params.resultType === '1') {
+                    params.statStartDt = this.sceneCommitParams.statStartDt;
+                    params.statStopDay = this.sceneCommitParams.statStopDay;
+                    params.statFreq = this.sceneCommitParams.statFreq;
+                }
                 console.log(params);
                 exportResultSet(params).then(resp => {
                     console.log(resp);
