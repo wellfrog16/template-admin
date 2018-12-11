@@ -86,25 +86,16 @@
                             <el-button :class="$style.operate_button_group" type="primary" size="small"
                                        @click="handleExportCsv">导出到csv
                             </el-button>
-                            <br>
-                            <el-button :class="$style.operate_button_group" type="primary" size="small"
-                                       @click="createNewData">重新生成数据
-                            </el-button>
                         </div>
                     </el-col>
                 </el-row>
             </div>
         </s-card>
         <div :class="$style.groupadd_button">
-            <!--<el-button-->
-            <!--size="small"-->
-            <!--type="primary"-->
-            <!--@click="generateReportsClick">生成报告-->
-            <!--</el-button>-->
             <el-button
                 size="small"
                 type="primary"
-                @click="dialogFormVisible = true">生成报告
+                @click="dialogFormVisible = true">生成数据
             </el-button>
             <el-button
                 size="small"
@@ -130,7 +121,6 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item label-width="130px">
-                    <!--<div slot="footer" class="dialog-footer">-->
                     <el-button
                         type="warning"
                         size="small"
@@ -141,7 +131,6 @@
                         size="small"
                         @click="generateReportsClick('ruleForms')">确 定
                     </el-button>
-                    <!--</div>-->
                 </el-form-item>
             </el-form>
 
@@ -188,7 +177,7 @@
             return {
                 dialogFormVisible: false,
                 ruleForms: {
-                    contractCode: ''  // 合约代码
+                    contractCode: ''  // 合约代码  cu1712
                 },
 
                 rulesAll: {
@@ -292,9 +281,6 @@
             // 导出到csv
             handleExportCsv() {
             },
-            // 重新生成数据
-            createNewData() {
-            },
             updateCheckedList() {
             },
             // 生成报告
@@ -305,59 +291,37 @@
             },
             closeData(done) {
                 done();
-                this.ruleForms.contractCode = this.ruleForms.contractCode;
+                // this.ruleForms.contractCode = '';
             },
             generateReportsClick() {
                 this.$refs['ruleForms'].validate(valid => {
                     if (valid) {
                         if (this.ruleForms.contractCode !== '') {
-                            // let params = [
-                            //     {
-                            //         "resultSetID": "",
-                            //         "resultSetName": "",
-                            //         "acctGroup": "XG000004",
-                            //         "acctGroupHold": "",
-                            //         "children": [
-                            //             {
-                            //                 "customerID": "80010634",
-                            //                 "customerName": "",
-                            //                 "customerHold": 0,
-                            //                 "accountOptCnt": 0,
-                            //                 "contractCode": this.ruleForms.contractCode    //"cu1712"
-                            //             }
-                            //         ],
-                            //         "contractCode": "",
-                            //         "custWheOtherGro": "",
-                            //         "acctGroSrc": ""
-                            //     }
-                            // ];
-
-                            let sss = [];
-                            let dd = [];
+                            let a_contractCode = [];
+                            let a_contractCodeChildren = [];
                             this.mainTableData.forEach(v => {
-                                v.contractCode = this.ruleForms.contractCode;
-                                // if(v.contractCode.children == null){
-                                //     v.contractCode.children.forEach(m => {
-                                //         m.contractCode = this.ruleForms.contractCode;
-                                //         console.log(m.contractCode);
-                                //     })
-                                // }
-                                return v.contractCode
+                                if(v.contractCode == null){
+                                    v.contractCode = this.ruleForms.contractCode;
+                                    a_contractCode = this.mainTableData;
+                                    if(v.children){
+                                        v.children.forEach(m => {
+                                            m.contractCode = this.ruleForms.contractCode;
+                                            a_contractCodeChildren = this.mainTableData;
+                                        })
+                                    }
+
+                                }
+
                             });
-
-                            // this.mainTableData.map(m => {
-                            //     this.mainTableData.contractCode = this.ruleForms.contractCode;
-                            // });
-                            // let params = this.mainTableData;
-                            console.log(this.mainTableData);
-
-
-
                             this.dialogFormVisible = false;
-                            // postRegenerate(params).then(resp => {
-                            //     this.$emit("generateEvent", resp.kmap);   // 知识库图表
-                            //     this.mainTableData = resp.resultSetList;  // 账户组信息
-                            // })
+                            postRegenerate(a_contractCodeChildren).then(resp => {
+                                if(resp){
+                                    this.mainTableData = [];
+                                    this.$emit("generateEvent", resp.kmap);   // 知识库图表
+                                    this.mainTableData = resp.resultSetList;  // 账户组信息
+                                }
+
+                            })
                         }
                     }
                 })
