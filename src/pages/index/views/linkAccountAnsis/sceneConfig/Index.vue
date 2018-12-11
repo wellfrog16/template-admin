@@ -176,7 +176,7 @@ export default {
                 fileList: [],
                 exportType: '',
                 resultId: 'AA0001',
-                resultType: '',
+                resultType: '1',
                 customNoArray: ['80000012', '80010237'],
                 contractCode: 'cu1712',
                 area: '9',
