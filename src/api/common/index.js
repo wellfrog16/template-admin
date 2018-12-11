@@ -18,5 +18,5 @@ export const uploadFileByBodyInfo = url => {
 };
 // 导出csv
 export const exportCsv = url => {
-    return `${config.server.api}${requestPrefix}/${url || 'export/analysis2'}?access_token=${localStorage.getItem('ACCESS_TOKEN')}`;
+    return `${config.server.api}${requestPrefix}/${url || 'export/analysis'}?access_token=${localStorage.getItem('ACCESS_TOKEN')}`;
 };

@@ -63,7 +63,7 @@
                                     <br>
                                     <el-button type="primary" size="small" @click="handleExportResult">导出到结果集</el-button>
                                     <br>
-                                    <el-button type="primary" size="small" @click="handleExportCsv">导出到csv</el-button>
+                                    <el-button type="primary" size="small" @click="handleExportCsv('账户组信息', mainTableColumns)">导出到csv</el-button>
                                     <br>
                                     <el-button type="primary" size="small" @click="createNewData">重新生成数据</el-button>
                                 </div>
@@ -84,15 +84,17 @@ import SCard from '@/components/index/common/SCard';
 import STable from '@/components/index/common/STable';
 import TreeTable from '@/components/index/common/TreeTable';
 import ResultSelectComponent from '@/components/index/common/ResultSelectComponent';
+import treeTableMixin from '@/pages/index/common/treeTableMixin';
+
 // import {getChart2Data} from '@/api/dataAnsis/assoAccountGroupMerge';
 import chart1 from './components/chart1';
 import chart2 from './components/chart2';
 import chart3 from './components/chart3';
 import chart4 from './components/chart4';
-import _ from 'lodash';
 import {charts, mainTableColumns, chartTableColumns1, chartTableColumns2, chartTableColumns4, table3Options} from './components/constants';
 export default {
     components: {chart1, chart2, chart3, chart4, SCard, STable, TreeTable, ResultSelectComponent},
+    mixins: [treeTableMixin],
     watch: {
         currentCustIds: {
             handler(val) {
@@ -114,12 +116,9 @@ export default {
             chartTableData: [[], [], [], []],
             resultIds: '',
             searchText: '',
-            selectAccountGroupList: [],
-            mainTableData: [],
             currentAccountGroupId: '',
             currentCustIds: [], // 当前账户组下的客户号
-            table3CurrentType: 'buyCnt',
-            childrenMap: {} // 账户组id和子客户号id的maping
+            table3CurrentType: 'buyCnt'
         };
     },
     computed: {
@@ -135,18 +134,11 @@ export default {
             this.currentAccountGroupId = groupId;
             this.currentCustIds = custIds;
         },
-        updateMainTableData(val) {
-            this.mainTableData = val;
-            this.sortByAccountId();
-        },
         updateTableData(value, index) {
             if (index === 2) {
                 this.createChart3Columnn(this.currentCustIds);
             }
             this.chartTableData[index] = value;
-        },
-        updateCheckedList(checkedNodes, checkedKeys) {
-            this.selectAccountGroupList = checkedKeys;
         },
         handleTabClick(tab) {
             this.activeTab = tab.name;
@@ -208,156 +200,6 @@ export default {
                 break;
             }
         },
-        deleteMethods(deleteList) {
-            let list = JSON.parse(JSON.stringify(this.mainTableData));
-            deleteList.forEach(v => {
-                if (v.children) {
-                    list = list.filter(l => {
-                        return l.acctId !== v.acctId;
-                    });
-                } else {
-                    list.forEach(l => {
-                        if (l.children && l.acctId === v.acctId) {
-                            l.children.splice(l.children.findIndex(f => { return f.custId === v.custId; }), 1);
-                        }
-                    });
-                }
-            });
-            this.mainTableData = JSON.parse(JSON.stringify(list));
-        },
-        handleDelete() {
-            let checkedNodes = this.getCheckedNodes();
-            console.log(checkedNodes);
-            this.deleteMethods(checkedNodes);
-        },
-        getMaxAccountId() {
-            let acctIds = [...new Set(this.mainTableData.map(v => {
-                return +v.acctId.slice(2);
-            }))];
-            return _.max(acctIds);
-        },
-        createAccountId(propsNew) {
-            let newId = propsNew || this.getMaxAccountId() + 1;
-            return this.accountIdPre + (('00000' + newId).slice(-6));
-        },
-        createTreeId() {
-            return new Date().getTime();
-        },
-        getCheckedNodes(flag) {
-            return this.$refs['self-tree-table'].$refs['tree-table'].getCheckedNodes(flag);
-        },
-        handleSplit() {
-            let checkedNodes = this.getCheckedNodes();
-            let acctIds = checkedNodes.map(v => {
-                return v.acctId;
-            });
-            acctIds = [...new Set(acctIds)];
-            if (!acctIds.length) {
-                this.$message.error('请选择子账户号');
-                return;
-            }
-            console.log(checkedNodes);
-            if (acctIds.length > 1) {
-                this.$message.error('请选择一个账户组内的子账户号');
-                return;
-            }
-            let checkedChildren = this.getCheckedNodes(true);
-            this.deleteMethods(checkedNodes);
-            checkedChildren.forEach(v => {
-                v.acctId = this.createAccountId();
-            });
-            this.mainTableData.push({
-                id: this.createTreeId(),
-                acctId: this.createAccountId(),
-                children: checkedChildren
-            });
-            this.sortByAccountId();
-        },
-        sortByAccountId() {
-            this.mainTableData = _.sortBy(this.mainTableData, [item => {
-                return item.acctId;
-            }]);
-        },
-        handleMerge() {
-            let checkedNodes = this.getCheckedNodes();
-            let checkedChildren = this.getCheckedNodes(true);
-            let acctGroups = [];
-            let acctIds = [];
-            checkedNodes.forEach(v => {
-                if (v.acctId && !v.custId) {
-                    acctGroups.push(v);
-                    acctIds.push(v.acctId);
-                }
-            });
-            if (!(acctGroups.length && acctGroups.length > 1)) {
-                this.$message.error('请选择多个账户组');
-                return;
-            }
-            let acctIdsNO = acctIds.map(v => {
-                return v.slice(2);
-            });
-            let minNo = _.min(acctIdsNO);
-            this.deleteMethods(checkedNodes);
-            checkedChildren.forEach(v => {
-                v.acctId = this.createAccountId(minNo);
-            });
-            this.mainTableData.push({
-                id: this.createTreeId(),
-                acctId: this.createAccountId(minNo),
-                children: _.unionBy(checkedChildren, 'custId')
-            });
-            this.sortByAccountId();
-        },
-        handleExportResult() {
-            this.$prompt('请输入结果集名称', '导出到结果集', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                inputPattern: /^[A-Za-z0-9\u4e00-\u9fa5]{1,30}$/,
-                inputErrorMessage: '结果集名称只能输入汉字、字母或者数字，长度30个字符以内'
-            }).then(({value}) => {
-                console.log(value);
-            }).catch(() => {});
-        },
-        handleExportCsv() {
-            // let tableData = [];
-            // this.mainTableData.forEach(v => {
-            //     if (v.children) {
-            //         tableData = tableData.concat(v.children);
-            //     }
-            // });
-            // console.log(tableData);
-            let params = {
-                fileName: '账户组信息',
-                tableColumns: mainTableColumns,
-                tableData: (() => {
-                    let d = [];
-                    for (let ii = 0; ii < 11; ii++) {
-                        d.push({
-                            'id': String(ii),
-                            'acctId': 'XG' + ii,
-                            'custId': '80' + String(ii),
-                            'custName': '客户' + ii,
-                            'acctGroAvgRelaCoef': 0,
-                            'acctAvgRelaCoef': 0,
-                            'contrCd': 'cu1712',
-                            'acctGroNetOpenInt': 500,
-                            'acctNetOpenInt': 100,
-                            'custWheOtherGro': 'BB001',
-                            'buyBargainRela': 0,
-                            'sellBargainRela': 0,
-                            'netBuyBargainRela': 0,
-                            'longPosMakePosRela': 0,
-                            'shortPosMakePosRela': 0,
-                            'floatPrftLossRela': 0
-                        });
-                    }
-                    return d;
-                })()
-            };
-            console.log(params);
-            this.gfnExportFileWithForm(params);
-        },
-        createNewData() {},
         commonReqParams() {
             return {
                 accountTeamNo: this.currentAccountGroupId || 'XG00001',
