@@ -25,12 +25,19 @@ export default {
     data() {
         return {
             loading: false,
+            storeData: {},
             chartOptions: {
                 tooltip: {
                     trigger: 'axis',
                     axisPointer: { // 坐标轴指示器，坐标轴触发有效
                         type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
                     }
+                },
+                grid: {
+                    x: 40,
+                    x2: 60,
+                    y: 60,
+                    y2: 60
                 },
                 legend: {
                     data: []
@@ -73,6 +80,7 @@ export default {
             getChart2Data(params).then(resp => {
                 this.loading = false;
                 console.log(resp);
+                this.storeData = resp;
                 this.initChart(resp);
             }).catch(e => {
                 this.loading = false;
@@ -80,6 +88,11 @@ export default {
             });
         },
         initChart(resData) {
+            resData = resData || this.storeData;
+            console.log(resData);
+            if (!Object.keys(resData).length) {
+                return;
+            }
             let {qtty, mainData, tableData} = resData;
             let series = [];
             let date = [];
@@ -104,7 +117,7 @@ export default {
                         },
                         symbolSize: 0, // 控制箭头和原点的大小、官方默认的标准线会带远点和箭头
                         data: [ // 设置条标准线——x=10
-                            {yAxis: qtty || ''}
+                            {yAxis: qtty || '10000'}
                         ]
                     },
                     data: mainData[v].map(m => { return m.value; })
@@ -115,7 +128,7 @@ export default {
             this.chartOptions['series'] = series;
             this.chartOptions['xAxis'][0]['data'] = date;
             // set datazoom
-            let dataZoomStartValue = date[date.length > 50 ? date.length - 50 : 0];
+            let dataZoomStartValue = date[date.length > 20 ? date.length - 20 : 0];
             let dataZoomEndValue = date[date.length - 1];
             this.chartOptions['dataZoom'][0]['startValue'] = dataZoomStartValue;
             this.chartOptions['dataZoom'][1]['startValue'] = dataZoomStartValue;

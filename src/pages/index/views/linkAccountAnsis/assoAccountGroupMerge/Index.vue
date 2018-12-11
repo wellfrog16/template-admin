@@ -118,8 +118,7 @@ export default {
             searchText: '',
             currentAccountGroupId: '',
             currentCustIds: [], // 当前账户组下的客户号
-            table3CurrentType: 'buyCnt',
-            drewChart: [this.drewChart1, this.drewChart2, this.drewChart3, this.drewChart4]
+            table3CurrentType: 'buyCnt'
         };
     },
     computed: {
@@ -133,6 +132,7 @@ export default {
         },
         selectResultId(val) {
             this.resultIds = val;
+            // 导入结果集
         },
         updateAccountGroupAndCustIds(groupId, custIds) {
             this.currentAccountGroupId = groupId;
@@ -149,7 +149,11 @@ export default {
         },
         toggleDetail(item, index) {
             this.charts[index]['toggleDetailFlags'] = !item.toggleDetailFlags;
-            this.drewChart[index]();
+            if (!item.toggleDetailFlags) {
+                this.$nextTick(() => {
+                    this.getChart()[index]();
+                });
+            }
         },
         handleEchartClickEvent(params, index) {
             console.log(params);
@@ -211,17 +215,32 @@ export default {
                 contrCode: this.sceneCommitParams.contrCd || 'cu1712'
             };
         },
+        getChart() {
+            return [this.getChart1, this.getChart2, this.getChart3, this.getChart4];
+        },
         drewChart1() {
             this.$refs['chartComponent1'] && this.$refs['chartComponent1'][0] && this.$refs['chartComponent1'][0].getData();
+        },
+        getChart1() {
+            this.$refs['chartComponent1'] && this.$refs['chartComponent1'][0] && this.$refs['chartComponent1'][0].initChart();
         },
         drewChart2() {
             this.$refs['chartComponent2'] && this.$refs['chartComponent2'][0] && this.$refs['chartComponent2'][0].getData();
         },
+        getChart2() {
+            this.$refs['chartComponent2'] && this.$refs['chartComponent2'][0] && this.$refs['chartComponent2'][0].initChart();
+        },
         drewChart3() {
             this.$refs['chartComponent3'] && this.$refs['chartComponent3'][0] && this.$refs['chartComponent3'][0].getData();
         },
+        getChart3() {
+            this.$refs['chartComponent3'] && this.$refs['chartComponent3'][0] && this.$refs['chartComponent3'][0].initChart();
+        },
         drewChart4() {
             this.$refs['chartComponent4'] && this.$refs['chartComponent4'][0] && this.$refs['chartComponent4'][0].getData();
+        },
+        getChart4() {
+            this.$refs['chartComponent4'] && this.$refs['chartComponent4'][0] && this.$refs['chartComponent4'][0].initChart();
         },
         createChart3Columnn(val) {
             let chart3Column = val.map(v => {

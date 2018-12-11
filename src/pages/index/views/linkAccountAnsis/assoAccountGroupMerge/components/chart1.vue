@@ -36,6 +36,7 @@ export default {
         };
         return {
             loading: false,
+            storeData: {},
             chartOptions: {
                 // legend: {
                 //     y: 'top',
@@ -140,7 +141,7 @@ export default {
                             },
                             symbolSize: 0, // 控制箭头和原点的大小、官方默认的标准线会带远点和箭头
                             data: [ // 设置条标准线——x=10
-                                {xAxis: 5000}
+                                {xAxis: 10000}
                             ]
                         },
                         markPoint: {
@@ -161,6 +162,7 @@ export default {
         getData() {
             // let resData = this.$store.getters.sceneCommitResp;
             let resData = resData1;
+            this.storeData = resData;
             this.initChart(resData);
         },
         sortByAccountId() {
@@ -169,6 +171,10 @@ export default {
             }]);
         },
         initChart(resData) {
+            resData = resData || this.storeData;
+            if (!Object.keys(resData).length) {
+                return;
+            }
             let {mainTableData, chartData} = resData;
             if (!chartData || !chartData.length) {
                 return;

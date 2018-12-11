@@ -25,6 +25,7 @@ export default {
     data() {
         return {
             loading: false,
+            storeData: {},
             txDt: '', // 选择的日期
             chartOptions: {
                 grid: {
@@ -108,14 +109,19 @@ export default {
             params.txDt = this.txDt;
             getChart4Data(params).then(resp => {
                 this.loading = false;
+                this.storeData = resp;
                 this.initChart(resp);
             }).catch(e => {
                 this.loading = false;
                 console.error(e);
             });
         },
-        initChart(resp) {
-            let {mainData, buysail} = resp;
+        initChart(resData) {
+            resData = resData || this.storeData;
+            if (!Object.keys(resData).length) {
+                return;
+            }
+            let {mainData, buysail} = resData;
             let lineData = [];
             let timeData = [];
             let colors = [];

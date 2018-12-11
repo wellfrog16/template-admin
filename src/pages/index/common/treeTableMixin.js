@@ -136,7 +136,7 @@ export default {
                 let params = {
                     statStartDt: this.sceneCommitParams.statStartDt || '2017-02-20',
                     statStopDay: this.sceneCommitParams.statStopDay || '2017-10-09',
-                    statFreq: this.sceneCommitParams.statFreq || '',
+                    statFreq: this.sceneCommitParams.statFreq || '11',
                     resultType: propsResultType || '5', // 结果集类型（1：相关性；5：合并）
                     resultName: value,
                     resultList: this.dealMainData()
