@@ -188,15 +188,9 @@
             echartClick() {
                 this.clearChartData();
                 if(this.echartsData){
-                    // console.log(this.echartsData.nodes);
-                    // console.log(this.echartsData.links);
-                    // console.log(this.chartOptions.series[0].data);
-                    // console.log(this.chartOptions.series[0].links);
                     this.chartOptions.series[0].data = this.echartsData.nodes;
                     this.chartOptions.series[0].links = this.echartsData.links;
 
-                }else {
-                    console.log(33);
                 }
 
 
