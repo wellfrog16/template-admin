@@ -84,7 +84,7 @@
                             </el-button>
                             <br>
                             <el-button :class="$style.operate_button_group" type="primary" size="small"
-                                       @click="handleExportCsv">导出到csv
+                                       @click="handleExportCsv('账户组信息', mainTableColumns)">导出到csv
                             </el-button>
                         </div>
                     </el-col>
@@ -137,206 +137,181 @@
     </div>
 </template>
 <script>
-    import {
-        uploadFileByBodyInfo    // 导入csv，输出账户号list 接口
-    } from '@/api/common';
+import {
+    uploadFileByBodyInfo // 导入csv，输出账户号list 接口
+} from '@/api/common';
+import treeTableMixin from '@/pages/index/common/treeTableMixin';
+import {
+    postTlsResultInfo, //  结果集列表接口
+} from '@/api/dataAnsis/abnormityAnalysis';
 
-    import {
-        postTlsResultInfo,    //  结果集列表接口
-    } from '@/api/dataAnsis/abnormityAnalysis';
+import {
+    postRegenerate, // 生成报告（知识库图表）（文革7）
+    postResultList // 导入结果集的树状列表(齐宁19)
+} from '@/api/dataAnsis/knowledgeAtlas';
 
-    import {
-        postRegenerate,   // 生成报告（知识库图表）（文革7）
-        postResultList  // 导入结果集的树状列表(齐宁19)
-    } from '@/api/dataAnsis/knowledgeAtlas';
+import SCard from '@/components/index/common/SCard';
+import UploadFileToServer from '@/components/index/common/UploadFileToServer';
+import TreeTable from '@/components/index/common/TreeTable';
+import ResultSelectComponent from '@/components/index/common/ResultSelectComponent';
 
-    import SCard from '@/components/index/common/SCard';
-    import UploadFileToServer from '@/components/index/common/UploadFileToServer';
-    import TreeTable from '@/components/index/common/TreeTable';
-    import ResultSelectComponent from '@/components/index/common/ResultSelectComponent';
+import {mainTableColumns} from '../components/constants';
 
-    import {mainTableColumns} from '../components/constants'
+export default {
+    name: 'groupaddInformation',
+    // 父传子！
+    props: {},
+    components: {
+        SCard, // 边框
+        UploadFileToServer, // 导入CSV
+        TreeTable,
+        ResultSelectComponent // 导入结果集的树状列表
+    },
+    // 混入, 是一个类的继承，类似于一个公共的方法。
+    mixins: [treeTableMixin],
+    // 存储数据
+    data() {
+        return {
+            dialogFormVisible: false,
+            ruleForms: {
+                contractCode: 'cu1712' // 合约代码  cu1712
+            },
 
-    export default {
-        name: "groupaddInformation",
-        // 父传子！
-        props: {},
-
-        components: {
-            SCard,  // 边框
-            UploadFileToServer,  // 导入CSV
-            TreeTable,
-            ResultSelectComponent   // 导入结果集的树状列表
-        },
-        // 混入, 是一个类的继承，类似于一个公共的方法。
-        mixins: [],
-        // 存储数据
-        data() {
-            return {
-                dialogFormVisible: false,
-                ruleForms: {
-                    contractCode: 'cu1712'  // 合约代码  cu1712
-                },
-
-                rulesAll: {
-                    contractCode: {
-                        required: true,
-                        message: '请输入合约代码'
-                    }
-                },
-
-                fullScreenLoading: false,  // 加载 (结果集加载)
-
-                mainTableColumns: mainTableColumns,
-                mainTableData: [],
-                // form 表单绑定值
-                ruleForm: {
-                    fileList: [],          // 导入CSV
-                    exportType: '',       // 导入结果集按钮
-                },
-                rules: {
-                    exportType: {
-                        message: '请选择结果集'
-                    },
-                    fileList: {
-                        message: '请导入CSV'
-                    }
-                },
-                resultList: [],
-                resultIds: '',
-                uploadOption: {
-                    name: '上传',
-                    size: 'small',
-                    type: 'primary'
-                },
-                // 导入csv，输出账户号list 接口
-                uploadParams: {}, // 上传文件body参数
-                actionUrl: uploadFileByBodyInfo('customer/combinedscence/csv'),
-                defaultLimitFileType: ['csv'],
-
-                counter: 0,  // 导入csv 表格push结果集名称
-                searchText: '',  // 请输入账户组或客户编号
-                mainTableDataClick: [], // 确认按钮
-
-
-            };
-        },
-        // 计算属性
-        computed: {},
-        watch: {},
-        //    数据交互  127662
-        methods: {
-            // 导入结果集数据
-            selectResultId(val, fff) {
-                this.resultIds = val;
-                if (val) {
-                    console.log(val);
-                    console.log(this.resultList);
-                    let params = {
-                        "resultId": val,     // 结果集编号
-                        "resultName": "AA",   // 结果集名称
-                        "resultType": "5",   // 结果集类型
-                        "setupUser": "appadmin",   // 创建用户
-                    }
-                    postResultList(params).then(resp => {
-                        this.fullScreenLoading = false;
-                        this.mainTableDataClick = resp;
-                    });
+            rulesAll: {
+                contractCode: {
+                    required: true,
+                    message: '请输入合约代码'
                 }
-
             },
 
-            // 确认结果集导入 // 确认上次SVG
-            ascertainUPClick1() {
-                this.mainTableData = this.mainTableData.concat(this.mainTableDataClick);
-            },
-            ascertainUPClick() {
-                this.$refs['uploadFile'].submitUpload();
-            },
+            fullScreenLoading: false, // 加载 (结果集加载)
 
+            mainTableColumns: mainTableColumns,
+            // form 表单绑定值
+            ruleForm: {
+                fileList: [], // 导入CSV
+                exportType: '', // 导入结果集按钮
+            },
+            rules: {
+                exportType: {
+                    message: '请选择结果集'
+                },
+                fileList: {
+                    message: '请导入CSV'
+                }
+            },
+            resultList: [],
+            resultIds: '',
+            uploadOption: {
+                name: '上传',
+                size: 'small',
+                type: 'primary'
+            },
+            // 导入csv，输出账户号list 接口
+            uploadParams: {}, // 上传文件body参数
+            actionUrl: uploadFileByBodyInfo('customer/combinedscence/csv'),
+            defaultLimitFileType: ['csv'],
 
-            // 导入CSV
-            handleUploadSuccess(resp) {
-                this.mainTableData = this.mainTableData.concat(resp);
-            },
-            // 导入CSV
-            currentFileList(fileList) {
-                this.ruleForm.fileList = fileList;
-            },
+            counter: 0, // 导入csv 表格push结果集名称
+            searchText: '', // 请输入账户组或客户编号
+            mainTableDataClick: [], // 确认按钮
 
-            // 删除
-            handleDelete() {
-            },
-            // 拆分
-            handleSplit() {
-            },
-            // 合并
-            handleMerge() {
-            },
-            // 导出到结果集
-            handleExportResult() {
-            },
-            // 导出到csv
-            handleExportCsv() {
-            },
-            updateCheckedList() {
-            },
-            // 生成报告
-            dialogFormVisibl() {
-                this.dialogFormVisible = false;
-                this.ruleForms.contractCode = '';
+        };
+    },
+    // 计算属性
+    computed: {},
+    watch: {},
+    //    数据交互  127662
+    methods: {
+        // 导入结果集数据
+        selectResultId(val, fff) {
+            this.resultIds = val;
+            if (val) {
+                console.log(val);
+                console.log(this.resultList);
+                let params = {
+                    'resultId': val, // 结果集编号
+                    'resultName': 'AA', // 结果集名称
+                    'resultType': '5', // 结果集类型
+                    'setupUser': 'appadmin', // 创建用户
+                };
+                postResultList(params).then(resp => {
+                    this.fullScreenLoading = false;
+                    this.mainTableDataClick = resp;
+                });
+            }
+        },
 
-            },
-            closeData(done) {
-                done();
-                // this.ruleForms.contractCode = '';
-            },
-            generateReportsClick() {
-                this.$refs['ruleForms'].validate(valid => {
-                    if (valid) {
-                        if (this.ruleForms.contractCode !== '') {
-                            let a_contractCode = [];
-                            let a_contractCodeChildren = [];
-                            this.mainTableData.forEach(v => {
-                                if(v.contractCode == null){
-                                    v.contractCode = this.ruleForms.contractCode;
-                                    a_contractCode = this.mainTableData;
-                                    if(v.children){
-                                        v.children.forEach(m => {
-                                            m.contractCode = this.ruleForms.contractCode;
-                                            a_contractCodeChildren = this.mainTableData;
-                                        })
-                                    }
+        // 确认结果集导入 // 确认上次SVG
+        ascertainUPClick1() {
+            this.mainTableData = this.mainTableData.concat(this.mainTableDataClick);
+        },
+        ascertainUPClick() {
+            this.$refs['uploadFile'].submitUpload();
+        },
 
+        // 导入CSV
+        handleUploadSuccess(resp) {
+            this.mainTableData = this.mainTableData.concat(resp);
+        },
+        // 导入CSV
+        currentFileList(fileList) {
+            this.ruleForm.fileList = fileList;
+        },
+        updateCheckedList() {
+        },
+        // 生成报告
+        dialogFormVisibl() {
+            this.dialogFormVisible = false;
+            this.ruleForms.contractCode = '';
+        },
+        closeData(done) {
+            done();
+            // this.ruleForms.contractCode = '';
+        },
+        generateReportsClick() {
+            this.$refs['ruleForms'].validate(valid => {
+                if (valid) {
+                    if (this.ruleForms.contractCode !== '') {
+                        let a_contractCode = [];
+                        let a_contractCodeChildren = [];
+                        this.mainTableData.forEach(v => {
+                            if (v.contractCode == null) {
+                                v.contractCode = this.ruleForms.contractCode;
+                                a_contractCode = this.mainTableData;
+                                if (v.children) {
+                                    v.children.forEach(m => {
+                                        m.contractCode = this.ruleForms.contractCode;
+                                        a_contractCodeChildren = this.mainTableData;
+                                    });
                                 }
-
-                            });
-                            this.dialogFormVisible = false;
-                            postRegenerate(a_contractCodeChildren).then(resp => {
-                                if(resp){
-                                    this.mainTableData = [];
-                                    this.$emit("generateEvent", resp.kmap);   // 知识库图表
-                                    this.mainTableData = resp.resultSetList;  // 账户组信息
-                                }
-
-                            })
-                        }
+                            }
+                        });
+                        this.dialogFormVisible = false;
+                        postRegenerate(a_contractCodeChildren).then(resp => {
+                            if (resp) {
+                                this.mainTableData = [];
+                                this.$emit('generateEvent', resp.kmap); // 知识库图表
+                                this.mainTableData = resp.resultSetList; // 账户组信息
+                            }
+                        });
                     }
-                })
-            },
-            // 下一步
-            nextClick() {
-            },
+                }
+            });
         },
-        // 在一个实例被创建之后执行代码
-        created() {
+        // 下一步
+        nextClick() {
         },
-        // 初始化数据
-        mounted() {
-        },
-        beforeDestroy() {
-        }
-    };
+    },
+    // 在一个实例被创建之后执行代码
+    created() {
+    },
+    // 初始化数据
+    mounted() {
+    },
+    beforeDestroy() {
+    }
+};
 </script>
 <style lang="less" module>
     .groupadd_information {
