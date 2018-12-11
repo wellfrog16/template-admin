@@ -1,6 +1,8 @@
 <template>
     <div :class="$style.knowledge_atlas">
+        <!-- 知识库图-->
         <knowledge-echarts :echartsData="echartsData"></knowledge-echarts>
+        <!--数据-->
         <group-infor @generateEvent="generateEvent"></group-infor>
     </div>
 </template>

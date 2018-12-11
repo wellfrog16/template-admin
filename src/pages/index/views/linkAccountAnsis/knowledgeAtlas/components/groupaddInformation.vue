@@ -55,7 +55,7 @@
             <div slot="content">
                 <el-row :gutter="20">
                     <el-col :span="21">
-                        <div style="overflow:auto; max-height:400px;">
+                        <div style="overflow:auto; max-height:350px;">
                             <tree-table
                                 ref="self-tree-table"
                                 :filterText="searchText"
@@ -133,10 +133,8 @@
                     </el-button>
                 </el-form-item>
             </el-form>
-
         </el-dialog>
     </div>
-
 </template>
 <script>
     import {
@@ -177,7 +175,7 @@
             return {
                 dialogFormVisible: false,
                 ruleForms: {
-                    contractCode: ''  // 合约代码  cu1712
+                    contractCode: 'cu1712'  // 合约代码  cu1712
                 },
 
                 rulesAll: {
