@@ -137,6 +137,7 @@ export default {
         },
         updateMainTableData(val) {
             this.mainTableData = val;
+            this.sortByAccountId();
         },
         updateTableData(value, index) {
             if (index === 2) {
@@ -237,7 +238,7 @@ export default {
         },
         createAccountId(propsNew) {
             let newId = propsNew || this.getMaxAccountId() + 1;
-            return this.accountIdPre + (('0000' + newId).slice(-5));
+            return this.accountIdPre + (('00000' + newId).slice(-6));
         },
         createTreeId() {
             return new Date().getTime();
@@ -303,7 +304,7 @@ export default {
             this.mainTableData.push({
                 id: this.createTreeId(),
                 acctId: this.createAccountId(minNo),
-                children: _.unionBy(checkedChildren)
+                children: _.unionBy(checkedChildren, 'custId')
             });
             this.sortByAccountId();
         },
@@ -399,9 +400,15 @@ export default {
         },
         nextStep() {
             this.$router.push({name: 'abnormity'});
+        },
+        resetDetailFlag() {
+            this.charts.forEach(v => {
+                v.toggleDetailFlags = false;
+            });
         }
     },
     mounted() {
+        this.resetDetailFlag();
         this.sceneCommitParams = this.$store.getters.sceneCommitParams;
         // test
         // this.drewChart1();
