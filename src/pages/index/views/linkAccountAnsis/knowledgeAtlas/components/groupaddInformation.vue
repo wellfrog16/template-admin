@@ -55,7 +55,7 @@
             <div slot="content">
                 <el-row :gutter="20">
                     <el-col :span="21">
-                        <div style="overflow:auto; max-height:350px;">
+                        <div style="overflow:auto; max-height:300px;">
                             <tree-table
                                 ref="self-tree-table"
                                 :filterText="searchText"
@@ -260,7 +260,7 @@ export default {
         },
         updateCheckedList() {
         },
-        // 生成报告
+        // 取消生成报告
         dialogFormVisibl() {
             this.dialogFormVisible = false;
             this.ruleForms.contractCode = '';
@@ -269,6 +269,7 @@ export default {
             done();
             // this.ruleForms.contractCode = '';
         },
+        // 生成报告
         generateReportsClick() {
             this.$refs['ruleForms'].validate(valid => {
                 if (valid) {
@@ -290,7 +291,6 @@ export default {
                         this.dialogFormVisible = false;
                         postRegenerate(a_contractCodeChildren).then(resp => {
                             if (resp) {
-                                this.mainTableData = [];
                                 this.$emit('generateEvent', resp.kmap); // 知识库图表
                                 this.mainTableData = resp.resultSetList; // 账户组信息
                             }

@@ -74,7 +74,8 @@
                         <el-col :xl="4" :lg="4" :md="4" :sm="24" class="generate">
                             <el-form-item label-width="20px">
                                 <el-button type="primary" size="small"
-                                           @click="generateReportsClick('ruleForm')">生成协查报告</el-button>
+                                           @click="generateReportsClick('ruleForm')">生成协查报告
+                                </el-button>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -98,7 +99,7 @@
         </s-card>
         <div style="text-align:center; margin: 30px 0;">
             <el-button size="small" type="primary" @click="backClick1">上一步</el-button>
-            <el-button size="small" type="primary" @click="exportClick1">导出CSV</el-button>
+            <el-button size="small" type="primary" @click="exportClick1('协查报告', tableColumns)">导出CSV</el-button>
         </div>
     </div>
 </template>
@@ -115,8 +116,7 @@
     } from '@/api/common';
     import {
         postTlsResultInfo,    //  结果集列表
-        postExportType,  // 当选择结果集时的生成报告接口
-        postExceptionInfo,  // 当选择导入csv时的生成报告接口
+        postExportType,       //  当选择结果集时的生成报告接口
         postImportAccounBar,  // Bar 柱状图
         postExportAnalysis    // 导出 CSV
     } from '@/api/dataAnsis/abnormityAnalysis';
@@ -188,90 +188,17 @@
                     this.resultList = resp;
                 });
             },
-            // 选择结果集的按钮 -- 二选一
-            resultChange(val){
-                if(val){
-                    if(this.ruleForm.exportType !== '0') {
-                        this.ruleForm.exportType = '0'
-                    }
-                }else {
-                    this.ruleForm.exportType = '';
-                }
-            },
+
             // 底部导出CSV按钮
-            exportClick1() {
-                console.log(22);
+            exportClick1(fileName, tableColumns) {
                 let params = {
-                    "downloadType": "3",
-                    // "assistReportVOList": this.tableData ? this.tableData : []
-                    "assistReportVOList": [
-                        {
-                            acctCurrNetMake: 374673,
-                            acctCurrNetPos: 0,
-                            acctNum: "XG00008",
-                            billMakePosQtty: 0,
-                            contrCd: "cu1712",
-                            custId: "80005147",
-                            custName: '',
-                            multiBillMakePosQtty: 0,
-                            statBosomDays: 150,
-                        },{
-                            acctCurrNetMake: 374673,
-                            acctCurrNetPos: 0,
-                            acctNum: "XG00008",
-                            billMakePosQtty: 0,
-                            contrCd: "cu1712",
-                            custId: "80008229",
-                            custName: '',
-                            multiBillMakePosQtty: 0,
-                            statBosomDays: 150,
-                        },{
-                            acctCurrNetMake: 374673,
-                            acctCurrNetPos: 0,
-                            acctNum: "XG00008",
-                            billMakePosQtty: 0,
-                            contrCd: "cu1712",
-                            custId: "80005237",
-                            custName: null,
-                            multiBillMakePosQtty: 0,
-                            statBosomDays: 150,
-                        },{
-                            acctCurrNetMake: 374673,
-                            acctCurrNetPos: 0,
-                            acctNum: "XG00003",
-                            billMakePosQtty: 0,
-                            contrCd: "cu1712",
-                            custId: "80005146",
-                            custName: '',
-                            multiBillMakePosQtty: 0,
-                            statBosomDays: 150,
-                        },{
-                            acctCurrNetMake: 374673,
-                            acctCurrNetPos: 0,
-                            acctNum: "XG00003",
-                            billMakePosQtty: 0,
-                            contrCd: "cu1712",
-                            custId: "80008229",
-                            custName: '',
-                            multiBillMakePosQtty: 0,
-                            statBosomDays: 150,
-                        },{
-                            acctCurrNetMake: 374673,
-                            acctCurrNetPos: 0,
-                            acctNum: "XG00003",
-                            billMakePosQtty: 0,
-                            contrCd: "cu1712",
-                            custId: "80005257",
-                            custName: null,
-                            multiBillMakePosQtty: 0,
-                            statBosomDays: 150,
-                        }
-                    ]
+                    "fileName": fileName || '测试',
+                    "tableColumns": tableColumns,
+                    "tableData": this.tableData
                 };
-                postExportAnalysis(params).then(resp => {
-                    console.log(resp);
-                })
                 console.log(params);
+                postExportAnalysis(params);
+
             },
             // 底部上一步按钮
             backClick1() {
@@ -281,15 +208,35 @@
             handleSdatePickerDateRangeChange(val) {
                 this.ruleForm.selectDateRange = val;
             },
-            // 导入CSV
-            handleUploadSuccess() {
-                this.$router.push({name: ''});
-            },
-
-            // 导入CSV
+            // 导入CSV (添加附件成功)
             currentFileList(fileList) {
                 this.ruleForm.fileList = fileList;
             },
+            // 导入CSV
+            handleUploadSuccess(resp) {
+                console.log(resp);
+                    let params = {
+                        contrCode: this.ruleForm.contractCode,             // 合约代码
+                        statTimeBegin: this.ruleForm.selectDateRange[0],   // 统计起始日
+                        statTimeEnd: this.ruleForm.selectDateRange[1],     // 统计截止日
+                        resultSetNo: this.ruleForm.resultId                // 结果集编号
+                    };
+                    this.$store.commit('saveSceneCommitResp', resp);
+                    this.tableData = resp.report;  // 协查报告数据
+                    this.tablePaneList = resp;    // tab 表格数据
+                    this.formDataList = params; // 生成协查报告的参数
+            },
+            // 选择结果集的按钮 -- 二选一
+            resultChange(val) {
+                if (val) {
+                    if (this.ruleForm.exportType !== '0') {
+                        this.ruleForm.exportType = '0'
+                    }
+                } else {
+                    this.ruleForm.exportType = '';
+                }
+            },
+
             // 生成报告
             generateReportsClick() {
                 this.tableData = [];
@@ -301,12 +248,9 @@
                                 contrCode: this.ruleForm.contractCode, // 合约代码
                                 statTimeBegin: this.ruleForm.selectDateRange[0], // 统计起始日
                                 statTimeEnd: this.ruleForm.selectDateRange[1],  // 统计截止日
-                                file: ''
-                            }
-                            this.uploadParams = {...this.uploadParams, ...params};
-                            this.$nextTick(() => {
-                                this.$refs['uploadFile'].submitUpload();
-                            });
+                            };
+                            // 导入csv
+                            this.$store.commit('saveSceneCommitParams', params);
                         } else {
                             let params = {
                                 contrCode: this.ruleForm.contractCode,             // 合约代码
@@ -314,19 +258,46 @@
                                 statTimeEnd: this.ruleForm.selectDateRange[1],     // 统计截止日
                                 resultSetNo: this.ruleForm.resultId                // 结果集编号
                             };
+                            this.$store.commit('saveSceneCommitParams', params);
+                        }
 
-                            this.dealWithIsLoading = true;
-                            postExportType(params).then(resp => {
-                                this.dealWithIsLoading = false;
-                                this.$router.push({name: ''});
-                                this.tableData = resp.report;  // 协查报告数据
-                                this.tablePaneList = resp;    // tab 表格数据
-                                this.formDataList = params; // 生成协查报告的参数
-                            });
+                        if (this.ruleForm.exportType === '1') {
+                            if (this.ruleForm.resultId == '') {
+                                let params = {
+                                    contrCode: this.ruleForm.contractCode, // 合约代码
+                                    statTimeBegin: this.ruleForm.selectDateRange[0], // 统计起始日
+                                    statTimeEnd: this.ruleForm.selectDateRange[1],  // 统计截止日
+                                };
+                                this.uploadParams = {...this.uploadParams, ...params};
+                                this.$nextTick(() => {
+                                    this.$refs['uploadFile'].submitUpload();
+                                });
+                            }
+
+                        } else {
+                            if (this.ruleForm.resultId !== '') {
+                                let params = {
+                                    contrCode: this.ruleForm.contractCode,             // 合约代码
+                                    statTimeBegin: this.ruleForm.selectDateRange[0],   // 统计起始日
+                                    statTimeEnd: this.ruleForm.selectDateRange[1],     // 统计截止日
+                                    resultSetNo: this.ruleForm.resultId                // 结果集编号
+                                };
+                                this.dealWithIsLoading = true;
+                                postExportType(params).then(resp => {
+                                    this.loading = false;
+                                    this.dealWithIsLoading = false;
+                                    this.$router.push({name: ''});
+                                    this.tableData = resp.report;  // 协查报告数据
+                                    this.tablePaneList = resp;    // tab 表格数据
+                                    this.formDataList = params; // 生成协查报告的参数
+                                    this.$store.commit('saveSceneCommitResp', resp);
+                                });
+                            }
+
                         }
                     }
                 });
-            }
+            },
         },
         mounted() {
             //  结果集列表

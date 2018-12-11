@@ -27,7 +27,9 @@
                 <el-button :class="$style.export_bt" type="primary" size="small" @click="exporstClick">导出CSV</el-button>
             </div>
         </div>
+
         <div :class="$style.a_form_table_bar">
+            <div :class="$style.pic_title">{{picTitle}}</div>
             <div :class="$style.bar_echarts"
                  v-loading="fullScreenLoading1"
                  element-loading-text="数据加载中，请耐心等待..."
@@ -80,7 +82,9 @@
                 activeName: '0',
                 activeNameList: activeNameList,
                 statTimeBegin: '',  // 统计起始日
-                statTimeEnd: ''    // 统计截止日
+                statTimeEnd: '',    // 统计截止日
+
+                picTitle: '超仓分析图'
             }
         },
         // 计算属性
@@ -93,10 +97,10 @@
                         this.activeNameList[0].tableDataList = val.overStoreAnalysis;
                         this.activeNameList[1].tableDataList = val.frequentTrade;
                         this.activeNameList[2].tableDataList = val.autoTrade;
-                        if (Object.keys(this.tablePaneData && this.tablePaneData).length !== 0) {
-                        // if (!$.isEmptyObject(this.tablePaneData)) {
-                            this.tabsData();
-                        }
+                        // if (Object.keys(this.tablePaneData && this.tablePaneData).length !== 0) {
+                        // // if (!$.isEmptyObject(this.tablePaneData)) {
+                        //     this.tabsData();
+                        // }
                     }
                 },
                 deep: true
@@ -115,54 +119,64 @@
         methods: {
             // 柱状图
             tabsData(propsData) {
-                this.clearChartData();
-                let accountTeamNo = '';   // 账户组号
-                let arrCustId = [];  // 客户编号
-                let contrCd = '';  // 合约代码
-                let tableDataListData = this.activeNameList[this.activeName].tableDataList;
-                for (let i = 0; i < tableDataListData.length; i++) {
-                    accountTeamNo = this.activeNameList[this.activeName].tableDataList[i].acctNum;          // 账户组号
-                    let a_acctNum = this.activeNameList[this.activeName].tableDataList;  // 合约代码
-                    if (accountTeamNo == a_acctNum[this.activeName].acctNum) {
-                        contrCd = a_acctNum[this.activeName].contrCd;
-                        arrCustId.push(this.activeNameList[this.activeName].tableDataList[i].custId)
-                    }
+                // this.clearChartData();
+                // let accountTeamNo = '';   // 账户组号
+                // let arrCustId = [];  // 客户编号
+                // let contrCd = '';  // 合约代码
+                // let tableDataListData = this.activeNameList[this.activeName].tableDataList;
+                // for (let i = 0; i < tableDataListData.length; i++) {
+                //     accountTeamNo = this.activeNameList[this.activeName].tableDataList[i].acctNum;          // 账户组号
+                //     let a_acctNum = this.activeNameList[this.activeName].tableDataList;  // 合约代码
+                //     if (accountTeamNo == a_acctNum[this.activeName].acctNum) {
+                //         contrCd = a_acctNum[this.activeName].contrCd;
+                //         arrCustId.push(this.activeNameList[this.activeName].tableDataList[i].custId)
+                //     }
+                // }
+                // let params = {
+                //     "accountTeamNo": accountTeamNo,                     // 账户组号
+                //     "arrCustId": arrCustId,                           // 客户编号
+                //     "contrCode": contrCd,                         // 合约代码
+                //     "statTimeBegin": this.statTimeBegin,     // 统计起始日
+                //     // "statTimeBegin": '2017-10-01',     // 统计起始日
+                //     // "statTimeEnd": '2017-12-31',         // 统计截止日
+                //     "statTimeEnd": this.statTimeEnd,         // 统计截止日
+                //     "type": this.activeName,                     // 取值 '1':超仓分析
+                // };
+                //
+                // // Bar 柱状图接口
+                // if (propsData && Object.keys(propsData).length) {
+                //     // store中获取缓存
+                //     this.barEchartsDete(propsData);  // 对象
+                // } else {
+                //     this.fullScreenLoading1 = true;
+                //     postImportAccounBar(params).then(resp => {
+                //         this.fullScreenLoading1 = false;
+                //         if (this.activeName == '0') {
+                //             this.$store.commit('overStoreMut', resp);
+                //         } else if (this.activeName == '1') {
+                //             this.$store.commit('frequentMut', resp);
+                //         } else {
+                //             this.$store.commit('autoTradeMut', resp);
+                //         }
+                //         this.barEchartsDete(resp);
+                //
+                //     })
+                // }
+
+            },
+            posdd(){
+                if (this.activeName == '0') {
+                    this.picTitle = '超仓分析图';
+                }else if (this.activeName == '1') {
+                    this.picTitle = '频繁报撤单分析图';
+                }else if (this.activeName == '2') {
+                    this.picTitle = '自成交分析图';
                 }
-                let params = {
-                    "accountTeamNo": accountTeamNo,                     // 账户组号
-                    "arrCustId": arrCustId,                           // 客户编号
-                    "contrCode": contrCd,                         // 合约代码
-                    "statTimeBegin": this.statTimeBegin,     // 统计起始日
-                    // "statTimeBegin": '2017-10-01',     // 统计起始日
-                    // "statTimeEnd": '2017-12-31',         // 统计截止日
-                    "statTimeEnd": this.statTimeEnd,         // 统计截止日
-                    "type": this.activeName,                     // 取值 '1':超仓分析
-                };
-
-                // Bar 柱状图接口
-                if (propsData && Object.keys(propsData).length) {
-                    // store中获取缓存
-                    this.barEchartsDete(propsData);  // 对象
-                } else {
-                    this.fullScreenLoading1 = true;
-                    postImportAccounBar(params).then(resp => {
-                        this.fullScreenLoading1 = false;
-                        if (this.activeName == '0') {
-                            this.$store.commit('overStoreMut', resp);
-                        } else if (this.activeName == '1') {
-                            this.$store.commit('frequentMut', resp);
-                        } else {
-                            this.$store.commit('autoTradeMut', resp);
-                        }
-                        this.barEchartsDete(resp);
-
-                    })
-                }
-
             },
 
             // tab 切换
             handleTabClick() {
+                this.posdd();
                 // if (!$.isEmptyObject(this.tablePaneData)) {
                 if (Object.keys(this.tablePaneData).length !== 0) {
                     this.fullScreenLoading1 = false;
@@ -170,9 +184,11 @@
                         let storeData = this.$store.getters.overStoreGetters;
                         this.tabsData(storeData || {});
                     } else if (this.activeName == '1') {
+                        this.picTitle = '频繁报撤单分析图';
                         let storeData = this.$store.getters.frequentGetters;
                         this.tabsData(storeData || {});
                     } else {
+                        this.picTitle = '自成交分析图';
                         let storeData = this.$store.getters.autoTradeGetters;
                         this.tabsData(storeData || {});
                     }
@@ -218,14 +234,30 @@
 
             // 导出CSV
             exporstClick() {
-                console.log(111);
-                let params = {
-                    "downloadType": "",
-                    "assistReportVOList": []
+                let fileName = '';
+                let tableColumns = '';
+                let tableData = '';
+                if (this.activeName == '0') {
+                    fileName = '超仓分析';
+                    tableColumns = this.activeNameList[0].tableColumns;
+                    tableData = this.activeNameList[0].tableDataList;
+
+                }else if (this.activeName == '1') {
+                    fileName = '自成交分析';
+                   tableColumns = this.activeNameList[1].tableColumns;
+                    tableData = this.activeNameList[1].tableDataList;
+
+                }else if (this.activeName == '2') {
+                    fileName = '频繁报撤单分析';
+                   tableColumns = this.activeNameList[2].tableColumns;
+                    tableData = this.activeNameList[2].tableDataList;
                 }
-                postExportAnalysis(params).then(resp => {
-                    console.log(resp);
-                })
+                let params = {
+                    "fileName": fileName || '测试',
+                    "tableColumns": tableColumns,
+                    "tableData": tableData
+                };
+                postExportAnalysis(params);
 
             }
             ,
@@ -293,6 +325,14 @@
             box-shadow: 0 0 10px #326fcb !important;
             width: 100%;
             height: 450px;
+            position: relative;
+            top: -16px;
+        }
+        .pic_title {
+            position: relative;
+            top: -50px;
+            left: 20px;
+            font-size: 16px;
         }
     }
 </style>
