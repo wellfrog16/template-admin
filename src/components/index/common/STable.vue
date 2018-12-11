@@ -209,7 +209,7 @@ export default {
             // console.log(row);
             this.$emit('celCick', row);
         },
-        handleCellDblClick(row){
+        handleCellDblClick(row) {
             this.$emit('cellDblClick', row);
         },
         headerRightClick(column, event) {

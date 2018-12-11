@@ -32,7 +32,7 @@ export default {
             }
         };
         let symbolSize = data => {
-            return data[2] > 40 ? 40 : data[2];
+            return data[2] > 40 ? 40 : data[2] < 10 ? 10 : data[2];
         };
         return {
             loading: false,
@@ -163,12 +163,18 @@ export default {
             // let resData = resData1;
             this.initChart(resData);
         },
+        sortByAccountId() {
+            this.mainTableData = _.sortBy(this.mainTableData, [item => {
+                return item.acctId;
+            }]);
+        },
         initChart(resData) {
             let {mainTableData, chartData} = resData;
             if (!chartData || !chartData.length) {
                 return;
             }
             this.mainTableData = mainTableData;
+            this.sortByAccountId();
             let allLeaf = [];
             mainTableData.forEach(v => {
                 if (v.children && v.children.length) {
