@@ -21,13 +21,14 @@
                 :expand-on-click-node="false">
                 <span class="custom-tree-node" slot-scope="{ node, data }">
                     <div v-for="(item, index) in columns" :key="index" style="text-align: center;">
-                        <el-popover placement="top-end" trigger="hover" :disabled="index < 5">
+                        <el-popover placement="top-end" trigger="hover" :disabled="index < 5" width="200">
                             <div>
                                 <p v-if="data.acctId" style="margin:0;">账户组号：{{ data.acctId }}</p>
                                 <p v-if="data.custId" style="margin:0;">客户编号：{{ data.custId }}</p>
+                                <p v-if="data.custId" style="margin:0;">{{ columns[index]['label'] }}：{{ (data[item.field] === null || data[item.field] === undefined) ?  '' :  data[item.field] }}</p>
                             </div>
                             <span slot="reference">
-                                <span v-if="item.field !== 'custId'" style="max-width:120px;">{{ (data[item.field] === null || data[item.field] === undefined) ?  '' :  data[item.field] }}</span>
+                                <span v-if="item.field !== 'custId'" style="width: 120px; text-overflow: ellipsis; overflow: hidden; display: block;">{{ (data[item.field] === null || data[item.field] === undefined) ?  '' :  data[item.field] }}</span>
                                 <custIdColumn v-else :scope="{row: data}"></custIdColumn>
                             </span>
                         </el-popover>
