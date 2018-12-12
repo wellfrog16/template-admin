@@ -3,7 +3,6 @@
         <a @click="handleClick">{{ scope.row.custId }}</a>
     </div>
 </template>
-
 <script>
 export default {
     props: {

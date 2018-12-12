@@ -142,10 +142,6 @@ import {
 } from '@/api/common';
 import treeTableMixin from '@/pages/index/common/treeTableMixin';
 import {
-    postTlsResultInfo, //  结果集列表接口
-} from '@/api/dataAnsis/abnormityAnalysis';
-
-import {
     postRegenerate, // 生成报告（知识库图表）（文革7）
     postResultList // 导入结果集的树状列表(齐宁19)
 } from '@/api/dataAnsis/knowledgeAtlas';
@@ -233,9 +229,12 @@ export default {
                     'resultType': resultTypeG, // 结果集类型
                     'setupUser': setupUserG,   // 创建用户
                 };
+                this.fullScreenLoading = true;
                 postResultList(params).then(resp => {
                     this.fullScreenLoading = false;
                     this.mainTableDataClick = resp;
+                }).catch(e => {
+                    this.fullScreenLoading = false;
                 });
             }
         },
@@ -286,12 +285,15 @@ export default {
                                 }
                             }
                         });
-                        this.dialogFormVisible = false;
+                        this.dialogFormVisible = true;
                         postRegenerate(a_contractCodeChildren).then(resp => {
                             if (resp) {
+                                this.dialogFormVisible = false;
                                 this.$emit('generateEvent', resp.kmap); // 知识库图表
                                 this.mainTableData = resp.resultSetList; // 账户组信息
                             }
+                        }).catch(e => {
+                            this.dialogFormVisible = false;
                         });
                     }
                 }

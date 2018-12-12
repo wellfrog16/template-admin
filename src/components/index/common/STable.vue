@@ -37,7 +37,7 @@
             <el-table-column
                 v-if="showIndexColumn"
                 type="index"
-                width="80"
+                width="60"
                 align="center"
                 label="序号">
             </el-table-column>

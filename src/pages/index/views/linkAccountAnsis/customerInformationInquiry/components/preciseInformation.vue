@@ -117,8 +117,9 @@
                                 this.loadingPreciseClear = false;
                                 return [];
                             }
-
-                        })
+                        }).catch(e => {
+                            this.loadingPreciseClear = false;
+                        });
                     }
                 })
             },

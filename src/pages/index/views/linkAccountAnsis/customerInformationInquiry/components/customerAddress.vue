@@ -99,7 +99,9 @@
                                 this.loadingCustomerAddress = false;
                                 return [];
                             }
-                        })
+                        }).catch(e => {
+                            this.loadingCustomerAddress = false;
+                        });
                     }
                 })
 

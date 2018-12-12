@@ -163,7 +163,7 @@
                     // this.nationyOptions = [];  // 国家
                     this.provinceOptions = resp;  // 省
                     this.cityOptions = [];  // 市
-                })
+                }).catch(e => {});
             },
             customChange(val){
                 this.ruleForm.province = val;
@@ -192,9 +192,9 @@
                                 this.loadingFuzzyClear = false;
                                 return []
                             }
-
-
-                        })
+                        }).catch(e => {
+                            this.loadingFuzzyClear = false;
+                        });
                     }
                 })
             },

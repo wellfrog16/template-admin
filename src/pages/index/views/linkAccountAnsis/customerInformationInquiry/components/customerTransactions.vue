@@ -129,8 +129,10 @@
 
             // 客户交易信息查询(生成报告)
             customerTransactionsClick() {
+                var myDate = new Date();
                 this.$refs['ruleForm'].validate(valid => {
                     if (valid) {
+                        console.log(new Date());
                         this.activeNameList[0].tableData = [];
                         this.activeNameList[1].tableData = [];
                         this.activeNameList[2].tableData = [];
@@ -144,6 +146,7 @@
                         };
                         this.loadingCustomerAddress = true;
                         postCustomerTransactions(params).then(resp => {
+                            console.log(new Date());
                             this.loadingCustomerAddress = false;
                             this.activeNameList[0].tableData = resp.tradeInfoList;
                             this.activeNameList[1].tableData = resp.tradeInfoFormList;
@@ -152,7 +155,9 @@
                             this.totalNum[0] = resp.tradeInfoVOListTotal;   // 持仓明细记录总数
                             this.totalNum[1] = resp.tradeInfoFormVOSTotal;   // 报单明细记录总数
                             this.totalNum[2] = resp.tradeInfoDealTotal;      // 成交明细记录总数
-                        })
+                        }).catch(e => {
+                            this.loadingCustomerAddress = false;
+                        });
                     }
                 })
             },
@@ -168,28 +173,32 @@
                 }
                 let params = {
                     "custId": this.ruleForm.customerID,       // 客户编码
-                    "timeBegin": this.ruleForm.selectDateRange[0],   // 统计区间(开始)
-                    "timeEnd": this.ruleForm.selectDateRange[1],   // 统计区间(结束)
+                    "timeBegin": moment(this.ruleForm.selectDateRange[0]).format('YYYY-MM-DD'),   // 统计区间(开始)
+                    "timeEnd": moment(this.ruleForm.selectDateRange[1]).format('YYYY-MM-DD'),   // 统计区间(结束)
                     "tabId": this.activeName,   // （"0":全部，"1":持仓，"2":报单，"3":成交）
                     "pageSize": val.pageRows,   // 每页查询条数
                     "pageNo": val.pageIndex,  // 页码
                 };
                 this.loadingCustomerAddress = true;
+                console.log(new Date());
                 postCustomerTransactions(params).then(resp => {
+                    console.log(new Date());
                     this.loadingCustomerAddress = false;
                     this.activeNameList[0].tableData = resp.tradeInfoList ? resp.tradeInfoList :this.activeNameList[0].tableData;
                     this.activeNameList[1].tableData = resp.tradeInfoFormList ? resp.tradeInfoFormList : this.activeNameList[1].tableData;
                     this.activeNameList[2].tableData = resp.tradeInfoDeal ? resp.tradeInfoDeal : this.activeNameList[2].tableData;
 
-
                     this.totalNum[0] = resp.tradeInfoVOListTotal === 0 ? this.totalNum[0] : resp.tradeInfoVOListTotal;   // 持仓明细记录总数
                     this.totalNum[1] = resp.tradeInfoFormVOSTotal === 0 ? this.totalNum[1] : resp.tradeInfoFormVOSTotal;   // 报单明细记录总数
                     this.totalNum[2] = resp.tradeInfoDealTotal === 0 ? this.totalNum[2] : resp.tradeInfoDealTotal;      // 成交明细记录总数
-                })
+                }).catch(e => {
+                    this.loadingCustomerAddress = false;
+                });
             }
         },
         // 初始化数据
         mounted() {
+            console.log(new Date());
             this.ruleForm.customerID = this.$route.query.custId ? this.$route.query.custId : '';
         },
     }

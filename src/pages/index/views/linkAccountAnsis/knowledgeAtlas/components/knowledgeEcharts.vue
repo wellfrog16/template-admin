@@ -87,51 +87,8 @@
                             symbolSize: 20,
                             focusNodeAdjacency: true,  //突出相关
                             roam: true,  //鼠标缩放、平移
-                            data: [
-                                // {
-                                //     "name": "XG0001",//节点名称
-                                //     "id": 0,
-                                //     "category": 0//与关系网类别索引对应，此处只有一个关系网所以这里写0
-                                // },
-                                // {
-                                //     "name": "XG0002",
-                                //     "id": 1,
-                                //     "category": 0
-                                // },
-                                // {
-                                //     "name": "XG0003",
-                                //     "id": 2,
-                                //     "category": 0
-                                // },
-                                // {
-                                //     "name": "XG0004",
-                                //     "id": 3,
-                                //     "category": 0
-                                // },
-                                // {
-                                //     "name": "XG0005",
-                                //     "id": 4,
-                                //     "category": 0
-                                // },
-                                // {
-                                //     "name": "XG0006",
-                                //     "id": 5,
-                                //     "category": 0
-                                // }
-                            ],
-                            links: [
-                                // {
-                                //     "source": 0,//起始节点，0表示第一个节点
-                                //     "target": 1 //目标节点，1表示与索引为1的节点进行连接
-                                // },
-                                // {
-                                //     "source": 5,
-                                //     "target": 3
-                                // }, {
-                                //     "source": 2,
-                                //     "target": 4
-                                // }
-                            ],
+                            data: [],
+                            links: [],
                             categories: [
                                 {"name": "XG0001"},
                                 {"name": "XG0002"},

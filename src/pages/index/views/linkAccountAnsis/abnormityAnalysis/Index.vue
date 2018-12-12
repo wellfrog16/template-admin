@@ -117,7 +117,6 @@
     import {
         postTlsResultInfo,    //  结果集列表
         postExportType,       //  当选择结果集时的生成报告接口
-        postImportAccounBar,  // Bar 柱状图
     } from '@/api/dataAnsis/abnormityAnalysis';
 
     export default {
@@ -157,8 +156,8 @@
                     exportType: '',       // 导入结果集按钮
                     contractCode: 'cu1712',        // 合约代码  cu1712
                     resultId: '',         // 导入结果集
-                    // selectDateRange: ['2017-10-01', '2017-12-31']   // 统计区间  '2017-02-20', '2017-10-09'
-                    selectDateRange: [new Date(moment().subtract(1, 'months').format('YYYY-MM-DD')), new Date(moment().subtract(1, 'days').format('YYYY-MM-DD'))]
+                    selectDateRange: ['2017-10-01', '2017-12-31']   // 统计区间  '2017-02-20', '2017-10-09'
+                    // selectDateRange: [new Date(moment().subtract(1, 'months').format('YYYY-MM-DD')), new Date(moment().subtract(1, 'days').format('YYYY-MM-DD'))]
                 },
                 rules: {
                     contractCode: {
@@ -185,6 +184,8 @@
                 postTlsResultInfo().then(resp => {
                     this.fullScreenLoading = false;
                     this.resultList = resp;
+                }).catch(e => {
+                    this.fullScreenLoading = false;
                 });
             },
 
@@ -219,6 +220,7 @@
                     resultSetNo: this.ruleForm.resultId                // 结果集编号
                 };
                 this.$store.commit('saveSceneCommitResp', resp);
+                this.dealWithIsLoading = false;
                 this.tableData = resp.report;  // 协查报告数据
                 this.tablePaneList = resp;    // tab 表格数据
                 this.formDataList = params; // 生成协查报告的参数
@@ -266,6 +268,7 @@
                                     statTimeEnd: moment(this.ruleForm.selectDateRange[1]).format('YYYY-MM-DD'),  // 统计截止日
                                 };
                                 this.uploadParams = {...this.uploadParams, ...params};
+                                this.dealWithIsLoading = true;
                                 this.$nextTick(() => {
                                     this.$refs['uploadFile'].submitUpload();
                                 });
@@ -288,6 +291,8 @@
                                     this.tablePaneList = resp;    // tab 表格数据
                                     this.formDataList = params; // 生成协查报告的参数
                                     this.$store.commit('saveSceneCommitResp', resp);
+                                }).catch(e => {
+                                    this.dealWithIsLoading = false;
                                 });
                             }
 
