@@ -110,7 +110,7 @@ export default {
                             }
                         },
                         label: {
-                            position: 'middle',
+                            position: 'right',
                             formatter: params => {
                                 return `超仓线：${params.value}`;
                             }
@@ -136,7 +136,7 @@ export default {
             this.chartOptions['dataZoom'][1]['endValue'] = dataZoomEndValue;
             console.log(this.chartOptions);
             this.$refs['chart1'] && this.$refs['chart1'].initChart();
-            this.$emit('updateTableData', tableData.slice(0, 100), this.index);
+            this.$emit('updateTableData', tableData, this.index);
             if (!flag) {
                 this.$nextTick(() => {
                     this.$emit('drewChart4');

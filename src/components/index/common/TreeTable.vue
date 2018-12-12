@@ -3,7 +3,7 @@
     <el-container class="tree-table-component">
         <div class="tree-table-component">
             <div class="table-header-container">
-                <el-checkbox :indeterminate="isIndeterminate" v-model="checkedAll" @change="handleCheckAll"></el-checkbox>
+                <!-- <el-checkbox :indeterminate="isIndeterminate" v-model="checkedAll" @change="handleCheckAll"></el-checkbox> -->
                 <span class="table-header">
                     <div v-for="(item, index) in columns" :key="index">
                         {{ item.label }}
@@ -25,7 +25,7 @@
                             <div>
                                 <p v-if="data.acctId" style="margin:0;">账户组号：{{ data.acctId }}</p>
                                 <p v-if="data.custId" style="margin:0;">客户编号：{{ data.custId }}</p>
-                                <p v-if="data.custId" style="margin:0;">{{ columns[index]['label'] }}：{{ (data[item.field] === null || data[item.field] === undefined) ?  '' :  data[item.field] }}</p>
+                                <p v-if="data.custId" style="margin:0; white-space:normal; word-break:break-all;">{{ columns[index]['label'] }}：{{ (data[item.field] === null || data[item.field] === undefined) ?  '' :  data[item.field] }}</p>
                             </div>
                             <span slot="reference">
                                 <span v-if="item.field !== 'custId'" style="width: 120px; text-overflow: ellipsis; overflow: hidden; display: block;">{{ (data[item.field] === null || data[item.field] === undefined) ?  '' :  data[item.field] }}</span>

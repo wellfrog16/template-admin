@@ -65,7 +65,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :xl="12" :lg="12" :md="12" :sm="24">
-                            <el-form-item prop="area" label="地区选择" label-width="140px">
+                            <el-form-item label="地区选择" label-width="140px">
                                 <div>
                                     <tree-common ref="tree-components" :isMultipleMode="true"></tree-common>
                                 </div>
@@ -176,10 +176,9 @@ export default {
                 fileList: [],
                 exportType: '',
                 resultId: 'AA0001',
-                resultType: '',
+                resultType: '5',
                 customNoArray: ['80000012', '80010237'],
                 contractCode: 'cu1712',
-                area: '9',
                 selectDateRange: [new Date(moment().subtract(1, 'months').format('YYYY-MM-DD')), new Date(moment().subtract(1, 'days').format('YYYY-MM-DD'))]
             },
             tableData: [],
@@ -202,7 +201,6 @@ export default {
                 children: 'children',
                 label: 'label'
             },
-            areaData: [],
             dialogItem: {},
             operateType: 0,
             createType: '',
@@ -297,10 +295,10 @@ export default {
                 this.$message.error('最多选择四个场景');
                 return;
             }
-            if (!this.ruleForm.exportType) {
-                this.$message.error('请选择一种导入客户的方式');
-                return;
-            }
+            // if (!this.ruleForm.exportType) {
+            //     this.$message.error('请选择一种导入客户的方式');
+            //     return;
+            // }
             this.$refs['ruleForm'].validate(valid => {
                 if (valid) {
                     this.showCarousel = true;
@@ -344,31 +342,29 @@ export default {
             this.$router.push({name: 'assoAccountGroupMerge'});
         },
         handleNextStep() {
-            // let cityIds = this.$refs['tree-components'].getCheckedList(true).map(v => {
-            //     return v.id;
-            // });
+            let cityIds = this.$refs['tree-components'].getCheckedList(true).map(v => {
+                return v.id;
+            });
             let params = {
                 exportType: this.ruleForm.exportType,
-                cityIds: '11',
-                // cityIds: cityIds.join(','),
+                cityIds: cityIds.join(',') || '11',
                 contrCd: this.ruleForm.contractCode,
-                // statStartDt: moment(this.ruleForm.selectDateRange[0]).format('YYYY-MM-DD'),
-                statStartDt: '2017-03-01',
-                statStopDay: '2017-03-31',
-                // statStopDay: moment(this.ruleForm.selectDateRange[1]).format('YYYY-MM-DD'),
-                sceneIds: '3333333333',
-                // sceneIds: this.selectList.map(v => {
-                //     return v.sceneId;
-                // }).join(','),
+                statStartDt: moment(this.ruleForm.selectDateRange[0]).format('YYYY-MM-DD'),
+                // statStartDt: '2017-03-01',
+                // statStopDay: '2017-03-31',
+                statStopDay: moment(this.ruleForm.selectDateRange[1]).format('YYYY-MM-DD'),
+                sceneIds: this.selectList.map(v => {
+                    return v.sceneId;
+                }).join(',') || '3333333333',
                 sceneNames: this.selectList.map(v => {
                     return v.sceneName;
                 }).join(','),
                 sceneTypes: this.selectList.map(v => {
                     return v.sceneType;
                 }).join(','),
-                // statFreq: this.selectList.map(v => {
-                //     return v.statFreq;
-                // }).join(',')
+                statFreq: this.selectList.map(v => {
+                    return v.statFreq;
+                }).join(',')
             };
             if (this.ruleForm.exportType === '0') {
                 params.resultIds = this.ruleForm.resultId;

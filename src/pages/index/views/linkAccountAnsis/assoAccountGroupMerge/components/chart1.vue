@@ -161,16 +161,15 @@ export default {
     methods: {
         getData() {
             let resData = this.$store.getters.sceneCommitResp;
-            // let resData = resData1;
+            // resData = resData1;
             this.storeData = resData;
             this.initChart(resData);
         },
-        sortByAccountId() {
-            this.mainTableData = _.sortBy(this.mainTableData, [item => {
-                return item.acctId;
-            }]);
+        sortDataByAcctIdCommon(data) {
+            return _.sortBy(data, [item => { return item.acctId; }]);
         },
         initChart(resData, flag) {
+            debugger;
             resData = resData || this.storeData;
             if (!Object.keys(resData).length) {
                 return;
@@ -179,8 +178,10 @@ export default {
             if (!chartData || !chartData.length) {
                 return;
             }
-            this.mainTableData = mainTableData;
-            this.sortByAccountId();
+            // 散点图sort
+            this.mainTableData = this.sortDataByAcctIdCommon(mainTableData);
+            // table data sort
+            chartData = this.sortDataByAcctIdCommon(chartData);
             let allLeaf = [];
             mainTableData.forEach(v => {
                 if (v.children && v.children.length) {
