@@ -62,6 +62,7 @@ export default {
         ];
         return {
             loading: false,
+            init: true,
             storeData: {},
             chartOptions: {
                 animation: false,
@@ -377,7 +378,7 @@ export default {
             this.chartOptions['series'][2]['data'] = scatterData2;
             this.chartOptions['xAxis']['data'] = date;
             console.log(this.chartOptions);
-            this.$emit('updateTableData', tableData.slice(0, 100), this.index);
+            this.$emit('updateTableData', tableData, this.index);
             this.$refs['chart2'] && this.$refs['chart2'].initChart();
             this.$nextTick(() => {
                 // 最近交易日，包含买入或卖出
@@ -390,7 +391,11 @@ export default {
                 console.log(88888888888);
                 if (!flag) {
                     this.$nextTick(() => {
-                        this.$emit('drewChart4');
+                        if (!this.init) {
+                            this.$emit('drewChart4');
+                        } else {
+                            this.init = false;
+                        }
                     });
                 }
             });
@@ -401,6 +406,9 @@ export default {
         handleEchartDblClickEvent(val) {
             this.$emit('handleEchartDblClickEvent', val, this.index);
         }
+    },
+    mounted() {
+        this.init = true;
     }
 };
 </script>

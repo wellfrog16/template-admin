@@ -11,3 +11,7 @@ export const getChart3Data = params => {
 export const getChart4Data = params => {
     return post(`${requestPrefix}/timeSharingWritten`, params || {});
 };
+// getExportResultSet
+export const getExportResultSet = params => {
+    return post(`${requestPrefix}/getExportResultSet`, params || {});
+};

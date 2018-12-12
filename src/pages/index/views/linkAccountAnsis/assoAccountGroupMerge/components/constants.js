@@ -766,7 +766,7 @@ for (let i = 0; i < 21; i++) {
                     'contrCd': 'cu1712',
                     'acctGroNetOpenInt': 500,
                     'acctNetOpenInt': 100,
-                    'custWheOtherGro': 'BB001',
+                    'custWheOtherGro': 'BB001, BB001, BB001, BB001',
                     'buyBargainRela': 0,
                     'sellBargainRela': 0,
                     'netBuyBargainRela': 0,
