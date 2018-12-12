@@ -694,8 +694,8 @@ export const chartTableColumns4 = [
 ];
 export const mainTableColumns = [
     {field: 'resultSetName', label: '结果集名称', minWidth: '50',},
-    {field: 'acctGroup', label: '账户组号', minWidth: '60',},
-    {field: 'customerID', label: '客户编号', minWidth: '60',},
+    {field: 'acctId', label: '账户组号', minWidth: '60',},
+    {field: 'custId', label: '客户编号', minWidth: '60',},
     {field: 'customerName', label: '客户名称', minWidth: '60',},
     {field: 'contractCode', label: '合约代码', minWidth: '60',},
     {field: 'acctGroupHold', label: '账户组持仓量', minWidth: '60',},

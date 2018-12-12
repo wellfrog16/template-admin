@@ -49,6 +49,10 @@ export default {
     },
     components: {custIdColumn},
     props: {
+        autoHeight: {
+            type: Boolean,
+            default: false
+        },
         columns: {
             type: Array,
             default() {
@@ -111,6 +115,7 @@ export default {
 </script>
 <style lang="less" scoped>
     .tree-table-component {
+        height: 350px;
         .el-tree {
             background: transparent;
         }

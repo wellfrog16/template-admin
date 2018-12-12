@@ -118,7 +118,6 @@
         postTlsResultInfo,    //  结果集列表
         postExportType,       //  当选择结果集时的生成报告接口
         postImportAccounBar,  // Bar 柱状图
-        postExportAnalysis    // 导出 CSV
     } from '@/api/dataAnsis/abnormityAnalysis';
 
     export default {
@@ -158,8 +157,8 @@
                     exportType: '',       // 导入结果集按钮
                     contractCode: 'cu1712',        // 合约代码  cu1712
                     resultId: '',         // 导入结果集
-                    selectDateRange: ['2017-10-01', '2017-12-31']   // 统计区间  '2017-02-20', '2017-10-09'
-                    // selectDateRange: [new Date(this.$moment().subtract(1, 'months').format('YYYY-MM-DD')), new Date(this.$moment().subtract(1, 'days').format('YYYY-MM-DD'))]
+                    // selectDateRange: ['2017-10-01', '2017-12-31']   // 统计区间  '2017-02-20', '2017-10-09'
+                    selectDateRange: [new Date(moment().subtract(1, 'months').format('YYYY-MM-DD')), new Date(moment().subtract(1, 'days').format('YYYY-MM-DD'))]
                 },
                 rules: {
                     contractCode: {
@@ -197,8 +196,7 @@
                     "tableData": this.tableData
                 };
                 console.log(params);
-                postExportAnalysis(params);
-
+                this.gfnExportFileWithForm(params);
             },
             // 底部上一步按钮
             backClick1() {
@@ -214,17 +212,16 @@
             },
             // 导入CSV
             handleUploadSuccess(resp) {
-                console.log(resp);
-                    let params = {
-                        contrCode: this.ruleForm.contractCode,             // 合约代码
-                        statTimeBegin: this.ruleForm.selectDateRange[0],   // 统计起始日
-                        statTimeEnd: this.ruleForm.selectDateRange[1],     // 统计截止日
-                        resultSetNo: this.ruleForm.resultId                // 结果集编号
-                    };
-                    this.$store.commit('saveSceneCommitResp', resp);
-                    this.tableData = resp.report;  // 协查报告数据
-                    this.tablePaneList = resp;    // tab 表格数据
-                    this.formDataList = params; // 生成协查报告的参数
+                let params = {
+                    contrCode: this.ruleForm.contractCode,             // 合约代码
+                    statTimeBegin: moment(this.ruleForm.selectDateRange[0]).format('YYYY-MM-DD'), // 统计起始日
+                    statTimeEnd: moment(this.ruleForm.selectDateRange[1]).format('YYYY-MM-DD'),  // 统计截止日
+                    resultSetNo: this.ruleForm.resultId                // 结果集编号
+                };
+                this.$store.commit('saveSceneCommitResp', resp);
+                this.tableData = resp.report;  // 协查报告数据
+                this.tablePaneList = resp;    // tab 表格数据
+                this.formDataList = params; // 生成协查报告的参数
             },
             // 选择结果集的按钮 -- 二选一
             resultChange(val) {
@@ -246,16 +243,16 @@
                         if (this.ruleForm.exportType === '1') {
                             let params = {
                                 contrCode: this.ruleForm.contractCode, // 合约代码
-                                statTimeBegin: this.ruleForm.selectDateRange[0], // 统计起始日
-                                statTimeEnd: this.ruleForm.selectDateRange[1],  // 统计截止日
+                                statTimeBegin: moment(this.ruleForm.selectDateRange[0]).format('YYYY-MM-DD'), // 统计起始日
+                                statTimeEnd: moment(this.ruleForm.selectDateRange[1]).format('YYYY-MM-DD'),  // 统计截止日
                             };
                             // 导入csv
                             this.$store.commit('saveSceneCommitParams', params);
                         } else {
                             let params = {
                                 contrCode: this.ruleForm.contractCode,             // 合约代码
-                                statTimeBegin: this.ruleForm.selectDateRange[0],   // 统计起始日
-                                statTimeEnd: this.ruleForm.selectDateRange[1],     // 统计截止日
+                                statTimeBegin: moment(this.ruleForm.selectDateRange[0]).format('YYYY-MM-DD'), // 统计起始日
+                                statTimeEnd: moment(this.ruleForm.selectDateRange[1]).format('YYYY-MM-DD'),  // 统计截止日
                                 resultSetNo: this.ruleForm.resultId                // 结果集编号
                             };
                             this.$store.commit('saveSceneCommitParams', params);
@@ -265,8 +262,8 @@
                             if (this.ruleForm.resultId == '') {
                                 let params = {
                                     contrCode: this.ruleForm.contractCode, // 合约代码
-                                    statTimeBegin: this.ruleForm.selectDateRange[0], // 统计起始日
-                                    statTimeEnd: this.ruleForm.selectDateRange[1],  // 统计截止日
+                                    statTimeBegin: moment(this.ruleForm.selectDateRange[0]).format('YYYY-MM-DD'), // 统计起始日
+                                    statTimeEnd: moment(this.ruleForm.selectDateRange[1]).format('YYYY-MM-DD'),  // 统计截止日
                                 };
                                 this.uploadParams = {...this.uploadParams, ...params};
                                 this.$nextTick(() => {
@@ -278,8 +275,8 @@
                             if (this.ruleForm.resultId !== '') {
                                 let params = {
                                     contrCode: this.ruleForm.contractCode,             // 合约代码
-                                    statTimeBegin: this.ruleForm.selectDateRange[0],   // 统计起始日
-                                    statTimeEnd: this.ruleForm.selectDateRange[1],     // 统计截止日
+                                    statTimeBegin: moment(this.ruleForm.selectDateRange[0]).format('YYYY-MM-DD'), // 统计起始日
+                                    statTimeEnd: moment(this.ruleForm.selectDateRange[1]).format('YYYY-MM-DD'),  // 统计截止日
                                     resultSetNo: this.ruleForm.resultId                // 结果集编号
                                 };
                                 this.dealWithIsLoading = true;

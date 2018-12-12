@@ -34,9 +34,9 @@ export default {
             });
             this.mainTableData = JSON.parse(JSON.stringify(list));
         },
+        // 删除
         handleDelete() {
             let checkedNodes = this.getCheckedNodes();
-            console.log(checkedNodes);
             this.deleteMethods(checkedNodes);
         },
         getMaxAccountId() {
@@ -55,6 +55,7 @@ export default {
         getCheckedNodes(flag) {
             return this.$refs['self-tree-table'].$refs['tree-table'].getCheckedNodes(flag);
         },
+        // 拆分
         handleSplit() {
             let checkedNodes = this.getCheckedNodes();
             let acctIds = checkedNodes.map(v => {
@@ -65,7 +66,6 @@ export default {
                 this.$message.error('请选择子账户号');
                 return;
             }
-            console.log(checkedNodes);
             if (acctIds.length > 1) {
                 this.$message.error('请选择一个账户组内的子账户号');
                 return;
@@ -87,6 +87,7 @@ export default {
                 return item.acctId;
             }]);
         },
+        // 合并
         handleMerge() {
             let checkedNodes = this.getCheckedNodes();
             let checkedChildren = this.getCheckedNodes(true);
@@ -126,6 +127,7 @@ export default {
             });
             return tableData;
         },
+        // 导出到结果集
         handleExportResult(propsResultType) {
             this.$prompt('请输入结果集名称', '导出到结果集', {
                 confirmButtonText: '确定',
@@ -143,7 +145,6 @@ export default {
                     params.statStopDay = this.sceneCommitParams.statStopDay;
                     params.statFreq = this.sceneCommitParams.statFreq;
                 }
-                console.log(params);
                 exportResultSet(params).then(resp => {
                     console.log(resp);
                     if (this.$route.name === 'assoAccountGroupMerge') {
@@ -152,19 +153,19 @@ export default {
                 });
             }).catch(() => {});
         },
+
+        // 导出到csv
         handleExportCsv(fileName, mainTableColumns) {
             let tableData = this.dealMainData();
             if (tableData && !tableData.length) {
                 this.$message.error('暂无数据');
                 return;
             }
-            // console.log(tableData);
             let params = {
                 fileName: fileName || '测试',
                 tableColumns: mainTableColumns,
                 tableData: tableData
             };
-            console.log(params);
             this.gfnExportFileWithForm(params);
         },
         createNewData() {},

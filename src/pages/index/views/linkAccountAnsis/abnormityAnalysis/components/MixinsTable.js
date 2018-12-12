@@ -70,7 +70,7 @@ export default {
                 },
                 yAxis: {
                     type: 'value',
-                    name: '持仓量',
+                    name: '',   // 持仓量
                     splitLine: {
                         lineStyle: {
                             color: ['rgb(20, 53, 98)']   // 网格线颜色
@@ -148,7 +148,7 @@ export default {
             this.barEcharts.clear();
         },
 
-        barEchartsDete(val) {
+        barEchartsDete(val, actiName) {
             if (val) {
                 let mainData = [];
                 let temp = [];
@@ -170,6 +170,17 @@ export default {
                     this.markLingOping.markLine.data[1].yAxis = val.qtty;
                     basicOptions = {...basicOptions, ...this.markLingOping};
                 }
+                let pinName = '';
+                if(actiName == '0'){
+                    pinName = '持仓量'
+                } else if(actiName == '1'){
+                    pinName = '撤单次数'
+                }else {
+                    pinName = '自成交数量'
+                }
+                this.chartOptions.yAxis.name = pinName;
+                console.log(this.chartOptions);
+
                 Object.keys(mainData).forEach(v => {
                     temp.push(
                         {

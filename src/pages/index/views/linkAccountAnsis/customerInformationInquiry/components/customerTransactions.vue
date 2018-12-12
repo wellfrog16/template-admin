@@ -100,6 +100,8 @@
                 ruleForm: {
                     customerID: '',        // 客户编号   20180000025
                     selectDateRange: [new Date(moment().subtract(1, 'months').format('YYYY-MM-DD')), new Date(moment().subtract(1, 'days').format('YYYY-MM-DD'))]
+
+                    // selectDateRange: [new Date(moment().subtract(1, 'months').format('YYYY-MM-DD')), new Date(moment().subtract(1, 'days').format('YYYY-MM-DD'))]
                     // selectDateRange: ['2017-02-01', '2018-12-31']   // 统计区间    '2017-02-01', '2018-12-31'
                 },
                 rules: {
@@ -134,8 +136,8 @@
                         this.activeNameList[2].tableData = [];
                         let params = {
                             "custId": this.ruleForm.customerID,       // 客户编码
-                            "timeBegin": this.ruleForm.selectDateRange[0],   // 统计区间(开始)
-                            "timeEnd": this.ruleForm.selectDateRange[1],   // 统计区间(结束)
+                            "timeBegin": moment(this.ruleForm.selectDateRange[0]).format('YYYY-MM-DD'),   // 统计区间(开始)
+                            "timeEnd": moment(this.ruleForm.selectDateRange[1]).format('YYYY-MM-DD'),   // 统计区间(结束)
                             "tabId": "0",   // （"0":全部，"1":持仓，"2":报单，"3":成交）
                             "pageSize": 20,   // 每页查询条数
                             "pageNo": 1,  // 页码

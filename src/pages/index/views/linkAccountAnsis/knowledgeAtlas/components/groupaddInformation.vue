@@ -55,7 +55,7 @@
             <div slot="content">
                 <el-row :gutter="20">
                     <el-col :span="21">
-                        <div style="overflow:auto; max-height:300px;">
+                        <div style="overflow:auto; max-height:400px;">
                             <tree-table
                                 ref="self-tree-table"
                                 :filterText="searchText"
@@ -224,16 +224,14 @@ export default {
     //    数据交互  127662
     methods: {
         // 导入结果集数据
-        selectResultId(val, fff) {
+        selectResultId(val, resultNameG, resultTypeG, setupUserG) {
             this.resultIds = val;
             if (val) {
-                console.log(val);
-                console.log(this.resultList);
                 let params = {
-                    'resultId': val, // 结果集编号
-                    'resultName': 'AA', // 结果集名称
-                    'resultType': '5', // 结果集类型
-                    'setupUser': 'appadmin', // 创建用户
+                    'resultId': val,           // 结果集编号
+                    'resultName': resultNameG, // 结果集名称
+                    'resultType': resultTypeG, // 结果集类型
+                    'setupUser': setupUserG,   // 创建用户
                 };
                 postResultList(params).then(resp => {
                     this.fullScreenLoading = false;
@@ -335,6 +333,40 @@ export default {
         }
         .dia_name {
             width: 65%;
+        }
+        .top-nav {
+            position: relative;
+            min-height: 56px;
+        }
+        .tabs-button {
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+        .search-input {
+            width: 240px;
+
+            /deep/ input {
+                border-radius: 15px;
+            }
+
+            /deep/ i {
+                color: #3c70a5 !important;
+            }
+        }
+        .custom-width {
+            width: 350px;
+        }
+        .operate-button-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .self-card-css {
+            /deep/.el-card__body {
+                padding: 10px;
+            }
         }
     }
 

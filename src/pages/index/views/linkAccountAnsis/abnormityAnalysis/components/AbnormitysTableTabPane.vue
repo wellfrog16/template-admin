@@ -45,7 +45,6 @@
 
     import {
         postImportAccounBar,     // Bar 柱状图
-        postExportAnalysis      // 导出 CSV
     } from '@/api/dataAnsis/abnormityAnalysis';
 
     export default {
@@ -169,7 +168,7 @@
                     this.picTitle = '超仓分析图';
                 }else if (this.activeName == '1') {
                     this.picTitle = '频繁报撤单分析图';
-                }else if (this.activeName == '2') {
+                }else {
                     this.picTitle = '自成交分析图';
                 }
             },
@@ -226,7 +225,7 @@
                         } else {
                             this.$store.commit('autoTradeMut', resp);
                         }
-                        this.barEchartsDete(resp);
+                        this.barEchartsDete(resp, this.activeName);
 
                     })
                 }
@@ -243,12 +242,12 @@
                     tableData = this.activeNameList[0].tableDataList;
 
                 }else if (this.activeName == '1') {
-                    fileName = '自成交分析';
+                    fileName = '频繁报撤单分析';
                    tableColumns = this.activeNameList[1].tableColumns;
                     tableData = this.activeNameList[1].tableDataList;
 
-                }else if (this.activeName == '2') {
-                    fileName = '频繁报撤单分析';
+                }else {
+                    fileName = '自成交分析';
                    tableColumns = this.activeNameList[2].tableColumns;
                     tableData = this.activeNameList[2].tableDataList;
                 }
@@ -257,7 +256,8 @@
                     "tableColumns": tableColumns,
                     "tableData": tableData
                 };
-                postExportAnalysis(params);
+                console.log(params);
+                this.gfnExportFileWithForm(params);
 
             }
             ,
