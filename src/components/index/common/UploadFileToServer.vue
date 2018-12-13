@@ -93,7 +93,7 @@ export default {
         defaultAccept: {
             type: String,
             default() {
-                return 'text/csv';
+                return '.csv';
             }
         },
         disabled: {
