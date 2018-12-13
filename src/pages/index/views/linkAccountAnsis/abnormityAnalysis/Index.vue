@@ -191,6 +191,10 @@
 
             // 底部导出CSV按钮
             exportClick1(fileName, tableColumns) {
+                if(this.tableData && !this.tableData.length){
+                    this.$message.error('协查报告暂无数据!');
+                    return;
+                }
                 let params = {
                     "fileName": fileName || '测试',
                     "tableColumns": tableColumns,

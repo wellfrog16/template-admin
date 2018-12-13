@@ -247,6 +247,10 @@
                    tableColumns = this.activeNameList[2].tableColumns;
                     tableData = this.activeNameList[2].tableDataList;
                 }
+                if(tableData && !tableData.length){
+                    this.$message.error('异常交易暂无数据!');
+                    return;
+                }
                 let params = {
                     "fileName": fileName || '测试',
                     "tableColumns": tableColumns,
