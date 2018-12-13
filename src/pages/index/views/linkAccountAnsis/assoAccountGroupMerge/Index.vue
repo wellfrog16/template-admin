@@ -140,9 +140,9 @@ export default {
             // 导入结果集
             getExportResultSet({resultIds: val}).then(resp => {
                 console.log(resp);
-                console.log(9090909);
+                this.$store.commit('saveSceneCommitResp', resp);
                 this.$nextTick(() => {
-                    this.getChart1(resp);
+                    this.drewChart1();
                 });
             });
         },
