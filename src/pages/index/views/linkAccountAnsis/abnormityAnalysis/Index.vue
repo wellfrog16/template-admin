@@ -219,7 +219,7 @@
                     statTimeEnd: moment(this.ruleForm.selectDateRange[1]).format('YYYY-MM-DD'),  // 统计截止日
                     resultSetNo: this.ruleForm.resultId                // 结果集编号
                 };
-                this.$store.commit('saveSceneCommitResp', resp);
+                // this.$store.commit('saveSceneCommitResp', resp);
                 this.dealWithIsLoading = false;
                 this.tableData = resp.report;  // 协查报告数据
                 this.tablePaneList = resp;    // tab 表格数据
@@ -249,7 +249,7 @@
                                 statTimeEnd: moment(this.ruleForm.selectDateRange[1]).format('YYYY-MM-DD'),  // 统计截止日
                             };
                             // 导入csv
-                            this.$store.commit('saveSceneCommitParams', params);
+                            // this.$store.commit('saveSceneCommitParams', params);
                         } else {
                             let params = {
                                 contrCode: this.ruleForm.contractCode,             // 合约代码
@@ -257,7 +257,7 @@
                                 statTimeEnd: moment(this.ruleForm.selectDateRange[1]).format('YYYY-MM-DD'),  // 统计截止日
                                 resultSetNo: this.ruleForm.resultId                // 结果集编号
                             };
-                            this.$store.commit('saveSceneCommitParams', params);
+                            // this.$store.commit('saveSceneCommitParams', params);
                         }
 
                         if (this.ruleForm.exportType === '1') {
@@ -290,7 +290,7 @@
                                     this.tableData = resp.report;  // 协查报告数据
                                     this.tablePaneList = resp;    // tab 表格数据
                                     this.formDataList = params; // 生成协查报告的参数
-                                    this.$store.commit('saveSceneCommitResp', resp);
+                                    // this.$store.commit('saveSceneCommitResp', resp);
                                 }).catch(e => {
                                     this.dealWithIsLoading = false;
                                 });

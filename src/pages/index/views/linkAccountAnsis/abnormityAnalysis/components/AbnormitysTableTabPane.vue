@@ -132,14 +132,12 @@
                     }
                 }
                 let params = {
-                    "accountTeamNo": accountTeamNo,                     // 账户组号
-                    "arrCustId": arrCustId,                           // 客户编号
-                    "contrCode": contrCd,                         // 合约代码
-                    "statTimeBegin": this.statTimeBegin,     // 统计起始日
-                    // "statTimeBegin": '2017-10-01',     // 统计起始日
-                    // "statTimeEnd": '2017-12-31',         // 统计截止日
-                    "statTimeEnd": this.statTimeEnd,         // 统计截止日
-                    "type": this.activeName,                     // 取值 '1':超仓分析
+                    "accountTeamNo": accountTeamNo,             // 账户组号
+                    "arrCustId": arrCustId,                     // 客户编号
+                    "contrCode": contrCd,                       // 合约代码
+                    "statTimeBegin": this.statTimeBegin,        // 统计起始日
+                    "statTimeEnd": this.statTimeEnd,            // 统计截止日
+                    "type": this.activeName,                    // 取值 '1':超仓分析
                 };
 
                 // Bar 柱状图接口
@@ -147,19 +145,36 @@
                     // store中获取缓存
                     this.barEchartsDete(propsData);  // 对象
                 } else {
-                    this.fullScreenLoading1 = true;
-                    postImportAccounBar(params).then(resp => {
-                        this.fullScreenLoading1 = false;
-                        if (this.activeName == '0') {
+                    console.log(this.activeName);
+                    if (this.activeName === '0') {
+                        this.fullScreenLoading1 = true;
+                        postImportAccounBar(params).then(resp => {
+                            this.fullScreenLoading1 = false;
                             this.$store.commit('overStoreMut', resp);
-                        } else if (this.activeName == '1') {
-                            this.$store.commit('frequentMut', resp);
-                        } else {
-                            this.$store.commit('autoTradeMut', resp);
-                        }
-                        this.barEchartsDete(resp);
+                            this.barEchartsDete(resp);
+                        }).catch(e => {
+                            this.fullScreenLoading1 = false;
+                        });
 
-                    })
+                    } else if (this.activeName === '1') {
+                        this.fullScreenLoading1 = true;
+                        postImportAccounBar(params).then(resp => {
+                            this.fullScreenLoading1 = false;
+                            this.$store.commit('frequentMut', resp);
+                            this.barEchartsDete(resp);
+                        }).catch(e => {
+                            this.fullScreenLoading1 = false;
+                        });
+                    } else {
+                        this.fullScreenLoading1 = true;
+                        postImportAccounBar(params).then(resp => {
+                            this.fullScreenLoading1 = false;
+                            this.$store.commit('autoTradeMut', resp);
+                            this.barEchartsDete(resp);
+                        }).catch(e => {
+                            this.fullScreenLoading1 = false;
+                        });
+                    }
                 }
 
             },
@@ -181,19 +196,18 @@
                     this.fullScreenLoading1 = false;
                     let storeData = []
                     if (this.activeName == '0') {
-                        storeData = this.$store.getters.overStoreGetters ? this.$store.getters.overStoreGetters : [];
+                        storeData = this.$store.getters.overStoreGetters;
                         // this.tabsData(storeData || {});
                         // this.barEchartsDete(storeData || {}, this.activeName);
                     } else if (this.activeName == '1') {
-                        storeData = this.$store.getters.frequentGetters ? this.$store.getters.frequentGetters : [];
+                        storeData = this.$store.getters.frequentGetters;
                     } else {
-                        storeData = this.$store.getters.autoTradeGetters ? this.$store.getters.autoTradeGetters : [];
+                        storeData = this.$store.getters.autoTradeGetters;
                     }
-                    this.tabsData(storeData || {});
-                    this.barEchartsDete(storeData);
+                    this.barEchartsDete(storeData || {}, this.activeName);
                 }
             },
-            // // Bar 柱状图
+            // Bar 柱状图(双击数据)
             tableellDblClick(row) {
                 if (Object.keys(row).length !== 0) {
                     this.clearChartData();
@@ -225,6 +239,7 @@
                         } else {
                             this.$store.commit('autoTradeMut', resp);
                         }
+                        console.log(this.activeName);
                         this.barEchartsDete(resp, this.activeName);
 
                     }).catch(e => {

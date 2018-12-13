@@ -7,9 +7,9 @@
                     <el-col :xl="7" :lg="7" :md="7" :sm="24">
                         <el-form-item prop="indexSelection" label="指标选择：" label-width="100px">
                             <el-select style="width: 100%;"
-                                        v-model="ruleForm.indexSelection"
-                                class="custom-width" clearable size="small"
-                                 placeholder="指标选择">
+                                       v-model="ruleForm.indexSelection"
+                                       class="custom-width" clearable size="small"
+                                       placeholder="指标选择">
                                 <el-option
                                     v-for="item in indexSelectionOptions"
                                     :key="item.value"
@@ -19,15 +19,17 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
+                    <el-col :xl="1" :lg="1" :md="1" :sm="24" :class="$style.col_md"><span>=</span></el-col>
                     <el-col :xl="7" :lg="7" :md="7" :sm="24">
-                        <el-form-item prop="contractCode" label="=" label-width="50px">
+                        <el-form-item prop="contractCode" label=" " label-width="20px">
                             <el-input clearable size="small" v-model="ruleForm.contractCode"
-                                      style="width: 100%;"  class="custom-width"></el-input>
+                                      style="width: 100%;" class="custom-width"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xl="2" :lg="2" :md="2" :sm="24">
                         <el-form-item label-width="25px">
-                            <el-button size="small" type="primary" @click="preciseInformationClick('ruleForm')">生成报告</el-button>
+                            <el-button size="small" type="primary" @click="preciseInformationClick('ruleForm')">生成报告
+                            </el-button>
                         </el-form-item>
                     </el-col>
                     <el-col :xl="2" :lg="2" :md="2" :sm="24">
@@ -105,19 +107,19 @@
             },
 
             // 精确信息查询(生成报告)
-            preciseInformationClick(){
+            preciseInformationClick() {
                 this.$refs['ruleForm'].validate(valid => {
-                    if(valid){
+                    if (valid) {
                         let params = {
                             "indexName": this.ruleForm.indexSelection,      // 指标名称
                             "indexValue": this.ruleForm.contractCode,         // 指标值
                         }
                         this.loadingPreciseClear = true;
                         postPreciseInformation(params).then(resp => {
-                            if(resp && resp.resData !== null){
+                            if (resp && resp.resData !== null) {
                                 this.loadingPreciseClear = false;
                                 this.tableData3 = this.tableData3.concat(resp);
-                            }else {
+                            } else {
                                 this.loadingPreciseClear = false;
                                 return [];
                             }
@@ -136,4 +138,10 @@
 </script>
 
 <style lang="less" module>
+.form_data {
+    .col_md {
+        text-align: center;
+        padding: 10px;
+    }
+}
 </style>

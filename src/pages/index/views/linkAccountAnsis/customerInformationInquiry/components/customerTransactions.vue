@@ -98,11 +98,8 @@
 
                 // form 表单绑定值
                 ruleForm: {
-                    customerID: '',        // 客户编号   20180000025
+                    customerID: '',        // 客户编号   20180000025 // 80000012
                     selectDateRange: [new Date(moment().subtract(1, 'months').format('YYYY-MM-DD')), new Date(moment().subtract(1, 'days').format('YYYY-MM-DD'))]
-
-                    // selectDateRange: [new Date(moment().subtract(1, 'months').format('YYYY-MM-DD')), new Date(moment().subtract(1, 'days').format('YYYY-MM-DD'))]
-                    // selectDateRange: ['2017-02-01', '2018-12-31']   // 统计区间    '2017-02-01', '2018-12-31'
                 },
                 rules: {
                     customerID: {
@@ -135,6 +132,10 @@
                         this.activeNameList[0].tableData = [];
                         this.activeNameList[1].tableData = [];
                         this.activeNameList[2].tableData = [];
+
+                        this.totalNum[0] = 0;
+                        this.totalNum[1] = 0;
+                        this.totalNum[2] = 0;
                         let params = {
                             "custId": this.ruleForm.customerID,       // 客户编码
                             "timeBegin": moment(this.ruleForm.selectDateRange[0]).format('YYYY-MM-DD'),   // 统计区间(开始)
@@ -164,10 +165,13 @@
             getPagination(val){
                 if(this.activeName === '1'){
                     this.activeNameList[0].tableData = [];
+                    this.totalNum[0] = 0;
                 }else if(this.activeName === '2'){
                     this.activeNameList[1].tableData = [];
+                    this.totalNum[1] = 0;
                 }else {
                     this.activeNameList[2].tableData = [];
+                    this.totalNum[2] = 0
                 }
                 let params = {
                     "custId": this.ruleForm.customerID,       // 客户编码
@@ -180,13 +184,20 @@
                 this.loadingCustomerAddress = true;
                 postCustomerTransactions(params).then(resp => {
                     this.loadingCustomerAddress = false;
-                    this.activeNameList[0].tableData = resp.tradeInfoList ? resp.tradeInfoList :this.activeNameList[0].tableData;
-                    this.activeNameList[1].tableData = resp.tradeInfoFormList ? resp.tradeInfoFormList : this.activeNameList[1].tableData;
-                    this.activeNameList[2].tableData = resp.tradeInfoDeal ? resp.tradeInfoDeal : this.activeNameList[2].tableData;
+                    if(this.activeName === '1'){
+                        this.activeNameList[0].tableData = resp.tradeInfoList ? resp.tradeInfoList :this.activeNameList[0].tableData;
+                        this.totalNum[0] = resp.tradeInfoVOListTotal ? resp.tradeInfoVOListTotal : this.totalNum[0];   // 持仓明细记录总数
 
-                    this.totalNum[0] = resp.tradeInfoVOListTotal === 0 ? this.totalNum[0] : resp.tradeInfoVOListTotal;   // 持仓明细记录总数
-                    this.totalNum[1] = resp.tradeInfoFormVOSTotal === 0 ? this.totalNum[1] : resp.tradeInfoFormVOSTotal;   // 报单明细记录总数
-                    this.totalNum[2] = resp.tradeInfoDealTotal === 0 ? this.totalNum[2] : resp.tradeInfoDealTotal;      // 成交明细记录总数
+                    }else if(this.activeName === '2'){
+                        this.activeNameList[1].tableData = resp.tradeInfoFormList ? resp.tradeInfoFormList : this.activeNameList[1].tableData;
+                        this.totalNum[1] = resp.tradeInfoFormVOSTotal ?  resp.tradeInfoFormVOSTotal : this.totalNum[1];   // 报单明细记录总数
+
+                    }else {
+                        this.activeNameList[2].tableData = resp.tradeInfoDeal ? resp.tradeInfoDeal : this.activeNameList[2].tableData;
+                        this.totalNum[2] = resp.tradeInfoDealTotal ? resp.tradeInfoDealTotal : this.totalNum[2];      // 成交明细记录总数
+
+                    }
+
                 }).catch(e => {
                     this.loadingCustomerAddress = false;
                 });
