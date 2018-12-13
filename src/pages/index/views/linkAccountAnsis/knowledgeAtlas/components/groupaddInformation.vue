@@ -12,7 +12,7 @@
                             </resultSelectComponent>
                         </el-col>
                         <el-col :span="2">
-                            <el-button size="small" type="primary" @click="ascertainUPClick1">确认</el-button>
+                            <el-button :loading="loadingBt" size="small" type="primary" @click="ascertainUPClick1">确认</el-button>
                         </el-col>
                     </el-col>
                     <el-col :span="8" :class="$style.rigth">
@@ -67,15 +67,15 @@
                     </el-col>
                     <el-col :span="3">
                         <div class="operate-button-group">
-                            <el-button :class="$style.operate_button_group" type="danger" size="small"
+                            <el-button style="padding: 9px 39px;" :class="$style.operate_button_group" type="danger" size="small"
                                        @click="handleDelete">删除
                             </el-button>
                             <br>
-                            <el-button :class="$style.operate_button_group" type="warning" size="small"
+                            <el-button style="padding: 9px 39px;" :class="$style.operate_button_group" type="warning" size="small"
                                        @click="handleSplit">拆分
                             </el-button>
                             <br>
-                            <el-button :class="$style.operate_button_group" type="warning" size="small"
+                            <el-button style="padding: 9px 39px;" :class="$style.operate_button_group" type="warning" size="small"
                                        @click="handleMerge">合并
                             </el-button>
                             <br>
@@ -83,7 +83,7 @@
                                        @click="handleExportResult">导出到结果集
                             </el-button>
                             <br>
-                            <el-button :class="$style.operate_button_group" type="primary" size="small"
+                            <el-button style="padding: 9px 24px;" :class="$style.operate_button_group" type="primary" size="small"
                                        @click="handleExportCsv('账户组信息', mainTableColumns)">导出到csv
                             </el-button>
                         </div>
@@ -168,6 +168,7 @@ export default {
     // 存储数据
     data() {
         return {
+            loadingBt: false,
             dialogFormVisible: false,
             ruleForms: {
                 contractCode: 'cu1712' // 合约代码  cu1712
@@ -229,11 +230,14 @@ export default {
                     'resultType': resultTypeG, // 结果集类型
                     'setupUser': setupUserG,   // 创建用户
                 };
+                this.loadingBt = true;
                 this.fullScreenLoading = true;
                 postResultList(params).then(resp => {
+                    this.loadingBt = false;
                     this.fullScreenLoading = false;
                     this.mainTableDataClick = resp;
                 }).catch(e => {
+                    this.loadingBt = false;
                     this.fullScreenLoading = false;
                 });
             }
@@ -285,10 +289,9 @@ export default {
                                 }
                             }
                         });
-                        this.dialogFormVisible = true;
+                        this.dialogFormVisible = false;
                         postRegenerate(a_contractCodeChildren).then(resp => {
                             if (resp) {
-                                this.dialogFormVisible = false;
                                 this.$emit('generateEvent', resp.kmap); // 知识库图表
                                 this.mainTableData = resp.resultSetList; // 账户组信息
                             }

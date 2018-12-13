@@ -12,10 +12,10 @@
         <s-card :title="`关系图库`" :icon="`fa fa-user-md`">
             <div slot="content">
                 <echarts-common
-                    :loading="loading"
+                    :loading="loadingE"
                     domId="chartId"
                     :defaultOption="chartOptionsA"
-                    :propsChartHeight="300">
+                    :propsChartHeight="350">
                 </echarts-common>
             </div>
         </s-card>
@@ -34,7 +34,6 @@
                 type: Object,
                 required: true
             },
-
         },
         components: {
             SCard,
@@ -59,7 +58,7 @@
                 echartsDataList: [],
                 barEcharts: null,
                 echartsOptions: {},
-                loading: false,
+                loadingE: false,
                 chartOptionsA: {},
 
                 chartOptions: {
@@ -77,26 +76,37 @@
                         }
                     },
                     animationEasingUpdate: 'quinticInOut',
-                    tooltip: {},
+                    tooltip: {
+                        formatter: (params) => {
+                            console.log(params)
+                            if (params.dataType === 'edge') { // link
+                                return '客户编号交集：' + params.data.tip || ''
+                            } else if (params.dataType === 'node') {
+                                return '账户组号: ' + params.name || ''
+                            }
+                        },
+                        // trigger:'item',
+                        // backgroundColor:  'rgba(245, 244, 237,0.7)' ,//提示框浮动背景色
+                        // borderColor:'black',
+                        // borderWidth:1,
+                        // textStyle:{
+                        //     color:'black',
+                        //     fontWeight:'bold',
+
+                        // }
+                    },
                     animation: false,
                     series: [
                         {
                             name: '知识图库',
                             type: 'graph',
                             layout: 'force',
-                            symbolSize: 20,
+                            symbolSize: 15,
                             focusNodeAdjacency: true,  //突出相关
                             roam: true,  //鼠标缩放、平移
                             data: [],
                             links: [],
-                            categories: [
-                                {"name": "XG0001"},
-                                {"name": "XG0002"},
-                                {"name": "XG0003"},
-                                {"name": "XG0004"},
-                                {"name": "XG0005"},
-                                {"name": "XG0006"}
-                            ],
+                            categories: [],
                             force: {
                                 repulsion: 200,
                                 edgeLength:[100,200],
@@ -105,17 +115,6 @@
                                 // repulsion: 150  //子节点之间的间距
                             },
                             draggable:true,
-                            tooltip:{
-                                trigger:'item',
-                                backgroundColor:  'rgba(245, 244, 237,0.7)' ,//提示框浮动背景色
-                                borderColor:'black',
-                                borderWidth:1,
-                                textStyle:{
-                                    color:'black',
-                                    fontWeight:'bold',
-
-                                }
-                            },
                             label: {
                                 normal: {
                                     position: 'right',
@@ -156,9 +155,12 @@
                 handler(val) {
                     this.echartsDataList = val;
                     if (val) {
+                        this.this.loadingE = false;
                         if (Object.keys(this.echartsData && this.echartsData).length !== 0) {
                             this.echartClick();
                         }
+                    }else {
+                        this.this.loadingE = true;
                     }
                 }
             }
