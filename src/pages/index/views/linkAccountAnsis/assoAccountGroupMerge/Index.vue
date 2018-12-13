@@ -20,7 +20,7 @@
                             <el-button type="text" @click="toggleDetail(item, index)">明细<i class="el-icon-plus" style="margign-left: 5px;"></i></el-button>
                         </div>
                         <div slot="content">
-                            <div v-if="item['toggleDetailFlags']">
+                            <div v-show="item['toggleDetailFlags']">
                                 <div v-if="index===2">
                                     <el-select class="custom-width" clearable size="small" v-model="table3CurrentType">
                                         <el-option v-for="(o, oi) in table3Options" :key="oi" :label="o.label" :value="o.field"></el-option>
@@ -28,7 +28,7 @@
                                 </div>
                                 <s-table :height="index === 2 ? 268 : 300" :columns="chartTableColumns[index]" :tableData="chartTableData[index]"></s-table>
                             </div>
-                            <div v-else>
+                            <div v-show="!item['toggleDetailFlags']">
                                 <chart1 :ref="`chartComponent${index + 1}`" v-if="index === 0" :childrenMap="childrenMap" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData" @updateMainTableData="updateMainTableData" @updateAccountGroupAndCustIds="updateAccountGroupAndCustIds" @drewChart2="drewChart2"  @drewChart3="drewChart3"></chart1>
                                 <chart2 :ref="`chartComponent${index + 1}`" v-if="index === 1" :commonReqParams="commonReqParams()" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData" @drewChart4="drewChart4"></chart2>
                                 <chart3 :ref="`chartComponent${index + 1}`" v-if="index === 2" :commonReqParams="commonReqParams()" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData" @drewChart4="drewChart4"></chart3>
@@ -172,11 +172,11 @@ export default {
         },
         toggleDetail(item, index) {
             this.charts[index]['toggleDetailFlags'] = !item.toggleDetailFlags;
-            if (!item.toggleDetailFlags) {
-                this.$nextTick(() => {
-                    this.getChart()[index](true);
-                });
-            }
+            // if (!item.toggleDetailFlags) {
+            //     this.$nextTick(() => {
+            //         this.getChart()[index](true);
+            //     });
+            // }
         },
         handleEchartDblClickEvent(params, index) {
             console.log(params);
