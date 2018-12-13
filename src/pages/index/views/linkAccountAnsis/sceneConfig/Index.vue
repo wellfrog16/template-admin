@@ -58,6 +58,7 @@
                                             <el-input clearable size="small" v-model="ruleForm.customNoArray[0]" style="width: 150px;"></el-input>
                                             <span style="color: #fff; margin: 0 20px;">~</span>
                                             <el-input clearable size="small" v-model="ruleForm.customNoArray[1]" style="width: 150px;"></el-input>
+                                            <el-button size="small" type="primary" @click="handleCheckedAll" style="margin-left:5px;">全选</el-button>
                                         </el-form-item>
                                     </el-radio>
                                 </el-radio-group>
@@ -159,7 +160,6 @@ export default {
     data() {
         return {
             createTypeOptions,
-            checkAllCustId: true,
             showDialog: false,
             showCarousel: false,
             loading: false,
@@ -225,6 +225,10 @@ export default {
         };
     },
     methods: {
+        handleCheckedAll() {
+            this.ruleForm.exportType = '2';
+            this.ruleForm.customNoArray = ['00000001', '99999999'];
+        },
         selectResultId(val, valType) {
             this.ruleForm.resultId = val;
             this.ruleForm.resultType = valType;
@@ -342,6 +346,10 @@ export default {
             this.$router.push({name: 'assoAccountGroupMerge'});
         },
         handleNextStep() {
+            if (!this.ruleForm.exportType) {
+                this.$message.error('请选择客户群体导入类型');
+                return;
+            }
             let cityIds = this.$refs['tree-components'].getCheckedList(true).map(v => {
                 return v.id;
             });
