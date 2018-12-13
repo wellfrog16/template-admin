@@ -217,8 +217,7 @@ export default {
                 right: 10%;
                 top: 50%;
                 padding: 30px;
-                box-shadow: 3px 0px 15px rgba(31, 82, 170, 0.75);
-
+                box-shadow: 3px 0 15px rgb(31, 82, 170, 0.75);
                 /deep/ .el-form-item__label {
                     color: #ddeaf9;
                 }
