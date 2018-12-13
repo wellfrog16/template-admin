@@ -214,10 +214,10 @@ export default {
             return _.sortBy(data, [item => { return item.acctId; }]);
         },
         initChart(flag) {
-            console.log(this.$store.getters.getXGchart1);
-            if (this.$store.getters.getXGchart1 && Object.keys(this.$store.getters.getXGchart1).length) {
-                this.chartOptions = JSON.parse(JSON.stringify(this.$store.getters.getXGchart1));
-            }
+            // console.log(this.$store.getters.getXGchart1);
+            // if (this.$store.getters.getXGchart1 && Object.keys(this.$store.getters.getXGchart1).length) {
+            //     this.chartOptions = this.$store.getters.getXGchart1;
+            // }
             this.$refs['chart0'] && this.$refs['chart0'].initChart();
             if (!flag) {
                 this.$nextTick(() => {
