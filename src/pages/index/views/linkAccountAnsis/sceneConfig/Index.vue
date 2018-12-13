@@ -60,7 +60,6 @@
                                             <el-input clearable size="small" v-model="ruleForm.customNoArray[1]" style="width: 150px;"></el-input>
                                         </el-form-item>
                                     </el-radio>
-                                    <br>
                                 </el-radio-group>
                             </el-form-item>
                         </el-col>
@@ -160,6 +159,7 @@ export default {
     data() {
         return {
             createTypeOptions,
+            checkAllCustId: true,
             showDialog: false,
             showCarousel: false,
             loading: false,
@@ -238,7 +238,7 @@ export default {
                     callback(new Error('请输入客户段起始号'));
                 } else if (!value[1] && value[1] !== 0) {
                     callback(new Error('请输入客户段结束号'));
-                } else if (!reg.test(value[0] || !reg.test(value[1]))) {
+                } else if (!reg.test(value[0]) || !reg.test(value[1])) {
                     callback(new Error('客户编号只能为数字'));
                 }
             }

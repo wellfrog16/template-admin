@@ -215,9 +215,9 @@ export default {
                 width: 400px;
                 position: absolute;
                 right: 10%;
-                top: 35%;
+                top: 50%;
                 padding: 30px;
-                box-shadow: 4px 6px 35px #4e4b4b;
+                box-shadow: 3px 0px 15px rgba(31, 82, 170, 0.75);
 
                 /deep/ .el-form-item__label {
                     color: #ddeaf9;
