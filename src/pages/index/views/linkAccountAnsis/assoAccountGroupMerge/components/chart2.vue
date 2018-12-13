@@ -100,7 +100,7 @@ export default {
                                 }
                             },
                             label: {
-                                position: 'end',
+                                position: 'middle',
                                 formatter: params => {
                                     return `超仓线：${params.value}`;
                                 }
@@ -139,7 +139,7 @@ export default {
         initChart(flag) {
             console.log(this.$store.getters.getXGchart2);
             if (this.$store.getters.getXGchart2 && Object.keys(this.$store.getters.getXGchart2).length) {
-                this.chartOptions = this.$store.getters.getXGchart2;
+                this.chartOptions = JSON.parse(JSON.stringify(this.$store.getters.getXGchart2));
             }
             this.$refs['chart1'] && this.$refs['chart1'].initChart();
         },
