@@ -7,9 +7,9 @@
              :active-text-color="activeTextColor"
     >
         <el-menu-item @click="toggleMode" index="" class="col-button">
-            <i class="fas fa-minus-square menu-fix-icon" v-if="!collapse"></i>
-            <i class="fas fa-minus menu-fix-icon" v-else></i>
-            <span slot="title">折叠</span>
+            <i class="fas fa-arrow-circle-left menu-fix-icon" v-if="!collapse"></i>
+            <i class="fas fa-arrow-circle-right menu-fix-icon" v-else></i>
+            <span slot="title">{{ collapse ? '显示' : '隐藏' }}</span>
         </el-menu-item>
 
         <template v-for="(item, index) in data">
