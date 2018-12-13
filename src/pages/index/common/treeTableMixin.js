@@ -3,7 +3,7 @@ import {exportResultSet} from '@/api/common';
 export default {
     data() {
         return {
-            accountIdPre: 'XG',
+            accountIdPre: 'XG', // 相关性分析类型的账户组号前缀
             childrenMap: {},
             selectAccountGroupList: [],
             mainTableData: []

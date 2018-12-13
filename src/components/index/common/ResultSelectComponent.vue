@@ -32,11 +32,11 @@ export default {
     methods: {
         handleChange() {
             let index = this.resultList.findIndex(item => {
-                return item.resultId === this.resultId;              // 结果集编号
+                return item.resultId === this.resultId; // 结果集编号
             });
-            let resultName = this.resultList[index]['resultName'];  // 结果集名称
-            let resultType = this.resultList[index]['resultType'];  // 结果集类型
-            let setupUser = this.resultList[index]['setupUser'];  // 创建用户
+            let resultName = this.resultList[index]['resultName']; // 结果集名称
+            let resultType = this.resultList[index]['resultType']; // 结果集类型
+            let setupUser = this.resultList[index]['setupUser']; // 创建用户
             this.$emit('selectResultId', this.resultId, resultName, resultType, setupUser);
         },
         getResultList() {

@@ -12,7 +12,7 @@
                 </el-row>
             </div>
         </div>
-        <div v-if="activeTab==='0' || !sceneNameList.length">
+        <div v-if="activeTab==='0' || !sceneNameList.length" v-loading.lock="fullLoading">
             <el-row :gutter="10">
                 <el-col :xl="12" :lg="12" :md="24" :sm="24" v-for="(item, index) in charts" :key="index">
                     <s-card :title="item.title" :icon="item.icon" class="self-card-css">
@@ -58,15 +58,15 @@
                             </el-col>
                             <el-col :span="3">
                                 <div class="operate-button-group">
-                                    <el-button type="danger" size="small" @click="handleDelete">删除</el-button>
+                                    <el-button type="danger" size="small" @click="handleDelete" class="self-width">删除</el-button>
                                     <br>
-                                    <el-button type="warning" size="small" @click="handleSplit">拆分</el-button>
+                                    <el-button type="warning" size="small" @click="handleSplit" class="self-width">拆分</el-button>
                                     <br>
-                                    <el-button type="warning" size="small" @click="handleMerge">合并</el-button>
+                                    <el-button type="warning" size="small" @click="handleMerge" class="self-width">合并</el-button>
                                     <br>
                                     <el-button type="primary" size="small" @click="handleExportResult('1')">导出到结果集</el-button>
                                     <br>
-                                    <el-button type="primary" size="small" @click="handleExportCsv('账户组信息', mainTableColumns)">导出到csv</el-button>
+                                    <el-button type="primary" size="small" class="self-width" @click="handleExportCsv('账户组信息', mainTableColumns)">导出到csv</el-button>
                                     <br>
                                     <el-button type="primary" size="small" @click="createNewData">重新生成数据</el-button>
                                 </div>
@@ -110,6 +110,7 @@ export default {
         return {
             table3Options,
             mainTableColumns,
+            fullLoading: false,
             sceneCommitParams: {},
             accountIdPre: 'XG',
             charts: charts,
@@ -138,7 +139,9 @@ export default {
         selectResultId(val) {
             this.resultIds = val;
             // 导入结果集
+            this.fullLoading = true;
             getExportResultSet({resultIds: val}).then(resp => {
+                this.fullLoading = false;
                 console.log(resp);
                 this.$store.commit('saveSceneCommitResp', resp);
                 this.$nextTick(() => {
@@ -334,6 +337,7 @@ export default {
             width: 350px;
         }
         .operate-button-group {
+            padding-top: 40px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -343,6 +347,9 @@ export default {
             /deep/.el-card__body {
                 padding: 10px;
             }
+        }
+        .self-width {
+            width: 104px;
         }
     }
 </style>

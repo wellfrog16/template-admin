@@ -79,7 +79,7 @@ export default {
                     formatter: param => {
                         console.log(param);
                         if (param.seriesIndex === 1 || param.seriesIndex === 2) {
-                            return `交易日: ${param.value[0]}<br><br>` + param.value[4].map((v, i) => {
+                            return `交易日: ${param.value[0]}<br>` + param.value[4].map((v, i) => {
                                 return `
                                     客户编号: ${v}<br>
                                     ${param.value[2]}数量: ${param.value[3]}
