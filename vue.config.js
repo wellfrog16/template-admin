@@ -19,7 +19,7 @@ module.exports = {
             entry: 'src/pages/index/main.js',
             template: 'public/index.html',
             filename: 'index.html',
-            title: '上期所监管科技平台',
+            title: '上期所大数据监管科技平台',
             chunks: ['chunk-vendors', 'chunk-common', 'index']
         },
         demo: {

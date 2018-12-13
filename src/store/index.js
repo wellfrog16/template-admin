@@ -5,6 +5,7 @@ import Vuex from 'vuex';
 import login from '@/store/module/index/login';
 import sceneConfig from '@/store/module/index/sceneConfig';
 import abnormitysAnalysis from '@/store/module/index/abnormitysAnalysis';
+import accountMergeXG from '@/store/module/index/accountMergeXG';
 
 Vue.use(Vuex);
 
@@ -25,6 +26,7 @@ export default new Vuex.Store({
     modules: {
         login,
         sceneConfig,
-        abnormitysAnalysis
+        abnormitysAnalysis,
+        accountMergeXG
     }
 });

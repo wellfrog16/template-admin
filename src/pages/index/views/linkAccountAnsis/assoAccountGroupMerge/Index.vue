@@ -14,13 +14,13 @@
         </div>
         <div v-if="activeTab==='0' || !sceneNameList.length">
             <el-row :gutter="10">
-                <el-col :span="12" v-for="(item, index) in charts" :key="index">
+                <el-col :xl="12" :lg="12" :md="24" :sm="24" v-for="(item, index) in charts" :key="index">
                     <s-card :title="item.title" :icon="item.icon" class="self-card-css">
                         <div slot="right">
                             <el-button type="text" @click="toggleDetail(item, index)">明细<i class="el-icon-plus" style="margign-left: 5px;"></i></el-button>
                         </div>
                         <div slot="content">
-                            <div v-show="item['toggleDetailFlags']">
+                            <div v-if="item['toggleDetailFlags']">
                                 <div v-if="index===2">
                                     <el-select class="custom-width" clearable size="small" v-model="table3CurrentType">
                                         <el-option v-for="(o, oi) in table3Options" :key="oi" :label="o.label" :value="o.field"></el-option>
@@ -28,7 +28,7 @@
                                 </div>
                                 <s-table :height="index === 2 ? 268 : 300" :columns="chartTableColumns[index]" :tableData="chartTableData[index]"></s-table>
                             </div>
-                            <div v-show="!item['toggleDetailFlags']">
+                            <div v-else>
                                 <chart1 :ref="`chartComponent${index + 1}`" v-if="index === 0" :childrenMap="childrenMap" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData" @updateMainTableData="updateMainTableData" @updateAccountGroupAndCustIds="updateAccountGroupAndCustIds" @drewChart2="drewChart2"  @drewChart3="drewChart3"></chart1>
                                 <chart2 :ref="`chartComponent${index + 1}`" v-if="index === 1" :commonReqParams="commonReqParams()" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData" @drewChart4="drewChart4"></chart2>
                                 <chart3 :ref="`chartComponent${index + 1}`" v-if="index === 2" :commonReqParams="commonReqParams()" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData" @drewChart4="drewChart4"></chart3>
@@ -39,9 +39,9 @@
                     </s-card>
                 </el-col>
             </el-row>
-            <s-card>
-                <s-table slot="content" :showPagination="true" :total="chartTableData[0].length" :columns="chartTableColumns[0]" :tableData="testTableData" @handlePaginationChange="handlePaginationChange"></s-table>
-            </s-card>
+            <!-- <s-card title="test分页" icon="el-edit" class="self-card-css">
+                <s-table slot="content" :showPagination="true" :totalNum="chartTableData[0].length" :columns="chartTableColumns[0]" :tableData="testTableData" @handlePaginationChange="handlePaginationChange"></s-table>
+            </s-card> -->
             <div class="main-table">
                 <s-card title="账户组信息" icon="fa fa-layer-group" :minHeight="300">
                     <div slot="right">
@@ -141,7 +141,6 @@ export default {
             getExportResultSet({resultIds: val}).then(resp => {
                 console.log(resp);
                 console.log(9090909);
-                debugger;
                 this.$nextTick(() => {
                     this.getChart1(resp);
                 });
@@ -153,10 +152,12 @@ export default {
         },
         handlePaginationChange(val) {
             this.pagination = val;
+            this.getTableData();
         },
         getTableData() {
             let session = JSON.parse(localStorage.getItem('CHART_TABLE_DATA'));
-            this.testTableData = session.slice(this.pagination['pageIndex'] * this.pagination['pageRows'], (this.pagination['pageIndex'] + 1) * (this.pagination['pageRows']));
+            this.chartTableData = session;
+            this.testTableData = session[0].slice((this.pagination['pageIndex'] - 1) * this.pagination['pageRows'], (this.pagination['pageIndex'] + 1) * (this.pagination['pageRows']));
         },
         updateTableData(value, index) {
             if (index === 2) {
@@ -171,11 +172,11 @@ export default {
         },
         toggleDetail(item, index) {
             this.charts[index]['toggleDetailFlags'] = !item.toggleDetailFlags;
-            // if (!item.toggleDetailFlags) {
-            //     this.$nextTick(() => {
-            //         this.getChart()[index](null, true);
-            //     });
-            // }
+            if (!item.toggleDetailFlags) {
+                this.$nextTick(() => {
+                    this.getChart()[index](true);
+                });
+            }
         },
         handleEchartDblClickEvent(params, index) {
             console.log(params);
@@ -189,6 +190,7 @@ export default {
                     this.$refs['chartComponent1'][0].chartOptions['series'][0]['markPoint']['data'] = markPointData.filter(v => {
                         return v.coord[0] !== params['data'][0] && v.coord[1] !== params['data'][1];
                     });
+                    this.$store.commit('saveXGchart1', this.$refs['chartComponent1'][0].chartOptions);
                     // table勾选状态
                     this.selectAccountGroupList = this.selectAccountGroupList.filter(v => {
                         return v !== currentId && this.childrenMap[currentId].indexOf(v) === -1;
@@ -199,6 +201,7 @@ export default {
                         coord: [params['data'][0], params['data'][1]]
                     });
                     console.log(this.$refs['chartComponent1'][0].chartOptions['series'][0]['markPoint']);
+                    this.$store.commit('saveXGchart1', this.$refs['chartComponent1'][0].chartOptions);
                     // table勾选状态
                     this.selectAccountGroupList.push(currentId);
                 }
@@ -223,7 +226,7 @@ export default {
                 // get chart4
                 break;
             case '2':
-                this.drewChart4(params['data'][0]);
+                this.drewChart4(params['data'][5]);
                 // get chart4
                 break;
             }
@@ -237,32 +240,32 @@ export default {
                 contrCode: this.sceneCommitParams.contrCd, // || 'cu1712'
             };
         },
-        getChart(data) {
-            return [this.getChart1(data), this.getChart2(data), this.getChart3(data), this.getChart4(data)];
+        getChart() {
+            return [this.getChart1, this.getChart2, this.getChart3, this.getChart4];
         },
         drewChart1() {
             this.$refs['chartComponent1'] && this.$refs['chartComponent1'][0] && this.$refs['chartComponent1'][0].getData();
         },
-        getChart1(data) {
-            this.$refs['chartComponent1'] && this.$refs['chartComponent1'][0] && this.$refs['chartComponent1'][0].initChart(data);
+        getChart1(flag) {
+            this.$refs['chartComponent1'] && this.$refs['chartComponent1'][0] && this.$refs['chartComponent1'][0].initChart(flag);
         },
         drewChart2() {
             this.$refs['chartComponent2'] && this.$refs['chartComponent2'][0] && this.$refs['chartComponent2'][0].getData();
         },
-        getChart2(data) {
-            this.$refs['chartComponent2'] && this.$refs['chartComponent2'][0] && this.$refs['chartComponent2'][0].initChart(data);
+        getChart2(flag) {
+            this.$refs['chartComponent2'] && this.$refs['chartComponent2'][0] && this.$refs['chartComponent2'][0].initChart(flag);
         },
         drewChart3() {
             this.$refs['chartComponent3'] && this.$refs['chartComponent3'][0] && this.$refs['chartComponent3'][0].getData();
         },
-        getChart3(data) {
-            this.$refs['chartComponent3'] && this.$refs['chartComponent3'][0] && this.$refs['chartComponent3'][0].initChart(data);
+        getChart3(flag) {
+            this.$refs['chartComponent3'] && this.$refs['chartComponent3'][0] && this.$refs['chartComponent3'][0].initChart(flag);
         },
-        drewChart4() {
-            this.$refs['chartComponent4'] && this.$refs['chartComponent4'][0] && this.$refs['chartComponent4'][0].getData();
+        drewChart4(date) {
+            this.$refs['chartComponent4'] && this.$refs['chartComponent4'][0] && this.$refs['chartComponent4'][0].getData(date);
         },
-        getChart4(data) {
-            this.$refs['chartComponent4'] && this.$refs['chartComponent4'][0] && this.$refs['chartComponent4'][0].initChart(data);
+        getChart4(flag) {
+            this.$refs['chartComponent4'] && this.$refs['chartComponent4'][0] && this.$refs['chartComponent4'][0].initChart(flag);
         },
         createChart3Columnn(val) {
             let chart3Column = val.map(v => {
@@ -295,6 +298,7 @@ export default {
     mounted() {
         this.resetDetailFlag();
         this.sceneCommitParams = this.$store.getters.sceneCommitParams;
+        // this.getTableData();
         // test
         // this.drewChart1();
         // this.drewChart2();

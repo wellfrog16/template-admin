@@ -25,7 +25,6 @@ export default {
     data() {
         return {
             loading: false,
-            storeData: {},
             txDt: '', // 选择的日期
             chartOptions: {
                 grid: {
@@ -107,114 +106,117 @@ export default {
             };
             this.txDt = propsDate || '2017-03-16';
             params.txDt = this.txDt;
-            getChart4Data(params).then(resp => {
+            getChart4Data(params).then(resData => {
                 this.loading = false;
-                this.storeData = resp;
-                this.initChart(resp);
+                if (!Object.keys(resData).length) {
+                    return;
+                }
+                let {mainData, buysail} = resData;
+                let lineData = [];
+                let timeData = [];
+                let colors = [];
+                let buy = {};
+                let sail = {};
+                let tableData = JSON.parse(JSON.stringify(buysail));
+                let buyArray = buysail.filter(v => {
+                    return v.bizDir === '买';
+                });
+                let sailArray = buysail.filter(v => {
+                    return v.bizDir === '卖';
+                });
+                buyArray.forEach(v => {
+                    if (!buy[v.custId]) {
+                        buy[v.custId] = [];
+                    }
+                    buy[v.custId].push(v);
+                });
+                sailArray.forEach(v => {
+                    if (!sail[v.custId]) {
+                        sail[v.custId] = [];
+                    }
+                    sail[v.custId].push(v);
+                });
+                let itemStyleCommon = i => {
+                    return {
+                        normal: {
+                            color: colors[i],
+                            opacity: 0.8,
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowOffsetY: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    };
+                };
+                mainData.forEach(v => {
+                    timeData.push(v.time.slice(0, 5));
+                    lineData.push(v.price);
+                });
+                // set datazoom
+                // let dataZoomStartValue = timeData[timeData.length > 50 ? timeData.length - 50 : 0];
+                // let dataZoomEndValue = timeData[timeData.length - 1];
+                // console.log(dataZoomStartValue);
+                // console.log(dataZoomEndValue);
+                // this.chartOptions['dataZoom'][0]['startValue'] = dataZoomStartValue;
+                // this.chartOptions['dataZoom'][1]['startValue'] = dataZoomStartValue;
+                // this.chartOptions['dataZoom'][0]['endValue'] = dataZoomEndValue;
+                // this.chartOptions['dataZoom'][1]['endValue'] = dataZoomEndValue;
+                this.chartOptions['series'][0]['data'] = lineData;
+                let series = this.chartOptions['series'];
+                Object.keys(buy).forEach((v, i) => {
+                    let data = buy[v].map(m => {
+                        return [m.declBillTm2.slice(-5), m.currPrice - (i + 1) * 2, m.declBillQtty, '买入', v];
+                    });
+                    series.push({
+                        name: `${v}`,
+                        type: 'scatter',
+                        symbol: 'triangle',
+                        symbolSize: 10,
+                        itemStyle: itemStyleCommon(i),
+                        data: data,
+                        smooth: true,
+                        lineStyle: {
+                            normal: {opacity: 0.5}
+                        }
+                    });
+                });
+                Object.keys(sail).forEach((v, i) => {
+                    let data = sail[v].map(m => {
+                        return [m.declBillTm2.slice(-5), m.currPrice + (i + 1) * 2, m.declBillQtty, '卖出', v];
+                    });
+                    series.push({
+                        name: `${v}`,
+                        type: 'scatter',
+                        symbol: 'triangle',
+                        symbolRotate: 180,
+                        symbolSize: 10,
+                        itemStyle: itemStyleCommon(i),
+                        data: data,
+                        smooth: true,
+                        lineStyle: {
+                            normal: {opacity: 0.5}
+                        }
+                    });
+                });
+                this.chartOptions['xAxis']['data'] = timeData;
+                this.chartOptions['series'] = series;
+                console.log(this.chartOptions);
+                this.$emit('updateTableData', tableData, this.index);
+                this.chartOptions['legend']['data'] = series.map(v => {
+                    return v.name;
+                });
+                this.$store.commit('saveXGchart4', this.chartOptions);
+                this.initChart();
             }).catch(e => {
                 this.loading = false;
                 console.error(e);
             });
         },
-        initChart(resData, flag) {
-            resData = resData || this.storeData;
-            if (!Object.keys(resData).length) {
-                return;
+        initChart(flag) {
+            console.log(this.$store.getters.getXGchart4);
+            if (this.$store.getters.getXGchart4 && Object.keys(this.$store.getters.getXGchart4).length) {
+                this.chartOptions = this.$store.getters.getXGchart4;
             }
-            let {mainData, buysail} = resData;
-            let lineData = [];
-            let timeData = [];
-            let colors = [];
-            let buy = {};
-            let sail = {};
-            let tableData = JSON.parse(JSON.stringify(buysail));
-            let buyArray = buysail.filter(v => {
-                return v.bizDir === '买';
-            });
-            let sailArray = buysail.filter(v => {
-                return v.bizDir === '卖';
-            });
-            buyArray.forEach(v => {
-                if (!buy[v.custId]) {
-                    buy[v.custId] = [];
-                }
-                buy[v.custId].push(v);
-            });
-            sailArray.forEach(v => {
-                if (!sail[v.custId]) {
-                    sail[v.custId] = [];
-                }
-                sail[v.custId].push(v);
-            });
-            let itemStyleCommon = i => {
-                return {
-                    normal: {
-                        color: colors[i],
-                        opacity: 0.8,
-                        shadowBlur: 10,
-                        shadowOffsetX: 0,
-                        shadowOffsetY: 0,
-                        shadowColor: 'rgba(0, 0, 0, 0.5)'
-                    }
-                };
-            };
-            mainData.forEach(v => {
-                timeData.push(v.time.slice(0, 5));
-                lineData.push(v.price);
-            });
-            // set datazoom
-            // let dataZoomStartValue = timeData[timeData.length > 50 ? timeData.length - 50 : 0];
-            // let dataZoomEndValue = timeData[timeData.length - 1];
-            // console.log(dataZoomStartValue);
-            // console.log(dataZoomEndValue);
-            // this.chartOptions['dataZoom'][0]['startValue'] = dataZoomStartValue;
-            // this.chartOptions['dataZoom'][1]['startValue'] = dataZoomStartValue;
-            // this.chartOptions['dataZoom'][0]['endValue'] = dataZoomEndValue;
-            // this.chartOptions['dataZoom'][1]['endValue'] = dataZoomEndValue;
-            this.chartOptions['series'][0]['data'] = lineData;
-            let series = this.chartOptions['series'];
-            Object.keys(buy).forEach((v, i) => {
-                let data = buy[v].map(m => {
-                    return [m.declBillTm2.slice(-5), m.currPrice - (i + 1) * 2, m.declBillQtty, '买入', v];
-                });
-                series.push({
-                    name: `${v}`,
-                    type: 'scatter',
-                    symbol: 'triangle',
-                    symbolSize: 10,
-                    itemStyle: itemStyleCommon(i),
-                    data: data,
-                    smooth: true,
-                    lineStyle: {
-                        normal: {opacity: 0.5}
-                    }
-                });
-            });
-            Object.keys(sail).forEach((v, i) => {
-                let data = sail[v].map(m => {
-                    return [m.declBillTm2.slice(-5), m.currPrice + (i + 1) * 2, m.declBillQtty, '卖出', v];
-                });
-                series.push({
-                    name: `${v}`,
-                    type: 'scatter',
-                    symbol: 'triangle',
-                    symbolRotate: 180,
-                    symbolSize: 10,
-                    itemStyle: itemStyleCommon(i),
-                    data: data,
-                    smooth: true,
-                    lineStyle: {
-                        normal: {opacity: 0.5}
-                    }
-                });
-            });
-            this.chartOptions['xAxis']['data'] = timeData;
-            this.chartOptions['series'] = series;
-            console.log(this.chartOptions);
-            this.$emit('updateTableData', tableData, this.index);
-            this.chartOptions['legend']['data'] = series.map(v => {
-                return v.name;
-            });
             this.$refs['chart3'] && this.$refs['chart3'].initChart();
         },
         handleEchartClickEvent(val) {
