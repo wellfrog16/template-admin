@@ -106,7 +106,7 @@ export default {
         },
         filterMethods(value, data) {
             if (!value) return true;
-            return (data['acctId'] && data['acctId'].indexOf(value) !== -1) || (data['custId'] && data['custId'].indexOf(value) !== -1);
+            return (data['acctId'] && data['acctId'].indexOf(value.trim()) !== -1) || (data['custId'] && data['custId'].indexOf(value.trim()) !== -1);
         }
     },
     mounted() {
