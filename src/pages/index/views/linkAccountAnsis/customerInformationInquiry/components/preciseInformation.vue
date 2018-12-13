@@ -20,7 +20,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :xl="7" :lg="7" :md="7" :sm="24">
-                        <el-form-item prop="contractCode" label="=" label-width="40px">
+                        <el-form-item prop="contractCode" label="=" label-width="50px">
                             <el-input clearable size="small" v-model="ruleForm.contractCode"
                                       style="width: 100%;"  class="custom-width"></el-input>
                         </el-form-item>
@@ -87,6 +87,10 @@
                     indexSelection: {
                         required: true,
                         message: '请选择指标选择'
+                    },
+                    contractCode: {
+                        required: true,
+                        message: '请输入指标内容'
                     }
                 }
             }

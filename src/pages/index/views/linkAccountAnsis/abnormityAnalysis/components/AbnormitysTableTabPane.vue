@@ -179,17 +179,18 @@
                 // if (!$.isEmptyObject(this.tablePaneData)) {
                 if (Object.keys(this.tablePaneData).length !== 0) {
                     this.fullScreenLoading1 = false;
+                    let storeData = []
                     if (this.activeName == '0') {
-                        let storeData = this.$store.getters.overStoreGetters;
-                        this.tabsData(storeData || {});
+                        storeData = this.$store.getters.overStoreGetters ? this.$store.getters.overStoreGetters : [];
+                        // this.tabsData(storeData || {});
+                        // this.barEchartsDete(storeData || {}, this.activeName);
                     } else if (this.activeName == '1') {
-                        let storeData = this.$store.getters.frequentGetters;
-                        this.tabsData(storeData || {});
+                        storeData = this.$store.getters.frequentGetters ? this.$store.getters.frequentGetters : [];
                     } else {
-                        let storeData = this.$store.getters.autoTradeGetters;
-                        this.tabsData(storeData || {});
+                        storeData = this.$store.getters.autoTradeGetters ? this.$store.getters.autoTradeGetters : [];
                     }
-                    this.barEchartsDete(resp, this.activeName);
+                    this.tabsData(storeData || {});
+                    this.barEchartsDete(storeData);
                 }
             },
             // // Bar 柱状图

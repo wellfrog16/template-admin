@@ -105,9 +105,9 @@
                     // selectDateRange: ['2017-02-01', '2018-12-31']   // 统计区间    '2017-02-01', '2018-12-31'
                 },
                 rules: {
-                    contractCode: {
+                    customerID: {
                         required: true,
-                        message: '请输入合约代码'
+                        message: '请输入客户编号'
                     },
                     selectDateRange: {
                         required: true,
@@ -132,7 +132,6 @@
                 var myDate = new Date();
                 this.$refs['ruleForm'].validate(valid => {
                     if (valid) {
-                        console.log(new Date());
                         this.activeNameList[0].tableData = [];
                         this.activeNameList[1].tableData = [];
                         this.activeNameList[2].tableData = [];
@@ -146,7 +145,6 @@
                         };
                         this.loadingCustomerAddress = true;
                         postCustomerTransactions(params).then(resp => {
-                            console.log(new Date());
                             this.loadingCustomerAddress = false;
                             this.activeNameList[0].tableData = resp.tradeInfoList;
                             this.activeNameList[1].tableData = resp.tradeInfoFormList;
@@ -180,9 +178,7 @@
                     "pageNo": val.pageIndex,  // 页码
                 };
                 this.loadingCustomerAddress = true;
-                console.log(new Date());
                 postCustomerTransactions(params).then(resp => {
-                    console.log(new Date());
                     this.loadingCustomerAddress = false;
                     this.activeNameList[0].tableData = resp.tradeInfoList ? resp.tradeInfoList :this.activeNameList[0].tableData;
                     this.activeNameList[1].tableData = resp.tradeInfoFormList ? resp.tradeInfoFormList : this.activeNameList[1].tableData;
@@ -198,7 +194,6 @@
         },
         // 初始化数据
         mounted() {
-            console.log(new Date());
             this.ruleForm.customerID = this.$route.query.custId ? this.$route.query.custId : '';
         },
     }

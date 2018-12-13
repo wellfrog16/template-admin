@@ -67,7 +67,7 @@ export const activeNameList = [
             {field: "custCode", label: "客户编号", width: '200', align: ''},
             {field: "custName", label: "客户名称", width: '200', align: ''},
             {field: "tradingDay", label: "交易日", width: '200', align: ''},
-            {field: "declDay", label: "报单日期", width: '200', align: ''},
+            {field: "declDay", label: "报单时间", width: '200', align: ''},
             {field: "reportId", label: "报单编号", width: '200', align: ''},
             {field: "contrCode", label: "合约代码", width: '200', align: ''},
             {field: "declPriceCond", label: "报单价格条件", width: '200', align: ''},

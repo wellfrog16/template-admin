@@ -66,7 +66,7 @@
                         </div>
                     </el-col>
                     <el-col :span="3">
-                        <div>
+                        <div class="operate-button-group">
                             <el-button :class="$style.operate_button_group" type="danger" size="small"
                                        @click="handleDelete">删除
                             </el-button>

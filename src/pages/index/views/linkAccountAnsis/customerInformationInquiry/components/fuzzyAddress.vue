@@ -9,13 +9,13 @@
                             <el-select style="width: 100%;"
                                 v-model="ruleForm.nationy"
                                 class="custom-width"
-                                size="small"
+                                size="small" clearable
                                 placeholder="请选择国家">
                                 <el-option
-                                    v-for="items in nationyOptions"
-                                    :key="items.value"
-                                    :label="items.label"
-                                    :value="items.value">
+                                    v-for="nitems in nationyOptions"
+                                    :key="nitems.idName"
+                                    :label="nitems.name"
+                                    :value="nitems.idName">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -44,10 +44,10 @@
                                 class="custom-width" clearable size="small"
                                 placeholder="请选择市">
                                 <el-option
-                                    v-for="item in cityOptions"
-                                    :key="item.id"
-                                    :label="item.label"
-                                    :value="item.id">
+                                    v-for="itemId in cityOptions"
+                                    :key="itemId.id"
+                                    :label="itemId.label"
+                                    :value="itemId.id">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -125,8 +125,8 @@
 
                 // form 表单绑定值
                 nationyOptions: [
-                    {label: '中国', value: '0'},
-
+                    {name: '中国', idName: '0'},
+                    // {name: '美国', idName: '1'},
                 ],   // 国家
                 provinceOptions:[],   // 省
                 cityOptions:[],       // 市
@@ -139,6 +139,18 @@
                     address: '',         // 地址   玉田新村105号101室
                 },
                 rules: {
+                    nationy: {
+                        required: true,
+                        message: '请选择国家'
+                    },
+                    province: {
+                        required: true,
+                        message: '请选择省'
+                    },
+                    city: {
+                        required: true,
+                        message: '请选市'
+                    },
                     address: {
                         required: true,
                         message: '请输入详细地址'
