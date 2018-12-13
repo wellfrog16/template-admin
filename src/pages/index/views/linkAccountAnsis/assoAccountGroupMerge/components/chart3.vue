@@ -77,6 +77,7 @@ export default {
                         type: 'cross'
                     },
                     formatter: param => {
+                        console.log(param);
                         if (param.seriesIndex === 1 || param.seriesIndex === 2) {
                             return `交易日: ${param.value[0]}<br><br>` + param.value[4].map((v, i) => {
                                 return `
@@ -414,8 +415,8 @@ export default {
                     );
                 });
                 mainData.forEach(v => {
-                    scatterData1.push([v.txDt, (v.highestPrice + 1000), '卖出', v.sellQtty, this.currentCustIds]);
-                    scatterData2.push([v.txDt, (v.lowestPrice - 1000), '买入', v.buyQtty, this.currentCustIds]);
+                    scatterData1.push([v.txDt, (v.highestPrice * 1.05), '卖出', v.sellAcctCnt, this.currentCustIds]);
+                    scatterData2.push([v.txDt, (v.lowestPrice * 1.05), '买入', v.buyAcctCnt, this.currentCustIds]);
                 });
                 this.chartOptions['series'][0]['data'] = seriesData;
                 this.chartOptions['series'][1]['data'] = scatterData1;
@@ -444,10 +445,10 @@ export default {
             this.$emit('updateTableData', tableData, this.index);
         },
         initChart(flag) {
-            console.log(this.$store.getters.getXGchart3);
-            if (this.$store.getters.getXGchart3 && Object.keys(this.$store.getters.getXGchart3).length) {
-                this.chartOptions = JSON.parse(JSON.stringify(this.$store.getters.getXGchart3));
-            }
+            // console.log(this.$store.getters.getXGchart3);
+            // if (this.$store.getters.getXGchart3 && Object.keys(this.$store.getters.getXGchart3).length) {
+            //     this.chartOptions = this.$store.getters.getXGchart3;
+            // }
             this.$refs['chart2'] && this.$refs['chart2'].initChart();
             this.$nextTick(() => {
                 if (!flag) {

@@ -213,10 +213,10 @@ export default {
             });
         },
         initChart(flag) {
-            console.log(this.$store.getters.getXGchart4);
-            if (this.$store.getters.getXGchart4 && Object.keys(this.$store.getters.getXGchart4).length) {
-                this.chartOptions = JSON.parse(JSON.stringify(this.$store.getters.getXGchart4));
-            }
+            // console.log(this.$store.getters.getXGchart4);
+            // if (this.$store.getters.getXGchart4 && Object.keys(this.$store.getters.getXGchart4).length) {
+            //     this.chartOptions = this.$store.getters.getXGchart4;
+            // }
             this.$refs['chart3'] && this.$refs['chart3'].initChart();
         },
         handleEchartClickEvent(val) {

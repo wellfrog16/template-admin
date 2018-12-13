@@ -137,10 +137,10 @@ export default {
             this.$emit('updateTableData', tableData, this.index);
         },
         initChart(flag) {
-            console.log(this.$store.getters.getXGchart2);
-            if (this.$store.getters.getXGchart2 && Object.keys(this.$store.getters.getXGchart2).length) {
-                this.chartOptions = JSON.parse(JSON.stringify(this.$store.getters.getXGchart2));
-            }
+            // console.log(this.$store.getters.getXGchart2);
+            // if (this.$store.getters.getXGchart2 && Object.keys(this.$store.getters.getXGchart2).length) {
+            //     this.chartOptions = this.$store.getters.getXGchart2;
+            // }
             this.$refs['chart1'] && this.$refs['chart1'].initChart();
         },
         handleEchartClickEvent(val) {
