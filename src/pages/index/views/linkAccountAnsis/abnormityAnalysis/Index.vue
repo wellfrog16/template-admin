@@ -33,7 +33,7 @@
                                     </el-radio>
                                     <br>
                                     <el-radio label="1">
-                                        <el-form-item prop="fileList" label="导入CSV" label-width="87px"
+                                        <el-form-item prop="fileList" label="导入CSV" label-width="100px"
                                                       style="display:inline-block; padding: 5px 0;"
                                                       :rules="[{
                                                           required: String(ruleForm.exportType) === '1', message: '请上传附件'
@@ -210,6 +210,7 @@
             // 导入CSV (添加附件成功)
             currentFileList(fileList) {
                 this.ruleForm.fileList = fileList;
+                this.ruleForm.exportType = '1';
             },
             // 导入CSV
             handleUploadSuccess(resp) {
@@ -219,7 +220,6 @@
                     statTimeEnd: moment(this.ruleForm.selectDateRange[1]).format('YYYY-MM-DD'),  // 统计截止日
                     resultSetNo: this.ruleForm.resultId                // 结果集编号
                 };
-                // this.$store.commit('saveSceneCommitResp', resp);
                 this.dealWithIsLoading = false;
                 this.tableData = resp.report;  // 协查报告数据
                 this.tablePaneList = resp;    // tab 表格数据
@@ -242,24 +242,6 @@
                 this.tablePaneList = {};
                 this.$refs['ruleForm'].validate(valid => {
                     if (valid) {
-                        if (this.ruleForm.exportType === '1') {
-                            let params = {
-                                contrCode: this.ruleForm.contractCode, // 合约代码
-                                statTimeBegin: moment(this.ruleForm.selectDateRange[0]).format('YYYY-MM-DD'), // 统计起始日
-                                statTimeEnd: moment(this.ruleForm.selectDateRange[1]).format('YYYY-MM-DD'),  // 统计截止日
-                            };
-                            // 导入csv
-                            // this.$store.commit('saveSceneCommitParams', params);
-                        } else {
-                            let params = {
-                                contrCode: this.ruleForm.contractCode,             // 合约代码
-                                statTimeBegin: moment(this.ruleForm.selectDateRange[0]).format('YYYY-MM-DD'), // 统计起始日
-                                statTimeEnd: moment(this.ruleForm.selectDateRange[1]).format('YYYY-MM-DD'),  // 统计截止日
-                                resultSetNo: this.ruleForm.resultId                // 结果集编号
-                            };
-                            // this.$store.commit('saveSceneCommitParams', params);
-                        }
-
                         if (this.ruleForm.exportType === '1') {
                             if (this.ruleForm.resultId == '') {
                                 let params = {
@@ -290,7 +272,6 @@
                                     this.tableData = resp.report;  // 协查报告数据
                                     this.tablePaneList = resp;    // tab 表格数据
                                     this.formDataList = params; // 生成协查报告的参数
-                                    // this.$store.commit('saveSceneCommitResp', resp);
                                 }).catch(e => {
                                     this.dealWithIsLoading = false;
                                 });
@@ -313,15 +294,9 @@
         .el-form {
             color: #fff;
         }
-        .generate {
-            position: relative;
-            top: -50px;
-            right: -25px;
-        }
         .new-btn {
             margin-left: 15px;
         }
-
         /deep/ .el-tree {
             width: 350px;
             max-height: 100px;
@@ -331,7 +306,6 @@
             border-radius: 3px;
             overflow: auto;
         }
-
         .search-input {
             width: 240px;
 
@@ -348,6 +322,17 @@
         }
         /deep/ .el-carousel__container {
             min-height: 500px;
+        }
+        .self-radio {
+            /deep/.el-radio__input {
+                vertical-align: top;
+                margin-top: 20px;
+            }
+        }
+        .generate {
+            position: relative;
+            top: -50px;
+            right: -25px;
         }
     }
 </style>

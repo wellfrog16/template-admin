@@ -145,36 +145,18 @@
                     // store中获取缓存
                     this.barEchartsDete(propsData);  // 对象
                 } else {
-                    console.log(this.activeName);
-                    if (this.activeName === '0') {
-                        this.fullScreenLoading1 = true;
-                        postImportAccounBar(params).then(resp => {
-                            this.fullScreenLoading1 = false;
+                    postImportAccounBar(params).then(resp => {
+                        if (this.activeName === '0') {
                             this.$store.commit('overStoreMut', resp);
-                            this.barEchartsDete(resp);
-                        }).catch(e => {
-                            this.fullScreenLoading1 = false;
-                        });
-
-                    } else if (this.activeName === '1') {
-                        this.fullScreenLoading1 = true;
-                        postImportAccounBar(params).then(resp => {
-                            this.fullScreenLoading1 = false;
+                        } else if (this.activeName === '1') {
                             this.$store.commit('frequentMut', resp);
-                            this.barEchartsDete(resp);
-                        }).catch(e => {
-                            this.fullScreenLoading1 = false;
-                        });
-                    } else {
-                        this.fullScreenLoading1 = true;
-                        postImportAccounBar(params).then(resp => {
-                            this.fullScreenLoading1 = false;
+                        } else {
                             this.$store.commit('autoTradeMut', resp);
-                            this.barEchartsDete(resp);
-                        }).catch(e => {
-                            this.fullScreenLoading1 = false;
-                        });
-                    }
+                        }
+                        this.barEchartsDete(resp, this.activeName);
+                    }).catch(e => {
+                        this.fullScreenLoading1 = false;
+                    });
                 }
 
             },
@@ -204,7 +186,7 @@
                     } else {
                         storeData = this.$store.getters.autoTradeGetters;
                     }
-                    this.barEchartsDete(storeData || {}, this.activeName);
+                    this.tabsData(storeData || {});
                 }
             },
             // Bar 柱状图(双击数据)
@@ -227,14 +209,13 @@
                         "contrCode": row.contrCd,                         // 合约代码
                         "type": this.activeName,                           // 取值 '1':超仓分析
                     };
-
                     this.fullScreenLoading1 = true;
                     // Bar 柱状图接口
                     postImportAccounBar(params).then(resp => {
                         this.fullScreenLoading1 = false;
-                        if (this.activeName == '0') {
+                        if (this.activeName === '0') {
                             this.$store.commit('overStoreMut', resp);
-                        } else if (this.activeName == '1') {
+                        } else if (this.activeName === '1') {
                             this.$store.commit('frequentMut', resp);
                         } else {
                             this.$store.commit('autoTradeMut', resp);
@@ -271,7 +252,6 @@
                     "tableColumns": tableColumns,
                     "tableData": tableData
                 };
-                console.log(params);
                 this.gfnExportFileWithForm(params);
 
             }
