@@ -36,7 +36,6 @@ export default {
         };
         return {
             loading: false,
-            storeData: {},
             chartOptions: {
                 // legend: {
                 //     y: 'top',
@@ -162,15 +161,6 @@ export default {
         getData() {
             let resData = this.$store.getters.sceneCommitResp;
             // resData = resData1;
-            this.storeData = resData;
-            this.initChart(resData);
-        },
-        sortDataByAcctIdCommon(data) {
-            return _.sortBy(data, [item => { return item.acctId; }]);
-        },
-        initChart(resData, flag) {
-            debugger;
-            resData = resData || this.storeData;
             if (!Object.keys(resData).length) {
                 return;
             }
@@ -213,10 +203,21 @@ export default {
                 return [v.acctGroOpenInt, v.acctGroAvgRela, v.custQtty, v.acctId, v.contrCd, v.custIds, v.id];
             });
             console.log(this.chartOptions);
+            this.$store.commit('saveXGchart1', this.chartOptions);
             this.$emit('updateTableData', chartData, this.index);
             this.$emit('updateMainTableData', mainTableData, this.index);
             // select max
             this.$emit('updateAccountGroupAndCustIds', selectMax ? selectMax.acctId : '', selectMax ? selectMax.custIds.split(',') : []);
+            this.initChart();
+        },
+        sortDataByAcctIdCommon(data) {
+            return _.sortBy(data, [item => { return item.acctId; }]);
+        },
+        initChart(flag) {
+            console.log(this.$store.getters.getXGchart1);
+            if (this.$store.getters.getXGchart1 && Object.keys(this.$store.getters.getXGchart1).length) {
+                this.chartOptions = this.$store.getters.getXGchart1;
+            }
             this.$refs['chart0'] && this.$refs['chart0'].initChart();
             if (!flag) {
                 this.$nextTick(() => {

@@ -25,7 +25,7 @@ export default {
     data() {
         return {
             loading: false,
-            storeData: {},
+            init: true,
             chartOptions: {
                 tooltip: {
                     trigger: 'axis',
@@ -79,69 +79,69 @@ export default {
             let params = this.commonReqParams;
             getChart2Data(params).then(resp => {
                 this.loading = false;
+                let {mainData, tableData} = resp;
+                if (tableData && !tableData.length) {
+                    return;
+                }
                 console.log(resp);
-                this.storeData = resp;
-                this.initChart(resp);
+                let series = [];
+                let date = [];
+                Object.keys(mainData).forEach(v => {
+                    series.push({
+                        name: v,
+                        type: 'bar',
+                        barMaxWidth: '45',
+                        stack: '总量',
+                        markLine: { // 标记线设置
+                            lineStyle: {
+                                normal: {
+                                    type: 'dashed',
+                                    color: '#ec0000'
+                                }
+                            },
+                            label: {
+                                position: 'end',
+                                formatter: params => {
+                                    return `超仓线：${params.value}`;
+                                }
+                            },
+                            symbolSize: 0, // 控制箭头和原点的大小、官方默认的标准线会带远点和箭头
+                            data: [ // 设置条标准线——x=10
+                                {yAxis: '10000'}
+                            ]
+                        },
+                        data: mainData[v].map(m => { return m.value; })
+                    });
+                    date = mainData[v].map(m => { return m.date; });
+                });
+                this.chartOptions['legend']['data'] = series.map(m => { return m.name; });
+                this.chartOptions['series'] = series;
+                this.chartOptions['xAxis'][0]['data'] = date;
+                // set datazoom
+                let dataZoomStartValue = date[date.length > 20 ? date.length - 20 : 0];
+                let dataZoomEndValue = date[date.length - 1];
+                this.chartOptions['dataZoom'][0]['startValue'] = dataZoomStartValue;
+                this.chartOptions['dataZoom'][1]['startValue'] = dataZoomStartValue;
+                this.chartOptions['dataZoom'][0]['endValue'] = dataZoomEndValue;
+                this.chartOptions['dataZoom'][1]['endValue'] = dataZoomEndValue;
+                console.log(this.chartOptions);
+                this.$store.commit('saveXGchart2', this.chartOptions);
+                this.initChart(mainData);
+                this.initTable(tableData);
             }).catch(e => {
                 this.loading = false;
                 console.error(e);
             });
         },
-        initChart(resData, flag) {
-            resData = resData || this.storeData;
-            console.log(resData);
-            if (!Object.keys(resData).length) {
-                return;
-            }
-            let {qtty, mainData, tableData} = resData;
-            let series = [];
-            let date = [];
-            Object.keys(mainData).forEach(v => {
-                series.push({
-                    name: v,
-                    type: 'bar',
-                    barMaxWidth: '45',
-                    stack: '总量',
-                    markLine: { // 标记线设置
-                        lineStyle: {
-                            normal: {
-                                type: 'dashed',
-                                color: '#ec0000'
-                            }
-                        },
-                        label: {
-                            position: 'right',
-                            formatter: params => {
-                                return `超仓线：${params.value}`;
-                            }
-                        },
-                        symbolSize: 0, // 控制箭头和原点的大小、官方默认的标准线会带远点和箭头
-                        data: [ // 设置条标准线——x=10
-                            {yAxis: qtty || '10000'}
-                        ]
-                    },
-                    data: mainData[v].map(m => { return m.value; })
-                });
-                date = mainData[v].map(m => { return m.date; });
-            });
-            this.chartOptions['legend']['data'] = series.map(m => { return m.name; });
-            this.chartOptions['series'] = series;
-            this.chartOptions['xAxis'][0]['data'] = date;
-            // set datazoom
-            let dataZoomStartValue = date[date.length > 20 ? date.length - 20 : 0];
-            let dataZoomEndValue = date[date.length - 1];
-            this.chartOptions['dataZoom'][0]['startValue'] = dataZoomStartValue;
-            this.chartOptions['dataZoom'][1]['startValue'] = dataZoomStartValue;
-            this.chartOptions['dataZoom'][0]['endValue'] = dataZoomEndValue;
-            this.chartOptions['dataZoom'][1]['endValue'] = dataZoomEndValue;
-            console.log(this.chartOptions);
-            this.$refs['chart1'] && this.$refs['chart1'].initChart();
+        initTable(tableData) {
             this.$emit('updateTableData', tableData, this.index);
-            if (!flag) {
-                this.$nextTick(() => {
-                    this.$emit('drewChart4');
-                });
+        },
+        initChart(flag) {
+            console.log(this.$store.getters.getXGchart2);
+            if (this.$store.getters.getXGchart2 && Object.keys(this.$store.getters.getXGchart2).length) {
+                this.chartOptions = this.$store.getters.getXGchart2;
             }
+            this.$refs['chart1'] && this.$refs['chart1'].initChart();
         },
         handleEchartClickEvent(val) {
             this.$emit('handleEchartClickEvent', val, this.index);

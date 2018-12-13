@@ -16,4 +16,21 @@ module.exports = app => {
         });
         res.json({code: 200, data});
     });
+    app.get('/mock/test/', (req, res) => {
+        const data = Mock.mock({
+            // 属性 list 的值是一个数组，其中含有 1 到 10 个元素
+            'mainData|10-20': [{
+                'id|+1': 1,
+                'txDt': '@date',
+                'openQuotPrice': '@float(-100000000, 100000000, 6, 6)',
+                'closeQuotPrice': '@float(-100000000, 100000000, 6, 6)',
+                'highestPrice': '@float(-100000000, 100000000, 6, 6)',
+                'lowestPrice': '@float(-100000000, 100000000, 6, 6)',
+                'sellAcctCnt|+1': 1,
+                'buyAcctCnt|+1': 9,
+            }],
+            'tableData': []
+        });
+        res.json({code: 200, data});
+    });
 };

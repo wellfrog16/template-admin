@@ -6,6 +6,7 @@
 <script>
 import EchartsCommon from '@/components/index/common/EchartsCommon';
 import {getChart3Data} from '@/api/dataAnsis/assoAccountGroupMerge';
+import api from '@/api/mock/demo';
 import _ from 'lodash';
 // import {respData3} from './constants';
 export default {
@@ -36,7 +37,7 @@ export default {
         let chart3SymbolSize = 8;
         let itemStyleArray = [{
             normal: {
-                color: '#28c76f',
+                color: '#095209',
                 opacity: 0.8,
                 shadowBlur: 10,
                 shadowOffsetX: 0,
@@ -45,7 +46,7 @@ export default {
             }
         }, {
             normal: {
-                color: '#f6416c',
+                color: '#7d0d14',
                 opacity: 0.8,
                 shadowBlur: 10,
                 shadowOffsetX: 0,
@@ -63,7 +64,7 @@ export default {
         return {
             loading: false,
             init: true,
-            storeData: {},
+            selectMax: {},
             chartOptions: {
                 animation: false,
                 // color: ['transparent', '#8A0000'],
@@ -150,8 +151,8 @@ export default {
                         },
                         seriesIndex: 1,
                         inRange: {
-                            color: ['#28c76f'],
-                            colorLightness: [1, 0.5]
+                            color: ['#095209'],
+                            colorLightness: [1, 0.3]
                         },
                         outOfRange: {
                             // symbolSize: [10, 45],
@@ -159,7 +160,7 @@ export default {
                         },
                         controller: {
                             inRange: {
-                                color: ['#28c76f']
+                                color: ['#095209']
                             },
                             outOfRange: {
                                 color: '#444'
@@ -184,8 +185,8 @@ export default {
                             color: '#fff'
                         },
                         inRange: {
-                            color: ['#f6416c'],
-                            colorLightness: [1, 0.5]
+                            color: ['#7d0d14'],
+                            colorLightness: [1, 0.3]
                         },
                         outOfRange: {
                             // symbolSize: [10, 45],
@@ -193,7 +194,7 @@ export default {
                         },
                         controller: {
                             inRange: {
-                                color: ['#f6416c']
+                                color: ['#7d0d14']
                             },
                             outOfRange: {
                                 color: '#444'
@@ -327,73 +328,86 @@ export default {
         };
     },
     methods: {
+        async test() {
+            let storeData = await api.test();
+            this.$store.commit('saveXGchart3', storeData.mainData);
+            this.initChart(storeData.mainData);
+        },
         getData() {
             // this.initChart(respData3);
+            // this.test();
             this.loading = true;
             let params = this.commonReqParams;
             getChart3Data(params).then(resp => {
                 this.loading = false;
                 console.log(resp);
-                this.storeData = resp;
-                this.initChart(resp);
+                let {mainData, tableData} = resp;
+                if (mainData && !mainData.length) {
+                    return;
+                }
+                mainData = _.sortBy(mainData, [item => {
+                    return item.txDt;
+                }]);
+                // set datazoom
+                let dataZoomStartValue = mainData[mainData.length > 20 ? mainData.length - 20 : 0]['txDt'];
+                let dataZoomEndValue = mainData[mainData.length - 1]['txDt'];
+                console.log(dataZoomStartValue);
+                console.log(dataZoomEndValue);
+                this.chartOptions['dataZoom'][0]['startValue'] = dataZoomStartValue;
+                this.chartOptions['dataZoom'][1]['startValue'] = dataZoomStartValue;
+                this.chartOptions['dataZoom'][0]['endValue'] = dataZoomEndValue;
+                this.chartOptions['dataZoom'][1]['endValue'] = dataZoomEndValue;
+                let seriesData = [];
+                let scatterData1 = [];
+                let scatterData2 = [];
+                let date = [];
+                mainData.forEach(v => {
+                    date.push(v.txDt);
+                    seriesData.push(
+                        [v.openQuotPrice, v.closeQuotPrice, v.lowestPrice, v.highestPrice, v.txDt]
+                    );
+                });
+                mainData.forEach(v => {
+                    scatterData1.push([v.txDt, (v.highestPrice + 1000), '卖出', v.sellAcctCnt, this.currentCustIds]);
+                    scatterData2.push([v.txDt, (v.lowestPrice - 1000), '买入', v.buyAcctCnt, this.currentCustIds]);
+                });
+                this.chartOptions['series'][0]['data'] = seriesData;
+                this.chartOptions['series'][1]['data'] = scatterData1;
+                this.chartOptions['series'][2]['data'] = scatterData2;
+                this.chartOptions['xAxis']['data'] = date;
+                // set cust count
+                this.chartOptions['visualMap'][0]['max'] = this.currentCustIds.length;
+                this.chartOptions['visualMap'][1]['max'] = this.currentCustIds.length;
+                console.log(this.chartOptions);
+                this.$store.commit('saveXGchart3', this.chartOptions);
+                this.initTable(tableData);
+                this.initChart();
+                // 最近交易日，包含买入或卖出
+                this.selectMax = _.maxBy(mainData, v => {
+                    if (!!v.sellAcctCnt || !!v.buyAcctCnt) {
+                        return v.txDt;
+                    }
+                });
+                console.log(this.selectMax);
             }).catch(e => {
                 this.loading = false;
                 console.error(e);
             });
         },
-        initChart(resData, flag) {
-            resData = resData || this.storeData;
-            if (!Object.keys(resData).length) {
-                return;
-            }
-            let {mainData, tableData} = resData;
-            mainData = _.sortBy(mainData, [item => {
-                return item.txDt;
-            }]);
-            // set datazoom
-            // let dataZoomStartValue = mainData[mainData.length > 50 ? mainData.length - 50 : 0]['txDt'];
-            // let dataZoomEndValue = mainData[mainData.length - 1]['txDt'];
-            // console.log(dataZoomStartValue);
-            // console.log(dataZoomEndValue);
-            // this.chartOptions['dataZoom'][0]['startValue'] = dataZoomStartValue;
-            // this.chartOptions['dataZoom'][1]['startValue'] = dataZoomStartValue;
-            // this.chartOptions['dataZoom'][0]['endValue'] = dataZoomEndValue;
-            // this.chartOptions['dataZoom'][1]['endValue'] = dataZoomEndValue;
-            let seriesData = [];
-            let scatterData1 = [];
-            let scatterData2 = [];
-            let date = [];
-            mainData.forEach(v => {
-                date.push(v.txDt);
-                seriesData.push(
-                    [v.openQuotPrice, v.closeQuotPrice, v.lowestPrice, v.highestPrice, v.txDt]
-                );
-            });
-            mainData.forEach(v => {
-                scatterData1.push([v.txDt, (v.highestPrice + 20), '卖出', v.sellAcctCnt, this.currentCustIds]);
-                scatterData2.push([v.txDt, (v.lowestPrice - 20), '买入', v.buyAcctCnt, this.currentCustIds]);
-            });
-            this.chartOptions['series'][0]['data'] = seriesData;
-            this.chartOptions['series'][1]['data'] = scatterData1;
-            this.chartOptions['series'][2]['data'] = scatterData2;
-            this.chartOptions['xAxis']['data'] = date;
-            console.log(this.chartOptions);
+        initTable(tableData) {
             this.$emit('updateTableData', tableData, this.index);
+        },
+        initChart(flag) {
+            console.log(this.$store.getters.getXGchart3);
+            if (this.$store.getters.getXGchart3 && Object.keys(this.$store.getters.getXGchart3).length) {
+                this.chartOptions = this.$store.getters.getXGchart3;
+            }
             this.$refs['chart2'] && this.$refs['chart2'].initChart();
             this.$nextTick(() => {
-                // 最近交易日，包含买入或卖出
-                let selectMax = _.maxBy(mainData, v => {
-                    if (!!v.sellAcctCnt || !!v.buyAcctCnt) {
-                        return v.txDt;
-                    }
-                });
-                console.log(selectMax);
-                console.log(88888888888);
                 if (!flag) {
                     this.$nextTick(() => {
-                        if (!this.init) {
-                            this.$emit('drewChart4');
-                        } else {
+                        if (this.init) {
+                            this.$emit('drewChart4', this.selectMax.txDt);
                             this.init = false;
                         }
                     });
@@ -406,9 +420,6 @@ export default {
         handleEchartDblClickEvent(val) {
             this.$emit('handleEchartDblClickEvent', val, this.index);
         }
-    },
-    mounted() {
-        this.init = true;
     }
 };
 </script>
