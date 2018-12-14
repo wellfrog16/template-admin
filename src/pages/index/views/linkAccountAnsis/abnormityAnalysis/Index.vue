@@ -191,7 +191,7 @@
 
             // 底部导出CSV按钮
             exportClick1(fileName, tableColumns) {
-                if(this.tableData && !this.tableData.length){
+                if (this.tableData && !this.tableData.length) {
                     this.$message.error('协查报告暂无数据!');
                     return;
                 }
@@ -288,7 +288,7 @@
         },
         mounted() {
             //  结果集列表
-            this.getResultList();
+            this.getResultList()
         }
     };
 </script>
@@ -328,7 +328,7 @@
             min-height: 500px;
         }
         .self-radio {
-            /deep/.el-radio__input {
+            /deep/ .el-radio__input {
                 vertical-align: top;
                 margin-top: 20px;
             }

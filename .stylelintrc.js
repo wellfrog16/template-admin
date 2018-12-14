@@ -19,7 +19,7 @@ module.exports = {
         ],
         'function-url-quotes': 'always', // 单引号
         'at-rule-semicolon-newline-after': null,
-        'property-no-unknown': [ true, {'ignoreProperties': ['return']} ], // 自定义函数用，忽略return
+        'property-no-unknown': [true, { 'ignoreProperties': ['return'] }], // 自定义函数用，忽略return
         'selector-list-comma-newline-after': 'never-multi-line', // 不允许多行
         'rule-empty-line-before': null
     }

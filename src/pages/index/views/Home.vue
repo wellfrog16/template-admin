@@ -9,12 +9,20 @@
                     :collapse="collapse"
                     background-color="#1f2d3d"
                     text-color="#fff"
-                    @toggleMode="toggleMode"/>
+                    @toggleMode="toggleMode"
+                />
             </el-aside>
-            <div :class="[$style.bread_css]" :style="{'left': width, 'width': `calc(100% - ${width})`}">
+            <div
+                :class="[$style.bread_css]"
+                :style="{'left': width, 'width': `calc(100% - ${width})`}"
+            >
                 <s-breadbreadcrumb :breadcrumbList="menuData"></s-breadbreadcrumb>
             </div>
-            <div :class="[$style.maicontainersn]" :style=" {'width': `calc(100% - ${width})`}" id="main-container">
+            <div
+                :class="[$style.maicontainersn]"
+                :style=" {'width': `calc(100% - ${width})`}"
+                id="main-container"
+            >
                 <el-main>
                     <router-view/>
                     <!-- <bottom-operate-button></bottom-operate-button> -->
@@ -25,21 +33,21 @@
 </template>
 
 <script>
-import AsideMenu from '@/components/index/home/menu';
+import AsideMenu from "@/components/index/home/menu";
 // import BottomOperateButton from '@/components/index/home/BottomOperateButton';
-import menu from '@/helper/menu';
-import SBreadbreadcrumb from '@/components/index/home/SBreadbreadcrumb';
+import menu from "@/helper/menu";
+import SBreadbreadcrumb from "@/components/index/home/SBreadbreadcrumb";
 
 export default {
     components: {
         AsideMenu,
         SBreadbreadcrumb,
         // BottomOperateButton,
-        HeadTop: () => import('@/components/index/home/headTop.vue'),
+        HeadTop: () => import("@/components/index/home/headTop.vue")
     },
     data() {
         return {
-            width: '200px',
+            width: "200px",
             collapse: false,
             menuData: menu.filter(this.$router.options.routes)
         };
@@ -57,70 +65,73 @@ export default {
             // }
             this.collapse = !this.collapse;
             if (this.collapse) {
-                this.width = '64px';
+                this.width = "64px";
             } else {
-                this.width = '200px';
+                this.width = "200px";
             }
         }
     },
-    mounted() {
-    }
+    mounted() {}
 };
 </script>
 
 <style>
-    .aside-menu:not(.el-menu--collapse) {
-        width: 100%;
-        border-right: solid 0;
-    }
+.aside-menu:not(.el-menu--collapse) {
+    width: 100%;
+    border-right: solid 0;
+}
 </style>
 
 <style lang="less" module>
-    @import '../../../assets/style/config.less';
-    @height: 60px;
-    @width: 200px;
+@import "../../../assets/style/config.less";
 
-    .container {
-        width: 100%;
-        height: 100vh;
-        background: url('../../../assets/img/common/bj.jpg') no-repeat;
-        background-size: cover;
-    }
+@height: 60px;
+@width: 200px;
 
-    .containers {
-        width: 100%;
-        height: 100%;
-        padding: 0;
-        margin: 0;
-        position: relative;
-    }
-    .aside {
-        background-color: rgba(0, 11, 32, 0.4);
-        height: 1080px;
-    }
-    .bread_css {
-        position: absolute;
-        top: 0;
-    }
-    .maicontainersn {
-        color: #fff;
-        overflow: auto;
-        margin-bottom: 50px;
-        margin-top: 45px;
-        width: calc(100% - @width);
-    }
+.container {
+    width: 100%;
+    height: 100vh;
+    background: url("../../../assets/img/common/bj.jpg") no-repeat;
+    background-size: cover;
+}
 
-    .switch {
-        cursor: pointer;
-        transition: all 0.2s;
-    }
+.containers {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    position: relative;
+}
 
-    .switch-tran {
-        transform: rotate(90deg);
-        transition: all 0.2s;
-    }
+.aside {
+    background-color: rgba(0, 11, 32, 0.4);
+    height: 1080px;
+}
 
-    .main {
-        background-color: hsl(219, 77%, 18%);
-    }
+.bread_css {
+    position: absolute;
+    top: 0;
+}
+
+.maicontainersn {
+    color: #fff;
+    overflow: auto;
+    margin-bottom: 50px;
+    margin-top: 45px;
+    width: calc(100% - @width);
+}
+
+.switch {
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.switch-tran {
+    transform: rotate(90deg);
+    transition: all 0.2s;
+}
+
+.main {
+    background-color: hsl(219, 77%, 18%);
+}
 </style>
