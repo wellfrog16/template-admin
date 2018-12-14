@@ -30,9 +30,9 @@
                             </div>
                             <div v-show="!item['toggleDetailFlags']">
                                 <chart1 :ref="`chartComponent${index + 1}`" v-if="index === 0" :childrenMap="childrenMap" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData" @updateMainTableData="updateMainTableData" @updateAccountGroupAndCustIds="updateAccountGroupAndCustIds" @drewChart2="drewChart2"  @drewChart3="drewChart3"></chart1>
-                                <chart2 :ref="`chartComponent${index + 1}`" v-if="index === 1" :commonReqParams="commonReqParams()" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData" @drewChart4="drewChart4"></chart2>
-                                <chart3 :ref="`chartComponent${index + 1}`" v-if="index === 2" :commonReqParams="commonReqParams()" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData" @drewChart4="drewChart4"></chart3>
-                                <chart4 :ref="`chartComponent${index + 1}`" v-if="index === 3" :commonReqParams="commonReqParams()" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData"></chart4>
+                                <chart2 :ref="`chartComponent${index + 1}`" v-if="index === 1" :commonReqParams="computedCommonReqParams" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData" @drewChart4="drewChart4"></chart2>
+                                <chart3 :ref="`chartComponent${index + 1}`" v-if="index === 2" :commonReqParams="computedCommonReqParams" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData" @drewChart4="drewChart4"></chart3>
+                                <chart4 :ref="`chartComponent${index + 1}`" v-if="index === 3" :commonReqParams="computedCommonReqParams" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData"></chart4>
                             </div>
                             <!-- <echarts-common v-else :loading="chartLoading[index]" :ref="`chart${index}`" :domId="`chart${index}`" :defaultOption="chartOptions[index]" :propsChartHeight="300" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></echarts-common> -->
                         </div>
@@ -104,6 +104,10 @@ export default {
                 this.createChart3Columnn(val);
             },
             deep: true
+        },
+        currentAccountGroupId() {
+            this.computedCommonReqParams = this.commonReqParams();
+            console.log(this.computedCommonReqParams);
         }
     },
     data() {
@@ -124,7 +128,8 @@ export default {
             currentCustIds: [], // 当前账户组下的客户号
             table3CurrentType: 'buyCnt',
             testTableData: [],
-            pagination: {pageIndex: 1, pageRows: 10}
+            pagination: {pageIndex: 1, pageRows: 10},
+            computedCommonReqParams: {}
         };
     },
     computed: {
@@ -220,8 +225,12 @@ export default {
             case '0':
                 this.currentAccountGroupId = params['data'][6];
                 this.currentCustIds = params.data[5].split(',');
-                this.drewChart2();
-                this.drewChart3();
+                console.log(this.currentAccountGroupId);
+                console.log(this.currentCustIds);
+                this.$nextTick(() => {
+                    this.drewChart2();
+                    this.drewChart3();
+                });
                 // get chart2 chart3
                 break;
             case '1':
@@ -241,6 +250,7 @@ export default {
                 statTimeBegin: this.sceneCommitParams.statStartDt, // || '2017-02-20',
                 statTimeEnd: this.sceneCommitParams.statStopDay, // || '2017-10-09',
                 contrCode: this.sceneCommitParams.contrCd, // || 'cu1712'
+                resultIds: this.resultIds || ''
             };
         },
         getChart() {

@@ -76,7 +76,17 @@ export default {
         getData() {
             this.loading = true;
             // this.initChart(resData2);
-            let params = this.commonReqParams;
+            console.log(this.commonReqParams);
+            let params = {
+                contrCode: this.commonReqParams.contrCode || 'cu1712',
+                statTimeBegin: this.commonReqParams.statTimeBegin || '2017-02-20',
+                statTimeEnd: this.commonReqParams.statTimeEnd || '2017-10-09',
+                accountTeamNo: this.commonReqParams.accountTeamNo || 'XG00001',
+                custId: this.commonReqParams.custId || '80006298,80003998,80003172',
+            };
+            if (this.commonReqParams.resultIds) {
+                params.resultIds = this.commonReqParams.resultIds;
+            }
             getChart2Data(params).then(resp => {
                 this.loading = false;
                 let {mainData, tableData} = resp;

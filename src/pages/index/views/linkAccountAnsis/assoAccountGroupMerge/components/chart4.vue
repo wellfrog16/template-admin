@@ -96,14 +96,16 @@ export default {
     methods: {
         getData(propsDate) {
             this.loading = true;
-            let params = this.commonReqParams;
-            // let params = {
-            //     contrCode: 'cu1712',
-            //     statTimeBegin: '2017-02-20',
-            //     statTimeEnd: '2017-10-09',
-            //     accountTeamNo: 'XG00001',
-            //     custId: '80006298,80003998,80003172'
-            // };
+            let params = {
+                contrCode: this.commonReqParams.contrCode || 'cu1712',
+                statTimeBegin: this.commonReqParams.statTimeBegin || '2017-02-20',
+                statTimeEnd: this.commonReqParams.statTimeEnd || '2017-10-09',
+                accountTeamNo: this.commonReqParams.accountTeamNo || 'XG00001',
+                custId: this.commonReqParams.custId || '80006298,80003998,80003172',
+            };
+            if (this.commonReqParams.resultIds) {
+                params.resultIds = this.commonReqParams.resultIds;
+            }
             this.txDt = propsDate;
             params.txDt = this.txDt;
             getChart4Data(params).then(resData => {
