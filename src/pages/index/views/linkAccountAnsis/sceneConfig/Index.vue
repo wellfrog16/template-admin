@@ -16,7 +16,7 @@
                                         </el-form-item>
                                     </el-radio>
                                     <br>
-                                    <el-radio label="1" >
+                                    <el-radio label="1" class="self-radio">
                                         <el-form-item prop="fileList" label="导入CSV" label-width="140px" style="display:inline-block; padding: 5px 0;"
                                                       :rules="[{
                                                           required: String(ruleForm.exportType) === '1', message: '请上传附件'
@@ -446,12 +446,6 @@ export default {
         }
         /deep/ .el-carousel__container {
             min-height: 500px;
-        }
-        .self-radio {
-            /deep/.el-radio__input {
-                vertical-align: top;
-                margin-top: 20px;
-            }
         }
     }
 </style>

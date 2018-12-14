@@ -295,6 +295,12 @@
         background: transparent;
     }
 }
+.self-radio {
+    /deep/.el-radio__input {
+        vertical-align: top;
+        margin-top: 20px;
+    }
+}
 .el-loading-mask {
     background: rgb(0, 0, 0);
     opacity: 0.7;
@@ -416,8 +422,20 @@
     }
     .el-pagination .btn-next, .el-pagination .btn-prev {
         background-color: #001c4c;
-        color: #fff;
         border-color: #0e2e64;
         margin: 0 10px;
+    }
+    .el-pagination .btn-prev {
+        padding-right: 12px;
+        color: #fff;
+    }
+    .pager-nat .el-pagination .btn-next:hover {
+        color: #0b4c8f;
+    }
+    .el-pagination .btn-prev:hover {
+        color: #0b4c8f;
+    }
+    .el-pager li:hover {
+        color: #0b4c8f;
     }
 }

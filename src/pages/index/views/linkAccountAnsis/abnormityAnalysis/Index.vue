@@ -32,7 +32,7 @@
                                         </el-form-item>
                                     </el-radio>
                                     <br>
-                                    <el-radio label="1">
+                                    <el-radio label="1" class="self-radio">
                                         <el-form-item prop="fileList" label="导入CSV" label-width="100px"
                                                       style="display:inline-block; padding: 5px 0;"
                                                       :rules="[{

@@ -139,18 +139,18 @@
                     address: '',         // 地址   玉田新村105号101室
                 },
                 rules: {
-                    nationy: {
-                        required: true,
-                        message: '请选择国家'
-                    },
-                    province: {
-                        required: true,
-                        message: '请选择省'
-                    },
-                    city: {
-                        required: true,
-                        message: '请选市'
-                    },
+                    // nationy: {
+                    //     required: true,
+                    //     message: '请选择国家'
+                    // },
+                    // province: {
+                    //     required: true,
+                    //     message: '请选择省'
+                    // },
+                    // city: {
+                    //     required: true,
+                    //     message: '请选市'
+                    // },
                     address: {
                         required: true,
                         message: '请输入详细地址'

@@ -84,6 +84,11 @@
                                 return '账户组号: ' + params.name || ''
                             }
                         },
+                        padding: 10,
+                        backgroundColor: '#222',
+                        borderColor: '#777',
+                        borderWidth: 1,
+                        extraCssText: 'width:150px; white-space:pre-wrap;',
                         // trigger:'item',
                         // backgroundColor:  'rgba(245, 244, 237,0.7)' ,//提示框浮动背景色
                         // borderColor:'black',
