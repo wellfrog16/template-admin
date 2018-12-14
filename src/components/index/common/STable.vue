@@ -54,16 +54,15 @@
                              @handlerChange="handlerChange"/>
             <slot name="tableColumnsPush"></slot>
         </el-table>
-        <el-row>
+        <el-row v-if="showPagination">
             <el-col :span="24" style="margin-top: 15px;">
                 <pagination class="pager-nat"
-                    v-if="showPagination"
-                    @getPagination="getPagination"
-                    :paginationProps="pagination"
-                    :pageSizes="pageSizes"
-                    background
-                    :layout="paginationLayout"
-                    :pageTotal="Number(totalNum) || 0"></pagination>
+                            @getPagination="getPagination"
+                            :paginationProps="pagination"
+                            :pageSizes="pageSizes"
+                            background
+                            :layout="paginationLayout"
+                            :pageTotal="Number(totalNum) || 0"></pagination>
             </el-col>
         </el-row>
     </div>

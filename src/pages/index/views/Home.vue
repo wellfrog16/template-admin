@@ -91,7 +91,7 @@ export default {
 .container {
     width: 100%;
     height: 100vh;
-    background: url("../../../assets/img/common/bj.jpg") no-repeat;
+    background: url('../../../assets/img/common/bj.jpg') no-repeat;
     background-size: cover;
 }
 

@@ -28,7 +28,7 @@ export default {
         width: 100%;
         height: @height;
         .head_top_log {
-            background: url('../../../assets/img/common/topp.png') no-repeat;
+            background: url('../../../assets/img/common/top2.png') no-repeat;
             width: 100%;
             height: @height;
             z-index: -10;

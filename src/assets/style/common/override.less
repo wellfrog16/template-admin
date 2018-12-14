@@ -346,8 +346,9 @@
 }
 // button
 .el-button--primary {
-    background-color: @g-btn-bg;
-    border-color: @g-btn-border;
+    background-color: @g-color-primary;
+    border-width: 2px;
+    border-color: @g-color-primary;
     &:hover {
         background: -webkit-linear-gradient(right top, #84b8dd, #2395e7);
     }
@@ -362,8 +363,9 @@
     }
 }
 .el-button--danger {
-    background-color: @g-btn-bg;
+    background-color: @g-color-danger;
     border-color: '#ea5455';
+    border-width: 2px;
     &:hover {
         background: -webkit-linear-gradient(right top, #feb692, #ea5455);
     }
@@ -378,24 +380,26 @@
     }
 }
 .el-button--warning {
-    background-color: @g-btn-bg;
+    background-color: @g-color-warning;
     border-color: '#f0d315b9';
+    border-width: 2px;
     &:hover {
-        background: -webkit-linear-gradient(right top, #f0d315, #f0d315b9);
+        background: -webkit-linear-gradient(right top, #f0d315, @g-color-warning);
     }
     &:visited {
         background: transparent;
     }
     &:active {
-        background: -webkit-linear-gradient(right top, #f0d315, #f0d315b9);
+        background: -webkit-linear-gradient(right top, #f0d315, @g-color-warning);
     }
     &:focus {
-        background: -webkit-linear-gradient(right top, #f0d315, #f0d315b9);
+        background: -webkit-linear-gradient(right top, #f0d315, @g-color-warning);
     }
 }
 .el-button--success {
-    background-color: @g-btn-bg;
+    background-color: @g-color-success;
     border-color: '#81fbb8';
+    border-width: 2px;
     &:hover {
         background: -webkit-linear-gradient(right top, #81fbb8, #28c76f);
     }
