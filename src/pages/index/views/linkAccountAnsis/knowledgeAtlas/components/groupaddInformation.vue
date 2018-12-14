@@ -171,7 +171,7 @@ export default {
             loadingBt: false,
             dialogFormVisible: false,
             ruleForms: {
-                contractCode: 'cu1712' // 合约代码  cu1712
+                contractCode: '' // 合约代码  cu1712
             },
 
             rulesAll: {

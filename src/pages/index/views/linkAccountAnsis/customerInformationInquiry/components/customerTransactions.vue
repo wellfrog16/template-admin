@@ -39,8 +39,6 @@
                         :label="active.label"
                         :key="active.name"
                         :name="active.name">
-                        <!--<div>{{JSON.stringify(active.tableColumns)}}</div>-->
-                        <!--<div>{{JSON.stringify(active.tableData)}}</div>-->
                         <s-table
                             :height="320"
                             :loading="loadingCustomerAddress"
@@ -81,7 +79,8 @@
                 loadingCustomerAddress: false,
                 activeName: '1',
                 showPagination: true,
-                pagination: [{
+                pagination: [
+                    {
                     pageIndex: 1,
                     pageRows: 20
                 },{
@@ -126,7 +125,6 @@
 
             // 客户交易信息查询(生成报告)
             customerTransactionsClick() {
-                var myDate = new Date();
                 this.$refs['ruleForm'].validate(valid => {
                     if (valid) {
                         this.activeNameList[0].tableData = [];
@@ -160,19 +158,10 @@
                     }
                 })
             },
-
             // 分页
             getPagination(val){
-                if(this.activeName === '1'){
-                    this.activeNameList[0].tableData = [];
-                    this.totalNum[0] = 0;
-                }else if(this.activeName === '2'){
-                    this.activeNameList[1].tableData = [];
-                    this.totalNum[1] = 0;
-                }else {
-                    this.activeNameList[2].tableData = [];
-                    this.totalNum[2] = 0
-                }
+                console.log(this.pagination[this.activeName - 1]);
+                this.pagination[this.activeName - 1] = val;
                 let params = {
                     "custId": this.ruleForm.customerID,       // 客户编码
                     "timeBegin": moment(this.ruleForm.selectDateRange[0]).format('YYYY-MM-DD'),   // 统计区间(开始)
@@ -187,15 +176,12 @@
                     if(this.activeName === '1'){
                         this.activeNameList[0].tableData = resp.tradeInfoList ? resp.tradeInfoList :this.activeNameList[0].tableData;
                         this.totalNum[0] = resp.tradeInfoVOListTotal ? resp.tradeInfoVOListTotal : this.totalNum[0];   // 持仓明细记录总数
-
                     }else if(this.activeName === '2'){
                         this.activeNameList[1].tableData = resp.tradeInfoFormList ? resp.tradeInfoFormList : this.activeNameList[1].tableData;
                         this.totalNum[1] = resp.tradeInfoFormVOSTotal ?  resp.tradeInfoFormVOSTotal : this.totalNum[1];   // 报单明细记录总数
-
                     }else {
                         this.activeNameList[2].tableData = resp.tradeInfoDeal ? resp.tradeInfoDeal : this.activeNameList[2].tableData;
                         this.totalNum[2] = resp.tradeInfoDealTotal ? resp.tradeInfoDealTotal : this.totalNum[2];      // 成交明细记录总数
-
                     }
 
                 }).catch(e => {

@@ -58,7 +58,7 @@
                 echartsDataList: [],
                 barEcharts: null,
                 echartsOptions: {},
-                loadingE: false,
+                loadingE: true,
                 chartOptionsA: {},
 
                 chartOptions: {
@@ -78,7 +78,6 @@
                     animationEasingUpdate: 'quinticInOut',
                     tooltip: {
                         formatter: (params) => {
-                            console.log(params)
                             if (params.dataType === 'edge') { // link
                                 return '客户编号交集：' + params.data.tip || ''
                             } else if (params.dataType === 'node') {
@@ -155,12 +154,10 @@
                 handler(val) {
                     this.echartsDataList = val;
                     if (val) {
-                        this.this.loadingE = false;
+                        this.loadingE = false;
                         if (Object.keys(this.echartsData && this.echartsData).length !== 0) {
                             this.echartClick();
                         }
-                    }else {
-                        this.this.loadingE = true;
                     }
                 }
             }

@@ -55,12 +55,13 @@
             <slot name="tableColumnsPush"></slot>
         </el-table>
         <el-row>
-            <el-col :span="24">
-                <pagination
+            <el-col :span="24" style="margin-top: 15px;">
+                <pagination class="pager-nat"
                     v-if="showPagination"
                     @getPagination="getPagination"
                     :paginationProps="pagination"
                     :pageSizes="pageSizes"
+                    background
                     :layout="paginationLayout"
                     :pageTotal="Number(totalNum) || 0"></pagination>
             </el-col>
