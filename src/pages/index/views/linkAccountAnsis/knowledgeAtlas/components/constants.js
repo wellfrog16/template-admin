@@ -693,15 +693,15 @@ export const chartTableColumns4 = [
     {label: '撤单数量', field: '', minWidth: 100}
 ];
 export const mainTableColumns = [
-    {field: 'resultSetName', label: '结果集名称', minWidth: '50',},
-    {field: 'acctId', label: '账户组号', minWidth: '60',},
-    {field: 'custId', label: '客户编号', minWidth: '60',},
-    {field: 'customerName', label: '客户名称', minWidth: '60',},
-    {field: 'contractCode', label: '合约代码', minWidth: '60',},
-    {field: 'acctGroupHold', label: '账户组持仓量', minWidth: '60',},
-    {field: 'customerHold', label: '账户持仓量', minWidth: '60',},
-    {field: 'custWheOtherGro', label: '客户所在其他组', minWidth: '60',},
-    {field: 'acctGroSrc', label: '账户组来源', minWidth: '60',},
+    {field: 'resultSetName', label: '结果集名称', width: '150', align: 'center'},
+    {field: 'acctId', label: '账户组号', width: '150', align: 'center'},
+    {field: 'custId', label: '客户编号', width: '150', align: 'center'},
+    {field: 'customerName', label: '客户名称', width: '150', align: 'center'},
+    {field: 'contractCode', label: '合约代码', width: '150', align: 'center'},
+    {field: 'acctGroupHold', label: '账户组持仓量', width: '150', align: 'center'},
+    {field: 'customerHold', label: '账户持仓量', width: '150', align: 'center'},
+    {field: 'custWheOtherGro', label: '客户所在其他组', width: '150', align: 'center'},
+    {field: 'acctGroSrc', label: '账户组来源', width: '150', align: 'center'},
 ];
 export const resData1 = {
     'mainTableData': [

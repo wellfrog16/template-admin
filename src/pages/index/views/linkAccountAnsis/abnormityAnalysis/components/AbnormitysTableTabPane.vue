@@ -220,7 +220,6 @@
                         } else {
                             this.$store.commit('autoTradeMut', resp);
                         }
-                        console.log(this.activeName);
                         this.barEchartsDete(resp, this.activeName);
 
                     }).catch(e => {
