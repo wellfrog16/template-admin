@@ -689,63 +689,79 @@ export const mainTableColumns = [
     {
         field: 'acctId',
         label: '账户组号',
-        minWidth: '80',
+        width: '170',
+        align: 'center'
     },
     {
         field: 'custId',
-        label: '客户编号'
+        label: '客户编号',
+        width: '175',
+        align: 'center'
     },
     {
         field: 'custName',
-        label: '客户名称'
+        label: '客户名称',
+        align: 'center'
     },
     {
         field: 'acctGroAvgRelaCoef',
         label: '账户组平均相关系数',
+        align: 'center'
     },
     {
         field: 'acctAvgRelaCoef',
         label: '账户平均相关系数',
+        align: 'center'
     },
     {
         field: 'contrCd',
         label: '合约代码',
+        align: 'center'
     },
     {
         field: 'acctGroNetOpenInt',
         label: '账户组净持仓量',
+        align: 'center'
     },
     {
         field: 'acctNetOpenInt',
         label: '账户净持仓量',
+        align: 'center'
     },
     {
         field: 'custWheOtherGro',
         label: '客户所在其他组',
+        align: 'center'
     },
     {
         field: 'buyBargainRela',
         label: '买入成交相关系数',
+        align: 'center'
     },
     {
         field: 'sellBargainRela',
         label: '卖出成交相关系数',
+        align: 'center'
     },
     {
         field: 'netBuyBargainRela',
         label: '净买入成交相关系数',
+        align: 'center'
     },
     {
         field: 'longPosMakePosRela',
         label: '多头持仓相关系数',
+        align: 'center'
     },
     {
         field: 'shortPosMakePosRela',
         label: '空头持仓相关系数',
+        align: 'center'
     },
     {
         field: 'floatPrftLossRela',
         label: '浮动盈亏相关系数',
+        align: 'center'
     }
 ];
 let ddd = [];

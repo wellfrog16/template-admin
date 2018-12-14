@@ -1,41 +1,53 @@
 /* 树形table */
 <template>
     <el-container class="tree-table-component">
-        <div class="tree-table-component">
-            <div class="table-header-container">
-                <!-- <el-checkbox :indeterminate="isIndeterminate" v-model="checkedAll" @change="handleCheckAll"></el-checkbox> -->
-                <span class="table-header">
-                    <div v-for="(item, index) in columns" :key="index">
-                        {{ item.label }}
-                    </div>
-                </span>
-            </div>
-            <el-tree
-                ref="tree-table"
-                class="tree-table"
-                show-checkbox
-                node-key="id"
-                :data="tableData"
-                :filter-node-method="filterMethods"
-                @check-change="handleTreeCheckedChange"
-                :expand-on-click-node="false">
-                <span class="custom-tree-node" slot-scope="{ node, data }">
-                    <div v-for="(item, index) in columns" :key="index" style="text-align: center;">
-                        <el-popover placement="top-end" trigger="hover" :disabled="index < 5" width="200">
-                            <div>
-                                <p v-if="data.acctId" style="margin:0;">账户组号：{{ data.acctId }}</p>
-                                <p v-if="data.custId" style="margin:0;">客户编号：{{ data.custId }}</p>
-                                <p v-if="data.custId" style="margin:0; white-space:normal; word-break:break-all;">{{ columns[index]['label'] }}：{{ (data[item.field] === null || data[item.field] === undefined) ?  '' :  data[item.field] }}</p>
-                            </div>
-                            <span slot="reference">
-                                <span v-if="item.field !== 'custId'" style="width: 120px; text-overflow: ellipsis; overflow: hidden; display: block;">{{ (data[item.field] === null || data[item.field] === undefined) ?  '' :  data[item.field] }}</span>
-                                <custIdColumn v-else :scope="{row: data}"></custIdColumn>
+        <!-- <div class="tree-table-component">
+
+        </div> -->
+        <template>
+            <el-table
+                :data="headerData"
+                default-expand-all
+                style="width: 100%;">
+                <el-table-column type="expand" class="expanded">
+                    <template>
+                        <el-tree
+                            ref="tree-table"
+                            class="tree-table"
+                            show-checkbox
+                            node-key="id"
+                            :data="tableData"
+                            :filter-node-method="filterMethods"
+                            @check-change="handleTreeCheckedChange"
+                            :expand-on-click-node="false">
+                            <span class="custom-tree-node" slot-scope="{ node, data }">
+                                <div v-for="(item, index) in columns" :key="index" style="text-align: center;">
+                                    <el-popover placement="top-end" trigger="hover" :disabled="index < 5" width="200">
+                                        <div>
+                                            <p v-if="data.acctId" style="margin:0;">账户组号：{{ data.acctId }}</p>
+                                            <p v-if="data.custId" style="margin:0;">客户编号：{{ data.custId }}</p>
+                                            <p v-if="data.custId" style="margin:0; white-space:normal; word-break:break-all;">{{ columns[index]['label'] }}：{{ (data[item.field] === null || data[item.field] === undefined) ?  '' :  data[item.field] }}</p>
+                                        </div>
+                                        <span slot="reference">
+                                            <span v-if="item.field !== 'custId'" style="max-width: 133px; text-overflow: ellipsis; overflow: hidden; display: inline-block; margin: 0;">{{ (data[item.field] === null || data[item.field] === undefined) ?  '' :  data[item.field] }}</span>
+                                            <custIdColumn v-else :scope="{row: data}" style="text-align:center;"></custIdColumn>
+                                        </span>
+                                    </el-popover>
+                                </div>
                             </span>
-                        </el-popover>
-                    </div>
-                </span>
-            </el-tree>
-        </div>
+                        </el-tree>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    v-for="(item, index) in columns"
+                    :key="index"
+                    :width="item.width ? item.width: 157"
+                    :align="item.align"
+                    :label="item.label"
+                    :prop="item.field">
+                </el-table-column>
+            </el-table>
+        </template>
     </el-container>
 </template>
 <script>
@@ -46,6 +58,24 @@ export default {
             isIndeterminate: false,
             checkedAll: false
         };
+    },
+    computed: {
+        headerData() {
+            let data = {};
+            this.columns.forEach(v => {
+                data[v.field] = v.label;
+            });
+            return [data];
+        },
+        allArray() {
+            let allArray = [];
+            this.tableData.forEach(v => {
+                if (v.children) {
+                    allArray = allArray.concat(v.children);
+                }
+            });
+            return allArray;
+        }
     },
     components: {custIdColumn},
     props: {
@@ -78,17 +108,6 @@ export default {
             this.isIndeterminate = false;
         }
     },
-    computed: {
-        allArray() {
-            let allArray = [];
-            this.tableData.forEach(v => {
-                if (v.children) {
-                    allArray = allArray.concat(v.children);
-                }
-            });
-            return allArray;
-        }
-    },
     methods: {
         handleCheckAll(val) {
             if (val) {
@@ -116,10 +135,44 @@ export default {
 <style lang="less" scoped>
     .tree-table-component {
         height: 350px;
-        .el-tree {
+        /deep/.el-table__row {
+            display: none;
+        }
+        /deep/.self-column-in-table {
+            a {
+                text-align: center;
+                width: 155px;
+            }
+        }
+        /deep/ .el-table tr {
+            &:hover {
+                td {
+                    background: transparent !important;
+                }
+            }
+        }
+        /deep/.el-tree__empty-block {
+            min-height: 300px;
+        }
+        /deep/.el-table--scrollable-x {
+            /deep/.el-table__body-wrapper {
+                height: 265px;
+                background: transparent;
+                &:hover {
+                    background: transparent;
+                }
+            }
+        }
+        /deep/ .el-table__expanded-cell {
             background: transparent;
         }
-        .el-tree-node {
+        // /deep/ .el-table__header {
+        //     padding-left: 10px;
+        // }
+        /deep/.el-tree {
+            background: transparent;
+        }
+        /deep/.el-tree-node {
             &:hover {
                 background: transparent;
             }
@@ -151,7 +204,8 @@ export default {
 
         .tree-table {
             color: #fff;
-            width: 2300px;
+            min-width: 1060px;
+            max-height: 400px;
             overflow: auto;
             .custom-tree-node {
                 flex: 1;
@@ -168,9 +222,12 @@ export default {
             }
 
             /deep/ .el-tree-node__content {
-                padding: 10px;
+                padding: 20px 0 20px 18px;
                 border-radius: 3px;
                 border-bottom: 1px solid #21446a;
+                &:hover {
+                    background: #07254c;
+                }
             }
         }
 
