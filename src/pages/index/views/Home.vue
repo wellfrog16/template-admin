@@ -33,21 +33,21 @@
 </template>
 
 <script>
-import AsideMenu from "@/components/index/home/menu";
+import AsideMenu from '@/components/index/home/menu';
 // import BottomOperateButton from '@/components/index/home/BottomOperateButton';
-import menu from "@/helper/menu";
-import SBreadbreadcrumb from "@/components/index/home/SBreadbreadcrumb";
+import menu from '@/helper/menu';
+import SBreadbreadcrumb from '@/components/index/home/SBreadbreadcrumb';
 
 export default {
     components: {
         AsideMenu,
         SBreadbreadcrumb,
         // BottomOperateButton,
-        HeadTop: () => import("@/components/index/home/headTop.vue")
+        HeadTop: () => import('@/components/index/home/headTop.vue')
     },
     data() {
         return {
-            width: "200px",
+            width: '200px',
             collapse: false,
             menuData: menu.filter(this.$router.options.routes)
         };
@@ -65,9 +65,9 @@ export default {
             // }
             this.collapse = !this.collapse;
             if (this.collapse) {
-                this.width = "64px";
+                this.width = '64px';
             } else {
-                this.width = "200px";
+                this.width = '200px';
             }
         }
     },
