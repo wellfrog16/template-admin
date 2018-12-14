@@ -52,7 +52,7 @@
                     <div slot="content">
                         <el-row :gutter="20">
                             <el-col :span="21">
-                                <div style="overflow:auto; max-height:400px;">
+                                <div style="max-height:400px;">
                                     <tree-table ref="self-tree-table" :filterText="searchText" :columns="mainTableColumns" :tableData="mainTableData" @updateCheckedList="updateCheckedList"></tree-table>
                                 </div>
                             </el-col>
