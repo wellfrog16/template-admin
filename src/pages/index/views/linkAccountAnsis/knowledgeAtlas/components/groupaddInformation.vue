@@ -8,11 +8,16 @@
                             <span>导入结果集：</span>
                             <resultSelectComponent
                                 :resultIdProps="resultIds"
-                                @selectResultId="selectResultId">
-                            </resultSelectComponent>
+                                @selectResultId="selectResultId"
+                            ></resultSelectComponent>
                         </el-col>
                         <el-col :span="2">
-                            <el-button :loading="loadingBt" size="small" type="primary" @click="ascertainUPClick1">确认</el-button>
+                            <el-button
+                                :loading="loadingBt"
+                                size="small"
+                                type="primary"
+                                @click="ascertainUPClick1"
+                            >确认</el-button>
                         </el-col>
                     </el-col>
                     <el-col :span="8" :class="$style.rigth">
@@ -36,7 +41,6 @@
                         <el-col :span="2">
                             <el-button size="small" type="primary" @click="ascertainUPClick">确认</el-button>
                         </el-col>
-
                     </el-col>
                 </el-row>
             </div>
@@ -48,8 +52,13 @@
                     class="search-input"
                     size="mini"
                     placeholder="请输入账户组或客户编号"
-                    v-model="searchText">
-                    <i class="el-icon-search" slot="prefix" style="margin-left:4px; cursor: pointer;"></i>
+                    v-model="searchText"
+                >
+                    <i
+                        class="el-icon-search"
+                        slot="prefix"
+                        style="margin-left:4px; cursor: pointer;"
+                    ></i>
                 </el-input>
             </div>
             <div slot="content">
@@ -57,80 +66,91 @@
                     <el-col :span="21">
                         <div style="overflow:auto; max-height:400px;">
                             <tree-table
+                                :loading="loadingTree"
                                 ref="self-tree-table"
                                 :filterText="searchText"
                                 :columns="mainTableColumns"
                                 :tableData="mainTableData"
-                                @updateCheckedList="updateCheckedList">
-                            </tree-table>
+                                @updateCheckedList="updateCheckedList"
+                            ></tree-table>
                         </div>
                     </el-col>
                     <el-col :span="3">
                         <div class="operate-button-group">
-                            <el-button style="padding: 9px 39px;" :class="$style.operate_button_group" type="danger" size="small"
-                                       @click="handleDelete">删除
-                            </el-button>
+                            <el-button
+                                style="padding: 9px 39px;"
+                                :class="$style.operate_button_group"
+                                type="danger"
+                                size="small"
+                                @click="handleDelete"
+                            >删除</el-button>
                             <br>
-                            <el-button style="padding: 9px 39px;" :class="$style.operate_button_group" type="warning" size="small"
-                                       @click="handleSplit">拆分
-                            </el-button>
+                            <el-button
+                                style="padding: 9px 39px;"
+                                :class="$style.operate_button_group"
+                                type="warning"
+                                size="small"
+                                @click="handleSplit"
+                            >拆分</el-button>
                             <br>
-                            <el-button style="padding: 9px 39px;" :class="$style.operate_button_group" type="warning" size="small"
-                                       @click="handleMerge">合并
-                            </el-button>
+                            <el-button
+                                style="padding: 9px 39px;"
+                                :class="$style.operate_button_group"
+                                type="warning"
+                                size="small"
+                                @click="handleMerge"
+                            >合并</el-button>
                             <br>
-                            <el-button :class="$style.operate_button_group" type="primary" size="small"
-                                       @click="handleExportResult">导出到结果集
-                            </el-button>
+                            <el-button
+                                :class="$style.operate_button_group"
+                                type="primary"
+                                size="small"
+                                @click="handleExportResult"
+                            >导出到结果集</el-button>
                             <br>
-                            <el-button style="padding: 9px 24px;" :class="$style.operate_button_group" type="primary" size="small"
-                                       @click="handleExportCsv('账户组信息', mainTableColumns)">导出到csv
-                            </el-button>
+                            <el-button
+                                style="padding: 9px 24px;"
+                                :class="$style.operate_button_group"
+                                type="primary"
+                                size="small"
+                                @click="handleExportCsv('账户组信息', mainTableColumns)"
+                            >导出到csv</el-button>
                         </div>
                     </el-col>
                 </el-row>
             </div>
         </s-card>
         <div :class="$style.groupadd_button">
-            <el-button
-                size="small"
-                type="primary"
-                @click="dialogFormVisible = true">生成数据
-            </el-button>
-            <el-button
-                size="small"
-                type="primary"
-                @click="nextClick">下一步
-            </el-button>
+            <el-button size="small" type="primary" @click="dialogFormClick">生成数据</el-button>
+            <el-button size="small" type="primary" @click="nextClick">下一步</el-button>
         </div>
         <el-dialog
             :before-close="closeData"
             title="客户历史交易查询"
             :visible.sync="dialogFormVisible"
-            :class="$style.dia_name">
+            :class="$style.dia_name"
+        >
             <el-form ref="ruleForms" :model="ruleForms" :rules="rulesAll">
-                <el-form-item
-                    prop="contractCode"
-                    label="合约代码："
-                    label-width="100px">
+                <el-form-item prop="contractCode" label="合约代码：" label-width="100px">
                     <el-input
                         style="width: 80%;"
                         v-model="ruleForms.contractCode"
-                        clearable size="small"
-                        auto-complete="off">
-                    </el-input>
+                        clearable
+                        size="small"
+                        auto-complete="off"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item label-width="130px">
                     <el-button
-                        type="warning"
-                        size="small"
-                        @click="dialogFormVisibl">取 消
-                    </el-button>
-                    <el-button
                         type="primary"
                         size="small"
-                        @click="generateReportsClick('ruleForms')">确 定
-                    </el-button>
+                        @click="generateReportsClick('ruleForms')"
+                    >确 定</el-button>
+                    <el-button
+                        type="warning"
+                        size="small"
+                        @click="dialogFormVisibl('ruleForms')"
+                    >取 消</el-button>
                 </el-form-item>
             </el-form>
         </el-dialog>
@@ -169,6 +189,7 @@ export default {
     data() {
         return {
             loadingBt: false,
+            loadingTree: false,
             dialogFormVisible: false,
             ruleForms: {
                 contractCode: '' // 合约代码  cu1712
@@ -235,42 +256,52 @@ export default {
                 postResultList(params).then(resp => {
                     this.loadingBt = false;
                     this.fullScreenLoading = false;
-                    this.mainTableDataClick = resp;
+                    this.mainTableData = resp;
                 }).catch(e => {
                     this.loadingBt = false;
                     this.fullScreenLoading = false;
                 });
             }
         },
-
-        // 确认结果集导入 // 确认上次SVG
+        // 确认结果集导入 
         ascertainUPClick1() {
             this.mainTableData = this.mainTableData.concat(this.mainTableDataClick);
         },
-        ascertainUPClick() {
-            this.$refs['uploadFile'].submitUpload();
-        },
-
-        // 导入CSV
-        handleUploadSuccess(resp) {
-            this.mainTableData = this.mainTableData.concat(resp);
-        },
-        // 导入CSV
+        // 导入CSV(附件导入成功)
         currentFileList(fileList) {
             this.ruleForm.fileList = fileList;
         },
+        // 导入CSV 
+        handleUploadSuccess(resp) {
+            this.mainTableData = this.mainTableData.concat(resp);
+        },
+          // 确认上次SVG
+        ascertainUPClick() {
+            this.$refs['uploadFile'].submitUpload();
+        },
+        
         updateCheckedList() {
         },
-        // 取消生成报告
-        dialogFormVisibl() {
+        // 生成报告按钮
+        dialogFormClick() {
+            if(this.mainTableData && !this.mainTableData.length){
+                this.$message.error('账户组信息暂无数据!');
+                return;
+            }else {
+                this.dialogFormVisible = true;
+            }     
+        },
+        // 生成报告取消按钮
+        dialogFormVisibl(formName) {
             this.dialogFormVisible = false;
-            this.ruleForms.contractCode = '';
+             this.$refs[formName].resetFields();
         },
         closeData(done) {
             done();
-            // this.ruleForms.contractCode = '';
+            console.log(done)
+            this.ruleForms.contractCode = '';
         },
-        // 生成报告
+        // 生成报告确认按钮
         generateReportsClick() {
             this.$refs['ruleForms'].validate(valid => {
                 if (valid) {
@@ -289,9 +320,12 @@ export default {
                                 }
                             }
                         });
-                        this.dialogFormVisible = false;
-                        postRegenerate(a_contractCodeChildren).then(resp => {
+                        this.loadingTree = true;
+                        this.ruleForms.contractCode = '';
+                        postRegenerate(a_contractCodeChildren).then(resp => {                             
                             if (resp) {
+                                this.dialogFormVisible = false;
+                                this.loadingTree = false;
                                 this.$emit('generateEvent', resp.kmap); // 知识库图表
                                 this.mainTableData = resp.resultSetList; // 账户组信息
                             }
