@@ -43,7 +43,7 @@
             </el-table-column>
             <div slot="empty">
                 <span>
-                    <i class="fa fa-bar-chart fa-lg"></i>
+                    <i class="fa fa-chart-bar fa-lg"></i>
                 </span>
                 暂无数据
             </div>
