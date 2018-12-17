@@ -22,6 +22,14 @@ const Index = {
             children: [
                 {
                     meta: 'scrollTop',
+                    path: '/',
+                    name: 'sceneConfig',
+                    label: '分析向导',
+                    icon: 'menu-fix-icon fa fa-location-arrow',
+                    component: resolve => require(['@/pages/index/views/linkAccountAnsis/sceneConfig/Index.vue'], resolve)
+                },
+                {
+                    meta: 'scrollTop',
                     path: '/sceneConfig',
                     name: 'sceneConfig',
                     label: '分析向导',
