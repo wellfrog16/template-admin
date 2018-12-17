@@ -230,7 +230,7 @@ export default {
     },
     methods: {
         // 导入结果集数据
-        selectResultId(val, resultTypeG, resultNameG, setupUserG) {
+        selectResultId(val, resultNameG, resultTypeG, setupUserG) {
             this.resultIds = val;
             if (val) {
                 let params = {
@@ -264,7 +264,7 @@ export default {
             if (resp && resp.length) {
                 this.mainTableData = this.mainTableData.concat(resp);
             } else {
-                this.$message.error('无效！')
+                this.$message.error('无效');
             }
         },
         // 确认上次SVG

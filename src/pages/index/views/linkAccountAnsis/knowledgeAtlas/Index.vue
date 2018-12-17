@@ -7,15 +7,13 @@
     </div>
 </template>
 <script>
-import KnowledgeEcharts from '../knowledgeAtlas/components/knowledgeEcharts';  // 知识库图表
+import KnowledgeEcharts from '../knowledgeAtlas/components/knowledgeEcharts'; // 知识库图表
 import groupInfor from '../knowledgeAtlas/components/groupaddInformation';
-import SCard from '@/components/index/common/SCard';
 export default {
     name: 'Index',
     components: {
         KnowledgeEcharts,
-        groupInfor,
-        SCard // 边框
+        groupInfor
     },
     // 混入, 是一个类的继承，类似于一个公共的方法。
     mixins: [],
@@ -31,11 +29,11 @@ export default {
     watch: {},
     //    数据交互  127662
     methods: {
-        generateEvent(data){
-            this.echartsData = data; 
+        generateEvent(data) {
+            this.echartsData = data;
         },
         updateLoading(flag) {
-            this.loading = flag
+            this.loading = flag;
         }
     }
 };
