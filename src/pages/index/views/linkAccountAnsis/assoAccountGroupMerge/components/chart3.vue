@@ -30,11 +30,13 @@ export default {
         }
     },
     data() {
+        let chart3SymbolSize = data => {
+            return data[3] ? 8 : 0;
+        };
         let upColor = '#ec0000';
         let upBorderColor = '#8A0000';
         let downColor = '#00da3c';
         let downBorderColor = '#008F28';
-        let chart3SymbolSize = 8;
         let itemStyleArray = [{
             normal: {
                 color: '#095209',
@@ -82,7 +84,7 @@ export default {
                             return `交易日: ${param.value[0]}<br>` + param.value[4].map((v, i) => {
                                 return `
                                     客户编号: ${v}<br>
-                                    ${param.value[2]}数量: ${param.value[3]}
+                                    ${param.value[2]}账户数: ${param.value[3]}
                                 `;
                             }).join('<br>');
                         } else {
