@@ -71,14 +71,13 @@
     </div>
 </template>
 <script>
- // 精确信息查询(生成报告接口)
+// 精确信息查询(生成报告接口)
 import {postPreciseInformation} from '@/api/dataAnsis/customerInformationInquiry';
 import {columnsCTrI3, indexSelectionOptions} from '../../customerInformationInquiry/components/constants';
 export default {
     name: 'customerAddress',
     components: {
         SCard: () => import('@/components/index/common/SCard'),
-        SDatePicker: () => import('@/components/index/common/SDatePicker'),
         STable: () => import('@/components/index/common/STable')
     },
     // 存储数据
@@ -90,7 +89,7 @@ export default {
             // form 表单绑定值
             ruleForm: {
                 indexSelection: '1', // 指标选择
-                contractCode: '' // 指标内容 (玉田新村105号101室) 
+                contractCode: '' // 指标内容
             },
             indexSelectionOptions: [], // 指标选择
             rules: {
