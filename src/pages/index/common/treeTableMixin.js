@@ -93,7 +93,9 @@ export default {
             let checkedChildren = this.getCheckedNodes(true);
             let acctGroups = [];
             let acctIds = [];
+            let resultSetName = '';
             checkedNodes.forEach(v => {
+                resultSetName = v.resultSetName || '';
                 if (v.acctId && !v.custId) {
                     acctGroups.push(v);
                     acctIds.push(v.acctId);
@@ -112,6 +114,7 @@ export default {
                 v.acctId = this.createAccountId(minNo);
             });
             this.mainTableData.push({
+                resultSetName: resultSetName,
                 id: this.createTreeId(),
                 acctId: this.createAccountId(minNo),
                 children: _.unionBy(checkedChildren, 'custId')

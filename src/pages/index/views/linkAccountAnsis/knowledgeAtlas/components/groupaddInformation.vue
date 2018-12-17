@@ -159,6 +159,7 @@
     </div>
 </template>
 <script>
+import _ from 'lodash';
 import {
     uploadFileByBodyInfo // 导入csv，输出账户号list 接口
 } from '@/api/common';
@@ -225,7 +226,8 @@ export default {
             defaultLimitFileType: ['csv'],
             counter: 0, // 导入csv 表格push结果集名称
             searchText: '', // 请输入账户组或客户编号
-            mainTableDataClick: [] // 确认按钮
+            mainTableDataClick: [], // 确认按钮
+            importResultList: []
         };
     },
     methods: {
@@ -251,9 +253,17 @@ export default {
                 });
             }
         },
+        sortDataByAcctIdCommon(data) {
+            return _.sortBy(data, [item => { return item.acctId; }]);
+        },
         // 确认结果集导入
         ascertainUPClick1() {
-            this.mainTableData = this.mainTableData.concat(this.mainTableDataClick);
+            if (this.importResultList.indexOf(this.resultIds) > -1) {
+                this.$message.error('该结果集已经导入，不能重复导入');
+                return;
+            }
+            this.importResultList.push(this.resultIds);
+            this.mainTableData = this.sortDataByAcctIdCommon(this.mainTableData.concat(this.mainTableDataClick));
         },
         // 导入CSV(附件导入成功)
         currentFileList(fileList) {
@@ -262,7 +272,7 @@ export default {
         // 导入CSV
         handleUploadSuccess(resp) {
             if (resp && resp.length) {
-                this.mainTableData = this.mainTableData.concat(resp);
+                this.mainTableData = this.sortDataByAcctIdCommon(this.mainTableData.concat(resp));
             } else {
                 this.$message.error('无效');
             }
