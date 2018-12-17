@@ -244,6 +244,8 @@ export default {
                     callback(new Error('请输入客户段结束号'));
                 } else if (!reg.test(value[0]) || !reg.test(value[1])) {
                     callback(new Error('客户编号只能为数字'));
+                } else if (value[0] > value[1]) {
+                    callback(new Error('客户段起始号不能大于结束号'));
                 }
             }
             callback();
