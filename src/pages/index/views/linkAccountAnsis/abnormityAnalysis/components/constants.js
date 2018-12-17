@@ -33,7 +33,9 @@ export const activeNameList = [{
     dealLoading: false,
     tableDataList: [],
 }, {
-    label: '自成交分析', name: '2', tableColumns: [
+    label: '自成交分析',
+    name: '2',
+    tableColumns: [
         {field: 'acctNum', label: '账户组号', width: 150, align: 'center', sortable: true},
         {field: 'custId', label: '客户编号', width: 150, align: 'center', template: custIdColumn, sortable: true},
         {field: 'custName', label: '客户名称', width: 150, align: 'center', sortable: true},
