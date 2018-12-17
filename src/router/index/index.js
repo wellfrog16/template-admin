@@ -23,6 +23,7 @@ const Index = {
                 {
                     meta: 'scrollTop',
                     path: '/',
+                    hidden: true,
                     name: 'sceneConfig',
                     label: '分析向导',
                     icon: 'menu-fix-icon fa fa-location-arrow',

@@ -37,7 +37,7 @@ const router = new Router({
             path: '/login',
             name: 'login',
             label: 'login',
-            isNotMenu: true,
+            hidden: true,
             // route level code-splitting
             // this generates a separate chunk (login.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
@@ -47,7 +47,7 @@ const router = new Router({
             path: '/notFound',
             name: 'notFound',
             label: 'notFound',
-            isNotMenu: true,
+            hidden: true,
             // route level code-splitting
             // this generates a separate chunk (notFound.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
@@ -55,7 +55,7 @@ const router = new Router({
         },
         {
             path: '*',
-            isNotMenu: true,
+            hidden: true,
             redirect: '/notFound'
         }
     ]

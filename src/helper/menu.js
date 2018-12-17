@@ -2,9 +2,7 @@
 
 // todo 对菜单进行权限过滤
 function filter(data) {
-    return data.filter(v => {
-        return !v.isNotMenu;
-    });
+    return data;
 }
 
 export default {

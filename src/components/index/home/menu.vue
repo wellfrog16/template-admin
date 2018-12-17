@@ -28,18 +28,19 @@
                 </template>
                 <template v-for="(item1, index1) in item.children">
                     <!-- 无三级菜单 -->
-                    <el-menu-item v-if="!item1.children" :index="item1.name" :key="index1">
+                    <el-menu-item v-if="!item1.children && !item.hidden" :index="item1.name" :key="index1">
                         <i :class="item1.icon"></i>{{ item1.label }}
                     </el-menu-item>
 
                     <!-- 有三级菜单 -->
-                    <template v-if="item1.children">
+                    <template v-if="item1.children && !item.hidden">
                         <el-submenu :index="item1.name" :key="index1">
                             <template slot="title">
                                 <i :class="item1.icon"></i>
                                 <span>{{ item1.label }}</span>
                             </template>
                             <el-menu-item
+                                v-show="!item2.hidden"
                                 v-for="(item2, index2) in item1.children"
                                 :index="item2.name"
                                 :key="index2">
