@@ -167,18 +167,13 @@ import {
     postRegenerate, // 生成报告（知识库图表）（文革7）
     postResultList // 导入结果集的树状列表(齐宁19)
 } from '@/api/dataAnsis/knowledgeAtlas';
-
 import SCard from '@/components/index/common/SCard';
 import UploadFileToServer from '@/components/index/common/UploadFileToServer';
 import TreeTable from '@/components/index/common/TreeTable';
 import ResultSelectComponent from '@/components/index/common/ResultSelectComponent';
-
 import {mainTableColumns} from '../components/constants';
-
 export default {
     name: 'groupaddInformation',
-    // 父传子！
-    props: {},
     components: {
         SCard, // 边框
         UploadFileToServer, // 导入CSV
@@ -194,7 +189,7 @@ export default {
             loadingTree: false,
             dialogFormVisible: false,
             ruleForms: {
-                contractCode: '' // 合约代码  cu1712
+                contractCode: '' // 合约代码cu1712
             },
             rulesAll: {
                 contractCode: {
@@ -206,7 +201,7 @@ export default {
             mainTableColumns: mainTableColumns,
             // form 表单绑定值
             ruleForm: {
-                fileList: [],  // 导入CSV
+                fileList: [], // 导入CSV
                 exportType: '' // 导入结果集按钮
             },
             rules: {
@@ -231,8 +226,7 @@ export default {
             counter: 0, // 导入csv 表格push结果集名称
             searchText: '', // 请输入账户组或客户编号
             mainTableDataClick: [] // 确认按钮
-
-        }
+        };
     },
     methods: {
         // 导入结果集数据
@@ -240,20 +234,20 @@ export default {
             this.resultIds = val;
             if (val) {
                 let params = {
-                    'resultId': val,           // 结果集编号
+                    'resultId': val, // 结果集编号
                     'resultName': resultNameG, // 结果集名称
                     'resultType': resultTypeG, // 结果集类型
-                    'setupUser': setupUserG    // 创建用户
+                    'setupUser': setupUserG // 创建用户
                 };
                 this.loadingBt = true;
-                this.fullScreenLoading = true
+                this.fullScreenLoading = true;
                 postResultList(params).then(resp => {
                     this.loadingBt = false;
                     this.fullScreenLoading = false;
-                    this.mainTableDataClick = resp
+                    this.mainTableDataClick = resp;
                 }).catch(e => {
                     this.loadingBt = false;
-                    this.fullScreenLoading = false
+                    this.fullScreenLoading = false;
                 });
             }
         },
@@ -263,31 +257,30 @@ export default {
         },
         // 导入CSV(附件导入成功)
         currentFileList(fileList) {
-            this.ruleForm.fileList = fileList
+            this.ruleForm.fileList = fileList;
         },
         // 导入CSV
         handleUploadSuccess(resp) {
             this.mainTableData = this.mainTableData.concat(resp);
         },
-          // 确认上次SVG
+        // 确认上次SVG
         ascertainUPClick() {
-            this.$refs['uploadFile'].submitUpload()
+            this.$refs['uploadFile'].submitUpload();
         },
         updateCheckedList() {
         },
         // 生成报告按钮
         dialogFormClick() {
-            if(this.mainTableData && !this.mainTableData.length){
+            if (this.mainTableData && !this.mainTableData.length) {
                 this.$message.error('账户组信息暂无数据!');
-                return;
-            }else {
+            } else {
                 this.dialogFormVisible = true;
             }
         },
         // 生成报告取消按钮
         dialogFormVisibl(formName) {
             this.dialogFormVisible = false;
-             this.$refs[formName].resetFields();
+            this.$refs[formName].resetFields();
         },
         closeData(done) {
             done();
@@ -298,16 +291,14 @@ export default {
             this.$refs['ruleForms'].validate(valid => {
                 if (valid) {
                     if (this.ruleForms.contractCode !== '') {
-                        let aContractCode = [];
                         let aCcontractCodeChildren = [];
                         this.mainTableData.forEach(v => {
-                            if (v.contractCode == null) {
+                            if (v.contractCode === null) {
                                 v.contractCode = this.ruleForms.contractCode;
-                                aContractCode = this.mainTableData
                                 if (v.children) {
                                     v.children.forEach(m => {
                                         m.contractCode = this.ruleForms.contractCode;
-                                        aCcontractCodeChildren = this.mainTableData
+                                        aCcontractCodeChildren = this.mainTableData;
                                     });
                                 }
                             }
@@ -315,16 +306,16 @@ export default {
                         this.loadingTree = true;
                         this.$emit('updateLoading', this.loadingTree);
                         this.ruleForms.contractCode = '';
-                        this.dialogFormVisible = false
-                        postRegenerate(a_contractCodeChildren).then(resp => {
+                        this.dialogFormVisible = false;
+                        postRegenerate(aCcontractCodeChildren).then(resp => {
                             if (resp) {
                                 this.loadingTree = false;
                                 this.$emit('generateEvent', resp.kmap); // 知识库图表
                                 this.$emit('updateLoading', this.loadingTree);
-                                this.mainTableData = resp.resultSetList // 账户组信息
+                                this.mainTableData = resp.resultSetList; // 账户组信息
                             }
                         }).catch(e => {
-                            this.dialogFormVisible = false
+                            this.dialogFormVisible = false;
                         });
                     }
                 }
@@ -336,7 +327,7 @@ export default {
     }
 };
 </script>
-<style lang="less" module>
+<style lang='less' module>
     .groupadd_information {
         .rigth {
             position: relative;

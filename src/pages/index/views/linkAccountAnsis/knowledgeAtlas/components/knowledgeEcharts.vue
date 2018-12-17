@@ -139,9 +139,8 @@ export default {
     }
 };
 </script>
-<style lang="less" module>
+<style lang='less' module>
     .knowledge_echarts {
         color: #13ce66;
     }
-
 </style>
