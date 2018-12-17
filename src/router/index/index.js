@@ -1,11 +1,11 @@
-import Vue from 'vue';
+// import Vue from 'vue';
 import Home from '@/pages/index/views/Home.vue';
 import LinkAccountAnsis from '@/pages/index/views/linkAccountAnsis/Index.vue';
 
 // 一个空模板，方便子节点使用
-const Root = Vue.component('root', {
-    template: '<router-view></router-view>'
-});
+// const Root = Vue.component('root', {
+//     template: '<router-view></router-view>'
+// });
 const Index = {
     path: '',
     name: 'tools',
@@ -52,14 +52,14 @@ const Index = {
                     icon: 'menu-fix-icon fa fa-broadcast-tower',
                     component: resolve => require(['@/pages/index/views/linkAccountAnsis/abnormityAnalysis/Index.vue'], resolve)
                 },
-                {
-                    meta: 'scrollTop',
-                    path: 'dictionary1',
-                    name: 'dictionary1',
-                    label: '账户组画像',
-                    icon: 'menu-fix-icon fa fa-street-view',
-                    component: Root
-                },
+                // {
+                //     meta: 'scrollTop',
+                //     path: 'dictionary1',
+                //     name: 'dictionary1',
+                //     label: '账户组画像',
+                //     icon: 'menu-fix-icon fa fa-street-view',
+                //     component: Root
+                // },
                 {
                     meta: 'scrollTop',
                     path: 'customerInformationInquiry',

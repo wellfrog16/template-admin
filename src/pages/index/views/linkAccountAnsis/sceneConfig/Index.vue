@@ -229,7 +229,7 @@ export default {
             this.ruleForm.exportType = '2';
             this.ruleForm.customNoArray = ['00000001', '99999999'];
         },
-        selectResultId(val, valType) {
+        selectResultId(val, valName, valType) {
             this.ruleForm.resultId = val;
             this.ruleForm.resultType = valType;
         },
