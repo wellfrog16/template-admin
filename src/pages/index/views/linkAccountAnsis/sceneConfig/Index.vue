@@ -301,10 +301,10 @@ export default {
                 this.$message.error('最多选择四个场景');
                 return;
             }
-            // if (!this.ruleForm.exportType) {
-            //     this.$message.error('请选择一种导入客户的方式');
-            //     return;
-            // }
+            if (!this.ruleForm.exportType) {
+                this.$message.error('请选择一种导入客户的方式');
+                return;
+            }
             this.$refs['ruleForm'].validate(valid => {
                 if (valid) {
                     this.showCarousel = true;
