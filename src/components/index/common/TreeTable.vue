@@ -155,16 +155,19 @@ export default {
             min-height: 400px;
         }
         /deep/.el-table--scrollable-x {
-            ::-webkit-scrollbar {
-                width: 1px;
-            }
+            // ::-webkit-scrollbar {
+            //     width: 1px;
+            // }
             /deep/.el-table__body-wrapper {
                 width: 100%;
                 height: 360px;
                 background: transparent;
                 overflow: auto;
+                // ::-webkit-scrollbar {
+                //     width: 12px;
+                // }
                 ::-webkit-scrollbar {
-                    width: 12px;
+                    display: none;
                 }
                 &:hover {
                     background: transparent;
