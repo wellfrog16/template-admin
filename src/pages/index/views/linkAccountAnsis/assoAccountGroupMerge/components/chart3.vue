@@ -105,7 +105,7 @@ export default {
                     data: ['日K', '卖出', '买入']
                 },
                 xAxis: {
-                    name: '日期',
+                    name: '',
                     type: 'category',
                     data: [],
                     scale: true,

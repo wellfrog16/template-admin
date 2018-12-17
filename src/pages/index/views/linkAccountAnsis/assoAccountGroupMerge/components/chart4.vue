@@ -45,20 +45,20 @@ export default {
                             // let url = 'https://www.baidu.com';
                             // <a href="${url}" target="_blank" style="cursor:pointer;">百度</a>;
                             return `
-                                时间点： ${param.name}<br>
+                                报单时间： ${param.name}<br>
                                 价格： ${param.value}<br>
                             `;
                         } else {
                             return `
-                                时间点： ${param.value[0]}<br>
+                                报单时间： ${param.value[0]}<br>
                                 账户号： ${param.value[4]}<br>
-                                ${param.value[3]}交易量： ${param.value[2]}<br>
+                                ${param.value[3]}报单数量： ${param.value[2]}<br>
                             `;
                         }
                     }
                 },
                 xAxis: {
-                    name: '时间点',
+                    name: '', // 报单时间
                     type: 'category',
                     data: []
                 },
@@ -85,7 +85,7 @@ export default {
                 ],
                 series: [
                     {
-                        name: '分时图',
+                        name: '分时报单图',
                         data: [],
                         type: 'line'
                     }

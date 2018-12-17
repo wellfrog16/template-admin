@@ -640,7 +640,7 @@ export const charts = [
     {title: '账户组相关性概览', icon: 'fa fa-globe', toggleDetailFlags: false},
     {title: '账户组历史持仓', icon: 'fa fa-chart-bar', toggleDetailFlags: false},
     {title: '账户组历史成交', icon: 'fa fa-handshake', toggleDetailFlags: false},
-    {title: '账户组分时成交', icon: 'fa fa-chart-line', toggleDetailFlags: false}
+    {title: '账户组分时报单', icon: 'fa fa-chart-line', toggleDetailFlags: false}
 ];
 export const chartTableColumns1 = [
     {label: '账户组编号', field: 'acctId', minWidth: 130},
@@ -675,15 +675,15 @@ export const chartTableColumns3 = [
     {label: '净持仓量', field: '', minWidth: 100}
 ];
 export const chartTableColumns4 = [
-    {label: '客户编号', field: 'custId', minWidth: 100, template: custIdColumn},
+    {label: '客户编号', field: 'custId', minWidth: 130, template: custIdColumn},
     {label: '买卖方向', field: 'bizDir', minWidth: 100},
-    {label: '报单时间1', field: 'declBillTm1', minWidth: 100},
-    {label: '报单时间2', field: 'declBillTm2', minWidth: 100},
-    {label: '报单数量', field: 'declBillQtty', minWidth: 100},
-    {label: '报单价格', field: 'declBillPrice', minWidth: 100},
-    {label: '成交时间', field: '', minWidth: 100},
-    {label: '成交数量', field: 'bargainQtty', minWidth: 100},
-    {label: '成交价格', field: '', minWidth: 100}
+    // {label: '报单时间1', field: 'declBillTm1', minWidth: 100},
+    {label: '报单时间', field: 'declBillTm2', minWidth: 130},
+    {label: '报单数量', field: 'declBillQtty', minWidth: 130},
+    {label: '报单价格', field: 'declBillPrice', minWidth: 130},
+    {label: '成交时间', field: 'bargainDate', minWidth: 130},
+    {label: '成交数量', field: 'bargainQtty', minWidth: 130},
+    {label: '成交价格', field: 'bargainPrice', minWidth: 130}
 ];
 export const mainTableColumns = [
     {

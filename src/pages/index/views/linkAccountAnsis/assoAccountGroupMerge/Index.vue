@@ -9,7 +9,7 @@
                 <el-row>
                     <span style="margin-right: 10px;">导入结果集：</span>
                     <resultSelectComponent ref="resultSelectComponent" :resultIdProps="resultIds" @selectResultId="selectResultId"></resultSelectComponent>
-                    <el-button size="mini" type="primary" style="margin-left:5px;" @click="handleImport">确定</el-button>
+                    <el-button size="mini" type="primary" style="margin-left:5px;" @click="handleImport" :loading="fullLoading">确定</el-button>
                 </el-row>
             </div>
         </div>
