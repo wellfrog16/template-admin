@@ -424,8 +424,8 @@ export default {
                     );
                 });
                 mainData.forEach(v => {
-                    scatterData1.push([v.txDt, (v.highestPrice * 1.05), '卖出', v.sellAcctCnt, this.currentCustIds]);
-                    scatterData2.push([v.txDt, (v.lowestPrice * 1.05), '买入', v.buyAcctCnt, this.currentCustIds]);
+                    scatterData1.push([v.txDt, (v.highestPrice * 1.005), '卖出', v.sellAcctCnt, this.currentCustIds]);
+                    scatterData2.push([v.txDt, (v.lowestPrice * 0.995), '买入', v.buyAcctCnt, this.currentCustIds]);
                 });
                 this.chartOptions['series'][0]['data'] = seriesData;
                 this.chartOptions['series'][1]['data'] = scatterData1;

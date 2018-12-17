@@ -134,7 +134,7 @@ export default {
 </script>
 <style lang="less" scoped>
     .tree-table-component {
-        height: 350px;
+        height: 400px;
         /deep/.el-table__row {
             display: none;
         }
@@ -152,12 +152,20 @@ export default {
             }
         }
         /deep/.el-tree__empty-block {
-            min-height: 300px;
+            min-height: 400px;
         }
         /deep/.el-table--scrollable-x {
+            ::-webkit-scrollbar {
+                width: 1px;
+            }
             /deep/.el-table__body-wrapper {
-                height: 265px;
+                width: 100%;
+                height: 360px;
                 background: transparent;
+                overflow: auto;
+                ::-webkit-scrollbar {
+                    width: 12px;
+                }
                 &:hover {
                     background: transparent;
                 }
@@ -206,7 +214,8 @@ export default {
             color: #fff;
             min-width: 1060px;
             max-height: 400px;
-            overflow: auto;
+            overflow-y: auto;
+            overflow-x: hidden;
             .custom-tree-node {
                 flex: 1;
                 display: flex;
