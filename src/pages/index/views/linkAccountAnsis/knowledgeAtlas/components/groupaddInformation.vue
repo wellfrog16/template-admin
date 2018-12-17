@@ -261,7 +261,11 @@ export default {
         },
         // 导入CSV
         handleUploadSuccess(resp) {
-            this.mainTableData = this.mainTableData.concat(resp);
+            if (resp && resp.length) {
+                this.mainTableData = this.mainTableData.concat(resp);
+            } else {
+                this.$message.error('无效！')
+            }
         },
         // 确认上次SVG
         ascertainUPClick() {
