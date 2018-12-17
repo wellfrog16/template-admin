@@ -6,49 +6,58 @@
                     size="small"
                     @tab-click="handleTabClick"
                     v-model="activeName"
-                    type="card" :class="$style.pane_titles">
+                    type="card"
+                    :class="$style.pane_titles"
+                >
                     <el-tab-pane
                         v-for="active in activeNameList"
                         :label="active.label"
                         :key="active.name"
-                        :name="active.name">
+                        :name="active.name"
+                    >
                         <s-table
                             sortable
                             :height="450"
                             :loading="dealWithIsLoading"
                             :columns="active.tableColumns"
                             :tableData="active.tableDataList"
-                            @cellDblClick="tableellDblClick">
-                        </s-table>
+                            @cellDblClick="tableellDblClick"
+                        ></s-table>
                     </el-tab-pane>
                 </el-tabs>
             </el-card>
             <div :class="$style.export_button">
-                <el-button :class="$style.export_bt" type="primary" size="small" @click="exporstClick">导出CSV</el-button>
+                <el-button
+                    :class="$style.export_bt"
+                    type="primary"
+                    size="small"
+                    @click="exporstClick"
+                >导出CSV</el-button>
             </div>
         </div>
 
         <div :class="$style.a_form_table_bar">
             <div :class="$style.pic_title">{{picTitle}}</div>
-            <div :class="$style.bar_echarts"
-                 v-loading="fullScreenLoading1"
-                 element-loading-text="数据加载中，请耐心等待..."
-                 element-loading-background="rgba(0,0,0,0.3)"
-                 id="AbarEcharts">
-            </div>
+            <div
+                :class="$style.bar_echarts"
+                v-loading="fullScreenLoading1"
+                element-loading-text="数据加载中，请耐心等待..."
+                element-loading-background="rgba(0,0,0,0.3)"
+                id="AbarEcharts"
+            ></div>
         </div>
     </div>
 </template>
 <script>
     import {activeNameList} from '../components/constants';
-    import MixinVue from "../components/MixinsTable";
+    import MixinVue from '../components/MixinsTable';
 
     import {
         postImportAccounBar,     // Bar 柱状图
     } from '@/api/dataAnsis/abnormityAnalysis';
 
     export default {
-        name: "AbnormitysTableTabPane",
+        name: 'AbnormitysTableTabPane',
         // 父传子！
         props: {
             // tab 表格数据
@@ -132,12 +141,12 @@
                     }
                 }
                 let params = {
-                    "accountTeamNo": accountTeamNo,             // 账户组号
-                    "arrCustId": arrCustId,                     // 客户编号
-                    "contrCode": contrCd,                       // 合约代码
-                    "statTimeBegin": this.statTimeBegin,        // 统计起始日
-                    "statTimeEnd": this.statTimeEnd,            // 统计截止日
-                    "type": this.activeName,                    // 取值 '1':超仓分析
+                    'accountTeamNo': accountTeamNo,             // 账户组号
+                    'arrCustId': arrCustId,                     // 客户编号
+                    'contrCode': contrCd,                       // 合约代码
+                    'statTimeBegin': this.statTimeBegin,        // 统计起始日
+                    'statTimeEnd': this.statTimeEnd,            // 统计截止日
+                    'type': this.activeName,                    // 取值 '1':超仓分析
                 };
 
                 // Bar 柱状图接口
@@ -200,14 +209,14 @@
                         }
                     }
                     let params = {
-                        "accountTeamNo": row.acctNum,                     // 账户组号
-                        "arrCustId": rowCustId,                           // 客户编号
-                        // "statTimeBegin": '2017-10-01',     // 统计起始日
-                        // "statTimeEnd": '2017-12-31',         // 统计截止日
-                        "statTimeBegin": this.statTimeBegin,     // 统计起始日
-                        "statTimeEnd": this.statTimeEnd,         // 统计截止日
-                        "contrCode": row.contrCd,                         // 合约代码
-                        "type": this.activeName,                           // 取值 '1':超仓分析
+                        'accountTeamNo': row.acctNum,                     // 账户组号
+                        'arrCustId': rowCustId,                           // 客户编号
+                        // 'statTimeBegin': '2017-10-01',     // 统计起始日
+                        // 'statTimeEnd': '2017-12-31',         // 统计截止日
+                        'statTimeBegin': this.statTimeBegin,     // 统计起始日
+                        'statTimeEnd': this.statTimeEnd,         // 统计截止日
+                        'contrCode': row.contrCd,                         // 合约代码
+                        'type': this.activeName,                           // 取值 '1':超仓分析
                     };
                     this.fullScreenLoading1 = true;
                     // Bar 柱状图接口
@@ -251,9 +260,9 @@
                     return
                 }
                 let params = {
-                    "fileName": fileName || '测试',
-                    "tableColumns": tableColumns,
-                    "tableData": tableData
+                    'fileName': fileName || '测试',
+                    'tableColumns': tableColumns,
+                    'tableData': tableData
                 };
                 this.gfnExportFileWithForm(params)
             }
@@ -261,7 +270,7 @@
         mounted() {}
     };
 </script>
-<style lang="less" module>
+<style lang='less' module>
     .card_table {
         margin-top: 80px;
         width: 100%;
