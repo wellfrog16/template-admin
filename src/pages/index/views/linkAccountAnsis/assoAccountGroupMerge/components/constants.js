@@ -689,13 +689,11 @@ export const mainTableColumns = [
     {
         field: 'acctId',
         label: '账户组号',
-        width: '170',
         align: 'center'
     },
     {
         field: 'custId',
         label: '客户编号',
-        width: '175',
         align: 'center'
     },
     {

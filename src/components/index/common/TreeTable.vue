@@ -29,7 +29,7 @@
                                             <p v-if="data.custId" style="margin:0; white-space:normal; word-break:break-all;">{{ columns[index]['label'] }}：{{ (data[item.field] === null || data[item.field] === undefined) ?  '' :  data[item.field] }}</p>
                                         </div>
                                         <span slot="reference">
-                                            <span v-if="item.field !== 'custId'" style="max-width: 133px; text-overflow: ellipsis; overflow: hidden; display: inline-block; margin: 0;">{{ (data[item.field] === null || data[item.field] === undefined) ?  '' :  data[item.field] }}</span>
+                                            <span v-if="item.field !== 'custId'" style="width: 135px; text-overflow: ellipsis; overflow: hidden; display: inline-block; margin: 0;">{{ (data[item.field] === null || data[item.field] === undefined) ?  '' :  data[item.field] }}</span>
                                             <custIdColumn v-else :scope="{row: data}" style="text-align:center;"></custIdColumn>
                                         </span>
                                     </el-popover>
@@ -41,7 +41,7 @@
                 <el-table-column
                     v-for="(item, index) in columns"
                     :key="index"
-                    :width="item.width ? item.width: 157"
+                    :width="item.width ? item.width: 155"
                     :align="item.align"
                     :label="item.label"
                     :prop="item.field">
@@ -141,7 +141,7 @@ export default {
         /deep/.self-column-in-table {
             a {
                 text-align: center;
-                width: 155px;
+                width: 135px;
             }
         }
         /deep/ .el-table tr {
@@ -230,13 +230,14 @@ export default {
                 }
             }
         }
-
+        /deep/.el-table__header-wrapper {
+            padding-left: 13px;
+        }
         .table-header-container {
             line-height: 55px;
             background: transparent !important;
             border-top: 1px solid #21446a;
             border-bottom: 1px solid #21446a;
-            padding-left: 12px;
             &:focus {
                 outline: none;
             }

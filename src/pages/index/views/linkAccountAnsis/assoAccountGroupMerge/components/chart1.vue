@@ -5,7 +5,7 @@
 </template>
 <script>
 import EchartsCommon from '@/components/index/common/EchartsCommon';
-// import {resData1} from './constants';
+import {resData1} from './constants';
 import _ from 'lodash';
 export default {
     components: {EchartsCommon},
@@ -160,7 +160,7 @@ export default {
     methods: {
         getData() {
             let resData = this.$store.getters.sceneCommitResp;
-            // resData = resData1;
+            resData = resData1;
             if (!Object.keys(resData).length) {
                 return;
             }
