@@ -239,30 +239,26 @@
                     tableData = this.activeNameList[0].tableDataList;
                 }else if (this.activeName == '1') {
                     fileName = '频繁报撤单分析';
-                   tableColumns = this.activeNameList[1].tableColumns;
+                    tableColumns = this.activeNameList[1].tableColumns;
                     tableData = this.activeNameList[1].tableDataList;
                 }else {
                     fileName = '自成交分析';
-                   tableColumns = this.activeNameList[2].tableColumns;
+                    tableColumns = this.activeNameList[2].tableColumns;
                     tableData = this.activeNameList[2].tableDataList;
                 }
                 if(tableData && !tableData.length){
                     this.$message.error('异常交易暂无数据!');
-                    return;
+                    return
                 }
                 let params = {
                     "fileName": fileName || '测试',
                     "tableColumns": tableColumns,
                     "tableData": tableData
                 };
-                this.gfnExportFileWithForm(params);
-
+                this.gfnExportFileWithForm(params)
             }
-            ,
         },
-        // 初始化数据
-        mounted() {
-        },
+        mounted() {}
     };
 </script>
 <style lang="less" module>

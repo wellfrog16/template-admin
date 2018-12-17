@@ -196,21 +196,18 @@ export default {
             ruleForms: {
                 contractCode: '' // 合约代码  cu1712
             },
-
             rulesAll: {
                 contractCode: {
                     required: true,
                     message: '请输入合约代码'
                 }
             },
-
             fullScreenLoading: false, // 加载 (结果集加载)
-
             mainTableColumns: mainTableColumns,
             // form 表单绑定值
             ruleForm: {
-                fileList: [], // 导入CSV
-                exportType: '', // 导入结果集按钮
+                fileList: [],  // 导入CSV
+                exportType: '' // 导入结果集按钮
             },
             rules: {
                 exportType: {
@@ -231,37 +228,32 @@ export default {
             uploadParams: {}, // 上传文件body参数
             actionUrl: uploadFileByBodyInfo('customer/combinedscence/csv'),
             defaultLimitFileType: ['csv'],
-
             counter: 0, // 导入csv 表格push结果集名称
             searchText: '', // 请输入账户组或客户编号
-            mainTableDataClick: [], // 确认按钮
+            mainTableDataClick: [] // 确认按钮
 
-        };
+        }
     },
-    // 计算属性
-    computed: {},
-    watch: {},
-    //    数据交互  127662
     methods: {
         // 导入结果集数据
-        selectResultId(val, resultNameG, resultTypeG, setupUserG) {
+        selectResultId(val, resultTypeG, resultNameG, setupUserG) {
             this.resultIds = val;
             if (val) {
                 let params = {
                     'resultId': val,           // 结果集编号
                     'resultName': resultNameG, // 结果集名称
                     'resultType': resultTypeG, // 结果集类型
-                    'setupUser': setupUserG,   // 创建用户
+                    'setupUser': setupUserG    // 创建用户
                 };
                 this.loadingBt = true;
-                this.fullScreenLoading = true;
+                this.fullScreenLoading = true
                 postResultList(params).then(resp => {
                     this.loadingBt = false;
                     this.fullScreenLoading = false;
-                    this.mainTableDataClick = resp;
+                    this.mainTableDataClick = resp
                 }).catch(e => {
                     this.loadingBt = false;
-                    this.fullScreenLoading = false;
+                    this.fullScreenLoading = false
                 });
             }
         },
@@ -271,7 +263,7 @@ export default {
         },
         // 导入CSV(附件导入成功)
         currentFileList(fileList) {
-            this.ruleForm.fileList = fileList;
+            this.ruleForm.fileList = fileList
         },
         // 导入CSV
         handleUploadSuccess(resp) {
@@ -279,9 +271,8 @@ export default {
         },
           // 确认上次SVG
         ascertainUPClick() {
-            this.$refs['uploadFile'].submitUpload();
+            this.$refs['uploadFile'].submitUpload()
         },
-
         updateCheckedList() {
         },
         // 生成报告按钮
@@ -307,33 +298,33 @@ export default {
             this.$refs['ruleForms'].validate(valid => {
                 if (valid) {
                     if (this.ruleForms.contractCode !== '') {
-                        let a_contractCode = [];
-                        let a_contractCodeChildren = [];
+                        let aContractCode = [];
+                        let aCcontractCodeChildren = [];
                         this.mainTableData.forEach(v => {
                             if (v.contractCode == null) {
                                 v.contractCode = this.ruleForms.contractCode;
-                                a_contractCode = this.mainTableData;
+                                aContractCode = this.mainTableData
                                 if (v.children) {
                                     v.children.forEach(m => {
                                         m.contractCode = this.ruleForms.contractCode;
-                                        a_contractCodeChildren = this.mainTableData;
+                                        aCcontractCodeChildren = this.mainTableData
                                     });
                                 }
                             }
                         });
                         this.loadingTree = true;
-                        this.$emit('updateLoading', this.loadingTree)
+                        this.$emit('updateLoading', this.loadingTree);
                         this.ruleForms.contractCode = '';
-                        this.dialogFormVisible = false;
+                        this.dialogFormVisible = false
                         postRegenerate(a_contractCodeChildren).then(resp => {
                             if (resp) {
                                 this.loadingTree = false;
                                 this.$emit('generateEvent', resp.kmap); // 知识库图表
-                                this.$emit('updateLoading', this.loadingTree)
-                                this.mainTableData = resp.resultSetList; // 账户组信息
+                                this.$emit('updateLoading', this.loadingTree);
+                                this.mainTableData = resp.resultSetList // 账户组信息
                             }
                         }).catch(e => {
-                            this.dialogFormVisible = false;
+                            this.dialogFormVisible = false
                         });
                     }
                 }
@@ -342,14 +333,6 @@ export default {
         // 下一步
         nextClick() {
         },
-    },
-    // 在一个实例被创建之后执行代码
-    created() {
-    },
-    // 初始化数据
-    mounted() {
-    },
-    beforeDestroy() {
     }
 };
 </script>
