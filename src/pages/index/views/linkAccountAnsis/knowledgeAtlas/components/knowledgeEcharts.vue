@@ -6,21 +6,19 @@
                 :label="active.label"
                 :key="active.name"
                 :name="active.name"
-            >
-            </el-tab-pane>
+            ></el-tab-pane>
         </el-tabs>
         <s-card :title="`关系图库`" :icon="`fa fa-user-md`">
             <div slot="content">
                 <echarts-common
-                    :loading="loadingE"
+                    :loading="loading"
                     domId="chartId"
                     :defaultOption="chartOptionsA"
-                    :propsChartHeight="350">
-                </echarts-common>
+                    :propsChartHeight="350"
+                ></echarts-common>
             </div>
         </s-card>
     </div>
-
 </template>
 <script>
     import SCard from '@/components/index/common/SCard';
@@ -34,6 +32,9 @@
                 type: Object,
                 required: true
             },
+            loading: {
+                type: Boolean
+            }
         },
         components: {
             SCard,
@@ -58,7 +59,6 @@
                 echartsDataList: [],
                 barEcharts: null,
                 echartsOptions: {},
-                loadingE: true,
                 chartOptionsA: {},
 
                 chartOptions: {
@@ -88,7 +88,7 @@
                         backgroundColor: '#222',
                         borderColor: '#777',
                         borderWidth: 1,
-                        extraCssText: 'width:150px; white-space:pre-wrap;',
+                        extraCssText: 'width:260px; white-space:pre-wrap;',
                         // trigger:'item',
                         // backgroundColor:  'rgba(245, 244, 237,0.7)' ,//提示框浮动背景色
                         // borderColor:'black',
@@ -159,7 +159,6 @@
                 handler(val) {
                     this.echartsDataList = val;
                     if (val) {
-                        this.loadingE = false;
                         if (Object.keys(this.echartsData && this.echartsData).length !== 0) {
                             this.echartClick();
                         }

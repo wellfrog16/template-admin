@@ -200,7 +200,6 @@
                     "tableColumns": tableColumns,
                     "tableData": this.tableData
                 };
-                console.log(params);
                 this.gfnExportFileWithForm(params);
             },
             // 底部上一步按钮

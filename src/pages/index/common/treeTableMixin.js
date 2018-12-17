@@ -137,13 +137,16 @@ export default {
             }).then(({value}) => {
                 let params = {
                     resultType: propsResultType || '5', // 结果集类型（1：相关性；5：合并）
-                    resultName: value,
-                    resultList: this.dealMainData()
+                    resultName: value
                 };
                 if (params.resultType === '1') {
                     params.statStartDt = this.sceneCommitParams.statStartDt;
                     params.statStopDay = this.sceneCommitParams.statStopDay;
                     params.statFreq = this.sceneCommitParams.statFreq;
+                    params.resultList = this.dealMainData();
+                }
+                if (params.resultType === '5') {
+                    params.resultListSyn = this.dealMainData();
                 }
                 exportResultSet(params).then(resp => {
                     console.log(resp);

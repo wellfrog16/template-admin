@@ -45,81 +45,83 @@
                 </el-row>
             </div>
         </s-card>
+        <div :class="$style.main_table">
+            <s-card title="账户组信息" icon="fa fa-layer-group">
+                <div slot="right">
+                    <el-input
+                        :class="$style.search_input"
+                        size="mini"
+                        placeholder="请输入账户组或客户编号"
+                        v-model="searchText"
+                    >
+                        <i
+                            class="el-icon-search"
+                            slot="prefix"
+                            style="margin-left:4px; cursor: pointer;"
+                        ></i>
+                    </el-input>
+                </div>
+                <div slot="content">
+                    <el-row :gutter="20">
+                        <el-col :span="21">
+                            <div style="overflow:auto; max-height:400px;">
+                                <tree-table
+                                    :loading="loadingTree"
+                                    ref="self-tree-table"
+                                    :filterText="searchText"
+                                    :columns="mainTableColumns"
+                                    :tableData="mainTableData"
+                                    @updateCheckedList="updateCheckedList"
+                                ></tree-table>
+                            </div>
+                        </el-col>
+                        <el-col :span="3">
+                            <div :class="$style.operate_button_group">
+                                <el-button
+                                    style="padding: 9px 39px;"
+                                    :class="$style.operate_button_group"
+                                    type="danger"
+                                    size="small"
+                                    @click="handleDelete"
+                                >删除</el-button>
+                                <br>
+                                <el-button
+                                    style="padding: 9px 39px;"
+                                    :class="$style.operate_button_group"
+                                    type="warning"
+                                    size="small"
+                                    @click="handleSplit"
+                                >拆分</el-button>
+                                <br>
+                                <el-button
+                                    style="padding: 9px 39px;"
+                                    :class="$style.operate_button_group"
+                                    type="warning"
+                                    size="small"
+                                    @click="handleMerge"
+                                >合并</el-button>
+                                <br>
+                                <el-button
+                                    :class="$style.operate_button_group"
+                                    type="primary"
+                                    size="small"
+                                    @click="handleExportResult()"
+                                >导出到结果集</el-button>
+                                <br>
+                                <el-button
+                                    style="padding: 9px 24px;"
+                                    :class="$style.operate_button_group"
+                                    type="primary"
+                                    size="small"
+                                    @click="handleExportCsv('账户组信息', mainTableColumns)"
+                                >导出到csv</el-button>
+                            </div>
+                        </el-col>
+                    </el-row>
+                </div>
+            </s-card>
+        </div>
 
-        <s-card title="账户组信息" icon="el-icon-edit">
-            <div slot="right">
-                <el-input
-                    class="search-input"
-                    size="mini"
-                    placeholder="请输入账户组或客户编号"
-                    v-model="searchText"
-                >
-                    <i
-                        class="el-icon-search"
-                        slot="prefix"
-                        style="margin-left:4px; cursor: pointer;"
-                    ></i>
-                </el-input>
-            </div>
-            <div slot="content">
-                <el-row :gutter="20">
-                    <el-col :span="21">
-                        <div style="overflow:auto; max-height:400px;">
-                            <tree-table
-                                :loading="loadingTree"
-                                ref="self-tree-table"
-                                :filterText="searchText"
-                                :columns="mainTableColumns"
-                                :tableData="mainTableData"
-                                @updateCheckedList="updateCheckedList"
-                            ></tree-table>
-                        </div>
-                    </el-col>
-                    <el-col :span="3">
-                        <div class="operate-button-group">
-                            <el-button
-                                style="padding: 9px 39px;"
-                                :class="$style.operate_button_group"
-                                type="danger"
-                                size="small"
-                                @click="handleDelete"
-                            >删除</el-button>
-                            <br>
-                            <el-button
-                                style="padding: 9px 39px;"
-                                :class="$style.operate_button_group"
-                                type="warning"
-                                size="small"
-                                @click="handleSplit"
-                            >拆分</el-button>
-                            <br>
-                            <el-button
-                                style="padding: 9px 39px;"
-                                :class="$style.operate_button_group"
-                                type="warning"
-                                size="small"
-                                @click="handleMerge"
-                            >合并</el-button>
-                            <br>
-                            <el-button
-                                :class="$style.operate_button_group"
-                                type="primary"
-                                size="small"
-                                @click="handleExportResult"
-                            >导出到结果集</el-button>
-                            <br>
-                            <el-button
-                                style="padding: 9px 24px;"
-                                :class="$style.operate_button_group"
-                                type="primary"
-                                size="small"
-                                @click="handleExportCsv('账户组信息', mainTableColumns)"
-                            >导出到csv</el-button>
-                        </div>
-                    </el-col>
-                </el-row>
-            </div>
-        </s-card>
         <div :class="$style.groupadd_button">
             <el-button size="small" type="primary" @click="dialogFormClick">生成数据</el-button>
             <el-button size="small" type="primary" @click="nextClick">下一步</el-button>
@@ -256,14 +258,14 @@ export default {
                 postResultList(params).then(resp => {
                     this.loadingBt = false;
                     this.fullScreenLoading = false;
-                    this.mainTableData = resp;
+                    this.mainTableDataClick = resp;
                 }).catch(e => {
                     this.loadingBt = false;
                     this.fullScreenLoading = false;
                 });
             }
         },
-        // 确认结果集导入 
+        // 确认结果集导入
         ascertainUPClick1() {
             this.mainTableData = this.mainTableData.concat(this.mainTableDataClick);
         },
@@ -271,7 +273,7 @@ export default {
         currentFileList(fileList) {
             this.ruleForm.fileList = fileList;
         },
-        // 导入CSV 
+        // 导入CSV
         handleUploadSuccess(resp) {
             this.mainTableData = this.mainTableData.concat(resp);
         },
@@ -279,7 +281,7 @@ export default {
         ascertainUPClick() {
             this.$refs['uploadFile'].submitUpload();
         },
-        
+
         updateCheckedList() {
         },
         // 生成报告按钮
@@ -289,7 +291,7 @@ export default {
                 return;
             }else {
                 this.dialogFormVisible = true;
-            }     
+            }
         },
         // 生成报告取消按钮
         dialogFormVisibl(formName) {
@@ -298,7 +300,6 @@ export default {
         },
         closeData(done) {
             done();
-            console.log(done)
             this.ruleForms.contractCode = '';
         },
         // 生成报告确认按钮
@@ -321,12 +322,14 @@ export default {
                             }
                         });
                         this.loadingTree = true;
+                        this.$emit('updateLoading', this.loadingTree)
                         this.ruleForms.contractCode = '';
-                        postRegenerate(a_contractCodeChildren).then(resp => {                             
+                        this.dialogFormVisible = false;
+                        postRegenerate(a_contractCodeChildren).then(resp => {
                             if (resp) {
-                                this.dialogFormVisible = false;
                                 this.loadingTree = false;
                                 this.$emit('generateEvent', resp.kmap); // 知识库图表
+                                this.$emit('updateLoading', this.loadingTree)
                                 this.mainTableData = resp.resultSetList; // 账户组信息
                             }
                         }).catch(e => {
@@ -382,7 +385,7 @@ export default {
             right: 0;
             top: 0;
         }
-        .search-input {
+        .search_input {
             width: 240px;
 
             /deep/ input {

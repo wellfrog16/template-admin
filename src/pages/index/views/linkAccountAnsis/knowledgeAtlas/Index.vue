@@ -1,9 +1,9 @@
 <template>
     <div :class="$style.knowledge_atlas">
         <!-- 知识库图-->
-        <knowledge-echarts :echartsData="echartsData"></knowledge-echarts>
+        <knowledge-echarts :echartsData="echartsData" :loading="loading"></knowledge-echarts>
         <!--数据-->
-        <group-infor @generateEvent="generateEvent"></group-infor>
+        <group-infor @generateEvent="generateEvent" @updateLoading="updateLoading"></group-infor>
     </div>
 </template>
 <script>
@@ -26,7 +26,8 @@
         // 存储数据
         data() {
             return {
-                echartsData: {}
+                echartsData: {},
+                loading: false
             };
         },
         // 计算属性
@@ -36,6 +37,10 @@
         methods: {
             generateEvent(data){
                 this.echartsData = data;
+                
+            },
+            updateLoading(flag) {
+                this.loading = flag
             }
             // clearChartData(){},
             //  barEchartsDete() {
