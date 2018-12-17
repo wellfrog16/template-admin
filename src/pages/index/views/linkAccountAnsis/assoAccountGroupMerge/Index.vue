@@ -9,6 +9,7 @@
                 <el-row>
                     <span style="margin-right: 10px;">导入结果集：</span>
                     <resultSelectComponent ref="resultSelectComponent" :resultIdProps="resultIds" @selectResultId="selectResultId"></resultSelectComponent>
+                    <el-button size="mini" type="primary" style="margin-left:5px;" @click="handleImport">确定</el-button>
                 </el-row>
             </div>
         </div>
@@ -143,9 +144,11 @@ export default {
         },
         selectResultId(val) {
             this.resultIds = val;
+        },
+        handleImport() {
             // 导入结果集
             this.fullLoading = true;
-            getExportResultSet({resultIds: val}).then(resp => {
+            getExportResultSet({resultIds: this.resultIds}).then(resp => {
                 this.fullLoading = false;
                 console.log(resp);
                 this.$store.commit('saveSceneCommitResp', resp);
