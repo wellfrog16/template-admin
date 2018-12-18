@@ -19,6 +19,8 @@ export default {
     },
     watch: {
         resultIdProps(val) {
+            console.log(val);
+            console.log('99888766543322');
             this.resultId = val;
         }
     },
@@ -44,6 +46,7 @@ export default {
             getTlsResultInfo().then(resp => {
                 this.loading = false;
                 this.resultList = resp;
+                this.$emit('getResultList', resp);
             }).catch(e => {
                 this.loading = false;
             });

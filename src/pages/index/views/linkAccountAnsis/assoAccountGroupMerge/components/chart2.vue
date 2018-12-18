@@ -5,7 +5,7 @@
 </template>
 <script>
 import EchartsCommon from '@/components/index/common/EchartsCommon';
-import {getChart2Data} from '@/api/dataAnsis/assoAccountGroupMerge';
+// import {getChart2Data} from '@/api/dataAnsis/assoAccountGroupMerge';
 // import {resData2} from './constants';
 
 export default {
@@ -19,6 +19,16 @@ export default {
             type: Object,
             default() {
                 return {};
+            }
+        },
+        currentAccountGroupId: {
+            type: [Number, String],
+            default: ''
+        },
+        currentCustIds: {
+            type: Array,
+            default() {
+                return [];
             }
         }
     },
@@ -40,6 +50,7 @@ export default {
                     y2: 60
                 },
                 legend: {
+                    type: 'scroll',
                     data: []
                 },
                 xAxis: [
@@ -73,76 +84,58 @@ export default {
         };
     },
     methods: {
-        getData() {
+        getData(resp) {
             this.$store.commit('saveXGchart2', this.chartOptions);
-            this.loading = true;
-            // this.initChart(resData2);
-            console.log(this.commonReqParams);
-            let params = {
-                contrCd: this.commonReqParams.contrCd,
-                statStartDt: this.commonReqParams.statStartDt,
-                statStopDay: this.commonReqParams.statStopDay,
-                acctId: this.commonReqParams.acctId,
-                custId: this.commonReqParams.custId,
-            };
-            if (this.commonReqParams.resultIds) {
-                params.resultIds = this.commonReqParams.resultIds;
+            let {mainData, tableData} = resp;
+            if (tableData && !tableData.length) {
+                return;
             }
-            getChart2Data(params).then(resp => {
-                this.loading = false;
-                let {mainData, tableData} = resp;
-                if (tableData && !tableData.length) {
-                    return;
-                }
-                console.log(resp);
-                let series = [];
-                let date = [];
-                Object.keys(mainData).forEach(v => {
-                    series.push({
-                        name: v,
-                        type: 'bar',
-                        barMaxWidth: '45',
-                        stack: '总量',
-                        markLine: { // 标记线设置
-                            lineStyle: {
-                                normal: {
-                                    type: 'dashed',
-                                    color: '#ec0000'
-                                }
-                            },
-                            label: {
-                                position: 'middle',
-                                formatter: params => {
-                                    return `超仓线：${params.value}`;
-                                }
-                            },
-                            symbolSize: 0, // 控制箭头和原点的大小、官方默认的标准线会带远点和箭头
-                            data: [ // 设置条标准线——x=10
-                                {yAxis: '10000'}
-                            ]
+            console.log(resp);
+            let series = [];
+            let date = [];
+            Object.keys(mainData).forEach(v => {
+                series.push({
+                    name: v,
+                    type: 'bar',
+                    barMaxWidth: '45',
+                    stack: '总量',
+                    markLine: { // 标记线设置
+                        lineStyle: {
+                            normal: {
+                                type: 'dashed',
+                                color: '#ec0000'
+                            }
                         },
-                        data: mainData[v].map(m => { return m.value; })
-                    });
-                    date = mainData[v].map(m => { return m.date; });
+                        label: {
+                            position: 'middle',
+                            formatter: params => {
+                                return `超仓线：${params.value}`;
+                            }
+                        },
+                        symbolSize: 0, // 控制箭头和原点的大小、官方默认的标准线会带远点和箭头
+                        data: [ // 设置条标准线——x=10
+                            {yAxis: '10000'}
+                        ]
+                    },
+                    data: mainData[v].map(m => { return m.value; })
                 });
-                this.chartOptions['legend']['data'] = series.map(m => { return m.name; });
-                this.chartOptions['series'] = series;
-                this.chartOptions['xAxis'][0]['data'] = date;
-                // set datazoom
-                let dataZoomStartValue = date[date.length > 20 ? date.length - 20 : 0];
-                let dataZoomEndValue = date[date.length - 1];
-                this.chartOptions['dataZoom'][0]['startValue'] = dataZoomStartValue;
-                this.chartOptions['dataZoom'][1]['startValue'] = dataZoomStartValue;
-                this.chartOptions['dataZoom'][0]['endValue'] = dataZoomEndValue;
-                this.chartOptions['dataZoom'][1]['endValue'] = dataZoomEndValue;
-                console.log(this.chartOptions);
-                this.$store.commit('saveXGchart2', this.chartOptions);
-                this.initChart(mainData);
-                this.initTable(tableData);
-            }).catch(e => {
-                this.loading = false;
-                console.error(e);
+                date = mainData[v].map(m => { return m.date; });
             });
+            this.chartOptions['legend']['data'] = series.map(m => { return m.name; });
+            this.chartOptions['series'] = series;
+            this.chartOptions['xAxis'][0]['data'] = date;
+            // set datazoom
+            let dataZoomStartValue = date[date.length > 20 ? date.length - 20 : 0];
+            let dataZoomEndValue = date[date.length - 1];
+            this.chartOptions['dataZoom'][0]['startValue'] = dataZoomStartValue;
+            this.chartOptions['dataZoom'][1]['startValue'] = dataZoomStartValue;
+            this.chartOptions['dataZoom'][0]['endValue'] = dataZoomEndValue;
+            this.chartOptions['dataZoom'][1]['endValue'] = dataZoomEndValue;
+            console.log(this.chartOptions);
+            this.$store.commit('saveXGchart2', this.chartOptions);
+            this.$store.commit('saveChartTableData', tableData, this.index);
+            this.initChart();
+            this.initTable(tableData);
         },
         initTable(tableData) {
             this.$emit('updateTableData', tableData, this.index);

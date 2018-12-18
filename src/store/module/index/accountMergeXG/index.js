@@ -1,10 +1,18 @@
 const state = {
+    mainTableData: [],
+    chartTableData: [],
     chartData1: {},
     chartData2: {},
     chartData3: {},
     chartData4: {} // 包含买卖
 };
 const mutations = {
+    saveChartTableData(state, val, index) {
+        state.chartTableData[index] = val;
+    },
+    saveMainTableData(state, val) {
+        state.mainTableData = val;
+    },
     saveXGchart1(state, val) {
         state.chartData1 = val;
     },
@@ -19,6 +27,12 @@ const mutations = {
     }
 };
 const getters = {
+    getChartTableData(state) {
+        return state.chartTableData;
+    },
+    getMainTableData(state) {
+        return state.mainTableData;
+    },
     getXGchart1(state) {
         return state.chartData1;
     },

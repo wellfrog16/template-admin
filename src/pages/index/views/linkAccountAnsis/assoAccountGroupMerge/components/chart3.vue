@@ -5,7 +5,7 @@
 </template>
 <script>
 import EchartsCommon from '@/components/index/common/EchartsCommon';
-import {getChart3Data} from '@/api/dataAnsis/assoAccountGroupMerge';
+// import {getChart3Data} from '@/api/dataAnsis/assoAccountGroupMerge';
 import api from '@/api/mock/demo';
 import _ from 'lodash';
 // import {respData3} from './constants';
@@ -21,6 +21,10 @@ export default {
             default() {
                 return {};
             }
+        },
+        currentAccountGroupId: {
+            type: [Number, String],
+            default: ''
         },
         currentCustIds: {
             type: Array,
@@ -84,7 +88,7 @@ export default {
                                 return `
                                     客户编号: ${v}<br>
                                 `;
-                            }).join('<br>');
+                            }).join('');
                         } else {
                             return schema.map((v, i) => {
                                 return v.text + ': ' + param.value[i === 0 ? 5 : i];
@@ -381,75 +385,58 @@ export default {
             console.log(this.selectMax);
             this.initChart();
         },
-        getData() {
+        getData(resp) {
             // this.test();
             this.$store.commit('saveXGchart3', this.chartOptions);
-            this.loading = true;
-            let params = {
-                contrCd: this.commonReqParams.contrCd,
-                statStartDt: this.commonReqParams.statStartDt,
-                statStopDay: this.commonReqParams.statStopDay,
-                acctId: this.commonReqParams.acctId,
-                custId: this.commonReqParams.custId,
-            };
-            if (this.commonReqParams.resultIds) {
-                params.resultIds = this.commonReqParams.resultIds;
+            let {mainData, tableData} = resp;
+            if (mainData && !mainData.length) {
+                return;
             }
-            getChart3Data(params).then(resp => {
-                this.loading = false;
-                console.log(resp);
-                let {mainData, tableData} = resp;
-                if (mainData && !mainData.length) {
-                    return;
-                }
-                mainData = _.sortBy(mainData, [item => {
-                    return item.txDt;
-                }]);
-                // set datazoom
-                let dataZoomStartValue = mainData[mainData.length > 20 ? mainData.length - 20 : 0]['txDt'];
-                let dataZoomEndValue = mainData[mainData.length - 1]['txDt'];
-                console.log(dataZoomStartValue);
-                console.log(dataZoomEndValue);
-                this.chartOptions['dataZoom'][0]['startValue'] = dataZoomStartValue;
-                this.chartOptions['dataZoom'][1]['startValue'] = dataZoomStartValue;
-                this.chartOptions['dataZoom'][0]['endValue'] = dataZoomEndValue;
-                this.chartOptions['dataZoom'][1]['endValue'] = dataZoomEndValue;
-                let seriesData = [];
-                let scatterData1 = [];
-                let scatterData2 = [];
-                let date = [];
-                mainData.forEach(v => {
-                    date.push(v.txDt);
-                    seriesData.push(
-                        [v.openQuotPrice, v.closeQuotPrice, v.lowestPrice, v.highestPrice, v.txDt]
-                    );
-                });
-                mainData.forEach(v => {
-                    scatterData1.push([v.txDt, (v.highestPrice * 1.005), '卖出', v.sellAcctCnt, this.currentCustIds]);
-                    scatterData2.push([v.txDt, (v.lowestPrice * 0.995), '买入', v.buyAcctCnt, this.currentCustIds]);
-                });
-                this.chartOptions['series'][0]['data'] = seriesData;
-                this.chartOptions['series'][1]['data'] = scatterData1;
-                this.chartOptions['series'][2]['data'] = scatterData2;
-                this.chartOptions['xAxis']['data'] = date;
-                // set cust count
-                this.chartOptions['visualMap'][0]['max'] = this.currentCustIds.length;
-                this.chartOptions['visualMap'][1]['max'] = this.currentCustIds.length;
-                console.log(this.chartOptions);
-                this.$store.commit('saveXGchart3', this.chartOptions);
-                this.initTable(tableData);
-                this.initChart();
-                // 最近交易日，包含买入或卖出
-                this.selectMax = _.maxBy(mainData, v => {
-                    if (!!v.sellAcctCnt || !!v.buyAcctCnt) {
-                        return v.txDt;
-                    }
-                });
-                console.log(this.selectMax);
-            }).catch(e => {
-                this.loading = false;
-                console.error(e);
+            mainData = _.sortBy(mainData, [item => {
+                return item.txDt;
+            }]);
+            // set datazoom
+            let dataZoomStartValue = mainData[mainData.length > 20 ? mainData.length - 20 : 0]['txDt'];
+            let dataZoomEndValue = mainData[mainData.length - 1]['txDt'];
+            console.log(dataZoomStartValue);
+            console.log(dataZoomEndValue);
+            this.chartOptions['dataZoom'][0]['startValue'] = dataZoomStartValue;
+            this.chartOptions['dataZoom'][1]['startValue'] = dataZoomStartValue;
+            this.chartOptions['dataZoom'][0]['endValue'] = dataZoomEndValue;
+            this.chartOptions['dataZoom'][1]['endValue'] = dataZoomEndValue;
+            let seriesData = [];
+            let scatterData1 = [];
+            let scatterData2 = [];
+            let date = [];
+            mainData.forEach(v => {
+                date.push(v.txDt);
+                seriesData.push(
+                    [v.openQuotPrice, v.closeQuotPrice, v.lowestPrice, v.highestPrice, v.txDt]
+                );
             });
+            mainData.forEach(v => {
+                scatterData1.push([v.txDt, (v.highestPrice * 1.005), '卖出', v.sellAcctCnt, this.currentCustIds]);
+                scatterData2.push([v.txDt, (v.lowestPrice * 0.995), '买入', v.buyAcctCnt, this.currentCustIds]);
+            });
+            this.chartOptions['series'][0]['data'] = seriesData;
+            this.chartOptions['series'][1]['data'] = scatterData1;
+            this.chartOptions['series'][2]['data'] = scatterData2;
+            this.chartOptions['xAxis']['data'] = date;
+            // set cust count
+            this.chartOptions['visualMap'][0]['max'] = this.currentCustIds.length;
+            this.chartOptions['visualMap'][1]['max'] = this.currentCustIds.length;
+            console.log(this.chartOptions);
+            this.$store.commit('saveXGchart3', this.chartOptions);
+            this.$store.commit('saveChartTableData', tableData, this.index);
+            this.initTable(tableData);
+            this.initChart();
+            // 最近交易日，包含买入或卖出
+            this.selectMax = _.maxBy(mainData, v => {
+                if (!!v.sellAcctCnt || !!v.buyAcctCnt) {
+                    return v.txDt;
+                }
+            });
+            console.log(this.selectMax);
         },
         initTable(tableData) {
             this.$emit('updateTableData', tableData, this.index);
@@ -465,7 +452,7 @@ export default {
             if (!flag) {
                 this.$nextTick(() => {
                     if (this.init) {
-                        this.$emit('drewChart4', this.selectMax.txDt);
+                        this.$emit('getBlock4Data', this.selectMax.txDt);
                         this.init = false;
                     }
                 });

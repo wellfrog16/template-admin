@@ -1,5 +1,8 @@
 <template>
-    <el-card class="self-card-component">
+    <el-card class="self-card-component"
+             v-loading="loading"
+             element-loading-text="数据加载中，请耐心等待..."
+             element-loading-background="rgba(0,0,0,0.3)">
         <div slot="header" class="card-header">
             <div class="header-left">
                 <span><i :class="icon"></i>{{ title }}</span>
@@ -24,6 +27,10 @@ export default {
         subTitle: {
             type: String,
             default: ''
+        },
+        loading: {
+            type: Boolean,
+            default: false
         }
     }
 };

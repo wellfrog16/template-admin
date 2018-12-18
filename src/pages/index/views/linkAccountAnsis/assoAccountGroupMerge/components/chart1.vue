@@ -32,7 +32,7 @@ export default {
             }
         };
         let symbolSize = data => {
-            return data[2] > 40 ? 40 : data[2] < 10 ? 10 : data[2];
+            return data[2] > 20 ? 40 : data[2] < 3 ? 9 : data[2] * 3;
         };
         return {
             loading: false,
@@ -205,6 +205,8 @@ export default {
             });
             console.log(this.chartOptions);
             this.$store.commit('saveXGchart1', this.chartOptions);
+            this.$store.commit('saveChartTableData', chartData, this.index);
+            this.$store.commit('saveMainTableData', mainTableData);
             this.$emit('updateTableData', chartData, this.index);
             this.$emit('updateMainTableData', mainTableData, this.index);
             // select max
@@ -223,10 +225,8 @@ export default {
         },
         getAssoCharts(flag) {
             if (!flag) {
-                this.$nextTick(() => {
-                    this.$emit('drewChart2');
-                    this.$emit('drewChart3');
-                });
+                this.$emit('getBlock2Data');
+                this.$emit('getBlock3Data');
             }
         },
         handleEchartClickEvent(val) {

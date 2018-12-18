@@ -22,8 +22,8 @@ let axisCommon = () => {
 };
 export const echartsDefault = {
     color: [
-        '#00709e',
         '#f8f400',
+        '#00709e',
         '#ac10ce',
         '#ff0000',
         '#00a8ec',

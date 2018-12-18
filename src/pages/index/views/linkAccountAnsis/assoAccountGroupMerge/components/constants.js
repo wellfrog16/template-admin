@@ -593,7 +593,6 @@ export const chartOption4 = {
         trigger: 'item',
         formatter: param => {
             if (param.seriesIndex === 0) {
-                console.log(param);
                 return `
                     时间点： ${param.name}<br>
                     价格： ${param.value}<br>
@@ -637,10 +636,10 @@ export const chartOption4 = {
     ]
 };
 export const charts = [
-    {title: '账户组相关性概览', icon: 'fa fa-globe', toggleDetailFlags: false},
-    {title: '账户组历史持仓', icon: 'fa fa-chart-bar', toggleDetailFlags: false},
-    {title: '账户组历史成交', icon: 'fa fa-handshake', toggleDetailFlags: false},
-    {title: '账户组分时报单', icon: 'fa fa-chart-line', toggleDetailFlags: false}
+    {title: '账户组相关性概览', icon: 'fa fa-globe', toggleDetailFlags: false, loading: false},
+    {title: '账户组历史持仓', icon: 'fa fa-chart-bar', toggleDetailFlags: false, loading: false},
+    {title: '账户组历史成交', icon: 'fa fa-handshake', toggleDetailFlags: false, loading: false},
+    {title: '账户组分时报单', icon: 'fa fa-chart-line', toggleDetailFlags: false, loading: false}
 ];
 export const chartTableColumns1 = [
     {label: '账户组编号', field: 'acctId', minWidth: 130},
@@ -793,7 +792,6 @@ for (let i = 0; i < 21; i++) {
         })()
     });
 }
-console.log(ddd);
 export const resData1 = {
     'mainTableData': ddd,
     'chartData': [
