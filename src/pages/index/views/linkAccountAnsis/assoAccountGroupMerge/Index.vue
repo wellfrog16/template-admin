@@ -21,7 +21,7 @@
                             <el-button type="text" @click="toggleDetail(item, index)">明细<i class="el-icon-plus" style="margign-left: 5px;"></i></el-button>
                         </div>
                         <div slot="content">
-                            <div v-show="item['toggleDetailFlags']">
+                            <div v-if="item['toggleDetailFlags']">
                                 <div v-if="index===2">
                                     <el-select class="custom-width" clearable size="small" v-model="table3CurrentType">
                                         <el-option v-for="(o, oi) in table3Options" :key="oi" :label="o.label" :value="o.field"></el-option>
@@ -29,7 +29,7 @@
                                 </div>
                                 <s-table :height="index === 2 ? 268 : 300" :columns="chartTableColumns[index]" :tableData="chartTableData[index]"></s-table>
                             </div>
-                            <div v-show="!item['toggleDetailFlags']">
+                            <div v-else>
                                 <chart1 :ref="`chartComponent${index + 1}`" v-if="index === 0" :childrenMap="childrenMap" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData" @updateMainTableData="updateMainTableData" @updateAccountGroupAndCustIds="updateAccountGroupAndCustIds" @drewChart2="drewChart2"  @drewChart3="drewChart3"></chart1>
                                 <chart2 :ref="`chartComponent${index + 1}`" v-if="index === 1" :commonReqParams="computedCommonReqParams" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData" @drewChart4="drewChart4"></chart2>
                                 <chart3 :ref="`chartComponent${index + 1}`" v-if="index === 2" :commonReqParams="computedCommonReqParams" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData" @drewChart4="drewChart4"></chart3>
@@ -91,6 +91,7 @@ import ResultSelectComponent from '@/components/index/common/ResultSelectCompone
 import treeTableMixin from '@/pages/index/common/treeTableMixin';
 
 import {getExportResultSet} from '@/api/dataAnsis/assoAccountGroupMerge';
+import {getInfoByResultId} from '@/api/common';
 import chart1 from './components/chart1';
 import chart2 from './components/chart2';
 import chart3 from './components/chart3';
@@ -148,12 +149,28 @@ export default {
         handleImport() {
             // 导入结果集
             this.fullLoading = true;
-            getExportResultSet({resultIds: this.resultIds}).then(resp => {
-                this.fullLoading = false;
-                console.log(resp);
-                this.$store.commit('saveSceneCommitResp', resp);
-                this.$nextTick(() => {
-                    this.drewChart1();
+            getInfoByResultId(this.resultIds).then(resp => {
+                this.computedCommonReqParams = {
+                    acctId: this.currentAccountGroupId, // || 'XG00001',
+                    custId: this.currentCustIds.join(','), // || '80001716,80000025,80001461',
+                    statStartDt: resp.statStartDt, // || '2017-02-20',
+                    statStopDay: resp.statStopDay, // || '2017-10-09',
+                    contrCd: resp.contrCd, // || 'cu1712'
+                };
+                this.$store.commit('saveSceneCommitParams', {
+                    resultIds: resp.resultIds,
+                    statStartDt: resp.statStartDt,
+                    statStopDay: resp.statStopDay,
+                    contrCd: resp.contrCd,
+                });
+                console.log(resp.statStartDt);
+                getExportResultSet({resultIds: this.resultIds}).then(resp => {
+                    this.fullLoading = false;
+                    console.log(resp);
+                    this.$store.commit('saveSceneCommitResp', resp);
+                    this.$nextTick(() => {
+                        this.drewChart1();
+                    });
                 });
             });
         },
@@ -183,11 +200,12 @@ export default {
         },
         toggleDetail(item, index) {
             this.charts[index]['toggleDetailFlags'] = !item.toggleDetailFlags;
-            // if (!item.toggleDetailFlags) {
-            //     this.$nextTick(() => {
-            //         this.getChart()[index](true);
-            //     });
-            // }
+            if (!item.toggleDetailFlags) {
+                this.$nextTick(() => {
+                    let dataMap = [this.$store.getters.getXGchart1, this.$store.getters.getXGchart2, this.$store.getters.getXGchart3, this.$store.getters.getXGchart4];
+                    (this.getChart()[index])(1, dataMap[index]);
+                });
+            }
         },
         handleEchartDblClickEvent(params, index) {
             console.log(params);
@@ -216,7 +234,7 @@ export default {
                     // table勾选状态
                     this.selectAccountGroupList.push(currentId);
                 }
-                this.drewChart1();
+                this.getChart1(1, this.$refs['chartComponent1'][0].chartOptions);
                 console.log(this.selectAccountGroupList);
                 this.$refs['self-tree-table'].$refs['tree-table'].setCheckedKeys(this.selectAccountGroupList);
                 break;
@@ -247,13 +265,14 @@ export default {
             }
         },
         commonReqParams() {
+            this.sceneCommitParams = this.$store.getters.sceneCommitParams;
             return {
-                accountTeamNo: this.currentAccountGroupId, // || 'XG00001',
+                acctId: this.currentAccountGroupId, // || 'XG00001',
                 custId: this.currentCustIds.join(','), // || '80001716,80000025,80001461',
-                statTimeBegin: this.sceneCommitParams.statStartDt, // || '2017-02-20',
-                statTimeEnd: this.sceneCommitParams.statStopDay, // || '2017-10-09',
-                contrCode: this.sceneCommitParams.contrCd, // || 'cu1712'
-                resultIds: this.resultIds || ''
+                statStartDt: this.sceneCommitParams.statStartDt, // || '2017-02-20',
+                statStopDay: this.sceneCommitParams.statStopDay, // || '2017-10-09',
+                contrCd: this.sceneCommitParams.contrCd, // || 'cu1712'
+                // resultIds: this.resultIds || ''
             };
         },
         getChart() {
@@ -262,26 +281,26 @@ export default {
         drewChart1() {
             this.$refs['chartComponent1'] && this.$refs['chartComponent1'][0] && this.$refs['chartComponent1'][0].getData();
         },
-        getChart1(flag) {
-            this.$refs['chartComponent1'] && this.$refs['chartComponent1'][0] && this.$refs['chartComponent1'][0].initChart(flag);
+        getChart1(flag, data) {
+            this.$refs['chartComponent1'] && this.$refs['chartComponent1'][0] && this.$refs['chartComponent1'][0].initChart(flag, data);
         },
         drewChart2() {
             this.$refs['chartComponent2'] && this.$refs['chartComponent2'][0] && this.$refs['chartComponent2'][0].getData();
         },
-        getChart2(flag) {
-            this.$refs['chartComponent2'] && this.$refs['chartComponent2'][0] && this.$refs['chartComponent2'][0].initChart(flag);
+        getChart2(flag, data) {
+            this.$refs['chartComponent2'] && this.$refs['chartComponent2'][0] && this.$refs['chartComponent2'][0].initChart(flag, data);
         },
         drewChart3() {
             this.$refs['chartComponent3'] && this.$refs['chartComponent3'][0] && this.$refs['chartComponent3'][0].getData();
         },
-        getChart3(flag) {
-            this.$refs['chartComponent3'] && this.$refs['chartComponent3'][0] && this.$refs['chartComponent3'][0].initChart(flag);
+        getChart3(flag, data) {
+            this.$refs['chartComponent3'] && this.$refs['chartComponent3'][0] && this.$refs['chartComponent3'][0].initChart(flag, data);
         },
         drewChart4(date) {
             this.$refs['chartComponent4'] && this.$refs['chartComponent4'][0] && this.$refs['chartComponent4'][0].getData(date);
         },
-        getChart4(flag) {
-            this.$refs['chartComponent4'] && this.$refs['chartComponent4'][0] && this.$refs['chartComponent4'][0].initChart(flag);
+        getChart4(flag, data) {
+            this.$refs['chartComponent4'] && this.$refs['chartComponent4'][0] && this.$refs['chartComponent4'][0].initChart(flag, data);
         },
         createChart3Columnn(val) {
             let chart3Column = val.map(v => {
@@ -312,14 +331,12 @@ export default {
         }
     },
     mounted() {
-        this.resetDetailFlag();
+        // this.resetDetailFlag();
         this.sceneCommitParams = this.$store.getters.sceneCommitParams;
+        this.resultIds = this.sceneCommitParams.resultIds || '';
         // this.getTableData();
         // test
         // this.drewChart1();
-        // this.drewChart2();
-        // this.drewChart3();
-        // this.drewChart4();
     }
 };
 </script>

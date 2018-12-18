@@ -653,7 +653,7 @@ export const chartTableColumns1 = [
 export const chartTableColumns2 = [
     {label: '账户组编号', field: 'acctId', minWidth: 130},
     {label: '客户编号', field: 'custId', minWidth: 130, template: custIdColumn},
-    {label: '交易日', field: 'txDay', minWidth: 100},
+    {label: '交易日', field: 'txDay', minWidth: 130},
     {label: '合约代码', field: 'contrCd', minWidth: 100},
     {label: '当前净持仓量', field: 'acctNetOpenInt', minWidth: 140},
     {label: '当前净持仓金额', field: 'posLimQtty', minWidth: 150},
@@ -664,13 +664,13 @@ export const chartTableColumns2 = [
 export const chartTableColumns3 = [
     {label: '账户组编号', field: '', minWidth: 130},
     {label: '客户编号', field: '', minWidth: 130, template: custIdColumn},
-    {label: '交易日', field: '', minWidth: 100},
+    {label: '交易日', field: '', minWidth: 130},
     {label: '合约代码', field: '', minWidth: 100},
     {label: '买入量', field: '', minWidth: 100},
     {label: '卖出量', field: '', minWidth: 100},
     {label: '多头持仓量', field: '', minWidth: 130},
     {label: '多头持仓量', field: '', minWidth: 130},
-    {label: '盈亏', field: '', minWidth: 90},
+    {label: '盈亏', field: '', minWidth: 100},
     {label: '净买入量', field: '', minWidth: 100},
     {label: '净持仓量', field: '', minWidth: 100}
 ];
@@ -678,10 +678,10 @@ export const chartTableColumns4 = [
     {label: '客户编号', field: 'custId', minWidth: 130, template: custIdColumn},
     {label: '买卖方向', field: 'bizDir', minWidth: 100},
     // {label: '报单时间1', field: 'declBillTm1', minWidth: 100},
-    {label: '报单时间', field: 'declBillTm2', minWidth: 130},
+    {label: '报单时间', field: 'declBillTm2', minWidth: 140},
     {label: '报单数量', field: 'declBillQtty', minWidth: 130},
     {label: '报单价格', field: 'declBillPrice', minWidth: 130},
-    {label: '成交时间', field: 'bargainDate', minWidth: 130},
+    {label: '成交时间', field: 'bargainDate', minWidth: 180},
     {label: '成交数量', field: 'bargainQtty', minWidth: 130},
     {label: '成交价格', field: 'bargainPrice', minWidth: 130}
 ];

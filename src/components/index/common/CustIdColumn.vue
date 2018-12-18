@@ -1,5 +1,5 @@
 <template>
-    <div style="display: flex; align-items:center;" class="self-column-in-table">
+    <div class="self-column-in-table">
         <a @click="handleClick">{{ scope.row.custId }}</a>
     </div>
 </template>

@@ -140,6 +140,7 @@ export default {
         }
         /deep/.self-column-in-table {
             a {
+                display: inline-block;
                 text-align: center;
                 width: 135px;
             }
@@ -152,12 +153,12 @@ export default {
             }
         }
         /deep/.el-tree__empty-block {
-            min-height: 400px;
+            min-height: 360px;
         }
         /deep/.el-table--scrollable-x {
             /deep/.el-table__body-wrapper {
                 width: 100%;
-                height: 340px;
+                max-height: 345px;
                 background: transparent;
                 &:hover {
                     background: transparent;
@@ -203,7 +204,7 @@ export default {
         .tree-table {
             color: #fff;
             min-width: 1060px;
-            max-height: 360px;
+            max-height: 337px;
             overflow: auto;
             .custom-tree-node {
                 flex: 1;

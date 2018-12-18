@@ -74,15 +74,16 @@ export default {
     },
     methods: {
         getData() {
+            this.$store.commit('saveXGchart2', this.chartOptions);
             this.loading = true;
             // this.initChart(resData2);
             console.log(this.commonReqParams);
             let params = {
-                contrCode: this.commonReqParams.contrCode || 'cu1712',
-                statTimeBegin: this.commonReqParams.statTimeBegin || '2017-02-20',
-                statTimeEnd: this.commonReqParams.statTimeEnd || '2017-10-09',
-                accountTeamNo: this.commonReqParams.accountTeamNo || 'XG00001',
-                custId: this.commonReqParams.custId || '80006298,80003998,80003172',
+                contrCd: this.commonReqParams.contrCd,
+                statStartDt: this.commonReqParams.statStartDt,
+                statStopDay: this.commonReqParams.statStopDay,
+                acctId: this.commonReqParams.acctId,
+                custId: this.commonReqParams.custId,
             };
             if (this.commonReqParams.resultIds) {
                 params.resultIds = this.commonReqParams.resultIds;
@@ -146,11 +147,10 @@ export default {
         initTable(tableData) {
             this.$emit('updateTableData', tableData, this.index);
         },
-        initChart(flag) {
-            // console.log(this.$store.getters.getXGchart2);
-            // if (this.$store.getters.getXGchart2 && Object.keys(this.$store.getters.getXGchart2).length) {
-            //     this.chartOptions = this.$store.getters.getXGchart2;
-            // }
+        initChart(flag, data) {
+            if (data) {
+                this.chartOptions = data;
+            }
             this.$refs['chart1'] && this.$refs['chart1'].initChart();
         },
         handleEchartClickEvent(val) {
@@ -158,6 +158,12 @@ export default {
         },
         handleEchartDblClickEvent(val) {
             this.$emit('handleEchartDblClickEvent', val, this.index);
+        }
+    },
+    mounted() {
+        let storeData = this.$store.getters.getXGchart2;
+        if (storeData && Object.keys(storeData).length) {
+            this.initChart(true, storeData);
         }
     }
 };

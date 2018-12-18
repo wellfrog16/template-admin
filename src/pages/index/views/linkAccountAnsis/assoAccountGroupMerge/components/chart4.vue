@@ -7,6 +7,7 @@
 import EchartsCommon from '@/components/index/common/EchartsCommon';
 // import {respData4} from './constants';
 import {getChart4Data} from '@/api/dataAnsis/assoAccountGroupMerge';
+import _ from 'lodash';
 
 export default {
     components: {EchartsCommon},
@@ -66,14 +67,14 @@ export default {
                     name: '价格',
                     type: 'value',
                     min: value => {
-                        return value.min;
+                        return value.min - (value.max - value.min) * 0.2;
                     },
                     max: value => {
-                        return value.max;
+                        return value.max + (value.max - value.min) * 0.2;
                     },
                     splitNumber: 2
                 },
-                dataZoom: [
+                /* dataZoom: [
                     {
                         type: 'inside'
                     },
@@ -82,7 +83,7 @@ export default {
                         type: 'slider',
                         y: '90%'
                     }
-                ],
+                ], */
                 series: [
                     {
                         name: '分时报单图',
@@ -95,13 +96,14 @@ export default {
     },
     methods: {
         getData(propsDate) {
+            this.$store.commit('saveXGchart4', this.chartOptions);
             this.loading = true;
             let params = {
-                contrCode: this.commonReqParams.contrCode || 'cu1712',
-                statTimeBegin: this.commonReqParams.statTimeBegin || '2017-02-20',
-                statTimeEnd: this.commonReqParams.statTimeEnd || '2017-10-09',
-                accountTeamNo: this.commonReqParams.accountTeamNo || 'XG00001',
-                custId: this.commonReqParams.custId || '80006298,80003998,80003172',
+                contrCd: this.commonReqParams.contrCd,
+                statStartDt: this.commonReqParams.statStartDt,
+                statStopDay: this.commonReqParams.statStopDay,
+                acctId: this.commonReqParams.acctId,
+                custId: this.commonReqParams.custId,
             };
             if (this.commonReqParams.resultIds) {
                 params.resultIds = this.commonReqParams.resultIds;
@@ -165,9 +167,19 @@ export default {
                 // this.chartOptions['dataZoom'][1]['endValue'] = dataZoomEndValue;
                 this.chartOptions['series'][0]['data'] = lineData;
                 let series = this.chartOptions['series'];
+                let maxPrice = _.max(lineData);
+                let minPrice = _.min(lineData);
+                let hPrice = maxPrice + (maxPrice - minPrice) * 0.2;
+                let lPrice = minPrice - (maxPrice - minPrice) * 0.2;
+                console.log(lineData);
+                console.log(maxPrice);
+                console.log(minPrice);
+                console.log(hPrice);
+                console.log(lPrice);
                 Object.keys(buy).forEach((v, i) => {
                     let data = buy[v].map(m => {
-                        return [m.declBillTm2.slice(-5), m.currPrice - (i + 1) * 2, m.declBillQtty, '买入', v];
+                        // return [m.declBillTm2.slice(-5), m.currPrice - (i + 1) * 10, m.declBillQtty, '买入', v];
+                        return [m.declBillTm2.slice(-5), lPrice + i * 2, m.declBillQtty, '买入', v];
                     });
                     series.push({
                         name: `${v}`,
@@ -184,7 +196,8 @@ export default {
                 });
                 Object.keys(sail).forEach((v, i) => {
                     let data = sail[v].map(m => {
-                        return [m.declBillTm2.slice(-5), m.currPrice + (i + 1) * 2, m.declBillQtty, '卖出', v];
+                        // return [m.declBillTm2.slice(-5), m.currPrice + (i + 1) * 10, m.declBillQtty, '卖出', v];
+                        return [m.declBillTm2.slice(-5), hPrice - i * 2, m.declBillQtty, '卖出', v];
                     });
                     series.push({
                         name: `${v}`,
@@ -214,11 +227,10 @@ export default {
                 console.error(e);
             });
         },
-        initChart(flag) {
-            // console.log(this.$store.getters.getXGchart4);
-            // if (this.$store.getters.getXGchart4 && Object.keys(this.$store.getters.getXGchart4).length) {
-            //     this.chartOptions = this.$store.getters.getXGchart4;
-            // }
+        initChart(flag, data) {
+            if (data) {
+                this.chartOptions = data;
+            }
             this.$refs['chart3'] && this.$refs['chart3'].initChart();
         },
         handleEchartClickEvent(val) {
@@ -226,6 +238,12 @@ export default {
         },
         handleEchartDblClickEvent(val) {
             this.$emit('handleEchartDblClickEvent', val, this.index);
+        }
+    },
+    mounted() {
+        let storeData = this.$store.getters.getXGchart4;
+        if (storeData && Object.keys(storeData).length) {
+            this.initChart(true, storeData);
         }
     }
 };
