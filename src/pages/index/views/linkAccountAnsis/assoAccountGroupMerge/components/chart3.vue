@@ -79,12 +79,10 @@ export default {
                         type: 'cross'
                     },
                     formatter: param => {
-                        console.log(param);
                         if (param.seriesIndex === 1 || param.seriesIndex === 2) {
-                            return `交易日: ${param.value[0]}<br>` + param.value[4].map((v, i) => {
+                            return `交易日: ${param.value[0]} ${param.value[2]}账户数: ${param.value[3]}<br>` + param.value[4].map((v, i) => {
                                 return `
                                     客户编号: ${v}<br>
-                                    ${param.value[2]}账户数: ${param.value[3]}
                                 `;
                             }).join('<br>');
                         } else {
@@ -385,13 +383,14 @@ export default {
         },
         getData() {
             // this.test();
+            this.$store.commit('saveXGchart3', this.chartOptions);
             this.loading = true;
             let params = {
-                contrCode: this.commonReqParams.contrCode || 'cu1712',
-                statTimeBegin: this.commonReqParams.statTimeBegin || '2017-02-20',
-                statTimeEnd: this.commonReqParams.statTimeEnd || '2017-10-09',
-                accountTeamNo: this.commonReqParams.accountTeamNo || 'XG00001',
-                custId: this.commonReqParams.custId || '80006298,80003998,80003172',
+                contrCd: this.commonReqParams.contrCd,
+                statStartDt: this.commonReqParams.statStartDt,
+                statStopDay: this.commonReqParams.statStopDay,
+                acctId: this.commonReqParams.acctId,
+                custId: this.commonReqParams.custId,
             };
             if (this.commonReqParams.resultIds) {
                 params.resultIds = this.commonReqParams.resultIds;
@@ -455,28 +454,34 @@ export default {
         initTable(tableData) {
             this.$emit('updateTableData', tableData, this.index);
         },
-        initChart(flag) {
-            // console.log(this.$store.getters.getXGchart3);
-            // if (this.$store.getters.getXGchart3 && Object.keys(this.$store.getters.getXGchart3).length) {
-            //     this.chartOptions = this.$store.getters.getXGchart3;
-            // }
+        initChart(flag, data) {
+            if (data) {
+                this.chartOptions = data;
+            }
             this.$refs['chart2'] && this.$refs['chart2'].initChart();
-            this.$nextTick(() => {
-                if (!flag) {
-                    this.$nextTick(() => {
-                        if (this.init) {
-                            this.$emit('drewChart4', this.selectMax.txDt);
-                            this.init = false;
-                        }
-                    });
-                }
-            });
+            this.getAssoCharts(flag);
+        },
+        getAssoCharts(flag) {
+            if (!flag) {
+                this.$nextTick(() => {
+                    if (this.init) {
+                        this.$emit('drewChart4', this.selectMax.txDt);
+                        this.init = false;
+                    }
+                });
+            }
         },
         handleEchartClickEvent(val) {
             this.$emit('handleEchartClickEvent', val, this.index);
         },
         handleEchartDblClickEvent(val) {
             this.$emit('handleEchartDblClickEvent', val, this.index);
+        }
+    },
+    mounted() {
+        let storeData = this.$store.getters.getXGchart3;
+        if (storeData && Object.keys(storeData).length) {
+            this.initChart(true, storeData);
         }
     }
 };

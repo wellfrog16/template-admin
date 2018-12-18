@@ -159,6 +159,7 @@ export default {
     },
     methods: {
         getData() {
+            this.$store.commit('saveXGchart1', this.chartOptions);
             let resData = this.$store.getters.sceneCommitResp;
             // resData = resData1;
             if (!Object.keys(resData).length) {
@@ -213,15 +214,16 @@ export default {
         sortDataByAcctIdCommon(data) {
             return _.sortBy(data, [item => { return item.acctId; }]);
         },
-        initChart(flag) {
-            // console.log(this.$store.getters.getXGchart1);
-            // if (this.$store.getters.getXGchart1 && Object.keys(this.$store.getters.getXGchart1).length) {
-            //     this.chartOptions = this.$store.getters.getXGchart1;
-            // }
+        initChart(flag, data) {
+            if (data) {
+                this.chartOptions = data;
+            }
             this.$refs['chart0'] && this.$refs['chart0'].initChart();
+            this.getAssoCharts(flag);
+        },
+        getAssoCharts(flag) {
             if (!flag) {
                 this.$nextTick(() => {
-                    console.log(987654);
                     this.$emit('drewChart2');
                     this.$emit('drewChart3');
                 });
@@ -235,7 +237,10 @@ export default {
         }
     },
     mounted() {
-        this.getData();
+        let storeData = this.$store.getters.getXGchart1;
+        if (storeData && Object.keys(storeData).length) {
+            this.initChart(true, storeData);
+        }
     }
 };
 </script>

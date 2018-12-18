@@ -21,7 +21,18 @@ let axisCommon = () => {
     };
 };
 export const echartsDefault = {
-    color: ['#fec42c', 'rgb(159, 240, 72)', 'rgb(37, 198, 252)', 'rgb(255, 83, 77)', 'rgb(237, 308, 190)', 'rgb(246, 214, 255)'],
+    color: [
+        '#00709e',
+        '#f8f400',
+        '#ac10ce',
+        '#ff0000',
+        '#00a8ec',
+        '#ff8a00',
+        '#006624',
+        '#e3007b',
+        '#1929b3',
+        '#b69913'
+    ],
     timeAxis: axisCommon(),
     // logAxis: axisCommon(),
     valueAxis: axisCommon(),
