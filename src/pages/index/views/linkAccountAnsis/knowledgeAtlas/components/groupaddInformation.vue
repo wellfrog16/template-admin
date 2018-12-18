@@ -305,24 +305,21 @@ export default {
             this.$refs['ruleForms'].validate(valid => {
                 if (valid) {
                     if (this.ruleForms.contractCode !== '') {
-                        let aCcontractCodeChildren = [];
                         this.mainTableData.forEach(v => {
-                            if (v.contractCode === null) {
-                                v.contractCode = this.ruleForms.contractCode;
-                                if (v.children) {
-                                    v.children.forEach(m => {
-                                        m.contractCode = this.ruleForms.contractCode;
-                                        aCcontractCodeChildren = this.mainTableData;
-                                    });
-                                }
+                            v.contractCode = this.ruleForms.contractCode;
+                            if (v.children) {
+                                v.children.forEach(m => {
+                                    m.contractCode = this.ruleForms.contractCode;
+                                });
                             }
                         });
                         this.loadingTree = true;
                         this.$emit('updateLoading', this.loadingTree);
-                        this.ruleForms.contractCode = '';
                         this.dialogFormVisible = false;
-                        postRegenerate(aCcontractCodeChildren).then(resp => {
-                            if (resp) {
+                        this.ruleForms.contractCode = '';
+                        postRegenerate(this.mainTableData).then(resp => {
+                            if (resp  && resp.resData !== null) {
+                                this.mainTableData = [];
                                 this.loadingTree = false;
                                 this.$emit('generateEvent', resp.kmap); // 知识库图表
                                 this.$emit('updateLoading', this.loadingTree);

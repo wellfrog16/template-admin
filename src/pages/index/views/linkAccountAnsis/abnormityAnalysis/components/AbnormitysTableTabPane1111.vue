@@ -170,9 +170,9 @@ export default {
             }
         },
         posdd() {
-            if (this.activeName === '1') {
+            if (this.activeName === '0') {
                 this.picTitle = '超仓分析图';
-            } else if (this.activeName === '2') {
+            } else if (this.activeName === '1') {
                 this.picTitle = '频繁报撤单分析图';
             } else {
                 this.picTitle = '自成交分析图';

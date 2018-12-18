@@ -95,20 +95,12 @@
                 </el-form>
             </div>
         </s-card>
-        <el-tabs v-model="activeName" size="small" type="card" @tab-click="handleTabsClick">
-            <el-tab-pane label="超仓分析" name="0">
-                <a-table1 v-show="activeName ==='0'" :loadingTable="loadingTable" :tableData1="tableData1"></a-table1>
-            </el-tab-pane>
-            <el-tab-pane label="频繁报撤单分析" name="1">
-                <a-table2 v-show="activeName === '1'" :loadingTable="loadingTable" :tableData2="tableData2"></a-table2>
-            </el-tab-pane>
-            <el-tab-pane label="自成交分析" name="2">
-                <a-table3 v-show="activeName === '2'" :loadingTable="loadingTable" :tableData3="tableData3"></a-table3>
-            </el-tab-pane>
-        </el-tabs>
-        <div style="text-align:center; margin-bottom: 20px; width: 85%;">
-            <el-button size="small" type="primary" @click="backClick1">导出CSV</el-button>
-        </div>
+        <a-table-tab-pane
+            class="a_form_table_bar"
+            :tablePaneData="tablePaneList"
+            :dealWithIsLoading="dealWithIsLoading"
+            :formData="formDataList"
+        ></a-table-tab-pane>
         <s-card :title="`协查报告`" :icon="`fa fa-user-md`">
             <div slot="content">
                 <s-table
@@ -128,12 +120,8 @@
 import {tableColumns} from '../abnormityAnalysis/components/constants';
 import MixinVue from './components/MixinsTable';
 import SCard from '@/components/index/common/SCard';
-import STable from '@/components/index/common/STable';
 import UploadFileToServer from '@/components/index/common/UploadFileToServer'; // 导入CSV
 import SDatePicker from '@/components/index/common/SDatePicker'; // 日期
-import ATable1 from '../abnormityAnalysis/components/Atable1';
-import ATable2 from '../abnormityAnalysis/components/Atable2';
-import ATable3 from '../abnormityAnalysis/components/Atable3';
 import moment from 'moment';
 import {
     uploadFileByBodyInfo // 导入csv，输出账户号list
@@ -147,24 +135,20 @@ export default {
         SCard,
         UploadFileToServer,
         SDatePicker,
-        STable,
-        ATable1,
-        ATable2,
-        ATable3
+        STable: () => import('@/components/index/common/STable'), // 列表
+        ATableTabPane: () => import('../abnormityAnalysis/components/AbnormitysTableTabPane'),
     },
     mixins: [MixinVue],
     data() {
         return {
-            activeName: '0',
-            loadingTable: false, // 加载 (tab 加载)
             fullScreenLoading: false, // 加载 (结果集加载)
             dealWithIsLoading: false, // 加载(表格加载)
+            // teb 列表数据
+            tablePaneList: {},
             // 底部列表
             tableColumns: tableColumns,
             tableData: [],
-            tableData1: [],
-            tableData2: [],
-            tableData3: [],
+            formDataList: {},
             resultList: [],
             uploadOption: {
                 name: '上传',
@@ -180,10 +164,9 @@ export default {
             ruleForm: {
                 fileList: [], // 导入CSV
                 exportType: '', // 导入结果集按钮
-                contractCode: 'cu1712', // 合约代码  cu1712
+                contractCode: '', // 合约代码  cu1712
                 resultId: '', // 导入结果集
-                selectDateRange: ['2017-10-01', '2017-12-31']   // 统计区间  '2017-02-20', '2017-10-09'
-                // selectDateRange: [new Date(moment().subtract(1, 'months').format('YYYY-MM-DD')), new Date(moment().subtract(1, 'days').format('YYYY-MM-DD'))]
+                selectDateRange: [new Date(moment().subtract(1, 'months').format('YYYY-MM-DD')), new Date(moment().subtract(1, 'days').format('YYYY-MM-DD'))]
             },
             rules: {
                 contractCode: {
@@ -240,16 +223,16 @@ export default {
         },
         // 导入CSV
         handleUploadSuccess(resp) {
-            // let params = {
-            //     contrCode: this.ruleForm.contractCode, // 合约代码
-            //     statTimeBegin: moment(this.ruleForm.selectDateRange[0]).format('YYYY-MM-DD'), // 统计起始日
-            //     statTimeEnd: moment(this.ruleForm.selectDateRange[1]).format('YYYY-MM-DD'), // 统计截止日
-            //     resultSetNo: this.ruleForm.resultId // 结果集编号
-            // };
-            // this.dealWithIsLoading = false;
-            // this.tableData = resp.report; // 协查报告数据
-            // this.tablePaneList = resp; // tab 表格数据????stal取
-            // this.formDataList = params; // 生成协查报告的参数
+            let params = {
+                contrCode: this.ruleForm.contractCode, // 合约代码
+                statTimeBegin: moment(this.ruleForm.selectDateRange[0]).format('YYYY-MM-DD'), // 统计起始日
+                statTimeEnd: moment(this.ruleForm.selectDateRange[1]).format('YYYY-MM-DD'), // 统计截止日
+                resultSetNo: this.ruleForm.resultId // 结果集编号
+            };
+            this.dealWithIsLoading = false;
+            this.tableData = resp.report; // 协查报告数据
+            this.tablePaneList = resp; // tab 表格数据
+            this.formDataList = params; // 生成协查报告的参数
         },
         // 选择结果集的按钮 -- 二选一
         resultChange(val) {
@@ -261,16 +244,12 @@ export default {
                 this.ruleForm.exportType = '';
             }
         },
-        handleTabsClick(){},
         // 生成报告
         generateReportsClick() {
             this.tableData = [];
-            this.tableData1 = [];
-            this.tableData2 = [];
-            this.tableData3 = [];
+            this.tablePaneList = {};
             this.$refs['ruleForm'].validate(valid => {
                 if (valid) {
-
                     if (this.ruleForm.exportType === '1') {
                         if (this.ruleForm.resultId === '') {
                             let params = {
@@ -292,24 +271,15 @@ export default {
                                 statTimeEnd: moment(this.ruleForm.selectDateRange[1]).format('YYYY-MM-DD'), // 统计截止日
                                 resultSetNo: this.ruleForm.resultId // 结果集编号
                             };
-                            this.$store.commit('momentMut', params); // tab 表格数据
-                            this.loadingTable = true;
                             this.dealWithIsLoading = true;
                             postExportType(params).then(resp => {
-                                if (resp) {
-                                    this.loadingTable = false;
-                                    this.dealWithIsLoading = false;
-                                    this.$router.push({name: ''});
-                                    this.tableData = resp.report; // 协查报告数据 autoTrade  frequentTrade  overStoreAnalysis
-                                    this.tableData1 = resp.overStoreAnalysis;
-                                    this.tableData2 = resp.frequentTrade;
-                                    this.tableData3 = resp.autoTrade;
-                                }
-                                  // this.$store.commit('overStoreMut', resp.overStoreAnalysis); // tab 表格数据
-                                // this.$store.commit('frequentMut', resp.frequentTrade); // tab 表格数据
-                                // this.$store.commit('autoTradeMut', resp.autoTrade); // tab 表格数据
+                                this.loading = false;
+                                this.dealWithIsLoading = false;
+                                this.$router.push({name: ''});
+                                this.tableData = resp.report; // 协查报告数据
+                                this.tablePaneList = resp; // tab 表格数据
+                                this.formDataList = params; // 生成协查报告的参数
                             }).catch(e => {
-                                this.loadingTable = false;
                                 this.dealWithIsLoading = false;
                             });
                         }

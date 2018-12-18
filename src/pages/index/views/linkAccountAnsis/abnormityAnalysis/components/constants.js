@@ -1,53 +1,38 @@
 import custIdColumn from '@/components/index/common/CustIdColumn';
 // 初始化表格信息
-export const activeNameList = [{
-    name: '0',
-    label: '超仓分析',
-    tableColumns: [
-        {field: 'acctNum', label: '账户组号', width: 150, align: 'center', sortable: true},
-        {field: 'custId', label: '客户编号', width: 150, align: 'center', template: custIdColumn, sortable: true},
-        {field: 'custName', label: '客户名称', width: 150, align: 'center', sortable: true},
-        {field: 'contrCd', label: '合约代码', width: 150, align: 'center', sortable: true},
-        {field: 'acctCurrNetMake', label: '账户组当前净持仓', width: 200, align: 'center', sortable: true},
-        {field: 'acctCurrNetPos', label: '账户当前净持仓', width: 200, align: 'center', sortable: true},
-        {field: 'multiBillMakePosQtty', label: '多单持仓量', width: 150, align: 'center', sortable: true},
-        {field: 'billMakePosQtty', label: '空单持仓量', width: 150, align: 'center', sortable: true},
-        {field: 'statBosomDays', label: '统计区间超仓天数', width: 200, align: 'center', sortable: true},
-    ],
-    dealLoading: false,
-    tableDataList: [],
-}, {
-    label: '频繁报撤单分析',
-    name: '1',
-    tableColumns: [
-        {field: 'acctNum', label: '账户组号', width: 150, align: 'center', sortable: true},
-        {field: 'custId', label: '客户编号', width: 150, align: 'center', template: custIdColumn, sortable: true},
-        {field: 'custName', label: '客户名称', width: 150, align: 'center', sortable: true},
-        {field: 'contrCd', label: '合约代码', width: 150, align: 'center', sortable: true},
-        {field: 'txDt', label: '交易日期', width: 150, align: 'center', sortable: true},
-        {field: 'mergeBillCnt', label: '合并撤单次数', width: 150, align: 'center', sortable: true},
-        {field: 'acctBillCnt', label: '账户撤单次数', width: 150, align: 'center', sortable: true},
-        {field: 'mergeMaAmtBillCnt', label: '合并大额撤单次数', width: 200, align: 'center', sortable: true},
-        {field: 'acctMaAmtBillCnt', label: '账户大额撤单次数', width: 200, align: 'center', sortable: true},
-    ],
-    dealLoading: false,
-    tableDataList: [],
-}, {
-    label: '自成交分析',
-    name: '2',
-    tableColumns: [
-        {field: 'acctNum', label: '账户组号', width: 150, align: 'center', sortable: true},
-        {field: 'custId', label: '客户编号', width: 150, align: 'center', template: custIdColumn, sortable: true},
-        {field: 'custName', label: '客户名称', width: 150, align: 'center', sortable: true},
-        {field: 'contrCd', label: '合约代码', width: 150, align: 'center', sortable: true},
-        {field: 'txDt', label: '交易日期', width: 150, align: 'center', sortable: true},
-        {field: 'mergeBargainCnt', label: '合并自成交次数', width: 150, align: 'center', sortable: true},
-        {field: 'acctBargainCnt', label: '账户自成交次数', width: 150, align: 'center', sortable: true},
-        {field: 'mergeBargainQtty', label: '合并自成交数量', width: 150, align: 'center', sortable: true},
-        {field: 'acctBargainQtty', label: '账户自成交数量', width: 150, align: 'center', sortable: true},
-    ],
-    tableDataList: [],
-}];
+export const tableColumns1 = [
+    {field: 'acctNum', label: '账户组号', width: 150, align: 'center', sortable: true},
+    {field: 'custId', label: '客户编号', width: 150, align: 'center', template: custIdColumn, sortable: true},
+    {field: 'custName', label: '客户名称', width: 150, align: 'center', sortable: true},
+    {field: 'contrCd', label: '合约代码', width: 150, align: 'center', sortable: true},
+    {field: 'acctCurrNetMake', label: '账户组当前净持仓', width: 200, align: 'center', sortable: true},
+    {field: 'acctCurrNetPos', label: '账户当前净持仓', width: 200, align: 'center', sortable: true},
+    {field: 'multiBillMakePosQtty', label: '多单持仓量', width: 150, align: 'center', sortable: true},
+    {field: 'billMakePosQtty', label: '空单持仓量', width: 150, align: 'center', sortable: true},
+    {field: 'statBosomDays', label: '统计区间超仓天数', width: 200, align: 'center', sortable: true},
+];
+export const tableColumns2 = [
+    {field: 'acctNum', label: '账户组号', width: 150, align: 'center', sortable: true},
+    {field: 'custId', label: '客户编号', width: 150, align: 'center', template: custIdColumn, sortable: true},
+    {field: 'custName', label: '客户名称', width: 150, align: 'center', sortable: true},
+    {field: 'contrCd', label: '合约代码', width: 150, align: 'center', sortable: true},
+    {field: 'txDt', label: '交易日期', width: 150, align: 'center', sortable: true},
+    {field: 'mergeBillCnt', label: '合并撤单次数', width: 150, align: 'center', sortable: true},
+    {field: 'acctBillCnt', label: '账户撤单次数', width: 150, align: 'center', sortable: true},
+    {field: 'mergeMaAmtBillCnt', label: '合并大额撤单次数', width: 200, align: 'center', sortable: true},
+    {field: 'acctMaAmtBillCnt', label: '账户大额撤单次数', width: 200, align: 'center', sortable: true},
+];
+export const tableColumns3 = [
+    {field: 'acctNum', label: '账户组号', width: 150, align: 'center', sortable: true},
+    {field: 'custId', label: '客户编号', width: 150, align: 'center', template: custIdColumn, sortable: true},
+    {field: 'custName', label: '客户名称', width: 150, align: 'center', sortable: true},
+    {field: 'contrCd', label: '合约代码', width: 150, align: 'center', sortable: true},
+    {field: 'txDt', label: '交易日期', width: 150, align: 'center', sortable: true},
+    {field: 'mergeBargainCnt', label: '合并自成交次数', width: 150, align: 'center', sortable: true},
+    {field: 'acctBargainCnt', label: '账户自成交次数', width: 150, align: 'center', sortable: true},
+    {field: 'mergeBargainQtty', label: '合并自成交数量', width: 150, align: 'center', sortable: true},
+    {field: 'acctBargainQtty', label: '账户自成交数量', width: 150, align: 'center', sortable: true},
+];
 export const tableColumns = [
     {field: 'acctNum', label: '账户组号', width: 150, align: 'center'},
     {field: 'custId', label: '客户编号', width: 150, align: 'center'},
