@@ -173,8 +173,8 @@ export default {
             console.log(lPrice);
             Object.keys(buy).forEach((v, i) => {
                 let data = buy[v].map(m => {
-                    // return [m.declBillTm2.slice(-5), m.currPrice - (i + 1) * 10, m.declBillQtty, '买入', v];
-                    return [m.declBillTm2.slice(-5), lPrice + i * 2, m.declBillQtty, '买入', v];
+                    return [m.declBillTm2.slice(-5), m.currPrice - (i + 1) * 10, m.declBillQtty, '买入', v];
+                    // return [m.declBillTm2.slice(-5), lPrice + i * 2, m.declBillQtty, '买入', v];
                 });
                 series.push({
                     name: `${v}`,
@@ -191,8 +191,8 @@ export default {
             });
             Object.keys(sail).forEach((v, i) => {
                 let data = sail[v].map(m => {
-                    // return [m.declBillTm2.slice(-5), m.currPrice + (i + 1) * 10, m.declBillQtty, '卖出', v];
-                    return [m.declBillTm2.slice(-5), hPrice - i * 2, m.declBillQtty, '卖出', v];
+                    return [m.declBillTm2.slice(-5), m.currPrice + (i + 1) * 10, m.declBillQtty, '卖出', v];
+                    // return [m.declBillTm2.slice(-5), hPrice - i * 2, m.declBillQtty, '卖出', v];
                 });
                 series.push({
                     name: `${v}`,
