@@ -68,7 +68,7 @@ export default {
                         if (params.dataType === 'edge') { // link
                             return '客户编号交集：' + params.data.tip || '';
                         } else if (params.dataType === 'node') {
-                            return '账户组号: ' + params.name || '';
+                            return '客户编号: ' + params.value || '';
                         }
                     },
                     padding: 10,

@@ -3,9 +3,9 @@
 const state = {
     abnorDataState: {
         momentState: {},
-        overStoreData: [], // 0
-        frequentData: [], // 1
-        autoTradeData: [], // 2
+        overStoreData: {}, // 0
+        frequentData: {}, // 1
+        autoTradeData: {}, // 2
 
     }
 };
