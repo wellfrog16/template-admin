@@ -214,10 +214,10 @@
                 ruleForm: {
                     fileList: [], // 导入CSV
                     exportType: '', // 导入结果集按钮
-                    contractCode: 'cu1712', // 合约代码  cu1712
+                    contractCode: '', // 合约代码  cu1712
                     resultId: '', // 导入结果集
-                    selectDateRange: ['2017-10-01', '2017-12-31']   // 统计区间  '2017-02-20', '2017-10-09'
-                    // selectDateRange: [new Date(moment().subtract(1, 'months').format('YYYY-MM-DD')), new Date(moment().subtract(1, 'days').format('YYYY-MM-DD'))]
+                    // selectDateRange: ['2017-10-01', '2017-12-31']   // 统计区间  '2017-02-20', '2017-10-09'
+                    selectDateRange: [new Date(moment().subtract(1, 'months').format('YYYY-MM-DD')), new Date(moment().subtract(1, 'days').format('YYYY-MM-DD'))]
                 },
                 rules: {
                     contractCode: {
@@ -297,7 +297,6 @@
                 // this.tablePaneList = resp; // tab 表格数据????stal取
                 // this.formDataList = params; // 生成协查报告的参数
                 this.$store.commit('momentMut', params); // tab 参数
-                console.log(resp);
             },
             // 选择结果集的按钮 -- 二选一
             resultChange(val) {
