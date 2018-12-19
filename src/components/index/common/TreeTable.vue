@@ -204,7 +204,7 @@ export default {
         .tree-table {
             color: #fff;
             min-width: 1060px;
-            max-height: 337px;
+            height: 337px;
             overflow: auto;
             .custom-tree-node {
                 flex: 1;

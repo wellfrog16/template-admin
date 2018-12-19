@@ -72,12 +72,15 @@ export default {
             }
             let checkedChildren = this.getCheckedNodes(true);
             this.deleteMethods(checkedNodes);
+            let resultSetName = this.createTreeId();
             checkedChildren.forEach(v => {
                 v.acctId = this.createAccountId();
+                v.resultSetName = resultSetName;
             });
             this.mainTableData.push({
                 id: this.createTreeId(),
                 acctId: this.createAccountId(),
+                resultSetName: resultSetName,
                 children: checkedChildren
             });
             this.sortByAccountId();
