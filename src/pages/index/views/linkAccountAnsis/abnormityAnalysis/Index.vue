@@ -296,8 +296,8 @@
                 this.tableData3 = resp.autoTrade;
                 // this.tablePaneList = resp; // tab 表格数据????stal取
                 // this.formDataList = params; // 生成协查报告的参数
-                this.$store.commit('momentMut', params); // tab 表格数据
-
+                this.$store.commit('momentMut', params); // tab 参数
+                console.log(resp);
             },
             // 选择结果集的按钮 -- 二选一
             resultChange(val) {
@@ -330,8 +330,10 @@
                                     statTimeBegin: moment(this.ruleForm.selectDateRange[0]).format('YYYY-MM-DD'), // 统计起始日
                                     statTimeEnd: moment(this.ruleForm.selectDateRange[1]).format('YYYY-MM-DD'), // 统计截止日
                                 };
+                                this.$store.commit('momentMut', params); // tab 表格数据
                                 this.uploadParams = {...this.uploadParams, ...params};
                                 this.dealWithIsLoading = true;
+                                this.loadingTable = true;
                                 this.$nextTick(() => {
                                     this.$refs['uploadFile'].submitUpload();
                                 });
