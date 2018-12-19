@@ -655,7 +655,7 @@ export const chartTableColumns2 = [
     {label: '交易日', field: 'txDay', minWidth: 130},
     {label: '合约代码', field: 'contrCd', minWidth: 100},
     {label: '当前净持仓量', field: 'acctNetOpenInt', minWidth: 140},
-    {label: '当前净持仓金额', field: 'posLimQtty', minWidth: 150},
+    // {label: '当前净持仓金额', field: 'posLimQtty', minWidth: 150},
     {label: '账户组净持仓量', field: 'acctGroNetOpenInt', minWidth: 150},
     {label: '空单净持仓量', field: 'nuBillOpenInt', minWidth: 140},
     {label: '多单净持仓量', field: 'multiBillOpenInt', minWidth: 140}
