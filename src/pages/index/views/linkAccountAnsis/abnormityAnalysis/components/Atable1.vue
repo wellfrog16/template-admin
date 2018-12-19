@@ -2,7 +2,7 @@
     <div :class="$style.card_table">
         <s-table
             sortable
-            :height="460"
+            :height="475"
             :loading="loadingTable"
             :columns="tableColumns"
             :tableData="tableData"
@@ -52,8 +52,7 @@ export default {
     },
     methods: {
         // Bar 柱状图(双击)
-        tableellDblClick (row) {
-            // this.clearChartData();
+        tableellDblClick(row) {
             let rowCustId = [];
             if (this.tableData1 && this.tableData1.length !== 0) {
                 for (let i = 0; i < this.tableData1.length; i++) {
@@ -61,7 +60,7 @@ export default {
                         rowCustId.push(this.tableData1[i].custId);
                     }
                 }
-            };
+            }
             let params = {
                 'accountTeamNo': row.acctNum, // 账户组号
                 'arrCustId': rowCustId, // 客户编号
@@ -79,7 +78,7 @@ export default {
                     this.Echarts1Loading1 = false;
                     this.fullScreenLoading1 = false;
                     this.$store.commit('overStoreMut', resp);
-                    this.$emit('barEchartsCick', resp ? resp : {}, '0' );
+                    this.$emit('barEchartsCick', resp ? resp : {}, '0');
                     this.$emit('EchartsClickLoading', this.Echarts1Loading1);
                 }
             }).catch(e => {
@@ -88,7 +87,10 @@ export default {
         }
     },
     mounted() {}
-}
+};
 </script>
-
-<style lang='less' module></style>
+<style lang='less' module>
+    .card_table {
+        box-shadow: 0 0 10px #326fcb !important;
+    }
+</style>

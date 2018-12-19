@@ -97,7 +97,7 @@
             </div>
         </s-card>
         <div class="card_table">
-            <el-tabs class="a_form_table_bar" v-model="activeName" size="small" type="card" @tab-click="handleTabsClick">
+            <el-tabs class="a_form_table_bar bar-shoe" v-model="activeName" size="small" type="card" @tab-click="handleTabsClick">
                 <el-tab-pane label="超仓分析" name="0">
                     <a-table1 @barEchartsCick="barEchartsCick" @EchartsClickLoading="EchartsClickLoading1"
                               v-show="activeName ==='0'" :loadingTable="loadingTable" :tableData1="tableData1"></a-table1>
@@ -325,16 +325,20 @@ export default {
         },
         // 生成报告
         generateReportsClick() {
-            // this.$store.commit('overStoreMut', {}); // tab 表格数据
-            // this.$store.commit('frequentMut', {}); // tab 表格数据
-            // this.$store.commit('autoTradeMut', {}); // tab 表格数据
-            this.tableData = [];
-            this.tableData1 = [];
-            this.tableData2 = [];
-            this.tableData3 = [];
-            this.barEchartsCick();
             this.$refs['ruleForm'].validate(valid => {
                 if (valid) {
+                    this.$store.commit('overStoreMut', {}); // tab 表格数据
+                    this.$store.commit('frequentMut', {}); // tab 表格数据
+                    this.$store.commit('autoTradeMut', {}); // tab 表格数据
+                    this.tableData = [];
+                    this.tableData1 = [];
+                    this.tableData2 = [];
+                    this.tableData3 = [];
+                    this.$nextTick(() => {
+                        this.$refs['chart1'] && this.$refs['chart1'].clearChartData();
+                        this.$refs['chart2'] && this.$refs['chart2'].clearChartData();
+                        this.$refs['chart3'] && this.$refs['chart3'].clearChartData();
+                    });
                     if (this.ruleForm.exportType === '1') {
                         if (this.ruleForm.resultId === '') {
                             let params = {
@@ -485,6 +489,9 @@ export default {
             display: flex;
             justify-content: space-between;
             position: relative;
+            .bar-shoe {
+                box-shadow: 0 0 10px rgba(31, 82, 170, 0.75);
+            }
             .a_form_table_bar {
                 padding: 0;
                 width: 49.3%;

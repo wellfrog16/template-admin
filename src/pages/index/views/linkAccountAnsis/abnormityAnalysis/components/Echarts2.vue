@@ -37,11 +37,9 @@ export default {
     data() {
         return {
             Echarts1Loading1: false, // bar 加载
-
             barEcharts: null,
             chartOptions: {
                 backgroundColor: ['rgba(7, 39, 89)'],
-                // color: ['#00709e', '#007520', '#a7a400', '#ef9c00', '#e8641b', '#df0024', '#009f3c', '#f8f400', '#004e49', '#004e49'],
                 color: [
                     '#00709e',
                     '#f8f400',
@@ -62,6 +60,7 @@ export default {
                     },
                 },
                 legend: {
+                    type: 'scroll',
                     inactiveColor: '#455579',
                     width: '80%',
                     top: '5',

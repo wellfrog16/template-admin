@@ -11,7 +11,6 @@
 
 <script>
 import EchartsCommon from '@/components/index/common/EchartsCommon';
-
 export default {
     name: 'Atable1',
     props: {
@@ -40,7 +39,6 @@ export default {
             barEcharts: null,
             chartOptions: {
                 backgroundColor: ['rgba(7, 39, 89)'],
-                // color: ['#00709e', '#007520', '#a7a400', '#ef9c00', '#e8641b', '#df0024', '#009f3c', '#f8f400', '#004e49', '#004e49'],
                 color: [
                     '#00709e',
                     '#f8f400',
@@ -85,7 +83,7 @@ export default {
                     name: ' 自成交数量',
                     splitLine: {
                         lineStyle: {
-                            color: ['#fff'], // 网格线颜色
+                            color: ['rgb(20, 53, 98)'], // 网格线颜色
                         },
                     },
                     nameTextStyle: {
@@ -115,7 +113,7 @@ export default {
                         interval: 0, // 间距
                         // x 轴线条颜色
                         axisLine: {
-                            lineStyle: {color: '#ffffff'},
+                            lineStyle: {color: 'rgba(255, 330, 86)'},
                         },
                         textStyle: {
                             margin: '10px',

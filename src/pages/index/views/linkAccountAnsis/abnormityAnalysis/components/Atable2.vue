@@ -2,7 +2,7 @@
     <div :class="$style.card_table">
         <s-table
             sortable
-            :height="450"
+            :height="475"
             :loading="loadingTable"
             :columns="tableColumns"
             :tableData="tableData"
@@ -16,7 +16,6 @@
 import {postImportAccounBar} from '@/api/dataAnsis/abnormityAnalysis';
 import {tableColumns2} from '../components/constants';
 import STable from '@/components/index/common/STable';
-
 export default {
     name: 'Atable2',
     props: {
@@ -53,7 +52,7 @@ export default {
         };
     },
     methods: {
-        tableellDblClick (row) {
+        tableellDblClick(row) {
             let rowCustId = [];
             // this.clearChartData();
             if (this.tableData2 && this.tableData2.length !== 0) {
@@ -62,7 +61,7 @@ export default {
                         rowCustId.push(this.tableData2[i].custId);
                     }
                 }
-            };
+            }
             let params = {
                 'accountTeamNo': row.acctNum, // 账户组号
                 'arrCustId': rowCustId, // 客户编号
@@ -87,6 +86,10 @@ export default {
         }
     },
     mounted() {}
-}
+};
 </script>
-<style lang='less' module></style>
+<style lang='less' module>
+    .card_table {
+        box-shadow: 0 0 10px #326fcb !important;
+    }
+</style>

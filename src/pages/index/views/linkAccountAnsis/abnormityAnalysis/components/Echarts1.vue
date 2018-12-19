@@ -4,14 +4,13 @@
             :loading="loading1"
             domId="AbarEcharts1"
             :defaultOption="chartOptions"
-            :propsChartHeight="430"
+            :propsChartHeight="420"
         ></echarts-common>
     </div>
 </template>
 
 <script>
 import EchartsCommon from '@/components/index/common/EchartsCommon';
-
 export default {
     name: 'Atable1',
     props: {
@@ -24,7 +23,6 @@ export default {
     data() {
         return {
             Echarts1Loading1: false, // bar 加载
-
             barEcharts: null,
             markLingOping: {
                 markLine: {
@@ -54,7 +52,6 @@ export default {
             },
             chartOptions: {
                 backgroundColor: ['rgba(7, 39, 89)'],
-                // color: ['#00709e', '#007520', '#a7a400', '#ef9c00', '#e8641b', '#df0024', '#009f3c', '#f8f400', '#004e49', '#004e49'],
                 color: [
                     '#00709e',
                     '#f8f400',
@@ -71,7 +68,7 @@ export default {
                     trigger: 'axis',
                     axisPointer: {
                         // 坐标轴指示器，坐标轴触发有效
-                        type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
+                        type: 'shadow',
                     },
                 },
                 legend: {
@@ -84,13 +81,8 @@ export default {
                         fontSize: 12,
                     },
                 },
-
                 // 柱状图高度
                 grid: {
-                    // x: 62,
-                    // x2: 60,
-                    // y: 60,
-                    // y2: 86
                     left: '4%',
                     right: '8%',
                     bottom: '7%',
