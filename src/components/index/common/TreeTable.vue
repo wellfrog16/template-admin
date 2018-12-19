@@ -123,6 +123,7 @@ export default {
             this.isIndeterminate =
                 checkedCount > 0 && checkedCount < this.allArray.length;
         },
+        // 请输入账户号组或客户编号（过滤）
         filterMethods(value, data) {
             if (!value) return true;
             return (data['acctId'] && data['acctId'].indexOf(value.trim()) !== -1) || (data['custId'] && data['custId'].indexOf(value.trim()) !== -1);

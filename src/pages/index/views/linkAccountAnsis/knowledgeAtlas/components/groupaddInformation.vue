@@ -13,11 +13,18 @@
                         </el-col>
                         <el-col :span="2">
                             <el-button
+<<<<<<< Updated upstream
                                 :loading="loadingBt"
                                 size="small"
                                 type="primary"
                                 @click="ascertainUPClick1"
                             >确认</el-button>
+=======
+                                size="small"
+                                type="primary"
+                                v-loading="loadingBt"
+                                @click="ascertainUPClick1">确认</el-button>
+>>>>>>> Stashed changes
                         </el-col>
                     </el-col>
                     <el-col :span="8" :class="$style.rigth">
@@ -39,7 +46,10 @@
                             ></upload-file-to-server>
                         </el-col>
                         <el-col :span="2">
-                            <el-button size="small" type="primary" @click="ascertainUPClick">确认</el-button>
+                            <el-button
+                                size="small"
+                                type="primary"
+                                @click="ascertainUPClick">确认</el-button>
                         </el-col>
                     </el-col>
                 </el-row>
@@ -122,6 +132,60 @@
             </s-card>
         </div>
 
+<<<<<<< Updated upstream
+=======
+        <s-card title="账户组信息" icon="el-icon-edit">
+            <div slot="right">
+                <el-input
+                    class="search-input"
+                    size="mini"
+                    placeholder="请输入账户号组或客户编号"
+                    v-model="searchText">
+                    <i class="el-icon-search"
+                       slot="prefix"
+                       style="margin-left:4px; cursor: pointer;"></i>
+                </el-input>
+            </div>
+            <div slot="content">
+                <el-row :gutter="20">
+                    <el-col :span="21">
+                        <div style="overflow:auto; max-height:400px;">
+                            <tree-table
+                                ref="self-tree-table"
+                                :filterText="searchText"
+                                :columns="mainTableColumns"
+                                :tableData="mainTableData"
+                                @updateCheckedList="updateCheckedList">
+                            </tree-table>
+                        </div>
+                    </el-col>
+                    <el-col :span="3">
+                        <div class="operate-button-group">
+                            <el-button style="padding: 9px 39px;" :class="$style.operate_button_group" type="danger" size="small"
+                                       @click="handleDelete">删除
+                            </el-button>
+                            <br>
+                            <el-button style="padding: 9px 39px;" :class="$style.operate_button_group" type="warning" size="small"
+                                       @click="handleSplit">拆分
+                            </el-button>
+                            <br>
+                            <el-button style="padding: 9px 39px;" :class="$style.operate_button_group" type="warning" size="small"
+                                       @click="handleMerge">合并
+                            </el-button>
+                            <br>
+                            <el-button :class="$style.operate_button_group" type="primary" size="small"
+                                       @click="handleExportResult">导出到结果集
+                            </el-button>
+                            <br>
+                            <el-button style="padding: 9px 24px;" :class="$style.operate_button_group" type="primary" size="small"
+                                       @click="handleExportCsv('账户组信息', mainTableColumns)">导出到csv
+                            </el-button>
+                        </div>
+                    </el-col>
+                </el-row>
+            </div>
+        </s-card>
+>>>>>>> Stashed changes
         <div :class="$style.groupadd_button">
             <el-button size="small" type="primary" @click="dialogFormClick">生成数据</el-button>
             <el-button size="small" type="primary" @click="nextClick">下一步</el-button>
@@ -187,7 +251,10 @@ export default {
     data() {
         return {
             loadingBt: false,
+<<<<<<< Updated upstream
             loadingTree: false,
+=======
+>>>>>>> Stashed changes
             dialogFormVisible: false,
             ruleForms: {
                 contractCode: '' // 合约代码cu1712
@@ -243,6 +310,7 @@ export default {
                 };
                 this.loadingBt = true;
                 this.fullScreenLoading = true;
+                this.loadingBt = true;
                 postResultList(params).then(resp => {
                     this.loadingBt = false;
                     this.fullScreenLoading = false;
@@ -277,9 +345,15 @@ export default {
                 this.$message.error('无效');
             }
         },
+<<<<<<< Updated upstream
         // 确认上次SVG
         ascertainUPClick() {
             this.$refs['uploadFile'].submitUpload();
+=======
+        // 导入CSV (添加附件成功)
+        currentFileList(fileList) {
+            this.ruleForm.fileList = fileList;
+>>>>>>> Stashed changes
         },
         updateCheckedList() {
         },

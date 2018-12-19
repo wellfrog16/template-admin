@@ -26,7 +26,7 @@ export const echartsDefault = {
         '#00709e',
         '#ac10ce',
         '#ff0000',
-        '#00a8ec',
+        '#13ce34',
         '#ff8a00',
         '#006624',
         '#e3007b',
