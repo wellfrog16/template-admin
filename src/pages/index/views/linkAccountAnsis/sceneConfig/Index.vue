@@ -273,6 +273,7 @@ export default {
         handleCloseDialog() {
             this.showDialog = false;
             this.createType = '';
+            this.dialogItem = {};
         },
         openDialog(item, type) {
             this.showDialog = true;
