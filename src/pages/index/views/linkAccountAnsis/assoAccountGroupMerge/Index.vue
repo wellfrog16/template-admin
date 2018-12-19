@@ -173,6 +173,7 @@ export default {
                     statStartDt: resp.statStartDt,
                     statStopDay: resp.statStopDay,
                     contrCd: resp.contrCd,
+                    statFreq: resp.statFreq
                 });
                 getExportResultSet({resultIds: this.resultIds}).then(resp => {
                     this.fullLoading = false;
