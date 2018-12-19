@@ -142,10 +142,11 @@ export default {
                     resultType: propsResultType || '5', // 结果集类型（1：相关性；5：合并）
                     resultName: value
                 };
+                let sceneCommitParams = this.$store.getters.sceneCommitParams;
                 if (params.resultType === '1') {
-                    params.statStartDt = this.sceneCommitParams.statStartDt;
-                    params.statStopDay = this.sceneCommitParams.statStopDay;
-                    params.statFreq = this.sceneCommitParams.statFreq;
+                    params.statStartDt = sceneCommitParams.statStartDt;
+                    params.statStopDay = sceneCommitParams.statStopDay;
+                    params.statFreq = sceneCommitParams.statFreq;
                     params.resultList = this.dealMainData();
                 }
                 if (params.resultType === '5') {
