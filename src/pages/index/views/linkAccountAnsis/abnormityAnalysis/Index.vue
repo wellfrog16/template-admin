@@ -6,7 +6,7 @@
                     <el-row>
                         <el-col :xl="10" :lg="10" :md="10" :sm="24">
                             <el-form-item prop="a">
-                                <el-radio-group v-model="ruleForm.exportType">
+                                <el-radio-group v-model="ruleForm.exportType" @change="groupChange">
                                     <el-radio label="0">
                                         <el-form-item
                                             prop="resultId"
@@ -285,10 +285,21 @@ export default {
         handleSdatePickerDateRangeChange(val) {
             this.ruleForm.selectDateRange = val;
         },
+        groupChange(val) {
+            if (val === '1') {
+                this.ruleForm.resultId = '';
+            } else {
+                if (this.ruleForm.fileList && this.ruleForm.fileList.length !== 0) {
+                    console.log(this.ruleForm.fileList[0].name);
+                    this.ruleForm.fileList = [];
+                }
+            }
+        },
         // 导入CSV (添加附件成功)
         currentFileList(fileList) {
             this.ruleForm.fileList = fileList;
             this.ruleForm.exportType = '1';
+            this.ruleForm.resultId = '';
         },
         // 导入CSV
         handleUploadSuccess(resp) {
