@@ -290,7 +290,6 @@ export default {
                 this.ruleForm.resultId = '';
             } else {
                 if (this.ruleForm.fileList && this.ruleForm.fileList.length !== 0) {
-                    console.log(this.ruleForm.fileList[0].name);
                     this.ruleForm.fileList = [];
                 }
             }
@@ -324,6 +323,9 @@ export default {
             if (val) {
                 if (this.ruleForm.exportType !== '0') {
                     this.ruleForm.exportType = '0';
+                    if (this.ruleForm.fileList && this.ruleForm.fileList.length !== 0) {
+                        this.ruleForm.fileList = [];
+                    }
                 }
             } else {
                 this.ruleForm.exportType = '';
