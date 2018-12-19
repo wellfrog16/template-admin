@@ -347,7 +347,7 @@ export default {
                 return {
                     'label': v,
                     'field': v,
-                    'minWdith': 120,
+                    'minWdith': 140,
                     'formatter': item => {
                         item = item.map;
                         return item[v] ? item[v][this.table3CurrentType] : '';
@@ -357,7 +357,7 @@ export default {
             chart3Column.unshift({
                 'label': '交易日',
                 'field': 'date',
-                'minWdith': 120
+                'minWdith': 140
             });
             this.chartTableColumns.splice(2, 1, chart3Column);
         },
