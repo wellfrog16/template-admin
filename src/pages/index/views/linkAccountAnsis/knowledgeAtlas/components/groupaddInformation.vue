@@ -14,16 +14,22 @@
                         <el-col :span="2">
                             <el-button
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                                 :loading="loadingBt"
                                 size="small"
                                 type="primary"
                                 @click="ascertainUPClick1"
                             >确认</el-button>
 =======
+=======
+>>>>>>> Stashed changes
                                 size="small"
                                 type="primary"
                                 v-loading="loadingBt"
                                 @click="ascertainUPClick1">确认</el-button>
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                         </el-col>
                     </el-col>
@@ -252,7 +258,10 @@ export default {
         return {
             loadingBt: false,
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             loadingTree: false,
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
             dialogFormVisible: false,
@@ -346,10 +355,13 @@ export default {
             }
         },
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         // 确认上次SVG
         ascertainUPClick() {
             this.$refs['uploadFile'].submitUpload();
 =======
+=======
+>>>>>>> Stashed changes
         // 导入CSV (添加附件成功)
         currentFileList(fileList) {
             this.ruleForm.fileList = fileList;
