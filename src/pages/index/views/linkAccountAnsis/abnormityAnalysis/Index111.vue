@@ -6,7 +6,7 @@
                     <el-row>
                         <el-col :xl="10" :lg="10" :md="10" :sm="24">
                             <el-form-item prop="a">
-                                <el-radio-group v-model="ruleForm.exportType">
+                                <el-radio-group v-model="ruleForm.exportType" @change="groupChange">
                                     <el-radio label="0">
                                         <el-form-item
                                             prop="resultId"

@@ -69,7 +69,6 @@ export default {
                         fontSize: 12,
                     },
                 },
-
                 // 柱状图高度
                 grid: {
                     left: '6%',

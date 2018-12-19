@@ -226,10 +226,77 @@ export default {
                     } else {
                         this.$store.commit('autoTradeMut', resp);
                     }
+<<<<<<< Updated upstream
                     this.barEchartsDete(resp, this.activeName);
                 }).catch(e => {
                     this.fullScreenLoading1 = false;
                 });
+=======
+                    let params = {
+                        "accountTeamNo": row.acctNum,                     // 账户组号
+                        "arrCustId": rowCustId,                           // 客户编号
+                        // "statTimeBegin": '2017-10-01',     // 统计起始日
+                        // "statTimeEnd": '2017-12-31',         // 统计截止日
+                        "statTimeBegin": this.statTimeBegin,     // 统计起始日
+                        "statTimeEnd": this.statTimeEnd,         // 统计截止日
+                        "contrCode": row.contrCd,                         // 合约代码
+                        "type": this.activeName,                           // 取值 '1':超仓分析
+                    };
+                    this.fullScreenLoading1 = true;
+                    // Bar 柱状图接口
+                    postImportAccounBar(params).then(resp => {
+                        this.fullScreenLoading1 = false;
+                        if (this.activeName === '0') {
+                            this.$store.commit('overStoreMut', resp);
+                        } else if (this.activeName === '1') {
+                            this.$store.commit('frequentMut', resp);
+                        } else {
+                            this.$store.commit('autoTradeMut', resp);
+                        }
+                        console.log(this.activeName);
+                        this.barEchartsDete(resp, this.activeName);
+
+                    }).catch(e => {
+                        this.fullScreenLoading1 = false;
+                    });
+                }
+            },
+
+            // 导出CSV
+            exporstClick() {
+                let fileName = '';
+                let tableColumns = '';
+                let tableData = '';
+                if (this.activeName == '0') {
+                    fileName = '超仓分析';
+                    tableColumns = this.activeNameList[0].tableColumns;
+                    tableData = this.activeNameList[0].tableDataList;
+                }else if (this.activeName == '1') {
+                    fileName = '频繁报撤单分析';
+                   tableColumns = this.activeNameList[1].tableColumns;
+                    tableData = this.activeNameList[1].tableDataList;
+                }else {
+                    fileName = '自成交分析';
+                   tableColumns = this.activeNameList[2].tableColumns;
+                    tableData = this.activeNameList[2].tableDataList;
+                }
+                if(tableData && !tableData.length){
+                    this.$message.error('异常交易暂无数据!');
+                    return;
+                }
+                let params = {
+                    "fileName": fileName || '测试',
+                    "tableColumns": tableColumns,
+                    "tableData": tableData
+                };
+                this.gfnExportFileWithForm(params);
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
             }
         },
         // 导出CSV

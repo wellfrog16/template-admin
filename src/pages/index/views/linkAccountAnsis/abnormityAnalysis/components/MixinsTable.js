@@ -199,8 +199,6 @@ export default {
                     pinName = '自成交数量';
                 }
                 this.chartOptions.yAxis.name = pinName;
-                console.log(this.chartOptions);
-
                 Object.keys(mainData).forEach(v => {
                     temp.push({
                         ...{
