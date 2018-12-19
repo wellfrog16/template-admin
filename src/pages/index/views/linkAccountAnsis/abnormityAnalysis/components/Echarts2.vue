@@ -4,19 +4,20 @@
             :loading="loading2"
             domId="AbarEcharts2"
             :defaultOption="chartOptions"
-            :propsChartHeight="350"
+            :propsChartHeight="430"
         ></echarts-common>
     </div>
 </template>
 
 <script>
 import EchartsCommon from '@/components/index/common/EchartsCommon';
+
 export default {
     name: 'Atable1',
     props: {
         loading2: {
-            type: Boolean
-        }
+            type: Boolean,
+        },
     },
     components: {EchartsCommon},
     watch: {
@@ -26,7 +27,7 @@ export default {
                     this.clearChartData();
                     this.barEchartsDete();
                 }
-            }
+            },
         },
         initChart() {
             this.clearChartData();
@@ -51,14 +52,14 @@ export default {
                     '#006624',
                     '#e3007b',
                     '#1929b3',
-                    '#b69913'
+                    '#b69913',
                 ],
                 tooltip: {
                     trigger: 'axis',
                     axisPointer: {
                         // 坐标轴指示器，坐标轴触发有效
-                        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-                    }
+                        type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
+                    },
                 },
                 legend: {
                     inactiveColor: '#455579',
@@ -66,46 +67,48 @@ export default {
                     top: '5',
                     textStyle: {
                         color: '#ffffff',
-                        fontSize: 12
-                    }
+                        fontSize: 12,
+                    },
                 },
 
                 // 柱状图高度
                 grid: {
-                    left: '10%',
-                    right: '5%',
-                    bottom: '9%',
+                    left: '6%',
+                    right: '8%',
+                    bottom: '7%',
                     width: 'auto',
                     height: 'auto',
-                    containLabel: true
+                    containLabel: true,
                 },
                 yAxis: {
+                    minInterval: 1,
                     type: 'value',
                     name: '撤单次数',
                     splitLine: {
                         lineStyle: {
-                            color: ['rgb(20, 53, 98)'] // 网格线颜色
-                        }
+                            color: ['rgb(20, 53, 98)'], // 网格线颜色
+                        },
                     },
                     nameTextStyle: {
                         color: ['#ffffff'], // 字体颜色（y轴标题‘持仓量’）
                         fontSize: 12,
-                        fontWeight: 'normal'
+                        fontWeight: 'normal',
                     },
                     axisLine: {
                         lineStyle: {
                             color: '#ffffff', // 金额字体色（Y轴金额）
-                            width: 1 // 这里是为了突出显示加上的
-                        }
-                    }
+                            width: 1, // 这里是为了突出显示加上的
+                        },
+                    },
                 },
                 xAxis: {
+                    name: '日期',
                     type: 'category',
                     data: [],
                     left: 'left',
-                    axisTick: { show: false },
+                    axisTick: {show: false},
                     boundaryGap: true,
-                    splitLine: { show: false }, //去除网格线
+                    splitLine: {show: false}, // 去除网格线
                     axisLabel: {
                         // 字体选择
                         show: true,
@@ -113,26 +116,26 @@ export default {
                         interval: 0, // 间距
                         // x 轴线条颜色
                         axisLine: {
-                            lineStyle: { color: 'rgba(255, 330, 86)' }
+                            lineStyle: {color: 'rgba(255, 330, 86)'},
                         },
                         textStyle: {
                             margin: '10px',
                             color: 'rgba(255, 255, 255)', // 字体颜色（y轴日期）
-                            fontSize: 12
-                        }
+                            fontSize: 12,
+                        },
                     },
                     label: {
                         normal: {
                             show: true,
-                            position: 'insideRight'
-                        }
+                            position: 'insideRight',
+                        },
                     },
                     axisLine: {
                         lineStyle: {
                             color: '#0087ED',
-                            width: 1 // 这里是为了突出显示加上的
-                        }
-                    }
+                            width: 1, // 这里是为了突出显示加上的
+                        },
+                    },
                 },
                 series: [],
                 // 横向滚动条
@@ -141,15 +144,14 @@ export default {
                         type: 'slider', // 图表下方的伸缩条
                         show: true, // 是否显示
                         xAxisIndex: [0],
-                        bottom: 0
+                        bottom: 0,
                     },
                     {
                         type: 'inside', // 鼠标滚轮
                         xAxisIndex: [0],
-                        left: '93%'
-                    }
-                ]
-            }
+                    },
+                ],
+            },
         };
     },
     methods: {
@@ -159,7 +161,7 @@ export default {
         },
         clearChartData() {
             this.barEcharts = this.$echarts.init(
-                document.getElementById('AbarEcharts2')
+                document.getElementById('AbarEcharts2'),
             );
             this.barEcharts.clear();
         },
@@ -175,18 +177,14 @@ export default {
                         ? val.dateList[val.dateList.length - 20]
                         : 0;
                 let dataZoomEndValue = val.dateList[val.dateList.length - 1];
-                this.chartOptions['dataZoom'][0][
-                    'startValue'
-                    ] = dataZoomStartValue;
-                this.chartOptions['dataZoom'][1][
-                    'startValue'
-                    ] = dataZoomStartValue;
+                this.chartOptions['dataZoom'][0]['startValue'] = dataZoomStartValue;
+                this.chartOptions['dataZoom'][1]['startValue'] = dataZoomStartValue;
                 this.chartOptions['dataZoom'][0]['endValue'] = dataZoomEndValue;
                 this.chartOptions['dataZoom'][1]['endValue'] = dataZoomEndValue;
                 let basicOptions = {
                     type: 'bar',
                     barMaxWidth: '30',
-                    stack: '总量'
+                    stack: '总量',
                 };
                 Object.keys(mainData).forEach(v => {
                     temp.push({
@@ -194,21 +192,21 @@ export default {
                             name: v,
                             data: mainData[v].map(m => {
                                 // 超仓分析
-                                return (m.netMarkPosQtty || 0);
-                            })
+                                return (m.acctBillCnt || 0);
+                            }),
                         },
-                        ...basicOptions
+                        ...basicOptions,
                     });
                 });
                 this.chartOptions.series = temp;
                 this.chartOptions.xAxis.data = val ? val.dateList : [];
                 this.barEcharts.setOption(this.chartOptions);
             }
-        }
+        },
     },
     mounted() {
-    }
-}
+    },
+};
 </script>
 
 <style lang='less' module></style>

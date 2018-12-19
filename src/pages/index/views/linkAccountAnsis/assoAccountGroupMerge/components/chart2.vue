@@ -75,7 +75,7 @@ export default {
                     },
                     {
                         type: 'inside',
-                        xAxisIndex: [0]
+                        xAxisIndex: [0],
                     }
                 ],
                 series: []

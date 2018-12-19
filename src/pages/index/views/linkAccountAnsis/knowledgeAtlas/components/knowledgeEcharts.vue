@@ -75,7 +75,7 @@ export default {
                     backgroundColor: '#222',
                     borderColor: '#777',
                     borderWidth: 1,
-                    extraCssText: 'width:300px; white-space:pre-wrap;'
+                    extraCssText: 'width:300px; white-space:pre-wrap; word-break: break-all;'
                 },
                 animationEasingUpdate: 'quinticInOut',
                 animation: false,

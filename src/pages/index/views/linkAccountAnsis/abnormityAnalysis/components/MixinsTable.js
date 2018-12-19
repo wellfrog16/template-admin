@@ -13,29 +13,29 @@ export default {
                         normal: {
                             lineStyle: {
                                 type: 'solid',
-                                color: 'red'
-                            }
-                        }
+                                color: 'red',
+                            },
+                        },
                     },
                     label: {
                         show: true,
                         formatter: function() {
                             return '限仓线';
-                        }
+                        },
                     },
                     data: [
                         {
                             yAxis: '',
                             symbol: 'none',
-                            x: '7%'
+                            x: '7%',
                         },
                         {
                             yAxis: '',
                             symbol: 'none',
-                            x: '93%'
-                        }
-                    ]
-                }
+                            x: '93%',
+                        },
+                    ],
+                },
             },
             chartOptions: {
                 backgroundColor: ['rgba(7, 39, 89)'],
@@ -50,14 +50,14 @@ export default {
                     '#006624',
                     '#e3007b',
                     '#1929b3',
-                    '#b69913'
+                    '#b69913',
                 ],
                 tooltip: {
                     trigger: 'axis',
                     axisPointer: {
                         // 坐标轴指示器，坐标轴触发有效
-                        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-                    }
+                        type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
+                    },
                 },
                 legend: {
                     inactiveColor: '#455579',
@@ -65,8 +65,8 @@ export default {
                     top: '5',
                     textStyle: {
                         color: '#ffffff',
-                        fontSize: 12
-                    }
+                        fontSize: 12,
+                    },
                 },
 
                 // 柱状图高度
@@ -76,35 +76,35 @@ export default {
                     bottom: '9%',
                     width: 'auto',
                     height: 'auto',
-                    containLabel: true
+                    containLabel: true,
                 },
                 yAxis: {
                     type: 'value',
                     name: '', // 持仓量
                     splitLine: {
                         lineStyle: {
-                            color: ['rgb(20, 53, 98)'] // 网格线颜色
-                        }
+                            color: ['rgb(20, 53, 98)'], // 网格线颜色
+                        },
                     },
                     nameTextStyle: {
                         color: ['#ffffff'], // 字体颜色（y轴标题‘持仓量’）
                         fontSize: 12,
-                        fontWeight: 'normal'
+                        fontWeight: 'normal',
                     },
                     axisLine: {
                         lineStyle: {
                             color: '#ffffff', // 金额字体色（Y轴金额）
-                            width: 1 // 这里是为了突出显示加上的
-                        }
-                    }
+                            width: 1, // 这里是为了突出显示加上的
+                        },
+                    },
                 },
                 xAxis: {
                     type: 'category',
                     data: [],
                     left: 'left',
-                    axisTick: { show: false },
+                    axisTick: {show: false},
                     boundaryGap: true,
-                    splitLine: { show: false }, //去除网格线
+                    splitLine: {show: false}, //去除网格线
                     axisLabel: {
                         // 字体选择
                         show: true,
@@ -112,26 +112,26 @@ export default {
                         interval: 0, // 间距
                         // x 轴线条颜色
                         axisLine: {
-                            lineStyle: { color: 'rgba(255, 330, 86)' }
+                            lineStyle: {color: 'rgba(255, 330, 86)'},
                         },
                         textStyle: {
                             margin: '10px',
                             color: 'rgba(255, 255, 255)', // 字体颜色（y轴日期）
-                            fontSize: 12
-                        }
+                            fontSize: 12,
+                        },
                     },
                     label: {
                         normal: {
                             show: true,
-                            position: 'insideRight'
-                        }
+                            position: 'insideRight',
+                        },
                     },
                     axisLine: {
                         lineStyle: {
                             color: '#0087ED',
-                            width: 1 // 这里是为了突出显示加上的
-                        }
-                    }
+                            width: 1, // 这里是为了突出显示加上的
+                        },
+                    },
                 },
                 series: [],
                 // 横向滚动条
@@ -140,22 +140,23 @@ export default {
                         type: 'slider', // 图表下方的伸缩条
                         show: true, // 是否显示
                         xAxisIndex: [0],
-                        bottom: 0
+                        bottom: 0,
                     },
                     {
                         type: 'inside', // 鼠标滚轮
                         xAxisIndex: [0],
-                        left: '93%'
-                    }
-                ]
-            }
+                        left: '93%',
+                    },
+                ],
+            },
         };
     },
-    create() {},
+    create() {
+    },
     methods: {
         clearChartData() {
             this.barEcharts = this.$echarts.init(
-                document.getElementById('AbarEcharts')
+                document.getElementById('AbarEcharts'),
             );
             this.barEcharts.clear();
         },
@@ -173,21 +174,21 @@ export default {
                 let dataZoomEndValue = val.dateList[val.dateList.length - 1];
                 this.chartOptions['dataZoom'][0][
                     'startValue'
-                ] = dataZoomStartValue;
+                    ] = dataZoomStartValue;
                 this.chartOptions['dataZoom'][1][
                     'startValue'
-                ] = dataZoomStartValue;
+                    ] = dataZoomStartValue;
                 this.chartOptions['dataZoom'][0]['endValue'] = dataZoomEndValue;
                 this.chartOptions['dataZoom'][1]['endValue'] = dataZoomEndValue;
                 let basicOptions = {
                     type: 'bar',
                     barMaxWidth: '30',
-                    stack: '总量'
+                    stack: '总量',
                 };
                 if (val && val.qtty) {
                     this.markLingOping.markLine.data[0].yAxis = val.qtty;
                     this.markLingOping.markLine.data[1].yAxis = val.qtty;
-                    basicOptions = { ...basicOptions, ...this.markLingOping };
+                    basicOptions = {...basicOptions, ...this.markLingOping};
                 }
                 let pinName = '';
                 if (actiName == '0') {
@@ -214,15 +215,15 @@ export default {
                                     m.bargainCnt ||
                                     0
                                 );
-                            })
+                            }),
                         },
-                        ...basicOptions
+                        ...basicOptions,
                     });
                 });
                 this.chartOptions.series = temp;
                 this.chartOptions.xAxis.data = val ? val.dateList : [];
                 this.barEcharts.setOption(this.chartOptions);
             }
-        }
-    }
+        },
+    },
 };
