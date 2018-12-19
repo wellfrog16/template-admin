@@ -451,10 +451,7 @@ export default {
         getAssoCharts(flag) {
             if (!flag) {
                 this.$nextTick(() => {
-                    if (this.init) {
-                        this.$emit('getBlock4Data', this.selectMax.txDt);
-                        this.init = false;
-                    }
+                    this.$emit('getBlock4Data', this.selectMax.txDt);
                 });
             }
         },

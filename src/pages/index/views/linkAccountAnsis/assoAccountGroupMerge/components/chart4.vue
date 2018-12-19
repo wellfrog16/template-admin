@@ -7,7 +7,7 @@
 import EchartsCommon from '@/components/index/common/EchartsCommon';
 // import {respData4} from './constants';
 // import {getChart4Data} from '@/api/dataAnsis/assoAccountGroupMerge';
-// import _ from 'lodash';
+import _ from 'lodash';
 
 export default {
     components: {EchartsCommon},
@@ -53,7 +53,6 @@ export default {
                     enterable: true, // 鼠标进入浮层
                     formatter: param => {
                         if (param.seriesIndex === 0) {
-                            console.log(param);
                             // let url = 'https://www.baidu.com';
                             // <a href="${url}" target="_blank" style="cursor:pointer;">百度</a>;
                             return `
@@ -115,11 +114,16 @@ export default {
             let lineData = [];
             let timeData = [];
             let colors = [
+                '#f8f400',
                 '#00709e',
                 '#ac10ce',
                 '#ff0000',
                 '#13ce34',
                 '#ff8a00',
+                '#006624',
+                '#e3007b',
+                '#1929b3',
+                '#b69913'
             ];
             let tableData = JSON.parse(JSON.stringify(buysail));
             let buy = {};
@@ -169,13 +173,15 @@ export default {
             // this.chartOptions['dataZoom'][1]['endValue'] = dataZoomEndValue;
             this.chartOptions['series'][0]['data'] = lineData;
             let series = this.chartOptions['series'];
-            // let maxPrice = _.max(lineData);
-            // let minPrice = _.min(lineData);
+            let maxPrice = _.max(lineData);
+            let minPrice = _.min(lineData);
+            let gap = (maxPrice - minPrice) * 0.03;
             // let hPrice = maxPrice + (maxPrice - minPrice) * 0.2;
             // let lPrice = minPrice - (maxPrice - minPrice) * 0.2;
-            // console.log(lineData);
-            // console.log(maxPrice);
-            // console.log(minPrice);
+            console.log(lineData);
+            console.log(maxPrice);
+            console.log(minPrice);
+            console.log(gap);
             // console.log(hPrice);
             // console.log(lPrice);
             // let data1 = [];
@@ -227,7 +233,7 @@ export default {
             // }
             Object.keys(buy).forEach((v, i) => {
                 let data = buy[v].map(m => {
-                    return [m.declBillTm2.slice(-5), m.currPrice - (i + 1) * 4, m.declBillQtty, '买入', v];
+                    return [m.declBillTm2.slice(-5), m.currPrice - (i + 1) * gap, m.declBillQtty, '买入', v];
                     // return [m.declBillTm2.slice(-5), lPrice + i * 2, m.declBillQtty, '买入', v];
                 });
                 series.push({
@@ -245,7 +251,7 @@ export default {
             });
             Object.keys(sail).forEach((v, i) => {
                 let data = sail[v].map(m => {
-                    return [m.declBillTm2.slice(-5), m.currPrice + (i + 1) * 4, m.declBillQtty, '卖出', v];
+                    return [m.declBillTm2.slice(-5), m.currPrice + (i + 1) * gap, m.declBillQtty, '卖出', v];
                     // return [m.declBillTm2.slice(-5), hPrice - i * 2, m.declBillQtty, '卖出', v];
                 });
                 series.push({
@@ -254,7 +260,7 @@ export default {
                     symbol: 'triangle',
                     symbolRotate: 180,
                     symbolSize: 10,
-                    itemStyle: itemStyleCommon(i),
+                    itemStyle: itemStyleCommon(i + 5),
                     data: data,
                     smooth: true,
                     lineStyle: {
