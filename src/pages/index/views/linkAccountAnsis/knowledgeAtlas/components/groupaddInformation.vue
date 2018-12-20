@@ -318,7 +318,7 @@ export default {
                         this.dialogFormVisible = false;
                         this.ruleForms.contractCode = '';
                         postRegenerate(this.mainTableData).then(resp => {
-                            if (resp  && resp.resData !== null) {
+                            if (resp && resp.resData !== null) {
                                 this.mainTableData = [];
                                 this.loadingTree = false;
                                 this.$emit('generateEvent', resp.kmap); // 知识库图表
