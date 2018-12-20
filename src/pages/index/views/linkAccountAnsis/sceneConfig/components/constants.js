@@ -1,7 +1,7 @@
 import InputInTable from '@/components/index/common/InputInTable';
 export const correlationIndexColumns = [
-    {field: 'indexName', label: '指标名称'},
-    {field: 'indexCon', label: '条件'},
+    {field: 'indexName', label: '指标名称', minWidth: 130},
+    {field: 'indexCon', label: '条件', minWidth: 60},
     {field: 'indexValue', label: '值', template: InputInTable},
 ];
 export const createTypeOptions = [

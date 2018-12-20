@@ -146,18 +146,6 @@ export default {
                 }
                 sail[v.custId].push(v);
             });
-            let itemStyleCommon = i => {
-                return {
-                    normal: {
-                        color: colors[i],
-                        opacity: 0.8,
-                        shadowBlur: 10,
-                        shadowOffsetX: 0,
-                        shadowOffsetY: 0,
-                        shadowColor: 'rgba(0, 0, 0, 0.5)'
-                    }
-                };
-            };
             mainData.forEach(v => {
                 timeData.push(v.txTm.slice(0, 5));
                 lineData.push(v.currPrice);
@@ -171,7 +159,13 @@ export default {
             // this.chartOptions['dataZoom'][1]['startValue'] = dataZoomStartValue;
             // this.chartOptions['dataZoom'][0]['endValue'] = dataZoomEndValue;
             // this.chartOptions['dataZoom'][1]['endValue'] = dataZoomEndValue;
-            this.chartOptions['series'][0]['data'] = lineData;
+            this.chartOptions['series'] = [
+                {
+                    name: '分时报单图',
+                    data: lineData,
+                    type: 'line'
+                }
+            ];
             let series = this.chartOptions['series'];
             let maxPrice = _.max(lineData);
             let minPrice = _.min(lineData);
@@ -237,11 +231,20 @@ export default {
                     // return [m.declBillTm2.slice(-5), lPrice + i * 2, m.declBillQtty, '买入', v];
                 });
                 series.push({
-                    name: `${v}`,
+                    name: `${v}买入`,
                     type: 'scatter',
                     symbol: 'triangle',
                     symbolSize: 10,
-                    itemStyle: itemStyleCommon(i),
+                    itemStyle: {
+                        normal: {
+                            color: colors[i],
+                            opacity: 0.8,
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowOffsetY: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    },
                     data: data,
                     smooth: true,
                     lineStyle: {
@@ -255,12 +258,21 @@ export default {
                     // return [m.declBillTm2.slice(-5), hPrice - i * 2, m.declBillQtty, '卖出', v];
                 });
                 series.push({
-                    name: `${v}`,
+                    name: `${v}卖出`,
                     type: 'scatter',
                     symbol: 'triangle',
                     symbolRotate: 180,
                     symbolSize: 10,
-                    itemStyle: itemStyleCommon(i + 5),
+                    itemStyle: {
+                        normal: {
+                            color: colors[i + 5],
+                            opacity: 0.8,
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowOffsetY: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    },
                     data: data,
                     smooth: true,
                     lineStyle: {

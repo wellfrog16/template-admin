@@ -11,7 +11,7 @@
                             label="操作"
                             show-overflow-tooltip>
                             <template slot-scope="scope">
-                                <el-button type="text" size="small" @click="handleInsert(scope.row)" :disabled="disabled">插入</el-button>
+                                <el-button type="primary" size="mini" @click="handleInsert(scope.row)" :disabled="disabled">插入</el-button>
                             </template>
                         </el-table-column>
                     </s-table>
@@ -85,7 +85,7 @@ export default {
     },
     methods: {
         handleInsert(item) {
-            let str = `${item.a} ${item.b} ${item.c}%`;
+            let str = `${item.indexName} ${item.indexCon} ${item.indexValue}%`;
             this.insertText(str);
         },
         insertText(str, obj) {
@@ -153,6 +153,22 @@ export default {
         getTlsIndexTlb() {
             console.log(this.ruleForm.sceneType);
             getTlsIndexTlb(String(this.ruleForm.sceneType)).then(resp => {
+                if (resp && !resp.length) {
+                    resp = [
+                        {
+                            indexId: '00011',
+                            indexName: '买入成交相关系数',
+                            indexStatus: '1',
+                            indexType: this.ruleForm.sceneType
+                        },
+                        {
+                            indexId: '00012',
+                            indexName: '卖出成交相关系数',
+                            indexStatus: '1',
+                            indexType: this.ruleForm.sceneType
+                        }
+                    ];
+                }
                 let data = resp.map(v => {
                     return {
                         indexName: v.indexName,

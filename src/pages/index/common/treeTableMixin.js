@@ -155,8 +155,10 @@ export default {
                 if (params.resultType === '5') {
                     params.resultListSyn = this.dealMainData();
                 }
+                this.fullLoading = true;
                 exportResultSet(params).then(resp => {
                     console.log(resp);
+                    this.fullLoading = false;
                     if (this.$route.name === 'assoAccountGroupMerge') {
                         this.updateResultList();
                     }
