@@ -20,7 +20,7 @@
             </div>
             <div
                 :class="[$style.maicontainersn]"
-                :style=" {'width': `calc(100% - ${width})`}"
+                :style=" {'width' : `calc(100% - ${width})`}"
                 id="main-container"
             >
                 <el-main>

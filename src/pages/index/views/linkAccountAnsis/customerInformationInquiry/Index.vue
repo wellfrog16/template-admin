@@ -18,11 +18,25 @@ export default {
     components: {
         SCAdd: () => import('../customerInformationInquiry/components/customerAddress'), // 客户地址查询
         SCTransactions: () => import('../customerInformationInquiry/components/customerTransactions'), // 客户交易信息查询
-        SPInformation: () => import('../customerInformationInquiry/components/preciseInformation'),    // 精确信息查询
-        SFAddress: () => import('../customerInformationInquiry/components/fuzzyAddress')         // 模糊地址查询
+        SPInformation: () => import('../customerInformationInquiry/components/preciseInformation'), // 精确信息查询
+        SFAddress: () => import('../customerInformationInquiry/components/fuzzyAddress') // 模糊地址查询
     },
     data() {
-        return {}
+        return {
+            exportsData: [],
+            pageZum: 1,
+            pageSize: 10
+        };
+    },
+    computed: {
+        listParams() {
+            let params = {
+                pageSize: this.pageSize,
+                pageZum: this.pageZum
+
+            };
+            return params;
+        }
     },
     methods: {},
 };

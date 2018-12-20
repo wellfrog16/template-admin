@@ -142,6 +142,7 @@ export default {
                     arrCustId.push(this.activeNameList[this.activeName].tableDataList[i].custId);
                 }
             }
+
             let params = {
                 'accountTeamNo': accountTeamNo, // 账户组号
                 'arrCustId': arrCustId, // 客户编号

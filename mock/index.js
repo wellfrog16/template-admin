@@ -1,9 +1,9 @@
 const Mock = require('mockjs');
 
 module.exports = app => {
-    app.get('/mock/list/', (req, res) => {
+    app.get('/mock/list/', (req, mase, res) => {
         const data = Mock.mock({
-            'total': 20,
+            'total': 10,
             // 属性 list 的值是一个数组，其中含有 1 到 10 个元素
             'list|10-20': [{
                 'id|+1': 1,
