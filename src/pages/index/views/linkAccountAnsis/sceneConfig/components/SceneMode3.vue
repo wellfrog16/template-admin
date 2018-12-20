@@ -2,7 +2,7 @@
     <div class="edit-scene-dialog">
         <s-card :title="`指标选择`">
             <div slot="content">
-                <index-param :operateType="operateType" :createType="createType" :dialogItem="dialogItem" :disabled="disabled" @updateIndexPara="updateIndexPara"></index-param>
+                <index-param ref="indexParamRef" :operateType="operateType" :createType="createType" :dialogItem="dialogItem" :disabled="disabled" @updateIndexPara="updateIndexPara"></index-param>
                 <el-row style="margin-top:10px; text-align:center;">
                     <el-input :disabled="disabled" :clearable="!disabled" style="margin-right: 5px;" size="small" v-model="ruleForm.sceneName" placeholder="请输入场景名称" class="custom-width"></el-input>
                     <el-input :disabled="disabled" :clearable="!disabled" style="margin-right: 5px;" size="small" v-model="ruleForm.sceneComnt" placeholder="请输入场景说明" class="custom-width"></el-input>
@@ -15,6 +15,7 @@
 <script>
 import IndexParam from './IndexParam';
 import SCard from '@/components/index/common/SCard';
+import {checkSql} from '@/api/dataAnsis/sceneConfig';
 
 export default {
     components: {SCard, IndexParam},
@@ -54,6 +55,27 @@ export default {
     methods: {
         updateIndexPara(val) {
             this.ruleForm.indexPara = val;
+        },
+        syntaxCheck(callback) {
+            let reg = /^[0-9]+$/;
+            let flag = false;
+            let tableData = this.$refs['indexParamRef'].tableData;
+            tableData.forEach(v => {
+                if (!reg.test(v.indexValue) || v.indexValue > 100) {
+                    flag = true;
+                }
+            });
+            if (flag) {
+                this.$message.error('指标值请输入小于100的正整数');
+                return;
+            }
+            checkSql(this.ruleForm.indexPara).then(resp => {
+                if (resp.success) {
+                    callback && callback();
+                } else {
+                    this.$message.error('请插入正确的指标');
+                }
+            });
         },
         saveSceneConfig() {
             if (!this.ruleForm.sceneName) {
