@@ -5,7 +5,7 @@
             <div class="table-header-container">
                 <el-checkbox :indeterminate="isIndeterminate" v-model="checkedAll" @change="handleCheckAll"></el-checkbox>
                 <span class="table-header">
-                    <div v-for="(item, index) in columns" :key="index" style="display:inline-block;width: 135px;">
+                    <div v-for="(item, index) in columns" :key="index" style="display:inline-block; width: 135px;">
                         {{ item.label }}
                     </div>
                 </span>

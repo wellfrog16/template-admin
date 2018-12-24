@@ -210,13 +210,12 @@ export default {
             height: 337px;
             overflow: auto;
             position: relative;
-            // 滚动条
             ::-webkit-scrollbar {
                 position: absolute;
                 left: 0;
             }
             ::-webkit-scrollbar-thumb {
-               position: absolute;
+                position: absolute;
                 left: 0;
             }
             .el-tree {
