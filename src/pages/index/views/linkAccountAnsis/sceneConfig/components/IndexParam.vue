@@ -154,20 +154,116 @@ export default {
             console.log(this.ruleForm.sceneType);
             getTlsIndexTlb(String(this.ruleForm.sceneType)).then(resp => {
                 if (resp && !resp.length) {
-                    resp = [
-                        {
-                            indexId: '00011',
-                            indexName: '买入成交相关系数',
-                            indexStatus: '1',
-                            indexType: this.ruleForm.sceneType
-                        },
-                        {
-                            indexId: '00012',
-                            indexName: '卖出成交相关系数',
-                            indexStatus: '1',
-                            indexType: this.ruleForm.sceneType
-                        }
-                    ];
+                    if (String(this.ruleForm.sceneType) === '3') { // 地址分析
+                        resp = [
+                            {
+                                indexId: '00011',
+                                indexName: '姓名相同',
+                                indexStatus: '1',
+                                indexType: this.ruleForm.sceneType
+                            },
+                            {
+                                indexId: '00012',
+                                indexName: '身份证相同',
+                                indexStatus: '1',
+                                indexType: this.ruleForm.sceneType
+                            },
+                            {
+                                indexId: '00013',
+                                indexName: '联系电话相同',
+                                indexStatus: '1',
+                                indexType: this.ruleForm.sceneType
+                            },
+                            {
+                                indexId: '00014',
+                                indexName: '联系地址相同',
+                                indexStatus: '1',
+                                indexType: this.ruleForm.sceneType
+                            },
+                            {
+                                indexId: '00015',
+                                indexName: '邮编相同',
+                                indexStatus: '1',
+                                indexType: this.ruleForm.sceneType
+                            },
+                            {
+                                indexId: '00016',
+                                indexName: '工作单位相同',
+                                indexStatus: '1',
+                                indexType: this.ruleForm.sceneType
+                            },
+                            {
+                                indexId: '00017',
+                                indexName: '电子邮件相同',
+                                indexStatus: '1',
+                                indexType: this.ruleForm.sceneType
+                            },
+                            {
+                                indexId: '00018',
+                                indexName: '银行账号相同',
+                                indexStatus: '1',
+                                indexType: this.ruleForm.sceneType
+                            },
+                            {
+                                indexId: '00019',
+                                indexName: '地址近似',
+                                indexStatus: '1',
+                                indexType: this.ruleForm.sceneType
+                            }
+                        ];
+                    }
+                    if (String(this.ruleForm.sceneType) === '4') { // 关系人
+                        resp = [
+                            {
+                                indexId: '00011',
+                                indexName: '同一投资经理',
+                                indexStatus: '1',
+                                indexType: this.ruleForm.sceneType
+                            },
+                            {
+                                indexId: '00012',
+                                indexName: '同一投资顾问',
+                                indexStatus: '1',
+                                indexType: this.ruleForm.sceneType
+                            },
+                            {
+                                indexId: '00013',
+                                indexName: '同一权益持有人',
+                                indexStatus: '1',
+                                indexType: this.ruleForm.sceneType
+                            },
+                            {
+                                indexId: '00014',
+                                indexName: '同一下单人',
+                                indexStatus: '1',
+                                indexType: this.ruleForm.sceneType
+                            },
+                            {
+                                indexId: '00015',
+                                indexName: '同一法人代表',
+                                indexStatus: '1',
+                                indexType: this.ruleForm.sceneType
+                            },
+                            {
+                                indexId: '00016',
+                                indexName: '同一资金调拨人',
+                                indexStatus: '1',
+                                indexType: this.ruleForm.sceneType
+                            },
+                            {
+                                indexId: '00017',
+                                indexName: '同一结算单确认人',
+                                indexStatus: '1',
+                                indexType: this.ruleForm.sceneType
+                            },
+                            {
+                                indexId: '00018',
+                                indexName: '同一开户授权人',
+                                indexStatus: '1',
+                                indexType: this.ruleForm.sceneType
+                            }
+                        ];
+                    }
                 }
                 let data = resp.map(v => {
                     return {

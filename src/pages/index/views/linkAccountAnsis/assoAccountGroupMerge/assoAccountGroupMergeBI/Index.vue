@@ -65,21 +65,22 @@
     </div>
 </template>
 <script>
+import {getBlock2Data1, getChart3Data2, getBlock4Data3} from './getBlock2Data';
 // import EchartsCommon from '@/components/index/common/EchartsCommon';
 import SCard from '@/components/index/common/SCard';
 import STable from '@/components/index/common/STable';
 import TreeTable from '@/components/index/common/TreeTable';
 import treeTableMixin from '@/pages/index/common/treeTableMixin';
-import {
-    getChart2Data,
-    getChart3Data,
-    getChart4Data,
-} from '@/api/dataAnsis/assoAccountGroupMerge';
+// import {
+//     getChart2Data,
+//     getChart3Data,
+//     getChart4Data,
+// } from '@/api/dataAnsis/assoAccountGroupMerge';
 import chart1 from '../components/chart5';
 import chart2 from '../components/chart2';
 import chart3 from '../components/chart3';
 import chart4 from '../components/chart4';
-import {chartsBI, mainTableColumnsBI, chartTableColumns1, chartTableColumns2, chartTableColumns4, table3Options} from '../components/constants';
+import {chartsBI, mainTableColumnsBI, chartTableColumns5, chartTableColumns2, chartTableColumns4, table3Options} from '../components/constants';
 export default {
     components: {chart1, chart2, chart3, chart4, SCard, STable, TreeTable},
     mixins: [treeTableMixin],
@@ -102,7 +103,7 @@ export default {
             sceneCommitParams: {},
             accountIdPre: 'XG',
             charts: chartsBI,
-            chartTableColumns: [chartTableColumns1, chartTableColumns2, [], chartTableColumns4],
+            chartTableColumns: [chartTableColumns5, chartTableColumns2, [], chartTableColumns4],
             chartTableData: [[], [], [], []],
             resultIds: '',
             searchText: '',
@@ -136,30 +137,40 @@ export default {
                 });
             }
         },
+        // historyNetPoolCang
+        // historyIsWritten
+        // timeSharingWritten
         getBlock2Data() {
-            this.charts[1]['loading'] = true;
-            let params = this.commonReqParams();
-            getChart2Data(params).then(resp => {
-                this.charts[1]['loading'] = false;
-                this.drewChart2(resp);
-            });
+            // console.log(33 + '地址' + getBlock2Data1);
+            this.drewChart2(getBlock2Data1);
+            this.charts[1]['loading'] = false;
+            // this.charts[1]['loading'] = true;
+            // let params = this.commonReqParams();
+            // getChart2Data(params).then(resp => {
+            //     this.charts[1]['loading'] = false;
+            //     this.drewChart2(resp);
+            // });
         },
         getBlock3Data() {
-            this.charts[2]['loading'] = true;
-            let params = this.commonReqParams();
-            getChart3Data(params).then(resp => {
-                this.charts[2]['loading'] = false;
-                this.drewChart3(resp);
-            });
+            // this.charts[2]['loading'] = true;
+            this.drewChart3(getChart3Data2);
+            this.charts[2]['loading'] = false;
+            // let params = this.commonReqParams();
+            // getChart3Data(params).then(resp => {
+            //     this.charts[2]['loading'] = false;
+            //     this.drewChart3(resp);
+            // });
         },
         getBlock4Data(date) {
-            this.charts[3]['loading'] = true;
-            let params = this.commonReqParams();
-            params.txDt = date;
-            getChart4Data(params).then(resp => {
-                this.charts[3]['loading'] = false;
-                this.drewChart4(resp);
-            });
+            // this.charts[3]['loading'] = true;
+            this.drewChart4(getBlock4Data3);
+            this.charts[3]['loading'] = false;
+            // let params = this.commonReqParams();
+            // params.txDt = date;
+            // getChart4Data(params).then(resp => {
+            //     this.charts[3]['loading'] = false;
+            //     this.drewChart4(resp);
+            // });
         },
         handleEchartDblClickEvent(params, index) {
             console.log(params);
@@ -296,9 +307,10 @@ export default {
         // }
         // this.createChart3Columnn(this.currentCustIds);
         this.sceneCommitParams = this.$store.getters.sceneCommitParams;
-        if (Object.keys(this.sceneCommitParams).length) {
-            this.drewChart1();
-        }
+        // if (Object.keys(this.sceneCommitParams).length) {
+        //     this.drewChart1();
+        // }
+        this.drewChart1();
     }
 };
 </script>

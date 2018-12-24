@@ -61,6 +61,79 @@ export const chartTableColumns4 = [
     {label: '成交数量', field: 'bargainQtty', minWidth: 130},
     {label: '成交价格', field: 'bargainPrice', minWidth: 130}
 ];
+export const chartTableColumns5 = [ // 地址分析关系图明细字段
+    {label: '账户组号', field: 'custId', minWidth: 130, template: custIdColumn},
+    {label: '账户组客户编号', field: 'bizDir', minWidth: 100},
+    {label: '姓名相同', field: 'declBillTm2', minWidth: 140},
+    {label: '身份证相同', field: 'declBillQtty', minWidth: 130},
+    {label: '联系电话相同', field: 'declBillPrice', minWidth: 130},
+    {label: '联系地址相同', field: 'bargainDate', minWidth: 180},
+    {label: '邮编相同', field: 'bargainQtty', minWidth: 130},
+    {label: '工作单位相同', field: 'bargainPrice2', minWidth: 130},
+    {label: '电子邮件相同', field: 'bargainPrice3', minWidth: 130},
+    {label: '银行账号相同', field: 'bargainPrice4', minWidth: 130},
+    {label: '地址近似', field: 'bargainPrice5', minWidth: 130}
+];
+export const chartTableColumns6 = [ // 关系人分析关系图明细字段
+    {label: '账户组号', field: 'custId1', minWidth: 130, template: custIdColumn},
+    {label: '账户组客户编号', field: 'bizDir1', minWidth: 100},
+    {label: '同一投资经理', field: 'declBillTm1', minWidth: 140},
+    {label: '同一投资顾问', field: 'declBillQtty1', minWidth: 130},
+    {label: '同一权益持有人', field: 'declBillPrice1', minWidth: 130},
+    {label: '同一下单人', field: 'bargainDate1', minWidth: 180},
+    {label: '同一法人代表', field: 'bargainQtty1', minWidth: 130},
+    {label: '同一资金调拨人', field: 'bargainPrice12', minWidth: 130},
+    {label: '同一结算单确认人', field: 'bargainPrice13', minWidth: 130},
+    {label: '同一开户授权人', field: 'bargainPrice14', minWidth: 130}
+];
+export const chartTableColumns8 = [
+    {
+        'custId': 'XG000001',
+        'bizDir': 'cu1712',
+        'declBillTm2': '66842',
+        'declBillQtty': '13644',
+        'declBillPrice': '10000',
+        'bargainDate': '10000',
+        'bargainQtty': '10000',
+        'bargainPrice2': '10000',
+        'bargainPrice3': '地址',
+        'bargainPrice4': '客户信息',
+        'bargainPrice5': '玉田路',
+        'custId1': '53100',
+        'bizDir1': '70037',
+        'declBillTm1': '531003',
+        'declBillQtty1': '531003',
+        'declBillPrice1': '53100',
+        'bargainDate1': '531005',
+        'bargainQtty1': '531007',
+        'bargainPrice12': '53100',
+        'bargainPrice13': '53198',
+        'bargainPrice14': '2017-05-02',
+    },
+    {
+        'custId': 'XG000001',
+        'bizDir': 'cu1712',
+        'declBillTm2': '66842',
+        'declBillQtty': '13644',
+        'declBillPrice': '10000',
+        'bargainDate': '10000',
+        'bargainQtty': '10000',
+        'bargainPrice2': '10000',
+        'bargainPrice3': '地址',
+        'bargainPrice4': '客户信息',
+        'bargainPrice5': '玉田路',
+        'custId1': '53100',
+        'bizDir1': '70037',
+        'declBillTm1': '531003',
+        'declBillQtty1': '531003',
+        'declBillPrice1': '53100',
+        'bargainDate1': '531005',
+        'bargainQtty1': '531007',
+        'bargainPrice12': '53100',
+        'bargainPrice13': '53198',
+        'bargainPrice14': '2017-05-02',
+    }
+];
 // tree-相关性
 export const mainTableColumns = [
     {

@@ -5,7 +5,7 @@
 </template>
 <script>
 import EchartsCommon from '@/components/index/common/EchartsCommon';
-import {resData5} from './constants.js';
+import {resData5, chartTableColumns8} from './constants.js';
 import _ from 'lodash';
 export default {
     components: {EchartsCommon},
@@ -100,9 +100,10 @@ export default {
             this.chartOptions['series'][0]['links'] = chartData['links'];
             console.log(this.chartOptions);
             this.$store.commit('saveXGchart1', this.chartOptions);
-            this.$store.commit('saveChartTableData', [], this.index);
+            // this.$store.commit('saveChartTableData', [], this.index);
+            this.$store.commit('saveChartTableData', chartTableColumns8, this.index);
             this.$store.commit('saveMainTableData', mainTableData);
-            this.$emit('updateTableData', [], this.index);
+            this.$emit('updateTableData', chartTableColumns8, this.index);
             this.$emit('updateMainTableData', mainTableData, this.index);
             // select max
             // this.$emit('updateAccountGroupAndCustIds', selectMax ? selectMax.acctId : '', selectMax ? selectMax.custIds.split(',') : []);

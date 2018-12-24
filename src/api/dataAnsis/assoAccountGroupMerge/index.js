@@ -5,11 +5,11 @@ export const getChart2Data = params => {
 };
 // get chart3
 export const getChart3Data = params => {
-    return post(`${requestPrefix}/historyIsWritten`, params || {});
+    return post(`${requestPrefix}/historyIsWritten`, params || {}); // ?
 };
 // get chart4
 export const getChart4Data = params => {
-    return post(`${requestPrefix}/timeSharingWritten`, params || {});
+    return post(`${requestPrefix}/timeSharingWritten`, params || {}); // ?
 };
 // getExportResultSet
 export const getExportResultSet = params => {
