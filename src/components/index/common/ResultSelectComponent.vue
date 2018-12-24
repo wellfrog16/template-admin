@@ -15,6 +15,10 @@ export default {
         resultIdProps: {
             type: String,
             default: ''
+        },
+        filterTypes: {
+            type: [Number, String],
+            default: ''
         }
     },
     watch: {
@@ -45,7 +49,9 @@ export default {
             this.loading = true;
             getTlsResultInfo().then(resp => {
                 this.loading = false;
-                this.resultList = resp;
+                this.resultList = resp.filter(v => {
+                    return String(v.resultType) !== String(this.filterTypes);
+                });
                 this.$emit('getResultList', resp);
             }).catch(e => {
                 this.loading = false;

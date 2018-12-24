@@ -106,7 +106,7 @@ export default {
     },
     methods: {
         getData(resData) {
-            this.$store.commit('saveXGchart4', this.chartOptions);
+            // this.$store.commit('saveXGchart4', this.chartOptions);
             if (!Object.keys(resData).length) {
                 return;
             }
@@ -305,10 +305,10 @@ export default {
         }
     },
     mounted() {
-        let storeData = this.$store.getters.getXGchart4;
-        if (storeData && Object.keys(storeData).length) {
-            this.initChart(true, storeData);
-        }
+        // let storeData = this.$store.getters.getXGchart4;
+        // if (storeData && Object.keys(storeData).length) {
+        //     this.initChart(true, storeData);
+        // }
     }
 };
 </script>

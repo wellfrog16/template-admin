@@ -31,7 +31,7 @@
             </el-row>
         </s-card>
         <div style="margin-top:8px; text-align:right;">
-            <el-button size="small" type="primary" :disabled="disabled" @click="syntaxCheck">语法检查</el-button>
+            <el-button size="small" type="primary" :disabled="disabled" @click="syntaxCheck()">语法检查</el-button>
         </div>
     </div>
 </template>

@@ -2,7 +2,7 @@
     <div class="edit-scene-dialog">
         <s-card :title="`指标选择`">
             <div slot="content">
-                <index-param :operateType="operateType" :createType="createType" :dialogItem="dialogItem" :disabled="disabled" @updateIndexPara="updateIndexPara"></index-param>
+                <index-param ref="indexParamRef" :operateType="operateType" :createType="createType" :dialogItem="dialogItem" :disabled="disabled" @updateIndexPara="updateIndexPara"></index-param>
                 <el-row style="margin-top:10px; text-align:center;">
                     <el-input :disabled="disabled" :clearable="!disabled" style="margin-right: 5px;" size="small" v-model="ruleForm.sceneName" placeholder="请输入场景名称" class="custom-width"></el-input>
                     <el-input :disabled="disabled" :clearable="!disabled" style="margin-right: 5px;" size="small" v-model="ruleForm.sceneComnt" placeholder="请输入场景说明" class="custom-width"></el-input>
@@ -15,6 +15,7 @@
 <script>
 import IndexParam from './IndexParam';
 import SCard from '@/components/index/common/SCard';
+import {defaultConfig} from './constants';
 
 export default {
     components: {SCard, IndexParam},
@@ -34,6 +35,11 @@ export default {
             }
         }
     },
+    watch: {
+        dialogItem() {
+            this.setRuleForm();
+        }
+    },
     computed: {
         disabled() {
             return String(this.operateType) === '1';
@@ -41,19 +47,30 @@ export default {
     },
     data() {
         return {
+            defaultConfig,
             ruleForm: {
-                sceneType: '', // 场景类型
+                sceneType: this.createType, // 场景类型
                 isDel: '1', // 可以删除
                 sceneId: '', // 场景id
                 sceneComnt: '', // 场景说明
                 sceneName: '', // 场景名称
-                indexPara: '' // 指数内容
+                indexPara: defaultConfig.indexPara // 指数内容
             }
         };
     },
     methods: {
         updateIndexPara(val) {
             this.ruleForm.indexPara = val;
+        },
+        setRuleForm() {
+            this.ruleForm = {
+                isDel: this.dialogItem.isDel,
+                sceneType: this.createType,
+                sceneId: this.dialogItem.sceneId || '',
+                sceneComnt: this.dialogItem.sceneComnt || '', // 场景说明
+                sceneName: this.dialogItem.sceneName || '', // 场景名称
+                indexPara: this.dialogItem.sceneId ? this.dialogItem.indexPara : this.defaultConfig.indexPara // 统计频度
+            };
         },
         saveSceneConfig() {
             if (!this.ruleForm.sceneName) {
@@ -65,16 +82,13 @@ export default {
                 return;
             }
             // 语法校验
-            this.syntaxCheck(() => {
-                this.$refs['ruleForm'].validate(valid => {
-                    if (valid) {
-                        this.$emit('saveScene', this.ruleForm);
-                    }
-                });
+            this.$refs['indexParamRef'].syntaxCheck(() => {
+                this.$emit('saveScene', this.ruleForm);
             });
         }
     },
     mounted() {
+        this.setRuleForm();
     }
 };
 </script>

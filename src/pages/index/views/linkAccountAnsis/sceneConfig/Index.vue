@@ -389,6 +389,11 @@ export default {
             // 导入csv
             this.loading = true;
             this.$store.commit('saveSceneCommitParams', params);
+            // test;
+            if (params.resultType !== 1) {
+                this.$router.push({name: 'assoAccountGroupMerge'});
+                return;
+            }
             if (this.ruleForm.exportType === '1') {
                 this.uploadParams = {...this.uploadParams, ...params};
                 this.$nextTick(() => {
