@@ -11,31 +11,34 @@
                 style="width: 100%;">
                 <el-table-column type="expand" class="expanded">
                     <template>
-                        <el-tree
-                            ref="tree-table"
-                            class="tree-table"
-                            show-checkbox
-                            node-key="id"
-                            :data="tableData"
-                            :filter-node-method="filterMethods"
-                            @check-change="handleTreeCheckedChange"
-                            :expand-on-click-node="false">
-                            <span class="custom-tree-node" slot-scope="{ node, data }">
-                                <div v-for="(item, index) in columns" :key="index" style="text-align: center;">
-                                    <el-popover placement="top-end" trigger="hover" :disabled="index < 5" width="200">
-                                        <div>
-                                            <p v-if="data.acctId" style="margin:0;">账户组号：{{ data.acctId }}</p>
-                                            <p v-if="data.custId" style="margin:0;">客户编号：{{ data.custId }}</p>
-                                            <p v-if="data.custId" style="margin:0; white-space:normal; word-break:break-all;">{{ columns[index]['label'] }}：{{ (data[item.field] === null || data[item.field] === undefined) ?  '' :  data[item.field] }}</p>
+                        <div dir="rtl" class="tree-table">
+                            <div dir="ltr">
+                                <el-tree
+                                    ref="tree-table"
+                                    show-checkbox
+                                    node-key="id"
+                                    :data="tableData"
+                                    :filter-node-method="filterMethods"
+                                    @check-change="handleTreeCheckedChange"
+                                    :expand-on-click-node="false">
+                                    <span class="custom-tree-node" slot-scope="{ node, data }">
+                                        <div v-for="(item, index) in columns" :key="index" style="text-align: center;">
+                                            <el-popover placement="top-end" trigger="hover" :disabled="index < 5" width="200">
+                                                <div>
+                                                    <p v-if="data.acctId" style="margin:0;">账户组号：{{ data.acctId }}</p>
+                                                    <p v-if="data.custId" style="margin:0;">客户编号：{{ data.custId }}</p>
+                                                    <p v-if="data.custId" style="margin:0; white-space:normal; word-break:break-all;">{{ columns[index]['label'] }}：{{ (data[item.field] === null || data[item.field] === undefined) ?  '' :  data[item.field] }}</p>
+                                                </div>
+                                                <span slot="reference">
+                                                    <span v-if="item.field !== 'custId'" style="width: 135px; text-overflow: ellipsis; overflow: hidden; display: inline-block; margin: 0;">{{ (data[item.field] === null || data[item.field] === undefined) ?  '' :  data[item.field] }}</span>
+                                                    <custIdColumn v-else :scope="{row: data}" style="text-align:center;"></custIdColumn>
+                                                </span>
+                                            </el-popover>
                                         </div>
-                                        <span slot="reference">
-                                            <span v-if="item.field !== 'custId'" style="width: 135px; text-overflow: ellipsis; overflow: hidden; display: inline-block; margin: 0;">{{ (data[item.field] === null || data[item.field] === undefined) ?  '' :  data[item.field] }}</span>
-                                            <custIdColumn v-else :scope="{row: data}" style="text-align:center;"></custIdColumn>
-                                        </span>
-                                    </el-popover>
-                                </div>
-                            </span>
-                        </el-tree>
+                                    </span>
+                                </el-tree>
+                            </div>
+                        </div>
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -203,10 +206,22 @@ export default {
         }
 
         .tree-table {
-            color: #fff;
             min-width: 1060px;
             height: 337px;
             overflow: auto;
+            position: relative;
+            // 滚动条
+            ::-webkit-scrollbar {
+                position: absolute;
+                left: 0;
+            }
+            ::-webkit-scrollbar-thumb {
+               position: absolute;
+                left: 0;
+            }
+            .el-tree {
+                color: #fff;
+            }
             .custom-tree-node {
                 flex: 1;
                 display: flex;

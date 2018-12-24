@@ -15,7 +15,7 @@
 <script>
 import IndexParam from './IndexParam';
 import SCard from '@/components/index/common/SCard';
-import {checkSql} from '@/api/dataAnsis/sceneConfig';
+import {defaultConfig} from './constants';
 
 export default {
     components: {SCard, IndexParam},
@@ -35,6 +35,11 @@ export default {
             }
         }
     },
+    watch: {
+        dialogItem() {
+            this.setRuleForm();
+        }
+    },
     computed: {
         disabled() {
             return String(this.operateType) === '1';
@@ -43,12 +48,13 @@ export default {
     data() {
         return {
             ruleForm: {
-                sceneType: '', // 场景类型
+                defaultConfig,
+                sceneType: this.createType, // 场景类型
                 isDel: '1', // 可以删除
                 sceneId: '', // 场景id
                 sceneComnt: '', // 场景说明
                 sceneName: '', // 场景名称
-                indexPara: '' // 指数内容
+                indexPara: defaultConfig.indexPara // 指数内容
             }
         };
     },
@@ -56,26 +62,15 @@ export default {
         updateIndexPara(val) {
             this.ruleForm.indexPara = val;
         },
-        syntaxCheck(callback) {
-            let reg = /^[0-9]+$/;
-            let flag = false;
-            let tableData = this.$refs['indexParamRef'].tableData;
-            tableData.forEach(v => {
-                if (!reg.test(v.indexValue) || v.indexValue > 100) {
-                    flag = true;
-                }
-            });
-            if (flag) {
-                this.$message.error('指标值请输入小于100的正整数');
-                return;
-            }
-            checkSql(this.ruleForm.indexPara).then(resp => {
-                if (resp.success) {
-                    callback && callback();
-                } else {
-                    this.$message.error('请插入正确的指标');
-                }
-            });
+        setRuleForm() {
+            this.ruleForm = {
+                isDel: this.dialogItem.isDel,
+                sceneType: this.createType,
+                sceneId: this.dialogItem.sceneId || '',
+                sceneComnt: this.dialogItem.sceneComnt || '', // 场景说明
+                sceneName: this.dialogItem.sceneName || '', // 场景名称
+                indexPara: this.dialogItem.sceneId ? this.dialogItem.indexPara : this.defaultConfig.indexPara // 统计频度
+            };
         },
         saveSceneConfig() {
             if (!this.ruleForm.sceneName) {
@@ -87,16 +82,13 @@ export default {
                 return;
             }
             // 语法校验
-            this.syntaxCheck(() => {
-                this.$refs['ruleForm'].validate(valid => {
-                    if (valid) {
-                        this.$emit('saveScene', this.ruleForm);
-                    }
-                });
+            this.$refs['indexParamRef'].syntaxCheck(() => {
+                this.$emit('saveScene', this.ruleForm);
             });
         }
     },
     mounted() {
+        this.setRuleForm();
     }
 };
 </script>

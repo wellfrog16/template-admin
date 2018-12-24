@@ -47,9 +47,9 @@ export default {
             this.echart.setOption(this.defaultOption);
             window.onresize = this.echart.resize;
             /* 解除绑定事件 */
-            this.echart.off('click');
-            this.echart.off('dblclick');
-            this.echart.off('brushselected');
+            this.echart && this.echart.off('click');
+            this.echart && this.echart.off('dblclick');
+            this.echart && this.echart.off('brushselected');
             /* 绑定单击事件 */
             let timeFn = null;
             this.echart.on('click', params => {
@@ -90,9 +90,9 @@ export default {
         });
     },
     beforeDestroy() {
-        this.echart.off('click');
-        this.echart.off('dblclick');
-        this.echart.off('brushselected');
+        this.echart && this.echart.off('click');
+        this.echart && this.echart.off('dblclick');
+        this.echart && this.echart.off('brushselected');
     }
 };
 </script>

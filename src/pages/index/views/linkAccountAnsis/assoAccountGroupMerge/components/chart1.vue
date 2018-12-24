@@ -159,7 +159,7 @@ export default {
     },
     methods: {
         getData() {
-            this.$store.commit('saveXGchart1', this.chartOptions);
+            // this.$store.commit('saveXGchart1', this.chartOptions);
             let resData = this.$store.getters.sceneCommitResp;
             // resData = resData1;
             if (!Object.keys(resData).length) {
@@ -237,10 +237,10 @@ export default {
         }
     },
     mounted() {
-        let storeData = this.$store.getters.getXGchart1;
-        if (storeData && Object.keys(storeData).length) {
-            this.initChart(true, storeData);
-        }
+        // let storeData = this.$store.getters.getXGchart1;
+        // if (storeData && Object.keys(storeData).length) {
+        //     this.initChart(true, storeData);
+        // }
     }
 };
 </script>

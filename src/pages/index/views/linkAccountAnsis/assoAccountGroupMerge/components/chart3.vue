@@ -387,7 +387,7 @@ export default {
         },
         getData(resp) {
             // this.test();
-            this.$store.commit('saveXGchart3', this.chartOptions);
+            // this.$store.commit('saveXGchart3', this.chartOptions);
             let {mainData, tableData} = resp;
             if (mainData && !mainData.length) {
                 return;
@@ -451,7 +451,7 @@ export default {
         getAssoCharts(flag) {
             if (!flag) {
                 this.$nextTick(() => {
-                    this.$emit('getBlock4Data', this.selectMax.txDt);
+                    this.$emit('getBlock4Data', this.selectMax ? this.selectMax.txDt : '2017-06-02');
                 });
             }
         },
@@ -463,10 +463,10 @@ export default {
         }
     },
     mounted() {
-        let storeData = this.$store.getters.getXGchart3;
-        if (storeData && Object.keys(storeData).length) {
-            this.initChart(true, storeData);
-        }
+        // let storeData = this.$store.getters.getXGchart3;
+        // if (storeData && Object.keys(storeData).length) {
+        //     this.initChart(true, storeData);
+        // }
     }
 };
 </script>

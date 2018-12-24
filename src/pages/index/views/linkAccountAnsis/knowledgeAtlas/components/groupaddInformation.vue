@@ -78,39 +78,35 @@
                         <el-col :span="3">
                             <div :class="$style.operate_button_group">
                                 <el-button
-                                    style="padding: 9px 39px;"
-                                    :class="$style.operate_button_group"
+                                    :class="[$style.operate_button_group, 'self-width']"
                                     type="danger"
                                     size="small"
                                     @click="handleDelete"
                                 >删除</el-button>
                                 <br>
                                 <el-button
-                                    style="padding: 9px 39px;"
-                                    :class="$style.operate_button_group"
+                                    :class="[$style.operate_button_group, 'self-width']"
                                     type="warning"
                                     size="small"
                                     @click="handleSplit"
                                 >拆分</el-button>
                                 <br>
                                 <el-button
-                                    style="padding: 9px 39px;"
-                                    :class="$style.operate_button_group"
+                                    :class="[$style.operate_button_group, 'self-width']"
                                     type="warning"
                                     size="small"
                                     @click="handleMerge"
                                 >合并</el-button>
                                 <br>
                                 <el-button
-                                    :class="$style.operate_button_group"
+                                    :class="[$style.operate_button_group, 'self-width']"
                                     type="primary"
                                     size="small"
                                     @click="handleExportResult()"
                                 >导出到结果集</el-button>
                                 <br>
                                 <el-button
-                                    style="padding: 9px 24px;"
-                                    :class="$style.operate_button_group"
+                                    :class="[$style.operate_button_group, 'self-width']"
                                     type="primary"
                                     size="small"
                                     @click="handleExportCsv('账户组信息', mainTableColumns)"

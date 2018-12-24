@@ -45,6 +45,38 @@ const Index = {
                     icon: 'menu-fix-icon fa fa-venus-double',
                     component: resolve => require(['@/pages/index/views/linkAccountAnsis/assoAccountGroupMerge/Index.vue'], resolve)
                 },
+                /* {
+                    meta: 'scrollTop',
+                    path: 'assoAccountGroupMergeXG',
+                    name: 'assoAccountGroupMergeXG',
+                    label: '账户组-相关性',
+                    icon: 'menu-fix-icon fa fa-venus-double',
+                    component: resolve => require(['@/pages/index/views/linkAccountAnsis/assoAccountGroupMerge/assoAccountGroupMergeXG/Index.vue'], resolve)
+                },
+                {
+                    meta: 'scrollTop',
+                    path: 'assoAccountGroupMergeBV',
+                    name: 'assoAccountGroupMergeBV',
+                    label: '账户组-行为分析',
+                    icon: 'menu-fix-icon fa fa-venus-double',
+                    component: resolve => require(['@/pages/index/views/linkAccountAnsis/assoAccountGroupMerge/assoAccountGroupMergeBV/Index.vue'], resolve)
+                },
+                {
+                    meta: 'scrollTop',
+                    path: 'assoAccountGroupMergeBI',
+                    name: 'assoAccountGroupMergeBI',
+                    label: '账户组-基本信息',
+                    icon: 'menu-fix-icon fa fa-venus-double',
+                    component: resolve => require(['@/pages/index/views/linkAccountAnsis/assoAccountGroupMerge/assoAccountGroupMergeBI/Index.vue'], resolve)
+                },
+                {
+                    meta: 'scrollTop',
+                    path: 'assoAccountGroupMergeRL',
+                    name: 'assoAccountGroupMergeRL',
+                    label: '账户组-关系人',
+                    icon: 'menu-fix-icon fa fa-venus-double',
+                    component: resolve => require(['@/pages/index/views/linkAccountAnsis/assoAccountGroupMerge/assoAccountGroupMergeRL/Index.vue'], resolve)
+                }, */
                 {
                     meta: 'scrollTop',
                     path: 'abnormity',

@@ -155,12 +155,12 @@ export default {
                 if (params.resultType === '5') {
                     params.resultListSyn = this.dealMainData();
                 }
-                this.fullLoading = true;
+                this.$emit('updateFullLoading', true);
                 exportResultSet(params).then(resp => {
                     console.log(resp);
-                    this.fullLoading = false;
+                    this.$emit('updateFullLoading', false);
                     if (this.$route.name === 'assoAccountGroupMerge') {
-                        this.updateResultList();
+                        this.$emit('updateResultList');
                     }
                 });
             }).catch(() => {});
