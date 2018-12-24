@@ -291,15 +291,7 @@ export default {
                     "tableData": tableData
                 };
                 this.gfnExportFileWithForm(params);
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-            }
-        },
+            },
         // 导出CSV
         exporstClick() {
             let fileName = '';

@@ -37,7 +37,7 @@
                 </div>
                 <div class="bottom-content">
                     <div class="div1">研究支撑平台</div>
-                    <div class="div2">监管科技工具集</div>
+                    <div class="div2" @click="cardClick">监管科技工具集</div>
                     <div class="div3">国际化应用</div>
                     <div class="div4">行业应用</div>
                 </div>
@@ -71,6 +71,7 @@ import {getAccessToken} from '@/api/login';
 export default {
     data() {
         return {
+            loginFlag: false,
             showLoginDialog: false,
             fullScreenLoading: false,
             ruleForm: {
@@ -87,7 +88,12 @@ export default {
             this.showLoginDialog = false;
         },
         handleLogin() {
-            this.showLoginDialog = !this.showLoginDialog;
+            if (this.loginFlag === true) {
+                this.showLoginDialog = false;
+                this.$message.error('您已登陆!');
+            } else {
+                this.showLoginDialog = true;
+            }
         },
         handleCancle() {
             this.handleCloseDialog();
@@ -101,6 +107,7 @@ export default {
             });
         },
         getLogin() {
+            this.mainContent = true;
             let params = {
                 username: this.ruleForm.userName.toLowerCase(),
                 password: this.ruleForm.password
@@ -110,8 +117,17 @@ export default {
                 localStorage.setItem('ACCESS_TOKEN', resp.access_token);
                 localStorage.setItem('USER_NAME', params.username);
                 this.$store.commit('saveAccessToken', resp.access_token);
-                this.$router.push({path: '/sceneConfig'});
+                // this.$router.push({path: '/sceneConfig'});
+                this.loginFlag = true;
+                this.showLoginDialog = false;
             });
+        },
+        cardClick() {
+            if (this.loginFlag === true) {
+                this.$router.push({name: 'toolsHome'});
+            } else {
+                this.$message.error('您还未登录!');
+            }
         }
     }
 };

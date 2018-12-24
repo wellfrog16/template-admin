@@ -24,10 +24,10 @@ const Index = {
                     meta: 'scrollTop',
                     path: '/',
                     hidden: true,
-                    name: 'sceneConfig',
-                    label: '分析向导',
+                    name: 'toolsHome',
+                    label: '监管科技工具集',
                     icon: 'menu-fix-icon fa fa-location-arrow',
-                    component: resolve => require(['@/pages/index/views/linkAccountAnsis/sceneConfig/Index.vue'], resolve)
+                    component: resolve => require(['@/pages/index/views/linkAccountAnsis/Home.vue'], resolve)
                 },
                 {
                     meta: 'scrollTop',
