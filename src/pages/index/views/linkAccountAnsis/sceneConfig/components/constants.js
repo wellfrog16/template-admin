@@ -16,9 +16,11 @@ export const accountTotalTypeOptions = [
     {label: '按报单数', value: '3'}
 ];
 export const accountTotalFrepOptions = [
+    {label: '五分钟', value: '4'},
+    {label: '一小时', value: '5'},
     {label: '一日', value: '1'},
     {label: '两日', value: '2'},
-    {label: '一周', value: '3'}
+    {label: '一周', value: '3'},
 ];
 export const sfOptions = [
     {label: '谱聚类', value: '1'},

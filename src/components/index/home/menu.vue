@@ -17,19 +17,19 @@
             <!-- 无二级子节点 -->
             <el-menu-item v-if="!item.children && !item.hidden" :index="item.name" :key="index">
                 <i :class="item.icon"></i>
-                <span slot="title">{{ item.label }}</span>
+                <span slot="title">{{ item.meta.title }}</span>
             </el-menu-item>
 
             <!-- 有二级子节点 -->
             <el-submenu v-if="item.children && !item.hidden" :index="item.name" :key="index">
                 <template slot="title">
                     <i :class="item.icon"></i>
-                    <span>{{ item.label }}</span>
+                    <span>{{ item.meta.title }}</span>
                 </template>
                 <template v-for="(item1, index1) in item.children">
                     <!-- 无三级菜单 -->
                     <el-menu-item v-if="!item1.children && !item.hidden" :index="item1.name" :key="index1">
-                        <i :class="item1.icon"></i>{{ item1.label }}
+                        <i :class="item1.icon"></i>{{ item1.meta.title }}
                     </el-menu-item>
 
                     <!-- 有三级菜单 -->
@@ -37,14 +37,14 @@
                         <el-submenu :index="item1.name" :key="index1">
                             <template slot="title">
                                 <i :class="item1.icon"></i>
-                                <span>{{ item1.label }}</span>
+                                <span>{{ item1.meta.title }}</span>
                             </template>
                             <el-menu-item
                                 v-show="!item2.hidden"
                                 v-for="(item2, index2) in item1.children"
                                 :index="item2.name"
                                 :key="index2">
-                                <i :class="item2.icon"></i>{{ item2.label }}
+                                <i :class="item2.icon"></i>{{ item2.meta.title }}
                             </el-menu-item>
                         </el-submenu>
                     </template>

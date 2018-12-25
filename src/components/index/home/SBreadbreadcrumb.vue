@@ -8,7 +8,7 @@
                 :to="{path: item.path}"
                 :key="index">
                 <span :class="$style.brliet">
-                    {{ item.label }}
+                    {{ item.meta.title }}
                 </span>
             </el-breadcrumb-item>
         </el-breadcrumb>
