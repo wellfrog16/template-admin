@@ -316,6 +316,7 @@ export default {
             // this.formDataList = params; // 生成协查报告的参数
             this.$store.commit('momentMut', params); // tab 参数
         },
+<<<<<<< Updated upstream
         // 选择结果集的按钮 -- 二选一
         resultChange(val) {
             if (val) {
@@ -323,6 +324,64 @@ export default {
                     this.ruleForm.exportType = '0';
                     if (this.ruleForm.fileList && this.ruleForm.fileList.length !== 0) {
                         this.ruleForm.fileList = [];
+=======
+        methods: {
+            //  结果集列表
+            getResultList() {
+                this.fullScreenLoading = true;
+                postTlsResultInfo().then(resp => {
+                    this.fullScreenLoading = false;
+                    this.resultList = resp;
+                }).catch(e => {
+                    this.fullScreenLoading = false;
+                });
+            },
+
+            // 底部导出CSV按钮
+            exportClick1(fileName, tableColumns) {
+                if(this.tableData && !this.tableData.length){
+                    this.$message.error('协查报告暂无数据!');
+                    return;
+                }
+                let params = {
+                    "fileName": fileName || '测试',
+                    "tableColumns": tableColumns,
+                    "tableData": this.tableData
+                };
+                this.gfnExportFileWithForm(params);
+            },
+            // 底部上一步按钮
+            backClick1() {
+            },
+
+            // 统计区间事件
+            handleSdatePickerDateRangeChange(val) {
+                this.ruleForm.selectDateRange = val;
+            },
+            // 导入CSV (添加附件成功)
+            currentFileList(fileList) {
+                this.ruleForm.fileList = fileList;
+                this.ruleForm.exportType = '1';
+            },
+            // 导入CSV
+            handleUploadSuccess(resp) {
+                let params = {
+                    contrCode: this.ruleForm.contractCode,             // 合约代码
+                    statTimeBegin: moment(this.ruleForm.selectDateRange[0]).format('YYYY-MM-DD'), // 统计起始日
+                    statTimeEnd: moment(this.ruleForm.selectDateRange[1]).format('YYYY-MM-DD'),  // 统计截止日
+                    resultSetNo: this.ruleForm.resultId                // 结果集编号
+                };
+                this.dealWithIsLoading = false;
+                this.tableData = resp.report;  // 协查报告数据
+                this.tablePaneList = resp;    // tab 表格数据
+                this.formDataList = params; // 生成协查报告的参数
+            },
+            // 选择结果集的按钮 -- 二选一
+            resultChange(val) {
+                if (val) {
+                    if (this.ruleForm.exportType !== '0') {
+                        this.ruleForm.exportType = '0'
+>>>>>>> Stashed changes
                     }
                 }
             } else {
