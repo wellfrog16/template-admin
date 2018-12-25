@@ -65,7 +65,6 @@ router.beforeEach((to, from, next) => {
     if (to.name === 'login') {
         next();
     } else {
-        console.log(to);
         document.title = to.meta.title || '上期所大数据监管科技平台';
         // 权限校验等
         let accessToken = localStorage.getItem('ACCESS_TOKEN');
@@ -83,6 +82,6 @@ router.beforeEach((to, from, next) => {
     }
 });
 router.afterEach((to, from, next) => {
-    // Vue.prototype.$jquery('#main-container').scrollTop(0);
+    Vue.prototype.$jquery('#main-container').scrollTop(0);
 });
 export default router;
