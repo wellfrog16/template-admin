@@ -390,7 +390,7 @@ export default {
             this.loading = true;
             this.$store.commit('saveSceneCommitParams', params);
             // test;
-            if (params.resultType !== 1) {
+            if (String(params.sceneTypes) !== '1') {
                 this.$router.push({name: 'assoAccountGroupMerge'});
                 return;
             }
