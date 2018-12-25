@@ -210,14 +210,6 @@ export default {
             height: 337px;
             overflow: auto;
             position: relative;
-            ::-webkit-scrollbar {
-                position: absolute;
-                left: 0;
-            }
-            ::-webkit-scrollbar-thumb {
-                position: absolute;
-                left: 0;
-            }
             .el-tree {
                 color: #fff;
             }

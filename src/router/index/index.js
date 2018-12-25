@@ -29,12 +29,11 @@ const Index = {
                 {
                     meta: {
                         scrollTop: true,
-                        title: '监管科技工具集'
+                        title: '首页'
                     },
                     path: '/',
-                    hidden: true,
                     name: 'toolsHome',
-                    icon: 'menu-fix-icon fa fa-location-arrow',
+                    icon: 'menu-fix-icon fa fa-home',
                     component: resolve => require(['@/pages/index/views/linkAccountAnsis/Home.vue'], resolve)
                 },
                 {

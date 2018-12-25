@@ -374,7 +374,7 @@ export const mainTableColumnsRL = [
     },
     {
         field: '',
-        label: '托（保）管机构联系人',
+        label: '托(保)管机构联系人',
         align: 'center'
     },
     {
