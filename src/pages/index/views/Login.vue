@@ -5,9 +5,21 @@
                 <div class="logo">
                     <img src="../../../assets/img/usr/login/logo.png" alt="">
                 </div>
-                <div class="login-btn" @click="handleLogin">
+                <div class="login-btn" @click="handleLogin" v-if="!loginFlag">
                     <el-button type="primary">登录</el-button>
                     <!-- <img src="../../../assets/img/usr/login/login.png" alt=""><span>登录</span> -->
+
+                </div>
+                <div class="top_container" v-else>
+                    <el-tooltip class="item" effect="dark" placement="bottom">
+                        <div class="user_img"><i class="fa fa-user"></i></div>
+                        <div slot="content">{{ ruleForm.userName }}</div>
+                    </el-tooltip>
+                    <div class="user_name">欢迎您登陆！{{ ruleForm.userName }}</div>
+                    <el-tooltip class="item" effect="dark" placement="bottom">
+                        <div class="login_out" @click="handleLoginOut"><i class="fa fa-sign-out-alt"></i></div>
+                        <div slot="content">登出</div>
+                    </el-tooltip>
                 </div>
             </div>
         </div>
@@ -128,6 +140,12 @@ export default {
             } else {
                 this.$message.error('您还未登录!');
             }
+        },
+        handleLoginOut() {
+            this.loginFlag = false;
+            localStorage.removeItem('ACCESS_TOKEN');
+            localStorage.removeItem('USER_NAME');
+            this.$message.success('登出成功');
         }
     }
 };
@@ -139,6 +157,41 @@ export default {
         height: 100%;
         color: #fff;
         position: relative;
+        .top_container {
+            height: 60px;
+            display: flex;
+            line-height: 60px;
+            justify-content: flex-end;
+            align-items: center;
+            color: #00cfff;
+            .user_img {
+                border-radius: 50%;
+                width: 45px;
+                height: 45px;
+                background: rgba(255, 255, 255, 0.5);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                cursor: pointer;
+                i {
+                    font-size: 16px;
+                }
+            }
+            .user_name {
+                margin-left: 5px;
+            }
+            .login_out {
+                margin-left: 25px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                i {
+                    font-size: 24px;
+                }
+            }
+        }
         .main-width {
             max-width: 1280px;
             margin: 0 auto;

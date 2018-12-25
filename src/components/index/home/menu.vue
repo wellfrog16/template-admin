@@ -89,6 +89,7 @@ export default {
             localStorage.removeItem('ACCESS_TOKEN');
             localStorage.removeItem('USER_NAME');
             this.$router.push({name: 'login'});
+            this.$message.success('登出成功');
         }
     }
 };
