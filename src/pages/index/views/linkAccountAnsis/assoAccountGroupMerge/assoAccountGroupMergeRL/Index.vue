@@ -99,28 +99,18 @@ export default {
         return {
             table3Options,
             mainTableColumnsRL,
-            fullLoading: false,
             sceneCommitParams: {},
             accountIdPre: 'XG',
             charts: chartsRL,
             chartTableColumns: [chartTableColumns6, chartTableColumns2, [], chartTableColumns4],
-            activeTab: '0',
-            tabs: ['场景名称1', '场景名称2'],
             chartTableData: [[], [], [], []],
             resultIds: '',
             searchText: '',
             currentAccountGroupId: '',
             currentCustIds: [], // 当前账户组下的客户号
             table3CurrentType: 'buyCnt',
-            testTableData: [],
-            pagination: {pageIndex: 1, pageRows: 10},
             computedCommonReqParams: {}
         };
-    },
-    computed: {
-        sceneNameList() {
-            return this.sceneCommitParams.sceneNames ? this.sceneCommitParams.sceneNames.split(',') : [];
-        }
     },
     methods: {
         updateAccountGroupAndCustIds(groupId, custIds) {
@@ -136,9 +126,6 @@ export default {
             this.chartTableData[index] = value;
             // test
             localStorage.setItem('CHART_TABLE_DATA', JSON.stringify(this.chartTableData));
-        },
-        handleTabClick(tab) {
-            this.activeTab = tab.name;
         },
         toggleDetail(item, index) {
             this.charts[index]['toggleDetailFlags'] = !item.toggleDetailFlags;
