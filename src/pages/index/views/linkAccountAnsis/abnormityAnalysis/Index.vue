@@ -155,9 +155,7 @@
     </div>
 </template>
 <script>
-import {tableColumns1, tableColumns2, tableColumns3} from '../abnormityAnalysis/components/constants';
-import {tableColumns} from '../abnormityAnalysis/components/constants';
-import MixinVue from './components/MixinsTable';
+import {tableColumns, tableColumns1, tableColumns2, tableColumns3} from '../abnormityAnalysis/components/constants';
 import SCard from '@/components/index/common/SCard';
 import STable from '@/components/index/common/STable';
 import UploadFileToServer from '@/components/index/common/UploadFileToServer'; // 导入CSV
@@ -190,7 +188,7 @@ export default {
         ECharts2,
         ECharts3,
     },
-    mixins: [MixinVue],
+    mixins: [],
     data() {
         return {
             loading1: false,
