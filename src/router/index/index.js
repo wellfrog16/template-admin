@@ -31,7 +31,18 @@ const Index = {
                         scrollTop: true,
                         title: '首页'
                     },
+                    hidden: true,
                     path: '/',
+                    name: 'toolsHome',
+                    icon: 'menu-fix-icon fa fa-home',
+                    component: resolve => require(['@/pages/index/views/linkAccountAnsis/Home.vue'], resolve)
+                },
+                {
+                    meta: {
+                        scrollTop: true,
+                        title: '首页'
+                    },
+                    path: '/toolsHome',
                     name: 'toolsHome',
                     icon: 'menu-fix-icon fa fa-home',
                     component: resolve => require(['@/pages/index/views/linkAccountAnsis/Home.vue'], resolve)
