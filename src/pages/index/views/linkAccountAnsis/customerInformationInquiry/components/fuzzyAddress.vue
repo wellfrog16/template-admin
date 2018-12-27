@@ -12,6 +12,7 @@
                                 class="custom-width"
                                 size="small"
                                 clearable
+                                @change="nationyChenge"
                                 placeholder="请选择国家"
                             >
                                 <el-option
@@ -161,13 +162,16 @@ export default {
         };
     },
     methods: {
+        nationyChenge(val) {
+            this.ruleForm.nationy = val;
+        },
         // 模糊地址(接口)
         fuzzyAddressData() {
             postFuzzyAddressData().then(resp => {
                 let data = [
                     {
-                        label: '中国',
-                        id: '0',
+                        name: '中国',
+                        idName: '0',
                         children: resp
                     }
                 ];

@@ -186,7 +186,7 @@ export default {
         ATable3,
         ECharts1,
         ECharts2,
-        ECharts3,
+        ECharts3
     },
     mixins: [],
     data() {
