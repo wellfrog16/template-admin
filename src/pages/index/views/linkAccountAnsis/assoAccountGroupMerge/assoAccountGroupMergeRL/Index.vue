@@ -51,7 +51,7 @@
                                 <br>
                                 <el-button type="warning" size="small" @click="handleMerge" class="self-width">合并</el-button>
                                 <br>
-                                <el-button type="primary" size="small" @click="handleExportResult('1')">导出到结果集</el-button>
+                                <el-button type="primary" size="small" @click="handleExportResult('4')">导出到结果集</el-button>
                                 <br>
                                 <el-button type="primary" size="small" class="self-width" @click="handleExportCsv('账户组信息', mainTableColumnsRL)">导出到csv</el-button>
                                 <br>

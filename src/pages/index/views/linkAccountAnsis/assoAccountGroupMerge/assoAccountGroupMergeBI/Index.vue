@@ -51,7 +51,7 @@
                                 <br>
                                 <el-button type="warning" size="small" @click="handleMerge" class="self-width">合并</el-button>
                                 <br>
-                                <el-button type="primary" size="small" @click="handleExportResult('1')">导出到结果集</el-button>
+                                <el-button type="primary" size="small" @click="handleExportResult('3')">导出到结果集</el-button>
                                 <br>
                                 <el-button type="primary" size="small" class="self-width" @click="handleExportCsv('账户组信息', mainTableColumnsBI)">导出到csv</el-button>
                                 <br>
@@ -255,7 +255,7 @@ export default {
             }
             let resData = this.$store.getters.sceneCommitResp[this.tabIndex];
             // resData = resData1;
-            let {resultSetList, kmap} = resData;
+            let {resultSetList, kmap, chartDataList} = resData;
             if (resultSetList && !resultSetList.length) {
                 return {
                     chartData: [],
@@ -265,7 +265,7 @@ export default {
             this.mainTableData = this.sortDataByAcctIdCommon(resultSetList);
             this.$store.commit('saveChartTableData', {data: kmap, index: this.tabIndex || this.$store.getters.getTabIndex});
             this.$store.commit('saveMainTableData', {data: resultSetList, index: this.tabIndex || this.$store.getters.getTabIndex});
-            this.updateTableData([], 0);
+            this.updateTableData(chartDataList, 0);
             return {
                 mainTableData: resultSetList,
                 chartData: kmap,

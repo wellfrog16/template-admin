@@ -70,6 +70,8 @@ export default {
                 this.$message.error('请选择一个账户组内的子账户号');
                 return;
             }
+            // 设置前缀；XG/DZ/GX
+            this.accountIdPre = acctIds[0].slice(0, 2);
             let checkedChildren = this.getCheckedNodes(true);
             this.deleteMethods(checkedNodes);
             let resultSetName = this.createTreeId();

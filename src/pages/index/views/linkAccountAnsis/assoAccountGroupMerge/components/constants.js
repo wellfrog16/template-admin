@@ -62,17 +62,17 @@ export const chartTableColumns4 = [
     {label: '成交价格', field: 'bargainPrice', minWidth: 130}
 ];
 export const chartTableColumns5 = [ // 地址分析关系图明细字段
-    {label: '账户组号', field: 'custId', minWidth: 130, template: custIdColumn},
-    {label: '账户组客户编号', field: 'bizDir', minWidth: 100},
-    {label: '姓名相同', field: 'declBillTm2', minWidth: 140},
-    {label: '身份证相同', field: 'declBillQtty', minWidth: 130},
-    {label: '联系电话相同', field: 'declBillPrice', minWidth: 130},
-    {label: '联系地址相同', field: 'bargainDate', minWidth: 180},
-    {label: '邮编相同', field: 'bargainQtty', minWidth: 130},
-    {label: '工作单位相同', field: 'bargainPrice2', minWidth: 130},
-    {label: '电子邮件相同', field: 'bargainPrice3', minWidth: 130},
-    {label: '银行账号相同', field: 'bargainPrice4', minWidth: 130},
-    {label: '地址近似', field: 'bargainPrice5', minWidth: 130}
+    {label: '账户组号', field: 'acctId', minWidth: 130},
+    {label: '账户组客户编号', field: 'acctCustId', minWidth: 130},
+    {label: '姓名相同', field: 'nameSame', minWidth: 140},
+    {label: '身份证相同', field: 'idtfyCertSame', minWidth: 130},
+    {label: '联系电话相同', field: 'contTelSame', minWidth: 130},
+    {label: '联系地址相同', field: 'contAddrSame', minWidth: 180},
+    {label: '邮编相同', field: 'zipCdSame', minWidth: 130},
+    {label: '工作单位相同', field: 'workCorpSame', minWidth: 130},
+    {label: '电子邮件相同', field: 'elecEailSame', minWidth: 130},
+    {label: '银行账号相同', field: 'bankAcctSame', minWidth: 130},
+    {label: '地址近似', field: 'addrLike', minWidth: 130}
 ];
 export const chartTableColumns6 = [ // 关系人分析关系图明细字段
     {label: '账户组号', field: 'custId1', minWidth: 130, template: custIdColumn},
