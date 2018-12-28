@@ -54,7 +54,7 @@ export default {
                 sceneId: '', // 场景id
                 sceneComnt: '', // 场景说明
                 sceneName: '', // 场景名称
-                indexPara: defaultConfig.indexPara // 指数内容
+                indexPara: defaultConfig.indexPara[this.createType] // 指数内容
             }
         };
     },
@@ -64,12 +64,12 @@ export default {
         },
         setRuleForm() {
             this.ruleForm = {
-                isDel: this.dialogItem.isDel,
+                isDel: this.dialogItem.isDel || '1',
                 sceneType: this.createType,
                 sceneId: this.dialogItem.sceneId || '',
                 sceneComnt: this.dialogItem.sceneComnt || '', // 场景说明
                 sceneName: this.dialogItem.sceneName || '', // 场景名称
-                indexPara: this.dialogItem.sceneId ? this.dialogItem.indexPara : this.defaultConfig.indexPara // 统计频度
+                indexPara: this.dialogItem.sceneId ? this.dialogItem.indexPara : this.defaultConfig.indexPara[this.createType] // 统计频度
             };
         },
         saveSceneConfig() {

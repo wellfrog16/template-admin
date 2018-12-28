@@ -87,7 +87,7 @@ export default {
         getData(resp) {
             // this.$store.commit('saveXGchart2', this.chartOptions);
             let {mainData, tableData} = resp;
-            if (tableData && !tableData.length) {
+            if (!Object.keys(mainData).length) {
                 return;
             }
             console.log(resp);

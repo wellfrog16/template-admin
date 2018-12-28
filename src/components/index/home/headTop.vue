@@ -1,14 +1,18 @@
 <template>
-    <div :class="$style.head_top">
+    <div :class="$style.head_top" @click="goHome">
         <div :class="$style.head_top_log">
             <div :class="$style.top_container">
-                <el-tooltip class="item" effect="dark" placement="bottom">
+                <!-- <el-tooltip class="item" effect="dark" placement="bottom">
                     <div :class="$style.user_img"><i class="fa fa-user"></i></div>
                     <div slot="content">{{ userName }}</div>
-                </el-tooltip>
-                <div :class="$style.user_name">欢迎您登陆！{{ userName }}</div>
+                </el-tooltip> -->
+                <div :class="$style.user_name">欢迎您！{{ userName }}</div>
                 <el-tooltip class="item" effect="dark" placement="bottom">
-                    <div :class="$style.login_out" @click="handleLoginOut"><i class="fa fa-sign-out-alt"></i></div>
+                    <div :class="$style.login_out" @click.stop="goHome"><i class="fa fa-home"></i></div>
+                    <div slot="content">首页</div>
+                </el-tooltip>
+                <el-tooltip class="item" effect="dark" placement="bottom">
+                    <div :class="$style.login_out" @click.stop="handleLoginOut"><i class="fa fa-sign-out-alt"></i></div>
                     <div slot="content">登出</div>
                 </el-tooltip>
             </div>
@@ -32,7 +36,7 @@ export default {
     name: 'headTop',
     data() {
         return {
-            userName: localStorage.getItem('USER_NAME')
+            userName: localStorage.getItem('USER_NAME') || ''
         };
     },
     methods: {
@@ -41,6 +45,9 @@ export default {
             localStorage.removeItem('USER_NAME');
             this.$router.push({name: 'login'});
             this.$message.success('登出成功');
+        },
+        goHome() {
+            this.$router.push({name: 'login', query: {loginFlag: true}});
         }
     }
 };
@@ -51,6 +58,7 @@ export default {
 
     @height: 60px;
     .head_top {
+        cursor: pointer;
         width: 100%;
         height: @height;
         .head_top_log {

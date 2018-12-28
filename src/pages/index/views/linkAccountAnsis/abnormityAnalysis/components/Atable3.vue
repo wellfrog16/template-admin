@@ -54,6 +54,7 @@ export default {
     methods: {
         // Bar 柱状图(双击)
         tableellDblClick(row) {
+            this.$store.commit('autoTradeMut', {});
             let rowCustId = [];
             // this.clearChartData();
             if (this.tableData3 && this.tableData3.length !== 0) {

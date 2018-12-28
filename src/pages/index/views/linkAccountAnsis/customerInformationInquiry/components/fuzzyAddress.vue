@@ -131,8 +131,8 @@ export default {
                 this.ruleForm.city = '';
                 let filterItem = this.provinceOptions.filter(v => {
                     return v.id === val;
-                })
-                this.cityOptions = filterItem[0].children
+                });
+                this.cityOptions = filterItem[0].children;
             }
         }
     },

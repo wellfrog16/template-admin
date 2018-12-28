@@ -85,10 +85,10 @@
                         <el-col :xl="4" :lg="4" :md="4" :sm="24" class="generate">
                             <el-form-item label-width="20px">
                                 <el-button
+                                    :loading="loadingBt"
                                     type="primary"
                                     size="small"
-                                    @click="generateReportsClick('ruleForm')"
-                                >生成协查报告
+                                    @click="generateReportsClick('ruleForm')">生成协查报告
                                 </el-button>
                             </el-form-item>
                         </el-col>
@@ -191,6 +191,7 @@ export default {
     mixins: [],
     data() {
         return {
+            loadingBt: false,
             loading1: false,
             loading2: false,
             loading3: false,
@@ -222,10 +223,10 @@ export default {
             ruleForm: {
                 fileList: [], // 导入CSV
                 exportType: '', // 导入结果集按钮
-                contractCode: '', // 合约代码  cu1712
+                contractCode: 'cu1712', // 合约代码  cu1712
                 resultId: '', // 导入结果集
-                // selectDateRange: ['2017-10-01', '2017-12-31']   // 统计区间  '2017-02-20', '2017-10-09'
-                selectDateRange: [new Date(moment().subtract(1, 'months').format('YYYY-MM-DD')), new Date(moment().subtract(1, 'days').format('YYYY-MM-DD'))],
+                selectDateRange: ['2017-10-01', '2017-12-31'] // 统计区间  '2017-02-20', '2017-10-09'
+                // selectDateRange: [new Date(moment().subtract(1, 'months').format('YYYY-MM-DD')), new Date(moment().subtract(1, 'days').format('YYYY-MM-DD'))],
             },
             rules: {
                 contractCode: {
@@ -235,9 +236,6 @@ export default {
                 selectDateRange: {
                     required: true,
                     message: '请选择统计区间',
-                },
-                exportType: {
-                    message: '请选择结果集',
                 },
                 fileList: {
                     message: '请导入CSV',
@@ -250,12 +248,27 @@ export default {
     methods: {
         EchartsClickLoading1(flag) {
             this.loading1 = flag;
+            if (flag) {
+                this.loadingBt = true;
+            } else {
+                this.loadingBt = false;
+            }
         },
         EchartsClickLoading2(flag) {
             this.loading2 = flag;
+            if (flag) {
+                this.loadingBt = true;
+            } else {
+                this.loadingBt = false;
+            }
         },
         EchartsClickLoading3(flag) {
             this.loading3 = flag;
+            if (flag) {
+                this.loadingBt = true;
+            } else {
+                this.loadingBt = false;
+            }
         },
         drewChart(num) {
             if (num === '0') {
@@ -300,21 +313,13 @@ export default {
         },
         // 导入CSV
         handleUploadSuccess(resp) {
-            let params = {
-                contrCode: this.ruleForm.contractCode, // 合约代码
-                statTimeBegin: moment(this.ruleForm.selectDateRange[0]).format('YYYY-MM-DD'), // 统计起始日
-                statTimeEnd: moment(this.ruleForm.selectDateRange[1]).format('YYYY-MM-DD'), // 统计截止日
-                resultSetNo: this.ruleForm.resultId, // 结果集编号
-            };
             this.dealWithIsLoading = false;
             this.loadingTable = false;
             this.tableData = resp.report; // 协查报告数据
             this.tableData1 = resp.overStoreAnalysis;
             this.tableData2 = resp.frequentTrade;
             this.tableData3 = resp.autoTrade;
-            // this.tablePaneList = resp; // tab 表格数据????stal取
-            // this.formDataList = params; // 生成协查报告的参数
-            this.$store.commit('momentMut', params); // tab 参数
+            this.ruleForm.fileList = [];
         },
         // 选择结果集的按钮 -- 二选一
         resultChange(val) {
@@ -336,6 +341,10 @@ export default {
         },
         // 生成报告
         generateReportsClick() {
+            if (!this.ruleForm.exportType) {
+                this.$message.error('请选择一种导入的方式');
+                return;
+            }
             this.$refs['ruleForm'].validate(valid => {
                 if (valid) {
                     this.$store.commit('overStoreMut', {}); // tab 表格数据
@@ -350,47 +359,50 @@ export default {
                         this.$refs['chart2'] && this.$refs['chart2'].clearChartData();
                         this.$refs['chart3'] && this.$refs['chart3'].clearChartData();
                     });
-                    if (this.ruleForm.exportType === '1') {
-                        if (this.ruleForm.resultId === '') {
-                            let params = {
-                                contrCode: this.ruleForm.contractCode, // 合约代码
-                                statTimeBegin: moment(this.ruleForm.selectDateRange[0]).format('YYYY-MM-DD'), // 统计起始日
-                                statTimeEnd: moment(this.ruleForm.selectDateRange[1]).format('YYYY-MM-DD'), // 统计截止日
-                            };
-                            this.$store.commit('momentMut', params); // tab 表格数据
-                            this.uploadParams = {...this.uploadParams, ...params};
-                            this.dealWithIsLoading = true;
-                            this.loadingTable = true;
-                            this.$nextTick(() => {
-                                this.$refs['uploadFile'].submitUpload();
-                            });
-                        }
+                    let params = {};
+                    if (this.ruleForm.exportType === '0') {
+                        params = {
+                            resultSetNo: this.ruleForm.resultId, // 结果集编号
+                            contrCode: this.ruleForm.contractCode, // 合约代码
+                            statTimeBegin: moment(this.ruleForm.selectDateRange[0]).format('YYYY-MM-DD'), // 统计起始日
+                            statTimeEnd: moment(this.ruleForm.selectDateRange[1]).format('YYYY-MM-DD'), // 统计截止日
+                        };
                     } else {
-                        if (this.ruleForm.resultId !== '') {
-                            let params = {
-                                contrCode: this.ruleForm.contractCode, // 合约代码
-                                statTimeBegin: moment(this.ruleForm.selectDateRange[0]).format('YYYY-MM-DD'), // 统计起始日
-                                statTimeEnd: moment(this.ruleForm.selectDateRange[1]).format('YYYY-MM-DD'), // 统计截止日
-                                resultSetNo: this.ruleForm.resultId, // 结果集编号
-                            };
-                            this.$store.commit('momentMut', params); // tab 表格数据
-                            this.loadingTable = true;
-                            this.dealWithIsLoading = true;
-                            postExportType(params).then(resp => {
-                                if (resp) {
-                                    this.loadingTable = false;
-                                    this.dealWithIsLoading = false;
-                                    this.$router.push({name: ''});
-                                    this.tableData = resp.report; // 协查报告数据 autoTrade  frequentTrade  overStoreAnalysis
-                                    this.tableData1 = resp.overStoreAnalysis;
-                                    this.tableData2 = resp.frequentTrade;
-                                    this.tableData3 = resp.autoTrade;
-                                }
-                            }).catch(e => {
+                        params = {
+                            contrCode: this.ruleForm.contractCode, // 合约代码
+                            statTimeBegin: moment(this.ruleForm.selectDateRange[0]).format('YYYY-MM-DD'), // 统计起始日
+                            statTimeEnd: moment(this.ruleForm.selectDateRange[1]).format('YYYY-MM-DD'), // 统计截止日
+                        };
+                    }
+                    if (this.ruleForm.exportType === '0') {
+                        this.$store.commit('momentMut', params); // tab表格数据
+                        this.loadingBt = true;
+                        this.loadingTable = true;
+                        this.dealWithIsLoading = true;
+                        postExportType(params).then(resp => {
+                            if (resp) {
+                                this.loadingBt = false;
                                 this.loadingTable = false;
                                 this.dealWithIsLoading = false;
-                            });
-                        }
+                                this.$router.push({name: ''});
+                                this.tableData = resp.report; // 协查报告数据 autoTrade  frequentTrade  overStoreAnalysis
+                                this.tableData1 = resp.overStoreAnalysis;
+                                this.tableData2 = resp.frequentTrade;
+                                this.tableData3 = resp.autoTrade;
+                            }
+                        }).catch(e => {
+                            this.loadingBt = false;
+                            this.loadingTable = false;
+                            this.dealWithIsLoading = false;
+                        });
+                    } else {
+                        this.$store.commit('momentMut', params); // tab 表格数据
+                        this.uploadParams = {...this.uploadParams, ...params};
+                        this.dealWithIsLoading = true;
+                        this.loadingTable = true;
+                        this.$nextTick(() => {
+                            this.$refs['uploadFile'].submitUpload();
+                        });
                     }
                 }
             });

@@ -179,6 +179,7 @@ export default {
                     let custIds = v.children.map(v => {
                         return v.custId;
                     });
+                    custIds = [...new Set(custIds)];
                     let childIds = v.children.map(v => {
                         return v.id;
                     });

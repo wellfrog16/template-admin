@@ -53,6 +53,7 @@ export default {
     },
     methods: {
         tableellDblClick(row) {
+            this.$store.commit('frequentMut', {});
             let rowCustId = [];
             // this.clearChartData();
             if (this.tableData2 && this.tableData2.length !== 0) {

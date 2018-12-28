@@ -175,9 +175,9 @@ export default {
             ruleForm: {
                 fileList: [],
                 exportType: '',
-                resultId: 'AA0001',
-                resultType: '5',
-                customNoArray: ['80000012', '80010237'],
+                resultId: '',
+                resultType: '',
+                customNoArray: ['80000012', '80001000'],
                 contractCode: 'cu1712',
                 selectDateRange: [new Date(moment().subtract(1, 'months').format('YYYY-MM-DD')), new Date(moment().subtract(1, 'days').format('YYYY-MM-DD'))]
             },

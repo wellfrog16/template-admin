@@ -5,7 +5,7 @@
             <span :class="$style.brliet"><i class="el-icon-location-outline" style="margin-right: 8px;"></i>当前位置：</span>
             <el-breadcrumb-item
                 v-for="(item, index) in currentBreamList"
-                :to="{path: item.path}"
+                :to="{path: (item.noLink || item.path) ? item.path : item.name + 'Home'}"
                 :key="index">
                 <span :class="$style.brliet">
                     {{ item.meta.title }}

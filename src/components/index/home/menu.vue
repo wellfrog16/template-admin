@@ -28,12 +28,12 @@
                 </template>
                 <template v-for="(item1, index1) in item.children">
                     <!-- 无三级菜单 -->
-                    <el-menu-item v-if="!item1.children && !item.hidden" :index="item1.name" :key="index1">
+                    <el-menu-item v-if="!item1.children && !item1.hidden" :index="item1.name" :key="index1">
                         <i :class="item1.icon"></i>{{ item1.meta.title }}
                     </el-menu-item>
 
                     <!-- 有三级菜单 -->
-                    <template v-if="item1.children && !item.hidden">
+                    <template v-if="item1.children && !item1.hidden">
                         <el-submenu :index="item1.name" :key="index1">
                             <template slot="title">
                                 <i :class="item1.icon"></i>
@@ -52,10 +52,10 @@
             </el-submenu>
             <!--  -->
         </template>
-        <el-menu-item @click="handleLoginOut" index="" class="col-button">
+        <!--   <el-menu-item @click="handleLoginOut" index="" class="col-button">
             <i class="fas fa-sign-out-alt menu-fix-icon"></i>
             <span slot="title">登出</span>
-        </el-menu-item>
+        </el-menu-item> -->
     </el-menu>
 </template>
 

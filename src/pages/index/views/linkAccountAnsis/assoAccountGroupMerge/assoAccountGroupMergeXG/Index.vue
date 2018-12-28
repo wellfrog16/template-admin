@@ -91,7 +91,6 @@ export default {
         },
         currentAccountGroupId() {
             this.computedCommonReqParams = this.commonReqParams();
-            console.log(this.computedCommonReqParams);
         }
     },
     data() {
@@ -174,7 +173,6 @@ export default {
             });
         },
         handleEchartDblClickEvent(params, index) {
-            console.log(params);
             switch (String(index)) {
             case '0':
                 // get chart2
@@ -195,25 +193,20 @@ export default {
                     this.$refs['chartComponent1'][0].chartOptions['series'][0]['markPoint']['data'].push({
                         coord: [params['data'][0], params['data'][1]]
                     });
-                    console.log(this.$refs['chartComponent1'][0].chartOptions['series'][0]['markPoint']);
                     this.$store.commit('saveXGchart1', this.$refs['chartComponent1'][0].chartOptions);
                     // table勾选状态
                     this.selectAccountGroupList.push(currentId);
                 }
                 this.getChart1(1, this.$refs['chartComponent1'][0].chartOptions);
-                console.log(this.selectAccountGroupList);
                 this.$refs['self-tree-table'].$refs['tree-table'].setCheckedKeys(this.selectAccountGroupList);
                 break;
             }
         },
         handleEchartClickEvent(params, index) {
-            console.log(params);
             switch (String(index)) {
             case '0':
                 this.currentAccountGroupId = params['data'][3];
                 this.currentCustIds = params.data[5].split(',');
-                console.log(this.currentAccountGroupId);
-                console.log(this.currentCustIds);
                 this.$nextTick(() => {
                     this.getBlock2Data();
                     this.getBlock3Data();
@@ -225,7 +218,7 @@ export default {
                 // get chart4
                 break;
             case '2':
-                this.getBlock4Data(params['data'][5]);
+                this.getBlock4Data(params['name']);
                 // get chart4
                 break;
             }

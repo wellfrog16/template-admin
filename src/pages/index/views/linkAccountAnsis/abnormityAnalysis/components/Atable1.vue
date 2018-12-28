@@ -53,6 +53,7 @@ export default {
     methods: {
         // Bar 柱状图(双击)
         tableellDblClick(row) {
+            this.$store.commit('overStoreMut', {});
             let rowCustId = [];
             if (this.tableData1 && this.tableData1.length !== 0) {
                 for (let i = 0; i < this.tableData1.length; i++) {
