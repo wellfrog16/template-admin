@@ -296,7 +296,6 @@ export default {
                 // get chart4
                 break;
             case '2':
-                console.log(params);
                 this.getBlock4Data(params['name']);
                 // get chart4
                 break;

@@ -21,7 +21,7 @@ export const getTlsIndexTlb = sceneType => {
 };
 // 语法检查
 export const checkSql = (indexPara, indexType) => {
-    return post(`${requestPrefix}/checkSql`, {indexPara: indexPara, indexType: indexType});
+    return post(`${requestPrefix}/checkSql`, {indexPara: indexPara, indexType: String(indexType)});
 };
 // 下一步-合并
 export const mergeAccountByFile = params => {

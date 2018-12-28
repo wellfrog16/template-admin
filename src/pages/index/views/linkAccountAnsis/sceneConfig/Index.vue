@@ -179,7 +179,7 @@ export default {
                 exportType: '',
                 resultId: '',
                 resultType: '',
-                customNoArray: ['80000012', '80001000'],
+                customNoArray: ['80000001', '80001000'],
                 contractCode: 'cu1712',
                 selectDateRange: [new Date(moment().subtract(1, 'months').format('YYYY-MM-DD')), new Date(moment().subtract(1, 'days').format('YYYY-MM-DD'))]
             },

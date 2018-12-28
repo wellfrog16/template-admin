@@ -76,62 +76,62 @@ export default {
 </script>
 
 <style>
-.aside-menu:not(.el-menu--collapse) {
-    width: 100%;
-    border-right: solid 0;
-}
+    .aside-menu:not(.el-menu--collapse) {
+        width: 100%;
+        border-right: solid 0;
+    }
 </style>
 
 <style lang="less" module>
-@import '../../../assets/style/config.less';
+    @import '../../../assets/style/config.less';
 
-@height: 60px;
-@width: 200px;
+    @height: 60px;
+    @width: 200px;
 
-.container {
-    width: 100%;
-    height: 100vh;
-    background: url('../../../assets/img/common/bj.jpg') no-repeat;
-    background-size: cover;
-}
+    .container {
+        width: 100%;
+        height: 100vh;
+        background: url('../../../assets/img/common/bj.jpg') no-repeat;
+        background-size: cover;
+    }
 
-.containers {
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    margin: 0;
-    position: relative;
-}
+    .containers {
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin: 0;
+        position: relative;
+    }
 
-.aside {
-    background-color: rgba(0, 11, 32, 0.4);
-    height: 1080px;
-}
+    .aside {
+        background-color: rgba(0, 11, 32, 0.4);
+        height: 1080px;
+    }
 
-.bread_css {
-    position: absolute;
-    top: 0;
-}
+    .bread_css {
+        position: absolute;
+        top: 0;
+    }
 
-.maicontainersn {
-    color: #fff;
-    overflow: auto;
-    margin-bottom: 50px;
-    margin-top: 45px;
-    width: calc(100% - @width);
-}
+    .maicontainersn {
+        color: #fff;
+        overflow: auto;
+        margin-bottom: 50px;
+        margin-top: 45px;
+        width: calc(100% - @width);
+    }
 
-.switch {
-    cursor: pointer;
-    transition: all 0.2s;
-}
+    .switch {
+        cursor: pointer;
+        transition: all 0.2s;
+    }
 
-.switch-tran {
-    transform: rotate(90deg);
-    transition: all 0.2s;
-}
+    .switch-tran {
+        transform: rotate(90deg);
+        transition: all 0.2s;
+    }
 
-.main {
-    background-color: hsl(219, 77%, 18%);
-}
+    .main {
+        background-color: hsl(219, 77%, 18%);
+    }
 </style>
