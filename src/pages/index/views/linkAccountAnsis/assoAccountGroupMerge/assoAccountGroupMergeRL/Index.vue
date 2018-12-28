@@ -16,10 +16,10 @@
                             <s-table :height="index === 2 ? 268 : 300" :columns="chartTableColumns[index]" :tableData="chartTableData[index]"></s-table>
                         </div>
                         <div v-else>
-                            <chart1 :ref="`chartComponent${index + 1}`" v-if="index === 0" :childrenMap="childrenMap" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData" @updateMainTableData="updateMainTableData" @updateAccountGroupAndCustIds="updateAccountGroupAndCustIds" @getBlock2Data="getBlock2Data"  @getBlock3Data="getBlock3Data"></chart1>
-                            <chart2 :ref="`chartComponent${index + 1}`" v-if="index === 1" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData" @getBlock4Data="getBlock4Data"></chart2>
-                            <chart3 :ref="`chartComponent${index + 1}`" v-if="index === 2" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData" @getBlock4Data="getBlock4Data"></chart3>
-                            <chart4 :ref="`chartComponent${index + 1}`" v-if="index === 3" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData"></chart4>
+                            <chart1 :ref="`chartComponent${index + 1}`" v-if="index === 0" :sceneType="4" :tabIndex="tabIndex" :childrenMap="childrenMap" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData" @updateMainTableData="updateMainTableData" @updateAccountGroupAndCustIds="updateAccountGroupAndCustIds" @getBlock2Data="getBlock2Data"  @getBlock3Data="getBlock3Data"></chart1>
+                            <chart2 :ref="`chartComponent${index + 1}`" v-if="index === 1" :sceneType="4" :tabIndex="tabIndex" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData" @getBlock4Data="getBlock4Data"></chart2>
+                            <chart3 :ref="`chartComponent${index + 1}`" v-if="index === 2" :sceneType="4" :tabIndex="tabIndex" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData" @getBlock4Data="getBlock4Data"></chart3>
+                            <chart4 :ref="`chartComponent${index + 1}`" v-if="index === 3" :sceneType="4" :tabIndex="tabIndex" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData"></chart4>
                         </div>
                         <!-- <echarts-common v-else :loading="chartLoading[index]" :ref="`chart${index}`" :domId="`chart${index}`" :defaultOption="chartOptions[index]" :propsChartHeight="300" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></echarts-common> -->
                     </div>
@@ -79,10 +79,17 @@ import chart1 from '../components/chart5';
 import chart2 from '../components/chart2';
 import chart3 from '../components/chart3';
 import chart4 from '../components/chart4';
-import {chartsRL, mainTableColumnsRL, chartTableColumns6, chartTableColumns2, chartTableColumns4, table3Options} from '../components/constants';
+import _ from 'lodash';
+import {chartsRL, mainTableColumnsRL, chartTableColumns6, chartTableColumns2, chartTableColumns4, table3Options, resData5} from '../components/constants';
 export default {
     components: {chart1, chart2, chart3, chart4, SCard, STable, TreeTable},
     mixins: [treeTableMixin],
+    props: {
+        tabIndex: {
+            type: [Number, String],
+            default: 0
+        }
+    },
     watch: {
         currentCustIds: {
             handler(val) {
@@ -92,7 +99,6 @@ export default {
         },
         currentAccountGroupId() {
             this.computedCommonReqParams = this.commonReqParams();
-            console.log(this.computedCommonReqParams);
         }
     },
     data() {
@@ -124,26 +130,27 @@ export default {
                 this.createChart3Columnn(this.currentCustIds);
             }
             this.chartTableData[index] = value;
-            // test
-            localStorage.setItem('CHART_TABLE_DATA', JSON.stringify(this.chartTableData));
+            console.log(this.tabIndex);
+            this.$store.commit('saveChartTableData', {data: this.chartTableData, index: this.tabIndex || this.$store.getters.getTabIndex});
         },
         toggleDetail(item, index) {
             this.charts[index]['toggleDetailFlags'] = !item.toggleDetailFlags;
             if (!item.toggleDetailFlags) {
                 this.$nextTick(() => {
-                    let dataMap = [this.$store.getters.getXGchart1, this.$store.getters.getXGchart2, this.$store.getters.getXGchart3, this.$store.getters.getXGchart4];
+                    let dataMap = [this.$store.getters.getchart1, this.$store.getters.getchart2, this.$store.getters.getchart3, this.$store.getters.getchart4];
                     (this.getChart()[index])(1, dataMap[index]);
                 });
             }
         },
         getBlock2Data() {
-            console.log(11 + '关系人tab');
             this.charts[1]['loading'] = false;
+            this.updateTableData(getBlock2Data1.tableData, 1);
             this.drewChart2(getBlock2Data1);
             // this.charts[1]['loading'] = true;
             // let params = this.commonReqParams();
             // getChart2Data(params).then(resp => {
             //     this.charts[1]['loading'] = false;
+            // this.updateTableData(resp.tableData, 1);
             //     console.log(resp);
             //     this.drewChart2(resp);
             // });
@@ -151,26 +158,29 @@ export default {
         getBlock3Data() {
             this.charts[2]['loading'] = false;
             this.drewChart3(getChart3Data2);
+            this.updateTableData(getChart3Data2.tableData, 2);
             // this.charts[2]['loading'] = true;
             // let params = this.commonReqParams();
             // getChart3Data(params).then(resp => {
             //     this.charts[2]['loading'] = false;
+            // this.updateTableData(resp.tableData, 2);
             //     this.drewChart3(resp);
             // });
         },
         getBlock4Data(date) {
             this.charts[3]['loading'] = false;
             this.drewChart4(getBlock4Data3);
+            this.updateTableData(getBlock4Data3.buysail, 3);
             // this.charts[3]['loading'] = true;
             // let params = this.commonReqParams();
             // params.txDt = date;
             // getChart4Data(params).then(resp => {
             //     this.charts[3]['loading'] = false;
+            // this.updateTableData(resp.buysail, 3);
             //     this.drewChart4(resp);
             // });
         },
         handleEchartDblClickEvent(params, index) {
-            console.log(params);
             switch (String(index)) {
             case '0':
                 // get chart2
@@ -181,7 +191,7 @@ export default {
                     this.$refs['chartComponent1'][0].chartOptions['series'][0]['markPoint']['data'] = markPointData.filter(v => {
                         return v.coord[0] !== params['data'][0] && v.coord[1] !== params['data'][1];
                     });
-                    this.$store.commit('saveXGchart1', this.$refs['chartComponent1'][0].chartOptions);
+                    this.$store.commit('savechart1', {data: this.$refs['chartComponent1'][0].chartOptions, index: this.tabIndex || this.$store.getters.getTabIndex});
                     // table勾选状态
                     this.selectAccountGroupList = this.selectAccountGroupList.filter(v => {
                         return v !== currentId && this.childrenMap[currentId].indexOf(v) === -1;
@@ -191,25 +201,20 @@ export default {
                     this.$refs['chartComponent1'][0].chartOptions['series'][0]['markPoint']['data'].push({
                         coord: [params['data'][0], params['data'][1]]
                     });
-                    console.log(this.$refs['chartComponent1'][0].chartOptions['series'][0]['markPoint']);
-                    this.$store.commit('saveXGchart1', this.$refs['chartComponent1'][0].chartOptions);
+                    this.$store.commit('saveXhart1', {data: this.$refs['chartComponent1'][0].chartOptions, index: this.tabIndex || this.$store.getters.getTabIndex});
                     // table勾选状态
                     this.selectAccountGroupList.push(currentId);
                 }
                 this.getChart1(1, this.$refs['chartComponent1'][0].chartOptions);
-                console.log(this.selectAccountGroupList);
                 this.$refs['self-tree-table'].$refs['tree-table'].setCheckedKeys(this.selectAccountGroupList);
                 break;
             }
         },
         handleEchartClickEvent(params, index) {
-            console.log(params);
             switch (String(index)) {
             case '0':
                 this.currentAccountGroupId = params.name;
                 this.currentCustIds = params.value.split(',');
-                console.log(this.currentAccountGroupId);
-                console.log(this.currentCustIds);
                 this.$nextTick(() => {
                     this.getBlock2Data();
                     this.getBlock3Data();
@@ -221,13 +226,16 @@ export default {
                 // get chart4
                 break;
             case '2':
-                this.getBlock4Data(params['data'][5]);
+                this.getBlock4Data(params['name']);
                 // get chart4
                 break;
             }
         },
         commonReqParams() {
-            this.sceneCommitParams = this.$store.getters.sceneCommitParams;
+            this.sceneCommitParams = this.$store.getters.sceneCommitParams[this.tabIndex || this.$store.getters.getTabIndex];
+            console.log(this.$store.getters.sceneCommitParams);
+            console.log(this.$store.getters.getTabIndex);
+            console.log(this.tabIndex);
             return {
                 acctId: this.currentAccountGroupId, // || 'XG00001',
                 custId: this.currentCustIds.join(','), // || '80001716,80000025,80001461',
@@ -237,11 +245,30 @@ export default {
                 // resultIds: this.resultIds || ''
             };
         },
+        sortDataByAcctIdCommon(data) {
+            return _.sortBy(data, [item => { return item.acctId; }]);
+        },
+        dealChart1AndMainTableData() {
+            let resData = resData5;
+            let {mainTableData, chartData} = resData;
+            this.mainTableData = this.sortDataByAcctIdCommon(mainTableData);
+            console.log(this.tabIndex);
+            console.log(777777777);
+            this.$store.commit('saveChartTableData', {data: chartData, index: this.tabIndex || this.$store.getters.getTabIndex});
+            this.$store.commit('saveMainTableData', {data: mainTableData, index: this.tabIndex || this.$store.getters.getTabIndex});
+            this.mainTableData = mainTableData;
+            this.updateTableData([], 0);
+            return {
+                mainTableData: mainTableData,
+                chartData: chartData
+            };
+        },
         getChart() {
             return [this.getChart1, this.getChart2, this.getChart3, this.getChart4];
         },
         drewChart1() {
-            this.$refs['chartComponent1'] && this.$refs['chartComponent1'][0] && this.$refs['chartComponent1'][0].getData();
+            let resData = this.dealChart1AndMainTableData();
+            this.$refs['chartComponent1'] && this.$refs['chartComponent1'][0] && this.$refs['chartComponent1'][0].getData(resData);
         },
         getChart1(flag, data) {
             this.$refs['chartComponent1'] && this.$refs['chartComponent1'][0] && this.$refs['chartComponent1'][0].initChart(flag, data);

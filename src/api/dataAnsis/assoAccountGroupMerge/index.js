@@ -15,3 +15,7 @@ export const getChart4Data = params => {
 export const getExportResultSet = params => {
     return post(`${requestPrefix}/getExportResultSet`, params || {});
 };
+// chart-table2 分页
+export const getChartTable2ByPage = params => {
+    return post(`${requestPrefix}/historyNetPoolCangPage`, params || {});
+};

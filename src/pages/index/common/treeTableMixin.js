@@ -145,7 +145,8 @@ export default {
                     resultType: propsResultType || '5', // 结果集类型（1：相关性；5：合并）
                     resultName: value
                 };
-                let sceneCommitParams = this.$store.getters.sceneCommitParams;
+                let tabIndex = this.$store.getters.getTabIndex;
+                let sceneCommitParams = this.$store.getters.sceneCommitParams[tabIndex];
                 if (params.resultType === '1') {
                     params.statStartDt = sceneCommitParams.statStartDt;
                     params.statStopDay = sceneCommitParams.statStopDay;

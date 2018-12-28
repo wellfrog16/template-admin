@@ -30,6 +30,14 @@ export default {
             default() {
                 return [];
             }
+        },
+        sceneType: {
+            type: [Number, String],
+            default: 1
+        },
+        tabIndex: {
+            type: [String, Number],
+            default: '0'
         }
     },
     data() {
@@ -85,9 +93,8 @@ export default {
     },
     methods: {
         getData(resp) {
-            // this.$store.commit('saveXGchart2', this.chartOptions);
-            let {mainData, tableData} = resp;
-            if (tableData && !tableData.length) {
+            let {mainData} = resp;
+            if (!Object.keys(mainData).length) {
                 return;
             }
             console.log(resp);
@@ -131,14 +138,8 @@ export default {
             this.chartOptions['dataZoom'][1]['startValue'] = dataZoomStartValue;
             this.chartOptions['dataZoom'][0]['endValue'] = dataZoomEndValue;
             this.chartOptions['dataZoom'][1]['endValue'] = dataZoomEndValue;
-            console.log(this.chartOptions);
-            this.$store.commit('saveXGchart2', this.chartOptions);
-            this.$store.commit('saveChartTableData', tableData, this.index);
+            this.$store.commit('savechart2', {data: this.chartOptions, index: this.tabIndex || this.$store.getters.getTabIndex});
             this.initChart();
-            this.initTable(tableData);
-        },
-        initTable(tableData) {
-            this.$emit('updateTableData', tableData, this.index);
         },
         initChart(flag, data) {
             if (data) {
@@ -154,10 +155,6 @@ export default {
         }
     },
     mounted() {
-        // let storeData = this.$store.getters.getXGchart2;
-        // if (storeData && Object.keys(storeData).length) {
-        //     this.initChart(true, storeData);
-        // }
     }
 };
 </script>

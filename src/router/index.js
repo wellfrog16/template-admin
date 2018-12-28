@@ -2,7 +2,6 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Tools from './index/index';
 import {Notification} from 'element-ui';
-import Home from '@/pages/index/views/Home.vue';
 Vue.use(Router);
 
 const scrollBehavior = (to, from, savedPosition) => {
@@ -34,27 +33,14 @@ const router = new Router({
     scrollBehavior,
     routes: [
         {
-            path: '',
+            path: 'index',
             name: 'index',
             hidden: true,
             meta: {
                 scrollTop: true,
                 title: '首页'
             },
-            component: Home,
-            icon: 'menu-fix-icon fa fa-home',
-            children: [
-                {
-                    meta: {
-                        scrollTop: true,
-                        title: '首页'
-                    },
-                    path: '/pageIndex',
-                    name: 'pageIndex',
-                    icon: 'menu-fix-icon fa fa-home',
-                    component: resolve => require(['@/pages/index/views/Index.vue'], resolve)
-                }
-            ]
+            component: resolve => require(['@/pages/index/views/Index.vue'], resolve),
         },
         Tools,
         {

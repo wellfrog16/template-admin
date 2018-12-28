@@ -37,6 +37,9 @@ export default {
     },
     methods: {
         handleChange() {
+            if (!this.resultId) {
+                return;
+            }
             let index = this.resultList.findIndex(item => {
                 return item.resultId === this.resultId; // 结果集编号
             });

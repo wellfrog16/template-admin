@@ -1,8 +1,8 @@
 <template>
     <div class="asso-account-group-merge" v-loading="fullLoading">
         <div class="top-nav">
-            <el-tabs type="card" v-model="activeTab" @tab-click="handleTabClick" v-if="sceneNameList.length && sceneNameList[0].name">
-                <el-tab-pane v-for="(item, index) in sceneNameList" :key="index" :name="String(index)" :label="item.name">
+            <el-tabs type="card" v-model="activeTab" @tab-click="handleTabClick" v-if="sceneNameList.length && sceneNameList[0].sceneNames">
+                <el-tab-pane v-for="(item, index) in sceneNameList" :key="index" :name="String(item.sceneIds)" :label="item.sceneNames">
                 </el-tab-pane>
             </el-tabs>
             <div class="tabs-button">
@@ -14,10 +14,10 @@
             </div>
         </div>
         <div v-for="(item, index) in sceneNameList" :key="index">
-            <sceneType1 ref="sceneType1" v-if="String(item.type) === '1' && String(index) === activeTab" @updateFullLoading="updateFullLoading" @updateResultList="updateResultList"></sceneType1>
-            <sceneType2 ref="sceneType2" v-if="String(item.type) === '2' && String(index) === activeTab" @updateFullLoading="updateFullLoading" @updateResultList="updateResultList"></sceneType2>
-            <sceneType3 ref="sceneType3" v-if="String(item.type) === '3' && String(index) === activeTab" @updateFullLoading="updateFullLoading" @updateResultList="updateResultList"></sceneType3>
-            <sceneType4 ref="sceneType4" v-if="String(item.type) === '4' && String(index) === activeTab" @updateFullLoading="updateFullLoading" @updateResultList="updateResultList"></sceneType4>
+            <sceneType1 ref="sceneType1" v-if="String(item.sceneTypes) === '1' && String(item.sceneIds) === activeTab" :tabIndex="item.sceneIds" @updateFullLoading="updateFullLoading" @updateResultList="updateResultList"></sceneType1>
+            <sceneType2 ref="sceneType2" v-if="String(item.sceneTypes) === '2' && String(item.sceneIds) === activeTab" :tabIndex="item.sceneIds" @updateFullLoading="updateFullLoading" @updateResultList="updateResultList"></sceneType2>
+            <sceneType3 ref="sceneType3" v-if="String(item.sceneTypes) === '3' && String(item.sceneIds) === activeTab" :tabIndex="item.sceneIds" @updateFullLoading="updateFullLoading" @updateResultList="updateResultList"></sceneType3>
+            <sceneType4 ref="sceneType4" v-if="String(item.sceneTypes) === '4' && String(item.sceneIds) === activeTab" :tabIndex="item.sceneIds" @updateFullLoading="updateFullLoading" @updateResultList="updateResultList"></sceneType4>
         </div>
         <div style="text-align:center; margin: 20px 0;">
             <el-button size="small" type="primary" style="width: 100px;" @click="nextStep">下一步</el-button>
@@ -43,8 +43,21 @@ export default {
             activeTab: '0',
             resultIds: '',
             exportResultType: '1',
-            sceneNameList: [{name: '', type: 1}] // [{name: '场景1', type: 1}, {name: '场景2', type: 2}, {name: '场景3', type: 3}, {name: '场景4', type: 4}] // [{name: '', type: 1}]
+            sceneNameList: [{sceneNames: '', sceneTypes: 1, sceneIds: 0}] // [{name: '场景1', type: 1}, {name: '场景2', type: 2}, {name: '场景3', type: 3}, {name: '场景4', type: 4}] // [{name: '', type: 1}]
         };
+    },
+    watch: {
+        '$store.getters.sceneCommitParams': {
+            handler(val) {
+                this.getSceneNameList(val, () => {
+                    this.$store.commit('saveTabIndex', this.resultIds);
+                    let sceneCommitParams = this.$store.getters.sceneCommitParams;
+                    console.log(this.$store.getters.sceneCommitParams);
+                    this.activeTab = this.resultIds || Object.keys(sceneCommitParams)[0];
+                });
+            },
+            deep: true
+        }
     },
     methods: {
         updateFullLoading(loading) {
@@ -59,41 +72,52 @@ export default {
         },
         getResultList(list) {
             setTimeout(() => {
-                let sceneCommitParams = this.$store.getters.sceneCommitParams;
-                this.resultIds = sceneCommitParams.resultIds || '';
+                // let sceneCommitParams = this.$store.getters.sceneCommitParams;
+                // this.resultIds = sceneCommitParams.resultIds || '';
             });
         },
         handleImport() {
             // 导入结果集
-            this.sceneNameList = [{name: '', type: this.exportResultType}];
+            this.sceneNameList = [{sceneNames: '', sceneTypes: this.exportResultType, sceneIds: 0}];
             this.activeTab = '0';
             this.fullLoading = true;
             getInfoByResultId(this.resultIds).then(resp => {
                 this.$refs['sceneType1'][0].computedCommonReqParams = {
+                    sceneNames: resp.resultName,
+                    sceneIds: this.resultId,
                     acctId: '', // || 'XG00001',
                     custId: '', // || '80001716,80000025,80001461',
                     statStartDt: resp.statStartDt, // || '2017-02-20',
                     statStopDay: resp.statStopDay, // || '2017-10-09',
                     contrCd: resp.contrCd, // || 'cu1712'
                 };
-                this.$store.commit('saveSceneCommitParams', {
+                let obj = {};
+                obj[this.resultIds] = {
+                    sceneNames: resp.resultName,
+                    sceneIds: this.resultIds,
+                    sceneTypes: this.exportResultType,
                     resultIds: this.resultIds,
                     statStartDt: resp.statStartDt,
                     statStopDay: resp.statStopDay,
                     contrCd: resp.contrCd,
                     statFreq: resp.statFreq
-                });
+                };
+                let store = this.$store.getters.sceneCommitParams;
+                store = {...store, ...obj};
+                this.$store.commit('saveSceneCommitParams', store);
                 getExportResultSet({resultIds: this.resultIds}).then(resp => {
                     this.fullLoading = false;
                     this.$store.commit('saveSceneCommitResp', resp);
+                    this.$store.commit('saveTabIndex', this.resultIds);
                     this.$nextTick(() => {
-                        this.$refs['sceneType1'][0].drewChart1();
+                        this.$refs['sceneType1'] && this.$refs['sceneType1'][0].drewChart1();
                     });
                 });
             });
         },
         handleTabClick(tab) {
             this.activeTab = tab.name;
+            this.$store.commit('saveActiveTab', tab.id);
         },
         nextStep() {
             this.$router.push({name: 'abnormity'});
@@ -102,23 +126,22 @@ export default {
             this.charts.forEach(v => {
                 v.toggleDetailFlags = false;
             });
+        },
+        getSceneNameList(sceneCommitParams, callback) {
+            this.sceneNameList = [];
+            Object.keys(sceneCommitParams).forEach(f => {
+                this.sceneNameList.push(sceneCommitParams[f]);
+            });
+            callback && callback();
         }
     },
     mounted() {
         let sceneCommitParams = this.$store.getters.sceneCommitParams;
-        console.log(sceneCommitParams);
-        let tabName = sceneCommitParams.sceneNames ? sceneCommitParams.sceneNames.split(',') : [];
-        let sceneTypes = sceneCommitParams.sceneTypes ? sceneCommitParams.sceneTypes.split(',') : [];
-        console.log(tabName);
-        let sceneNameList = [];
-        if (tabName.length) {
-            sceneNameList = tabName.map((item, i) => {
-                return {
-                    name: item,
-                    type: sceneTypes[i]
-                };
+        if (sceneCommitParams && Object.keys(sceneCommitParams).length) {
+            this.getSceneNameList(sceneCommitParams, () => {
+                this.$store.commit('saveTabIndex', Object.keys(sceneCommitParams)[0]);
             });
-            this.sceneNameList = sceneNameList;
+            this.activeTab = Object.keys(sceneCommitParams)[0];
         }
     },
     beforeDestroy() {

@@ -108,9 +108,9 @@
                         label="操作"
                         show-overflow-tooltip>
                         <template slot-scope="scope">
-                            <el-button type="primary" size="small" @click.stop="openDialog(scope.row, 1)" icon="el-icon-view">查看</el-button>
-                            <el-button type="warning" size="small" @click.stop="openDialog(scope.row, 2)" icon="el-icon-edit">编辑</el-button>
-                            <el-button type="danger" size="small" v-if="scope.row.isDel === '1'" icon="el-icon-delete" @click.stop="handleDelete(scope.row)">删除</el-button>
+                            <el-button type="primary" size="small" @click.self="openDialog(scope.row, 1)" icon="el-icon-view">查看</el-button>
+                            <el-button type="warning" size="small" @click.self="openDialog(scope.row, 2)" icon="el-icon-edit">编辑</el-button>
+                            <el-button type="danger" size="small" v-if="scope.row.isDel === '1'" icon="el-icon-delete" @click.self="handleDelete(scope.row)">删除</el-button>
                         </template>
                     </el-table-column>
                 </s-table>
@@ -146,7 +146,9 @@ import {createTypeOptions} from './components/constants';
 import {getSceneList, deleteScene, mergeAccount} from '@/api/dataAnsis/sceneConfig';
 import {uploadFileByBodyInfo} from '@/api/common';
 import resultSelectComponent from '@/components/index/common/ResultSelectComponent';
+import {resData5} from '../assoAccountGroupMerge//components/constants';
 import moment from 'moment';
+import _ from 'lodash';
 export default {
     components: {
         STable,
@@ -175,9 +177,9 @@ export default {
             ruleForm: {
                 fileList: [],
                 exportType: '',
-                resultId: 'AA0001',
-                resultType: '5',
-                customNoArray: ['80000012', '80010237'],
+                resultId: '',
+                resultType: '',
+                customNoArray: ['80000012', '80001000'],
                 contractCode: 'cu1712',
                 selectDateRange: [new Date(moment().subtract(1, 'months').format('YYYY-MM-DD')), new Date(moment().subtract(1, 'days').format('YYYY-MM-DD'))]
             },
@@ -221,7 +223,9 @@ export default {
                     required: true,
                     message: '请选择统计区间'
                 }
-            }
+            },
+            openWindows: {},
+            openFlag: false
         };
     },
     methods: {
@@ -306,6 +310,15 @@ export default {
                 this.$message.error('请选择一种导入客户的方式');
                 return;
             }
+            this.selectList = _.sortBy(this.selectList, [item => { return item.sceneId; }]);
+            let sceneTypes = this.selectList.map(v => {
+                return v.sceneType;
+            });
+            let uniqArray = _.uniq(sceneTypes);
+            if (uniqArray.length < this.selectList.length) {
+                this.$message.error('不能选择同一种场景类型');
+                return;
+            }
             this.$refs['ruleForm'].validate(valid => {
                 if (valid) {
                     this.showCarousel = true;
@@ -342,58 +355,37 @@ export default {
         handleSearch() {
             this.getTableData({searchName: this.searchAccountText});
         },
-        handleUploadSuccess(resp) {
+        handleUploadSuccess(resp, success, params) {
             this.loading = false;
             this.showCarousel = false;
-            this.$store.commit('saveSceneCommitResp', resp);
-            this.$router.push({name: 'assoAccountGroupMerge'});
-        },
-        handleNextStep() {
-            if (!this.ruleForm.exportType) {
-                this.$message.error('请选择客户群体导入类型');
-                return;
-            }
-            let cityIds = this.$refs['tree-components'].getCheckedList(true).map(v => {
-                return v.id;
-            });
-            let params = {
-                exportType: this.ruleForm.exportType,
-                cityIds: cityIds.join(',') || '11',
-                contrCd: this.ruleForm.contractCode,
-                statStartDt: moment(this.ruleForm.selectDateRange[0]).format('YYYY-MM-DD'),
-                // statStartDt: '2017-03-01',
-                // statStopDay: '2017-03-31',
-                statStopDay: moment(this.ruleForm.selectDateRange[1]).format('YYYY-MM-DD'),
-                sceneIds: this.selectList.map(v => {
-                    return v.sceneId;
-                }).join(',') || '3333333333',
-                sceneNames: this.selectList.map(v => {
-                    return v.sceneName;
-                }).join(','),
-                sceneTypes: this.selectList.map(v => {
-                    return v.sceneType;
-                }).join(','),
-                statFreq: this.selectList.map(v => {
-                    return v.statFreq;
-                }).join(',')
-            };
-            if (this.ruleForm.exportType === '0') {
-                params.resultIds = this.ruleForm.resultId;
-                params.resultType = this.ruleForm.resultType;
-            }
-            if (this.ruleForm.exportType === '2') {
-                params.accountStart = this.ruleForm.customNoArray[0];
-                params.accountEnd = this.ruleForm.customNoArray[1];
-            }
-            console.log(params);
-            // 导入csv
-            this.loading = true;
-            this.$store.commit('saveSceneCommitParams', params);
-            // test;
-            if (String(params.sceneTypes) !== '1') {
+            let store = this.$store.getters.sceneCommitResp;
+            store[params.sceneIds] = resp;
+            this.$store.commit('saveSceneCommitResp', store);
+            if (!this.openFlag) {
+                this.openFlag = true;
                 this.$router.push({name: 'assoAccountGroupMerge'});
-                return;
             }
+            // this.windowNewTabBySceneId(params, resp);
+        },
+        async createWindow(params, resp) {
+            let sceneTypeMap = {
+                '1': 'XG',
+                '2': 'BV',
+                '3': 'BI',
+                '4': 'RL',
+            };
+            let win = await window.open(`${location.origin}/#/assoAccountGroupMerge${sceneTypeMap[params.sceneTypes]}?sceneId=${params.sceneIds}`);
+            console.log(win);
+            setTimeout(() => {
+                win && win.postMessage(resp);
+            }, 1350);
+        },
+        windowNewTabBySceneId(params, resp) {
+            resp.sceneId = params.sceneIds;
+            this.createWindow(params, resp);
+        },
+        getNextStepData(params) {
+            this.loading = true;
             if (this.ruleForm.exportType === '1') {
                 this.uploadParams = {...this.uploadParams, ...params};
                 this.$nextTick(() => {
@@ -403,12 +395,77 @@ export default {
                 mergeAccount(params).then(resp => {
                     this.loading = false;
                     this.showCarousel = false;
-                    this.$store.commit('saveSceneCommitResp', resp);
-                    this.$router.push({name: 'assoAccountGroupMerge'});
+                    let store = this.$store.getters.sceneCommitResp;
+                    store[params.sceneIds] = resp;
+                    this.$store.commit('saveSceneCommitResp', store);
+                    if (!this.openFlag) {
+                        this.openFlag = true;
+                        this.$router.push({name: 'assoAccountGroupMerge'});
+                    }
+                    // this.windowNewTabBySceneId(params, resp);
                 }).catch(e => {
                     this.loading = false;
                 });
             }
+        },
+        handleNextStep() {
+            let cityIds = this.$refs['tree-components'].getCheckedList(true).map(v => {
+                return v.id;
+            });
+
+            let params = {
+                exportType: this.ruleForm.exportType,
+                cityIds: cityIds.join(',') || '11',
+                contrCd: this.ruleForm.contractCode,
+                statStartDt: moment(this.ruleForm.selectDateRange[0]).format('YYYY-MM-DD'),
+                // statStartDt: '2017-03-01',
+                // statStopDay: '2017-03-31',
+                statStopDay: moment(this.ruleForm.selectDateRange[1]).format('YYYY-MM-DD'),
+                sceneIds: '',
+                sceneNames: '',
+                sceneTypes: '',
+                statFreq: '',
+                indexPara: ''
+            };
+            if (this.ruleForm.exportType === '0') {
+                params.resultIds = this.ruleForm.resultId;
+                params.resultType = this.ruleForm.resultType;
+            }
+            if (this.ruleForm.exportType === '2') {
+                params.accountStart = this.ruleForm.customNoArray[0];
+                params.accountEnd = this.ruleForm.customNoArray[1];
+            }
+            let paramsArray = [];
+            this.selectList.forEach(v => {
+                paramsArray.push({
+                    ...params,
+                    ...{
+                        sceneIds: v.sceneId,
+                        sceneNames: v.sceneName,
+                        sceneTypes: v.sceneType,
+                        statFreq: v.statFreq,
+                        indexPara: v.indexPara
+                    }
+                });
+            });
+            let tabs = {};
+            paramsArray.forEach(v => {
+                tabs[v.sceneIds] = v;
+            });
+            this.$store.commit('saveSceneCommitParams', tabs);
+            paramsArray.forEach(v => {
+                if (v.sceneTypes === '1' || v.sceneTypes === '3') {
+                    this.getNextStepData(v);
+                } else {
+                    if (!this.openFlag) {
+                        this.openFlag = true;
+                        let store = this.$store.getters.sceneCommitResp;
+                        store[params.sceneIds] = resData5;
+                        this.$store.commit('saveSceneCommitResp', store);
+                        this.$router.push({name: 'assoAccountGroupMerge'});
+                    }
+                }
+            });
         }
     },
     mounted() {

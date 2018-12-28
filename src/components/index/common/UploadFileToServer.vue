@@ -161,12 +161,12 @@ export default {
         },
         handleUploadSuccess(res, file, fileList) {
             if (res.value === true) {
-                this.$emit('getTxtCon', [file], true);
+                this.$emit('getTxtCon', [file], true, this.uploadParams);
                 return;
             }
             const {success, resData, message} = res;
             if (success) {
-                this.$emit('getTxtCon', resData, success);
+                this.$emit('getTxtCon', resData, success, this.uploadParams);
                 // this.$refs.upload.clearFiles()
             } else {
                 this.$message.error(message || '上传失败');

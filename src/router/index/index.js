@@ -21,6 +21,7 @@ const Index = {
                 scrollTop: true,
                 title: '首页'
             },
+            hidden: true,
             path: '/toolsHome',
             name: 'toolsHome',
             icon: 'menu-fix-icon fa fa-home',
@@ -28,6 +29,7 @@ const Index = {
         },
         {
             path: '',
+            noLink: true,
             meta: {
                 scrollTop: true,
                 title: '关联账户分析'
@@ -64,7 +66,7 @@ const Index = {
                     path: 'assoAccountGroupMergeXG',
                     name: 'assoAccountGroupMergeXG',
                     icon: 'menu-fix-icon fa fa-venus-double',
-                    component: resolve => require(['@/pages/index/views/linkAccountAnsis/assoAccountGroupMerge/assoAccountGroupMergeXG/Index.vue'], resolve)
+                    component: resolve => require(['@/pages/index/views/linkAccountAnsis/assoAccountGroupMergeNew/assoAccountGroupMergeXG/Index.vue'], resolve)
                 },
                 {
                     meta: {
@@ -74,7 +76,7 @@ const Index = {
                     path: 'assoAccountGroupMergeBV',
                     name: 'assoAccountGroupMergeBV',
                     icon: 'menu-fix-icon fa fa-venus-double',
-                    component: resolve => require(['@/pages/index/views/linkAccountAnsis/assoAccountGroupMerge/assoAccountGroupMergeBV/Index.vue'], resolve)
+                    component: resolve => require(['@/pages/index/views/linkAccountAnsis/assoAccountGroupMergeNew/assoAccountGroupMergeBV/Index.vue'], resolve)
                 },
                 {
                     meta: {
@@ -84,7 +86,7 @@ const Index = {
                     path: 'assoAccountGroupMergeBI',
                     name: 'assoAccountGroupMergeBI',
                     icon: 'menu-fix-icon fa fa-venus-double',
-                    component: resolve => require(['@/pages/index/views/linkAccountAnsis/assoAccountGroupMerge/assoAccountGroupMergeBI/Index.vue'], resolve)
+                    component: resolve => require(['@/pages/index/views/linkAccountAnsis/assoAccountGroupMergeNew/assoAccountGroupMergeBI/Index.vue'], resolve)
                 },
                 {
                     meta: {
@@ -94,7 +96,7 @@ const Index = {
                     path: 'assoAccountGroupMergeRL',
                     name: 'assoAccountGroupMergeRL',
                     icon: 'menu-fix-icon fa fa-venus-double',
-                    component: resolve => require(['@/pages/index/views/linkAccountAnsis/assoAccountGroupMerge/assoAccountGroupMergeRL/Index.vue'], resolve)
+                    component: resolve => require(['@/pages/index/views/linkAccountAnsis/assoAccountGroupMergeNew/assoAccountGroupMergeRL/Index.vue'], resolve)
                 }, */
                 {
                     meta: {

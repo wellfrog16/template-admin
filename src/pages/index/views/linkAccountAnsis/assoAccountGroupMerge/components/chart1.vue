@@ -19,6 +19,10 @@ export default {
             default() {
                 return {};
             }
+        },
+        tabIndex: {
+            type: [String, Number],
+            default: '0'
         }
     },
     data() {
@@ -158,57 +162,16 @@ export default {
         };
     },
     methods: {
-        getData() {
-            // this.$store.commit('saveXGchart1', this.chartOptions);
-            let resData = this.$store.getters.sceneCommitResp;
-            // resData = resData1;
-            if (!Object.keys(resData).length) {
+        getData(resData) {
+            let {chartData} = resData;
+            if (!chartData || (chartData && !chartData.length)) {
                 return;
             }
-            let {mainTableData, chartData} = resData;
-            if (!chartData || !chartData.length) {
-                return;
-            }
-            // 散点图sort
-            this.mainTableData = this.sortDataByAcctIdCommon(mainTableData);
-            // table data sort
-            chartData = this.sortDataByAcctIdCommon(chartData);
-            let allLeaf = [];
-            mainTableData.forEach(v => {
-                if (v.children && v.children.length) {
-                    let custIds = v.children.map(v => {
-                        return v.custId;
-                    });
-                    let childIds = v.children.map(v => {
-                        return v.id;
-                    });
-                    allLeaf.push({
-                        acctId: v.acctId,
-                        custIds: custIds,
-                        id: v.id
-                    });
-                    this.childrenMap[v.id] = childIds;
-                }
-            });
-            chartData.forEach(v => {
-                let index = allLeaf.findIndex(i => {
-                    return i.acctId === v.acctId;
-                });
-                v.custIds = index > -1 ? allLeaf[index]['custIds'].join(',') : '';
-                v.id = index > -1 ? allLeaf[index]['id'] : '';
-            });
             let selectMax = _.maxBy(chartData, 'acctGroOpenInt');
-            console.log(selectMax);
-            console.log(999999999999);
             this.chartOptions['series'][0]['data'] = chartData.map(v => {
                 return [v.acctGroOpenInt, v.acctGroAvgRela, v.custQtty, v.acctId, v.contrCd, v.custIds, v.id];
             });
-            console.log(this.chartOptions);
-            this.$store.commit('saveXGchart1', this.chartOptions);
-            this.$store.commit('saveChartTableData', chartData, this.index);
-            this.$store.commit('saveMainTableData', mainTableData);
-            this.$emit('updateTableData', chartData, this.index);
-            this.$emit('updateMainTableData', mainTableData, this.index);
+            this.$store.commit('savechart1', {data: this.chartOptions, index: this.tabIndex || this.$store.getters.getTabIndex});
             // select max
             this.$emit('updateAccountGroupAndCustIds', selectMax ? selectMax.acctId : '', selectMax ? selectMax.custIds.split(',') : []);
             this.initChart();
@@ -237,10 +200,6 @@ export default {
         }
     },
     mounted() {
-        // let storeData = this.$store.getters.getXGchart1;
-        // if (storeData && Object.keys(storeData).length) {
-        //     this.initChart(true, storeData);
-        // }
     }
 };
 </script>

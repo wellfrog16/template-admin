@@ -225,7 +225,7 @@ export default {
                 statAcctCnt: this.dialogItem.sceneId ? this.dialogItem.statAcctCnt : this.defaultConfig.statAcctCnt, // 统计账户数
                 statAcctType: this.dialogItem.sceneId ? this.dialogItem.statAcctType : this.defaultConfig.statAcctType, // 统计账户类型
                 statFreq: this.dialogItem.sceneId ? this.dialogItem.statFreq : this.defaultConfig.statFreq, // 统计频度
-                indexPara: this.dialogItem.sceneId ? this.dialogItem.indexPara : this.defaultConfig.indexPara // 统计频度
+                indexPara: this.dialogItem.sceneId ? this.dialogItem.indexPara : this.defaultConfig.indexPara[this.createType] // 统计频度
             };
             if (this.dialogItem.sceneId) {
                 let checkedList = [];
@@ -259,7 +259,7 @@ export default {
                 statAcctCnt: this.defaultConfig.statAcctCnt, // 统计账户数
                 statAcctType: this.defaultConfig.statAcctType, // 统计账户类型
                 statFreq: this.defaultConfig.statFreq, // 统计频度
-                indexPara: this.defaultConfig.indexPara // 语法
+                indexPara: this.defaultConfig.indexPara[this.createType] // 语法
             };
             this.tableData = JSON.parse(JSON.stringify(this.defaultConfig.tableData)); // 指标列表
         },
@@ -275,7 +275,7 @@ export default {
                 this.$message.error('指标值请输入小于100的正整数');
                 return;
             }
-            checkSql(this.ruleForm.indexPara).then(resp => {
+            checkSql(this.ruleForm.indexPara, this.ruleForm.sceneType).then(resp => {
                 if (resp.success) {
                     callback && callback();
                 } else {

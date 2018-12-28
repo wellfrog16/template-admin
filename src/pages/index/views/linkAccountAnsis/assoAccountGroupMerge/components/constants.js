@@ -235,52 +235,52 @@ export const mainTableColumnsBI = [
         align: 'center'
     },
     {
-        field: 'acctGroNetOpenInt',
+        field: 'acctMakeGroPosQtty',
         label: '账户组净持仓量',
         align: 'center'
     },
     {
-        field: 'acctNetOpenInt',
+        field: 'acctMakePosQtty',
         label: '账户净持仓量',
         align: 'center'
     },
     {
-        field: 'custWheOtherGro',
+        field: 'custOther',
         label: '客户所在其他组',
         align: 'center'
     },
     {
-        field: '',
+        field: 'idtfyCertNum',
         label: '身份证',
         align: 'center'
     },
     {
-        field: '',
+        field: 'contTel',
         label: '联系电话',
         align: 'center'
     },
     {
-        field: '',
+        field: 'contAddr',
         label: '联系地址',
         align: 'center'
     },
     {
-        field: '',
+        field: 'zipCd',
         label: '邮编',
         align: 'center'
     },
     {
-        field: '',
+        field: 'workCorp',
         label: '工作单位',
         align: 'center'
     },
     {
-        field: '',
+        field: 'elecEmil',
         label: '电子邮件',
         align: 'center'
     },
     {
-        field: '',
+        field: 'bankAcct',
         label: '银行账号',
         align: 'center'
     },

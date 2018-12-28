@@ -36,11 +36,15 @@ export const defaultConfig = {
     statAcctType: '1', // 统计账户类型
     statFreq: '1', // 统计频度
     sf: '', // 算法
-    indexPara: '买入成交相关系数>=90% AND 卖出成交相关系数>=90%' // 指数参数
+    indexPara: {
+        '1': '买入成交相关系数>=90% AND 卖出成交相关系数>=90%',
+        '3': '(姓名相同 AND 身份证相同) OR (邮编相同 AND 联系地址相同)',
+        '4': '(同一投资经理 AND 同一投资顾问) OR (同一权益持有人 AND 同一开户授权人)',
+    } // 指数参数
 };
 export const checkbox = [
     {field: 'acctMakePosQtty', label: '账户持仓量 >=', value: '1', unit: '手'},
     {field: 'acctBargainQtty', label: '账户成交量 >=', value: '2', unit: '手'},
     {field: 'acctBillCnt', label: '账户报单数 >=', value: '3', unit: '笔'},
-    {field: 'statAcctCnt', label: '统计账户数 >=', value: '4', unit: ''}
+    {field: 'statAcctCnt', label: '统计账户数', value: '4', unit: ''}
 ];

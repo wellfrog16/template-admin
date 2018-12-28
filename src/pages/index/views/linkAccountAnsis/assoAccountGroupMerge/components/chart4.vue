@@ -31,6 +31,14 @@ export default {
             default() {
                 return [];
             }
+        },
+        sceneType: {
+            type: [Number, String],
+            default: 1
+        },
+        tabIndex: {
+            type: [String, Number],
+            default: '0'
         }
     },
     data() {
@@ -106,7 +114,6 @@ export default {
     },
     methods: {
         getData(resData) {
-            // this.$store.commit('saveXGchart4', this.chartOptions);
             if (!Object.keys(resData).length) {
                 return;
             }
@@ -125,7 +132,6 @@ export default {
                 '#1929b3',
                 '#b69913'
             ];
-            let tableData = JSON.parse(JSON.stringify(buysail));
             let buy = {};
             let sail = {};
             let buyArray = buysail.filter(v => {
@@ -172,10 +178,6 @@ export default {
             let gap = (maxPrice - minPrice) * 0.03;
             // let hPrice = maxPrice + (maxPrice - minPrice) * 0.2;
             // let lPrice = minPrice - (maxPrice - minPrice) * 0.2;
-            console.log(lineData);
-            console.log(maxPrice);
-            console.log(minPrice);
-            console.log(gap);
             // console.log(hPrice);
             // console.log(lPrice);
             // let data1 = [];
@@ -282,13 +284,10 @@ export default {
             });
             this.chartOptions['xAxis']['data'] = timeData;
             this.chartOptions['series'] = series;
-            console.log(this.chartOptions);
-            this.$emit('updateTableData', tableData, this.index);
             this.chartOptions['legend']['data'] = series.map(v => {
                 return v.name;
             });
-            this.$store.commit('saveXGchart4', this.chartOptions);
-            this.$store.commit('saveChartTableData', tableData, this.index);
+            this.$store.commit('savechart4', {data: this.chartOptions, index: this.tabIndex || this.$store.getters.getTabIndex});
             this.initChart();
         },
         initChart(flag, data) {
@@ -305,10 +304,6 @@ export default {
         }
     },
     mounted() {
-        // let storeData = this.$store.getters.getXGchart4;
-        // if (storeData && Object.keys(storeData).length) {
-        //     this.initChart(true, storeData);
-        // }
     }
 };
 </script>

@@ -31,6 +31,14 @@ export default {
             default() {
                 return [];
             }
+        },
+        sceneType: {
+            type: [Number, String],
+            default: 1
+        },
+        tabIndex: {
+            type: [String, Number],
+            default: '0'
         }
     },
     data() {
@@ -335,7 +343,7 @@ export default {
     methods: {
         async test() {
             let resp = await api.test();
-            let {mainData, tableData} = resp;
+            let {mainData} = resp;
             if (mainData && !mainData.length) {
                 return;
             }
@@ -345,8 +353,6 @@ export default {
             // set datazoom
             let dataZoomStartValue = mainData[mainData.length > 20 ? mainData.length - 20 : 0]['txDt'];
             let dataZoomEndValue = mainData[mainData.length - 1]['txDt'];
-            console.log(dataZoomStartValue);
-            console.log(dataZoomEndValue);
             this.chartOptions['dataZoom'][0]['startValue'] = dataZoomStartValue;
             this.chartOptions['dataZoom'][1]['startValue'] = dataZoomStartValue;
             this.chartOptions['dataZoom'][0]['endValue'] = dataZoomEndValue;
@@ -372,9 +378,7 @@ export default {
             // set cust count
             this.chartOptions['visualMap'][0]['max'] = this.currentCustIds.length;
             this.chartOptions['visualMap'][1]['max'] = this.currentCustIds.length;
-            console.log(this.chartOptions);
-            this.$store.commit('saveXGchart3', this.chartOptions);
-            this.initTable(tableData);
+            this.$store.commit('saveXGchart3', {data: this.chartOptions, index: this.tabIndex || this.$store.getters.getTabIndex});
             this.initChart();
             // 最近交易日，包含买入或卖出
             this.selectMax = _.maxBy(mainData, v => {
@@ -382,13 +386,11 @@ export default {
                     return v.txDt;
                 }
             });
-            console.log(this.selectMax);
             this.initChart();
         },
         getData(resp) {
             // this.test();
-            // this.$store.commit('saveXGchart3', this.chartOptions);
-            let {mainData, tableData} = resp;
+            let {mainData} = resp;
             if (mainData && !mainData.length) {
                 return;
             }
@@ -398,8 +400,6 @@ export default {
             // set datazoom
             let dataZoomStartValue = mainData[mainData.length > 20 ? mainData.length - 20 : 0]['txDt'];
             let dataZoomEndValue = mainData[mainData.length - 1]['txDt'];
-            console.log(dataZoomStartValue);
-            console.log(dataZoomEndValue);
             this.chartOptions['dataZoom'][0]['startValue'] = dataZoomStartValue;
             this.chartOptions['dataZoom'][1]['startValue'] = dataZoomStartValue;
             this.chartOptions['dataZoom'][0]['endValue'] = dataZoomEndValue;
@@ -425,10 +425,7 @@ export default {
             // set cust count
             this.chartOptions['visualMap'][0]['max'] = this.currentCustIds.length;
             this.chartOptions['visualMap'][1]['max'] = this.currentCustIds.length;
-            console.log(this.chartOptions);
-            this.$store.commit('saveXGchart3', this.chartOptions);
-            this.$store.commit('saveChartTableData', tableData, this.index);
-            this.initTable(tableData);
+            this.$store.commit('savechart3', {data: this.chartOptions, index: this.tabIndex || this.$store.getters.getTabIndex});
             this.initChart();
             // 最近交易日，包含买入或卖出
             this.selectMax = _.maxBy(mainData, v => {
@@ -436,10 +433,6 @@ export default {
                     return v.txDt;
                 }
             });
-            console.log(this.selectMax);
-        },
-        initTable(tableData) {
-            this.$emit('updateTableData', tableData, this.index);
         },
         initChart(flag, data) {
             if (data) {

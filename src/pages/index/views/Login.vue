@@ -87,7 +87,7 @@ export default {
             showLoginDialog: false,
             fullScreenLoading: false,
             ruleForm: {
-                userName: '',
+                userName: localStorage.getItem('USER_NAME') || '',
                 password: ''
             }
         };
@@ -135,7 +135,7 @@ export default {
             });
         },
         cardClick() {
-            if (this.loginFlag === true) {
+            if (this.loginFlag) {
                 this.$router.push({name: 'toolsHome'});
             } else {
                 this.$message.error('您还未登录!');
@@ -147,6 +147,10 @@ export default {
             localStorage.removeItem('USER_NAME');
             this.$message.success('登出成功');
         }
+    },
+    mounted() {
+        let {loginFlag} = this.$route.query;
+        this.loginFlag = loginFlag || false;
     }
 };
 </script>

@@ -3,7 +3,7 @@
         <s-card :title="`相关性指标选择`">
             <el-row slot="content" :gutter="20">
                 <el-col :span="11">
-                    <s-table :showHeader="false" :columns="correlationIndexColumns" :tableData="tableData" :height="200" :otherProps="{unit: '%', disabled: disabled}">
+                    <s-table :loading="loading" :showHeader="false" :columns="String(ruleForm.sceneType) === '1' ? correlationIndexColumns : correlationIndexColumns.slice(0, 1)" :tableData="tableData" :height="200" :otherProps="{unit: '%', disabled: disabled}">
                         <el-table-column
                             :width="100"
                             align="center"
@@ -25,13 +25,13 @@
                 </el-col>
                 <el-col :span="11">
                     <div class="textarea-css">
-                        <el-input :rows="8" type="textarea" placeholder="示例：买入成交相关系数>=90% AND 卖出成交相关系数>90%" :readonly="disabled" id="textarea" v-model="ruleForm.indexPara"></el-input>
+                        <el-input :rows="8" type="textarea" :placeholder="`示例：${defaultConfig['indexPara'][ruleForm.sceneType]}`" :readonly="disabled" id="textarea" v-model="ruleForm.indexPara"></el-input>
                     </div>
                 </el-col>
             </el-row>
         </s-card>
         <div style="margin-top:8px; text-align:right;">
-            <el-button size="small" type="primary" :disabled="disabled" @click="syntaxCheck()">语法检查</el-button>
+            <el-button size="small" type="primary" :loading="loadingSyntaxCheck" :disabled="disabled" @click="syntaxCheck()">语法检查</el-button>
         </div>
     </div>
 </template>
@@ -77,7 +77,9 @@ export default {
         return {
             correlationIndexColumns,
             defaultConfig,
+            loadingSyntaxCheck: false,
             tableData: [],
+            loading: false,
             ruleForm: {
                 indexPara: ''
             }
@@ -85,7 +87,7 @@ export default {
     },
     methods: {
         handleInsert(item) {
-            let str = `${item.indexName} ${item.indexCon} ${item.indexValue}%`;
+            let str = String(this.ruleForm.sceneType) === '1' ? `${item.indexName} ${item.indexCon} ${item.indexValue}%` : `${item.indexName}`;
             this.insertText(str);
         },
         insertText(str, obj) {
@@ -128,7 +130,7 @@ export default {
                 sceneId: this.dialogItem.sceneId || '',
                 sceneComnt: this.dialogItem.sceneComnt || '', // 场景说明
                 sceneName: this.dialogItem.sceneName || '', // 场景名称
-                indexPara: this.dialogItem.indexPara || this.defaultConfig.indexPara // 统计频度
+                indexPara: this.dialogItem.indexPara || this.defaultConfig.indexPara[this.createType] // 统计频度
             };
         },
         handleReset() {
@@ -138,11 +140,13 @@ export default {
                 sceneId: this.defaultConfig.sceneId || '',
                 sceneComnt: this.defaultConfig.sceneComnt, // 场景说明
                 sceneName: this.defaultConfig.sceneName, // 场景名称
-                indexPara: this.defaultConfig.indexPara
+                indexPara: this.defaultConfig.indexPara[this.createType]
             };
         },
         syntaxCheck(callback) {
-            checkSql(this.ruleForm.indexPara).then(resp => {
+            this.loadingSyntaxCheck = true;
+            checkSql(this.ruleForm.indexPara, this.ruleForm.sceneType).then(resp => {
+                this.loadingSyntaxCheck = false;
                 if (resp) {
                     callback && callback();
                 } else {
@@ -151,128 +155,22 @@ export default {
             });
         },
         getTlsIndexTlb() {
-            console.log(this.ruleForm.sceneType);
+            this.loading = true;
             getTlsIndexTlb(String(this.ruleForm.sceneType)).then(resp => {
-                if (resp && !resp.length) {
-                    if (String(this.ruleForm.sceneType) === '3') { // 地址分析
-                        resp = [
-                            {
-                                indexId: '00011',
-                                indexName: '姓名相同',
-                                indexStatus: '1',
-                                indexType: this.ruleForm.sceneType
-                            },
-                            {
-                                indexId: '00012',
-                                indexName: '身份证相同',
-                                indexStatus: '1',
-                                indexType: this.ruleForm.sceneType
-                            },
-                            {
-                                indexId: '00013',
-                                indexName: '联系电话相同',
-                                indexStatus: '1',
-                                indexType: this.ruleForm.sceneType
-                            },
-                            {
-                                indexId: '00014',
-                                indexName: '联系地址相同',
-                                indexStatus: '1',
-                                indexType: this.ruleForm.sceneType
-                            },
-                            {
-                                indexId: '00015',
-                                indexName: '邮编相同',
-                                indexStatus: '1',
-                                indexType: this.ruleForm.sceneType
-                            },
-                            {
-                                indexId: '00016',
-                                indexName: '工作单位相同',
-                                indexStatus: '1',
-                                indexType: this.ruleForm.sceneType
-                            },
-                            {
-                                indexId: '00017',
-                                indexName: '电子邮件相同',
-                                indexStatus: '1',
-                                indexType: this.ruleForm.sceneType
-                            },
-                            {
-                                indexId: '00018',
-                                indexName: '银行账号相同',
-                                indexStatus: '1',
-                                indexType: this.ruleForm.sceneType
-                            },
-                            {
-                                indexId: '00019',
-                                indexName: '地址近似',
-                                indexStatus: '1',
-                                indexType: this.ruleForm.sceneType
-                            }
-                        ];
-                    }
-                    if (String(this.ruleForm.sceneType) === '4') { // 关系人
-                        resp = [
-                            {
-                                indexId: '00011',
-                                indexName: '同一投资经理',
-                                indexStatus: '1',
-                                indexType: this.ruleForm.sceneType
-                            },
-                            {
-                                indexId: '00012',
-                                indexName: '同一投资顾问',
-                                indexStatus: '1',
-                                indexType: this.ruleForm.sceneType
-                            },
-                            {
-                                indexId: '00013',
-                                indexName: '同一权益持有人',
-                                indexStatus: '1',
-                                indexType: this.ruleForm.sceneType
-                            },
-                            {
-                                indexId: '00014',
-                                indexName: '同一下单人',
-                                indexStatus: '1',
-                                indexType: this.ruleForm.sceneType
-                            },
-                            {
-                                indexId: '00015',
-                                indexName: '同一法人代表',
-                                indexStatus: '1',
-                                indexType: this.ruleForm.sceneType
-                            },
-                            {
-                                indexId: '00016',
-                                indexName: '同一资金调拨人',
-                                indexStatus: '1',
-                                indexType: this.ruleForm.sceneType
-                            },
-                            {
-                                indexId: '00017',
-                                indexName: '同一结算单确认人',
-                                indexStatus: '1',
-                                indexType: this.ruleForm.sceneType
-                            },
-                            {
-                                indexId: '00018',
-                                indexName: '同一开户授权人',
-                                indexStatus: '1',
-                                indexType: this.ruleForm.sceneType
-                            }
-                        ];
-                    }
+                this.loading = false;
+                if (String(this.ruleForm.sceneType) === '1') {
+                    resp = resp.map(v => {
+                        return {
+                            indexName: v.indexName,
+                            indexValue: 90,
+                            indexCon: '>='
+                        };
+                    });
                 }
-                let data = resp.map(v => {
-                    return {
-                        indexName: v.indexName,
-                        indexValue: 90,
-                        indexCon: '>='
-                    };
-                });
-                this.tableData = data;
+                this.tableData = resp;
+            }).catch(e => {
+                this.loading = false;
+                console.error(e);
             });
         }
     },

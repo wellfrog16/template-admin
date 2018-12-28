@@ -20,8 +20,8 @@ export const getTlsIndexTlb = sceneType => {
     return post(`${requestPrefix}/getTlsIndexTlb`, {indexType: sceneType});
 };
 // 语法检查
-export const checkSql = indexPara => {
-    return post(`${requestPrefix}/checkSql`, {indexPara});
+export const checkSql = (indexPara, indexType) => {
+    return post(`${requestPrefix}/checkSql`, {indexPara: indexPara, indexType: indexType});
 };
 // 下一步-合并
 export const mergeAccountByFile = params => {

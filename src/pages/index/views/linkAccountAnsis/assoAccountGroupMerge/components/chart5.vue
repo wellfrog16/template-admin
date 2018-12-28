@@ -5,7 +5,7 @@
 </template>
 <script>
 import EchartsCommon from '@/components/index/common/EchartsCommon';
-import {resData5, chartTableColumns8} from './constants.js';
+import {resData5} from './constants.js';
 import _ from 'lodash';
 export default {
     components: {EchartsCommon},
@@ -19,6 +19,14 @@ export default {
             default() {
                 return {};
             }
+        },
+        sceneType: {
+            type: [Number, String],
+            default: 1
+        },
+        tabIndex: {
+            type: [String, Number],
+            default: '0'
         }
     },
     data() {
@@ -64,47 +72,12 @@ export default {
         };
     },
     methods: {
-        getData() {
-            // this.$store.commit('saveXGchart1', this.chartOptions);
-            // let resData = this.$store.getters.sceneCommitResp;
-            let resData = resData5;
-            if (!Object.keys(resData).length) {
-                return;
-            }
-            let {mainTableData, chartData} = resData;
-            if (!chartData || !Object.keys(chartData).length) {
-                return;
-            }
+        getData(resData) {
+            let {chartData} = resData;
             // 散点图sort
-            this.mainTableData = this.sortDataByAcctIdCommon(mainTableData);
-            // table data sort
-            // let allLeaf = [];
-            // mainTableData.forEach(v => {
-            //     if (v.children && v.children.length) {
-            //         let custIds = v.children.map(v => {
-            //             return v.custId;
-            //         });
-            //         let childIds = v.children.map(v => {
-            //             return v.id;
-            //         });
-            //         allLeaf.push({
-            //             acctId: v.acctId,
-            //             custIds: custIds,
-            //             id: v.id
-            //         });
-            //         this.childrenMap[v.id] = childIds;
-            //     }
-            // });
-            // let selectMax = _.maxBy(chartData, 'acctGroOpenInt');
-            this.chartOptions['series'][0]['data'] = chartData['nodes'];
             this.chartOptions['series'][0]['links'] = chartData['links'];
             console.log(this.chartOptions);
-            this.$store.commit('saveXGchart1', this.chartOptions);
-            // this.$store.commit('saveChartTableData', [], this.index);
-            this.$store.commit('saveChartTableData', chartTableColumns8, this.index);
-            this.$store.commit('saveMainTableData', mainTableData);
-            this.$emit('updateTableData', chartTableColumns8, this.index);
-            this.$emit('updateMainTableData', mainTableData, this.index);
+            this.$store.commit('savechart1', {data: this.chartOptions, index: this.tabIndex || this.$store.getters.tabIndex});
             // select max
             // this.$emit('updateAccountGroupAndCustIds', selectMax ? selectMax.acctId : '', selectMax ? selectMax.custIds.split(',') : []);
             this.$emit('updateAccountGroupAndCustIds', chartData['nodes'][0]['name'], chartData['nodes'][0]['value'].split(','));
@@ -134,10 +107,6 @@ export default {
         }
     },
     mounted() {
-        // let storeData = this.$store.getters.getXGchart1;
-        // if (storeData && Object.keys(storeData).length) {
-        //     this.initChart(true, storeData);
-        // }
     }
 };
 </script>

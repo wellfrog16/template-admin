@@ -1,8 +1,5 @@
 const state = {
-    sceneCommitResp: {
-        mainTableData: [],
-        chartData: []
-    },
+    sceneCommitResp: {},
     sceneCommitParams: {}
 };
 const mutations = {

@@ -16,10 +16,10 @@
                             <s-table :height="index === 2 ? 268 : 300" :columns="chartTableColumns[index]" :tableData="chartTableData[index]"></s-table>
                         </div>
                         <div v-else>
-                            <chart1 :ref="`chartComponent${index + 1}`" v-if="index === 0" :childrenMap="childrenMap" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData" @updateMainTableData="updateMainTableData" @updateAccountGroupAndCustIds="updateAccountGroupAndCustIds" @getBlock2Data="getBlock2Data"  @getBlock3Data="getBlock3Data"></chart1>
-                            <chart2 :ref="`chartComponent${index + 1}`" v-if="index === 1" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData" @getBlock4Data="getBlock4Data"></chart2>
-                            <chart3 :ref="`chartComponent${index + 1}`" v-if="index === 2" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData" @getBlock4Data="getBlock4Data"></chart3>
-                            <chart4 :ref="`chartComponent${index + 1}`" v-if="index === 3" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData"></chart4>
+                            <chart1 :ref="`chartComponent${index + 1}`" v-if="index === 0" :tabIndex="tabIndex" :sceneType="1" :childrenMap="childrenMap" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateAccountGroupAndCustIds="updateAccountGroupAndCustIds" @getBlock2Data="getBlock2Data" @getBlock3Data="getBlock3Data"></chart1>
+                            <chart2 :ref="`chartComponent${index + 1}`" v-if="index === 1" :tabIndex="tabIndex" :sceneType="1" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @getBlock4Data="getBlock4Data"></chart2>
+                            <chart3 :ref="`chartComponent${index + 1}`" v-if="index === 2" :tabIndex="tabIndex" :sceneType="1" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @getBlock4Data="getBlock4Data"></chart3>
+                            <chart4 :ref="`chartComponent${index + 1}`" v-if="index === 3" :tabIndex="tabIndex" :sceneType="1" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData"></chart4>
                         </div>
                         <!-- <echarts-common v-else :loading="chartLoading[index]" :ref="`chart${index}`" :domId="`chart${index}`" :defaultOption="chartOptions[index]" :propsChartHeight="300" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></echarts-common> -->
                     </div>
@@ -73,26 +73,40 @@ import {
     getChart2Data,
     getChart3Data,
     getChart4Data,
+    // getChartTable2ByPage
 } from '@/api/dataAnsis/assoAccountGroupMerge';
 import chart1 from '../components/chart1';
 import chart2 from '../components/chart2';
 import chart3 from '../components/chart3';
 import chart4 from '../components/chart4';
+import _ from 'lodash';
 import {charts, mainTableColumns, chartTableColumns1, chartTableColumns2, chartTableColumns4, table3Options} from '../components/constants';
 export default {
     components: {chart1, chart2, chart3, chart4, SCard, STable, TreeTable},
     mixins: [treeTableMixin],
+    props: {
+        tabIndex: {
+            type: [Number, String],
+            default: 0
+        }
+    },
     watch: {
-        currentCustIds: {
+        'currentCustIds': {
             handler(val) {
                 this.createChart3Columnn(val);
             },
             deep: true
         },
-        currentAccountGroupId() {
+        currentAccountGroupId(val) {
+            console.log('watchgroupid:' + val);
             this.computedCommonReqParams = this.commonReqParams();
-            console.log(this.computedCommonReqParams);
-        }
+        },
+        // '$store.getters.sceneCommitResp': {
+        // handler() {
+        //     this.drewChart1();
+        // },
+        // deep: true
+        // }
     },
     data() {
         return {
@@ -128,13 +142,66 @@ export default {
             this.chartTableData = session;
             this.testTableData = session[0].slice((this.pagination['pageIndex'] - 1) * this.pagination['pageRows'], (this.pagination['pageIndex'] + 1) * (this.pagination['pageRows']));
         },
+        sortDataByAcctIdCommon(data) {
+            return _.sortBy(data, [item => { return item.acctId; }]);
+        },
+        dealChart1AndMainTableData() {
+            if (!this.tabIndex) {
+                return {
+                    chartData: [],
+                    mainTableData: []
+                };
+            }
+            let resData = this.$store.getters.sceneCommitResp[this.tabIndex];
+            let {mainTableData, chartData} = resData;
+            if (mainTableData && !mainTableData.length) {
+                return {
+                    chartData: [],
+                    mainTableData: []
+                };
+            }
+            // 散点图sort
+            this.mainTableData = this.sortDataByAcctIdCommon(mainTableData);
+            // table data sort
+            chartData = this.sortDataByAcctIdCommon(chartData);
+            let allLeaf = [];
+            mainTableData.forEach(v => {
+                if (v.children && v.children.length) {
+                    let custIds = v.children.map(v => {
+                        return v.custId;
+                    });
+                    custIds = [...new Set(custIds)];
+                    let childIds = v.children.map(v => {
+                        return v.id;
+                    });
+                    allLeaf.push({
+                        acctId: v.acctId,
+                        custIds: custIds,
+                        id: v.id
+                    });
+                    this.childrenMap[v.id] = childIds;
+                }
+            });
+            chartData.forEach(v => {
+                let index = allLeaf.findIndex(i => {
+                    return i.acctId === v.acctId;
+                });
+                v.custIds = index > -1 ? allLeaf[index]['custIds'].join(',') : '';
+                v.id = index > -1 ? allLeaf[index]['id'] : '';
+            });
+            this.$store.commit('saveMainTableData', {data: mainTableData, index: this.tabIndex || this.$store.getters.getTabIndex});
+            this.updateTableData(chartData, 0);
+            return {
+                chartData: chartData,
+                mainTableData: mainTableData
+            };
+        },
         updateTableData(value, index) {
             if (index === 2) {
                 this.createChart3Columnn(this.currentCustIds);
             }
             this.chartTableData[index] = value;
-            // test
-            localStorage.setItem('CHART_TABLE_DATA', JSON.stringify(this.chartTableData));
+            this.$store.commit('saveChartTableData', {data: this.chartTableData, index: this.tabIndex || this.$store.getters.getTabIndex});
         },
         handleTabClick(tab) {
             this.activeTab = tab.name;
@@ -143,7 +210,8 @@ export default {
             this.charts[index]['toggleDetailFlags'] = !item.toggleDetailFlags;
             if (!item.toggleDetailFlags) {
                 this.$nextTick(() => {
-                    let dataMap = [this.$store.getters.getXGchart1, this.$store.getters.getXGchart2, this.$store.getters.getXGchart3, this.$store.getters.getXGchart4];
+                    let dataMap = [this.$store.getters.getchart1, this.$store.getters.getchart2, this.$store.getters.getchart3, this.$store.getters.getchart4];
+                    console.log(this.$store.getters.getchart1);
                     (this.getChart()[index])(1, dataMap[index]);
                 });
             }
@@ -153,14 +221,22 @@ export default {
             let params = this.commonReqParams();
             getChart2Data(params).then(resp => {
                 this.charts[1]['loading'] = false;
+                this.updateTableData(resp.tableData, 1);
                 this.drewChart2(resp);
             });
+            // getChartTable2ByPage({...params, ...{pageSize: 10, pageNum: 1}}).then(resp => {
+            //     console.log(resp);
+            // });
+            // getChart2Data({...params, ...{pageSize: 10, pageNum: 2}}).then(resp => {
+            //     console.log(resp);
+            // });
         },
         getBlock3Data() {
             this.charts[2]['loading'] = true;
             let params = this.commonReqParams();
             getChart3Data(params).then(resp => {
                 this.charts[2]['loading'] = false;
+                this.updateTableData(resp.tableData, 2);
                 this.drewChart3(resp);
             });
         },
@@ -170,11 +246,11 @@ export default {
             params.txDt = date;
             getChart4Data(params).then(resp => {
                 this.charts[3]['loading'] = false;
+                this.updateTableData(resp.buysail, 3);
                 this.drewChart4(resp);
             });
         },
         handleEchartDblClickEvent(params, index) {
-            console.log(params);
             switch (String(index)) {
             case '0':
                 // get chart2
@@ -185,7 +261,7 @@ export default {
                     this.$refs['chartComponent1'][0].chartOptions['series'][0]['markPoint']['data'] = markPointData.filter(v => {
                         return v.coord[0] !== params['data'][0] && v.coord[1] !== params['data'][1];
                     });
-                    this.$store.commit('saveXGchart1', this.$refs['chartComponent1'][0].chartOptions);
+                    this.$store.commit('savechart1', {data: this.$refs['chartComponent1'][0].chartOptions, index: this.tabIndex || this.$store.getters.getTabIndex});
                     // table勾选状态
                     this.selectAccountGroupList = this.selectAccountGroupList.filter(v => {
                         return v !== currentId && this.childrenMap[currentId].indexOf(v) === -1;
@@ -195,25 +271,20 @@ export default {
                     this.$refs['chartComponent1'][0].chartOptions['series'][0]['markPoint']['data'].push({
                         coord: [params['data'][0], params['data'][1]]
                     });
-                    console.log(this.$refs['chartComponent1'][0].chartOptions['series'][0]['markPoint']);
-                    this.$store.commit('saveXGchart1', this.$refs['chartComponent1'][0].chartOptions);
+                    this.$store.commit('savechart1', {data: this.$refs['chartComponent1'][0].chartOptions, index: this.tabIndex || this.$store.getters.getTabIndex});
                     // table勾选状态
                     this.selectAccountGroupList.push(currentId);
                 }
                 this.getChart1(1, this.$refs['chartComponent1'][0].chartOptions);
-                console.log(this.selectAccountGroupList);
                 this.$refs['self-tree-table'].$refs['tree-table'].setCheckedKeys(this.selectAccountGroupList);
                 break;
             }
         },
         handleEchartClickEvent(params, index) {
-            console.log(params);
             switch (String(index)) {
             case '0':
                 this.currentAccountGroupId = params['data'][3];
                 this.currentCustIds = params.data[5].split(',');
-                console.log(this.currentAccountGroupId);
-                console.log(this.currentCustIds);
                 this.$nextTick(() => {
                     this.getBlock2Data();
                     this.getBlock3Data();
@@ -225,13 +296,14 @@ export default {
                 // get chart4
                 break;
             case '2':
-                this.getBlock4Data(params['data'][5]);
+                console.log(params);
+                this.getBlock4Data(params['name']);
                 // get chart4
                 break;
             }
         },
         commonReqParams() {
-            this.sceneCommitParams = this.$store.getters.sceneCommitParams;
+            this.sceneCommitParams = this.$store.getters.sceneCommitParams[this.tabIndex || this.$store.getters.getTabIndex];
             return {
                 acctId: this.currentAccountGroupId, // || 'XG00001',
                 custId: this.currentCustIds.join(','), // || '80001716,80000025,80001461',
@@ -245,7 +317,8 @@ export default {
             return [this.getChart1, this.getChart2, this.getChart3, this.getChart4];
         },
         drewChart1() {
-            this.$refs['chartComponent1'] && this.$refs['chartComponent1'][0] && this.$refs['chartComponent1'][0].getData();
+            let respData = this.dealChart1AndMainTableData();
+            this.$refs['chartComponent1'] && this.$refs['chartComponent1'][0] && this.$refs['chartComponent1'][0].getData(respData);
         },
         getChart1(flag, data) {
             this.$refs['chartComponent1'] && this.$refs['chartComponent1'][0] && this.$refs['chartComponent1'][0].initChart(flag, data);
@@ -289,6 +362,12 @@ export default {
                 'minWidth': 140
             });
             this.chartTableColumns.splice(2, 1, chart3Column);
+        },
+        getStoreData() {
+            let dataMap = [this.$store.getters.getchart1, this.$store.getters.getchart2, this.$store.getters.getchart3, this.$store.getters.getchart4];
+            dataMap.forEach((v, index) => {
+                (this.getChart()[index])(1, dataMap[index]);
+            });
         }
     },
     mounted() {
