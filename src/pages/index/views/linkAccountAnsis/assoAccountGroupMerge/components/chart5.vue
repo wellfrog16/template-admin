@@ -46,7 +46,7 @@ export default {
                     backgroundColor: '#222',
                     borderColor: '#777',
                     borderWidth: 1,
-                    extraCssText: 'width:200px; white-space:pre-wrap;',
+                    extraCssText: 'width:200px; white-space:pre-wrap; word-break: break-all',
                 },
                 animation: false,
                 series: [
@@ -77,7 +77,6 @@ export default {
             // 散点图sort
             this.chartOptions['series'][0]['links'] = chartData['links'];
             this.chartOptions['series'][0]['data'] = chartData['nodes'];
-            console.log(this.chartOptions);
             this.$store.commit('savechart1', {data: this.chartOptions, index: this.tabIndex || this.$store.getters.tabIndex});
             // select max
             // this.$emit('updateAccountGroupAndCustIds', selectMax ? selectMax.acctId : '', selectMax ? selectMax.custIds.split(',') : []);

@@ -165,6 +165,9 @@ export default {
                     if (this.$route.name === 'assoAccountGroupMerge') {
                         this.$emit('updateResultList');
                     }
+                }).catch(e => {
+                    console.error(e);
+                    this.$emit('updateFullLoading', false);
                 });
             }).catch(() => {});
         },
@@ -177,7 +180,7 @@ export default {
                 return;
             }
             let params = {
-                fileName: fileName || '测试',
+                fileName: fileName || '',
                 tableColumns: mainTableColumns,
                 tableData: tableData
             };

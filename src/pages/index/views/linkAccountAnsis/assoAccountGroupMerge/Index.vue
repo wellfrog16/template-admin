@@ -50,7 +50,7 @@ export default {
         '$store.getters.sceneCommitParams': {
             handler(val) {
                 this.getSceneNameList(val, () => {
-                    this.$store.commit('saveTabIndex', this.resultIds);
+                    // this.$store.commit('saveTabIndex', this.resultIds);
                     let sceneCommitParams = this.$store.getters.sceneCommitParams;
                     console.log(this.$store.getters.sceneCommitParams);
                     this.activeTab = this.resultIds || Object.keys(sceneCommitParams)[0];
@@ -107,7 +107,9 @@ export default {
                 this.$store.commit('saveSceneCommitParams', store);
                 getExportResultSet({resultIds: this.resultIds}).then(resp => {
                     this.fullLoading = false;
-                    this.$store.commit('saveSceneCommitResp', resp);
+                    let store = this.$store.getters.sceneCommitResp;
+                    store[this.resultIds] = resp;
+                    this.$store.commit('saveSceneCommitResp', store);
                     this.$store.commit('saveTabIndex', this.resultIds);
                     this.$nextTick(() => {
                         this.$refs['sceneType1'] && this.$refs['sceneType1'][0].drewChart1();
@@ -116,8 +118,10 @@ export default {
             });
         },
         handleTabClick(tab) {
+            console.log(tab);
             this.activeTab = tab.name;
-            this.$store.commit('saveActiveTab', tab.id);
+            this.$store.commit('saveTabIndex', tab.name);
+            this.$store.commit('saveClickTab', true);
         },
         nextStep() {
             this.$router.push({name: 'abnormity'});
@@ -136,6 +140,8 @@ export default {
         }
     },
     mounted() {
+        // 用于是否取缓存数据
+        this.$store.commit('saveClickTab', false);
         let sceneCommitParams = this.$store.getters.sceneCommitParams;
         if (sceneCommitParams && Object.keys(sceneCommitParams).length) {
             this.getSceneNameList(sceneCommitParams, () => {

@@ -97,7 +97,6 @@ export default {
             if (!Object.keys(mainData).length) {
                 return;
             }
-            console.log(resp);
             let series = [];
             let date = [];
             Object.keys(mainData).forEach(v => {

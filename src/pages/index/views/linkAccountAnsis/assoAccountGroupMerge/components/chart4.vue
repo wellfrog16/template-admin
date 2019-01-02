@@ -121,7 +121,6 @@ export default {
             let lineData = [];
             let timeData = [];
             let colors = [
-                '#f8f400',
                 '#00709e',
                 '#ac10ce',
                 '#ff0000',
@@ -130,7 +129,8 @@ export default {
                 '#006624',
                 '#e3007b',
                 '#1929b3',
-                '#b69913'
+                '#b69913',
+                '#f8f400'
             ];
             let buy = {};
             let sail = {};
