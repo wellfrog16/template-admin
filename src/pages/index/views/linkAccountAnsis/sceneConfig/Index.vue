@@ -146,7 +146,7 @@ import {createTypeOptions} from './components/constants';
 import {getSceneList, deleteScene, mergeAccount} from '@/api/dataAnsis/sceneConfig';
 import {uploadFileByBodyInfo} from '@/api/common';
 import resultSelectComponent from '@/components/index/common/ResultSelectComponent';
-import {resData5} from '../assoAccountGroupMerge//components/constants';
+import {resData5} from '../assoAccountGroupMerge/components/constants';
 import moment from 'moment';
 import _ from 'lodash';
 export default {

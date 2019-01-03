@@ -182,6 +182,9 @@ export default {
     },
     // 初始化数据
     mounted() {
+        this.activeNameList[0].tableData = [];
+        this.activeNameList[1].tableData = [];
+        this.activeNameList[2].tableData = [];
         this.ruleForm.customerID = this.$route.query.custId ? this.$route.query.custId : '';
     }
 };
