@@ -69,6 +69,7 @@ import SCard from '@/components/index/common/SCard';
 import STable from '@/components/index/common/STable';
 import TreeTable from '@/components/index/common/TreeTable';
 import treeTableMixin from '@/pages/index/common/treeTableMixin';
+import commonMixin from '@/pages/index/common/commonMixin';
 import {
     getChart2Data,
     getChart3Data,
@@ -83,7 +84,7 @@ import _ from 'lodash';
 import {charts, mainTableColumns, chartTableColumns1, chartTableColumns2, chartTableColumns4, table3Options} from '../components/constants';
 export default {
     components: {chart1, chart2, chart3, chart4, SCard, STable, TreeTable},
-    mixins: [treeTableMixin],
+    mixins: [treeTableMixin, commonMixin],
     props: {
         tabIndex: {
             type: [Number, String],
@@ -153,7 +154,7 @@ export default {
                 };
             }
             let resData = this.$store.getters.sceneCommitResp[this.tabIndex];
-            let {mainTableData, chartData} = resData;
+            let {mainTableData, chartData, id} = resData;
             if (mainTableData && !mainTableData.length) {
                 return {
                     chartData: [],
@@ -189,66 +190,112 @@ export default {
                 v.custIds = index > -1 ? allLeaf[index]['custIds'].join(',') : '';
                 v.id = index > -1 ? allLeaf[index]['id'] : '';
             });
-            this.$store.commit('saveMainTableData', {data: mainTableData, index: this.tabIndex || this.$store.getters.getTabIndex});
-            this.updateTableData(chartData, 0);
+            this.$store.commit('saveMainTableData', {data: mainTableData, index: id || this.tabIndex || this.$store.getters.getTabIndex});
+            this.updateTableData(chartData, 0, id);
             return {
                 chartData: chartData,
                 mainTableData: mainTableData
             };
         },
-        updateTableData(value, index) {
+        updateTableData(value, index, id) {
             if (index === 2) {
                 this.createChart3Columnn(this.currentCustIds);
             }
             this.chartTableData[index] = value;
-            this.$store.commit('saveChartTableData', {data: this.chartTableData, index: this.tabIndex || this.$store.getters.getTabIndex});
+            this.$store.commit('saveChartTableData', {data: this.chartTableData, index: id || this.tabIndex || this.$store.getters.getTabIndex});
         },
         handleTabClick(tab) {
             this.activeTab = tab.name;
         },
         toggleDetail(item, index) {
             this.charts[index]['toggleDetailFlags'] = !item.toggleDetailFlags;
+            let data = {};
+            let storeData = this.$store.getters.getBlockData[this.$store.getters.getTabIndex];
+            if (index === 0) {
+                data = storeData['chartData1'];
+            } else if (index === 1) {
+                data = storeData['chartData2'];
+            } else if (index === 2) {
+                data = storeData['chartData3'];
+            } else if (index === 3) {
+                data = storeData['chartData4'];
+            }
             if (!item.toggleDetailFlags) {
                 this.$nextTick(() => {
-                    let dataMap = [this.$store.getters.getchart1, this.$store.getters.getchart2, this.$store.getters.getchart3, this.$store.getters.getchart4];
-                    console.log(this.$store.getters.getchart1);
-                    (this.getChart()[index])(1, dataMap[index]);
+                    // let dataMap = [this.$store.getters.getchart1, this.$store.getters.getchart2, this.$store.getters.getchart3, this.$store.getters.getchart4];
+                    setTimeout(() => {
+                        (this.getChart()[index])(data, 1);
+                    });
                 });
             }
         },
         getBlock2Data() {
-            this.charts[1]['loading'] = true;
-            let params = this.commonReqParams();
-            getChart2Data(params).then(resp => {
-                this.charts[1]['loading'] = false;
-                this.updateTableData(resp.tableData, 1);
-                this.drewChart2(resp);
-            });
-            // getChartTable2ByPage({...params, ...{pageSize: 10, pageNum: 1}}).then(resp => {
-            //     console.log(resp);
-            // });
-            // getChart2Data({...params, ...{pageSize: 10, pageNum: 2}}).then(resp => {
-            //     console.log(resp);
-            // });
+            let flag = this.$store.getters.getClickTab;
+            if (flag && this.$store.getters.getchart2) {
+                let tableData = this.$store.getters.getChartTableData[1];
+                let chartData = this.$store.getters.getchart2;
+                this.updateTableData(tableData, 1);
+                this.getChart2(chartData);
+            } else {
+                if (this.currentAccountGroupId) {
+                    let params = this.commonReqParams();
+                    this.charts[1]['loading'] = true;
+                    getChart2Data(params).then(resp => {
+                        this.charts[1]['loading'] = false;
+                        this.updateTableData(resp.tableData, 1);
+                        this.drewChart2(resp);
+                    }).catch(e => {
+                        console.error(e);
+                        this.charts[1]['loading'] = false;
+                    });
+                }
+            }
         },
         getBlock3Data() {
-            this.charts[2]['loading'] = true;
-            let params = this.commonReqParams();
-            getChart3Data(params).then(resp => {
-                this.charts[2]['loading'] = false;
-                this.updateTableData(resp.tableData, 2);
-                this.drewChart3(resp);
-            });
+            let flag = this.$store.getters.getClickTab;
+            if (flag && this.$store.getters.getchart3) {
+                let tableData = this.$store.getters.getChartTableData[2];
+                let chartData = this.$store.getters.getchart3;
+                this.updateTableData(tableData, 1);
+                this.getChart2(chartData);
+            } else {
+                if (this.currentAccountGroupId) {
+                    this.charts[2]['loading'] = true;
+                    let params = this.commonReqParams();
+                    getChart3Data(params).then(resp => {
+                        this.charts[2]['loading'] = false;
+                        this.updateTableData(resp.tableData, 2);
+                        this.drewChart3(resp);
+                    }).catch(e => {
+                        console.error(e);
+                        this.charts[1]['loading'] = false;
+                    });
+                }
+            }
         },
         getBlock4Data(date) {
-            this.charts[3]['loading'] = true;
-            let params = this.commonReqParams();
-            params.txDt = date;
-            getChart4Data(params).then(resp => {
-                this.charts[3]['loading'] = false;
-                this.updateTableData(resp.buysail, 3);
-                this.drewChart4(resp);
-            });
+            let flag = this.$store.getters.getClickTab;
+            if (flag && this.$store.getters.getchart4) {
+                this.$store.commit('saveClickTab', false);
+                let tableData = this.$store.getters.getChartTableData[3];
+                let chartData = this.$store.getters.getchart4;
+                this.updateTableData(tableData, 1);
+                this.getChart2(chartData);
+            } else {
+                if (this.currentAccountGroupId) {
+                    this.charts[3]['loading'] = true;
+                    let params = this.commonReqParams();
+                    params.txDt = date;
+                    getChart4Data(params).then(resp => {
+                        this.charts[3]['loading'] = false;
+                        this.updateTableData(resp.buysail, 3);
+                        this.drewChart4(resp);
+                    }).catch(e => {
+                        console.error(e);
+                        this.charts[1]['loading'] = false;
+                    });
+                }
+            }
         },
         handleEchartDblClickEvent(params, index) {
             switch (String(index)) {
@@ -261,7 +308,7 @@ export default {
                     this.$refs['chartComponent1'][0].chartOptions['series'][0]['markPoint']['data'] = markPointData.filter(v => {
                         return v.coord[0] !== params['data'][0] && v.coord[1] !== params['data'][1];
                     });
-                    this.$store.commit('savechart1', {data: this.$refs['chartComponent1'][0].chartOptions, index: this.tabIndex || this.$store.getters.getTabIndex});
+                    this.$store.commit('savechart1', {data: this.$refs['chartComponent1'][0].chartOptions, index: params.id || this.tabIndex || this.$store.getters.getTabIndex});
                     // table勾选状态
                     this.selectAccountGroupList = this.selectAccountGroupList.filter(v => {
                         return v !== currentId && this.childrenMap[currentId].indexOf(v) === -1;
@@ -271,7 +318,7 @@ export default {
                     this.$refs['chartComponent1'][0].chartOptions['series'][0]['markPoint']['data'].push({
                         coord: [params['data'][0], params['data'][1]]
                     });
-                    this.$store.commit('savechart1', {data: this.$refs['chartComponent1'][0].chartOptions, index: this.tabIndex || this.$store.getters.getTabIndex});
+                    this.$store.commit('savechart1', {data: this.$refs['chartComponent1'][0].chartOptions, index: params.id || this.tabIndex || this.$store.getters.getTabIndex});
                     // table勾选状态
                     this.selectAccountGroupList.push(currentId);
                 }
@@ -281,6 +328,7 @@ export default {
             }
         },
         handleEchartClickEvent(params, index) {
+            this.$store.commit('saveClickTab', false);
             switch (String(index)) {
             case '0':
                 this.currentAccountGroupId = params['data'][3];
@@ -304,6 +352,7 @@ export default {
         commonReqParams() {
             this.sceneCommitParams = this.$store.getters.sceneCommitParams[this.tabIndex || this.$store.getters.getTabIndex];
             return {
+                id: this.sceneCommitParams.sceneIds,
                 acctId: this.currentAccountGroupId, // || 'XG00001',
                 custId: this.currentCustIds.join(','), // || '80001716,80000025,80001461',
                 statStartDt: this.sceneCommitParams.statStartDt, // || '2017-02-20',
@@ -311,34 +360,6 @@ export default {
                 contrCd: this.sceneCommitParams.contrCd, // || 'cu1712'
                 // resultIds: this.resultIds || ''
             };
-        },
-        getChart() {
-            return [this.getChart1, this.getChart2, this.getChart3, this.getChart4];
-        },
-        drewChart1() {
-            let respData = this.dealChart1AndMainTableData();
-            this.$refs['chartComponent1'] && this.$refs['chartComponent1'][0] && this.$refs['chartComponent1'][0].getData(respData);
-        },
-        getChart1(flag, data) {
-            this.$refs['chartComponent1'] && this.$refs['chartComponent1'][0] && this.$refs['chartComponent1'][0].initChart(flag, data);
-        },
-        drewChart2(resp) {
-            this.$refs['chartComponent2'] && this.$refs['chartComponent2'][0] && this.$refs['chartComponent2'][0].getData(resp);
-        },
-        getChart2(flag, data) {
-            this.$refs['chartComponent2'] && this.$refs['chartComponent2'][0] && this.$refs['chartComponent2'][0].initChart(flag, data);
-        },
-        drewChart3(resp) {
-            this.$refs['chartComponent3'] && this.$refs['chartComponent3'][0] && this.$refs['chartComponent3'][0].getData(resp);
-        },
-        getChart3(flag, data) {
-            this.$refs['chartComponent3'] && this.$refs['chartComponent3'][0] && this.$refs['chartComponent3'][0].initChart(flag, data);
-        },
-        drewChart4(resp) {
-            this.$refs['chartComponent4'] && this.$refs['chartComponent4'][0] && this.$refs['chartComponent4'][0].getData(resp);
-        },
-        getChart4(flag, data) {
-            this.$refs['chartComponent4'] && this.$refs['chartComponent4'][0] && this.$refs['chartComponent4'][0].initChart(flag, data);
         },
         createChart3Columnn(val) {
             if (!val) {
@@ -379,7 +400,7 @@ export default {
         // this.createChart3Columnn(this.currentCustIds);
         this.sceneCommitParams = this.$store.getters.sceneCommitParams;
         if (Object.keys(this.sceneCommitParams).length) {
-            this.drewChart1();
+            this.drewChart1(1);
         }
     }
 };

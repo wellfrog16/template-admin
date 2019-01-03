@@ -146,7 +146,7 @@ import {createTypeOptions} from './components/constants';
 import {getSceneList, deleteScene, mergeAccount} from '@/api/dataAnsis/sceneConfig';
 import {uploadFileByBodyInfo} from '@/api/common';
 import resultSelectComponent from '@/components/index/common/ResultSelectComponent';
-import {resData5} from '../assoAccountGroupMerge/components/constants';
+// import {resData5} from '../assoAccountGroupMerge//components/constants';
 import moment from 'moment';
 import _ from 'lodash';
 export default {
@@ -361,10 +361,12 @@ export default {
             let store = this.$store.getters.sceneCommitResp;
             store[params.sceneIds] = resp;
             this.$store.commit('saveSceneCommitResp', store);
-            if (!this.openFlag) {
-                this.openFlag = true;
-                this.$router.push({name: 'assoAccountGroupMerge'});
-            }
+            setTimeout(() => {
+                if (!this.openFlag) {
+                    this.openFlag = true;
+                    this.$router.push({name: 'assoAccountGroupMerge'});
+                }
+            });
             // this.windowNewTabBySceneId(params, resp);
         },
         async createWindow(params, resp) {
@@ -398,6 +400,7 @@ export default {
                     let store = this.$store.getters.sceneCommitResp;
                     store[params.sceneIds] = resp;
                     this.$store.commit('saveSceneCommitResp', store);
+                    console.log('save-store', store);
                     if (!this.openFlag) {
                         this.openFlag = true;
                         this.$router.push({name: 'assoAccountGroupMerge'});
@@ -417,10 +420,10 @@ export default {
                 exportType: this.ruleForm.exportType,
                 cityIds: cityIds.join(',') || '11',
                 contrCd: this.ruleForm.contractCode,
-                statStartDt: moment(this.ruleForm.selectDateRange[0]).format('YYYY-MM-DD'),
-                // statStartDt: '2017-03-01',
-                // statStopDay: '2017-03-31',
-                statStopDay: moment(this.ruleForm.selectDateRange[1]).format('YYYY-MM-DD'),
+                statStartDt: '2016-12-01',
+                statStopDay: '2017-12-31',
+                // statStartDt: moment(this.ruleForm.selectDateRange[0]).format('YYYY-MM-DD'),
+                // statStopDay: moment(this.ruleForm.selectDateRange[1]).format('YYYY-MM-DD'),
                 sceneIds: '',
                 sceneNames: '',
                 sceneTypes: '',
@@ -454,17 +457,18 @@ export default {
             });
             this.$store.commit('saveSceneCommitParams', tabs);
             paramsArray.forEach(v => {
-                if (v.sceneTypes === '1' || v.sceneTypes === '3') {
-                    this.getNextStepData(v);
-                } else {
-                    if (!this.openFlag) {
-                        this.openFlag = true;
-                        let store = this.$store.getters.sceneCommitResp;
-                        store[params.sceneIds] = resData5;
-                        this.$store.commit('saveSceneCommitResp', store);
-                        this.$router.push({name: 'assoAccountGroupMerge'});
-                    }
-                }
+                this.getNextStepData(v);
+                // if (v.sceneTypes === '1' || v.sceneTypes === '3') {
+                //     this.getNextStepData(v);
+                // } else {
+                //     if (!this.openFlag) {
+                //         this.openFlag = true;
+                //         let store = this.$store.getters.sceneCommitResp;
+                //         store[params.sceneIds] = resData5;
+                //         this.$store.commit('saveSceneCommitResp', store);
+                //         this.$router.push({name: 'assoAccountGroupMerge'});
+                //     }
+                // }
             });
         }
     },

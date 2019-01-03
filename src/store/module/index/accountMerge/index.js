@@ -1,4 +1,5 @@
 const state = {
+    clickTab: false,
     activeTab: '0',
     tabIndex: 0,
     blockData: {}
@@ -6,6 +7,9 @@ const state = {
 const mutations = {
     saveActiveTab(state, val) {
         state.activeTab = val;
+    },
+    saveClickTab(state, val) {
+        state.clickTab = val;
     },
     saveTabIndex(state, val) {
         state.tabIndex = val;
@@ -74,6 +78,9 @@ const getters = {
     },
     getchart4(state) {
         return state.tabIndex ? state.blockData[state.tabIndex].chartData4 : null;
+    },
+    getClickTab(state) {
+        return state.clickTab;
     }
 };
 const actions = {};

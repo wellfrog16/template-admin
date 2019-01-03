@@ -162,24 +162,20 @@ export default {
         };
     },
     methods: {
-        getData(resData) {
-            let {chartData} = resData;
-            if (!chartData || (chartData && !chartData.length)) {
+        getData(data, id) {
+            if (!data || (data && !data.length)) {
                 return;
             }
-            let selectMax = _.maxBy(chartData, 'acctGroOpenInt');
-            this.chartOptions['series'][0]['data'] = chartData.map(v => {
+            this.chartOptions['series'][0]['data'] = data.map(v => {
                 return [v.acctGroOpenInt, v.acctGroAvgRela, v.custQtty, v.acctId, v.contrCd, v.custIds, v.id];
             });
-            this.$store.commit('savechart1', {data: this.chartOptions, index: this.tabIndex || this.$store.getters.getTabIndex});
-            // select max
-            this.$emit('updateAccountGroupAndCustIds', selectMax ? selectMax.acctId : '', selectMax ? selectMax.custIds.split(',') : []);
-            this.initChart();
+            this.$store.commit('savechart1', {data: this.chartOptions, index: id || this.tabIndex || this.$store.getters.getTabIndex});
+            this.$refs['chart0'] && this.$refs['chart0'].initChart();
         },
         sortDataByAcctIdCommon(data) {
             return _.sortBy(data, [item => { return item.acctId; }]);
         },
-        initChart(flag, data) {
+        initChart(data, flag) {
             if (data) {
                 this.chartOptions = data;
             }

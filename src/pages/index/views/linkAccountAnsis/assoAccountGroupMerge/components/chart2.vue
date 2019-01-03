@@ -93,11 +93,10 @@ export default {
     },
     methods: {
         getData(resp) {
-            let {mainData} = resp;
+            let {mainData, id} = resp;
             if (!Object.keys(mainData).length) {
                 return;
             }
-            console.log(resp);
             let series = [];
             let date = [];
             Object.keys(mainData).forEach(v => {
@@ -138,10 +137,10 @@ export default {
             this.chartOptions['dataZoom'][1]['startValue'] = dataZoomStartValue;
             this.chartOptions['dataZoom'][0]['endValue'] = dataZoomEndValue;
             this.chartOptions['dataZoom'][1]['endValue'] = dataZoomEndValue;
-            this.$store.commit('savechart2', {data: this.chartOptions, index: this.tabIndex || this.$store.getters.getTabIndex});
-            this.initChart();
+            this.$store.commit('savechart2', {data: this.chartOptions, index: id || this.tabIndex || this.$store.getters.getTabIndex});
+            this.$refs['chart1'] && this.$refs['chart1'].initChart();
         },
-        initChart(flag, data) {
+        initChart(data, flag) {
             if (data) {
                 this.chartOptions = data;
             }

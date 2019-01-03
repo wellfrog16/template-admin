@@ -155,16 +155,21 @@ export default {
                     params.statFreq = sceneCommitParams.statFreq;
                     params.resultList = this.dealMainData();
                 }
+                if (params.resultType === '3') {
+                    params.resultListInfo = this.dealMainData();
+                }
                 if (params.resultType === '5') {
                     params.resultListSyn = this.dealMainData();
                 }
                 this.$emit('updateFullLoading', true);
                 exportResultSet(params).then(resp => {
-                    console.log(resp);
                     this.$emit('updateFullLoading', false);
                     if (this.$route.name === 'assoAccountGroupMerge') {
                         this.$emit('updateResultList');
                     }
+                }).catch(e => {
+                    console.error(e);
+                    this.$emit('updateFullLoading', false);
                 });
             }).catch(() => {});
         },
@@ -177,7 +182,7 @@ export default {
                 return;
             }
             let params = {
-                fileName: fileName || '测试',
+                fileName: fileName || '',
                 tableColumns: mainTableColumns,
                 tableData: tableData
             };

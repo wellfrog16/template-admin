@@ -75,16 +75,16 @@ export const chartTableColumns5 = [ // 地址分析关系图明细字段
     {label: '地址近似', field: 'addrLike', minWidth: 130}
 ];
 export const chartTableColumns6 = [ // 关系人分析关系图明细字段
-    {label: '账户组号', field: 'custId1', minWidth: 130, template: custIdColumn},
-    {label: '账户组客户编号', field: 'bizDir1', minWidth: 100},
-    {label: '同一投资经理', field: 'declBillTm1', minWidth: 140},
-    {label: '同一投资顾问', field: 'declBillQtty1', minWidth: 130},
-    {label: '同一权益持有人', field: 'declBillPrice1', minWidth: 130},
-    {label: '同一下单人', field: 'bargainDate1', minWidth: 180},
-    {label: '同一法人代表', field: 'bargainQtty1', minWidth: 130},
-    {label: '同一资金调拨人', field: 'bargainPrice12', minWidth: 130},
-    {label: '同一结算单确认人', field: 'bargainPrice13', minWidth: 130},
-    {label: '同一开户授权人', field: 'bargainPrice14', minWidth: 130}
+    {label: '账户组号', field: 'acctId', minWidth: 130},
+    {label: '账户组客户编号', field: 'acctCustId', minWidth: 100},
+    {label: '同一投资经理', field: 'sameInvestMger', minWidth: 140},
+    {label: '同一投资顾问', field: 'sameInvestConsu', minWidth: 130},
+    {label: '同一权益持有人', field: 'sameRaiHoldPerson', minWidth: 130},
+    {label: '同一下单人', field: 'sameNextBillPerson', minWidth: 180},
+    {label: '同一法人代表', field: 'sameCapCannibPerson', minWidth: 130},
+    {label: '同一资金调拨人', field: 'sameLpSubstTbl', minWidth: 130},
+    {label: '同一结算单确认人', field: 'sameStlBillCfmPerson', minWidth: 130},
+    {label: '同一开户授权人', field: 'sameOpenAuthPerson', minWidth: 130}
 ];
 export const chartTableColumns8 = [
     {
