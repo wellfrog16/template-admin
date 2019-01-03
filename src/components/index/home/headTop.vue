@@ -11,6 +11,21 @@
                     <div :class="$style.login_out" @click.stop="goHome"><i class="fa fa-home"></i></div>
                     <div slot="content">首页</div>
                 </el-tooltip>
+                <el-popover :popper-class="$style.popper_class" placement="bottom"
+                            width="300"
+                            trigger="hover">
+                    <div slot="reference" :class="$style.login_out" @click.prevent.stop="() => {return;}"><i class="fa fa-sitemap"></i></div>
+                    <div>
+                        <el-row :gutter="10">
+                            <el-col :span="12" v-for="(item, index) in topNavList" :key="index"
+                                    style="margin: 5px 0; cursor: pointer; text-align: center;">
+                                <el-card>
+                                    <span @click="handleRouterLink(item)">{{ item.name }}</span>
+                                </el-card>
+                            </el-col>
+                        </el-row>
+                    </div>
+                </el-popover>
                 <el-tooltip class="item" effect="dark" placement="bottom">
                     <div :class="$style.login_out" @click.stop="handleLoginOut"><i class="fa fa-sign-out-alt"></i></div>
                     <div slot="content">登出</div>
@@ -36,7 +51,13 @@ export default {
     name: 'headTop',
     data() {
         return {
-            userName: localStorage.getItem('USER_NAME') || ''
+            userName: localStorage.getItem('USER_NAME') || '',
+            topNavList: [
+                {name: '研究支撑平台', link: ''},
+                {name: '监管科技工具集', link: 'toolsHome'},
+                {name: '国际化应用', link: ''},
+                {name: '行业应用', link: ''},
+            ]
         };
     },
     methods: {
@@ -48,6 +69,12 @@ export default {
         },
         goHome() {
             this.$router.push({name: 'login', query: {loginFlag: true}});
+        },
+        handleRouterLink(item) {
+            if (item.link) {
+                console.log(item.link);
+                this.$router.push({name: item.link});
+            }
         }
     }
 };
