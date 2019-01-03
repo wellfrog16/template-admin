@@ -80,17 +80,44 @@ export default {
             this.sceneNameList = [{sceneNames: '', sceneTypes: this.exportResultType, sceneIds: 0}];
             this.activeTab = '0';
             this.fullLoading = true;
-            getInfoByResultId(this.resultIds).then(resp => {
-                this.$refs['sceneType1'][0].computedCommonReqParams = {
-                    sceneNames: resp.resultName,
-                    sceneIds: this.resultIds,
-                    acctId: '', // || 'XG00001',
-                    custId: '', // || '80001716,80000025,80001461',
-                    statStartDt: resp.statStartDt, // || '2017-02-20',
-                    statStopDay: resp.statStopDay, // || '2017-10-09',
-                    contrCd: resp.contrCd, // || 'cu1712'
-                    id: this.resultIds
-                };
+            getInfoByResultId(this.resultIds, this.exportResultType).then(resp => {
+                this.$nextTick(() => {
+                    console.log(this.$refs);
+                });
+                if (String(this.exportResultType) === '1') {
+                    this.$refs['sceneType1'][0].computedCommonReqParams = {
+                        sceneNames: resp.resultName,
+                        sceneIds: this.resultIds,
+                        acctId: '', // || 'XG00001',
+                        custId: '', // || '80001716,80000025,80001461',
+                        statStartDt: resp.statStartDt, // || '2017-02-20',
+                        statStopDay: resp.statStopDay, // || '2017-10-09',
+                        contrCd: resp.contrCd, // || 'cu1712'
+                        id: this.resultIds
+                    };
+                } else if (String(this.exportResultType) === '3') {
+                    this.$refs['sceneType3'][0].computedCommonReqParams = {
+                        sceneNames: resp.resultName,
+                        sceneIds: this.resultIds,
+                        acctId: '', // || 'XG00001',
+                        custId: '', // || '80001716,80000025,80001461',
+                        statStartDt: resp.statStartDt, // || '2017-02-20',
+                        statStopDay: resp.statStopDay, // || '2017-10-09',
+                        contrCd: resp.contrCd, // || 'cu1712'
+                        id: this.resultIds
+                    };
+                } else if (String(this.exportResultType) === '4') {
+                    this.$refs['sceneType4'][0].computedCommonReqParams = {
+                        sceneNames: resp.resultName,
+                        sceneIds: this.resultIds,
+                        acctId: '', // || 'XG00001',
+                        custId: '', // || '80001716,80000025,80001461',
+                        statStartDt: resp.statStartDt, // || '2017-02-20',
+                        statStopDay: resp.statStopDay, // || '2017-10-09',
+                        contrCd: resp.contrCd, // || 'cu1712'
+                        id: this.resultIds
+                    };
+                }
                 let obj = {};
                 obj[this.resultIds] = {
                     sceneNames: resp.resultName,
@@ -114,7 +141,13 @@ export default {
                     this.$store.commit('saveTabIndex', this.resultIds);
                     this.$nextTick(() => {
                         let flag = String(this.exportResultType) === '1' ? 1 : null;
-                        this.$refs['sceneType1'] && this.$refs['sceneType1'][0].drewChart1(flag);
+                        if (String(this.exportResultType) === '1') {
+                            this.$refs['sceneType1'] && this.$refs['sceneType1'][0].drewChart1(flag);
+                        } else if (String(this.exportResultType) === '3') {
+                            this.$refs['sceneType3'] && this.$refs['sceneType3'][0].drewChart1(flag);
+                        } else if (String(this.exportResultType) === '4') {
+                            this.$refs['sceneType4'] && this.$refs['sceneType4'][0].drewChart1(flag);
+                        }
                     });
                 });
             });

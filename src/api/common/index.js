@@ -24,7 +24,11 @@ export const exportCsv = url => {
 export const exportResultSet = params => {
     return post(`${requestPrefix}/getAcctExportResultSet`, params || {});
 };
+// 重新生成数据
+export const getRegeneratingData = params => {
+    return post(`${requestPrefix}/getRegeneratingData`, params || {});
+};
 // 通过结果集id查询合约代码，起止日期等
-export const getInfoByResultId = resultIds => {
-    return post(`${requestPrefix}/getRegeneratingResults`, {resultIds});
+export const getInfoByResultId = (resultIds, resultType) => {
+    return post(`${requestPrefix}/getRegeneratingResults`, {resultIds: resultIds, resultType: resultType});
 };

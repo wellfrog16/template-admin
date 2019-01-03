@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import {exportResultSet} from '@/api/common';
+import {exportResultSet, getRegeneratingData} from '@/api/common';
 export default {
     data() {
         return {
@@ -106,6 +106,8 @@ export default {
                     acctIds.push(v.acctId);
                 }
             });
+            // 设置前缀；XG/DZ/GX
+            this.accountIdPre = checkedNodes[0]['acctId'].slice(0, 2);
             if (!(acctGroups.length && acctGroups.length > 1)) {
                 this.$message.error('请选择多个账户组');
                 return;
@@ -136,7 +138,7 @@ export default {
             return tableData;
         },
         // 导出到结果集
-        handleExportResult(propsResultType) {
+        handleExportResult(propsResultType, resultId) {
             this.$prompt('请输入结果集名称', '导出到结果集', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
@@ -147,12 +149,11 @@ export default {
                     resultType: propsResultType || '5', // 结果集类型（1：相关性；5：合并）
                     resultName: value
                 };
-                let tabIndex = this.$store.getters.getTabIndex;
-                let sceneCommitParams = this.$store.getters.sceneCommitParams[tabIndex];
+                let sceneCommitParams = this.$store.getters.sceneCommitParams[resultId];
+                params.statStartDt = sceneCommitParams.statStartDt;
+                params.statStopDay = sceneCommitParams.statStopDay;
+                params.statFreq = sceneCommitParams.statFreq;
                 if (params.resultType === '1') {
-                    params.statStartDt = sceneCommitParams.statStartDt;
-                    params.statStopDay = sceneCommitParams.statStopDay;
-                    params.statFreq = sceneCommitParams.statFreq;
                     params.resultList = this.dealMainData();
                 }
                 if (params.resultType === '3') {
@@ -191,6 +192,41 @@ export default {
             };
             this.gfnExportFileWithForm(params);
         },
-        createNewData() {},
+        // 重新生成数据
+        createNewData(propsResultType, resultId) {
+            let params = {
+                id: resultId,
+                stateId: 1, // 重新生成数据标识
+                resultType: propsResultType || '5', // 结果集类型（1：相关性；5：合并）
+            };
+            let sceneCommitParams = this.$store.getters.sceneCommitParams[resultId];
+            params.statStartDt = sceneCommitParams.statStartDt;
+            params.statStopDay = sceneCommitParams.statStopDay;
+            params.statFreq = sceneCommitParams.statFreq;
+            if (params.resultType === '1') {
+                params.resultList = this.dealMainData();
+            }
+            if (params.resultType === '3') {
+                params.resultListInfo = this.dealMainData();
+            }
+            if (params.resultType === '4') {
+                params.resultListPerson = this.dealMainData();
+            }
+            if (params.resultType === '5') {
+                params.resultListSyn = this.dealMainData();
+            }
+            this.$emit('updateFullLoading', true);
+            getRegeneratingData(params).then(resp => {
+                this.$emit('updateFullLoading', false);
+                let store = this.$store.getters.sceneCommitResp;
+                store[params.id] = resp;
+                this.$store.commit('saveSceneCommitResp', store);
+                let flag = String(propsResultType) === '1' ? 1 : null;
+                this.drewChart1(flag);
+            }).catch(e => {
+                console.error(e);
+                this.$emit('updateFullLoading', false);
+            });
+        },
     }
 };

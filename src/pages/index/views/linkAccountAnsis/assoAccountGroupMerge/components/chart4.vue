@@ -48,7 +48,7 @@ export default {
             chartOptions: {
                 grid: {
                     x: 40,
-                    x2: 60,
+                    x2: 70,
                     y: 60,
                     y2: 60
                 },

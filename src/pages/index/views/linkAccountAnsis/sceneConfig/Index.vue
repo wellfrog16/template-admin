@@ -108,9 +108,9 @@
                         label="操作"
                         show-overflow-tooltip>
                         <template slot-scope="scope">
-                            <el-button type="primary" size="small" @click.self="openDialog(scope.row, 1)" icon="el-icon-view">查看</el-button>
-                            <el-button type="warning" size="small" @click.self="openDialog(scope.row, 2)" icon="el-icon-edit">编辑</el-button>
-                            <el-button type="danger" size="small" v-if="scope.row.isDel === '1'" icon="el-icon-delete" @click.self="handleDelete(scope.row)">删除</el-button>
+                            <el-button type="primary" size="small" @click="openDialog(scope.row, 1)" icon="el-icon-view">查看</el-button>
+                            <el-button type="warning" size="small" @click="openDialog(scope.row, 2)" icon="el-icon-edit">编辑</el-button>
+                            <el-button type="danger" size="small" v-if="scope.row.isDel === '1'" icon="el-icon-delete" @click="handleDelete(scope.row)">删除</el-button>
                         </template>
                     </el-table-column>
                 </s-table>
@@ -432,6 +432,7 @@ export default {
             };
             if (this.ruleForm.exportType === '0') {
                 params.resultIds = this.ruleForm.resultId;
+                params.id = this.ruleForm.resultId;
                 params.resultType = this.ruleForm.resultType;
             }
             if (this.ruleForm.exportType === '2') {
@@ -443,6 +444,7 @@ export default {
                 paramsArray.push({
                     ...params,
                     ...{
+                        id: v.sceneId,
                         sceneIds: v.sceneId,
                         sceneNames: v.sceneName,
                         sceneTypes: v.sceneType,

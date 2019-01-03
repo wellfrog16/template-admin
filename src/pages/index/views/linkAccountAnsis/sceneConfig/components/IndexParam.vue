@@ -66,6 +66,12 @@ export default {
     watch: {
         dialogItem() {
             this.setRuleForm();
+        },
+        'ruleForm.indexPara': {
+            handler(val) {
+                this.$emit('updateIndexPara', val);
+            },
+            deep: true
         }
     },
     computed: {
