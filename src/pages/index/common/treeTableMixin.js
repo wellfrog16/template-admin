@@ -158,6 +158,9 @@ export default {
                 if (params.resultType === '3') {
                     params.resultListInfo = this.dealMainData();
                 }
+                if (params.resultType === '4') {
+                    params.resultListPerson = this.dealMainData();
+                }
                 if (params.resultType === '5') {
                     params.resultListSyn = this.dealMainData();
                 }
