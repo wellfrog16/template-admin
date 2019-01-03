@@ -19,7 +19,7 @@
                         <el-row :gutter="10">
                             <el-col :span="12" v-for="(item, index) in topNavList" :key="index"
                                     style="margin: 5px 0; cursor: pointer; text-align: center;">
-                                <el-card>
+                                <el-card :style="{background: `${item.bg}`, backgroundSize: 'cover'}">
                                     <span @click="handleRouterLink(item)">{{ item.name }}</span>
                                 </el-card>
                             </el-col>
@@ -47,16 +47,20 @@
 </template>
 
 <script>
+import img1 from '@/assets/img/usr/login/1_1.png';
+import img2 from '@/assets/img/usr/login/2_1.png';
+import img3 from '@/assets/img/usr/login/3_1.png';
+import img4 from '@/assets/img/usr/login/4_1.png';
 export default {
     name: 'headTop',
     data() {
         return {
             userName: localStorage.getItem('USER_NAME') || '',
             topNavList: [
-                {name: '研究支撑平台', link: ''},
-                {name: '监管科技工具集', link: 'toolsHome'},
-                {name: '国际化应用', link: ''},
-                {name: '行业应用', link: ''},
+                {name: '研究支撑平台', link: '', bg: 'url(' + img1 + ') no-repeat'},
+                {name: '监管科技工具集', link: 'toolsHome', bg: 'url(' + img2 + ') no-repeat'},
+                {name: '国际化应用', link: '', bg: 'url(' + img3 + ') no-repeat'},
+                {name: '行业应用', link: '', bg: 'url(' + img4 + ') no-repeat'},
             ]
         };
     },
@@ -84,6 +88,10 @@ export default {
     @import '../../../assets/style/config.less';
 
     @height: 60px;
+    .popper_class {
+        background: #00cfff;
+        border: none;
+    }
     .head_top {
         cursor: pointer;
         width: 100%;
