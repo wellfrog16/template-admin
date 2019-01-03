@@ -113,7 +113,8 @@ export default {
                     this.$store.commit('saveSceneCommitResp', store);
                     this.$store.commit('saveTabIndex', this.resultIds);
                     this.$nextTick(() => {
-                        this.$refs['sceneType1'] && this.$refs['sceneType1'][0].drewChart1();
+                        let flag = String(this.exportResultType) === '1' ? 1 : null;
+                        this.$refs['sceneType1'] && this.$refs['sceneType1'][0].drewChart1(flag);
                     });
                 });
             });
