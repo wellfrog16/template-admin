@@ -52,7 +52,6 @@ export default {
                 this.getSceneNameList(val, () => {
                     // this.$store.commit('saveTabIndex', this.resultIds);
                     let sceneCommitParams = this.$store.getters.sceneCommitParams;
-                    console.log(this.$store.getters.sceneCommitParams);
                     this.activeTab = this.resultIds || Object.keys(sceneCommitParams)[0];
                 });
             },
@@ -84,12 +83,13 @@ export default {
             getInfoByResultId(this.resultIds).then(resp => {
                 this.$refs['sceneType1'][0].computedCommonReqParams = {
                     sceneNames: resp.resultName,
-                    sceneIds: this.resultId,
+                    sceneIds: this.resultIds,
                     acctId: '', // || 'XG00001',
                     custId: '', // || '80001716,80000025,80001461',
                     statStartDt: resp.statStartDt, // || '2017-02-20',
                     statStopDay: resp.statStopDay, // || '2017-10-09',
                     contrCd: resp.contrCd, // || 'cu1712'
+                    id: this.resultIds
                 };
                 let obj = {};
                 obj[this.resultIds] = {
@@ -100,7 +100,8 @@ export default {
                     statStartDt: resp.statStartDt,
                     statStopDay: resp.statStopDay,
                     contrCd: resp.contrCd,
-                    statFreq: resp.statFreq
+                    statFreq: resp.statFreq,
+                    id: this.resultIds
                 };
                 let store = this.$store.getters.sceneCommitParams;
                 store = {...store, ...obj};
@@ -118,7 +119,6 @@ export default {
             });
         },
         handleTabClick(tab) {
-            console.log(tab);
             this.activeTab = tab.name;
             this.$store.commit('saveTabIndex', tab.name);
             this.$store.commit('saveClickTab', true);

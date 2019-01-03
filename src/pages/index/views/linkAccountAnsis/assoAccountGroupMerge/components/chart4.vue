@@ -117,7 +117,7 @@ export default {
             if (!Object.keys(resData).length) {
                 return;
             }
-            let {mainData, buysail} = resData;
+            let {mainData, buysail, id} = resData;
             let lineData = [];
             let timeData = [];
             let colors = [
@@ -287,10 +287,10 @@ export default {
             this.chartOptions['legend']['data'] = series.map(v => {
                 return v.name;
             });
-            this.$store.commit('savechart4', {data: this.chartOptions, index: this.tabIndex || this.$store.getters.getTabIndex});
-            this.initChart();
+            this.$store.commit('savechart4', {data: this.chartOptions, index: id || this.tabIndex || this.$store.getters.getTabIndex});
+            this.$refs['chart3'] && this.$refs['chart3'].initChart();
         },
-        initChart(flag, data) {
+        initChart(data, flag) {
             if (data) {
                 this.chartOptions = data;
             }

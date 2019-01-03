@@ -126,12 +126,12 @@ export default {
             sessionStorage.setItem('CURRENT_GROUP_ID', JSON.stringify(groupId));
             sessionStorage.setItem('CURRENT_CUST_IDS', JSON.stringify(custIds));
         },
-        updateTableData(value, index) {
+        updateTableData(value, index, id) {
             if (index === 2) {
                 this.createChart3Columnn(this.currentCustIds);
             }
             this.chartTableData[index] = value;
-            this.$store.commit('saveChartTableData', {data: this.chartTableData, index: this.tabIndex || this.$store.getters.getTabIndex});
+            this.$store.commit('saveChartTableData', {data: this.chartTableData, index: id || this.tabIndex || this.$store.getters.getTabIndex});
         },
         toggleDetail(item, index) {
             this.charts[index]['toggleDetailFlags'] = !item.toggleDetailFlags;
@@ -150,7 +150,7 @@ export default {
                 this.$nextTick(() => {
                     // let dataMap = [this.$store.getters.getchart1, this.$store.getters.getchart2, this.$store.getters.getchart3, this.$store.getters.getchart4];
                     setTimeout(() => {
-                        (this.getChart()[index])(1, data);
+                        (this.getChart()[index])(data, 1);
                     });
                 });
             }
@@ -161,7 +161,7 @@ export default {
                 let tableData = this.$store.getters.getChartTableData[1];
                 let chartData = this.$store.getters.getchart2;
                 this.updateTableData(tableData, 1);
-                this.getChart2(null, chartData);
+                this.getChart2(chartData);
             } else {
                 this.charts[1]['loading'] = true;
                 let params = this.commonReqParams();
@@ -169,6 +169,9 @@ export default {
                     this.charts[1]['loading'] = false;
                     this.updateTableData(resp.tableData, 1);
                     this.drewChart2(resp);
+                }).catch(e => {
+                    console.error(e);
+                    this.charts[1]['loading'] = false;
                 });
             }
         },
@@ -178,7 +181,7 @@ export default {
                 let tableData = this.$store.getters.getChartTableData[2];
                 let chartData = this.$store.getters.getchart3;
                 this.updateTableData(tableData, 2);
-                this.getChart3(null, chartData);
+                this.getChart3(chartData);
             } else {
                 let params = this.commonReqParams();
                 this.charts[2]['loading'] = true;
@@ -186,6 +189,9 @@ export default {
                     this.charts[2]['loading'] = false;
                     this.updateTableData(resp.tableData, 2);
                     this.drewChart3(resp);
+                }).catch(e => {
+                    console.error(e);
+                    this.charts[1]['loading'] = false;
                 });
             }
         },
@@ -196,7 +202,7 @@ export default {
                 let tableData = this.$store.getters.getChartTableData[3];
                 let chartData = this.$store.getters.getchart4;
                 this.updateTableData(tableData, 3);
-                this.getChart4(null, chartData);
+                this.getChart4(chartData);
             } else {
                 let params = this.commonReqParams();
                 this.charts[3]['loading'] = true;
@@ -205,6 +211,9 @@ export default {
                     this.charts[3]['loading'] = false;
                     this.updateTableData(resp.buysail, 3);
                     this.drewChart4(resp);
+                }).catch(e => {
+                    console.error(e);
+                    this.charts[1]['loading'] = false;
                 });
             }
         },
@@ -219,7 +228,7 @@ export default {
                     this.$refs['chartComponent1'][0].chartOptions['series'][0]['markPoint']['data'] = markPointData.filter(v => {
                         return v.coord[0] !== params['data'][0] && v.coord[1] !== params['data'][1];
                     });
-                    this.$store.commit('savechart1', {data: this.$refs['chartComponent1'][0].chartOptions, index: this.tabIndex || this.$store.getters.getTabIndex});
+                    this.$store.commit('savechart1', {data: this.$refs['chartComponent1'][0].chartOptions, index: params.id || this.tabIndex || this.$store.getters.getTabIndex});
                     // table勾选状态
                     this.selectAccountGroupList = this.selectAccountGroupList.filter(v => {
                         return v !== currentId && this.childrenMap[currentId].indexOf(v) === -1;
@@ -229,7 +238,7 @@ export default {
                     this.$refs['chartComponent1'][0].chartOptions['series'][0]['markPoint']['data'].push({
                         coord: [params['data'][0], params['data'][1]]
                     });
-                    this.$store.commit('saveXhart1', {data: this.$refs['chartComponent1'][0].chartOptions, index: this.tabIndex || this.$store.getters.getTabIndex});
+                    this.$store.commit('saveXhart1', {data: this.$refs['chartComponent1'][0].chartOptions, index: params.id || this.tabIndex || this.$store.getters.getTabIndex});
                     // table勾选状态
                     this.selectAccountGroupList.push(currentId);
                 }
@@ -263,6 +272,7 @@ export default {
         commonReqParams() {
             this.sceneCommitParams = this.$store.getters.sceneCommitParams[this.tabIndex || this.$store.getters.getTabIndex];
             return {
+                id: this.sceneCommitParams.sceneIds,
                 acctId: this.currentAccountGroupId, // || 'XG00001',
                 custId: this.currentCustIds.join(','), // || '80001716,80000025,80001461',
                 statStartDt: this.sceneCommitParams.statStartDt, // || '2017-02-20',
@@ -285,7 +295,7 @@ export default {
             if (resData && !Object.keys(resData).length) {
                 return;
             }
-            let {resultSetList, kmap, chartDataList} = resData;
+            let {resultSetList, kmap, chartDataList, id} = resData;
             if (resultSetList && !resultSetList.length) {
                 return {
                     chartData: [],
@@ -293,9 +303,9 @@ export default {
                 };
             }
             this.mainTableData = this.sortDataByAcctIdCommon(resultSetList);
-            this.$store.commit('saveChartTableData', {data: kmap, index: this.tabIndex || this.$store.getters.getTabIndex});
-            this.$store.commit('saveMainTableData', {data: resultSetList, index: this.tabIndex || this.$store.getters.getTabIndex});
-            this.updateTableData(chartDataList, 0);
+            this.$store.commit('saveChartTableData', {data: kmap, index: id || this.tabIndex || this.$store.getters.getTabIndex});
+            this.$store.commit('saveMainTableData', {data: resultSetList, index: id || this.tabIndex || this.$store.getters.getTabIndex});
+            this.updateTableData(chartDataList, 0, id);
             return {
                 mainTableData: resultSetList,
                 chartData: kmap,

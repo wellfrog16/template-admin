@@ -390,7 +390,7 @@ export default {
         },
         getData(resp) {
             // this.test();
-            let {mainData} = resp;
+            let {mainData, id} = resp;
             if (mainData && !mainData.length) {
                 return;
             }
@@ -425,16 +425,17 @@ export default {
             // set cust count
             this.chartOptions['visualMap'][0]['max'] = this.currentCustIds.length;
             this.chartOptions['visualMap'][1]['max'] = this.currentCustIds.length;
-            this.$store.commit('savechart3', {data: this.chartOptions, index: this.tabIndex || this.$store.getters.getTabIndex});
-            this.initChart();
+            this.$store.commit('savechart3', {data: this.chartOptions, index: id || this.tabIndex || this.$store.getters.getTabIndex});
+            this.$refs['chart2'] && this.$refs['chart2'].initChart();
             // 最近交易日，包含买入或卖出
             this.selectMax = _.maxBy(mainData, v => {
                 if (!!v.sellAcctCnt || !!v.buyAcctCnt) {
                     return v.txDt;
                 }
             });
+            sessionStorage.setItem('MAX_DATE', this.selectMax.txDt);
         },
-        initChart(flag, data) {
+        initChart(data, flag) {
             if (data) {
                 this.chartOptions = data;
             }
@@ -444,7 +445,16 @@ export default {
         getAssoCharts(flag) {
             if (!flag) {
                 this.$nextTick(() => {
-                    this.$emit('getBlock4Data', this.selectMax ? this.selectMax.txDt : '2017-06-02');
+                    let date = '';
+                    if (this.selectMax) {
+                        if (this.selectMax.txDt) {
+                            date = this.selectMax.txDt;
+                        } else {
+                            date = sessionStorage.getItem('MAX_DATE');
+                        }
+                    }
+                    console.log('date:', date);
+                    this.$emit('getBlock4Data', date);
                 });
             }
         },

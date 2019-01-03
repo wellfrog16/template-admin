@@ -73,7 +73,6 @@ export default {
     },
     methods: {
         cardClick() {
-            console.log(11);
             this.$router.push({path: '/sceneConfig'});
         }
     },

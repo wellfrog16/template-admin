@@ -23,8 +23,6 @@ export default {
     },
     watch: {
         resultIdProps(val) {
-            console.log(val);
-            console.log('99888766543322');
             this.resultId = val;
         }
     },

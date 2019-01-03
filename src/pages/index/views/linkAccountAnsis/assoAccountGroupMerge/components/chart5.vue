@@ -72,21 +72,20 @@ export default {
         };
     },
     methods: {
-        getData(resData) {
-            let {chartData} = resData;
+        getData(chartData, id) {
             // 散点图sort
             this.chartOptions['series'][0]['links'] = chartData['links'];
             this.chartOptions['series'][0]['data'] = chartData['nodes'];
-            this.$store.commit('savechart1', {data: this.chartOptions, index: this.tabIndex || this.$store.getters.tabIndex});
+            this.$store.commit('savechart1', {data: this.chartOptions, index: id || this.tabIndex || this.$store.getters.tabIndex});
             // select max
             // this.$emit('updateAccountGroupAndCustIds', selectMax ? selectMax.acctId : '', selectMax ? selectMax.custIds.split(',') : []);
             this.$emit('updateAccountGroupAndCustIds', chartData['nodes'][0]['name'], chartData['nodes'][0]['value'].split(','));
-            this.initChart();
+            this.$refs['chart0'] && this.$refs['chart0'].initChart();
         },
         sortDataByAcctIdCommon(data) {
             return _.sortBy(data, [item => { return item.acctId; }]);
         },
-        initChart(flag, data) {
+        initChart(data, flag) {
             if (data) {
                 this.chartOptions = data;
             }
