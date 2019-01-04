@@ -8,7 +8,7 @@
                 :name="active.name"
             ></el-tab-pane>
         </el-tabs>
-        <s-card :title="`关系图库`" :icon="`fa fa-user-md`">
+        <s-card :title="`关系图库`" :icon="`fa fa-share-alt`">
             <div slot="content">
                 <echarts-common
                     :loading="loading"

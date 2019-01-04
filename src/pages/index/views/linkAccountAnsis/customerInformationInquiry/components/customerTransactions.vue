@@ -36,7 +36,7 @@
                 </el-row>
             </el-form>
         </el-card>
-        <s-card :title="`客户交易信息查询`" :icon="`fa fa-user-md`">
+        <s-card :title="`客户交易信息查询`" :icon="`fa fa-search-dollar`">
             <div slot="content">
                 <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
                     <el-tab-pane

@@ -60,7 +60,6 @@ export default {
     },
     methods: {
         updateIndexPara(val) {
-            console.log(val);
             this.ruleForm.indexPara = val;
         },
         setRuleForm() {

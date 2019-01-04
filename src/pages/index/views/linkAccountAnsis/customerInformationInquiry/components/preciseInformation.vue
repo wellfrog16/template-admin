@@ -58,7 +58,7 @@
                 </el-row>
             </el-form>
         </el-card>
-        <s-card :title="`精确信息查询`" :icon="`fa fa-user-md`">
+        <s-card :title="`精确信息查询`" :icon="`fa fa-search-plus`">
             <div slot="content">
                 <s-table
                     :height="230"

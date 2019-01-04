@@ -1,6 +1,6 @@
 <template>
     <div class="scene-config-page">
-        <s-card class="basic-info" :title="`客户群体选择`" :icon="`fa fa-user-md`">
+        <s-card class="basic-info" :title="`客户群体选择`" :icon="`fa fa-user-check`">
             <div slot="content">
                 <el-form ref="ruleForm" :model="ruleForm" :rules="rules">
                     <el-row>

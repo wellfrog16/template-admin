@@ -1,6 +1,6 @@
 <template>
     <div class="scene-config-page">
-        <s-card :title="`查询`" :icon="`fa fa-user-md`">
+        <s-card :title="`查询`" :icon="`fa fa-search`">
             <div slot="content">
                 <el-form ref="ruleForm" :model="ruleForm" :rules="rules">
                     <el-row>
@@ -113,7 +113,7 @@
                               :tableData3="tableData3"></a-table3>
                 </el-tab-pane>
             </el-tabs>
-            <s-card style="padding: 10px 0;" v-if="activeName ==='0'" :title="`超仓分析图`" :icon="`fa fa-user-md`"
+            <s-card style="padding: 10px 0;" v-if="activeName ==='0'" :title="`超仓分析图`" :icon="`fa fa-chart-bar`"
                     class="a_form_table_bar">
                 <div slot="content">
                     <e-charts1 ref="chart1" :loading1="loading1"></e-charts1>
@@ -139,7 +139,7 @@
         <div style="text-align:center; margin-bottom: 20px; width: 85%;">
             <el-button size="small" type="primary" @click="exporstClick">导出CSV</el-button>
         </div>
-        <s-card :title="`协查报告`" :icon="`fa fa-user-md`">
+        <s-card :title="`协查报告`" :icon="`fa fa-file-alt`">
             <div slot="content">
                 <s-table
                     :loading="dealWithIsLoading"

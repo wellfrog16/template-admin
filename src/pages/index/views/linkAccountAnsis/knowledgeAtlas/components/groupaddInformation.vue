@@ -1,6 +1,6 @@
 <template>
     <div :class="$style.groupadd_information">
-        <s-card :title="`客户群体选择`" :icon="`fa fa-user-md`">
+        <s-card :title="`客户群体选择`" :icon="`fa fa-user-check`">
             <div slot="content">
                 <el-row>
                     <el-col :span="15">
