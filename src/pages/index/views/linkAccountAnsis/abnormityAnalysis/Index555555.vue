@@ -1,6 +1,6 @@
 <template>
     <div class="scene-config-page">
-        <s-card :title="`查询`" :icon="`fa fa-search`">
+        <s-card :title="`查询`" :icon="`fa fa-user-md`">
             <div slot="content">
                 <el-form ref="ruleForm" :model="ruleForm" :rules="rules">
                     <el-row>
@@ -113,7 +113,7 @@
                               :tableData3="tableData3"></a-table3>
                 </el-tab-pane>
             </el-tabs>
-            <s-card style="padding: 10px 0;" v-if="activeName ==='0'" :title="`超仓分析图`" :icon="`fa fa-chart-bar`"
+            <s-card style="padding: 10px 0;" v-if="activeName ==='0'" :title="`超仓分析图`" :icon="`fa fa-user-md`"
                     class="a_form_table_bar">
                 <div slot="content">
                     <e-charts1 ref="chart1" :loading1="loading1"></e-charts1>
@@ -139,7 +139,7 @@
         <div style="text-align:center; margin-bottom: 20px; width: 85%;">
             <el-button size="small" type="primary" @click="exporstClick">导出CSV</el-button>
         </div>
-        <s-card :title="`协查报告`" :icon="`fa fa-file-alt`">
+        <s-card :title="`协查报告`" :icon="`fa fa-user-md`">
             <div slot="content">
                 <s-table
                     :loading="dealWithIsLoading"
@@ -189,6 +189,7 @@ export default {
         ECharts3
     },
     mixins: [],
+    watch: {},
     data() {
         return {
             count: 0,
@@ -226,10 +227,10 @@ export default {
             ruleForm: {
                 fileList: [], // 导入CSV
                 exportType: '', // 导入结果集按钮
-                contractCode: '', // 合约代码  cu1712
+                contractCode: 'cu1712', // 合约代码  cu1712
                 resultId: '', // 导入结果集
-                // selectDateRange: ['2017-06-01', '2017-12-31'] // 统计区间  '2017-02-20', '2017-10-09'
-                selectDateRange: [new Date(moment().subtract(1, 'months').format('YYYY-MM-DD')), new Date(moment().subtract(1, 'days').format('YYYY-MM-DD'))],
+                selectDateRange: ['2017-06-01', '2017-12-31'] // 统计区间  '2017-02-20', '2017-10-09'
+                // selectDateRange: [new Date(moment().subtract(1, 'months').format('YYYY-MM-DD')), new Date(moment().subtract(1, 'days').format('YYYY-MM-DD'))],
             },
             rules: {
                 contractCode: {
@@ -250,21 +251,27 @@ export default {
     },
     methods: {
         EchartsClickLoading1(flag) {
+            this.loading1 = flag;
             if (flag) {
-                this.loading1 = flag;
                 this.loadingBt = true;
+            } else {
+                this.loadingBt = false;
             }
         },
         EchartsClickLoading2(flag) {
+            this.loading2 = flag;
             if (flag) {
-                this.loading2 = flag;
                 this.loadingBt = true;
+            } else {
+                this.loadingBt = false;
             }
         },
         EchartsClickLoading3(flag) {
+            this.loading3 = flag;
             if (flag) {
-                this.loading3 = flag;
                 this.loadingBt = true;
+            } else {
+                this.loadingBt = false;
             }
         },
         drewChart(num) {
@@ -359,11 +366,6 @@ export default {
                 if (this.count === 4) {
                     this.loadingBt = false;
                 }
-            } else {
-                this.$notify.error({
-                    title: '',
-                    message: '操作失败！'
-                });
             }
         },
         // 选择结果集的按钮 -- 二选一

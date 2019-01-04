@@ -84,6 +84,7 @@ export default {
                 }
             }).catch(e => {
                 this.fullScreenLoading1 = false;
+                this.Echarts1Loading1 = false;
             });
         }
     },

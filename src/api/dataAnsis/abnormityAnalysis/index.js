@@ -15,9 +15,7 @@ export const postTlsResultInfo = params => {
 export const postExportType = params => {
     return post(`${requestPrefix}/exceptionInfo/resultSet`, params);
 };
-
 // Bar 柱状图
 export const postImportAccounBar = params => {
     return post(`${requestPrefix}/exceptionInfo/pic`, params);
 };
-
