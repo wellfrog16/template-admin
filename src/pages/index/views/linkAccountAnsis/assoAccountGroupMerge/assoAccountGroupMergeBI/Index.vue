@@ -141,7 +141,10 @@ export default {
         toggleDetail(item, index) {
             this.charts[index]['toggleDetailFlags'] = !item.toggleDetailFlags;
             let data = {};
-            let storeData = this.$store.getters.getBlockData[this.$store.getters.getTabIndex];
+            let storeData = this.$store.getters.getBlockData[this.$store.getters.getTabIndex] || {};
+            if (storeData && !Object.keys(storeData).length) {
+                return;
+            }
             if (index === 0) {
                 data = storeData['chartData1'];
             } else if (index === 1) {
@@ -299,7 +302,13 @@ export default {
                     mainTableData: []
                 };
             }
-            let resData = this.$store.getters.sceneCommitResp[this.tabIndex];
+            let resData = this.$store.getters.sceneCommitResp[this.tabIndex] || {};
+            if (!Object.keys(resData).length) {
+                return {
+                    chartData: [],
+                    mainTableData: []
+                };
+            }
             let {resultSetList, kmap, chartDataList, id} = resData;
             if (resultSetList && !resultSetList.length) {
                 return {
@@ -341,7 +350,7 @@ export default {
         nextStep() {
             this.$router.push({name: 'abnormity'});
         },
-        resetDetailFlag() {
+        resetToggleDetailFlag() {
             this.charts.forEach(v => {
                 v.toggleDetailFlags = false;
             });
@@ -355,6 +364,7 @@ export default {
         //     this.currentAccountGroupId = JSON.parse(sessionStorage.getItem('CURRENT_GROUP_ID'));
         // }
         // this.createChart3Columnn(this.currentCustIds);
+        this.resetToggleDetailFlag();
         this.sceneCommitParams = this.$store.getters.sceneCommitParams;
         if (Object.keys(this.sceneCommitParams).length) {
             this.drewChart1();
