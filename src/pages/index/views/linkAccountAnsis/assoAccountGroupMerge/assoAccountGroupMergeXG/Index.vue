@@ -269,7 +269,7 @@ export default {
                 let tableData = this.$store.getters.getChartTableData[2];
                 let chartData = this.$store.getters.getchart3;
                 this.updateTableData(tableData, 1);
-                this.getChart2(chartData);
+                this.getChart3(chartData);
             } else {
                 if (this.currentAccountGroupId) {
                     this.charts[2]['loading'] = true;
@@ -292,7 +292,7 @@ export default {
                 let tableData = this.$store.getters.getChartTableData[3];
                 let chartData = this.$store.getters.getchart4;
                 this.updateTableData(tableData, 1);
-                this.getChart2(chartData);
+                this.getChart4(chartData);
             } else {
                 if (this.currentAccountGroupId) {
                     this.charts[3]['loading'] = true;
