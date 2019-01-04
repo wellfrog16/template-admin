@@ -52,6 +52,7 @@ export default {
                 this.getSceneNameList(val, () => {
                     // this.$store.commit('saveTabIndex', this.resultIds);
                     let sceneCommitParams = this.$store.getters.sceneCommitParams;
+                    this.activeTab = 0; // switch to update data
                     this.activeTab = this.resultIds || Object.keys(sceneCommitParams)[0];
                 });
             },

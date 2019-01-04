@@ -298,21 +298,22 @@ export default {
         dealChart1AndMainTableData() {
             if (!this.tabIndex) {
                 return {
-                    chartData: [],
+                    chartData: {},
                     mainTableData: []
                 };
             }
             let resData = this.$store.getters.sceneCommitResp[this.tabIndex] || {};
-            if (!Object.keys(resData).length) {
-                return {
-                    chartData: [],
-                    mainTableData: []
-                };
-            }
+            // if (!Object.keys(resData).length) {
+            //     return {
+            //         chartData: [],
+            //         mainTableData: []
+            //     };
+            // }
+            console.log(resData);
             let {resultSetList, kmap, chartDataList, id} = resData;
             if (resultSetList && !resultSetList.length) {
                 return {
-                    chartData: [],
+                    chartData: {},
                     mainTableData: []
                 };
             }

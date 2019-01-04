@@ -12,6 +12,9 @@ export default {
             setTimeout(() => {
                 let respData = this.dealChart1AndMainTableData();
                 const {chartData, id} = respData;
+                if (!chartData) {
+                    return;
+                }
                 if (type === 1) {
                     let selectMax = _.maxBy(chartData, 'acctGroOpenInt');
                     // select max
