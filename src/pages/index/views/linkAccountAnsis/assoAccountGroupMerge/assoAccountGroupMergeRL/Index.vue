@@ -4,7 +4,10 @@
             <el-col :xl="12" :lg="12" :md="24" :sm="24" v-for="(item, index) in charts" :key="index">
                 <s-card :title="item.title" :icon="item.icon" class="self-card-css" :loading="item.loading">
                     <div slot="right">
-                        <el-button type="text" @click="toggleDetail(item, index)">明细<i class="el-icon-plus" style="margign-left: 5px;"></i></el-button>
+                        <el-button type="text" @click="toggleDetail(item, index)">
+                            <span v-if="!item['toggleDetailFlags']">明细<i class="el-icon-plus" style="margign-left: 5px;"></i></span>
+                            <span v-else>图表<i class="fa fa-undo-alt" style="margign-left: 5px;"></i></span>
+                        </el-button>
                     </div>
                     <div slot="content">
                         <div v-if="item['toggleDetailFlags']">

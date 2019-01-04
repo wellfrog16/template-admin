@@ -43,7 +43,7 @@ export default {
             activeTab: '0',
             resultIds: '',
             exportResultType: '1',
-            sceneNameList: [{sceneNames: '', sceneTypes: 1, sceneIds: 0}] // [{name: '场景1', type: 1}, {name: '场景2', type: 2}, {name: '场景3', type: 3}, {name: '场景4', type: 4}] // [{name: '', type: 1}]
+            sceneNameList: [{sceneNames: '', sceneTypes: 1, sceneIds: 0}]
         };
     },
     watch: {
@@ -76,51 +76,48 @@ export default {
             });
         },
         handleImport() {
+            if (this.sceneNameList && this.sceneNameList.length > 4) {
+                this.$message.error('暂时只支持同时操作四个场景类型');
+                return;
+            }
             // 导入结果集
-            this.sceneNameList = [{sceneNames: '', sceneTypes: this.exportResultType, sceneIds: 0}];
-            this.activeTab = '0';
             this.fullLoading = true;
             getInfoByResultId(this.resultIds, this.exportResultType).then(resp => {
-                this.$nextTick(() => {
-                    console.log(this.$refs);
-                });
+                let resultName = resp.resultName || resp.resultSetName;
+                this.sceneNameList.push({sceneNames: resultName, sceneTypes: this.exportResultType, sceneIds: this.resultIds});
+                this.activeTab = this.resultIds;
+                let params = {
+                    sceneNames: resultName,
+                    sceneIds: this.resultIds,
+                    acctId: '', // || 'XG00001',
+                    custId: '', // || '80001716,80000025,80001461',
+                    statStartDt: resp.statStartDt, // || '2017-02-20',
+                    statStopDay: resp.statStopDay, // || '2017-10-09',
+                    contrCd: resp.contrCd, // || 'cu1712'
+                    id: this.resultIds
+                };
                 if (String(this.exportResultType) === '1') {
-                    this.$refs['sceneType1'][0].computedCommonReqParams = {
-                        sceneNames: resp.resultName,
-                        sceneIds: this.resultIds,
-                        acctId: '', // || 'XG00001',
-                        custId: '', // || '80001716,80000025,80001461',
-                        statStartDt: resp.statStartDt, // || '2017-02-20',
-                        statStopDay: resp.statStopDay, // || '2017-10-09',
-                        contrCd: resp.contrCd, // || 'cu1712'
-                        id: this.resultIds
-                    };
+                    setTimeout(() => {
+                        this.$nextTick(() => {
+                            this.$refs['sceneType1'][0].computedCommonReqParams = params;
+                        });
+                    });
                 } else if (String(this.exportResultType) === '3') {
-                    this.$refs['sceneType3'][0].computedCommonReqParams = {
-                        sceneNames: resp.resultName,
-                        sceneIds: this.resultIds,
-                        acctId: '', // || 'XG00001',
-                        custId: '', // || '80001716,80000025,80001461',
-                        statStartDt: resp.statStartDt, // || '2017-02-20',
-                        statStopDay: resp.statStopDay, // || '2017-10-09',
-                        contrCd: resp.contrCd, // || 'cu1712'
-                        id: this.resultIds
-                    };
+                    setTimeout(() => {
+                        this.$nextTick(() => {
+                            this.$refs['sceneType3'][0].computedCommonReqParams = params;
+                        });
+                    });
                 } else if (String(this.exportResultType) === '4') {
-                    this.$refs['sceneType4'][0].computedCommonReqParams = {
-                        sceneNames: resp.resultName,
-                        sceneIds: this.resultIds,
-                        acctId: '', // || 'XG00001',
-                        custId: '', // || '80001716,80000025,80001461',
-                        statStartDt: resp.statStartDt, // || '2017-02-20',
-                        statStopDay: resp.statStopDay, // || '2017-10-09',
-                        contrCd: resp.contrCd, // || 'cu1712'
-                        id: this.resultIds
-                    };
+                    setTimeout(() => {
+                        this.$nextTick(() => {
+                            this.$refs['sceneType4'][0].computedCommonReqParams = params;
+                        });
+                    });
                 }
                 let obj = {};
                 obj[this.resultIds] = {
-                    sceneNames: resp.resultName,
+                    sceneNames: resultName,
                     sceneIds: this.resultIds,
                     sceneTypes: this.exportResultType,
                     resultIds: this.resultIds,
@@ -166,10 +163,14 @@ export default {
             });
         },
         getSceneNameList(sceneCommitParams, callback) {
-            this.sceneNameList = [];
+            console.log(sceneCommitParams);
+            let sceneNameList = [];
             Object.keys(sceneCommitParams).forEach(f => {
-                this.sceneNameList.push(sceneCommitParams[f]);
+                if (sceneCommitParams[f].sceneNames) {
+                    sceneNameList.push(sceneCommitParams[f]);
+                }
             });
+            this.sceneNameList = sceneNameList;
             callback && callback();
         }
     },
