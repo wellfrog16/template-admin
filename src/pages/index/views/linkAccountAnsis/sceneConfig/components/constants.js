@@ -5,10 +5,10 @@ export const correlationIndexColumns = [
     {field: 'indexValue', label: '值', template: InputInTable},
 ];
 export const createTypeOptions = [
-    {label: '相关性分析', value: '1'},
-    {label: '行为分析', value: '2'},
-    {label: '地址分析', value: '3'},
-    {label: '关系人分析', value: '4'}
+    {label: '相关系数', value: '1'},
+    {label: '聚类', value: '2'},
+    {label: '基本信息', value: '3'},
+    {label: '关系人', value: '4'}
 ];
 export const accountTotalTypeOptions = [
     {label: '按持仓量', value: '1'},
