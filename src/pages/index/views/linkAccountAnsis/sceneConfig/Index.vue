@@ -418,12 +418,12 @@ export default {
 
             let params = {
                 exportType: this.ruleForm.exportType,
-                cityIds: cityIds.join(',') || '11',
+                cityIds: cityIds.join(',') || '',
                 contrCd: this.ruleForm.contractCode,
-                statStartDt: '2016-12-01',
-                statStopDay: '2017-12-31',
-                // statStartDt: moment(this.ruleForm.selectDateRange[0]).format('YYYY-MM-DD'),
-                // statStopDay: moment(this.ruleForm.selectDateRange[1]).format('YYYY-MM-DD'),
+                // statStartDt: '2016-12-01',
+                // statStopDay: '2017-12-31',
+                statStartDt: moment(this.ruleForm.selectDateRange[0]).format('YYYY-MM-DD'),
+                statStopDay: moment(this.ruleForm.selectDateRange[1]).format('YYYY-MM-DD'),
                 sceneIds: '',
                 sceneNames: '',
                 sceneTypes: '',
