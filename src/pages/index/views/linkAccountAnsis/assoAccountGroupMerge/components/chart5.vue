@@ -57,6 +57,7 @@ export default {
                         data: [],
                         links: [],
                         categories: [],
+                        focusNodeAdjacency: true,
                         roam: true,
                         label: {
                             normal: {
