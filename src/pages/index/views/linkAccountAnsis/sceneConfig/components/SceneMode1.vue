@@ -43,33 +43,7 @@
                 </div>
             </el-col>
             <el-col :span='12' class="right-block">
-                <s-card :title="`相关性指标选择`">
-                    <el-row slot="content">
-                        <s-table :loading="loading" :show-header="false" :columns="correlationIndexColumns" :tableData="tableData" :height="200" :otherProps="{unit: '%', disabled: disabled}">
-                            <el-table-column
-                                :width="100"
-                                align="center"
-                                slot="tableColumnsPush"
-                                label="操作"
-                                show-overflow-tooltip>
-                                <template slot-scope="scope">
-                                    <el-button type="primary" size="small" @click="handleInsert(scope.row)" :disabled="disabled">插入</el-button>
-                                </template>
-                            </el-table-column>
-                        </s-table>
-                    </el-row>
-                </s-card>
-                <div class="button-group">
-                    <el-button @click="insertText(' AND ')" :disabled="disabled" size="mini" type="primary">AND</el-button>
-                    <el-button @click="insertText(' OR ')"  :disabled="disabled" size="mini" type="primary">OR</el-button>
-                    <el-button @click="insertText('()')"  :disabled="disabled" size="mini" type="primary">(...)</el-button>
-                </div>
-                <div class="textarea-css">
-                    <el-input :rows="4" type="textarea" placeholder="示例：买入成交相关系数>=90% AND 卖出成交相关系数>90%" :readonly="disabled" id="textarea" v-model="ruleForm.indexPara"></el-input>
-                </div>
-                <div style="margin-top:8px; text-align:right;">
-                    <el-button size="small" type="primary" :disabled="disabled" @click="syntaxCheck()">语法检查</el-button>
-                </div>
+                <index-param ref="indexParamRef" :operateType="operateType" :createType="createType" :dialogItem="dialogItem" :disabled="disabled" @updateIndexPara="updateIndexPara"></index-param>
             </el-col>
         </el-row>
         <el-row style="margin-top:10px; text-align:center;">
@@ -81,14 +55,10 @@
 </template>
 <script>
 import SCard from '@/components/index/common/SCard';
-import STable from '@/components/index/common/STable';
-import {
-    getTlsIndexTlb,
-    checkSql
-} from '@/api/dataAnsis/sceneConfig';
+import indexParam from './indexParamNew';
 import {correlationIndexColumns, accountTotalTypeOptions, accountTotalFrepOptions, defaultConfig, checkbox} from './constants';
 export default {
-    components: {SCard, STable},
+    components: {SCard, indexParam},
     props: {
         operateType: {
             type: [Number, String],
@@ -143,6 +113,9 @@ export default {
         };
     },
     methods: {
+        updateIndexPara(val) {
+            this.ruleForm.indexPara = val;
+        },
         handleCheckedChange() {
             this.$refs['ruleForm'].validateField('acctMakePosQtty');
             this.$refs['ruleForm'].validateField('acctBargainQtty');
@@ -175,46 +148,9 @@ export default {
             }
             callback();
         },
-        handleInsert(item) {
-            let str = `${item.indexName} ${item.indexCon} ${item.indexValue}%`;
-            this.insertText(str);
-        },
-        insertText(str, obj) {
-            obj = obj || document.getElementById('textarea');
-            if (document.selection) {
-                let sel = document.selection.createRange();
-                sel.text = str;
-            } else if (typeof obj.selectionStart === 'number' && typeof obj.selectionEnd === 'number') {
-                let startPos = obj.selectionStart;
-                let endPos = obj.selectionEnd;
-                let cursorPos = startPos;
-                let tmpStr = obj.value;
-                obj.value = tmpStr.substring(0, startPos) + str + tmpStr.substring(endPos, tmpStr.length);
-                this.ruleForm.indexPara = obj.value;
-                cursorPos += str.length;
-                obj.focus();
-                obj.selectionStart = obj.selectionEnd = cursorPos;
-            } else {
-                obj.value += str;
-                this.ruleForm.indexPara = obj.value;
-            }
-        },
-        moveEnd(obj) {
-            obj = obj || document.getElementById('textarea');
-            obj.focus();
-            var len = obj.value.length;
-            if (document.selection) {
-                var sel = obj.createTextRange();
-                sel.moveStart('character', len);
-                sel.collapse();
-                sel.select();
-            } else if (typeof obj.selectionStart === 'number' && typeof obj.selectionEnd === 'number') {
-                obj.selectionStart = obj.selectionEnd = len;
-            }
-        },
         setRuleForm() {
             this.ruleForm = {
-                isDel: '1',
+                isDel: String(this.dialogItem.isDel) === '0' ? '0' : '1',
                 sceneType: this.createType,
                 sceneId: this.dialogItem.sceneId || '',
                 sceneComnt: this.dialogItem.sceneComnt || '', // 场景说明
@@ -248,7 +184,7 @@ export default {
         },
         handleReset() {
             this.ruleForm = {
-                isDel: '1',
+                isDel: String(this.ruleForm.isDel) === '0' ? '0' : '1',
                 sceneType: this.createType,
                 sceneId: this.ruleForm.sceneId || '',
                 sceneComnt: this.ruleForm.sceneComnt, // 场景说明
@@ -263,26 +199,6 @@ export default {
             };
             this.tableData = JSON.parse(JSON.stringify(this.defaultConfig.tableData)); // 指标列表
         },
-        syntaxCheck(callback) {
-            let reg = /^[0-9]+$/;
-            let flag = false;
-            this.tableData.forEach(v => {
-                if (!reg.test(v.indexValue) || v.indexValue > 100) {
-                    flag = true;
-                }
-            });
-            if (flag) {
-                this.$message.error('指标值请输入小于100的正整数');
-                return;
-            }
-            checkSql(this.ruleForm.indexPara, this.ruleForm.sceneType).then(resp => {
-                if (resp.success) {
-                    callback && callback();
-                } else {
-                    this.$message.error('请插入正确的指标');
-                }
-            });
-        },
         saveSceneConfig() {
             if (!this.ruleForm.sceneName) {
                 this.$message.error('请输入场景名称');
@@ -294,7 +210,7 @@ export default {
             }
             this.$refs['ruleForm'].validate(valid => {
                 if (valid) {
-                    this.syntaxCheck(() => { // 语法校验
+                    this.$refs['indexParamRef'].syntaxCheck(() => { // 语法校验
                         let params = JSON.parse(JSON.stringify(this.ruleForm));
                         if (this.checkedList.indexOf('1') === -1) {
                             params.acctMakePosQtty = '';
@@ -312,29 +228,10 @@ export default {
                     });
                 }
             });
-        },
-        getTlsIndexTlb() {
-            this.loading = true;
-            getTlsIndexTlb(this.ruleForm.sceneType).then(resp => {
-                this.loading = false;
-                let data = resp.map(v => {
-                    return {
-                        indexName: v.indexName,
-                        indexValue: 90,
-                        indexCon: '>='
-                    };
-                });
-                this.tableData = data;
-                this.defaultConfig.tableData = JSON.parse(JSON.stringify(data));
-            }).catch(e => {
-                this.loading = false;
-                console.error(e);
-            });
         }
     },
     mounted() {
         this.setRuleForm();
-        this.getTlsIndexTlb();
     }
 };
 </script>
