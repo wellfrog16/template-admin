@@ -1,7 +1,7 @@
 <template>
     <div class="asso-account-group-merge" v-loading="fullLoading">
         <div class="top-nav">
-            <el-tabs type="card" v-model="activeTab" @tab-click="handleTabClick" v-if="sceneNameList.length && sceneNameList[0].sceneNames">
+            <el-tabs type="card" closable v-model="activeTab" @tab-click="handleTabClick" v-if="sceneNameList.length && sceneNameList[0].sceneNames" @tab-remove="removeTab">
                 <el-tab-pane v-for="(item, index) in sceneNameList" :key="index" :name="String(item.sceneIds)" :label="item.sceneNames">
                 </el-tab-pane>
             </el-tabs>
@@ -54,6 +54,7 @@ export default {
                     let sceneCommitParams = this.$store.getters.sceneCommitParams;
                     this.activeTab = 0; // switch to update data
                     this.activeTab = this.resultIds || Object.keys(sceneCommitParams)[0];
+                    console.log(this.activeTab);
                 });
             },
             deep: true
@@ -77,6 +78,10 @@ export default {
             });
         },
         handleImport() {
+            if (!this.resultIds) {
+                this.$message.error('请先选择一个结果集');
+                return;
+            }
             if (this.sceneNameList && this.sceneNameList.length > 4) {
                 this.$message.error('暂时只支持同时操作四个场景类型');
                 return;
@@ -147,7 +152,13 @@ export default {
                             this.$refs['sceneType4'] && this.$refs['sceneType4'][0].drewChart1(flag);
                         }
                     });
+                }).catch(e => {
+                    this.fullLoading = false;
+                    console.error(e);
                 });
+            }).catch(e => {
+                this.fullLoading = false;
+                console.error(e);
             });
         },
         handleTabClick(tab) {
@@ -172,7 +183,40 @@ export default {
                 }
             });
             this.sceneNameList = sceneNameList;
+            console.log(this.sceneNameList);
             callback && callback();
+        },
+        removeTab(targetName) {
+            let tabs = this.sceneNameList;
+            if (tabs.length === 1) {
+                this.$message.error('至少有一个场景');
+                return;
+            }
+            let activeName = this.activeTab;
+            let nextTab = null;
+            if (String(activeName) === String(targetName)) {
+                tabs.forEach((tab, index) => {
+                    if (String(tab.sceneIds) === String(targetName)) {
+                        nextTab = tabs[index + 1] || tabs[index - 1];
+                        if (nextTab) {
+                            activeName = nextTab.sceneIds;
+                        }
+                    }
+                });
+            }
+            let store = this.$store.getters.sceneCommitParams;
+            let newArray = {};
+            for (let key in store) {
+                if (String(key) !== String(targetName)) {
+                    newArray[key] = store[key];
+                }
+            }
+            console.log(newArray);
+            this.$store.commit('saveSceneCommitParams', newArray);
+            this.sceneNameList = tabs.filter(tab => String(tab.sceneIds) !== String(targetName));
+            console.log(this.sceneNameList);
+            this.activeTab = activeName;
+            this.resultIds = activeName;
         }
     },
     mounted() {

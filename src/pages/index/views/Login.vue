@@ -150,7 +150,7 @@ export default {
     },
     mounted() {
         let {loginFlag} = this.$route.query;
-        this.loginFlag = loginFlag || false;
+        this.loginFlag = loginFlag && this.ruleForm.userName;
     }
 };
 </script>

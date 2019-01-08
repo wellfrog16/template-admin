@@ -1,42 +1,51 @@
 /* 树形table */
 <template>
-    <el-container class="tree-table-component">
-        <div class="tree-table-component">
-            <div class="table-header-container">
+    <div>
+        <div style="overflow: auto;" class="asso-scrollbar-b">
+            <div style="width:2445px; display: flex; text-align: center; padding-left: 55px; height: 36px; line-height: 36px;">
+                <div v-for="(item, index) in columns" :key="index" style="flex: 1;">
+                    {{ item.label }}
+                </div>
+            </div>
+        </div>
+        <el-container>
+            <div class="tree-table-component">
+                <!-- <div class="table-header-container">
                 <el-checkbox :indeterminate="isIndeterminate" v-model="checkedAll" @change="handleCheckAll"></el-checkbox>
                 <span class="table-header">
-                    <div v-for="(item, index) in columns" :key="index" style="display:inline-block; width: 135px;">
-                        {{ item.label }}
-                    </div>
+
                 </span>
+            </div> -->
+                <el-tree
+                    ref="tree-table"
+                    class="tree-table asso-scrollbar"
+                    show-checkbox
+                    node-key="id"
+                    :data="tableData"
+                    :default-expanded-keys="[0]"
+                    :filter-node-method="filterMethods"
+                    @check-change="handleTreeCheckedChange"
+                    :expand-on-click-node="false">
+                    <span class="custom-tree-node" slot-scope="{ node, data }">
+                        <div v-for="(item, index) in columns" :key="index" style="text-align: center;">
+                            <el-popover placement="top-end" trigger="hover" :disabled="index < 5" width="200">
+                                <div>
+                                    <p v-if="data.acctId" style="margin:0;">账户组号：{{ data.acctId }}</p>
+                                    <p v-if="data.custId" style="margin:0;">客户编号：{{ data.custId }}</p>
+                                    <p v-if="data.custId" style="margin:0; white-space:normal; word-break:break-all;">{{ columns[index]['label'] }}：{{ (data[item.field] === null || data[item.field] === undefined) ?  '' :  data[item.field] }}</p>
+                                </div>
+                                <span slot="reference">
+                                    <span v-if="item.field !== 'custId' || data[item.field]==='客户编号'" style="width: 145px; text-overflow: ellipsis; overflow: hidden; display: inline-block; margin: 0;">{{ (data[item.field] === null || data[item.field] === undefined) ?  '' :  data[item.field] }}</span>
+                                    <custIdColumn v-else :scope="{row: data}" style="text-align:center;"></custIdColumn>
+                                </span>
+                            </el-popover>
+                        </div>
+                    </span>
+                </el-tree>
             </div>
-            <el-tree
-                ref="tree-table"
-                class="tree-table"
-                show-checkbox
-                node-key="id"
-                :data="tableData"
-                :filter-node-method="filterMethods"
-                @check-change="handleTreeCheckedChange"
-                :expand-on-click-node="false">
-                <span class="custom-tree-node" slot-scope="{ node, data }">
-                    <div v-for="(item, index) in columns" :key="index" style="text-align: center;">
-                        <el-popover placement="top-end" trigger="hover" :disabled="index < 5" width="200">
-                            <div>
-                                <p v-if="data.acctId" style="margin:0;">账户组号：{{ data.acctId }}</p>
-                                <p v-if="data.custId" style="margin:0;">客户编号：{{ data.custId }}</p>
-                                <p v-if="data.custId" style="margin:0; white-space:normal; word-break:break-all;">{{ columns[index]['label'] }}：{{ (data[item.field] === null || data[item.field] === undefined) ?  '' :  data[item.field] }}</p>
-                            </div>
-                            <span slot="reference">
-                                <span v-if="item.field !== 'custId'" style="width: 145px; text-overflow: ellipsis; overflow: hidden; display: inline-block; margin: 0;">{{ (data[item.field] === null || data[item.field] === undefined) ?  '' :  data[item.field] }}</span>
-                                <custIdColumn v-else :scope="{row: data}" style="text-align:center;"></custIdColumn>
-                            </span>
-                        </el-popover>
-                    </div>
-                </span>
-            </el-tree>
-        </div>
-    </el-container>
+        </el-container>
+    </div>
+
 </template>
 <script>
 import custIdColumn from '@/components/index/common/CustIdColumn';
@@ -44,7 +53,8 @@ export default {
     data() {
         return {
             isIndeterminate: false,
-            checkedAll: false
+            checkedAll: false,
+            treeData: []
         };
     },
     components: {custIdColumn},
@@ -72,6 +82,9 @@ export default {
         },
         allArray() {
             this.isIndeterminate = false;
+        },
+        tableData(val) {
+            this.dealTreeData();
         }
     },
     computed: {
@@ -103,15 +116,66 @@ export default {
         filterMethods(value, data) {
             if (!value) return true;
             return (data['acctId'] && data['acctId'].indexOf(value.trim()) !== -1) || (data['custId'] && data['custId'].indexOf(value.trim()) !== -1);
+        },
+        dealTreeData() {
+            let parentNode = {id: 0, children: this.tableData};
+            this.columns.forEach(v => {
+                parentNode[v.field] = v.label;
+            });
+            this.treeData = [
+                parentNode
+            ];
         }
     },
     mounted() {
+        // let ddd = [];
+        // for (let i = 0; i < 21; i++) {
+        //     ddd.push({
+        //         'id': i,
+        //         'acctId': 'XG' + i,
+        //         'children': (() => {
+        //             let d = [];
+        //             for (let ii = 0; ii < 11; ii++) {
+        //                 d.push({
+        //                     'id': String(i) + String(ii),
+        //                     'acctId': 'XG' + i,
+        //                     'custId': '80' + String(i) + String(ii),
+        //                     'custName': null,
+        //                     'acctGroAvgRelaCoef': 0,
+        //                     'acctAvgRelaCoef': 0,
+        //                     'contrCd': 'cu1712',
+        //                     'acctGroNetOpenInt': 500,
+        //                     'acctNetOpenInt': 100,
+        //                     'custWheOtherGro': 'BB001, BB001, BB001, BB001',
+        //                     'buyBargainRela': 0,
+        //                     'sellBargainRela': 0,
+        //                     'netBuyBargainRela': 0,
+        //                     'longPosMakePosRela': 0,
+        //                     'shortPosMakePosRela': 0,
+        //                     'floatPrftLossRela': 0
+        //                 });
+        //             }
+        //             return d;
+        //         })()
+        //     });
+        // }
+        this.dealTreeData();
+        let $ = this.$jquery;
+        $('.asso-scrollbar').scroll(event => {
+            $('.asso-scrollbar-b').scrollLeft($('.asso-scrollbar').scrollLeft());
+        });
     }
 };
 </script>
 <style lang="less" scoped>
+    .asso-scrollbar-b::-webkit-scrollbar {
+        display: none;
+    }
     .tree-table-component {
+        width: 100%;
         .el-tree {
+            width: 100% !important;
+            height: 390px;
             background: transparent;
         }
         /deep/.self-column-in-table {
@@ -165,6 +229,9 @@ export default {
                     flex: 1;
                     padding: 0 10px;
                 }
+            }
+            /deep/ .el-tree-node {
+                width: 2500px;
             }
             /deep/ .el-tree-node__content {
                 padding: 10px;

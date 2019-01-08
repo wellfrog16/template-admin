@@ -81,6 +81,14 @@ const instance = url => {
         },
         error => {
             loadingInstancce && loadingInstancce.close();
+            if (error.toString().indexOf('Request failed with status code 401') > -1) {
+                localStorage.removeItem('ACCESS_TOKEN');
+                localStorage.removeItem('USER_NAME');
+                Vue.prototype.router.replace({
+                    path: '/login',
+                    query: {redirect: Vue.prototype.router.currentRoute.fullPath}
+                });
+            }
             Notification.error({
                 message: '加载失败'
             });

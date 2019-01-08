@@ -64,7 +64,7 @@
                 <div slot="content">
                     <el-row :gutter="20">
                         <el-col :span="21">
-                            <div style="overflow:auto; max-height:400px;">
+                            <div>
                                 <tree-table
                                     :loading="loadingTree"
                                     ref="self-tree-table"
@@ -166,7 +166,7 @@ import {
 } from '@/api/dataAnsis/knowledgeAtlas';
 import SCard from '@/components/index/common/SCard';
 import UploadFileToServer from '@/components/index/common/UploadFileToServer';
-import TreeTable from '@/components/index/common/TreeTable';
+import TreeTable from '@/components/index/common/TreeTableOld';
 import ResultSelectComponent from '@/components/index/common/ResultSelectComponent';
 import {mainTableColumns} from '../components/constants';
 export default {

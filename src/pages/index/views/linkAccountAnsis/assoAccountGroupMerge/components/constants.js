@@ -284,7 +284,7 @@ export const mainTableColumnsBI = [
         label: '银行账号',
         align: 'center'
     },
-    {
+    /* {
         field: '',
         label: '当地纳税号',
         align: 'center'
@@ -303,7 +303,7 @@ export const mainTableColumnsBI = [
         field: '',
         label: '港澳通行证号',
         align: 'center'
-    }
+    } */
 ];
 // tree-关系人
 export const mainTableColumnsRL = [
@@ -343,31 +343,31 @@ export const mainTableColumnsRL = [
         align: 'center'
     },
     {
-        field: '',
+        field: 'nextBillPerson',
         label: '指定下单人',
         align: 'center'
     },
     {
-        field: '',
+        field: 'capCannibPerson',
         label: '资金调拨人',
         align: 'center'
     },
     {
-        field: '',
+        field: 'stlBillCfmPerson',
         label: '结算单确认人',
         align: 'center'
     },
     {
-        field: '',
+        field: 'lpSubstTbl',
         label: '法人代表',
         align: 'center'
     },
     {
-        field: '',
+        field: 'openAuthPerson',
         label: '开户授权人',
         align: 'center'
     },
-    {
+    /* {
         field: '',
         label: '分户管理资产负责人',
         align: 'center'
@@ -376,15 +376,20 @@ export const mainTableColumnsRL = [
         field: '',
         label: '托(保)管机构联系人',
         align: 'center'
-    },
+    }, */
     {
-        field: '',
-        label: '基金经理',
+        field: 'investMger',
+        label: '投资经理',
         align: 'center'
     },
     {
-        field: '',
+        field: 'investConsu',
         label: '投资顾问',
+        align: 'center'
+    },
+    {
+        field: 'raiProdEncode',
+        label: '权益产品编码',
         align: 'center'
     }
 ];

@@ -71,7 +71,7 @@
 // import {getBlock2Data1, getChart3Data2, getBlock4Data3} from './getBlock2Data';
 import SCard from '@/components/index/common/SCard';
 import STable from '@/components/index/common/STable';
-import TreeTable from '@/components/index/common/TreeTable';
+import TreeTable from '@/components/index/common/TreeTableOld';
 import treeTableMixin from '@/pages/index/common/treeTableMixin';
 import commonMixin from '@/pages/index/common/commonMixin';
 import {

@@ -9,5 +9,5 @@ export const mainTableColumns = [
     {field: 'acctGroupHold', label: '账户组持仓量', align: 'center'},
     {field: 'customerHold', label: '账户持仓量', align: 'center'},
     {field: 'custWheOtherGro', label: '客户所在其他组', align: 'center'},
-    {field: '', label: '', align: 'center', width: 36}
+    // {field: '', label: '', align: 'center', width: 36}
 ];
