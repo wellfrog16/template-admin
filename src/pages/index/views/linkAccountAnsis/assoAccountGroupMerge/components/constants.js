@@ -328,17 +328,17 @@ export const mainTableColumnsRL = [
         align: 'center'
     },
     {
-        field: 'acctGroNetOpenInt',
+        field: 'acctGrMakePosQtty',
         label: '账户组净持仓量',
         align: 'center'
     },
     {
-        field: 'acctNetOpenInt',
+        field: 'acctMakePosQtty',
         label: '账户净持仓量',
         align: 'center'
     },
     {
-        field: 'custWheOtherGro',
+        field: 'custOtherGr',
         label: '客户所在其他组',
         align: 'center'
     },
