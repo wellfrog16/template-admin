@@ -381,7 +381,7 @@ export default {
             width: 350px;
         }
         .operate-button-group {
-            padding-top: 40px;
+            padding-top: 65px;
             display: flex;
             flex-direction: column;
             align-items: center;

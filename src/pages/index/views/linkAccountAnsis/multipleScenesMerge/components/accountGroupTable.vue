@@ -2,45 +2,37 @@
     <div :class="$style.groupadd_information">
         <s-card :title="`客户群体选择`" :icon="`fa fa-user-check`">
             <div slot="content">
-                <el-row>
-                    <el-col :span="15">
-                        <el-col :span="16">
-                            <span>导入结果集：</span>
-                            <resultSelectComponent
-                                :resultIdProps="resultIds"
-                                @selectResultId="selectResultId"
-                            ></resultSelectComponent>
-                        </el-col>
-                        <el-col :span="2">
-                            <el-button
-                                :loading="loadingBt"
-                                size="small"
-                                type="primary"
-                                @click="ascertainUPClick1"
-                            >确认</el-button>
-                        </el-col>
+                <el-row :gutter="20">
+                    <el-col :span="14">
+                        <span>导入结果集：</span>
+                        <resultSelectComponent
+                            style="width: 50%; max-width: 350px;"
+                            :resultIdProps="resultIds"
+                            @selectResultId="selectResultId"
+                        ></resultSelectComponent>
+                        <el-button
+                            style="margin-left: 10px;"
+                            :loading="loadingBt"
+                            size="small"
+                            type="primary"
+                            @click="handleConfirmExportResultData"
+                        >确认</el-button>
                     </el-col>
-                    <el-col :span="8" :class="$style.rigth">
-                        <el-col :span="6" :class="$style.leading">
-                            <span>导入 CSV：</span>
-                        </el-col>
-                        <el-col :span="10" :class="$style.up_loading">
-                            <upload-file-to-server
-                                class="upload-file"
-                                style="max-width: 444px;"
-                                ref="uploadFile"
-                                :actionUrl="actionUrl"
-                                :fileListProps="ruleForm.fileList"
-                                :uploadParams="uploadParams"
-                                :showSubmitUploadBtn="false"
-                                :autoUploadMode="false"
-                                @getTxtCon="handleUploadSuccess"
-                                @currentFileList="currentFileList"
-                            ></upload-file-to-server>
-                        </el-col>
-                        <el-col :span="2">
-                            <el-button size="small" type="primary" @click="ascertainUPClick">确认</el-button>
-                        </el-col>
+                    <el-col :span="10" style="line-height: 40px;">
+                        <span>导入 CSV：</span>
+                        <upload-file-to-server
+                            class="upload-file"
+                            style="display: inline-block; margin: 0 10px; vertical-align: top; width: 140px; text-align: left;"
+                            ref="uploadFile"
+                            :actionUrl="actionUrl"
+                            :fileListProps="ruleForm.fileList"
+                            :uploadParams="uploadParams"
+                            :showSubmitUploadBtn="false"
+                            :autoUploadMode="false"
+                            @getTxtCon="handleUploadSuccess"
+                            @currentFileList="currentFileList"
+                        ></upload-file-to-server>
+                        <el-button size="small" type="primary" @click="handleConfirmExportCsvData">确认</el-button>
                     </el-col>
                 </el-row>
             </div>
@@ -76,63 +68,65 @@
                             </div>
                         </el-col>
                         <el-col :span="3">
-                            <div :class="$style.operate_button_group">
+                            <div :class="$style.operate_group">
                                 <el-button
-                                    :class="[$style.operate_button_group, 'self-width']"
+                                    class="self-width"
                                     type="danger"
                                     size="small"
                                     @click="handleDelete"
                                 >删除</el-button>
                                 <br>
                                 <el-button
-                                    :class="[$style.operate_button_group, 'self-width']"
+                                    class="self-width"
                                     type="warning"
                                     size="small"
                                     @click="handleSplit"
                                 >拆分</el-button>
                                 <br>
                                 <el-button
-                                    :class="[$style.operate_button_group, 'self-width']"
+                                    class="self-width"
                                     type="warning"
                                     size="small"
                                     @click="handleMerge"
                                 >合并</el-button>
                                 <br>
                                 <el-button
-                                    :class="[$style.operate_button_group, 'self-width']"
+                                    class="self-width"
                                     type="primary"
                                     size="small"
                                     @click="handleExportResult()"
                                 >导出到结果集</el-button>
                                 <br>
                                 <el-button
-                                    :class="[$style.operate_button_group, 'self-width']"
+                                    class="self-width"
                                     type="primary"
                                     size="small"
                                     @click="handleExportCsv('账户组信息', mainTableColumns)"
                                 >导出到csv</el-button>
+                                <br>
+                                <el-button
+                                    class="self-width"
+                                    type="primary"
+                                    size="small"
+                                    :loading="loadingTree"
+                                    @click="createData"
+                                >生成数据</el-button>
                             </div>
                         </el-col>
                     </el-row>
                 </div>
             </s-card>
         </div>
-
-        <div :class="$style.groupadd_button">
-            <el-button size="small" type="primary" @click="dialogFormClick">生成数据</el-button>
-            <el-button size="small" type="primary" @click="nextClick">下一步</el-button>
-        </div>
         <el-dialog
-            :before-close="closeData"
-            title="客户历史交易查询"
+            :before-close="handleCloseDialog"
+            title="输入合约代码生成数据"
             :visible.sync="dialogFormVisible"
-            :class="$style.dia_name"
-        >
-            <el-form ref="ruleForms" :model="ruleForms" :rules="rulesAll">
+            :class="$style.dia_name">
+            <el-form ref="dialogRuleForm" :model="dialogRuleForm" :rules="dialogFormRules">
                 <el-form-item prop="contractCode" label="合约代码：" label-width="100px">
                     <el-input
                         style="width: 80%;"
-                        v-model="ruleForms.contractCode"
+                        v-model="dialogRuleForm.contractCode"
                         clearable
                         size="small"
                         auto-complete="off"
@@ -142,12 +136,12 @@
                     <el-button
                         type="primary"
                         size="small"
-                        @click="generateReportsClick('ruleForms')"
+                        @click="handleDialogConfirm('dialogRuleForm')"
                     >确 定</el-button>
                     <el-button
                         type="warning"
                         size="small"
-                        @click="dialogFormVisibl('ruleForms')"
+                        @click="handleDialogCancel('dialogRuleForm')"
                     >取 消</el-button>
                 </el-form-item>
             </el-form>
@@ -155,48 +149,46 @@
     </div>
 </template>
 <script>
-import _ from 'lodash';
 import {
     uploadFileByBodyInfo // 导入csv，输出账户号list 接口
 } from '@/api/common';
 import treeTableMixin from '@/pages/index/common/treeTableMixin';
 import {
-    postRegenerate, // 生成报告（知识库图表）（文革7）
-    postResultList // 导入结果集的树状列表(齐宁19)
-} from '@/api/dataAnsis/knowledgeAtlas';
+    regenerateData, // 生成数据
+    postResultList // 导入结果集的树状列表
+} from '@/api/dataAnsis/multipleScenesMerge';
 import SCard from '@/components/index/common/SCard';
 import UploadFileToServer from '@/components/index/common/UploadFileToServer';
 import TreeTable from '@/components/index/common/TreeTableOld';
 import ResultSelectComponent from '@/components/index/common/ResultSelectComponent';
 import {mainTableColumns} from '../components/constants';
+import _ from 'lodash';
+
 export default {
-    name: 'groupaddInformation',
+    name: 'accountGroupTable',
     components: {
-        SCard, // 边框
-        UploadFileToServer, // 导入CSV
+        SCard,
+        UploadFileToServer, // 上传文件到服务器组件
         TreeTable,
-        ResultSelectComponent // 导入结果集的树状列表
+        ResultSelectComponent // 导入结果集公共组件
     },
-    // 混入, 是一个类的继承，类似于一个公共的方法。
     mixins: [treeTableMixin],
-    // 存储数据
     data() {
         return {
             loadingBt: false,
             loadingTree: false,
             dialogFormVisible: false,
-            ruleForms: {
-                contractCode: '' // 合约代码cu1712
+            fullScreenLoading: false,
+            mainTableColumns: mainTableColumns, // 树形table表头
+            dialogRuleForm: {
+                contractCode: '' // 合约代码
             },
-            rulesAll: {
+            dialogFormRules: {
                 contractCode: {
                     required: true,
                     message: '请输入合约代码'
                 }
             },
-            fullScreenLoading: false, // 加载 (结果集加载)
-            mainTableColumns: mainTableColumns,
-            // form 表单绑定值
             ruleForm: {
                 fileList: [], // 导入CSV
                 exportType: '' // 导入结果集按钮
@@ -209,27 +201,31 @@ export default {
                     message: '请导入CSV'
                 }
             },
-            resultList: [],
-            resultIds: '',
+            resultIds: '', // 当前导入的结果集id
+            resultType: '', // 当前导入的结果集类型
+            currentConctrd: '', // 当前导入后数据的合约代码
+            startDate: '', // 当前导入后数据的合约代码
+            endDate: '', // 当前导入后数据的合约代码
+            statFreq: '', // 当前导入后数据的合约代码
             uploadOption: {
                 name: '上传',
                 size: 'small',
                 type: 'primary'
             },
-            // 导入csv，输出账户号list 接口
             uploadParams: {}, // 上传文件body参数
             actionUrl: uploadFileByBodyInfo('customer/combinedscence/csv'),
             defaultLimitFileType: ['csv'],
-            counter: 0, // 导入csv 表格push结果集名称
-            searchText: '', // 请输入账户组或客户编号
-            mainTableDataClick: [], // 确认按钮
-            importResultList: []
+            searchText: '',
+            importResultRespData: [], // 导入当前结果集后返回的结果
+            importResultList: [], // 已经导入的结果集列表
+            isHasSceneType1: false
         };
     },
     methods: {
         // 导入结果集数据
         selectResultId(val, resultNameG, resultTypeG, setupUserG) {
             this.resultIds = val;
+            this.resultType = resultTypeG;
             if (val) {
                 let params = {
                     'resultId': val, // 结果集编号
@@ -242,7 +238,13 @@ export default {
                 postResultList(params).then(resp => {
                     this.loadingBt = false;
                     this.fullScreenLoading = false;
-                    this.mainTableDataClick = resp;
+                    this.importResultRespData = resp;
+                    if (resp && resp.length) {
+                        this.currentConctrd = resp[0]['contractCode'] || '';
+                        this.startDate = resp[0]['children'][0]['startDate'] || '1900-01-01';
+                        this.endDate = resp[0]['children'][0]['endDate'] || '3000-12-31';
+                        this.statFreq = resp[0]['children'][0]['statFrep'] || '1';
+                    }
                 }).catch(e => {
                     this.loadingBt = false;
                     this.fullScreenLoading = false;
@@ -253,13 +255,20 @@ export default {
             return _.sortBy(data, [item => { return item.acctId; }]);
         },
         // 确认结果集导入
-        ascertainUPClick1() {
+        handleConfirmExportResultData() {
+            if (this.isHasSceneType1 && String(this.resultType) === '1') {
+                this.$message.error('只能导入一次相关系数类型的结果集');
+                return;
+            }
             if (this.importResultList.indexOf(this.resultIds) > -1) {
                 this.$message.error('该结果集已经导入，不能重复导入');
                 return;
             }
             this.importResultList.push(this.resultIds);
-            this.mainTableData = this.sortDataByAcctIdCommon(this.mainTableData.concat(this.mainTableDataClick));
+            this.mainTableData = this.sortDataByAcctIdCommon(this.mainTableData.concat(this.importResultRespData));
+            if (!this.isHasSceneType1 && String(this.resultType) === '1') {
+                this.isHasSceneType1 = true;
+            }
         },
         // 导入CSV(附件导入成功)
         currentFileList(fileList) {
@@ -270,83 +279,84 @@ export default {
             if (resp && resp.length) {
                 this.mainTableData = this.sortDataByAcctIdCommon(this.mainTableData.concat(resp));
             } else {
-                this.$message.error('无效');
+                this.$message.error('导入数据无效');
             }
         },
-        // 确认上次SVG
-        ascertainUPClick() {
+        // 提交CSV到服务器
+        handleConfirmExportCsvData() {
             this.$refs['uploadFile'].submitUpload();
         },
-        updateCheckedList() {
-        },
-        // 生成报告按钮
-        dialogFormClick() {
+        // 生成数据按钮
+        createData() {
             if (this.mainTableData && !this.mainTableData.length) {
                 this.$message.error('账户组信息暂无数据!');
             } else {
-                this.dialogFormVisible = true;
+                if (!this.currentConctrd) {
+                    this.dialogFormVisible = true;
+                } else {
+                    this.generateDataMethods();
+                }
             }
         },
-        // 生成报告取消按钮
-        dialogFormVisibl(formName) {
+        // dialog取消按钮
+        handleDialogCancel(formName) {
             this.dialogFormVisible = false;
             this.$refs[formName].resetFields();
         },
-        closeData(done) {
+        handleCloseDialog(done) {
             done();
-            this.ruleForms.contractCode = '';
+            this.dialogRuleForm.contractCode = '';
         },
-        // 生成报告确认按钮
-        generateReportsClick() {
-            this.$refs['ruleForms'].validate(valid => {
+        // dialog确认按钮
+        handleDialogConfirm() {
+            this.$refs['dialogRuleForm'].validate(valid => {
                 if (valid) {
-                    if (this.ruleForms.contractCode !== '') {
-                        this.mainTableData.forEach(v => {
-                            v.contractCode = this.ruleForms.contractCode;
-                            if (v.children) {
-                                v.children.forEach(m => {
-                                    m.contractCode = this.ruleForms.contractCode;
-                                });
-                            }
-                        });
-                        this.loadingTree = true;
-                        this.$emit('updateLoading', this.loadingTree);
-                        this.dialogFormVisible = false;
-                        this.ruleForms.contractCode = '';
-                        postRegenerate(this.mainTableData).then(resp => {
-                            if (resp && resp.resData !== null) {
-                                this.mainTableData = [];
-                                this.loadingTree = false;
-                                this.$emit('generateEvent', resp.kmap); // 知识库图表
-                                this.$emit('updateLoading', this.loadingTree);
-                                this.mainTableData = resp.resultSetList; // 账户组信息
-                            }
-                        }).catch(e => {
-                            this.dialogFormVisible = false;
-                        });
-                    }
+                    this.generateDataMethods();
                 }
             });
         },
-        // 下一步
-        nextClick() {
-        },
+        generateDataMethods() {
+            let conctrd = this.dialogRuleForm.contractCode || this.currentConctrd;
+            console.log(conctrd);
+            this.mainTableData.forEach(v => {
+                v.contractCode = conctrd;
+                if (v.children) {
+                    v.children.forEach(m => {
+                        m.contractCode = conctrd;
+                    });
+                }
+            });
+            this.loadingTree = true;
+            this.$emit('updateLoading', this.loadingTree);
+            this.dialogFormVisible = false;
+            this.dialogRuleForm.contractCode = '';
+            let params = {
+                mainTableData: this.mainTableData,
+                startDate: this.startDate,
+                endDate: this.endDate,
+                contractCode: this.currentConctrd,
+                statFreq: this.statFreq
+            };
+            regenerateData(params).then(resp => {
+                if (resp && resp.resData !== null) {
+                    this.loadingTree = false;
+                    let relativeTable = resp.relativeTable;
+                    let resultTable = resp.resultTable;
+                    // this.$emit('generateEvent', resp.kmap); // 知识库图表
+                    this.$emit('updateLoading', this.loadingTree);
+                    this.$emit('updateTableInfo', {relativeTable, resultTable});
+                    this.mainTableData = this.sortDataByAcctIdCommon(resp.combineResultInfos); // 账户组信息
+                }
+            }).catch(e => {
+                this.dialogFormVisible = false;
+                this.loadingTree = false;
+            });
+        }
     }
 };
 </script>
 <style lang='less' module>
     .groupadd_information {
-        .rigth {
-            position: relative;
-        }
-        .leading {
-            position: relative;
-            top: 9px;
-        }
-        .up_loading {
-            position: relative;
-            top: -4px;
-        }
         .operate_button_group {
             margin: 10px 0;
         }
@@ -356,15 +366,6 @@ export default {
         }
         .dia_name {
             width: 65%;
-        }
-        .top-nav {
-            position: relative;
-            min-height: 56px;
-        }
-        .tabs-button {
-            position: absolute;
-            right: 0;
-            top: 0;
         }
         .search_input {
             width: 240px;
@@ -380,7 +381,8 @@ export default {
         .custom-width {
             width: 350px;
         }
-        .operate-button-group {
+        .operate_group {
+            padding-top: 65px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -390,6 +392,9 @@ export default {
             /deep/.el-card__body {
                 padding: 10px;
             }
+        }
+        .el-upload-list__item-name {
+            max-width: 140px;
         }
     }
 

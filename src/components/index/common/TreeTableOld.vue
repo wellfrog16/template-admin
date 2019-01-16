@@ -1,8 +1,8 @@
 /* 树形table */
 <template>
-    <div>
+    <div v-loading="loading">
         <div style="overflow: auto;" class="asso-scrollbar-b">
-            <div style="width:2445px; display: flex; text-align: center; padding-left: 55px; height: 36px; line-height: 36px;">
+            <div :style="`width: ${propsWidth}px; display: flex; text-align: center; padding-left: 55px; height: 36px; line-height: 36px;`">
                 <div v-for="(item, index) in columns" :key="index" style="flex: 1;">
                     {{ item.label }}
                 </div>
@@ -35,7 +35,9 @@
                                     <p v-if="data.custId" style="margin:0; white-space:normal; word-break:break-all;">{{ columns[index]['label'] }}：{{ (data[item.field] === null || data[item.field] === undefined) ?  '' :  data[item.field] }}</p>
                                 </div>
                                 <span slot="reference">
-                                    <span v-if="item.field !== 'custId' || data[item.field]==='客户编号'" style="width: 145px; text-overflow: ellipsis; overflow: hidden; display: inline-block; margin: 0;">{{ (data[item.field] === null || data[item.field] === undefined) ?  '' :  data[item.field] }}</span>
+                                    <span v-if="item.field !== 'custId' || data[item.field]==='客户编号'" style="width: 145px; text-overflow: ellipsis; overflow: hidden; display: inline-block; margin: 0;">
+                                        {{ (data[item.field] === null || data[item.field] === undefined) ?  (item.field === 'acctGroSrc' ? '其他' : '') :  data[item.field] }}
+                                    </span>
                                     <custIdColumn v-else :scope="{row: data}" style="text-align:center;"></custIdColumn>
                                 </span>
                             </el-popover>
@@ -54,7 +56,8 @@ export default {
         return {
             isIndeterminate: false,
             checkedAll: false,
-            treeData: []
+            treeData: [],
+            propsWidth: 2500
         };
     },
     components: {custIdColumn},
@@ -74,6 +77,10 @@ export default {
         filterText: {
             type: String,
             default: ''
+        },
+        loading: {
+            type: Boolean,
+            default: false
         }
     },
     watch: {
@@ -85,6 +92,13 @@ export default {
         },
         tableData(val) {
             this.dealTreeData();
+            let $ = this.$jquery;
+            setTimeout(() => {
+                this.propsWidth = 165 * (this.columns.length) + 50;
+                if (this.propsWidth) {
+                    $('.tree-table').find('.el-tree-node').css('width', this.propsWidth + 70 + 'px');
+                }
+            }, 1000);
         }
     },
     computed: {
@@ -216,7 +230,6 @@ export default {
         }
         .tree-table {
             color: #fff;
-            width: 2300px;
             overflow: auto;
             .custom-tree-node {
                 flex: 1;
@@ -230,9 +243,9 @@ export default {
                     padding: 0 10px;
                 }
             }
-            /deep/ .el-tree-node {
-                width: 2500px;
-            }
+            // /deep/ .el-tree-node {
+            //     width: 2500px;
+            // }
             /deep/ .el-tree-node__content {
                 padding: 10px;
                 border-radius: 3px;

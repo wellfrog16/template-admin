@@ -79,7 +79,7 @@ export default {
                     this.Echarts1Loading1 = false;
                     this.fullScreenLoading1 = false;
                     this.$store.commit('overStoreMut', resp);
-                    this.$emit('barEchartsCick', resp ? resp : {}, '0');
+                    this.$emit('barEchartsCick', resp || {}, '0');
                     this.$emit('EchartsClickLoading', this.Echarts1Loading1);
                 }
             }).catch(e => {

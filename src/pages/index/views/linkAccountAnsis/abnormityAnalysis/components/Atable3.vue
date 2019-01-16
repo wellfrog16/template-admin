@@ -80,7 +80,7 @@ export default {
                 this.Echarts1Loading1 = false;
                 this.fullScreenLoading1 = false;
                 this.$store.commit('autoTradeMut', resp);
-                this.$emit('barEchartsCick', resp ? resp : {}, '2');
+                this.$emit('barEchartsCick', resp || {}, '2');
                 this.$emit('EchartsClickLoading', this.Echarts1Loading1);
             }).catch(e => {
                 this.fullScreenLoading1 = false;

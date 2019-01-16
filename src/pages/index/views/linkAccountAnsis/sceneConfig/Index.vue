@@ -518,5 +518,8 @@ export default {
         /deep/ .el-carousel__container {
             min-height: 500px;
         }
+        .el-upload-list__item-name {
+            max-width: 140px;
+        }
     }
 </style>

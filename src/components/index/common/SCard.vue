@@ -48,6 +48,7 @@ export default {
             .header-left {
                 flex: 1;
                 text-align: left;
+                line-height: 40px;
                 .sub-title {
                     font-size: 12px;
                     margin-left: 10px;

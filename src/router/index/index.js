@@ -142,10 +142,10 @@ const Index = {
                         scrollTop: true,
                         title: '组合场景整合'
                     },
-                    path: 'knowledgeAtlas',
-                    name: 'knowledgeAtlas',
+                    path: 'multipleScenesMerge',
+                    name: 'multipleScenesMerge',
                     icon: 'menu-fix-icon fa fa-code-branch', // customer_information_inquiry
-                    component: resolve => require(['@/pages/index/views/linkAccountAnsis/knowledgeAtlas/Index.vue'], resolve)
+                    component: resolve => require(['@/pages/index/views/linkAccountAnsis/multipleScenesMerge/Index.vue'], resolve)
                 }
             ]
         }

@@ -27,6 +27,7 @@
                         <el-form-item label-width="140px" prop="cc" label="统计频度" style="padding-left:23px; margin-bottom: 30px;">
                             <el-select :disabled="disabled" :clearabled="!disabled" size="small" v-model="ruleForm.statFreq" class="custom-width">
                                 <el-option
+                                    :disabled="item.value !== '1'"
                                     v-for="item in accountTotalFrepOptions"
                                     :key="item.value"
                                     :label="item.label"
@@ -44,7 +45,7 @@
                 <s-card :title="`算法参数配置`">
                     <el-row slot="content" style="padding: 20px;">
                         <el-radio-group v-model="ruleForm.sf">
-                            <el-radio v-for="(item, index) in sfOptions" :key="index" :label="item.value">{{ item.label }}</el-radio>
+                            <el-radio v-for="(item, index) in sfOptions" :key="index" :label="item.value" :disabled="item.value === '2'">{{ item.label }}</el-radio>
                         </el-radio-group>
                     </el-row>
                 </s-card>
@@ -59,7 +60,7 @@
 </template>
 <script>
 import SCard from '@/components/index/common/SCard';
-import {correlationIndexColumns, accountTotalTypeOptions, accountTotalFrepOptions, defaultConfig, sfOptions} from './constants';
+import {checkbox, correlationIndexColumns, accountTotalTypeOptions, accountTotalFrepOptions, defaultConfig, sfOptions} from './constants';
 export default {
     components: {SCard},
     props: {
@@ -90,18 +91,13 @@ export default {
     },
     data() {
         return {
+            checkbox,
             accountTotalTypeOptions,
             accountTotalFrepOptions,
             correlationIndexColumns,
             defaultConfig,
             sfOptions,
-            checkedList: ['0'],
-            checkbox: [
-                {field: 'acctMakePosQtty', label: '账户持仓量 >=', value: '0', unit: '手'},
-                {field: 'acctBargainQtty', label: '账户成交量 >=', value: '1', unit: '手'},
-                {field: 'acctBillCnt', label: '账户报单数 >=', value: '2', unit: '笔'},
-                {field: 'statAcctCnt', label: '统计账户数 >=', value: '3', unit: ''}
-            ],
+            checkedList: ['1', '2', '3', '4'],
             ruleForm: {
                 isDel: '1', // 可以删除
                 sceneId: '', // 场景id
@@ -113,7 +109,7 @@ export default {
                 statAcctCnt: '', // 统计账户数
                 statAcctType: '', // 统计账户类型
                 statFreq: '', // 统计频度
-                sf: '', // 算法
+                sf: '1', // 算法
                 indexPara: '' // 指数内容
             }
         };
@@ -121,7 +117,7 @@ export default {
     methods: {
         setRuleForm() {
             this.ruleForm = {
-                isDel: '1',
+                isDel: String(this.dialogItem.isDel) === '0' ? '0' : '1',
                 sceneType: this.createType,
                 sceneId: this.dialogItem.sceneId || '',
                 sceneComnt: this.dialogItem.sceneComnt || '', // 场景说明
@@ -137,7 +133,7 @@ export default {
         },
         handleReset() {
             this.ruleForm = {
-                isDel: '1',
+                isDel: String(this.ruleForm.isDel) === '0' ? '0' : '1',
                 sceneType: this.createType,
                 sceneComnt: this.ruleForm.sceneComnt, // 场景说明
                 sceneName: this.ruleForm.sceneName, // 场景名称
@@ -164,7 +160,20 @@ export default {
             this.syntaxCheck(() => {
                 this.$refs['ruleForm'].validate(valid => {
                     if (valid) {
-                        this.$emit('saveScene', this.ruleForm);
+                        let params = JSON.parse(JSON.stringify(this.ruleForm));
+                        if (this.checkedList.indexOf('1') === -1) {
+                            params.acctMakePosQtty = '';
+                        }
+                        if (this.checkedList.indexOf('2') === -1) {
+                            params.acctBargainQtty = '';
+                        }
+                        if (this.checkedList.indexOf('3') === -1) {
+                            params.acctBillCnt = '';
+                        }
+                        if (this.checkedList.indexOf('4') === -1) {
+                            params.statAcctCnt = '';
+                        }
+                        this.$emit('saveScene', params);
                     }
                 });
             });
