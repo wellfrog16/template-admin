@@ -1,7 +1,7 @@
 
 // popularFeelings/anomalyRecognition
 import Home from '@/pages/index/views/Home.vue';
-import PopularFeelings from '@/pages/index/views/popularFeelings/Index.vue';
+import PopularFeelings from '@/router/index/popularFeelings/Index.vue';
 
 const PopularFeelingsIndex = {
     path: '',

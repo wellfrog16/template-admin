@@ -16,20 +16,21 @@
 import {postImportAccounBar} from '@/api/dataAnsis/abnormityAnalysis';
 import {tableColumns2} from '../components/constants';
 import STable from '@/components/index/common/STable';
+
 export default {
     name: 'Atable2',
     props: {
         tableData2: {
             type: Array,
-            required: true
+            required: true,
         },
         // 加载
         loadingTable: {
             ttype: Boolean,
             default() {
                 return {};
-            }
-        }
+            },
+        },
     },
     components: {STable},
     watch: {
@@ -38,8 +39,8 @@ export default {
                 if (val) {
                     this.tableData = val;
                 }
-            }
-        }
+            },
+        },
     },
     data() {
         return {
@@ -48,7 +49,7 @@ export default {
             fullScreenLoading1: false, // bar 加载
             aLoading: false,
             tableColumns: tableColumns2,
-            tableData: []
+            tableData: [],
         };
     },
     methods: {
@@ -85,9 +86,10 @@ export default {
                 this.fullScreenLoading1 = false;
                 this.Echarts1Loading1 = false;
             });
-        }
+        },
     },
-    mounted() {}
+    mounted() {
+    },
 };
 </script>
 <style lang='less' module>
