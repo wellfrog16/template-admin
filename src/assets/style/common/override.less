@@ -264,6 +264,7 @@
 
 // el-checkbox
 .el-checkbox {
+    color: @g-color;
     .el-checkbox__inner {
         background: transparent;
     }
@@ -279,6 +280,9 @@
         .el-checkbox__inner {
             background: @g-active-bg;
         }
+    }
+    .el-checkbox__input.is-checked + .el-checkbox__label {
+        color: @g-color;
     }
 }
 .el-radio {

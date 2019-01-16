@@ -6,6 +6,7 @@
         </div> -->
         <template>
             <el-table
+                :loading="loading"
                 :data="headerData"
                 default-expand-all
                 style="width: 100%;">
@@ -101,6 +102,10 @@ export default {
         filterText: {
             type: String,
             default: ''
+        },
+        loading: {
+            type: Boolean,
+            default: false
         }
     },
     watch: {
