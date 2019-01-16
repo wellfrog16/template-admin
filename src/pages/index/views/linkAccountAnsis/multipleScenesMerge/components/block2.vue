@@ -20,7 +20,7 @@ export default {
                 tooltip: {
                     formatter: params => {
                         if (params.dataType === 'edge') { // link
-                            return '客户编号交集：' + params.data.tip || '';
+                            return '客户交集：' + params.data.tip || '';
                         } else if (params.dataType === 'node') {
                             return '客户编号: ' + params.value || '';
                         }
@@ -34,7 +34,7 @@ export default {
                 animation: false,
                 series: [
                     {
-                        name: '关系图谱',
+                        name: '客户地址信息识别',
                         type: 'graph',
                         layout: 'force',
                         data: [],

@@ -62,6 +62,10 @@ export default {
         }
     },
     data() {
+        let symbolSize = data => {
+            let len = data.split(',').length;
+            return len > 5 ? 40 : len < 1 ? 9 : len * 8;
+        };
         return {
             loading: false,
             ruleForm: {
@@ -82,31 +86,6 @@ export default {
             ],
             isIndeterminate: false,
             checkAll: true,
-            chartSeriesCommon: {
-                name: '',
-                type: 'graph',
-                layout: 'force',
-                symbolSize: 15,
-                focusNodeAdjacency: true,
-                roam: true,
-                data: [],
-                links: [],
-                categories: [],
-                force: {
-                    repulsion: 200,
-                    edgeLength: [100, 200]
-                },
-                draggable: true,
-                label: {
-                    normal: {
-                        position: 'right',
-                        show: true,
-                        textStyle: {
-                            fontSize: 12
-                        }
-                    }
-                }
-            },
             chartOptions: {
                 legend: {data: []},
                 tooltip: {
@@ -125,28 +104,58 @@ export default {
                 },
                 animationEasingUpdate: 'quinticInOut',
                 animation: false,
-                series: []
+                series: [
+                    {
+                        name: '关系图谱',
+                        type: 'graph',
+                        layout: 'force',
+                        symbolSize: symbolSize,
+                        focusNodeAdjacency: true,
+                        roam: true,
+                        data: [],
+                        links: [],
+                        categories: [],
+                        force: {
+                            repulsion: 200,
+                            edgeLength: [100, 200]
+                        },
+                        draggable: true,
+                        label: {
+                            normal: {
+                                position: 'right',
+                                textStyle: {
+                                    fontSize: 12
+                                }
+                            }
+                        }
+                    }
+                ]
             },
             echartsData: []
         };
     },
     methods: {
         setChartOptions(val) {
-            this.chartOptions.legend.data = [];
-            this.chartOptions.series = [];
-            for (let i = 0; i < val.length; i++) {
-                this.chartOptions.series.push({
-                    ...this.chartSeriesCommon,
-                    ...{
-                        name: val[i]['name'],
-                        data: val[i]['nodes'],
-                        links: val[i]['links'],
-                    }
-                });
-                this.chartOptions.legend.data.push(val[i]['name']);
-            }
+            this.chartOptions.legend.data = this.checkboxes.map(v => {
+                return v.label;
+            });
+            this.chartOptions.series[0]['categories'] = this.checkboxes.map(v => {
+                return {name: v.label};
+            });
+            this.chartOptions.series[0]['categories'].unshift({name: ''}); // 处理checkbox的code从1开始的问题。
+            this.chartOptions.series[0]['data'] = val.nodes;
+            val.links.forEach(v => {
+                if (v.tip.split(',').length > 5) {
+                    v.lineStyle = {normal: {color: 'rgba(239, 156, 0)', width: 10}};
+                } else if (v.tip.split(',').length > 3) {
+                    v.lineStyle = {normal: {color: 'rgba(239, 156, 0)', width: 5}};
+                } else {
+                    v.lineStyle = {normal: {color: 'rgba(239, 156, 0)', width: 1}};
+                }
+            });
+            this.chartOptions.series[0]['links'] = val.links;
             console.log('******');
-            console.log(this.chartOptions.series);
+            console.log(this.chartOptions);
             this.$refs['chartRef'].initChart();
         },
         handleEchartClickEvent() {},
@@ -201,12 +210,7 @@ export default {
     },
     mounted() {
         // test
-        let data = [
-            {name: '相关性系数', links: [{'source': 'XG000017', 'target': 'XG000030', 'tip': '80001730'}, {'source': 'XG000006', 'target': 'XG000034', 'tip': '80002861'}], nodes: [{'id': 'XG000002', 'name': 'XG000002', 'value': '80002294,80000025', 'categories': '1'}, {'id': 'XG000004', 'name': 'XG000004', 'value': '80010237,80000025', 'categories': '1'}]},
-            {name: '基本信息', links: [{'source': 'XG000017', 'target': 'XG000030', 'tip': '80001730'}, {'source': 'XG000006', 'target': 'XG000034', 'tip': '80002861'}], nodes: [{'id': 'XG000002', 'name': 'XG000002', 'value': '80002294,80000025', 'categories': '3'}, {'id': 'XG000004', 'name': 'XG000004', 'value': '80010237,80000025', 'categories': '3'}]},
-            {name: '关系人', links: [], nodes: []},
-            {name: '其他', links: [], nodes: []}
-        ];
+        let data = {links: [{'source': 'XG000003', 'target': 'XG000002', 'tip': '80001730', 'id': '0', 'lineStyle': {normal: {}}}, {'source': 'XG000003', 'target': 'XG000004', 'tip': '80002861, 002, 003, 0034', 'id': '1'}], nodes: [{'id': 'XG000003', 'name': 'XG000003', 'value': '80002294,80000025', 'category': 1}, {'id': 'XG000002', 'name': 'XG000002', 'value': '80002294,80000025,800000028', 'category': 1}, {'id': 'XG000004', 'name': 'XG000004', 'value': '80010237,80000025', 'category': 2}]};
         this.setChartOptions(data);
     }
 };

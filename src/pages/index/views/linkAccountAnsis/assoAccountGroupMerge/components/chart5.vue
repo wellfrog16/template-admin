@@ -30,6 +30,10 @@ export default {
         }
     },
     data() {
+        let symbolSize = data => {
+            let len = data.split(',').length;
+            return len > 5 ? 40 : len < 1 ? 9 : len * 8;
+        };
         return {
             resData5,
             loading: false,
@@ -57,6 +61,7 @@ export default {
                         data: [],
                         links: [],
                         categories: [],
+                        symbolSize: symbolSize,
                         focusNodeAdjacency: true,
                         roam: true,
                         label: {
@@ -74,9 +79,21 @@ export default {
     },
     methods: {
         getData(chartData, id) {
+            // 设置连线样式
+            chartData.links.forEach(v => {
+                console.log(v.tip.split(',').length);
+                if (v.tip.split(',').length > 5) {
+                    v.lineStyle = {normal: {color: 'rgba(239, 156, 0)', width: 10}};
+                } else if (v.tip.split(',').length > 3) {
+                    v.lineStyle = {normal: {color: 'rgba(239, 156, 0)', width: 5}};
+                } else {
+                    v.lineStyle = {normal: {color: 'rgba(239, 156, 0)', width: 1}};
+                }
+            });
             // 散点图sort
             this.chartOptions['series'][0]['links'] = chartData['links'];
             this.chartOptions['series'][0]['data'] = chartData['nodes'];
+            console.log(this.chartOptions);
             this.$store.commit('savechart1', {data: this.chartOptions, index: id || this.tabIndex || this.$store.getters.tabIndex});
             // select max
             // this.$emit('updateAccountGroupAndCustIds', selectMax ? selectMax.acctId : '', selectMax ? selectMax.custIds.split(',') : []);
