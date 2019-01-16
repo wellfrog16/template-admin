@@ -250,22 +250,19 @@ export default {
     },
     methods: {
         EchartsClickLoading1(flag) {
-            if (flag) {
-                this.loading1 = flag;
-                this.loadingBt = true;
-            }
+            this.loadingTable0 = flag;
+            this.loading1 = flag;
+            this.loadingBt = flag;
         },
         EchartsClickLoading2(flag) {
-            if (flag) {
-                this.loading2 = flag;
-                this.loadingBt = true;
-            }
+            this.loadingTable1 = flag;
+            this.loading2 = flag;
+            this.loadingBt = flag;
         },
         EchartsClickLoading3(flag) {
-            if (flag) {
-                this.loading3 = flag;
-                this.loadingBt = true;
-            }
+            this.loadingTable2 = flag;
+            this.loading3 = flag;
+            this.loadingBt = flag;
         },
         drewChart(num) {
             if (num === '0') {

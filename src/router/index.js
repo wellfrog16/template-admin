@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Tools from './index/index';
+import PopularFeelings from './index/popularFeelings/index';
 import {Notification} from 'element-ui';
 Vue.use(Router);
 
@@ -43,6 +44,7 @@ const router = new Router({
             component: resolve => require(['@/pages/index/views/Index.vue'], resolve),
         },
         Tools,
+        PopularFeelings,
         {
             path: '/login',
             name: 'login',
