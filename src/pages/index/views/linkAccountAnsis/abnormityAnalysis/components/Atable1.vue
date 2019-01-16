@@ -25,7 +25,7 @@ export default {
         },
         // 加载
         loadingTable: {
-            ttype: Boolean,
+            type: Boolean,
             default() {
                 return {};
             }
@@ -85,6 +85,7 @@ export default {
             }).catch(e => {
                 this.fullScreenLoading1 = false;
                 this.Echarts1Loading1 = false;
+                this.$emit('EchartsClickLoading', this.Echarts1Loading1);
             });
         }
     },
