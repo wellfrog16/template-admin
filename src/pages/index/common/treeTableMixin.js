@@ -149,10 +149,12 @@ export default {
                     resultType: propsResultType || '5', // 结果集类型（1：相关性；5：合并）
                     resultName: value
                 };
-                let sceneCommitParams = this.$store.getters.sceneCommitParams[resultId];
-                params.statStartDt = sceneCommitParams.statStartDt;
-                params.statStopDay = sceneCommitParams.statStopDay;
-                params.statFreq = sceneCommitParams.statFreq;
+                if (params.resultType !== '5') {
+                    let sceneCommitParams = this.$store.getters.sceneCommitParams[resultId];
+                    params.statStartDt = sceneCommitParams.statStartDt;
+                    params.statStopDay = sceneCommitParams.statStopDay;
+                    params.statFreq = sceneCommitParams.statFreq;
+                }
                 if (params.resultType === '1') {
                     params.resultList = this.dealMainData();
                 }
@@ -166,10 +168,18 @@ export default {
                     params.resultListSyn = this.dealMainData();
                 }
                 this.$emit('updateFullLoading', true);
+                if (params.resultType === '5') {
+                    this.updateFullLoading(true);
+                }
                 exportResultSet(params).then(resp => {
                     this.$emit('updateFullLoading', false);
+                    if (params.resultType === '5') {
+                        this.updateFullLoading(false);
+                    }
                     if (this.$route.name === 'assoAccountGroupMerge') {
                         this.$emit('updateResultList');
+                    } else if (this.$route.name === 'multipleScenesMerge') {
+                        this.updateResultList();
                     }
                 }).catch(e => {
                     console.error(e);
@@ -199,10 +209,12 @@ export default {
                 stateId: 1, // 重新生成数据标识
                 resultType: propsResultType || '5', // 结果集类型（1：相关性；5：合并）
             };
-            let sceneCommitParams = this.$store.getters.sceneCommitParams[resultId];
-            params.statStartDt = sceneCommitParams.statStartDt;
-            params.statStopDay = sceneCommitParams.statStopDay;
-            params.statFreq = sceneCommitParams.statFreq;
+            if (params.resultType !== '5') {
+                let sceneCommitParams = this.$store.getters.sceneCommitParams[resultId];
+                params.statStartDt = sceneCommitParams.statStartDt;
+                params.statStopDay = sceneCommitParams.statStopDay;
+                params.statFreq = sceneCommitParams.statFreq;
+            }
             if (params.resultType === '1') {
                 params.resultList = this.dealMainData();
             }
