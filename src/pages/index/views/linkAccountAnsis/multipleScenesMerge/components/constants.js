@@ -31,10 +31,19 @@ export const mainTableColumns = [
     {field: 'openAutherson', label: '开户授权人名称', align: 'center'},
     // {field: '', label: '', align: 'center', width: 36}
 ];
-export const chartTableColumns1 = [];
+export const chartTableColumns1 = [
+    {label: '客户编号1', field: 'custId1', align: 'center', minWidth: 130},
+    {label: '客户编号2', field: 'custId2', align: 'center', minWidth: 130},
+    {label: '买入成交相关系数', field: 'buyBargainRela', align: 'center', minWidth: 160},
+    {label: '卖出成交相关系数', field: 'sellBargainRela', align: 'center', minWidth: 160},
+    {label: '净买入成交相关系数', field: 'netBuyBargainRela', align: 'center', minWidth: 160},
+    {label: '多头持仓相关系数', field: 'longPosMakePosRela', align: 'center', minWidth: 160},
+    {label: '空头持仓相关系数', field: 'shortPosMakePosRela', align: 'center', minWidth: 160},
+    {label: '浮动盈亏相关系数', field: 'floatPrftLossRela', align: 'center', minWidth: 160},
+];
 export const chartTableColumns2 = [
     {label: '客户编号', field: 'custId', align: 'center', minWidth: 130},
-    {label: '身份证号', field: 'idteyCertNum', align: 'center', minWidth: 130},
+    {label: '身份证号', field: 'idtfyCertNum', align: 'center', minWidth: 130},
     {label: '联系电话', field: 'contTel', align: 'center', minWidth: 130},
     {label: '联系地址', field: 'contAddr', align: 'center', minWidth: 130},
     {label: '邮编', field: 'zipCd', align: 'center', minWidth: 100},

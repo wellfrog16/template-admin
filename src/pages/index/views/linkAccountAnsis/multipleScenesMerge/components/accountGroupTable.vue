@@ -41,6 +41,7 @@
             <s-card title="账户组信息" icon="fa fa-layer-group">
                 <div slot="right">
                     <el-input
+                        clearable
                         :class="$style.search_input"
                         size="mini"
                         placeholder="请输入账户组或客户编号"

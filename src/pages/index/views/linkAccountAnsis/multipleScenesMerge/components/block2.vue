@@ -22,7 +22,7 @@ export default {
                         if (params.dataType === 'edge') { // link
                             return '客户交集：' + params.data.tip || '';
                         } else if (params.dataType === 'node') {
-                            return '客户编号: ' + params.value || '';
+                            // return '客户编号: ' + params.value || '';
                         }
                     },
                     padding: 10,
@@ -42,6 +42,7 @@ export default {
                         categories: [],
                         focusNodeAdjacency: true,
                         roam: true,
+                        draggable: true,
                         label: {
                             normal: {
                                 position: 'right'
@@ -57,6 +58,16 @@ export default {
     },
     methods: {
         drewChart(chartData) {
+            let lineColor = 'rgba(255, 68, 68, 1)';
+            chartData.links.forEach(v => {
+                if (v.tip.split(',').length > 5) {
+                    v.lineStyle = {normal: {color: lineColor, width: 10}};
+                } else if (v.tip.split(',').length > 3) {
+                    v.lineStyle = {normal: {color: lineColor, width: 5}};
+                } else {
+                    v.lineStyle = {normal: {color: lineColor, width: 1}};
+                }
+            });
             this.chartOptions['series'][0]['links'] = chartData['links'];
             this.chartOptions['series'][0]['data'] = chartData['nodes'];
             this.$refs['chart0'] && this.$refs['chart0'].initChart();

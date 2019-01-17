@@ -18,7 +18,7 @@
                 <el-col :xl="12" :lg="12" :md="24" :sm="24" v-for="(item, index) in blocks" :key="index">
                     <s-card :title="item.title" :icon="item.icon" class="self-card-css" :loading="item.loading">
                         <div slot="right">
-                            <el-button type="text" @click="toggleDetail(item, index)" v-if="index === 1 || index === 3">
+                            <el-button type="text" @click="toggleDetail(item, index)" v-if="index !== 2">
                                 <span v-if="!item['toggleDetailFlags']">明细<i class="el-icon-plus" style="margign-left: 5px;"></i></span>
                                 <span v-else>图表<i class="fa fa-undo-alt" style="margign-left: 5px;"></i></span>
                             </el-button>
@@ -78,10 +78,7 @@ export default {
             activeTab: '0',
             tabList: [{name: '0', label: '手工合并'}],
             loading: false,
-            block1TableData: [
-                {'name': '20198989888', '20180909322': 0.1},
-                {'name': '20180909322', '20198989888': 0.6},
-            ], // 矩阵数据
+            block1TableData: [], // 矩阵数据
             relativeTable: '',
             resultTable: ''
         };
@@ -132,7 +129,9 @@ export default {
             this.blocks[0]['loading'] = true;
             fetchBlockData1(params).then(resp => {
                 this.blocks[0]['loading'] = false;
-                this.block1TableData = resp;
+                const {mainData, tableData} = resp;
+                this.chartTableData[0] = tableData;
+                this.block1TableData = mainData;
             }).catch(e => {
                 this.blocks[0]['loading'] = false;
             });
@@ -155,10 +154,10 @@ export default {
             this.blocks[3]['loading'] = true;
             fetchBlockData4(params).then(resp => {
                 this.blocks[3]['loading'] = false;
-                const {tableData, chartData} = resp;
+                const {tableData, nodes, links} = resp;
                 this.chartTableData[3] = tableData;
-                this.chartData[3] = chartData;
-                this.getChart2(chartData);
+                this.chartData[3] = {nodes, links};
+                this.getChart4({nodes, links});
             }).catch(e => {
                 this.blocks[3]['loading'] = false;
             });
