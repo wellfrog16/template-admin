@@ -22,9 +22,10 @@ export default {
                 return {
                     field: v.name,
                     label: v.name,
+                    minWidth: 140
                 };
             });
-            columns.unshift({field: 'name', label: ''});
+            columns.unshift({field: 'name', label: '', minWidth: 140});
             return columns;
         }
     },

@@ -35,7 +35,7 @@
         <div class="main-table">
             <s-card title="账户组信息" icon="fa fa-layer-group" :minHeight="300">
                 <div slot="right">
-                    <el-input class="search-input" size="mini" placeholder="请输入账户组号或客户编号" v-model="searchText">
+                    <el-input clearable class="search-input" size="mini" placeholder="请输入账户组号或客户编号" v-model="searchText">
                         <i class="el-icon-search" slot="prefix" style="margin-left:4px; cursor: pointer;"></i>
                     </el-input>
                 </div>

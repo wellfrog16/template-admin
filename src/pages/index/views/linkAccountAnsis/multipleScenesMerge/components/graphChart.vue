@@ -19,7 +19,7 @@
                         </el-col>
                         <el-col :xl="12" :lg="12" :md="12" :sm="24" style="padding-left: 20px;">
                             <el-form-item prop="showAccountCount" label="显示账户组数：">
-                                前&nbsp;&nbsp;<el-input v-model="ruleForm.showAccountCount" style="width: 150px;"></el-input>
+                                前&nbsp;&nbsp;<el-input clearable size="small" v-model="ruleForm.showAccountCount" style="width: 150px;"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -64,7 +64,7 @@ export default {
     data() {
         let symbolSize = data => {
             let len = data.split(',').length;
-            return len > 5 ? 40 : len < 1 ? 9 : len * 8;
+            return len > 5 ? 35 : len < 1 ? 8 : len * 7;
         };
         return {
             loading: false,
@@ -109,6 +109,7 @@ export default {
                         name: '关系图谱',
                         type: 'graph',
                         layout: 'force',
+                        // symbol: 'path://M30.9,53.2C16.8,53.2,5.3,41.7,5.3,27.6S16.8,2,30.9,2C45,2,56.4,13.5,56.4,27.6S45,53.2,30.9,53.2z M30.9,3.5C17.6,3.5,6.8,14.4,6.8,27.6c0,13.3,10.8,24.1,24.101,24.1C44.2,51.7,55,40.9,55,27.6C54.9,14.4,44.1,3.5,30.9,3.5z M36.9,35.8c0,0.601-0.4,1-0.9,1h-1.3c-0.5,0-0.9-0.399-0.9-1V19.5c0-0.6,0.4-1,0.9-1H36c0.5,0,0.9,0.4,0.9,1V35.8z M27.8,35.8 c0,0.601-0.4,1-0.9,1h-1.3c-0.5,0-0.9-0.399-0.9-1V19.5c0-0.6,0.4-1,0.9-1H27c0.5,0,0.9,0.4,0.9,1L27.8,35.8L27.8,35.8z',
                         symbolSize: symbolSize,
                         focusNodeAdjacency: true,
                         roam: true,
@@ -144,18 +145,17 @@ export default {
             });
             this.chartOptions.series[0]['categories'].unshift({name: ''}); // 处理checkbox的code从1开始的问题。
             this.chartOptions.series[0]['data'] = val.nodes;
+            let lineColor = 'rgba(255, 68, 68, 1)';
             val.links.forEach(v => {
                 if (v.tip.split(',').length > 5) {
-                    v.lineStyle = {normal: {color: 'rgba(239, 156, 0)', width: 10}};
+                    v.lineStyle = {normal: {color: lineColor, width: 10}};
                 } else if (v.tip.split(',').length > 3) {
-                    v.lineStyle = {normal: {color: 'rgba(239, 156, 0)', width: 5}};
+                    v.lineStyle = {normal: {color: lineColor, width: 5}};
                 } else {
-                    v.lineStyle = {normal: {color: 'rgba(239, 156, 0)', width: 1}};
+                    v.lineStyle = {normal: {color: lineColor, width: 1}};
                 }
             });
             this.chartOptions.series[0]['links'] = val.links;
-            console.log('******');
-            console.log(this.chartOptions);
             this.$refs['chartRef'].initChart();
         },
         handleEchartClickEvent() {},
@@ -208,11 +208,7 @@ export default {
             });
         }
     },
-    mounted() {
-        // test
-        let data = {links: [{'source': 'XG000003', 'target': 'XG000002', 'tip': '80001730', 'id': '0', 'lineStyle': {normal: {}}}, {'source': 'XG000003', 'target': 'XG000004', 'tip': '80002861, 002, 003, 0034', 'id': '1'}], nodes: [{'id': 'XG000003', 'name': 'XG000003', 'value': '80002294,80000025', 'category': 1}, {'id': 'XG000002', 'name': 'XG000002', 'value': '80002294,80000025,800000028', 'category': 1}, {'id': 'XG000004', 'name': 'XG000004', 'value': '80010237,80000025', 'category': 2}]};
-        this.setChartOptions(data);
-    }
+    mounted() {}
 };
 </script>
 <style lang='less' module>

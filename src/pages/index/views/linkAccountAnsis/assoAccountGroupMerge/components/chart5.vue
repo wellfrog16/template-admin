@@ -32,7 +32,7 @@ export default {
     data() {
         let symbolSize = data => {
             let len = data.split(',').length;
-            return len > 5 ? 40 : len < 1 ? 9 : len * 8;
+            return len > 5 ? 35 : len < 1 ? 8 : len * 7;
         };
         return {
             resData5,
@@ -61,6 +61,7 @@ export default {
                         data: [],
                         links: [],
                         categories: [],
+                        draggable: true,
                         symbolSize: symbolSize,
                         focusNodeAdjacency: true,
                         roam: true,
@@ -80,14 +81,14 @@ export default {
     methods: {
         getData(chartData, id) {
             // 设置连线样式
+            let lineColor = 'rgba(255, 68, 68, 1)';
             chartData.links.forEach(v => {
-                console.log(v.tip.split(',').length);
                 if (v.tip.split(',').length > 5) {
-                    v.lineStyle = {normal: {color: 'rgba(239, 156, 0)', width: 10}};
+                    v.lineStyle = {normal: {color: lineColor, width: 10}};
                 } else if (v.tip.split(',').length > 3) {
-                    v.lineStyle = {normal: {color: 'rgba(239, 156, 0)', width: 5}};
+                    v.lineStyle = {normal: {color: lineColor, width: 5}};
                 } else {
-                    v.lineStyle = {normal: {color: 'rgba(239, 156, 0)', width: 1}};
+                    v.lineStyle = {normal: {color: lineColor, width: 1}};
                 }
             });
             // 散点图sort

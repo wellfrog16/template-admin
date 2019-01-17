@@ -87,6 +87,7 @@ export default {
                     borderColor: '#777',
                     borderWidth: 1,
                     trigger: 'item',
+                    enterable: true,
                     axisPointer: {
                         type: 'cross'
                     },
