@@ -25,7 +25,7 @@ export default {
                     minWidth: 140
                 };
             });
-            columns.unshift({field: 'name', label: '', minWidth: 140});
+            columns.unshift({field: 'name', label: '', minWidth: 140, fixed: true});
             return columns;
         }
     },

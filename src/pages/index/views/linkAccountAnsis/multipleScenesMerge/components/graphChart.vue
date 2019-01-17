@@ -2,7 +2,7 @@
     <div :class="$style.graph_chart">
         <s-card :title="`账户组关系筛选`" :icon="`fa fa-filter`">
             <div slot="right">
-                <el-button size="small" type="primary" @click="createData">生成数据</el-button>
+                <el-button size="small" type="primary" @click="createData">生成关系图谱</el-button>
             </div>
             <div slot="content">
                 <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="140">
@@ -78,11 +78,11 @@ export default {
                 ]
             },
             checkboxes: [
-                {label: '相关系数', value: '1'},
-                // {label: '聚类', value: '2'},
-                {label: '基本信息', value: '3'},
-                {label: '关系人', value: '4'},
-                {label: '其他', value: '5'},
+                {label: '相关系数', value: 1},
+                {label: '聚类', value: '2'},
+                {label: '基本信息', value: 3},
+                {label: '关系人', value: 4},
+                {label: '其他', value: 5},
             ],
             isIndeterminate: false,
             checkAll: true,
@@ -104,6 +104,24 @@ export default {
                 },
                 animationEasingUpdate: 'quinticInOut',
                 animation: false,
+                // visualMap: {
+                //     left: 'right',
+                //     textGap: 10,
+                //     itemHeight: 200,
+                //     itemWidth: 10,
+                //     bottom: '22%',
+                //     // dimension: 4, // 注意：对应映射索引
+                //     type: 'continuous',
+                //     min: 0,
+                //     max: 1000,
+                //     text: ['持仓量', ''],
+                //     realtime: false,
+                //     calculable: true,
+                //     // color: ['orangered', 'yellow', 'lightskyblue'],
+                //     textStyle: {
+                //         color: 'yellow'
+                //     }
+                // },
                 series: [
                     {
                         name: '关系图谱',
@@ -114,7 +132,7 @@ export default {
                         focusNodeAdjacency: true,
                         roam: true,
                         data: [],
-                        links: [],
+                        links: [{source: 'XG000002', target: 'XG000003', tip: '11'}],
                         categories: [],
                         force: {
                             repulsion: 200,
@@ -140,11 +158,13 @@ export default {
             this.chartOptions.legend.data = this.checkboxes.map(v => {
                 return v.label;
             });
+            this.chartOptions.legend.data.unshift('');
             this.chartOptions.series[0]['categories'] = this.checkboxes.map(v => {
                 return {name: v.label};
             });
             this.chartOptions.series[0]['categories'].unshift({name: ''}); // 处理checkbox的code从1开始的问题。
             this.chartOptions.series[0]['data'] = val.nodes;
+            console.log(this.chartOptions);
             let lineColor = 'rgba(255, 68, 68, 1)';
             val.links.forEach(v => {
                 if (v.tip.split(',').length > 5) {
@@ -208,7 +228,10 @@ export default {
             });
         }
     },
-    mounted() {}
+    mounted() {
+        // let value = {nodes: [{'id': 'XG000002', 'name': 'XG000002', 'value': '99', 'category': 2, 'qt': 33}, {'id': 'XG000003', 'name': 'XG000003', 'value': '999', 'category': 3, 'qt': 999}], links: []};
+        // this.setChartOptions(value);
+    }
 };
 </script>
 <style lang='less' module>
