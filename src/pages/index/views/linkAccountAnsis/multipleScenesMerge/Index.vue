@@ -142,10 +142,10 @@ export default {
             this.blocks[1]['loading'] = true;
             fetchBlockData2(params).then(resp => {
                 this.blocks[1]['loading'] = false;
-                const {tableData, chartData} = resp;
+                const {tableData, nodes, links} = resp;
                 this.chartTableData[1] = tableData;
-                this.chartData[1] = chartData;
-                this.getChart2(chartData);
+                this.chartData[1] = {nodes, links};
+                this.getChart2({nodes, links});
             }).catch(e => {
                 this.blocks[1]['loading'] = false;
             });
