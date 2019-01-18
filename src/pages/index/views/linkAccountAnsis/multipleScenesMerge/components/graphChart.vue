@@ -36,7 +36,7 @@
                     :loading="loading"
                     domId="chartId"
                     :defaultOption="chartOptions"
-                    :propsChartHeight="600"
+                    :propsChartHeight="550"
                     @handleEchartClickEvent="handleEchartClickEvent"
                     @handleEchartDblClickEvent="handleEchartDblClickEvent"
                 ></echarts-common>
@@ -133,7 +133,7 @@ export default {
                     left: 'right',
                     inverse: true,
                     textGap: 25,
-                    itemHeight: 470,
+                    itemHeight: 420,
                     itemWidth: 15,
                     bottom: '5%',
                     // dimension: 4, // 注意：对应映射索引
@@ -275,8 +275,20 @@ export default {
         }
     },
     mounted() {
-        let value = {nodes: [{'id': 'XG000002', 'name': 'XG000002', 'value': 23, 'category': 2, 'custIds': '11,22,33'}, {'id': 'XG000003', 'name': 'XG000003', 'value': 77, 'category': 3, 'custIds': '22,44,55,66,77'}], links: [{target: 'XG000002', source: 'XG000003', tip: '787', intersectionRatio: 0.6}]};
-        this.setChartOptions(value);
+        /* let value = {nodes: [{'id': 'XG000005', 'name': 'XG000005', 'value': 23, 'category': 1, 'custIds': '11,22,33'}, {'id': 'XG000002', 'name': 'XG000002', 'value': 23, 'category': 2, 'custIds': '11,22,33'}, {'id': 'XG000003', 'name': 'XG000003', 'value': 77, 'category': 3, 'custIds': '22,44,55,66,77'}], links: [{target: 'XG000002', source: 'XG000003', tip: '787', intersectionRatio: 0.6}]};
+        for (let i = 6; i < 30; i++) {
+            value.nodes.push({
+                id: 'XG00000' + i,
+                name: 'XG00000' + i,
+                value: i,
+                category: i % 5,
+                custIds: '9, 99, 7'
+            });
+            value.links.push({
+                target: 'XG00000' + i, source: 'XG00000' + (i - 1), tip: '787', intersectionRatio: 0.6
+            });
+        }
+        this.setChartOptions(value); */
     }
 };
 </script>
