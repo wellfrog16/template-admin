@@ -121,7 +121,8 @@ export default {
             currentCustIds: [], // 当前账户组下的客户号
             table3CurrentType: 'buyCnt',
             computedCommonReqParams: {},
-            mainTableData: []
+            mainTableData: [],
+            currentSceneType: '3'
         };
     },
     methods: {
@@ -299,7 +300,8 @@ export default {
             if (!this.tabIndex) {
                 return {
                     chartData: {},
-                    mainTableData: []
+                    mainTableData: [],
+                    chartDataList: []
                 };
             }
             let resData = this.$store.getters.sceneCommitResp[this.tabIndex] || {};
@@ -314,7 +316,8 @@ export default {
             if (resultSetList && !resultSetList.length) {
                 return {
                     chartData: {},
-                    mainTableData: []
+                    mainTableData: [],
+                    chartDataList: []
                 };
             }
             this.mainTableData = this.sortDataByAcctIdCommon(resultSetList);
@@ -324,6 +327,7 @@ export default {
             return {
                 mainTableData: resultSetList,
                 chartData: kmap,
+                chartDataList: chartDataList
             };
         },
         createChart3Columnn(val) {

@@ -11,7 +11,7 @@ export default {
         drewChart1(type) {
             setTimeout(() => {
                 let respData = this.dealChart1AndMainTableData();
-                const {chartData, id} = respData;
+                let {chartData, id} = respData;
                 if (!chartData) {
                     return;
                 }
@@ -26,6 +26,36 @@ export default {
                     this.getBlock2Data();
                     this.getBlock3Data();
                 });
+                if (this.currentSceneType === '4') {
+                    let chartDataList = respData.chartDataList;
+                    chartData.nodes.forEach(v => {
+                        let index = chartDataList.findIndex(i => {
+                            return i.acctId === v.name;
+                        });
+                        const {sameInvestMger, sameInvestConsu, sameRaiHoldPerson} = chartDataList[index];
+                        console.log(chartDataList[index]);
+                        if (sameInvestMger === '是' || sameInvestConsu === '是' || sameRaiHoldPerson === '是') {
+                            v.category = 0;
+                        } else {
+                            v.category = 1;
+                        }
+                    });
+                } else if (this.currentSceneType === '3') {
+                    let chartDataList = respData.chartDataList;
+                    chartData.nodes.forEach(v => {
+                        let index = chartDataList.findIndex(i => {
+                            return i.acctId === v.name;
+                        });
+                        const {contAddrSame, zipCdSame, elecEailSame} = chartDataList[index];
+                        console.log(chartDataList[index]);
+                        if (contAddrSame === '是' || zipCdSame === '是' || elecEailSame === '是') {
+                            v.category = 0;
+                        } else {
+                            v.category = 1;
+                        }
+                    });
+                }
+                console.log(chartData);
                 this.$refs['chartComponent1'] && this.$refs['chartComponent1'][0] && this.$refs['chartComponent1'][0].getData(chartData, id);
             });
         },

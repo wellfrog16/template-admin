@@ -69,6 +69,10 @@ export default {
             this.echart.on('brushselected', params => {
                 this.$emit('handleBrushSelectedEvent', params, this.domId);
             });
+            /* 绑定框选结束事件 */
+            this.echart.on('contextmenu', params => {
+                this.$emit('handleContextMenu', params, this.domId);
+            });
         }
     },
     watch: {
@@ -93,6 +97,7 @@ export default {
         this.echart && this.echart.off('click');
         this.echart && this.echart.off('dblclick');
         this.echart && this.echart.off('brushselected');
+        this.echart && this.echart.off('contextmenu');
     }
 };
 </script>

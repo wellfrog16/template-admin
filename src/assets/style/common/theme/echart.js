@@ -23,15 +23,15 @@ let axisCommon = () => {
 export const echartsDefault = {
     color: [
         '#f8f400',
-        '#00709e',
-        '#ac10ce',
-        '#ff0000',
+        '#40f3d6',
+        '#f77fe0',
         '#13ce34',
         '#ff8a00',
-        '#006624',
         '#e3007b',
         '#1929b3',
-        '#b69913'
+        '#b69913',
+        '#00709e',
+        '#006624',
     ],
     timeAxis: axisCommon(),
     // logAxis: axisCommon(),

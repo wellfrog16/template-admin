@@ -34,7 +34,7 @@ export default {
                 animation: false,
                 series: [
                     {
-                        name: '关系人识别',
+                        name: '实控关系识别',
                         type: 'graph',
                         layout: 'force',
                         data: [],

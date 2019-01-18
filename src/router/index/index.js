@@ -101,7 +101,7 @@ const Index = {
                 {
                     meta: {
                         scrollTop: true,
-                        title: '账户组-关系人'
+                        title: '账户组-实控关系'
                     },
                     path: 'assoAccountGroupMergeRL',
                     name: 'assoAccountGroupMergeRL',

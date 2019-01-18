@@ -8,12 +8,12 @@ export const createTypeOptions = [
     {label: '相关系数', value: '1'},
     {label: '聚类', value: '2'},
     {label: '基本信息', value: '3'},
-    {label: '关系人', value: '4'}
+    {label: '实控关系', value: '4'}
 ];
 export const accountTotalTypeOptions = [
-    {label: '按持仓量', value: '1'},
-    {label: '按成交量', value: '2'},
-    {label: '按报单数', value: '3'}
+    {label: '按持仓量从大到小', value: '1'},
+    {label: '按成交量从大到小', value: '2'},
+    {label: '按报单数从大到小', value: '3'}
 ];
 export const accountTotalFrepOptions = [
     {label: '五分钟', value: '4'},
@@ -46,5 +46,5 @@ export const checkbox = [
     {field: 'acctMakePosQtty', label: '账户持仓量 >=', value: '1', unit: '手'},
     {field: 'acctBargainQtty', label: '账户成交量 >=', value: '2', unit: '手'},
     {field: 'acctBillCnt', label: '账户报单数 >=', value: '3', unit: '笔'},
-    {field: 'statAcctCnt', label: '统计账户数', value: '4', unit: ''}
+    {field: 'statAcctCnt', label: '账户数前', value: '4', unit: ''}
 ];
