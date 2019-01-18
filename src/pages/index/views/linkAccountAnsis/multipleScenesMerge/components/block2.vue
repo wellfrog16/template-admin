@@ -17,6 +17,7 @@ export default {
         return {
             loading: false,
             chartOptions: {
+                color: ['#f77fe0'],
                 tooltip: {
                     formatter: params => {
                         if (params.dataType === 'edge') { // link

@@ -7,10 +7,16 @@
             <div class="header-left">
                 <span><i :class="icon"></i>{{ title }}</span>
                 <span class="sub-title" v-if="subTitle">{{ subTitle }}</span>
+                <span v-if="canCollose" class="collose-icon">
+                    <i class="el-icon-arrow-up" v-if="show" @click="toggleIcon"></i>
+                    <i class="el-icon-arrow-down" v-else @click="toggleIcon"></i>
+                </span>
             </div>
-            <div class="header-right"><slot name="right"></slot></div>
+            <div class="header-right">
+                <slot name="right"></slot>
+            </div>
         </div>
-        <slot name="content"></slot>
+        <slot name="content" v-if="show"></slot>
     </el-card>
 </template>
 <script>
@@ -31,6 +37,19 @@ export default {
         loading: {
             type: Boolean,
             default: false
+        },
+        canCollose: {
+            type: Boolean,
+            default: true
+        },
+        show: {
+            type: Boolean,
+            default: true
+        }
+    },
+    methods: {
+        toggleIcon() {
+            this.show = !this.show;
         }
     }
 };
@@ -59,6 +78,14 @@ export default {
             .header-right {
                 flex: 1;
                 text-align: right;
+            }
+            .collose-icon {
+                margin-left: 15px;
+                cursor: pointer;
+                i {
+                    font-size: 18px;
+                    font-weight: 600;
+                }
             }
         }
     }

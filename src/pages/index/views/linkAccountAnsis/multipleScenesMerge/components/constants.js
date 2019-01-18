@@ -42,7 +42,7 @@ export const chartTableColumns1 = [
     {label: '浮动盈亏相关系数', field: 'floatPrftLossRela', align: 'center', minWidth: 160},
 ];
 export const chartTableColumns2 = [
-    {label: '客户编号', field: 'custId', align: 'center', minWidth: 130},
+    {label: '客户编号', field: 'custId', align: 'center', minWidth: 130, fixed: true},
     {label: '身份证号', field: 'idtfyCertNum', align: 'center', minWidth: 130},
     {label: '联系电话', field: 'contTel', align: 'center', minWidth: 130},
     {label: '联系地址', field: 'contAddr', align: 'center', minWidth: 130},
@@ -53,7 +53,7 @@ export const chartTableColumns2 = [
 ];
 export const chartTableColumns3 = [];
 export const chartTableColumns4 = [
-    {label: '客户编号', field: 'custId', align: 'center', minWidth: 130},
+    {label: '客户编号', field: 'custId', align: 'center', minWidth: 130, fixed: true},
     {label: '投资经理', field: 'investMger', align: 'center', minWidth: 100},
     {label: '投资顾问', field: 'investConsu', align: 'center', minWidth: 100},
     {label: '权益产品编码', field: 'raiProdEncode', align: 'center', minWidth: 130},
