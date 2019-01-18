@@ -40,7 +40,11 @@ export default {
             chartOptions: {
                 color: String(this.sceneType) === '3' ? ['#f77fe0', '#fff'] : ['#ff0000', '#fff'],
                 legend: {
-                    data: []
+                    data: [],
+                    itemGap: 20,
+                    left: 'left',
+                    top: 'middle',
+                    orient: 'vertical'
                 },
                 tooltip: {
                     formatter: params => {
