@@ -193,15 +193,15 @@ export default {
                 if (v.intersectionRatio <= 0.5) {
                     v.lineStyle = {normal: {color: lineColor, width: 2, type: 'dashed'}};
                 } else if (v.intersectionRatio <= 0.6) {
-                    v.lineStyle = {normal: {color: lineColor, width: 4, type: 'solied'}};
+                    v.lineStyle = {normal: {color: lineColor, width: 4, type: 'solid'}};
                 } else if (v.intersectionRatio <= 0.7) {
-                    v.lineStyle = {normal: {color: lineColor, width: 6, type: 'solied'}};
+                    v.lineStyle = {normal: {color: lineColor, width: 6, type: 'solid'}};
                 } else if (v.intersectionRatio <= 0.8) {
-                    v.lineStyle = {normal: {color: lineColor, width: 8, type: 'solied'}};
+                    v.lineStyle = {normal: {color: lineColor, width: 8, type: 'solid'}};
                 } else if (v.intersectionRatio <= 0.9) {
-                    v.lineStyle = {normal: {color: lineColor, width: 10, type: 'solied'}};
+                    v.lineStyle = {normal: {color: lineColor, width: 10, type: 'solid'}};
                 } else {
-                    v.lineStyle = {normal: {color: lineColor, width: 12, type: 'solied'}};
+                    v.lineStyle = {normal: {color: lineColor, width: 12, type: 'solid'}};
                 }
             });
             let max = _.maxBy(val.nodes, 'value')['value'];
@@ -262,8 +262,8 @@ export default {
         }
     },
     mounted() {
-        let value = {nodes: [{'id': 'XG000002', 'name': 'XG000002', 'value': 23, 'category': 2, 'custIds': '11,22,33'}, {'id': 'XG000003', 'name': 'XG000003', 'value': 77, 'category': 3, 'custIds': '22,44,55,66,77'}], links: [{target: 'XG000002', source: 'XG000003', tip: '787', intersectionRatio: 0.6}]};
-        this.setChartOptions(value);
+        // let value = {nodes: [{'id': 'XG000002', 'name': 'XG000002', 'value': 23, 'category': 2, 'custIds': '11,22,33'}, {'id': 'XG000003', 'name': 'XG000003', 'value': 77, 'category': 3, 'custIds': '22,44,55,66,77'}], links: [{target: 'XG000002', source: 'XG000003', tip: '787', intersectionRatio: 0.6}]};
+        // this.setChartOptions(value);
     }
 };
 </script>
