@@ -248,11 +248,12 @@ export default {
                     this.fullScreenLoading = false;
                     this.importResultRespData = resp;
                     if (resp && resp.length) {
-                        this.currentConctrd = resp[0]['contractCode'] || '';
-                        this.startDate = resp[0]['children'][0]['startDate'] || '1900-01-01';
-                        this.endDate = resp[0]['children'][0]['endDate'] || '3000-12-31';
-                        this.statFreq = resp[0]['children'][0]['statFrep'] || '1';
+                        this.currentConctrd = this.currentConctrd || resp[0]['contractCode'] || '';
+                        this.startDate = this.startDate || resp[0]['children'][0]['startDate'] || '1900-01-01';
+                        this.endDate = this.endDate || resp[0]['children'][0]['endDate'] || '3000-12-31';
+                        this.statFreq = this.statFreq || resp[0]['children'][0]['statFrep'] || '1';
                     }
+                    console.log(this.startDate);
                 }).catch(e => {
                     this.loadingBt = false;
                     this.fullScreenLoading = false;

@@ -391,7 +391,8 @@ export default {
             chart3Column.unshift({
                 'label': '交易日',
                 'field': 'date',
-                'minWidth': 140
+                'minWidth': 140,
+                'fixed': true
             });
             this.chartTableColumns.splice(2, 1, chart3Column);
         },
