@@ -35,6 +35,7 @@
                 width="55">
             </el-table-column>
             <el-table-column
+                fixed
                 v-if="showIndexColumn"
                 type="index"
                 width="60"

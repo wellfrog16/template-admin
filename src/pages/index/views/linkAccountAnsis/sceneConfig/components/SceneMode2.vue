@@ -7,7 +7,11 @@
                         <el-form-item>
                             <el-checkbox-group v-model="checkedList">
                                 <el-checkbox :disabled="disabled" :label="item.value" v-for="(item, index) in checkbox" :key="index">
-                                    <el-form-item :prop="item.field" :label="item.label" label-width="140px" style="display:inline-block; padding: 5px 0;">
+                                    <div v-if="index === 0" class="header-css">按数量筛选：</div>
+                                    <div v-if="index === 3"  class="header-css">按排名筛选：</div>
+                                    <el-form-item :prop="item.field" :label="item.label" label-width="140px" style="display:inline-block; padding: 5px 0;"  :rules="[
+                                        {validator: selfValidate, type: item.field}
+                                    ]">
                                         <el-input :disabled="disabled" :clearabled="!disabled" class="custom-width" size="small" v-model="ruleForm[item.field]"></el-input>
                                         <span class="unit-css" v-if="item.unit">{{ item.unit }}</span>
                                         <el-select :disabled="disabled" :clearabled="!disabled" size="small" v-if="index === checkbox.length - 1" v-model="ruleForm.statAcctType" class="custom-width" style="margin-left:3px;">
@@ -146,6 +150,32 @@ export default {
                 sf: this.defaultConfig.sf // 算法
             };
         },
+        selfValidate(rule, value, callback) {
+            let reg = /^[0-9]+$/;
+            switch (rule.type) {
+            case 'acctMakePosQtty':
+                if (this.checkedList.indexOf('1') > -1 && !reg.test(value)) {
+                    callback(new Error('账户持仓量只能输入正整数'));
+                }
+                break;
+            case 'acctBargainQtty':
+                if (this.checkedList.indexOf('2') > -1 && !reg.test(value)) {
+                    callback(new Error('账户成交量只能输入正整数'));
+                }
+                break;
+            case 'acctBillCnt':
+                if (this.checkedList.indexOf('3') > -1 && !reg.test(value)) {
+                    callback(new Error('账户报单数只能输入正整数'));
+                }
+                break;
+            case 'statAcctCnt':
+                if (this.checkedList.indexOf('4') > -1 && !reg.test(value)) {
+                    callback(new Error('账户数只能输入正整数'));
+                }
+                break;
+            }
+            callback();
+        },
         syntaxCheck(callback) {
             callback && callback();
         },
@@ -209,6 +239,12 @@ export default {
             /deep/ .el-card__body {
                 padding: 0;
             }
+        }
+        .header-css {
+            margin-left: -20px;
+            padding: 10px 32px;
+            background: url('../../../../../../assets/img/usr/card_header_bg.png') no-repeat -10px bottom;
+            background-size: 200px;
         }
     }
 </style>

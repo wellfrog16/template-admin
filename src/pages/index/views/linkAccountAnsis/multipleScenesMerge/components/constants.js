@@ -83,7 +83,7 @@ export const blocks = [
         toggleDetailFlags: false
     },
     {
-        title: '关系人识别',
+        title: '实控关系识别',
         icon: '',
         loading: false,
         toggleDetailFlags: false

@@ -136,6 +136,12 @@
             background-color: @g-table-highlight-color !important;
         }
     }
+    tr.hover-row {
+        background-color: @g-table-highlight-color !important;
+        td {
+            background-color: @g-table-highlight-color !important;
+        }
+    }
 
     .el-table__append-wrapper {
         table {
@@ -162,6 +168,12 @@
 }
 .el-table__empty-block {
     min-width: 400px;
+}
+.el-table__fixed-right::before, .el-table__fixed::before {
+    background: transparent;
+    &:hover {
+        background: transparent;
+    }
 }
 // input
 .el-input__inner {

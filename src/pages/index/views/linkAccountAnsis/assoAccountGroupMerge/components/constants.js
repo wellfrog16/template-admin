@@ -80,7 +80,7 @@ export const chartTableColumns5 = [ // 地址分析关系图明细字段
     {label: '银行账号相同', field: 'bankAcctSame', minWidth: 130},
     {label: '地址近似', field: 'addrLike', minWidth: 130}
 ];
-export const chartTableColumns6 = [ // 关系人分析关系图明细字段
+export const chartTableColumns6 = [ // 实控关系分析关系图明细字段
     {label: '账户组号', field: 'acctId', minWidth: 130},
     {label: '账户组客户编号', field: 'acctCustId', minWidth: 100},
     {label: '同一投资经理', field: 'sameInvestMger', minWidth: 140},
@@ -311,7 +311,7 @@ export const mainTableColumnsBI = [
         align: 'center'
     } */
 ];
-// tree-关系人
+// tree-实控关系
 export const mainTableColumnsRL = [
     {
         field: 'acctId',

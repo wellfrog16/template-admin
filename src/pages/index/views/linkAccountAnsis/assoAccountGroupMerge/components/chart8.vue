@@ -38,10 +38,6 @@ export default {
             resData5,
             loading: false,
             chartOptions: {
-                color: String(this.sceneType) === '3' ? ['#f77fe0', '#fff'] : ['#ff0000', '#fff'],
-                legend: {
-                    data: []
-                },
                 tooltip: {
                     formatter: params => {
                         if (params.dataType === 'edge') { // link
@@ -98,10 +94,6 @@ export default {
             // 散点图sort
             this.chartOptions['series'][0]['links'] = chartData['links'];
             this.chartOptions['series'][0]['data'] = chartData['nodes'];
-            this.chartOptions.legend.data = ['重点指标', '次要指标'];
-            this.chartOptions['series'][0]['categories'] = this.chartOptions.legend.data.map(v => {
-                return {name: v};
-            });
             console.log(this.chartOptions);
             this.$store.commit('savechart1', {data: this.chartOptions, index: id || this.tabIndex || this.$store.getters.tabIndex});
             // select max

@@ -54,7 +54,7 @@
                                 <br>
                                 <el-button type="warning" size="small" @click="handleMerge" class="self-width">合并</el-button>
                                 <br>
-                                <el-button type="primary" size="small" @click="handleExportResult('1', tabIndex)">导出到结果集</el-button>
+                                <!-- <el-button type="primary" size="small" @click="handleExportResult('1', tabIndex)">导出到结果集</el-button> -->
                                 <br>
                                 <el-button type="primary" size="small" class="self-width" @click="handleExportCsv('账户组信息', mainTableColumns)">导出到csv</el-button>
                                 <br>
@@ -79,10 +79,10 @@ import {
     getChart4Data,
     // getChartTable2ByPage
 } from '@/api/dataAnsis/assoAccountGroupMerge';
-import chart1 from '../components/chart1';
+import chart1 from '../components/chart6';
 import chart2 from '../components/chart2';
-import chart3 from '../components/chart3';
-import chart4 from '../components/chart4';
+import chart3 from '../components/chart7';
+import chart4 from '../components/chart8';
 import _ from 'lodash';
 import {chartsBV, mainTableColumns, chartTableColumns1, chartTableColumns2, chartTableColumns4, table3Options} from '../components/constants';
 export default {

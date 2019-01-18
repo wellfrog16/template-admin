@@ -144,7 +144,7 @@ export default {
                             },
                             symbolSize: 0, // 控制箭头和原点的大小、官方默认的标准线会带远点和箭头
                             data: [ // 设置条标准线——x=10
-                                {xAxis: 10000}
+                                {xAxis: 100000}
                             ]
                         },
                         markPoint: {

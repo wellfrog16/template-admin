@@ -26,7 +26,7 @@ export const fetchBlockData3 = params => {
 export const fetchBlockData2 = params => {
     return post(`${requestPrefix}/customer/combinedscence/baseInfo`, params || {});
 };
-// 点击关系图谱，钻取关系人
+// 点击关系图谱，钻取实控关系
 export const fetchBlockData4 = params => {
     return post(`${requestPrefix}/customer/combinedscence/relativePeople`, params || {});
 };

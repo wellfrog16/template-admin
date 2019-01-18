@@ -1,11 +1,12 @@
 <template>
-    <div :class="$style.groupadd_information">
+    <div :class="$style.groupadd_information" v-loading="fullScreenLoading">
         <s-card :title="`客户群体选择`" :icon="`fa fa-user-check`">
             <div slot="content">
                 <el-row :gutter="20">
                     <el-col :span="14">
                         <span>导入结果集：</span>
                         <resultSelectComponent
+                            ref="resultSelectComponent"
                             style="width: 50%; max-width: 350px;"
                             :resultIdProps="resultIds"
                             @selectResultId="selectResultId"
@@ -223,6 +224,12 @@ export default {
         };
     },
     methods: {
+        updateFullLoading(loading) {
+            this.fullScreenLoading = loading;
+        },
+        updateResultList() {
+            this.$refs['resultSelectComponent'].getResultList();
+        },
         // 导入结果集数据
         selectResultId(val, resultNameG, resultTypeG, setupUserG) {
             this.resultIds = val;

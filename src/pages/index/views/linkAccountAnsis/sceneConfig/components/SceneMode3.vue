@@ -7,6 +7,8 @@
                         <el-form-item>
                             <el-checkbox-group v-model="checkedList">
                                 <el-checkbox :disabled="disabled" :label="item.value" v-for="(item, index) in checkbox" :key="index" @change="handleCheckedChange">
+                                    <div v-if="index === 0" class="header-css">按数量筛选：</div>
+                                    <div v-if="index === 3"  class="header-css">按排名筛选：</div>
                                     <el-form-item :prop="item.field" :label="item.label" label-width="140px" style="display:inline-block; padding: 5px 0;" :rules="[
                                         {validator: selfValidate, type: item.field}
                                     ]">
@@ -130,7 +132,7 @@ export default {
                 break;
             case 'statAcctCnt':
                 if (this.checkedList.indexOf('4') > -1 && !reg.test(value)) {
-                    callback(new Error('统计账户数只能输入正整数'));
+                    callback(new Error('账户数只能输入正整数'));
                 }
                 break;
             }
@@ -271,6 +273,12 @@ export default {
             /deep/ .el-card__body {
                 padding: 0;
             }
+        }
+        .header-css {
+            margin-left: -20px;
+            padding: 10px 32px;
+            background: url('../../../../../../assets/img/usr/card_header_bg.png') no-repeat -10px bottom;
+            background-size: 200px;
         }
     }
 </style>

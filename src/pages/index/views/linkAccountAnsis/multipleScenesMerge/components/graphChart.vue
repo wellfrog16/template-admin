@@ -2,7 +2,7 @@
     <div :class="$style.graph_chart">
         <s-card :title="`账户组关系筛选`" :icon="`fa fa-filter`">
             <div slot="right">
-                <el-button size="small" type="primary" @click="createData">生成数据</el-button>
+                <el-button size="small" type="primary" :loading="loading" @click="createData">生成关系图谱</el-button>
             </div>
             <div slot="content">
                 <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="140">
@@ -11,7 +11,7 @@
                             <el-form-item prop="sceneTypes" label="场景类型选择：">
                                 <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
                                 <el-checkbox-group v-model="ruleForm.sceneTypes" @change="handleSelectChange" style="padding-left: 110px;">
-                                    <el-checkbox v-for="(item, index) in checkboxes" :key="index" :label="item.value">
+                                    <el-checkbox v-for="(item, index) in checkboxes" :key="index" :label="String(item.value)">
                                         {{ item.label }}
                                     </el-checkbox>
                                 </el-checkbox-group>
@@ -45,6 +45,7 @@
 import SCard from '@/components/index/common/SCard';
 import EchartsCommon from '@/components/index/common/EchartsCommon';
 import {createRelationChart} from '@/api/dataAnsis/multipleScenesMerge';
+import _ from 'lodash';
 export default {
     name: 'graphChart',
     components: {
@@ -62,14 +63,14 @@ export default {
         }
     },
     data() {
-        let symbolSize = data => {
-            let len = data.split(',').length;
-            return len > 5 ? 35 : len < 1 ? 8 : len * 7;
-        };
+        // let symbolSize = data => {
+        //     let len = data.split(',').length;
+        //     return len > 5 ? 35 : len < 1 ? 8 : len * 7;
+        // };
         return {
             loading: false,
             ruleForm: {
-                sceneTypes: ['1', '3', '4', '5'],
+                sceneTypes: ['1', '2', '3', '4', '5'],
                 showAccountCount: '50'
             },
             rules: {
@@ -78,22 +79,37 @@ export default {
                 ]
             },
             checkboxes: [
-                {label: '相关系数', value: '1'},
-                // {label: '聚类', value: '2'},
-                {label: '基本信息', value: '3'},
-                {label: '关系人', value: '4'},
-                {label: '其他', value: '5'},
+                {label: '相关系数', value: 1},
+                {label: '聚类', value: 2},
+                {label: '基本信息', value: 3},
+                {label: '实控关系', value: 4},
+                {label: '其他', value: 5},
             ],
             isIndeterminate: false,
             checkAll: true,
             chartOptions: {
+                color: [
+                    '',
+                    '#f8f400',
+                    '#40f3d6',
+                    '#f77fe0',
+                    '#ff0000',
+                    '#13ce34',
+                    '#ff8a00',
+                    '#b69913',
+                    '#00709e',
+                    '#b69913',
+                    '#1929b3',
+                    '#006624'],
                 legend: {data: []},
                 tooltip: {
                     formatter: params => {
                         if (params.dataType === 'edge') { // link
                             return '客户编号交集：' + params.data.tip || '';
                         } else if (params.dataType === 'node') {
-                            return '客户编号: ' + params.value || '';
+                            return '持仓量排名：' + params.data.value + '<br>客户编号: ' + params.data.custIds || '';
+                        } else {
+                            return '';
                         }
                     },
                     padding: 10,
@@ -104,13 +120,40 @@ export default {
                 },
                 animationEasingUpdate: 'quinticInOut',
                 animation: false,
+                visualMap: {
+                    left: 'right',
+                    inverse: true,
+                    textGap: 25,
+                    itemHeight: 220,
+                    itemWidth: 15,
+                    bottom: '5%',
+                    // dimension: 4, // 注意：对应映射索引
+                    type: 'continuous',
+                    min: 1,
+                    max: 1000,
+                    text: ['', '持仓量排名'],
+                    realtime: false,
+                    calculable: true,
+                    // color: ['orangered', 'yellow', 'lightskyblue'],
+                    textStyle: {
+                        color: '#fb7171'
+                    },
+                    inRange: {
+                        symbol: 'circle'
+                    },
+                    controller: {
+                        inRange: {
+                            color: ['#f30808', '#fff']
+                        }
+                    }
+                },
                 series: [
                     {
                         name: '关系图谱',
                         type: 'graph',
                         layout: 'force',
                         // symbol: 'path://M30.9,53.2C16.8,53.2,5.3,41.7,5.3,27.6S16.8,2,30.9,2C45,2,56.4,13.5,56.4,27.6S45,53.2,30.9,53.2z M30.9,3.5C17.6,3.5,6.8,14.4,6.8,27.6c0,13.3,10.8,24.1,24.101,24.1C44.2,51.7,55,40.9,55,27.6C54.9,14.4,44.1,3.5,30.9,3.5z M36.9,35.8c0,0.601-0.4,1-0.9,1h-1.3c-0.5,0-0.9-0.399-0.9-1V19.5c0-0.6,0.4-1,0.9-1H36c0.5,0,0.9,0.4,0.9,1V35.8z M27.8,35.8 c0,0.601-0.4,1-0.9,1h-1.3c-0.5,0-0.9-0.399-0.9-1V19.5c0-0.6,0.4-1,0.9-1H27c0.5,0,0.9,0.4,0.9,1L27.8,35.8L27.8,35.8z',
-                        symbolSize: symbolSize,
+                        // symbolSize: symbolSize,
                         focusNodeAdjacency: true,
                         roam: true,
                         data: [],
@@ -140,34 +183,45 @@ export default {
             this.chartOptions.legend.data = this.checkboxes.map(v => {
                 return v.label;
             });
+            this.chartOptions.legend.data.unshift('');
             this.chartOptions.series[0]['categories'] = this.checkboxes.map(v => {
                 return {name: v.label};
             });
             this.chartOptions.series[0]['categories'].unshift({name: ''}); // 处理checkbox的code从1开始的问题。
-            this.chartOptions.series[0]['data'] = val.nodes;
             let lineColor = 'rgba(255, 68, 68, 1)';
             val.links.forEach(v => {
-                if (v.tip.split(',').length > 5) {
-                    v.lineStyle = {normal: {color: lineColor, width: 10}};
-                } else if (v.tip.split(',').length > 3) {
-                    v.lineStyle = {normal: {color: lineColor, width: 5}};
+                if (v.intersectionRatio <= 0.5) {
+                    v.lineStyle = {normal: {color: lineColor, width: 2, type: 'dashed'}};
+                } else if (v.intersectionRatio <= 0.6) {
+                    v.lineStyle = {normal: {color: lineColor, width: 4, type: 'solied'}};
+                } else if (v.intersectionRatio <= 0.7) {
+                    v.lineStyle = {normal: {color: lineColor, width: 6, type: 'solied'}};
+                } else if (v.intersectionRatio <= 0.8) {
+                    v.lineStyle = {normal: {color: lineColor, width: 8, type: 'solied'}};
+                } else if (v.intersectionRatio <= 0.9) {
+                    v.lineStyle = {normal: {color: lineColor, width: 10, type: 'solied'}};
                 } else {
-                    v.lineStyle = {normal: {color: lineColor, width: 1}};
+                    v.lineStyle = {normal: {color: lineColor, width: 12, type: 'solied'}};
                 }
             });
+            let max = _.maxBy(val.nodes, 'value')['value'];
+            val.nodes.forEach(v => {
+                let len = v.custIds.split(',').length;
+                v.symbolSize = len > 5 ? 35 : len < 1 ? 8 : len * 7;
+            });
             this.chartOptions.series[0]['links'] = val.links;
+            this.chartOptions.series[0]['data'] = val.nodes;
+            this.chartOptions.visualMap.max = max;
             this.$refs['chartRef'].initChart();
         },
         handleEchartClickEvent() {},
         handleEchartDblClickEvent(item) {
-            console.log(item);
             if (item.dataType === 'node') {
                 let params = {
-                    accNumList: item.data['value'], // 客户编号（逗号分隔）
+                    accNumList: item.data['custIds'], // 客户编号（逗号分隔）
                     relativeTable: this.relativeTable, // 相关性临时表名
                     resultTable: this.resultTable // 结果集临时表名
                 };
-                console.log(params);
                 this.$emit('getBlockData', params);
             }
         },
@@ -193,7 +247,6 @@ export default {
                         relativeTable: this.relativeTable,
                         resultTable: this.resultTable,
                     };
-                    console.log(params);
                     this.loading = true;
                     createRelationChart(params).then(resp => {
                         console.log(resp);
@@ -208,7 +261,10 @@ export default {
             });
         }
     },
-    mounted() {}
+    mounted() {
+        let value = {nodes: [{'id': 'XG000002', 'name': 'XG000002', 'value': 23, 'category': 2, 'custIds': '11,22,33'}, {'id': 'XG000003', 'name': 'XG000003', 'value': 77, 'category': 3, 'custIds': '22,44,55,66,77'}], links: [{target: 'XG000002', source: 'XG000003', tip: '787', intersectionRatio: 0.6}]};
+        this.setChartOptions(value);
+    }
 };
 </script>
 <style lang='less' module>
