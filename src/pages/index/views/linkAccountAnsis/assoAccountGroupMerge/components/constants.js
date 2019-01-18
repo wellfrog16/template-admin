@@ -25,7 +25,7 @@ export const chartsRL = [
     {title: '账户组分时报单', icon: 'fa fa-chart-line', toggleDetailFlags: false, loading: false}
 ];
 export const chartTableColumns1 = [
-    {label: '账户组编号', field: 'acctId', minWidth: 130},
+    {label: '账户组编号', field: 'acctId', minWidth: 130, fixed: true},
     {label: '子账户数量', field: 'custQtty', minWidth: 130},
     {label: '合约代码', field: 'contrCd', minWidth: 100},
     {label: '当前净持仓量', field: 'acctGroOpenInt', minWidth: 140},
@@ -33,8 +33,8 @@ export const chartTableColumns1 = [
     {label: '所属客户编号', field: 'custIds', minWidth: 130}
 ];
 export const chartTableColumns2 = [
-    {label: '账户组编号', field: 'acctId', minWidth: 130},
-    {label: '客户编号', field: 'custId', minWidth: 130, template: custIdColumn},
+    {label: '账户组编号', field: 'acctId', minWidth: 130, fixed: true},
+    {label: '客户编号', field: 'custId', minWidth: 130, fixed: true, template: custIdColumn},
     {label: '交易日', field: 'txDay', minWidth: 130},
     {label: '合约代码', field: 'contrCd', minWidth: 100},
     {label: '当前净持仓量', field: 'acctNetOpenInt', minWidth: 140},
@@ -43,7 +43,7 @@ export const chartTableColumns2 = [
     {label: '空单净持仓量', field: 'nuBillOpenInt', minWidth: 140},
     {label: '多单净持仓量', field: 'multiBillOpenInt', minWidth: 140}
 ];
-export const chartTableColumns3 = [
+export const chartTableColumns3 = [ // no use
     {label: '账户组编号', field: '', minWidth: 130},
     {label: '客户编号', field: '', minWidth: 130, template: custIdColumn},
     {label: '交易日', field: '', minWidth: 130},
@@ -57,7 +57,7 @@ export const chartTableColumns3 = [
     {label: '净持仓量', field: '', minWidth: 100}
 ];
 export const chartTableColumns4 = [
-    {label: '客户编号', field: 'custId', minWidth: 130, template: custIdColumn},
+    {label: '客户编号', field: 'custId', minWidth: 130, fixed: true, template: custIdColumn},
     {label: '买卖方向', field: 'bizDir', minWidth: 100},
     // {label: '报单时间1', field: 'declBillTm1', minWidth: 100},
     {label: '报单时间', field: 'declBillTm2', minWidth: 140},
@@ -68,8 +68,8 @@ export const chartTableColumns4 = [
     {label: '成交价格', field: 'bargainPrice', minWidth: 130}
 ];
 export const chartTableColumns5 = [ // 地址分析关系图明细字段
-    {label: '账户组号', field: 'acctId', minWidth: 130},
-    {label: '账户组客户编号', field: 'acctCustId', minWidth: 130},
+    {label: '账户组号', field: 'acctId', minWidth: 130, fixed: true},
+    {label: '账户组客户编号', field: 'acctCustId', minWidth: 160},
     {label: '姓名相同', field: 'nameSame', minWidth: 140},
     {label: '身份证相同', field: 'idtfyCertSame', minWidth: 130},
     {label: '联系电话相同', field: 'contTelSame', minWidth: 130},
@@ -81,15 +81,15 @@ export const chartTableColumns5 = [ // 地址分析关系图明细字段
     {label: '地址近似', field: 'addrLike', minWidth: 130}
 ];
 export const chartTableColumns6 = [ // 实控关系分析关系图明细字段
-    {label: '账户组号', field: 'acctId', minWidth: 130},
-    {label: '账户组客户编号', field: 'acctCustId', minWidth: 100},
+    {label: '账户组号', field: 'acctId', minWidth: 130, fixed: true},
+    {label: '账户组客户编号', field: 'acctCustId', minWidth: 160},
     {label: '同一投资经理', field: 'sameInvestMger', minWidth: 140},
     {label: '同一投资顾问', field: 'sameInvestConsu', minWidth: 130},
     {label: '同一权益持有人', field: 'sameRaiHoldPerson', minWidth: 130},
     {label: '同一下单人', field: 'sameNextBillPerson', minWidth: 180},
     {label: '同一法人代表', field: 'sameCapCannibPerson', minWidth: 130},
     {label: '同一资金调拨人', field: 'sameLpSubstTbl', minWidth: 130},
-    {label: '同一结算单确认人', field: 'sameStlBillCfmPerson', minWidth: 130},
+    {label: '同一结算单确认人', field: 'sameStlBillCfmPerson', minWidth: 160},
     {label: '同一开户授权人', field: 'sameOpenAuthPerson', minWidth: 130}
 ];
 export const chartTableColumns8 = [
