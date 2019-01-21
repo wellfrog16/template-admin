@@ -1,6 +1,9 @@
 <template>
     <div :class="$style.groupadd_information" v-loading="fullScreenLoading">
         <s-card :title="`客户群体选择`" :icon="`fa fa-user-check`">
+            <div slot="right">
+                <el-button size="small" type="warning" @click="createData" :loading="loadingTree">生成数据</el-button>
+            </div>
             <div slot="content">
                 <el-row :gutter="20">
                     <el-col :span="14">
@@ -105,14 +108,14 @@
                                     size="small"
                                     @click="handleExportCsv('账户组信息', mainTableColumns)"
                                 >导出到csv</el-button>
-                                <br>
+                                <!-- <br>
                                 <el-button
                                     class="self-width"
-                                    type="primary"
+                                    type="warning"
                                     size="small"
                                     :loading="loadingTree"
                                     @click="createData"
-                                >生成数据</el-button>
+                                >生成数据</el-button> -->
                             </div>
                         </el-col>
                     </el-row>

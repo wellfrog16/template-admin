@@ -66,25 +66,25 @@ export const chartTableColumns4 = [
 export const blocks = [
     {
         title: '相关系数识别',
-        icon: '',
+        icon: 'fa fa-percent',
         loading: false,
         toggleDetailFlags: false
     },
     {
-        title: '客户地址信息识别',
-        icon: '',
+        title: '客户基本信息识别',
+        icon: 'fa fa-search-location',
         loading: false,
         toggleDetailFlags: false
     },
     {
-        title: '交易行为识别',
-        icon: '',
+        title: '高频聚类识别',
+        icon: 'fa fa-search-dollar',
         loading: false,
         toggleDetailFlags: false
     },
     {
         title: '实控关系识别',
-        icon: '',
+        icon: 'fa fa-link',
         loading: false,
         toggleDetailFlags: false
     }
