@@ -1,6 +1,6 @@
 <template>
     <div class="index-param-commponent">
-        <s-card :title="`相关性指标选择`">
+        <s-card :title="`${indexTitle}指标选择`">
             <el-row slot="content">
                 <s-table :loading="loading" :showHeader="false" :columns="String(ruleForm.sceneType) === '1' ? correlationIndexColumns : correlationIndexColumns.slice(0, 1)" :tableData="tableData" :height="200" :otherProps="{unit: '%', disabled: disabled}">
                     <el-table-column
@@ -71,6 +71,10 @@ export default {
     computed: {
         disabled() {
             return String(this.operateType) === '1';
+        },
+        indexTitle() {
+            let titleList = ['相关性', '聚类', '基本信息', '实控关系'];
+            return titleList[this.createType - 1];
         }
     },
     data() {

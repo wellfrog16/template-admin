@@ -7,7 +7,7 @@
             <div slot="content">
                 <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="140">
                     <el-row>
-                        <el-col :xl="12" :lg="12" :md="12" :sm="24" style="border-right:1px solid rgba(4, 58, 127, 0.92);">
+                        <!-- <el-col :xl="12" :lg="12" :md="12" :sm="24" style="border-right:1px solid rgba(4, 58, 127, 0.92);">
                             <el-form-item prop="sceneTypes" label="场景类型选择：">
                                 <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
                                 <el-checkbox-group v-model="ruleForm.sceneTypes" @change="handleSelectChange" style="padding-left: 110px;">
@@ -16,7 +16,7 @@
                                     </el-checkbox>
                                 </el-checkbox-group>
                             </el-form-item>
-                        </el-col>
+                        </el-col> -->
                         <el-col :xl="12" :lg="12" :md="12" :sm="24" style="padding-left: 20px;">
                             <el-form-item prop="showAccountCount" label="显示账户组数：">
                                 前&nbsp;&nbsp;<el-input clearable size="small" v-model="ruleForm.showAccountCount" style="width: 150px;"></el-input>
@@ -27,9 +27,9 @@
             </div>
         </s-card>
         <s-card :title="`关系图谱`" :icon="`fa fa-share-alt`">
-            <div slot="right">
+            <!-- <div slot="right">
                 <el-button size="small" type="primary" :loading="loading" @click="createData">生成关系图谱</el-button>
-            </div>
+            </div> -->
             <div slot="content">
                 <echarts-common
                     ref="chartRef"
@@ -74,7 +74,7 @@ export default {
             loading: false,
             ruleForm: {
                 sceneTypes: ['1', '2', '3', '4', '5'],
-                showAccountCount: '9999'
+                showAccountCount: '50'
             },
             rules: {
                 showAccountCount: [
@@ -139,7 +139,7 @@ export default {
                     // dimension: 4, // 注意：对应映射索引
                     type: 'continuous',
                     min: 1,
-                    max: 1000,
+                    max: 50,
                     text: ['', '持仓量排名'],
                     realtime: false,
                     calculable: true,
