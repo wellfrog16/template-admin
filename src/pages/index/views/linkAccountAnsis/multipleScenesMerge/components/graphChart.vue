@@ -1,6 +1,6 @@
 <template>
     <div :class="$style.graph_chart">
-        <!-- <s-card :title="`账户组关系筛选`" :icon="`fa fa-filter`">
+        <s-card :title="`账户组关系筛选`" :icon="`fa fa-filter`">
             <div slot="right">
                 <el-button size="small" type="primary" :loading="loading" @click="createData">生成关系图谱</el-button>
             </div>
@@ -25,7 +25,7 @@
                     </el-row>
                 </el-form>
             </div>
-        </s-card> -->
+        </s-card>
         <s-card :title="`关系图谱`" :icon="`fa fa-share-alt`">
             <div slot="right">
                 <el-button size="small" type="primary" :loading="loading" @click="createData">生成关系图谱</el-button>
@@ -252,27 +252,26 @@ export default {
                 this.$message.error('请先生成结果集后再生成关系图谱');
                 return;
             }
-            let params = {
-                accRelations: this.ruleForm.sceneTypes.join(','),
-                resultNum: this.ruleForm.showAccountCount.trim() || '50',
-                relativeTable: this.relativeTable,
-                resultTable: this.resultTable,
-            };
-            this.loading = true;
-            createRelationChart(params).then(resp => {
-                console.log(resp);
-                this.loading = false;
-                this.echartsData = resp;
-                this.setChartOptions(resp);
-            }).catch(e => {
-                console.error(e);
-                this.loading = false;
+            this.$refs['ruleForm'].validate(valid => {
+                if (valid) {
+                    let params = {
+                        accRelations: this.ruleForm.sceneTypes.join(','),
+                        resultNum: this.ruleForm.showAccountCount.trim() || '50',
+                        relativeTable: this.relativeTable,
+                        resultTable: this.resultTable,
+                    };
+                    this.loading = true;
+                    createRelationChart(params).then(resp => {
+                        console.log(resp);
+                        this.loading = false;
+                        this.echartsData = resp;
+                        this.setChartOptions(resp);
+                    }).catch(e => {
+                        console.error(e);
+                        this.loading = false;
+                    });
+                }
             });
-            // this.$refs['ruleForm'].validate(valid => {
-            //     if (valid) {
-
-            //     }
-            // });
         }
     },
     mounted() {

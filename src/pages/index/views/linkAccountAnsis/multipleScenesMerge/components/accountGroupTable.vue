@@ -39,7 +39,7 @@
             </div>
         </s-card>
         <div :class="$style.main_table">
-            <s-card title="账户组信息" icon="fa fa-layer-group">
+            <s-card title="账户组信息" icon="fa fa-layer-group" :canCollose="true" :showContent="showContent">
                 <div slot="right">
                     <el-input
                         clearable
@@ -220,7 +220,8 @@ export default {
             searchText: '',
             importResultRespData: [], // 导入当前结果集后返回的结果
             importResultList: [], // 已经导入的结果集列表
-            isHasSceneType1: false
+            isHasSceneType1: false,
+            showContent: false
         };
     },
     methods: {
@@ -274,6 +275,7 @@ export default {
                 return;
             }
             this.importResultList.push(this.resultIds);
+            this.showContent = true;
             this.mainTableData = this.sortDataByAcctIdCommon(this.mainTableData.concat(this.importResultRespData));
             if (!this.isHasSceneType1 && String(this.resultType) === '1') {
                 this.isHasSceneType1 = true;
@@ -286,6 +288,7 @@ export default {
         // 导入CSV
         handleUploadSuccess(resp) {
             if (resp && resp.length) {
+                this.showContent = true;
                 this.mainTableData = this.sortDataByAcctIdCommon(this.mainTableData.concat(resp));
             } else {
                 this.$message.error('导入数据无效');
