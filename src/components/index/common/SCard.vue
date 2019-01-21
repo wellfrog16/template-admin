@@ -8,7 +8,7 @@
                 <span><i :class="icon"></i>{{ title }}</span>
                 <span class="sub-title" v-if="subTitle">{{ subTitle }}</span>
                 <span v-if="canCollose" class="collose-icon">
-                    <i class="el-icon-arrow-up" v-if="show" @click="toggleIcon"></i>
+                    <i class="el-icon-arrow-up" v-if="showContent" @click="toggleIcon"></i>
                     <i class="el-icon-arrow-down" v-else @click="toggleIcon"></i>
                 </span>
             </div>
@@ -16,7 +16,9 @@
                 <slot name="right"></slot>
             </div>
         </div>
-        <slot name="content" v-if="show"></slot>
+        <div v-show="showContent">
+            <slot name="content"></slot>
+        </div>
     </el-card>
 </template>
 <script>
@@ -40,16 +42,16 @@ export default {
         },
         canCollose: {
             type: Boolean,
-            default: true
+            default: false
         },
-        show: {
+        showContent: {
             type: Boolean,
             default: true
         }
     },
     methods: {
         toggleIcon() {
-            this.show = !this.show;
+            this.showContent = !this.showContent;
         }
     }
 };
