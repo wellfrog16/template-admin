@@ -33,7 +33,6 @@ export default {
                             return i.acctId === v.name;
                         });
                         const {sameInvestMger, sameInvestConsu, sameRaiHoldPerson} = chartDataList[index];
-                        console.log(chartDataList[index]);
                         if (sameInvestMger === '是' || sameInvestConsu === '是' || sameRaiHoldPerson === '是') {
                             v.category = 0;
                         } else {

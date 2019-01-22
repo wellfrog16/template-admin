@@ -89,7 +89,7 @@ export default {
     methods: {
         getData(chartData, id) {
             // 设置连线样式
-            let lineColor = 'rgba(255, 68, 68, 1)';
+            let lineColor = '#959595';
             chartData.links.forEach(v => {
                 if (v.tip.split(',').length > 5) {
                     v.lineStyle = {normal: {color: lineColor, width: 10}};

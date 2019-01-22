@@ -228,12 +228,12 @@ export default {
             switch (String(index)) {
             case '0':
                 // get chart2
-                let currentId = params['data']['id'];
+                let currentId = params['data']['uid'];
                 if (this.selectAccountGroupList.indexOf(currentId) > -1) { // 取消选中
                     // mark 样式
                     let data = this.$refs['chartComponent1'][0].chartOptions['series'][0]['data'];
                     data.forEach(v => {
-                        if (v.id === currentId) {
+                        if (v.uid === currentId) {
                             v.itemStyle = {borderColor: 'transparent', borderWidth: 1};
                         }
                     });
@@ -247,7 +247,7 @@ export default {
                     // mark 样式
                     let data = this.$refs['chartComponent1'][0].chartOptions['series'][0]['data'];
                     data.forEach(v => {
-                        if (v.id === currentId) {
+                        if (v.uid === currentId) {
                             v.itemStyle = {borderColor: '#ffff00', borderWidth: 2};
                         }
                     });
@@ -349,7 +349,7 @@ export default {
                         return i.acctId === v.name;
                     });
                     v.custIds = index > -1 ? allLeaf[index]['custIds'].join(',') : '';
-                    v.id = index > -1 ? allLeaf[index]['id'] : '';
+                    v.uid = index > -1 ? allLeaf[index]['id'] : '';
                 });
             }
             this.$store.commit('saveChartTableData', {data: kmap, index: id || this.tabIndex || this.$store.getters.getTabIndex});

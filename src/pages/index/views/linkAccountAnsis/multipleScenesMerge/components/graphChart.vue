@@ -201,7 +201,7 @@ export default {
                 return {name: v.label};
             });
             this.chartOptions.series[0]['categories'].unshift({name: ''}); // 处理checkbox的code从1开始的问题。
-            let lineColor = 'rgba(255, 68, 68, 1)';
+            let lineColor = '#959595';
             val.links.forEach(v => {
                 if (v.intersectionRatio <= 0.5) {
                     v.lineStyle = {normal: {color: lineColor, width: 2, type: 'dashed'}};

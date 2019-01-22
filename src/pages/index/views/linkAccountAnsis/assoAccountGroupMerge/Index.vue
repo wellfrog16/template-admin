@@ -22,6 +22,9 @@
         <div style="text-align:center; margin: 20px 0;">
             <el-button size="small" type="primary" style="width: 100px;" @click="nextStep">下一步</el-button>
         </div>
+        <!-- <div>
+            <el-button v-for="(c, i) in color" :key="i" :style="{'background': c}">测试</el-button>
+        </div> -->
     </div>
 </template>
 <script>
@@ -38,6 +41,25 @@ export default {
     components: {sceneType1, sceneType2, sceneType3, sceneType4, ResultSelectComponent},
     data() {
         return {
+            color: [
+                '#f8f400',
+                '#40f3d6',
+                '#ce20ff',
+                '#13ce34',
+                '#ff8a00',
+                '#e3007b',
+                '#1929b3',
+                '#b69913',
+                '#00709e',
+                '#006624',
+                '#4f1692',
+                '#b9cc87',
+                '#ffabf3',
+                '#f3253c',
+                '#18414c',
+                '#dbef09',
+                '#791e06',
+                '#09beef'],
             fullLoading: false,
             sceneCommitParams: {},
             activeTab: '0',
