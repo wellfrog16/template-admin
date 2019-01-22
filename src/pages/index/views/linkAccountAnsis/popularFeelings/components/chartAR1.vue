@@ -50,12 +50,12 @@
                 :propsChartHeight="430">
             </echarts-common>
             <!--<div slot="content" :class="$style.step_tag">-->
-                <!--<el-steps :active="1" align-center finish-status="success">-->
-                    <!--<el-stap v-for="stepss in stepsOptions" :title="stepss.title" :description="stepss.name"></el-stap>-->
-                    <!--&lt;!&ndash;<el-step title="步骤 1" description="这是一段很长很长很长的描述性文字"></el-step>&ndash;&gt;-->
-                    <!--&lt;!&ndash;<el-step title="步骤 2" description="这是一段很长很长很长的描述性文字"></el-step>&ndash;&gt;-->
-                    <!--&lt;!&ndash;<el-step title="步骤 3" description="这段就没那么长了"></el-step>&ndash;&gt;-->
-                <!--</el-steps>-->
+            <!--<el-steps :active="1" align-center finish-status="success">-->
+            <!--<el-stap v-for="stepss in stepsOptions" :title="stepss.title" :description="stepss.name"></el-stap>-->
+            <!--&lt;!&ndash;<el-step title="步骤 1" description="这是一段很长很长很长的描述性文字"></el-step>&ndash;&gt;-->
+            <!--&lt;!&ndash;<el-step title="步骤 2" description="这是一段很长很长很长的描述性文字"></el-step>&ndash;&gt;-->
+            <!--&lt;!&ndash;<el-step title="步骤 3" description="这段就没那么长了"></el-step>&ndash;&gt;-->
+            <!--</el-steps>-->
             <!--</div>-->
         </div>
     </s-card>
