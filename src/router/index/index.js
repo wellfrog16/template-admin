@@ -148,6 +148,40 @@ const Index = {
                     component: resolve => require(['@/pages/index/views/linkAccountAnsis/multipleScenesMerge/Index.vue'], resolve)
                 }
             ]
+        },
+        {
+            path: '/',
+            noLink: true,
+            meta: {
+                scrollTop: true,
+                title: '异常波动'
+            },
+            name: 'popularFeelings1',
+            icon: 'menu-fix-icon fa fa-address-book',
+            component: LinkAccountAnsis
+        },
+        {
+            path: '',
+            noLink: true,
+            meta: {
+                scrollTop: true,
+                title: '舆情异常识别'
+            },
+            name: 'popularFeeling',
+            icon: 'menu-fix-icon fa fa-address-book',
+            component: LinkAccountAnsis,
+            children: [
+                {
+                    meta: {
+                        scrollTop: true,
+                        title: '异常识别'
+                    },
+                    path: '/popularFeelings',
+                    name: 'popularFeelings',
+                    icon: 'menu-fix-icon fa fa-location-arrow',
+                    component: resolve => require(['@/pages/index/views/linkAccountAnsis/popularFeelings/Index.vue'], resolve)
+                }
+            ]
         }
     ]
 };

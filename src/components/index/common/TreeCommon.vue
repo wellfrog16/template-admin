@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import {getAreaTreeList} from '@/api/common/index.js';
+import {getAreaTreeList} from '@/api/common/index';
 export default {
     name: 'selector-dealer',
     props: {

@@ -53,10 +53,10 @@ export default {
             chartOptions: {
                 backgroundColor: ['rgba(7, 39, 89)'],
                 color: [
-                    '#00709e',
                     '#f8f400',
-                    '#ac10ce',
                     '#ff0000',
+                    '#00709e',
+                    '#ac10ce',
                     '#00a8ec',
                     '#ff8a00',
                     '#006624',

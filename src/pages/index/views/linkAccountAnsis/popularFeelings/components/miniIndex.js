@@ -2,36 +2,58 @@
 export default {
     data() {
         return {
+            stepsOptions: [
+                {
+                    idName: '0',
+                    name: '步骤 ',
+                    title: '步骤 1'
+                },
+                {
+                    idName: '1',
+                    name: '步骤 ',
+                    title: '步骤 2'
+                },
+                {
+                    idName: '2',
+                    name: '步骤 ',
+                    title: '步骤 3'
+                },
+                {
+                    idName: '3',
+                    name: '步骤 ',
+                    title: '步骤 4'
+                }
+            ],
             timeWindowOptions: [
                 // 1 秒、5 秒、1 分 钟、10 分钟，还是 1 天、5 天、1 个月、1
                 {
                     idName: '0',
-                    name: '1 秒'
+                    name: '1 分钟'
                 },
                 {
                     idName: '1',
-                    name: '10 分钟'
+                    name: '5 分钟'
                 },
                 {
                     idName: '2',
-                    name: '1 分 钟'
+                    name: '10 分 钟'
                 },
                 {
                     idName: '3',
                     name: '1 天'
                 },
-                {
-                    idName: '4',
-                    name: '5 天'
-                },
-                {
-                    idName: '5',
-                    name: '1 个月'
-                },
-                {
-                    idName: '6',
-                    name: '1年'
-                },
+                // {
+                //     idName: '4',
+                //     name: '5 天'
+                // },
+                // {
+                //     idName: '5',
+                //     name: '1 个月'
+                // },
+                // {
+                //     idName: '6',
+                //     name: '1年'
+                // },
             ],
             ruleForm: {
                 timeWindow: '',

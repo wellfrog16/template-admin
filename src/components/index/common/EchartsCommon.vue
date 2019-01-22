@@ -26,6 +26,10 @@ export default {
         loading: {
             type: Boolean,
             default: false
+        },
+        noClearFlag: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
@@ -43,7 +47,9 @@ export default {
             if (mark !== 'init') {
                 //   this.gfnEchartShowLoading(this.echart)
             }
-            this.echart.clear();
+            if (!this.noClearFlag) {
+                this.echart.clear();
+            }
             this.echart.setOption(this.defaultOption);
             window.onresize = this.echart.resize;
             /* 解除绑定事件 */
