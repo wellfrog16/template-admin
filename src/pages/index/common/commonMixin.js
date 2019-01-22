@@ -47,7 +47,6 @@ export default {
                             return i.acctId === v.name;
                         });
                         const {contAddrSame, zipCdSame, elecEailSame} = chartDataList[index];
-                        console.log(chartDataList[index]);
                         if (contAddrSame === '是' || zipCdSame === '是' || elecEailSame === '是') {
                             v.category = 0;
                         } else {
@@ -55,7 +54,6 @@ export default {
                         }
                     });
                 }
-                console.log(chartData);
                 this.$refs['chartComponent1'] && this.$refs['chartComponent1'][0] && this.$refs['chartComponent1'][0].getData(chartData, id);
             });
         },

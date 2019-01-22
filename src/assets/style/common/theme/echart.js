@@ -24,7 +24,8 @@ export const echartsDefault = {
     color: [
         '#f8f400',
         '#40f3d6',
-        '#f77fe0',
+        '#ce20ff',
+        // '#f77fe0',
         '#13ce34',
         '#ff8a00',
         '#e3007b',

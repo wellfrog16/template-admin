@@ -309,7 +309,7 @@ export default {
                 }
             }
         },
-        handleEchartDblClickEvent(params, index) {
+        handleEchartClickEvent(params, index) {
             switch (String(index)) {
             case '0':
                 // get chart2
@@ -334,12 +334,15 @@ export default {
                     // table勾选状态
                     this.selectAccountGroupList.push(currentId);
                 }
-                this.getChart1(1, this.$refs['chartComponent1'][0].chartOptions);
+                this.getChart1(this.$refs['chartComponent1'][0].chartOptions, 1);
                 this.$refs['self-tree-table'].$refs['tree-table'].setCheckedKeys(this.selectAccountGroupList);
+                setTimeout(() => {
+                    this.$refs['self-tree-table'].handleChecked(this.selectAccountGroupList);
+                }, 500);
                 break;
             }
         },
-        handleEchartClickEvent(params, index) {
+        handleEchartDblClickEvent(params, index) {
             this.$store.commit('saveClickTab', false);
             switch (String(index)) {
             case '0':
