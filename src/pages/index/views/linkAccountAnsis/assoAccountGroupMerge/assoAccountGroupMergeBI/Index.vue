@@ -229,37 +229,47 @@ export default {
                 });
             }
         },
-        handleEchartDblClickEvent(params, index) {
+        handleEchartClickEvent(params, index) {
             switch (String(index)) {
             case '0':
                 // get chart2
-                let currentId = params['data'][6];
-                let markPointData = this.$refs['chartComponent1'][0].chartOptions['series'][0]['markPoint']['data'];
+                let currentId = params['data']['id'];
                 if (this.selectAccountGroupList.indexOf(currentId) > -1) { // 取消选中
-                    // markPoint 样式
-                    this.$refs['chartComponent1'][0].chartOptions['series'][0]['markPoint']['data'] = markPointData.filter(v => {
-                        return v.coord[0] !== params['data'][0] && v.coord[1] !== params['data'][1];
+                    // mark 样式
+                    let data = this.$refs['chartComponent1'][0].chartOptions['series'][0]['data'];
+                    data.forEach(v => {
+                        if (v.id === currentId) {
+                            v.itemStyle = {borderColor: 'transparent', borderWidth: 1};
+                        }
                     });
+                    this.$refs['chartComponent1'][0].chartOptions['series'][0]['data'] = data;
                     this.$store.commit('savechart1', {data: this.$refs['chartComponent1'][0].chartOptions, index: params.id || this.tabIndex || this.$store.getters.getTabIndex});
                     // table勾选状态
                     this.selectAccountGroupList = this.selectAccountGroupList.filter(v => {
                         return v !== currentId && this.childrenMap[currentId].indexOf(v) === -1;
                     });
                 } else { // 选中
-                    // markPoint 样式
-                    this.$refs['chartComponent1'][0].chartOptions['series'][0]['markPoint']['data'].push({
-                        coord: [params['data'][0], params['data'][1]]
+                    // mark 样式
+                    let data = this.$refs['chartComponent1'][0].chartOptions['series'][0]['data'];
+                    data.forEach(v => {
+                        if (v.id === currentId) {
+                            v.itemStyle = {borderColor: '#ffff00', borderWidth: 2};
+                        }
                     });
+                    this.$refs['chartComponent1'][0].chartOptions['series'][0]['data'] = data;
                     this.$store.commit('savechart1', {data: this.$refs['chartComponent1'][0].chartOptions, index: params.id || this.tabIndex || this.$store.getters.getTabIndex});
                     // table勾选状态
                     this.selectAccountGroupList.push(currentId);
                 }
-                this.getChart1(1, this.$refs['chartComponent1'][0].chartOptions);
+                this.getChart1(this.$refs['chartComponent1'][0].chartOptions, 1);
                 this.$refs['self-tree-table'].$refs['tree-table'].setCheckedKeys(this.selectAccountGroupList);
+                setTimeout(() => {
+                    this.$refs['self-tree-table'].handleChecked(this.selectAccountGroupList);
+                }, 500);
                 break;
             }
         },
-        handleEchartClickEvent(params, index) {
+        handleEchartDblClickEvent(params, index) {
             this.$store.commit('saveClickTab', false);
             switch (String(index)) {
             case '0':
@@ -321,6 +331,33 @@ export default {
                 };
             }
             this.mainTableData = this.sortDataByAcctIdCommon(resultSetList);
+            let allLeaf = [];
+            this.mainTableData.forEach(v => {
+                if (v.children && v.children.length) {
+                    let custIds = v.children.map(v => {
+                        return v.custId;
+                    });
+                    custIds = [...new Set(custIds)];
+                    let childIds = v.children.map(v => {
+                        return v.id;
+                    });
+                    allLeaf.push({
+                        acctId: v.acctId,
+                        custIds: custIds,
+                        id: v.id
+                    });
+                    this.childrenMap[v.id] = childIds;
+                }
+            });
+            if (kmap && kmap.nodes) {
+                kmap.nodes.forEach(v => {
+                    let index = allLeaf.findIndex(i => {
+                        return i.acctId === v.name;
+                    });
+                    v.custIds = index > -1 ? allLeaf[index]['custIds'].join(',') : '';
+                    v.id = index > -1 ? allLeaf[index]['id'] : '';
+                });
+            }
             this.$store.commit('saveChartTableData', {data: kmap, index: id || this.tabIndex || this.$store.getters.getTabIndex});
             this.$store.commit('saveMainTableData', {data: resultSetList, index: id || this.tabIndex || this.$store.getters.getTabIndex});
             this.updateTableData(chartDataList, 0, id);

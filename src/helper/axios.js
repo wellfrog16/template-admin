@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {Loading, Notification} from 'element-ui';
+import {Loading, Notification, MessageBox} from 'element-ui';
 import config from '@/config';
 import store from '../store';
 // import router from '../router';
@@ -49,6 +49,11 @@ const instance = url => {
                     Notification.success({
                         message: data.message
                     });
+                    if (data.message.indexOf('筛选2000') > -1) {
+                        MessageBox.alert('返回结果过大，为提高操作体验，已自动筛选前2000条数据', '警告', {
+                            confirmButtonText: '确定'
+                        });
+                    }
                 } else {
                     // 处理登录接口
                     if (data.access_token) {
