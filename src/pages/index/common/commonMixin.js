@@ -45,8 +45,8 @@ export default {
                         let index = chartDataList.findIndex(i => {
                             return i.acctId === v.name;
                         });
-                        const {contAddrSame, zipCdSame, elecEailSame} = chartDataList[index];
-                        if (contAddrSame === '是' || zipCdSame === '是' || elecEailSame === '是') {
+                        const {contTelSame, idtfyCertSame, contAddrSame} = chartDataList[index];
+                        if (contTelSame === '是' || idtfyCertSame === '是' || contAddrSame === '是') {
                             v.category = 0;
                         } else {
                             v.category = 1;
