@@ -38,7 +38,7 @@ export default {
             resData5,
             loading: false,
             chartOptions: {
-                color: String(this.sceneType) === '3' ? ['#f77fe0', '#00ff55'] : ['#ff0000', '#00ff55'],
+                color: String(this.sceneType) === '3' ? ['#ce20ff', '#a3fbed'] : ['#00ff55', '#a3fbed'],
                 legend: {
                     data: [],
                     itemGap: 20,
@@ -89,7 +89,7 @@ export default {
     methods: {
         getData(chartData, id) {
             // 设置连线样式
-            let lineColor = 'rgba(255, 68, 68, 1)';
+            let lineColor = '#959595';
             chartData.links.forEach(v => {
                 if (v.tip.split(',').length > 5) {
                     v.lineStyle = {normal: {color: lineColor, width: 10}};

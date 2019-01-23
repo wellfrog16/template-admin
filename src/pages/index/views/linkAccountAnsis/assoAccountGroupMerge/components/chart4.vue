@@ -8,6 +8,7 @@ import EchartsCommon from '@/components/index/common/EchartsCommon';
 // import {respData4} from './constants';
 // import {getChart4Data} from '@/api/dataAnsis/assoAccountGroupMerge';
 import _ from 'lodash';
+import {echartsDefault} from '@/assets/style/common/theme/echart';
 
 export default {
     components: {EchartsCommon},
@@ -120,18 +121,7 @@ export default {
             let {mainData, buysail, id} = resData;
             let lineData = [];
             let timeData = [];
-            let colors = [
-                '#00709e',
-                '#ac10ce',
-                '#ff0000',
-                '#13ce34',
-                '#ff8a00',
-                '#006624',
-                '#e3007b',
-                '#1929b3',
-                '#b69913',
-                '#f8f400'
-            ];
+            let colors = echartsDefault;
             let buy = {};
             let sail = {};
             let buyArray = buysail.filter(v => {

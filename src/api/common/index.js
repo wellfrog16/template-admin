@@ -32,3 +32,7 @@ export const getRegeneratingData = params => {
 export const getInfoByResultId = (resultIds, resultType) => {
     return post(`${requestPrefix}/getRegeneratingResults`, {resultIds: resultIds, resultType: resultType});
 };
+// 通过结果集id查询合约代码，起止日期等
+export const deleteResultById = resultIds => {
+    return post(`${requestPrefix}/resultSet/del`, {resultIds});
+};

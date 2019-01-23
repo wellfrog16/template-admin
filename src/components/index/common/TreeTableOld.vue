@@ -1,6 +1,11 @@
 /* 树形table */
 <template>
     <div v-loading="loading">
+        <div style="padding-bottom: 15px; text-align: center; color: #e6a23c;">
+            <span style="margin-right: 20px;">高级筛选：</span>
+            <el-checkbox v-model="checked" @change="handleChecked()">只显示已选</el-checkbox>
+            <el-button size="mini" type="warning" @click="handleClearChecked" style="margin-left: 20px;">清除已选</el-button>
+        </div>
         <div style="overflow: auto;" class="asso-scrollbar-b">
             <div :style="`width: ${propsWidth}px; display: flex; text-align: center; padding-left: 55px; height: 36px; line-height: 36px;`">
                 <div v-for="(item, index) in columns" :key="index" style="flex: 1;">
@@ -21,7 +26,7 @@
                     class="tree-table asso-scrollbar"
                     show-checkbox
                     node-key="id"
-                    :data="tableData"
+                    :data="tableDataModel"
                     :default-expanded-keys="[0]"
                     :filter-node-method="filterMethods"
                     @check-change="handleTreeCheckedChange"
@@ -57,7 +62,11 @@ export default {
             isIndeterminate: false,
             checkedAll: false,
             treeData: [],
-            propsWidth: 2500
+            propsWidth: 2500,
+            checked: false,
+            tableDataModel: [],
+            selectTemList: [],
+            allData: []
         };
     },
     components: {custIdColumn},
@@ -91,6 +100,8 @@ export default {
             this.isIndeterminate = false;
         },
         tableData(val) {
+            this.tableDataModel = val;
+            this.allData = val;
             this.dealTreeData();
             let $ = this.$jquery;
             setTimeout(() => {
@@ -104,7 +115,7 @@ export default {
     computed: {
         allArray() {
             let allArray = [];
-            this.tableData.forEach(v => {
+            this.tableDataModel.forEach(v => {
                 if (v.children) {
                     allArray = allArray.concat(v.children);
                 }
@@ -113,6 +124,36 @@ export default {
         }
     },
     methods: {
+        handleClearChecked() {
+            this.checked = false;
+            this.selectTemList = [];
+            this.handleChecked();
+            this.$refs['tree-table'].setCheckedKeys([]);
+        },
+        handleChecked(selectKeys) {
+            let checkedKeys = [];
+            if (selectKeys && selectKeys.length) {
+                checkedKeys = this.allData.filter(v => {
+                    return selectKeys.indexOf(v.id) > -1;
+                });
+            }
+            if (this.checked) {
+                let checkedNodes = checkedKeys.length ? checkedKeys : this.$refs['tree-table'].getCheckedNodes();
+                this.selectTemList = checkedNodes.filter(v => {
+                    return !!v.children;
+                });
+                this.tableDataModel = this.selectTemList;
+            } else {
+                this.tableDataModel = this.allData;
+            }
+            let $ = this.$jquery;
+            setTimeout(() => {
+                this.propsWidth = 165 * (this.columns.length) + 50;
+                if (this.propsWidth) {
+                    $('.tree-table').find('.el-tree-node').css('width', this.propsWidth + 70 + 'px');
+                }
+            }, 1000);
+        },
         handleCheckAll(val) {
             if (val) {
                 this.$refs['tree-table'].setCheckedNodes(this.allArray);
@@ -126,6 +167,7 @@ export default {
             let checkedCount = this.$refs['tree-table'].getCheckedNodes(true).length;
             this.isIndeterminate =
                 checkedCount > 0 && checkedCount < this.allArray.length;
+            this.$refs['tree-table'].setCheckedKeys(this.$refs['tree-table'].getCheckedKeys());
         },
         filterMethods(value, data) {
             if (!value) return true;

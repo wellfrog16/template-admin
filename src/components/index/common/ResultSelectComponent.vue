@@ -5,11 +5,15 @@
             :key="item.resultId"
             :label="item.resultName"
             :value="item.resultId">
+            <span style="float: left;">{{ item.resultName }}</span>
+            <span style="float: right; color: #8492a6; font-size: 13px;">
+                <el-button size="mini" type="danger" @click="handleDelete(item)">删除</el-button>
+            </span>
         </el-option>
     </el-select>
 </template>
 <script>
-import {getTlsResultInfo} from '@/api/common';
+import {getTlsResultInfo, deleteResultById} from '@/api/common';
 export default {
     props: {
         resultIdProps: {
@@ -57,6 +61,19 @@ export default {
             }).catch(e => {
                 this.loading = false;
             });
+        },
+        handleDelete(item) {
+            this.$confirm(`确定删除'${item.resultName}'?`, '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            })
+                .then(() => {
+                    deleteResultById(item.resultId).then(() => {
+                        this.resultId = '';
+                        this.resultList.splice(this.resultList.findIndex(f => { return f.resultId === item.resultId; }), 1);
+                    });
+                });
         }
     },
     mounted() {
