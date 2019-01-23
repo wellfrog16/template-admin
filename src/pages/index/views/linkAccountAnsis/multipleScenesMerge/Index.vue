@@ -162,7 +162,16 @@ export default {
                 this.blocks[3]['loading'] = false;
             });
         },
-        nextStep() {}
+        nextStep() {
+            this.$confirm('离开本页面信息将丢失，是否确定离开?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            })
+                .then(() => {
+                    this.$router.push({name: 'abnormity'});
+                });
+        }
     }
 };
 </script>

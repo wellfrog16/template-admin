@@ -38,7 +38,7 @@ export default {
             resData5,
             loading: false,
             chartOptions: {
-                color: String(this.sceneType) === '3' ? ['#ce20ff', '#a3fbed'] : ['#00ff55', '#a3fbed'],
+                color: String(this.sceneType) === '3' ? ['#ce20ff', '#e7b0ea'] : ['#00ff55', '#a3fbed'],
                 legend: {
                     data: [],
                     itemGap: 20,

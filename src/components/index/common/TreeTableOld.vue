@@ -90,6 +90,10 @@ export default {
         loading: {
             type: Boolean,
             default: false
+        },
+        clearAllSelected: {
+            type: Boolean,
+            default: false
         }
     },
     watch: {
@@ -129,6 +133,9 @@ export default {
             this.selectTemList = [];
             this.handleChecked();
             this.$refs['tree-table'].setCheckedKeys([]);
+            if (this.clearAllSelected) {
+                this.$emit('handleClearAll');
+            }
         },
         handleChecked(selectKeys) {
             let checkedKeys = [];

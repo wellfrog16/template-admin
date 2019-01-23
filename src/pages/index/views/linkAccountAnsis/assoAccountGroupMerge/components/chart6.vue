@@ -1,12 +1,23 @@
 <template>
-    <div>
+    <div class="scene2-1">
         <echarts-common :loading="loading" :ref="`chart${index}`" :domId="`chart${index}`" :defaultOption="chartOptions" :propsChartHeight="300" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></echarts-common>
+        <div class="select-container">
+            <div v-for="(item, key, index) in options" :key="index" v-show="showSelectList">
+                <span>{{ key }}:</span>
+                <el-select v-model="selectModes[index]" @change="handleSelectChange(key, index)">
+                    <el-option v-for="(it, i) in item" :key="i" :label="it" :value="it">
+                    </el-option>
+                </el-select>
+            </div>
+            <div style="cursor: pointer; padding: 10px; color: #f5ff00; text-align: right; font-size: 18px;" class="blink" @click="showSelectList = !showSelectList">
+                <i v-if="showSelectList" class="el-icon-d-arrow-right"></i>
+                <i v-else class="el-icon-d-arrow-left"></i>
+            </div>
+        </div>
     </div>
 </template>
 <script>
 import EchartsCommon from '@/components/index/common/EchartsCommon';
-import {resData5} from './constants.js';
-import _ from 'lodash';
 export default {
     components: {EchartsCommon},
     props: {
@@ -30,79 +41,122 @@ export default {
         }
     },
     data() {
-        let symbolSize = data => {
-            let len = data.split(',').length;
-            return len > 5 ? 35 : len < 1 ? 8 : len * 7;
+        let schema = [
+            {name: 'name', index: 0},
+            {name: 'group', index: 1},
+            {name: 'protein', index: 2},
+            {name: 'calcium', index: 3},
+            {name: 'sodium', index: 4},
+            {name: 'id', index: 5}
+        ];
+        let fieldIndices = schema.reduce(function(obj, item) {
+            obj[item.name] = item.index;
+            return obj;
+        }, {});
+        let fieldNames = schema.map(item => {
+            return item.name;
+        });
+        fieldNames = fieldNames.slice(2, fieldNames.length - 1);
+        console.log(fieldIndices);
+        let config = {
+            xAxis3D: 'protein',
+            yAxis3D: 'calcium',
+            zAxis3D: 'sodium'
         };
+        let configParameters = {};
+        ['xAxis3D', 'yAxis3D', 'zAxis3D'].forEach(function(fieldName) {
+            configParameters[fieldName] = fieldNames;
+        });
+        let data = [['name1', 'g1', 1, 3, 4, 0], ['name2', 'g2', 4, 5, 11, 1]];
+
         return {
-            resData5,
+            config,
+            fieldIndices,
+            data,
             loading: false,
+            showSelectList: true,
+            selectModes: ['protein', 'calcium', 'sodium'],
+            options: configParameters,
             chartOptions: {
-                tooltip: {
-                    formatter: params => {
-                        if (params.dataType === 'edge') { // link
-                            return '客户编号交集：' + params.data.tip || '';
-                        } else if (params.dataType === 'node') {
-                            return '客户编号: ' + params.value || '';
+                tooltip: {},
+                xAxis3D: {
+                    name: config.xAxis3D,
+                    type: 'value'
+                },
+                yAxis3D: {
+                    name: config.yAxis3D,
+                    type: 'value'
+                },
+                zAxis3D: {
+                    name: config.zAxis3D,
+                    type: 'value'
+                },
+                grid3D: {
+                    environment: 'rgba(0, 0, 0, 0.2)',
+                    axisLine: {
+                        lineStyle: {
+                            color: '#fff'
                         }
                     },
-                    padding: 10,
-                    backgroundColor: '#222',
-                    borderColor: '#777',
-                    borderWidth: 1,
-                    extraCssText: 'width:200px; white-space:pre-wrap; word-break: break-all',
+                    axisPointer: {
+                        lineStyle: {
+                            color: '#ffbd67'
+                        }
+                    },
+                    viewControl: {
+                        // autoRotate: true
+                        // projection: 'orthographic'
+                    }
                 },
-                animation: false,
-                series: [
-                    {
-                        name: '关系图谱',
-                        type: 'graph',
-                        layout: 'force',
-                        data: [],
-                        links: [],
-                        categories: [],
-                        draggable: true,
-                        symbolSize: symbolSize,
-                        focusNodeAdjacency: true,
-                        roam: true,
-                        label: {
-                            normal: {
-                                position: 'right'
-                            }
-                        },
-                        force: {
-                            repulsion: 100
+                series: [{
+                    name: '聚类',
+                    type: 'scatter3D',
+                    data: data.map(function(item, idx) {
+                        return [
+                            item[fieldIndices[config.xAxis3D]],
+                            item[fieldIndices[config.yAxis3D]],
+                            item[fieldIndices[config.zAxis3D]],
+                            idx
+                        ];
+                    }),
+                    symbolSize: 12,
+                    // symbol: 'triangle',
+                    itemStyle: {
+                        color: '#40f3d6',
+                        borderWidth: 1,
+                        borderColor: 'rgba(255,255,255,0.8)'
+                    },
+                    emphasis: {
+                        itemStyle: {
+                            color: '#fff'
                         }
                     }
-                ]
+                }]
             }
         };
     },
     methods: {
-        getData(chartData, id) {
-            // 设置连线样式
-            let lineColor = '#959595';
-            chartData.links.forEach(v => {
-                if (v.tip.split(',').length > 5) {
-                    v.lineStyle = {normal: {color: lineColor, width: 10}};
-                } else if (v.tip.split(',').length > 3) {
-                    v.lineStyle = {normal: {color: lineColor, width: 5}};
-                } else {
-                    v.lineStyle = {normal: {color: lineColor, width: 1}};
-                }
+        handleSelectChange(key, index) {
+            let value = this.selectModes[index];
+            let data = this.data.map((item, idx) => {
+                return [
+                    item[this.fieldIndices[this.selectModes[0]]],
+                    item[this.fieldIndices[this.selectModes[1]]],
+                    item[this.fieldIndices[this.selectModes[2]]],
+                    idx
+                ];
             });
-            // 散点图sort
-            this.chartOptions['series'][0]['links'] = chartData['links'];
-            this.chartOptions['series'][0]['data'] = chartData['nodes'];
+            this.chartOptions[key] = {name: value};
+            this.chartOptions.series[0].data = data;
             console.log(this.chartOptions);
-            this.$store.commit('savechart1', {data: this.chartOptions, index: id || this.tabIndex || this.$store.getters.tabIndex});
-            // select max
-            // this.$emit('updateAccountGroupAndCustIds', selectMax ? selectMax.acctId : '', selectMax ? selectMax.custIds.split(',') : []);
-            this.$emit('updateAccountGroupAndCustIds', chartData['nodes'][0]['name'], chartData['nodes'][0]['value'].split(','));
-            this.$refs['chart0'] && this.$refs['chart0'].initChart();
+            this.$refs['chart0'].initChart();
         },
-        sortDataByAcctIdCommon(data) {
-            return _.sortBy(data, [item => { return item.acctId; }]);
+        getData(chartData, id) {
+            console.log(this.chartOptions);
+            // this.$store.commit('savechart1', {data: this.chartOptions, index: id || this.tabIndex || this.$store.getters.tabIndex});
+            // select max
+            // this.$emit('updateAccountGroupAndCustIds', chartData['nodes'][0]['name'], chartData['nodes'][0]['value'].split(','));
+            this.$refs['chart0'] && this.$refs['chart0'].initChart();
         },
         initChart(data, flag) {
             if (data) {
@@ -115,9 +169,11 @@ export default {
             if (!flag) {
                 this.$emit('getBlock2Data');
                 this.$emit('getBlock3Data');
+                this.$emit('getBlock4Data');
             }
         },
         handleEchartClickEvent(val) {
+            console.log(val);
             this.$emit('handleEchartClickEvent', val, this.index);
         },
         handleEchartDblClickEvent(val) {
@@ -125,6 +181,29 @@ export default {
         }
     },
     mounted() {
+        this.getData();
     }
 };
 </script>
+<style lang="less" scoped>
+    .scene2-1 {
+        position: relative;
+        .select-container {
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+
+        @keyframes blink {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0.3;
+            }
+        }
+        .blink {
+            animation: blink 1.5s infinite;
+        }
+    }
+</style>

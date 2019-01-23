@@ -43,7 +43,7 @@
                     <el-row :gutter="20">
                         <el-col :span="21">
                             <div>
-                                <tree-table ref="self-tree-table" :filterText="searchText" :columns="mainTableColumnsRL" :tableData="mainTableData" @updateCheckedList="updateCheckedList"></tree-table>
+                                <tree-table ref="self-tree-table" :filterText="searchText" :columns="mainTableColumnsRL" :tableData="mainTableData" :clearAllSelected="true" @updateCheckedList="updateCheckedList" @handleClearAll="handleClearAll"></tree-table>
                             </div>
                         </el-col>
                         <el-col :span="3">
@@ -124,6 +124,18 @@ export default {
         };
     },
     methods: {
+        handleClearAll() {
+            // mark 样式
+            let data = this.$refs['chartComponent1'][0].chartOptions['series'][0]['data'];
+            data.forEach(v => {
+                v.itemStyle = {borderColor: 'transparent', borderWidth: 1};
+            });
+            this.$refs['chartComponent1'][0].chartOptions['series'][0]['data'] = data;
+            this.$store.commit('savechart1', {data: this.$refs['chartComponent1'][0].chartOptions, index: this.tabIndex || this.$store.getters.getTabIndex});
+            // table勾选状态
+            this.selectAccountGroupList = [];
+            this.getChart1(this.$refs['chartComponent1'][0].chartOptions, 1);
+        },
         updateAccountGroupAndCustIds(groupId, custIds) {
             this.currentAccountGroupId = groupId;
             this.currentCustIds = custIds;
