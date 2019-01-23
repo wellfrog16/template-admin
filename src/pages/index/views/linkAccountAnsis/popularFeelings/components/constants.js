@@ -1570,7 +1570,7 @@ export let echartsData111111111 = {
             'crudeDealTime': '2019-01-15',
             'realPrice': 419.200,
             'realAveragePrice': 417.124,
-            'realUpsAndDowns': 894.000,
+            'realUpsAndDowns': 194.000,
             'realMakeBargain': 56100.000,
             'quantity': 415
         }, {
@@ -1580,7 +1580,7 @@ export let echartsData111111111 = {
             'crudeDealTime': '2019-01-15',
             'realPrice': 419.100,
             'realAveragePrice': 417.155,
-            'realUpsAndDowns': 1200.000,
+            'realUpsAndDowns': 100.000,
             'realMakeBargain': 56012.000,
             'quantity': 415
         }, {
@@ -1590,7 +1590,7 @@ export let echartsData111111111 = {
             'crudeDealTime': '2019-01-15',
             'realPrice': 419.100,
             'realAveragePrice': 417.180,
-            'realUpsAndDowns': 670.000,
+            'realUpsAndDowns': 270.000,
             'realMakeBargain': 56072.000,
             'quantity': 415
         }, {
@@ -1600,7 +1600,7 @@ export let echartsData111111111 = {
             'crudeDealTime': '2019-01-15',
             'realPrice': 419.000,
             'realAveragePrice': 417.202,
-            'realUpsAndDowns': 554.000,
+            'realUpsAndDowns': 254.000,
             'realMakeBargain': 56022.000,
             'quantity': 415
         }, {
@@ -1610,7 +1610,7 @@ export let echartsData111111111 = {
             'crudeDealTime': '2019-01-15',
             'realPrice': 419.100,
             'realAveragePrice': 417.221,
-            'realUpsAndDowns': 926.000,
+            'realUpsAndDowns': 326.000,
             'realMakeBargain': 55950.000,
             'quantity': 415
         }, {
@@ -1620,7 +1620,7 @@ export let echartsData111111111 = {
             'crudeDealTime': '2019-01-15',
             'realPrice': 418.800,
             'realAveragePrice': 417.244,
-            'realUpsAndDowns': 1230.000,
+            'realUpsAndDowns': 130.000,
             'realMakeBargain': 55954.000,
             'quantity': 415
         }, {
@@ -1630,7 +1630,7 @@ export let echartsData111111111 = {
             'crudeDealTime': '2019-01-15',
             'realPrice': 419.100,
             'realAveragePrice': 417.266,
-            'realUpsAndDowns': 890.000,
+            'realUpsAndDowns': 80.000,
             'realMakeBargain': 56040.000,
             'quantity': 415
         }, {
@@ -1640,7 +1640,7 @@ export let echartsData111111111 = {
             'crudeDealTime': '2019-01-15',
             'realPrice': 418.700,
             'realAveragePrice': 417.284,
-            'realUpsAndDowns': 924.000,
+            'realUpsAndDowns': 24.000,
             'realMakeBargain': 56078.000,
             'quantity': 415
         }, {
@@ -1650,7 +1650,7 @@ export let echartsData111111111 = {
             'crudeDealTime': '2019-01-15',
             'realPrice': 419.200,
             'realAveragePrice': 417.299,
-            'realUpsAndDowns': 940.000,
+            'realUpsAndDowns': 240.000,
             'realMakeBargain': 56198.000,
             'quantity': 415
         }, {
@@ -1660,7 +1660,7 @@ export let echartsData111111111 = {
             'crudeDealTime': '2019-01-15',
             'realPrice': 419.000,
             'realAveragePrice': 417.318,
-            'realUpsAndDowns': 782.000,
+            'realUpsAndDowns': 482.000,
             'realMakeBargain': 56248.000,
             'quantity': 415
         }, {
@@ -1670,7 +1670,7 @@ export let echartsData111111111 = {
             'crudeDealTime': '2019-01-15',
             'realPrice': 419.100,
             'realAveragePrice': 417.333,
-            'realUpsAndDowns': 604.000,
+            'realUpsAndDowns': 204.000,
             'realMakeBargain': 56282.000,
             'quantity': 415
         }, {
@@ -1680,7 +1680,7 @@ export let echartsData111111111 = {
             'crudeDealTime': '2019-01-15',
             'realPrice': 419.200,
             'realAveragePrice': 417.350,
-            'realUpsAndDowns': 592.000,
+            'realUpsAndDowns': 292.000,
             'realMakeBargain': 56262.000,
             'quantity': 415
         }, {
@@ -1690,7 +1690,7 @@ export let echartsData111111111 = {
             'crudeDealTime': '2019-01-15',
             'realPrice': 419.500,
             'realAveragePrice': 417.366,
-            'realUpsAndDowns': 724.000,
+            'realUpsAndDowns': 224.000,
             'realMakeBargain': 56212.000,
             'quantity': 415
         }, {
@@ -1700,7 +1700,7 @@ export let echartsData111111111 = {
             'crudeDealTime': '2019-01-15',
             'realPrice': 419.000,
             'realAveragePrice': 417.387,
-            'realUpsAndDowns': 814.000,
+            'realUpsAndDowns': 214.000,
             'realMakeBargain': 56276.000,
             'quantity': 415
         }, {
@@ -1710,7 +1710,7 @@ export let echartsData111111111 = {
             'crudeDealTime': '2019-01-15',
             'realPrice': 418.400,
             'realAveragePrice': 417.406,
-            'realUpsAndDowns': 1010.000,
+            'realUpsAndDowns': 310.000,
             'realMakeBargain': 56236.000,
             'quantity': 415
         }, {
@@ -1720,7 +1720,7 @@ export let echartsData111111111 = {
             'crudeDealTime': '2019-01-15',
             'realPrice': 418.800,
             'realAveragePrice': 417.424,
-            'realUpsAndDowns': 1010.000,
+            'realUpsAndDowns': 110.000,
             'realMakeBargain': 56334.000,
             'quantity': 415
         }, {

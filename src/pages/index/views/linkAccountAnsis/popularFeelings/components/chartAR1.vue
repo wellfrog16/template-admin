@@ -323,7 +323,15 @@ export default {
                         markArea: {
                             silent: false,
                             itemStyle: {
-                                color: '#222'
+                                // color: '#222',
+                                borderColor: 'rgba(0, 0, 0, 0.5)',
+                                borderWidth: '1',
+                                shadowColor: 'rgba(0, 0, 0, 0.5)',
+                                shadowBlur: 3,
+                                opacity: 0.9,
+                                shadowOffsetX: 2,
+                                shadowOffsetY: 3
+
                             },
                             data: [
                                 [
@@ -374,7 +382,7 @@ export default {
                         itemStyle: {
                             normal: {
                                 lineStyle: {
-                                    color: '#ff0000'
+                                    color: '#10ff82'
                                 }
                             }
                         },
