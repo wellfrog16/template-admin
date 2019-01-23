@@ -65,7 +65,7 @@
 import moment from 'moment';
 import MiniIndex from './miniIndex';
 import {echartsData1} from './constants';
-// import {postCrudeOilPrices} from '@/api/popularFeelings/anomalyRecognition';
+import {postCrudeOilPrices} from '@/api/popularFeelings/anomalyRecognition';
 import SCard from '@/components/index/common/SCard';
 import EchartsCommon from '@/components/index/common/EchartsCommon';
 import DialogAR1 from './dialogAR1';
@@ -135,64 +135,103 @@ export default {
                             // right: 'center', // right 的值可以是像 20 这样的具体像素值，可以是像 '20%' 这样相对于容器高宽的百分比。
                             // bottom: 'center', // bottom 的值可以是像 20 这样的具体像素值，可以是像 '20%' 这样相对于容器高宽的百分比
                         }
-                    },
-                    // {
-                    //     text: '5月8日，特朗普\n宣布美国正式退 \n出伊朗核协议',
-                    //     borderColor: '#fff',
-                    //     borderWidth: 1,
-                    //     textStyle: {
-                    //         color: '#fff',
-                    //         fontSize: 12
-                    //     },
-                    //     left: 'left',
-                    //     top: '70%'
-                    // },
-                    // {
-                    //     text: '10月16日，中东独立 \n媒体(中东跟)报道 \n披露了沙特记者哈苏 \n吉事件被杀的内幕',
-                    //     borderColor: '#fff',
-                    //     borderWidth: 1,
-                    //     textStyle: {
-                    //         color: '#fff',
-                    //         fontSize: 12
-                    //     },
-                    //     left: '22%',
-                    //     top: '70%'
-                    // },
-                    // {
-                    //     text: '10月8日，特朗普\n宣布美国正式退 \n出伊朗核协议',
-                    //     borderColor: '#fff',
-                    //     borderWidth: 1,
-                    //     textStyle: {
-                    //         color: '#fff',
-                    //         fontSize: 12
-                    //     },
-                    //     left: '50%',
-                    //     top: '70%'
-                    // },
-                    // {
-                    //     text: '9月8日，特朗普\n宣布美国正式退 \n出伊朗核协议',
-                    //     borderColor: '#fff',
-                    //     borderWidth: 1,
-                    //     textStyle: {
-                    //         color: '#fff',
-                    //         fontSize: 12
-                    //     },
-                    //     left: '74%',
-                    //     top: '70%'
-                    // }
+                    }
                 ],
                 grid: {
                     x: 30, // 左
                     x2: 40, // 右
                     y: 60, // 上
-                    // y2: 160 // 下
                     y2: 70 // 下
                 },
-                calculable: true,
+                // title: [
+                //     {
+                //         text: '', // 动态数据
+                //         // subtext: '副标题',
+                //         // left: 'center',
+                //         left: 'left',
+                //         itemGap: 10,
+                //         // left: '20%',
+                //         textStyle: {
+                //             // 文字颜色
+                //             color: '#fff',
+                //             // 字体风格,'normal','italic','oblique'
+                //             fontStyle: 'normal',
+                //             // 字体粗细 'normal','bold','bolder','lighter',100 | 200 | 300 | 400...
+                //             fontWeight: '100',
+                //             // 字体系列
+                //             fontFamily: 'sans-serif',
+                //             // 字体大小
+                //             fontSize: 12,
+                //             // padding: 45,
+                //             // margin: 40,
+                //             // left: 'center', // left 的值可以是像 20 这样的具体像素值，可以是像 '20%' 这样相对于容器高宽的百分比，也可以是 'left', 'center', 'right',如果 left 的值为'left', 'center', 'right'，组件会根据相应的位置自动对齐。
+                //             // top: 'center', // left 的值可以是像 20 这样的具体像素值，可以是像 '20%' 这样相对于容器高宽的百分比，也可以是 'left', 'center', 'right',如果 left 的值为'left', 'center', 'right'，组件会根据相应的位置自动对齐。
+                //             // right: 'center', // right 的值可以是像 20 这样的具体像素值，可以是像 '20%' 这样相对于容器高宽的百分比。
+                //             // bottom: 'center', // bottom 的值可以是像 20 这样的具体像素值，可以是像 '20%' 这样相对于容器高宽的百分比
+                //         }
+                //     },
+                //     {
+                //         text: '5月8日，特朗普\n宣布美国正式退 \n出伊朗核协议',
+                //         borderColor: '#fff',
+                //         borderWidth: 1,
+                //         textStyle: {
+                //             color: '#fff',
+                //             fontSize: 12
+                //         },
+                //         left: 'left',
+                //         top: '70%'
+                //     },
+                //     {
+                //         text: '10月16日，中东独立 \n媒体(中东跟)报道 \n披露了沙特记者哈苏 \n吉事件被杀的内幕',
+                //         borderColor: '#fff',
+                //         borderWidth: 1,
+                //         textStyle: {
+                //             color: '#fff',
+                //             fontSize: 12
+                //         },
+                //         left: '22%',
+                //         top: '70%'
+                //     },
+                //     {
+                //         text: '10月8日，特朗普\n宣布美国正式退 \n出伊朗核协议',
+                //         borderColor: '#fff',
+                //         borderWidth: 1,
+                //         textStyle: {
+                //             color: '#fff',
+                //             fontSize: 12
+                //         },
+                //         left: '50%',
+                //         top: '70%'
+                //     },
+                //     {
+                //         text: '9月8日，特朗普\n宣布美国正式退 \n出伊朗核协议',
+                //         borderColor: '#fff',
+                //         borderWidth: 1,
+                //         textStyle: {
+                //             color: '#fff',
+                //             fontSize: 12
+                //         },
+                //         left: '74%',
+                //         top: '70%'
+                //     }
+                // ],
+                // grid: {
+                //     x: 30, // 左
+                //     x2: 20, // 右
+                //     y: 60, // 上
+                //     y2: 160 // 下
+                // },
                 tooltip: {
                     borderColor: '#777',
                     borderWidth: 1,
                     trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross',
+                        label: {
+                            color: '#f8f400',
+                            backgroundColor: '#222'
+                        }
+                    },
                     position(pos, params, el, elRect, size) {
                         var obj = {top: 10};
                         obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]] = 30;
@@ -209,19 +248,28 @@ export default {
                 },
                 xAxis: {
                     type: 'category',
-                    boundaryGap: false,
-                    // 调整x轴的lable
-                    axisLabel: {
-                        textStyle: {
-                            fontSize: 12 // 字体
-                        }
-                    },
+                    // data: (function() {
+                    //     let now = new Date();
+                    //     let res = [];
+                    //     let len = 10;
+                    //     while (len--) {
+                    //         res.unshift(now.toLocaleTimeString().replace(/^\D*/, ''));
+                    //         now = new Date(now - 1000);
+                    //     }
+                    //     return res;
+                    // })(),
                     data: [],
                     axisLine: { // y轴
                         lineStyle: {
                             color: '#6ab2ec',
                             width: 1,
                         },
+                    },
+                    // 调整x轴的lable
+                    axisLabel: {
+                        textStyle: {
+                            fontSize: 12 // 让字体变小
+                        }
                     }
                 },
                 yAxis: [
@@ -229,12 +277,13 @@ export default {
                         name: '价格',
                         type: 'value',
                         position: 'left',
-                        min: value => {
-                            return value.min;
-                        },
-                        max: value => {
-                            return value.max;
-                        },
+                        // min: value => {
+                        //     return value.min;
+                        // },
+                        // max: value => {
+                        //     return value.max;
+                        // },
+                        // 控制网格线是否显示
                         splitLine: {
                             show: false,
                             //  改变轴线颜色
@@ -243,14 +292,11 @@ export default {
                                 color: ['#132a6e']
                             }
                         },
-                        axisLine: { // y轴
+                        // 设置轴线的属性
+                        axisLine: {
                             lineStyle: {
                                 color: '#6ab2ec',
-                                // width: 0
                             }
-                        },
-                        axisTick: { // y轴刻度线
-                            show: true,
                         },
                         axisLabel: {
                             formatter: '{value}'
@@ -273,20 +319,17 @@ export default {
                             lineStyle: {
                                 // 使用深浅的间隔色
                                 color: ['#132a6e']
-                                // width: 0
                             }
                         },
-                        axisLine: { // 设置y轴线的属性
+                        // 设置轴线的属性
+                        axisLine: {
                             lineStyle: {
                                 color: '#6ab2ec',
-                            },
-                        },
-                        axisTick: { // y轴刻度线
-                            show: true,
+                            }
                         },
                         axisLabel: {
                             formatter: '{value} %'
-                        },
+                        }
                     },
                 ],
                 dataZoom: [
@@ -302,11 +345,65 @@ export default {
                 series: [
                     {
                         name: '分时',
+                        // data: (function() {
+                        //     var res = [];
+                        //     var len = 10;
+                        //     while (len--) {
+                        //         res.push(Math.round(Math.random() * 1000));
+                        //     }
+                        //     return res; // 价格
+                        // })(),
                         data: [],
-                        yAxisIndex: 0,
+                        markPoint: {
+                            // 提供的标记类型包括 'circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow', 'none'
+                            symbol: 'circle',
+                            // 设置符号大小
+                            symbolSize: 30,
+                            data: [
+                                // 'min' 最大值-- 'max' 最大值 --'average' 平均值
+                                {
+                                    type: 'max',
+                                    name: '最大值',
+                                    value: '',
+                                    itemStyle: {
+                                        normal: {
+                                            label: {
+                                                show: true,
+                                                color: '#222'
+                                            },
+                                            lineStyle: {
+                                                color: '#222'
+                                            },
+                                            borderWidth: 1,
+                                            // lineStyle: {
+                                            //     type: 'dash',
+                                            //     color: '#222 ',
+                                            //     width: 2,
+                                            // },
+                                            borderColor: 'red'
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'min',
+                                    name: '最小值',
+                                    value: 2300,
+                                    // itemStyle: {
+                                    //     normal: {color: '#222'}
+                                    // }
+                                }
+                            ]
+                        },
+                        // markLine: {
+                        //     data: [
+                        //         {type: 'average', name: '平均值'}
+                        //     ]
+                        // },
+                        // yAxisIndex: 0,
                         type: 'line',
                         itemStyle: {
                             normal: {
+                                color: 'red',
                                 lineStyle: {
                                     color: '#f8f400'
                                 }
@@ -314,60 +411,23 @@ export default {
                         },
                         // itemStyle: {
                         //     normal: {
-                        //         color: 'red',
                         //         lineStyle: {
                         //             color: '#f8f400'
                         //         }
                         //     }
-                        // },
-                        markArea: {
-                            silent: false,
-                            itemStyle: {
-                                color: '#222'
-                            },
-                            data: [
-                                [
-                                    {
-                                        name: '异常数据',
-                                        xAxis: '21:00',
-                                        yAxis: 413
-                                    },
-                                    {
-                                        xAxis: '23:37',
-                                        yAxis: 419
-                                    }
-                                ],
-                                [
-                                    {
-                                        name: '异常数据',
-                                        xAxis: '21:00',
-                                        yAxis: 4.17
-                                    },
-                                    {
-                                        xAxis: '23:37',
-                                        yAxis: 4.9
-                                    }
-                                ]
-                            ],
-                            //     data: {
-                            //         0: {
-                            //             coord: [{
-                            //                 // name: '异常数据',
-                            //                 xAxis: '21:00',
-                            //                 // yAxis: 413
-                            //             }]
-                            //         },
-                            //         1: {
-                            //             coord: [ {
-                            //                 // xAxis: '23:37',
-                            //                 yAxis: 419
-                            //             }]
-                            //         }
-                            //     }
-                        },
+                        // }
                     },
                     {
                         name: '分时图',
+                        // data: (function() {
+                        //     var res = [];
+                        //     var len = 0;
+                        //     while (len < 10) {
+                        //         res.push((Math.random() * 10 + 5).toFixed(1) - 0);
+                        //         len++;
+                        //     }
+                        //     return res; // 预购量
+                        // })(),
                         data: [],
                         type: 'line',
                         yAxisIndex: 1,
@@ -383,6 +443,32 @@ export default {
                         symbolSize: 0,
                         // // 设置为光滑曲线
                         smooth: true
+                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        // markLine: {
+                        //     itemStyle: {
+                        //         normal: {
+                        //             lineStyle: {type: 'solid', color: 'red'},
+                        //             label: {show: true, position: 'left'}
+                        //         }
+                        //     },
+                        //     data: [
+                        //         {
+                        //             name: '平均线',
+                        //             // 支持 'average', 'min', 'max'
+                        //             type: 'average',
+                        //             // lineStyle: {
+                        //             //     normal: {
+                        //             //         color: 'red',
+                        //             //         width: '1',
+                        //             //         // 'solid','dashed','dotted'
+                        //             //         type: 'solid',
+                        //             //     }
+                        //             // },
+                        //         }
+                        //     ],
+                        //     // 起点标记的图形- 提供的标记类型包括 'circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow', 'none'
+                        //     symbol: 'none'
+                        // }
                     }
                 ]
             }
@@ -585,6 +671,7 @@ export default {
             // }, 210000);
             setInterval(v => {
                 if (echartsData1 && echartsData1.length !== 0) {
+                    // console.log(resp);
                     this.loading1 = false;
                     let {mainData} = echartsData1;
                     // let {mainData} = resp;
@@ -602,12 +689,18 @@ export default {
                     let realUpsAndDownss = '';
                     var now = new Date(); // 当前日期
                     var dateWeek = now.getDay(); // 今天本周的第几天
+                    // let axisData = (new Date()).toLocaleTimeString().replace(/^\D*/, ''); // 分钟
+                    // let data0 = Math.round(Math.random() * 1000); // 分钟
+                    // let data1 = (Math.random() * 10 + 5).toFixed(1) - 0; // 分钟
                     this.mainData = mainData;
                     mainData.forEach(v => {
+                        // timeData.shift();
                         timeData.push(v.realTime);
                         lineData.push(v.realPrice);
                         // lineDatas.push((v.realAveragePrice * 0.010).toFixed(2));
-                        lineDatas.push(v.realAveragePrice * 0.010);
+                        lineDatas.push(v.realAveragePrice);
+                        // lineDatas.push((v.realPrice / v.realMakeBargain).toFixed(2));
+                        // console.log((v.realPrice / v.realMakeBargain).toFixed(2));
                         // 产品成交时间+星期几+实时交易时间+实时交易均价+实时交易成交数量+实时交易涨跌
                         // titleText += v.crudeDealTime + '/' + dateWeek + '/' + v.realTime + ' 均 ' + v.realAveragePrice + ' 量 ' + v.realMakeBargain + ' 幅 ' + v.realUpsAndDowns;
                         crudeDealTimes = v.crudeDealTime;
@@ -620,7 +713,10 @@ export default {
                     this.chartOptions1['title'][0]['text'] = titleText;
                     this.chartOptions1['series'][0]['data'] = lineData;
                     this.chartOptions1['series'][1]['data'] = lineDatas;
+                    // this.chartOptions1['series'][0]['data'].push(data0);
+                    // this.chartOptions1['series'][1]['data'].push(data1);
                     this.chartOptions1['xAxis']['data'] = timeData;
+                    // this.chartOptions1['xAxis']['data'].push(axisData);
                     this.$refs['echartsDemo1'] && this.$refs['echartsDemo1'].initChart();
                 }
             }, 2000);
