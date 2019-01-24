@@ -18,7 +18,7 @@
                             </el-form-item>
                         </el-col> -->
                         <el-col :xl="12" :lg="12" :md="12" :sm="24" style="padding-left: 20px;">
-                            <el-form-item prop="showAccountCount" label="显示账户组数：">
+                            <el-form-item prop="showAccountCount" label="显示账户组数按持仓量排名：">
                                 前&nbsp;&nbsp;<el-input clearable size="small" v-model="ruleForm.showAccountCount" style="width: 150px;"></el-input>
                             </el-form-item>
                         </el-col>
@@ -97,7 +97,7 @@ export default {
                     '#40f3d6',
                     '#ce20ff',
                     '#00ff55',
-                    '#13ce34',
+                    '#e4d1bb',
                     '#ff8a00',
                     '#b69913',
                     '#00709e',

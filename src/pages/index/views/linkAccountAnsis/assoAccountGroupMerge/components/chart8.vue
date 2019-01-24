@@ -5,19 +5,30 @@
 </template>
 <script>
 import EchartsCommon from '@/components/index/common/EchartsCommon';
-import {resData5} from './constants.js';
-import _ from 'lodash';
+// import {respData4} from './constants';
+// import {getChart4Data} from '@/api/dataAnsis/assoAccountGroupMerge';
+
 export default {
     components: {EchartsCommon},
     props: {
         index: {
             type: [String, Number],
-            default: '0'
+            default: '3'
         },
-        childrenMap: {
+        commonReqParams: {
             type: Object,
             default() {
                 return {};
+            }
+        },
+        currentAccountGroupId: {
+            type: [Number, String],
+            default: ''
+        },
+        currentCustIds: {
+            type: Array,
+            default() {
+                return [];
             }
         },
         sceneType: {
@@ -30,92 +41,75 @@ export default {
         }
     },
     data() {
-        let symbolSize = data => {
-            let len = data.split(',').length;
-            return len > 5 ? 35 : len < 1 ? 8 : len * 7;
-        };
         return {
-            resData5,
             loading: false,
             chartOptions: {
-                tooltip: {
-                    formatter: params => {
-                        if (params.dataType === 'edge') { // link
-                            return '客户编号交集：' + params.data.tip || '';
-                        } else if (params.dataType === 'node') {
-                            return '客户编号: ' + params.value || '';
-                        }
-                    },
-                    padding: 10,
-                    backgroundColor: '#222',
-                    borderColor: '#777',
-                    borderWidth: 1,
-                    extraCssText: 'width:200px; white-space:pre-wrap; word-break: break-all',
+                color: ['#40f3d6'],
+                legend: {
+                    type: 'scroll',
+                    data: []
                 },
-                animation: false,
+                tooltip: {},
+                dataZoom: [
+                    {
+                        type: 'inside'
+                    },
+                    {
+                        show: true,
+                        type: 'slider',
+                        y: '90%'
+                    }
+                ],
+                xAxis: [
+                    {
+                        name: '客户编号',
+                        type: 'category',
+                        data: [],
+                        axisTick: {
+                            alignWithLabel: true
+                        }
+                    }
+                ],
+                yAxis: [
+                    {
+                        name: '出现次数',
+                        type: 'value'
+                    }
+                ],
                 series: [
                     {
-                        name: '关系图谱',
-                        type: 'graph',
-                        layout: 'force',
-                        data: [],
-                        links: [],
-                        categories: [],
-                        draggable: true,
-                        symbolSize: symbolSize,
-                        focusNodeAdjacency: true,
-                        roam: true,
-                        label: {
-                            normal: {
-                                position: 'right'
-                            }
-                        },
-                        force: {
-                            repulsion: 100
-                        }
+                        name: '账户组稳态分析-客户',
+                        type: 'bar',
+                        barMaxWidth: '35',
+                        data: []
                     }
                 ]
             }
         };
     },
     methods: {
-        getData(chartData, id) {
-            // 设置连线样式
-            let lineColor = '#959595';
-            chartData.links.forEach(v => {
-                if (v.tip.split(',').length > 5) {
-                    v.lineStyle = {normal: {color: lineColor, width: 10}};
-                } else if (v.tip.split(',').length > 3) {
-                    v.lineStyle = {normal: {color: lineColor, width: 5}};
-                } else {
-                    v.lineStyle = {normal: {color: lineColor, width: 1}};
-                }
+        getData(resData) {
+            if (!Object.keys(resData).length) {
+                return;
+            }
+            let {tableData, id} = resData;
+            if (!tableData.length) {
+                return;
+            }
+            this.chartOptions['xAxis'][0]['data'] = tableData.map(v => {
+                return v.custId;
             });
-            // 散点图sort
-            this.chartOptions['series'][0]['links'] = chartData['links'];
-            this.chartOptions['series'][0]['data'] = chartData['nodes'];
-            console.log(this.chartOptions);
-            this.$store.commit('savechart1', {data: this.chartOptions, index: id || this.tabIndex || this.$store.getters.tabIndex});
-            // select max
-            // this.$emit('updateAccountGroupAndCustIds', selectMax ? selectMax.acctId : '', selectMax ? selectMax.custIds.split(',') : []);
-            this.$emit('updateAccountGroupAndCustIds', chartData['nodes'][0]['name'], chartData['nodes'][0]['value'].split(','));
-            this.$refs['chart0'] && this.$refs['chart0'].initChart();
-        },
-        sortDataByAcctIdCommon(data) {
-            return _.sortBy(data, [item => { return item.acctId; }]);
+            this.chartOptions['series'][0]['data'] = tableData.map(v => {
+                return v.count;
+            });
+            this.$store.commit('savechart4', {data: this.chartOptions, index: id || this.tabIndex || this.$store.getters.getTabIndex});
+            this.$refs['chart3'] && this.$refs['chart3'].initChart();
         },
         initChart(data, flag) {
             if (data) {
                 this.chartOptions = data;
             }
-            this.$refs['chart0'] && this.$refs['chart0'].initChart();
-            this.getAssoCharts(flag);
-        },
-        getAssoCharts(flag) {
-            if (!flag) {
-                this.$emit('getBlock2Data');
-                this.$emit('getBlock3Data');
-            }
+            this.$refs['chart3'] && this.$refs['chart3'].initChart();
         },
         handleEchartClickEvent(val) {
             this.$emit('handleEchartClickEvent', val, this.index);

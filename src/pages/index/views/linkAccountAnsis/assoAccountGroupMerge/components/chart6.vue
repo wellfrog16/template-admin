@@ -42,12 +42,11 @@ export default {
     },
     data() {
         let schema = [
-            {name: 'name', index: 0},
-            {name: 'group', index: 1},
-            {name: 'protein', index: 2},
-            {name: 'calcium', index: 3},
-            {name: 'sodium', index: 4},
-            {name: 'id', index: 5}
+            {name: 'custId', index: 0},
+            {name: 'data1', index: 1},
+            {name: 'data2', index: 2},
+            {name: 'data3', index: 3},
+            {name: 'acctId', index: 4}
         ];
         let fieldIndices = schema.reduce(function(obj, item) {
             obj[item.name] = item.index;
@@ -56,32 +55,48 @@ export default {
         let fieldNames = schema.map(item => {
             return item.name;
         });
-        fieldNames = fieldNames.slice(2, fieldNames.length - 1);
+        fieldNames = fieldNames.slice(0, fieldNames.length - 1);
         console.log(fieldIndices);
         let config = {
-            xAxis3D: 'protein',
-            yAxis3D: 'calcium',
-            zAxis3D: 'sodium'
+            xAxis3D: 'custId',
+            yAxis3D: 'data1',
+            zAxis3D: 'data2'
         };
         let configParameters = {};
         ['xAxis3D', 'yAxis3D', 'zAxis3D'].forEach(function(fieldName) {
             configParameters[fieldName] = fieldNames;
         });
-        let data = [['name1', 'g1', 1, 3, 4, 0], ['name2', 'g2', 4, 5, 11, 1]];
-
         return {
             config,
             fieldIndices,
-            data,
             loading: false,
             showSelectList: true,
-            selectModes: ['protein', 'calcium', 'sodium'],
+            selectModes: ['custId', 'data1', 'data2', 'data3'],
             options: configParameters,
             chartOptions: {
-                tooltip: {},
+                tooltip: {
+                    padding: 10,
+                    backgroundColor: '#222',
+                    borderColor: '#777',
+                    borderWidth: 1,
+                    extraCssText: 'width:150px; white-space:pre-wrap;',
+                    formatter: data => {
+                        if (data.componentType === 'markLine' || data.componentType === 'markPoint') {
+                            return '';
+                        }
+                        let {value} = data;
+                        let str = '';
+                        str += `账户组号：${value[4]} \n`;
+                        str += `客户号：${value[0]} \n`;
+                        str += `data1：${value[1]} \n`;
+                        str += `data2：${value[2]} \n`;
+                        str += `data3：${value[3]} \n`;
+                        return str;
+                    }
+                },
                 xAxis3D: {
                     name: config.xAxis3D,
-                    type: 'value'
+                    type: 'category'
                 },
                 yAxis3D: {
                     name: config.yAxis3D,
@@ -116,14 +131,7 @@ export default {
                 series: [{
                     name: '聚类',
                     type: 'scatter3D',
-                    data: data.map(function(item, idx) {
-                        return [
-                            item[fieldIndices[config.xAxis3D]],
-                            item[fieldIndices[config.yAxis3D]],
-                            item[fieldIndices[config.zAxis3D]],
-                            idx
-                        ];
-                    }),
+                    data: [],
                     symbolSize: 12,
                     // symbol: 'triangle',
                     itemStyle: {
@@ -142,25 +150,37 @@ export default {
     },
     methods: {
         handleSelectChange(key, index) {
+            let xyz = ['xAxis3D', 'yAxis3D', 'zAxis3D'];
             let value = this.selectModes[index];
+            if (this.selectModes[index] === 'custId') {
+                this.chartOptions[xyz[index]]['type'] = 'category';
+            } else {
+                this.chartOptions[xyz[index]]['type'] = 'value';
+            }
+            console.log(this.selectModes);
             let data = this.data.map((item, idx) => {
                 return [
                     item[this.fieldIndices[this.selectModes[0]]],
                     item[this.fieldIndices[this.selectModes[1]]],
-                    item[this.fieldIndices[this.selectModes[2]]],
-                    idx
+                    item[this.fieldIndices[this.selectModes[2]]]
                 ];
             });
-            this.chartOptions[key] = {name: value};
+            this.chartOptions[key]['name'] = value;
             this.chartOptions.series[0].data = data;
-            console.log(this.chartOptions);
             this.$refs['chart0'].initChart();
         },
         getData(chartData, id) {
-            console.log(this.chartOptions);
-            // this.$store.commit('savechart1', {data: this.chartOptions, index: id || this.tabIndex || this.$store.getters.tabIndex});
+            console.log(chartData);
+            if (!this.chartOptions) {
+                return;
+            }
+            this.chartOptions['series'][0]['data'] = this.data = chartData.map(v => {
+                return [v.custId, v.data1, v.data2, v.data3, v.acctId];
+            });
+            this.$store.commit('savechart1', {data: this.chartOptions, index: id || this.tabIndex || this.$store.getters.tabIndex});
             // select max
             // this.$emit('updateAccountGroupAndCustIds', chartData['nodes'][0]['name'], chartData['nodes'][0]['value'].split(','));
+            this.$emit('updateAccountGroupAndCustIds', 'JL2018090903', ['2018888888']);
             this.$refs['chart0'] && this.$refs['chart0'].initChart();
         },
         initChart(data, flag) {
@@ -186,7 +206,6 @@ export default {
         }
     },
     mounted() {
-        this.getData();
     }
 };
 </script>

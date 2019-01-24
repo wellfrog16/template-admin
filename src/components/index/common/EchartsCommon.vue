@@ -40,6 +40,9 @@ export default {
     methods: {
         initChart(mark) {
             let myChart = document.getElementById(this.domId);
+            if (!myChart) {
+                return;
+            }
             this.echart = this.$echarts.init(myChart, this.theme);
             // this.echart.dispatchAction({
             //   type: 'restore'

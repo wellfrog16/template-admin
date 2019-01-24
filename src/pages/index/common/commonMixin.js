@@ -25,6 +25,9 @@ export default {
                 setTimeout(() => {
                     this.getBlock2Data();
                     this.getBlock3Data();
+                    if (this.currentSceneType === '2') {
+                        this.getBlock4Data();
+                    }
                 });
                 if (this.currentSceneType === '4') {
                     let chartDataList = respData.chartDataList;

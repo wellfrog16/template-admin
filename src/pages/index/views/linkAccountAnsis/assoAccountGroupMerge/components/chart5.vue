@@ -5,7 +5,6 @@
 </template>
 <script>
 import EchartsCommon from '@/components/index/common/EchartsCommon';
-import {resData5} from './constants.js';
 import _ from 'lodash';
 export default {
     components: {EchartsCommon},
@@ -35,7 +34,6 @@ export default {
             return len > 5 ? 35 : len < 1 ? 8 : len * 7;
         };
         return {
-            resData5,
             loading: false,
             chartOptions: {
                 color: String(this.sceneType) === '3' ? ['#ce20ff', '#e7b0ea'] : ['#00ff55', '#a3fbed'],
