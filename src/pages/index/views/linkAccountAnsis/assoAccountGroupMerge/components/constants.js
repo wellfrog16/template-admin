@@ -1,5 +1,5 @@
 import custIdColumn from '@/components/index/common/CustIdColumn';
-import {graphData} from './testJson';
+// import {graphData} from './testJson';
 export const charts = [
     {title: '账户组相关性概览', icon: 'fa fa-globe', toggleDetailFlags: false, loading: false},
     {title: '账户组历史持仓', icon: 'fa fa-chart-bar', toggleDetailFlags: false, loading: false},
@@ -92,54 +92,23 @@ export const chartTableColumns6 = [ // 实控关系分析关系图明细字段
     {label: '同一结算单确认人', field: 'sameStlBillCfmPerson', minWidth: 160},
     {label: '同一开户授权人', field: 'sameOpenAuthPerson', minWidth: 130}
 ];
-export const chartTableColumns8 = [
-    {
-        'custId': 'XG000001',
-        'bizDir': 'cu1712',
-        'declBillTm2': '66842',
-        'declBillQtty': '13644',
-        'declBillPrice': '10000',
-        'bargainDate': '10000',
-        'bargainQtty': '10000',
-        'bargainPrice2': '10000',
-        'bargainPrice3': '地址',
-        'bargainPrice4': '客户信息',
-        'bargainPrice5': '玉田路',
-        'custId1': '53100',
-        'bizDir1': '70037',
-        'declBillTm1': '531003',
-        'declBillQtty1': '531003',
-        'declBillPrice1': '53100',
-        'bargainDate1': '531005',
-        'bargainQtty1': '531007',
-        'bargainPrice12': '53100',
-        'bargainPrice13': '53198',
-        'bargainPrice14': '2017-05-02',
-    },
-    {
-        'custId': 'XG000001',
-        'bizDir': 'cu1712',
-        'declBillTm2': '66842',
-        'declBillQtty': '13644',
-        'declBillPrice': '10000',
-        'bargainDate': '10000',
-        'bargainQtty': '10000',
-        'bargainPrice2': '10000',
-        'bargainPrice3': '地址',
-        'bargainPrice4': '客户信息',
-        'bargainPrice5': '玉田路',
-        'custId1': '53100',
-        'bizDir1': '70037',
-        'declBillTm1': '531003',
-        'declBillQtty1': '531003',
-        'declBillPrice1': '53100',
-        'bargainDate1': '531005',
-        'bargainQtty1': '531007',
-        'bargainPrice12': '53100',
-        'bargainPrice13': '53198',
-        'bargainPrice14': '2017-05-02',
-    }
+export const chartTableColumns7 = [ // 聚类散点图明细字段
+    {label: '账户组号', field: 'acctId', minWidth: 130, fixed: true},
+    {label: '客户编号', field: 'custId', minWidth: 160},
+    {label: '合约代码', field: 'contrCd', minWidth: 140},
+    {label: '统计起始日', field: '', minWidth: 160},
+    {label: '统计截止日', field: '', minWidth: 160}
 ];
+export const chartTableColumns8 = [ // 聚类稳态分析-时间图明细字段
+    {label: '交易日期', field: 'acctId', minWidth: 130, fixed: true},
+    {label: '客户编号', field: 'custId', minWidth: 160, fixed: true},
+    {label: '客户数', field: 'count', minWidth: 100}
+];
+export const chartTableColumns9 = [ // 聚类稳态分析-客户图明细字段
+    {label: '客户编号', field: 'custId', minWidth: 160, fixed: true},
+    {label: '出现次数', field: 'count', minWidth: 100}
+];
+
 // tree-相关性
 export const mainTableColumns = [
     {
@@ -217,6 +186,24 @@ export const mainTableColumns = [
         label: '浮动盈亏相关系数',
         align: 'center'
     }
+];
+// tree-聚类
+export const mainTableColumnsBV = [
+    {field: 'acctId', label: '账户组号', align: 'center'},
+    {field: 'custId', label: '客户编号', align: 'center'},
+    {field: 'custName', label: '客户名称', align: 'center'},
+    {field: 'contrCd', label: '合约代码', align: 'center'},
+    {field: 'acctGrMakePosQtty', label: '账户组净持仓量', align: 'center'},
+    {field: 'acctMakePosQtty', label: '账户净持仓量', align: 'center'},
+    {field: '', label: '成交量', align: 'center'},
+    {field: '', label: '报单次数', align: 'center'},
+    {field: '', label: '成交率', align: 'center'},
+    {field: '', label: '撤单率', align: 'center'},
+    {field: '', label: '平均操作时间差', align: 'center'},
+    {field: '', label: '统计起始日', align: 'center'},
+    {field: '', label: '统计截止日', align: 'center'},
+    {field: '', label: '统计频度', align: 'center'},
+    {field: '', label: '算法选择', align: 'center'}
 ];
 // tree-基本信息
 export const mainTableColumnsBI = [
@@ -579,7 +566,7 @@ export const respData4 = {
         {a: 1, b: 2}
     ]
 };
-export let resData5 = {
-    chartData: graphData.resData.kmap,
+export let testData = {
+    chartData: [{acctId: 'XG00005', custId: '888', data1: 1, data2: 3, data3: 9}, {acctId: 'XG00007', custId: '1888', data1: 8, data2: 17, data3: 28}],
     mainTableData: ddd
 };

@@ -28,7 +28,7 @@
                             </el-checkbox-group>
                         </el-form-item>
                         <p class="remark">* 缩小账户范围能提升计算效率</p>
-                        <el-form-item label-width="140px" prop="statFreq" label="统计频度" style="padding-left:23px; margin-bottom: 30px;">
+                        <el-form-item label-width="140px" prop="statFreq" label="统计频度" style="padding-left:23px; margin-bottom: 0;">
                             <el-select :disabled="disabled" :clearabled="!disabled" size="small" v-model="ruleForm.statFreq" class="custom-width">
                                 <el-option
                                     v-for="item in accountTotalFrepOptions"

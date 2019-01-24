@@ -13,7 +13,7 @@ export default {
     props: {
         index: {
             type: [String, Number],
-            default: '1'
+            default: '2'
         },
         commonReqParams: {
             type: Object,
@@ -138,14 +138,15 @@ export default {
             this.chartOptions['dataZoom'][1]['startValue'] = dataZoomStartValue;
             this.chartOptions['dataZoom'][0]['endValue'] = dataZoomEndValue;
             this.chartOptions['dataZoom'][1]['endValue'] = dataZoomEndValue;
-            this.$store.commit('savechart2', {data: this.chartOptions, index: id || this.tabIndex || this.$store.getters.getTabIndex});
-            this.$refs['chart1'] && this.$refs['chart1'].initChart();
+            this.$store.commit('savechart3', {data: this.chartOptions, index: id || this.tabIndex || this.$store.getters.getTabIndex});
+            console.log(this.chartOptions);
+            this.$refs['chart2'] && this.$refs['chart2'].initChart();
         },
         initChart(data, flag) {
             if (data) {
                 this.chartOptions = data;
             }
-            this.$refs['chart1'] && this.$refs['chart1'].initChart();
+            this.$refs['chart2'] && this.$refs['chart2'].initChart();
         },
         handleEchartClickEvent(val) {
             if (String(this.sceneType) === '2') { // 聚类

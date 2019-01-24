@@ -189,7 +189,14 @@ export default {
             this.$store.commit('saveClickTab', true);
         },
         nextStep() {
-            this.$router.push({name: 'abnormity'});
+            this.$confirm('离开本页面信息将丢失，是否确定离开?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            })
+                .then(() => {
+                    this.$router.push({name: 'multipleScenesMerge'});
+                });
         },
         resetDetailFlag() {
             this.charts.forEach(v => {
