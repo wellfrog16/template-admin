@@ -567,6 +567,23 @@ export const respData4 = {
     ]
 };
 export let testData = {
-    chartData: [{acctId: 'XG00005', custId: '888', data1: 1, data2: 3, data3: 9}, {acctId: 'XG00007', custId: '1888', data1: 8, data2: 17, data3: 28}],
+    chartData: [
+        {acctId: 'JL00005', custId: '2018090999', data1: 1, data2: 3, data3: 9, data4: 27, data5: 17},
+        {acctId: 'JL00005', custId: '2018090919', data1: 4, data2: 1, data3: 19, data4: 7, data5: 16},
+        {acctId: 'JL00005', custId: '2018090929', data1: 11, data2: 8, data3: 9, data4: 17, data5: 11},
+        {acctId: 'JL00005', custId: '2018090939', data1: 6, data2: 18, data3: 29, data4: 12, data5: 31},
+        {acctId: 'JL00005', custId: '2018090949', data1: 16, data2: 18, data3: 39, data4: 27, data5: 44},
+        {acctId: 'JL00005', custId: '2018090959', data1: 26, data2: 42, data3: 49, data4: 37, data5: 55},
+        {acctId: 'JL00005', custId: '2018090969', data1: 36, data2: 13, data3: 59, data4: 47, data5: 13},
+        {acctId: 'JL00005', custId: '2018090129', data1: 46, data2: 38, data3: 19, data4: 17, data5: 71},
+        {acctId: 'JL00005', custId: '2018090229', data1: 61, data2: 18, data3: 9, data4: 1, data5: 13},
+        {acctId: 'JL00005', custId: '2018090329', data1: 6, data2: 8, data3: 77, data4: 9, data5: 11},
+        {acctId: 'JL00007', custId: '2018090918', data1: 18, data2: 37, data3: 28, data4: 17, data5: 7},
+        {acctId: 'JL00007', custId: '2018090918', data1: 38, data2: 87, data3: 38, data4: 12, data5: 71},
+        {acctId: 'JL00007', custId: '2018090918', data1: 78, data2: 17, data3: 18, data4: 17, data5: 57},
+        {acctId: 'JL00009', custId: '2018090338', data1: 8, data2: 17, data3: 28, data4: 19, data5: 7},
+        {acctId: 'JL00009', custId: '2018090128', data1: 18, data2: 17, data3: 28, data4: 57, data5: 6},
+        {acctId: 'JL00009', custId: '2018090548', data1: 48, data2: 37, data3: 2, data4: 11, data5: 17},
+    ],
     mainTableData: ddd
 };

@@ -63,6 +63,18 @@ export default {
         resultTable: {
             type: String,
             default: ''
+        },
+        mainTableData: {
+            type: Array,
+            default() {
+                return [];
+            }
+        },
+        selectAccountGroupList: {
+            type: Array,
+            default() {
+                return [];
+            }
         }
     },
     data() {
@@ -72,6 +84,7 @@ export default {
         // };
         return {
             loading: false,
+            childrenMap: {},
             ruleForm: {
                 sceneTypes: ['1', '2', '3', '4', '5'],
                 showAccountCount: '50'
@@ -193,6 +206,34 @@ export default {
     },
     methods: {
         setChartOptions(val) {
+            // 增加uid字段
+            let allLeaf = [];
+            this.mainTableData.forEach(v => {
+                if (v.children && v.children.length) {
+                    let custIds = v.children.map(v => {
+                        return v.custId;
+                    });
+                    custIds = [...new Set(custIds)];
+                    let childIds = v.children.map(v => {
+                        return v.id;
+                    });
+                    allLeaf.push({
+                        acctId: v.acctId,
+                        custIds: custIds,
+                        id: v.id
+                    });
+                    this.childrenMap[v.id] = childIds;
+                }
+            });
+            if (val && val.nodes) {
+                val.nodes.forEach(v => {
+                    let index = allLeaf.findIndex(i => {
+                        return i.acctId === v.name;
+                    });
+                    v.custIds = index > -1 ? allLeaf[index]['custIds'].join(',') : '';
+                    v.uid = index > -1 ? allLeaf[index]['id'] : '';
+                });
+            }
             this.chartOptions.legend.data = this.checkboxes.map(v => {
                 return v.label;
             });
@@ -227,7 +268,48 @@ export default {
             this.chartOptions.visualMap.max = max;
             this.$refs['chartRef'].initChart();
         },
+        initChart(options) {
+            this.chartOptions = options;
+            this.$refs['chartRef'].initChart();
+        },
         handleEchartClickEvent() {},
+        /* handleEchartClickEvent(params) {
+            // 增加勾选标志
+            let currentId = params['data']['uid'];
+            if (this.selectAccountGroupList.indexOf(currentId) > -1) { // 取消选中
+                // mark 样式
+                let data = this.chartOptions['series'][0]['data'];
+                data.forEach(v => {
+                    if (v.uid === currentId) {
+                        v.itemStyle = {borderColor: 'transparent', borderWidth: 1};
+                    }
+                });
+                this.chartOptions['series'][0]['data'] = data;
+                // table勾选状态
+                let selectAccountGroupList = this.selectAccountGroupList.filter(v => {
+                    return v !== currentId && this.childrenMap[currentId].indexOf(v) === -1;
+                });
+                this.$emit('updateSelectAccountGroupList', selectAccountGroupList);
+            } else { // 选中
+                // mark 样式
+                let data = this.chartOptions['series'][0]['data'];
+                data.forEach(v => {
+                    if (v.uid === currentId) {
+                        v.itemStyle = {borderColor: '#ffff00', borderWidth: 2};
+                    }
+                });
+                this.chartOptions['series'][0]['data'] = data;
+                // table勾选状态
+                let selectAccountGroupList = JSON.parse(JSON.stringify(this.selectAccountGroupList));
+                selectAccountGroupList.push(currentId);
+                this.$emit('updateSelectAccountGroupList', selectAccountGroupList);
+            }
+            this.setChartOptions(this.chartOptions);
+            this.$refs['self-tree-table'].$refs['tree-table'].setCheckedKeys(this.selectAccountGroupList);
+            setTimeout(() => {
+                this.$refs['self-tree-table'].handleChecked(this.selectAccountGroupList);
+            }, 500);
+        }, */
         handleEchartDblClickEvent(item) {
             if (item.dataType === 'node') {
                 let params = {
