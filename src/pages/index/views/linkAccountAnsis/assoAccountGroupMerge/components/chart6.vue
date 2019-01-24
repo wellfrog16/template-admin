@@ -9,9 +9,9 @@
                     </el-option>
                 </el-select>
             </div>
-            <div style="cursor: pointer; padding: 10px; color: #f5ff00; text-align: right; font-size: 18px;" class="blink" @click="showSelectList = !showSelectList">
-                <i v-if="showSelectList" class="el-icon-d-arrow-right"></i>
-                <i v-else class="el-icon-d-arrow-left"></i>
+            <div style="cursor: pointer; padding: 10px; color: #f5ff00; font-size: 18px; text-align: right; margin-left: 15px;" @click="showSelectList = !showSelectList">
+                <i v-if="showSelectList" class="el-icon-d-arrow-right to-right" style="position: relative;"></i>
+                <i v-else class="el-icon-d-arrow-left to-left" style="position: relative;"></i>
             </div>
         </div>
     </div>
@@ -92,15 +92,20 @@ export default {
                     type: 'value'
                 },
                 grid3D: {
-                    environment: 'rgba(0, 0, 0, 0.2)',
+                    environment: 'rgba(0, 0, 0)',
                     axisLine: {
                         lineStyle: {
-                            color: '#fff'
+                            color: '#00f9ff'
                         }
                     },
                     axisPointer: {
                         lineStyle: {
                             color: '#ffbd67'
+                        }
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: '#959595'
                         }
                     },
                     viewControl: {
@@ -194,16 +199,32 @@ export default {
             top: 0;
         }
 
-        @keyframes blink {
+        @keyframes to-right {
             from {
                 opacity: 1;
+                right: 15px;
             }
             to {
                 opacity: 0.3;
+                right: 0;
             }
         }
-        .blink {
-            animation: blink 1.5s infinite;
+
+        @keyframes to-left {
+            from {
+                opacity: 1;
+                right: 0;
+            }
+            to {
+                opacity: 0.3;
+                right: 15px;
+            }
+        }
+        .to-right {
+            animation: to-right 1.5s infinite;
+        }
+        .to-left {
+            animation: to-left 1.5s infinite;
         }
     }
 </style>
