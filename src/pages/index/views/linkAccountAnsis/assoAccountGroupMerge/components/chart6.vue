@@ -5,7 +5,7 @@
             <div v-for="(item, key, index) in options" :key="index" v-show="showSelectList">
                 <span>{{ key }}:</span>
                 <el-select v-model="selectModes[index]" @change="handleSelectChange(key, index)">
-                    <el-option v-for="(it, i) in item" :key="i" :label="it" :value="it">
+                    <el-option v-for="(it, i) in item" :key="i" :label="mapArray[it]" :value="it">
                     </el-option>
                 </el-select>
             </div>
@@ -18,6 +18,8 @@
 </template>
 <script>
 import EchartsCommon from '@/components/index/common/EchartsCommon';
+import {echartsDefault} from '@/assets/style/common/theme/echart';
+import _ from 'lodash';
 export default {
     components: {EchartsCommon},
     props: {
@@ -42,11 +44,13 @@ export default {
     },
     data() {
         let schema = [
-            {name: 'custId', index: 0},
-            {name: 'data1', index: 1},
-            {name: 'data2', index: 2},
-            {name: 'data3', index: 3},
-            {name: 'acctId', index: 4}
+            {name: 'data1', index: 0},
+            {name: 'data2', index: 1},
+            {name: 'data3', index: 2},
+            {name: 'data4', index: 3},
+            {name: 'data5', index: 4},
+            {name: 'acctId', index: 5},
+            {name: 'custId', index: 6},
         ];
         let fieldIndices = schema.reduce(function(obj, item) {
             obj[item.name] = item.index;
@@ -55,12 +59,12 @@ export default {
         let fieldNames = schema.map(item => {
             return item.name;
         });
-        fieldNames = fieldNames.slice(0, fieldNames.length - 1);
+        fieldNames = fieldNames.slice(0, fieldNames.length - 2);
         console.log(fieldIndices);
         let config = {
-            xAxis3D: 'custId',
-            yAxis3D: 'data1',
-            zAxis3D: 'data2'
+            xAxis3D: '日均成交量',
+            yAxis3D: '日均报单次数',
+            zAxis3D: '日均成交率'
         };
         let configParameters = {};
         ['xAxis3D', 'yAxis3D', 'zAxis3D'].forEach(function(fieldName) {
@@ -71,40 +75,85 @@ export default {
             fieldIndices,
             loading: false,
             showSelectList: true,
-            selectModes: ['custId', 'data1', 'data2', 'data3'],
+            selectModes: ['data1', 'data2', 'data3', 'data4', 'data5'],
+            mapArray: {
+                data1: '日均成交量',
+                data2: '日均报单次数',
+                data3: '日均成交率',
+                data4: '日均撤单率',
+                data5: '日均操作时间差',
+            },
             options: configParameters,
+            commonSeries: {
+                name: '',
+                type: 'scatter3D',
+                data: [],
+                symbolSize: 18,
+                // symbol: 'triangle',
+                itemStyle: {
+                    color: '#40f3d6',
+                    borderWidth: 1,
+                    borderColor: 'rgba(255,255,255,0.8)'
+                },
+                emphasis: {
+                    itemStyle: {
+                        color: '#fff'
+                    }
+                }
+            },
             chartOptions: {
+                legend: {
+                    itemGap: 20,
+                    left: 10,
+                    top: 'middle',
+                    orient: 'vertical',
+                    data: []
+                },
                 tooltip: {
+                    show: true,
                     padding: 10,
                     backgroundColor: '#222',
                     borderColor: '#777',
                     borderWidth: 1,
                     extraCssText: 'width:150px; white-space:pre-wrap;',
                     formatter: data => {
+                        console.log(data);
                         if (data.componentType === 'markLine' || data.componentType === 'markPoint') {
                             return '';
                         }
                         let {value} = data;
                         let str = '';
-                        str += `账户组号：${value[4]} \n`;
-                        str += `客户号：${value[0]} \n`;
-                        str += `data1：${value[1]} \n`;
-                        str += `data2：${value[2]} \n`;
-                        str += `data3：${value[3]} \n`;
+                        str += `账户组号：${value[3]} \n`;
+                        str += `客户号：${value[4]} \n`;
+                        str += `x：${value[0]} \n`;
+                        str += `y：${value[1]} \n`;
+                        str += `z：${value[2]} \n`;
                         return str;
                     }
                 },
                 xAxis3D: {
                     name: config.xAxis3D,
-                    type: 'category'
+                    type: 'value',
+                    nameTextStyle: {
+                        fontSize: 14,
+                        fontWeight: 600
+                    }
                 },
                 yAxis3D: {
                     name: config.yAxis3D,
-                    type: 'value'
+                    type: 'value',
+                    nameTextStyle: {
+                        fontSize: 14,
+                        fontWeight: 600
+                    }
                 },
                 zAxis3D: {
                     name: config.zAxis3D,
-                    type: 'value'
+                    type: 'value',
+                    nameTextStyle: {
+                        fontSize: 14,
+                        fontWeight: 600
+                    }
                 },
                 grid3D: {
                     environment: 'rgba(0, 0, 0)',
@@ -128,57 +177,73 @@ export default {
                         // projection: 'orthographic'
                     }
                 },
-                series: [{
-                    name: '聚类',
-                    type: 'scatter3D',
-                    data: [],
-                    symbolSize: 12,
-                    // symbol: 'triangle',
-                    itemStyle: {
-                        color: '#40f3d6',
-                        borderWidth: 1,
-                        borderColor: 'rgba(255,255,255,0.8)'
-                    },
-                    emphasis: {
-                        itemStyle: {
-                            color: '#fff'
-                        }
-                    }
-                }]
+                series: []
             }
         };
     },
     methods: {
         handleSelectChange(key, index) {
-            let xyz = ['xAxis3D', 'yAxis3D', 'zAxis3D'];
             let value = this.selectModes[index];
-            if (this.selectModes[index] === 'custId') {
-                this.chartOptions[xyz[index]]['type'] = 'category';
-            } else {
-                this.chartOptions[xyz[index]]['type'] = 'value';
-            }
+            // let xyz = ['xAxis3D', 'yAxis3D', 'zAxis3D'];
+            // if (this.selectModes[index] === 'custId') {
+            //     this.chartOptions[xyz[index]]['type'] = 'category';
+            // } else {
+            //     this.chartOptions[xyz[index]]['type'] = 'value';
+            // }
             console.log(this.selectModes);
-            let data = this.data.map((item, idx) => {
-                return [
-                    item[this.fieldIndices[this.selectModes[0]]],
-                    item[this.fieldIndices[this.selectModes[1]]],
-                    item[this.fieldIndices[this.selectModes[2]]]
-                ];
+            this.chartOptions[key]['name'] = this.mapArray[value];
+            this.chartOptions.series = [];
+            Object.keys(this.data).forEach((key, index) => {
+                this.chartOptions['series'].push(
+                    {
+                        ...this.commonSeries,
+                        ...{
+                            name: key,
+                            data: this.data[key].map(item => {
+                                return [
+                                    item[this.selectModes[0]],
+                                    item[this.selectModes[1]],
+                                    item[this.selectModes[2]],
+                                    item['acctId'],
+                                    item['custId'],
+                                ];
+                            })
+                        },
+                        ...{
+                            itemStyle: {color: echartsDefault.color[index]}
+                        }
+                    }
+                );
             });
-            this.chartOptions[key]['name'] = value;
-            this.chartOptions.series[0].data = data;
+            console.log(this.chartOptions);
             this.$refs['chart0'].initChart();
         },
         getData(chartData, id) {
-            console.log(chartData);
             if (!this.chartOptions) {
                 return;
             }
-            this.chartOptions['series'][0]['data'] = this.data = chartData.map(v => {
-                return [v.custId, v.data1, v.data2, v.data3, v.acctId];
+            chartData = _.groupBy(chartData, 'acctId');
+            Object.keys(chartData).forEach((key, index) => {
+                this.chartOptions['legend']['data'].push(key);
+                this.chartOptions['series'].push(
+                    {
+                        ...this.commonSeries,
+                        ...{
+                            name: key,
+                            data: chartData[key].map(v => {
+                                return [v.data1, v.data2, v.data3, v.acctId, v.custId];
+                            })
+                        },
+                        ...{
+                            itemStyle: {color: echartsDefault.color[index]}
+                        }
+                    }
+                );
             });
+            this.data = chartData;
+            console.log(this.chartOptions);
             this.$store.commit('savechart1', {data: this.chartOptions, index: id || this.tabIndex || this.$store.getters.tabIndex});
-            // select max
+            // select max;
             // this.$emit('updateAccountGroupAndCustIds', chartData['nodes'][0]['name'], chartData['nodes'][0]['value'].split(','));
             this.$emit('updateAccountGroupAndCustIds', 'JL2018090903', ['2018888888']);
             this.$refs['chart0'] && this.$refs['chart0'].initChart();

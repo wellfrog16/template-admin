@@ -9,9 +9,9 @@
             ></el-tab-pane>
         </el-tabs>
         <!--导入树形table-->
-        <account-group-table ref="accountGroupTableRef" @updateLoading="updateLoading" @updateTableInfo="updateTableInfo"></account-group-table>
+        <account-group-table ref="accountGroupTableRef" @updateLoading="updateLoading" @updateTableInfo="updateTableInfo" @updateMainTableData="updateMainTableData" @updateSelectAccountGroupList="updateSelectAccountGroupList" @handleClearAll="handleClearAll"></account-group-table>
         <!-- 关系图谱 -->
-        <graph-chart ref="graphChartRef" :relativeTable="relativeTable" :resultTable="resultTable" @getBlockData="getBlockData"></graph-chart>
+        <graph-chart ref="graphChartRef" :relativeTable="relativeTable" :resultTable="resultTable" :mainTableData="mainTableData" :selectAccountGroupList="selectAccountGroupList" @getBlockData="getBlockData" @updateSelectAccountGroupList="updateSelectAccountGroupList"></graph-chart>
         <!-- 账户组钻取 -->
         <div>
             <el-row :gutter="10">
@@ -72,6 +72,8 @@ export default {
     data() {
         return {
             blocks,
+            mainTableData: [],
+            selectAccountGroupList: [],
             chartTableColumns: [chartTableColumns1, chartTableColumns2, chartTableColumns3, chartTableColumns4],
             chartTableData: [[], [], [], []],
             chartData: [[], [], [], []],
@@ -93,6 +95,24 @@ export default {
             const {relativeTable, resultTable} = val;
             this.relativeTable = relativeTable;
             this.resultTable = resultTable;
+        },
+        updateMainTableData(val) {
+            this.mainTableData = val;
+        },
+        updateSelectAccountGroupList(val) {
+            this.selectAccountGroupList = val;
+            this.$refs['accountGroupTableRef'].selectAccountGroupList = val;
+        },
+        handleClearAll() {
+            // mark 样式
+            let data = this.$refs['graphChartRef'].chartOptions['series'][0]['data'];
+            data.forEach(v => {
+                v.itemStyle = {borderColor: 'transparent', borderWidth: 1};
+            });
+            this.$refs['graphChartRef'].chartOptions['series'][0]['data'] = data;
+            // table勾选状态
+            this.updateSelectAccountGroupList([]);
+            this.$refs['graphChartRef'].initChart(this.$refs['graphChartRef'].chartOptions);
         },
         toggleDetail(item, index) {
             this.blocks[index]['toggleDetailFlags'] = !item.toggleDetailFlags;

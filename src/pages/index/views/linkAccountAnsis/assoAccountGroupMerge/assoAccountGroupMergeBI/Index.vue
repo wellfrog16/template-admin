@@ -244,7 +244,6 @@ export default {
         handleEchartClickEvent(params, index) {
             switch (String(index)) {
             case '0':
-                // get chart2
                 let currentId = params['data']['uid'];
                 if (this.selectAccountGroupList.indexOf(currentId) > -1) { // 取消选中
                     // mark 样式

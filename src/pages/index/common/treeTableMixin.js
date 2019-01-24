@@ -16,6 +16,7 @@ export default {
         },
         updateCheckedList(checkedNodes, checkedKeys) {
             this.selectAccountGroupList = checkedKeys;
+            this.$emit('updateSelectAccountGroupList', checkedKeys);
         },
         deleteMethods(deleteList) {
             let list = JSON.parse(JSON.stringify(this.mainTableData));

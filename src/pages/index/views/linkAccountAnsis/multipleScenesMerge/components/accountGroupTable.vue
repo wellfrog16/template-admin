@@ -68,7 +68,9 @@
                                     :filterText="searchText"
                                     :columns="mainTableColumns"
                                     :tableData="mainTableData"
+                                    :clearAllSelected="true"
                                     @updateCheckedList="updateCheckedList"
+                                    @handleClearAll="handleClearAll"
                                 ></tree-table>
                             </div>
                         </el-col>
@@ -228,6 +230,9 @@ export default {
         };
     },
     methods: {
+        handleClearAll() {
+            this.$emit('handleClearAll');
+        },
         updateFullLoading(loading) {
             this.fullScreenLoading = loading;
         },
@@ -361,6 +366,7 @@ export default {
                     this.$emit('updateLoading', this.loadingTree);
                     this.$emit('updateTableInfo', {relativeTable, resultTable});
                     this.mainTableData = this.sortDataByAcctIdCommon(resp.combineResultInfos); // 账户组信息
+                    this.$emit('updateMainTableData', this.mainTableData);
                 }
             }).catch(e => {
                 this.dialogFormVisible = false;
