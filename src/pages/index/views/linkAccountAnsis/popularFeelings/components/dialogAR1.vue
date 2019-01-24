@@ -31,20 +31,20 @@
             </s-card>
         </el-col>
         <!--<el-col :span="12">-->
-            <!--<s-card class="" :title="`舆情`" :icon="`fa fa-chart-line`">-->
-                <!--<s-table-->
-                    <!--ref="selfTables2"-->
-                    <!--slot="content"-->
-                    <!--:showSelectionColumn="true"-->
-                    <!--:showIndexColumn="false"-->
-                    <!--:height="230"-->
-                    <!--:loading="loadingAR"-->
-                    <!--:columns="columnsListPF"-->
-                    <!--:tableData="tableData1PF"-->
-                    <!--@selection-change="handleSelectionChange2"-->
-                <!--&gt;-->
-                <!--</s-table>-->
-            <!--</s-card>-->
+        <!--<s-card class="" :title="`舆情`" :icon="`fa fa-chart-line`">-->
+        <!--<s-table-->
+        <!--ref="selfTables2"-->
+        <!--slot="content"-->
+        <!--:showSelectionColumn="true"-->
+        <!--:showIndexColumn="false"-->
+        <!--:height="230"-->
+        <!--:loading="loadingAR"-->
+        <!--:columns="columnsListPF"-->
+        <!--:tableData="tableData1PF"-->
+        <!--@selection-change="handleSelectionChange2"-->
+        <!--&gt;-->
+        <!--</s-table>-->
+        <!--</s-card>-->
         <!--</el-col>-->
     </el-row>
 </template>

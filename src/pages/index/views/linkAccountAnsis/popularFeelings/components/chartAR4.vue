@@ -52,7 +52,8 @@
 
 <script>
 import MiniIndex from './miniIndex';
-import {postKLineChart} from '@/api/popularFeelings/anomalyRecognition';
+import _ from 'lodash';
+import {postPetroleumAR4} from '@/api/dataAnsis/popularFeelings';
 import {echartsData4} from './constants';
 import SCard from '@/components/index/common/SCard';
 import EchartsCommon from '@/components/index/common/EchartsCommon';
@@ -376,17 +377,17 @@ export default {
             }
         },
         barEchartsDete() {
+            let params = {
+                'startDate': '2018-03-26',
+                'endDate': '2019-01-10'
+            };
+            // 舆情-K线图
             this.loading4 = true;
-            // let params = {
-            //     'startDate': '2018-03-26',
-            //     'endDate': '2019-01-10'
-            // };
-            // // 舆情-K线图
-            // postKLineChart(params).then(resp => {
-            //     console.log(resp);
-            // }).catch(e => {
-            //     this.loading3 = false;
-            // });
+            postPetroleumAR4(params).then(resp => {
+                this.loading4 = false;
+            }).catch(e => {
+                this.loading4 = false;
+            });
             if (echartsData4 && echartsData4.length !== 0) {
                 this.loading4 = false;
                 let {mainData} = echartsData4;
@@ -405,14 +406,18 @@ export default {
                 this.chartOptions4['dataZoom'][1]['endValue'] = dataZoomEndValue;
                 let seriesData = [];
                 let date = [];
+                let titleText = '';
                 mainData.forEach(v => {
                     date.push(v.tradeDay);
+                    titleText = v.tradeDay + ' 开 ' + v.openingPrice + ' 高 ' + v.lowestPrice + ' 收 ' + v.openingPrice + ' 低 ' + v.highestPrice + ' 量 ' + v.volume + ' 幅 ' + v.amplitude + ' %';
                     seriesData.push(
                         // 开盘价 - 收盘价 -最低价-最高价 / 交易日 -成交量  // amplitude;//振幅
                         // chg;//涨跌
                         [v.openingPrice, v.closingPrice, v.lowestPrice, v.highestPrice, v.volume, v.amplitude, v.chg, v.tradeDay]
                     );
                 });
+
+                this.chartOptions4['title'][0]['text'] = titleText;
                 this.chartOptions4['series'][0]['data'] = seriesData;
                 this.chartOptions4['xAxis']['data'] = date;
                 this.$refs['echartsDemo4'] && this.$refs['echartsDemo4'].initChart();

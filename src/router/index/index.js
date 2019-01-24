@@ -108,6 +108,16 @@ const Index = {
                     icon: 'menu-fix-icon fa fa-venus-double',
                     component: resolve => require(['@/pages/index/views/linkAccountAnsis/assoAccountGroupMergeNew/assoAccountGroupMergeRL/Index.vue'], resolve)
                 }, */
+                {
+                    meta: {
+                        scrollTop: true,
+                        title: '异常交易分析'
+                    },
+                    path: 'abnormity',
+                    name: 'abnormity',
+                    icon: 'menu-fix-icon fa fa-broadcast-tower',
+                    component: resolve => require(['@/pages/index/views/linkAccountAnsis/abnormityAnalysis/Index.vue'], resolve)
+                },
                 // {
                 //    meta: {
                 //     scrollTop: true,
@@ -121,46 +131,35 @@ const Index = {
                 {
                     meta: {
                         scrollTop: true,
-                        title: '组合场景整合'
-                    },
-                    path: 'multipleScenesMerge',
-                    name: 'multipleScenesMerge',
-                    icon: 'menu-fix-icon fa fa-code-branch', // customer_information_inquiry
-                    component: resolve => require(['@/pages/index/views/linkAccountAnsis/multipleScenesMerge/Index.vue'], resolve)
-                },
-                {
-                    meta: {
-                        scrollTop: true,
-                        title: '异常交易分析'
-                    },
-                    path: 'abnormity',
-                    name: 'abnormity',
-                    icon: 'menu-fix-icon fa fa-broadcast-tower',
-                    component: resolve => require(['@/pages/index/views/linkAccountAnsis/abnormityAnalysis/Index.vue'], resolve)
-                },
-                {
-                    meta: {
-                        scrollTop: true,
                         title: '客户信息查询'
                     },
                     path: 'customerInformationInquiry',
                     name: 'customerInformationInquiry',
                     icon: 'menu-fix-icon fa fa-search', // customer_information_inquiry
                     component: resolve => require(['@/pages/index/views/linkAccountAnsis/customerInformationInquiry/Index.vue'], resolve)
+                }, {
+                    meta: {
+                        scrollTop: true,
+                        title: '组合场景整合'
+                    },
+                    path: 'multipleScenesMerge',
+                    name: 'multipleScenesMerge',
+                    icon: 'menu-fix-icon fa fa-code-branch', // customer_information_inquiry
+                    component: resolve => require(['@/pages/index/views/linkAccountAnsis/multipleScenesMerge/Index.vue'], resolve)
                 }
             ]
         },
-        {
-            path: '/',
-            noLink: true,
-            meta: {
-                scrollTop: true,
-                title: '异常波动'
-            },
-            name: 'popularFeelings1',
-            icon: 'menu-fix-icon fa fa-address-book',
-            component: LinkAccountAnsis
-        },
+        // {
+        //     path: '/',
+        //     noLink: true,
+        //     meta: {
+        //         scrollTop: true,
+        //         title: '异常波动'
+        //     },
+        //     name: 'popularFeelings1',
+        //     icon: 'menu-fix-icon fa fa-address-book',
+        //     component: LinkAccountAnsis
+        // },
         {
             path: '',
             noLink: true,

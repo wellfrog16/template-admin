@@ -62,10 +62,10 @@
 </template>
 
 <script>
-import moment from 'moment';
+// import moment from 'moment';
 import MiniIndex from './miniIndex';
 import {echartsData1} from './constants';
-// import {postCrudeOilPrices} from '@/api/popularFeelings/anomalyRecognition';
+// import {postPetroleumAR1} from '@/api/dataAnsis/popularFeelings';
 import SCard from '@/components/index/common/SCard';
 import EchartsCommon from '@/components/index/common/EchartsCommon';
 import DialogAR1 from './dialogAR1';
@@ -85,8 +85,18 @@ export default {
              * 实时交易均价  realAveragePrice      realAveragePrice: 413.6
              * 实时交易成交  realMakeBargain       realMakeBargain: 50026
              * 实时交易价格  realPrice             realPrice: 413.6
-             * 实时交易时间 realTime               realTime: "2019-01-15 08:59:00.0"
-             * 实时交易涨跌  realUpsAndDowns       realUpsAndDowns: 1398
+             * 实时交易时间 realTime               realTime: "08:59"
+             * 实时交易涨跌  realUpsAndDowns       realUpsAndDowns: 1398 +  percentageAmplitude: "-0.79%"  ?
+             * crudeCode: "YY_SCO"
+             crudeDealTime: "2019-01-24"
+             crudeName: "原油"
+             percentageAmplitude: "-0.79%"  ?
+             quantity: null
+             realAveragePrice: "427.300"
+             realMakeBargain: "436"
+             realPrice: "425.000"
+             realTime: "10:13"
+             realUpsAndDowns: "-3.4000"
              */
             {name: 'crudeCode', index: 0, text: '原油代码'},
             {name: 'crudeDealTime', index: 1, text: '产品成交时间'},
@@ -98,8 +108,6 @@ export default {
             {name: 'realUpsAndDowns', index: 7, text: '实时交易涨跌'},
         ];
         return {
-            s1: '',
-            s2: '',
             loading1: false,
             dialogVisible: false,
             // form 表单绑定值
@@ -182,8 +190,8 @@ export default {
                     // }
                 ],
                 grid: {
-                    x: 30, // 左
-                    x2: 40, // 右
+                    x: 25, // 左
+                    x2: 25, // 右
                     y: 60, // 上
                     // y2: 160 // 下
                     y2: 70 // 下
@@ -193,17 +201,28 @@ export default {
                     borderColor: '#777',
                     borderWidth: 1,
                     trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross',
+                        label: {
+                            color: '#fff',
+                            backgroundColor: '#222'
+                        }
+                    },
                     position(pos, params, el, elRect, size) {
                         var obj = {top: 10};
                         obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]] = 30;
                         return obj;
                     },
                     formatter: param => {
-                        let filterItem = this.mainData.filter(v => {
+                        let filterItem = this.mainData.filter((v, index) => {
                             return v.realTime === param[0]['name'];
                         })[0];
                         return schema.map((v, i) => {
-                            return v.text + ': ' + filterItem[v.name];
+                            let textObj = {};
+                            if (v.index === 7) { // 涨跌幅
+                                textObj = v.text + ': ' + filterItem[v.name] + '(' + filterItem.percentageAmplitude + ')';
+                            }
+                            return textObj;
                         }).join('<br>');
                     }
                 },
@@ -217,9 +236,13 @@ export default {
                         }
                     },
                     data: [],
+                    axisTick: { // y轴刻度线
+                        show: false,
+                    },
                     axisLine: { // y轴
                         lineStyle: {
-                            color: '#6ab2ec',
+                            type: 'dashed',
+                            color: '#fff',
                             width: 1,
                         },
                     }
@@ -236,11 +259,12 @@ export default {
                             return value.max;
                         },
                         splitLine: {
-                            show: false,
+                            show: true,
                             //  改变轴线颜色
                             lineStyle: {
+                                type: 'dashed',
                                 // 使用深浅的间隔色
-                                color: ['#132a6e']
+                                color: ['#1f416e']
                             }
                         },
                         axisLine: { // y轴
@@ -260,15 +284,11 @@ export default {
                         name: '涨跌',
                         type: 'value',
                         position: 'right',
-                        min: value => {
-                            return value.min;
-                        },
-                        max: value => {
-                            return value.max;
-                        },
+                        min: 1.79,
+                        max: 0,
                         // 控制网格线是否显示
                         splitLine: {
-                            show: true,
+                            show: false,
                             //  改变轴线颜色
                             lineStyle: {
                                 // 使用深浅的间隔色
@@ -282,12 +302,46 @@ export default {
                             },
                         },
                         axisTick: { // y轴刻度线
-                            show: true,
+                            show: false,
                         },
                         axisLabel: {
                             formatter: '{value} %'
                         },
                     },
+                    {
+                        name: '均价',
+                        show: false,
+                        offset: 0,
+                        type: 'value',
+                        position: 'right',
+                        min: value => {
+                            return value.min;
+                        },
+                        max: value => {
+                            return value.max;
+                        },
+                        // 控制网格线是否显示
+                        splitLine: {
+                            show: false,
+                            //  改变轴线颜色
+                            lineStyle: {
+                                // 使用深浅的间隔色
+                                color: ['#fff']
+                                // width: 0
+                            }
+                        },
+                        axisLine: { // 设置y轴线的属性
+                            lineStyle: {
+                                color: 'red',
+                            },
+                        },
+                        axisTick: { // y轴刻度线
+                            show: true,
+                        },
+                        axisLabel: {
+                            formatter: '{value}'
+                        },
+                    }
                 ],
                 dataZoom: [
                     {
@@ -301,10 +355,11 @@ export default {
                 ],
                 series: [
                     {
-                        name: '分时',
+                        name: '价格',
                         data: [],
                         yAxisIndex: 0,
                         type: 'line',
+                        symbolSize: 5,
                         itemStyle: {
                             normal: {
                                 lineStyle: {
@@ -323,7 +378,7 @@ export default {
                         markArea: {
                             silent: false,
                             itemStyle: {
-                                // color: '#222',
+                                color: '#999',
                                 borderColor: 'rgba(0, 0, 0, 0.5)',
                                 borderWidth: '1',
                                 shadowColor: 'rgba(0, 0, 0, 0.5)',
@@ -333,56 +388,36 @@ export default {
                                 shadowOffsetY: 3
 
                             },
-                            data: [
-                                [
-                                    {
-                                        name: '异常数据',
-                                        xAxis: '21:00',
-                                        yAxis: 413
-                                    },
-                                    {
-                                        xAxis: '23:37',
-                                        yAxis: 419
-                                    }
-                                ],
-                                [
-                                    {
-                                        name: '异常数据',
-                                        xAxis: '21:00',
-                                        yAxis: 4.17
-                                    },
-                                    {
-                                        xAxis: '23:37',
-                                        yAxis: 4.9
-                                    }
-                                ]
-                            ],
-                            //     data: {
-                            //         0: {
-                            //             coord: [{
-                            //                 // name: '异常数据',
-                            //                 xAxis: '21:00',
-                            //                 // yAxis: 413
-                            //             }]
-                            //         },
-                            //         1: {
-                            //             coord: [ {
-                            //                 // xAxis: '23:37',
-                            //                 yAxis: 419
-                            //             }]
-                            //         }
-                            //     }
+                            data: [],
                         },
                     },
                     {
-                        name: '分时图',
+                        name: '均价',
                         data: [],
                         type: 'line',
                         yAxisIndex: 1,
                         itemStyle: {
                             normal: {
                                 lineStyle: {
-                                    color: '#10ff82'
+                                    color: '#222'
+                                }
+                            }
+                        },
+                        symbol: 'circle',
+                        // // 设置折点大小
+                        symbolSize: 0,
+                        // // 设置为光滑曲线
+                        smooth: true
+                    },
+                    {
+                        name: '涨跌',
+                        data: [],
+                        type: 'line',
+                        yAxisIndex: 2,
+                        itemStyle: {
+                            normal: {
+                                lineStyle: {
+                                    color: 'red'
                                 }
                             }
                         },
@@ -456,182 +491,66 @@ export default {
         // });
 
         barEchartsDete() {
-            // this.loading1 = true;
-            // let params = {
-            //     'timeOfDay': moment(new Date()).format('YYYY-MM-DD'),
-            // };
-            //  舆情-K线图
-            // setInterval(() => {
-            //     postCrudeOilPrices(params).then(resp => {
-            //         // if (resp && resp.length !== 0) {
-            //         //     // console.log(resp);
-            //         //     this.loading1 = false;
-            //         //     // let {mainData} = echartsData1;
-            //         //     let {mainData} = resp;
-            //         //     if (mainData && !mainData.length) {
-            //         //         return;
-            //         //     }
-            //         //     let lineData = [];
-            //         //     let timeData = [];
-            //         //     let colors = [
-            //         //         '#00709e',
-            //         //         '#ac10ce',
-            //         //         '#ff0000',
-            //         //         '#13ce34',
-            //         //         '#ff8a00',
-            //         //         '#006624',
-            //         //         '#e3007b',
-            //         //         '#1929b3',
-            //         //         '#b69913',
-            //         //         '#f8f400'
-            //         //     ];
-            //         //     let buy = {};
-            //         //     let sail = {};
-            //         //     // console.log(mainData);
-            //         //     mainData.forEach(v => {
-            //         //         /**
-            //         //          * 原油代码 crudeCode                 crudeCode: "t1nf_SC0"
-            //         //          * 产品成交时间  crudeDealTime         crudeDealTime: "2019-01-15"
-            //         //          * 产品名称  crudeName                crudeName: "原油"
-            //         //          * ..........................         quantity: 415  ?
-            //         //          * 实时交易均价  realAveragePrice      realAveragePrice: 413.6
-            //         //          * 实时交易成交  realMakeBargain       realMakeBargain: 50026
-            //         //          * 实时交易价格  realPrice             realPrice: 413.6
-            //         //          * 实时交易时间 realTime               realTime: "2019-01-15 08:59:00.0"
-            //         //          * 实时交易涨跌  realUpsAndDowns       realUpsAndDowns: 1398
-            //         //          */
-            //         //         timeData.push(v.realTime);
-            //         //         lineData.push(
-            //         //             [
-            //         //                 v.crudeCode,
-            //         //                 v.crudeDealTime,
-            //         //                 v.crudeName,
-            //         //                 v.realAveragePrice,
-            //         //                 v.realMakeBargain,
-            //         //                 v.realPrice,
-            //         //                 v.realUpsAndDowns
-            //         //             ]
-            //         //         );
-            //         //     });
-            //         //     this.chartOptions1['series'] = [
-            //         //         {
-            //         //             name: '分时报单图',
-            //         //             data: lineData,
-            //         //             type: 'line'
-            //         //         }
-            //         //     ];
-            //         //     let series = this.chartOptions1['series'];
-            //         //     let maxPrice = _.max(lineData);
-            //         //     let minPrice = _.min(lineData);
-            //         //     let gap = (maxPrice - minPrice) * 0.03;
-            //         //     Object.keys(buy).forEach((v, i) => {
-            //         //         let data = buy[v].map(m => {
-            //         //             return [m.declBillTm2.slice(-5), m.closingPrice - (i + 1) * gap, m.declBillQtty, '买入', v];
-            //         //             // return [m.declBillTm2.slice(-5), lPrice + i * 2, m.declBillQtty, '买入', v];
-            //         //         });
-            //         //         series.push({
-            //         //             name: `${v}买入`,
-            //         //             type: 'scatter',
-            //         //             symbol: 'triangle',
-            //         //             symbolSize: 10,
-            //         //             itemStyle: {
-            //         //                 normal: {
-            //         //                     color: colors[i],
-            //         //                     opacity: 0.8,
-            //         //                     shadowBlur: 10,
-            //         //                     shadowOffsetX: 0,
-            //         //                     shadowOffsetY: 0,
-            //         //                     shadowColor: 'rgba(0, 0, 0, 0.5)'
-            //         //                 }
-            //         //             },
-            //         //             data: data,
-            //         //             smooth: true,
-            //         //             lineStyle: {
-            //         //                 normal: {opacity: 0.5}
-            //         //             }
-            //         //         });
-            //         //     });
-            //         //     Object.keys(sail).forEach((v, i) => {
-            //         //         let data = sail[v].map(m => {
-            //         //             return [m.declBillTm2.slice(-5), m.closingPrice + (i + 1) * gap, m.declBillQtty, '卖出', v];
-            //         //             // return [m.declBillTm2.slice(-5), hPrice - i * 2, m.declBillQtty, '卖出', v];
-            //         //         });
-            //         //         series.push({
-            //         //             name: `${v}卖出`,
-            //         //             type: 'scatter',
-            //         //             symbol: 'triangle',
-            //         //             symbolRotate: 180,
-            //         //             symbolSize: 10,
-            //         //             itemStyle: {
-            //         //                 normal: {
-            //         //                     color: colors[i + 5],
-            //         //                     opacity: 0.8,
-            //         //                     shadowBlur: 10,
-            //         //                     shadowOffsetX: 0,
-            //         //                     shadowOffsetY: 0,
-            //         //                     shadowColor: 'rgba(0, 0, 0, 0.5)'
-            //         //                 }
-            //         //             },
-            //         //             data: data,
-            //         //             smooth: true,
-            //         //             lineStyle: {
-            //         //                 normal: {opacity: 0.5}
-            //         //             }
-            //         //         });
-            //         //     });
-            //         //     this.chartOptions1['xAxis']['data'] = timeData;
-            //         //     this.chartOptions1['series'] = series;
-            //         //     this.chartOptions1['legend']['data'] = series.map(v => {
-            //         //         return v.name;
-            //         //     });
-            //         //     // this.$store.commit('savechart4', {data: this.chartOptions1, index: id || this.tabIndex || this.$store.getters.getTabIndex});
-            //         //     this.$refs['echartsDemo1'] && this.$refs['echartsDemo1'].initChart();
-            //         // }
-            //     }).catch(e => {
-            //         this.loading1 = false;
-            //     });
-            // }, 210000);
             setInterval(v => {
+                // let params = {
+                //     'timeOfDay': '2019-01-24'
+                // };
+                // this.loading1 = true;
+                // postPetroleumAR1(params).then(resp => {
+                //     console.log(resp);
+                // }).catch(e => {
+                //     this.loading1 = false;
+                // });
                 if (echartsData1 && echartsData1.length !== 0) {
                     this.loading1 = false;
                     let {mainData} = echartsData1;
-                    // let {mainData} = resp;
                     if (mainData && !mainData.length) {
                         return;
                     }
-                    let lineData = [];
-                    let lineDatas = [];
-                    let timeData = [];
+                    let exceptionDatas = echartsData1.exceptionData; // 异常数据
+                    let timeData = []; // 实时交易时间
+                    let priceData = []; // 实时交易价格
+                    let averagePriceData = []; // 实时交易均价
                     let titleText = '';
-                    let crudeDealTimes = '';
-                    let realTimes = '';
-                    let realAveragePrices = '';
-                    let realMakeBargains = '';
-                    let realUpsAndDownss = '';
                     var now = new Date(); // 当前日期
                     var dateWeek = now.getDay(); // 今天本周的第几天
                     this.mainData = mainData;
                     mainData.forEach(v => {
-                        timeData.push(v.realTime);
-                        lineData.push(v.realPrice);
-                        // lineDatas.push((v.realAveragePrice * 0.010).toFixed(2));
-                        lineDatas.push(v.realAveragePrice * 0.010);
-                        // 产品成交时间+星期几+实时交易时间+实时交易均价+实时交易成交数量+实时交易涨跌
-                        // titleText += v.crudeDealTime + '/' + dateWeek + '/' + v.realTime + ' 均 ' + v.realAveragePrice + ' 量 ' + v.realMakeBargain + ' 幅 ' + v.realUpsAndDowns;
-                        crudeDealTimes = v.crudeDealTime;
-                        realTimes = v.realTime;
-                        realAveragePrices = v.realAveragePrice;
-                        realMakeBargains = v.realMakeBargain;
-                        realUpsAndDownss = v.realUpsAndDowns;
+                        timeData.push(v.realTime); // 实时交易时间
+                        priceData.push(v.realPrice); // 实时交易价格
+                        averagePriceData.push(v.realAveragePrice * 0.010); // 实时交易均价
+                        // 产品成交时间--星期几---实时交易时间---实时交易均价---实时交易成交数量----实时交易涨跌
+                        titleText = v.crudeDealTime + '/' + dateWeek + '/' + v.realTime + ' 均 ' + v.realAveragePrice + ' 量 ' + v.realMakeBargain + ' 幅 ' + v.realUpsAndDowns + '%';
                     });
-                    titleText = crudeDealTimes + '/' + dateWeek + '/' + realTimes + ' 均 ' + realAveragePrices + ' 量 ' + realMakeBargains + ' 幅 ' + realUpsAndDownss * 0.010 + '%';
-                    this.chartOptions1['title'][0]['text'] = titleText;
-                    this.chartOptions1['series'][0]['data'] = lineData;
-                    this.chartOptions1['series'][1]['data'] = lineDatas;
-                    this.chartOptions1['xAxis']['data'] = timeData;
+                    let markAreaData = [
+                        [
+                            {
+                                'name': '异常数据',
+                                'xAxis': mainData[mainData.length - 1].realTime, // 异常时间
+                                'yAxis': mainData[mainData.length - 1].realPrice, // 异常价格
+                            },
+                            {
+                                'xAxis': exceptionDatas[0].realTime, // 前五分钟异常时间
+                                'yAxis': exceptionDatas[0].realPrice, // 前五分钟异常价格
+                            }
+                        ],
+                        [
+                            {
+                                'xAxis': mainData[mainData.length - 1].realTime, // 异常时间
+                            },
+                            {
+                                'xAxis': exceptionDatas[0].realTime, // 前五分钟异常时间
+                            }
+                        ]
+                    ];
+                    this.chartOptions1['title'][0]['text'] = titleText; // 标题
+                    this.chartOptions1['xAxis']['data'] = timeData; // 实时交易时间
+                    this.chartOptions1['series'][0]['data'] = priceData; // 实时交易价格
+                    this.chartOptions1['series'][2]['data'] = averagePriceData; // 实时交易均价
+                    this.chartOptions1['series'][0]['markArea']['data'] = markAreaData; // 异常
                     this.$refs['echartsDemo1'] && this.$refs['echartsDemo1'].initChart();
                 }
-            }, 2000);
+            }, 1000);
         }
     }
 };

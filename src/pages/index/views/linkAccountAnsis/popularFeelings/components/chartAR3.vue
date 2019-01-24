@@ -1,5 +1,5 @@
 <template>
-    <s-card :title="`国油日K图`" :icon="`fa fa-handshake`">
+    <s-card :title="`原油日K图`" :icon="`fa fa-handshake`">
         <el-button slot="right" type="text" @click="dialogClick">配置<i class="fa fa-undo-alt"></i></el-button>
         <el-dialog
             width="55%"
@@ -52,8 +52,9 @@
 
 <script>
 import MiniIndex from './miniIndex';
-import {postKLineChart} from '@/api/popularFeelings/anomalyRecognition';
-import {echartsData3} from './constants';
+import _ from 'lodash';
+import {postPetroleumAR3} from '@/api/dataAnsis/popularFeelings';
+// import {echartsData3} from './constants';
 import SCard from '@/components/index/common/SCard';
 import EchartsCommon from '@/components/index/common/EchartsCommon';
 import DialogAR3 from './dialogAR3';
@@ -376,54 +377,56 @@ export default {
         },
         barEchartsDete() {
             this.loading3 = true;
-            // let params = {
-            //     'startDate': '2018-03-26',
-            //     'endDate': '2019-01-10'
-            // };
-            // // 舆情-K线图
-            // postKLineChart(params).then(resp => {
-            //     console.log(resp);
-            // }).catch(e => {
-            //     this.loading3 = false;
-            // });
-            if (echartsData3 && echartsData3.length !== 0) {
-                this.loading3 = false;
-                let {mainData} = echartsData3;
-                // let {mainData} = resp;
-                if (mainData && !mainData.length) {
-                    return;
+            let params = {
+                'startDate': '2018-03-26',
+                'endDate': '2019-01-10'
+            };
+            // 原油日K图
+            postPetroleumAR3(params).then(resp => {
+                if (resp && resp.length !== 0) {
+                    this.loading3 = false;
+                    // let {mainData} = resp || echartsData3;
+                    let {mainData} = resp;
+                    if (mainData && !mainData.length) {
+                        return;
+                    }
+                    mainData = _.sortBy(mainData, [axis => {
+                        return axis.tradeDay;
+                    }]);
+                    let dataZoomStartValue = mainData[mainData.length > 20 ? mainData.length - 20 : 0]['tradeDay'];
+                    let dataZoomEndValue = mainData[mainData.length - 1]['tradeDay'];
+                    this.chartOptions3['dataZoom'][0]['startValue'] = dataZoomStartValue;
+                    this.chartOptions3['dataZoom'][1]['startValue'] = dataZoomStartValue;
+                    this.chartOptions3['dataZoom'][0]['endValue'] = dataZoomEndValue;
+                    this.chartOptions3['dataZoom'][1]['endValue'] = dataZoomEndValue;
+                    let seriesData = [];
+                    let date = [];
+                    let titleText = '';
+                    // let tradeDay = ''; // 交易日
+                    // let openingPrice = ''; // 开盘价
+                    // let lowestPrice = ''; // 最高价
+                    // let openingPrice = ''; // 收盘价
+                    // let highestPrice = ''; // 最低价
+                    // let volume = ''; // 成交量
+                    // let amplitude = ''; // 振幅
+                    // let chg = ''; // 涨跌
+                    mainData.forEach(v => {
+                        date.push(v.tradeDay);
+                        titleText = v.tradeDay + ' 开 ' + v.openingPrice + ' 高 ' + v.lowestPrice + ' 收 ' + v.openingPrice + ' 低 ' + v.highestPrice + ' 量 ' + v.volume + ' 幅 ' + v.amplitude + ' %';
+                        seriesData.push(
+                            // 开盘价 - 收盘价 -最低价-最高价 / 交易日 -成交量  // amplitude;//振幅
+                            // chg;//涨跌
+                            [v.openingPrice, v.closingPrice, v.lowestPrice, v.highestPrice, v.volume, v.amplitude, v.chg, v.tradeDay]
+                        );
+                    });
+                    this.chartOptions3['title'][0]['text'] = titleText;
+                    this.chartOptions3['series'][0]['data'] = seriesData;
+                    this.chartOptions3['xAxis']['data'] = date;
+                    this.$refs['echartsDemo3'] && this.$refs['echartsDemo3'].initChart();
                 }
-                mainData = _.sortBy(mainData, [axis => {
-                    return axis.tradeDay;
-                }]);
-                let dataZoomStartValue = mainData[mainData.length > 20 ? mainData.length - 20 : 0]['tradeDay'];
-                let dataZoomEndValue = mainData[mainData.length - 1]['tradeDay'];
-                this.chartOptions3['dataZoom'][0]['startValue'] = dataZoomStartValue;
-                this.chartOptions3['dataZoom'][1]['startValue'] = dataZoomStartValue;
-                this.chartOptions3['dataZoom'][0]['endValue'] = dataZoomEndValue;
-                this.chartOptions3['dataZoom'][1]['endValue'] = dataZoomEndValue;
-                let seriesData = [];
-                let date = [];
-                let titleText = '';
-                let crudeDealTimes = '';
-                let realTimes = '';
-                let realAveragePrices = '';
-                let realMakeBargains = '';
-                let realUpsAndDownss = '';
-                var now = new Date(); // 当前日期
-                var dateWeek = now.getDay(); // 今天本周的第几天
-                mainData.forEach(v => {
-                    date.push(v.tradeDay);
-                    seriesData.push(
-                        // 开盘价 - 收盘价 -最低价-最高价 / 交易日 -成交量  // amplitude;//振幅
-                        // chg;//涨跌
-                        [v.openingPrice, v.closingPrice, v.lowestPrice, v.highestPrice, v.volume, v.amplitude, v.chg, v.tradeDay]
-                    );
-                });
-                this.chartOptions3['series'][0]['data'] = seriesData;
-                this.chartOptions3['xAxis']['data'] = date;
-                this.$refs['echartsDemo3'] && this.$refs['echartsDemo3'].initChart();
-            }
+            }).catch(e => {
+                this.loading3 = false;
+            });
         }
     },
 };
