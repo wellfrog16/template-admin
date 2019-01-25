@@ -208,23 +208,25 @@ export default {
         setChartOptions(val) {
             // 增加uid字段
             let allLeaf = [];
-            this.mainTableData.forEach(v => {
-                if (v.children && v.children.length) {
-                    let custIds = v.children.map(v => {
-                        return v.custId;
-                    });
-                    custIds = [...new Set(custIds)];
-                    let childIds = v.children.map(v => {
-                        return v.id;
-                    });
-                    allLeaf.push({
-                        acctId: v.acctId,
-                        custIds: custIds,
-                        id: v.id
-                    });
-                    this.childrenMap[v.id] = childIds;
-                }
-            });
+            if (this.mainTableData) {
+                this.mainTableData.forEach(v => {
+                    if (v.children && v.children.length) {
+                        let custIds = v.children.map(v => {
+                            return v.custId;
+                        });
+                        custIds = [...new Set(custIds)];
+                        let childIds = v.children.map(v => {
+                            return v.id;
+                        });
+                        allLeaf.push({
+                            acctId: v.acctId,
+                            custIds: custIds,
+                            id: v.id
+                        });
+                        this.childrenMap[v.id] = childIds;
+                    }
+                });
+            }
             if (val && val.nodes) {
                 val.nodes.forEach(v => {
                     let index = allLeaf.findIndex(i => {
@@ -233,6 +235,13 @@ export default {
                     v.custIds = index > -1 ? allLeaf[index]['custIds'].join(',') : '';
                     v.uid = index > -1 ? allLeaf[index]['id'] : '';
                 });
+                val.nodes.forEach(v => {
+                    let len = v.custIds.split(',').length;
+                    v.symbolSize = len > 5 ? 35 : len < 1 ? 8 : len * 7;
+                });
+                let max = _.maxBy(val.nodes, 'value')['value'];
+                this.chartOptions.visualMap.max = max;
+                this.chartOptions.series[0]['data'] = val.nodes;
             }
             this.chartOptions.legend.data = this.checkboxes.map(v => {
                 return v.label;
@@ -243,37 +252,31 @@ export default {
             });
             this.chartOptions.series[0]['categories'].unshift({name: ''}); // 处理checkbox的code从1开始的问题。
             let lineColor = '#959595';
-            val.links.forEach(v => {
-                if (v.intersectionRatio <= 0.5) {
-                    v.lineStyle = {normal: {color: lineColor, width: 2, type: 'dashed'}};
-                } else if (v.intersectionRatio <= 0.6) {
-                    v.lineStyle = {normal: {color: lineColor, width: 4, type: 'solid'}};
-                } else if (v.intersectionRatio <= 0.7) {
-                    v.lineStyle = {normal: {color: lineColor, width: 6, type: 'solid'}};
-                } else if (v.intersectionRatio <= 0.8) {
-                    v.lineStyle = {normal: {color: lineColor, width: 8, type: 'solid'}};
-                } else if (v.intersectionRatio <= 0.9) {
-                    v.lineStyle = {normal: {color: lineColor, width: 10, type: 'solid'}};
-                } else {
-                    v.lineStyle = {normal: {color: lineColor, width: 12, type: 'solid'}};
-                }
-            });
-            let max = _.maxBy(val.nodes, 'value')['value'];
-            val.nodes.forEach(v => {
-                let len = v.custIds.split(',').length;
-                v.symbolSize = len > 5 ? 35 : len < 1 ? 8 : len * 7;
-            });
-            this.chartOptions.series[0]['links'] = val.links;
-            this.chartOptions.series[0]['data'] = val.nodes;
-            this.chartOptions.visualMap.max = max;
+            if (val && val.links) {
+                val.links.forEach(v => {
+                    if (v.intersectionRatio <= 0.5) {
+                        v.lineStyle = {normal: {color: lineColor, width: 2, type: 'dashed'}};
+                    } else if (v.intersectionRatio <= 0.6) {
+                        v.lineStyle = {normal: {color: lineColor, width: 4, type: 'solid'}};
+                    } else if (v.intersectionRatio <= 0.7) {
+                        v.lineStyle = {normal: {color: lineColor, width: 6, type: 'solid'}};
+                    } else if (v.intersectionRatio <= 0.8) {
+                        v.lineStyle = {normal: {color: lineColor, width: 8, type: 'solid'}};
+                    } else if (v.intersectionRatio <= 0.9) {
+                        v.lineStyle = {normal: {color: lineColor, width: 10, type: 'solid'}};
+                    } else {
+                        v.lineStyle = {normal: {color: lineColor, width: 12, type: 'solid'}};
+                    }
+                });
+                this.chartOptions.series[0]['links'] = val.links;
+            }
             this.$refs['chartRef'].initChart();
         },
         initChart(options) {
             this.chartOptions = options;
             this.$refs['chartRef'].initChart();
         },
-        handleEchartClickEvent() {},
-        /* handleEchartClickEvent(params) {
+        handleEchartClickEvent(params) {
             // 增加勾选标志
             let currentId = params['data']['uid'];
             if (this.selectAccountGroupList.indexOf(currentId) > -1) { // 取消选中
@@ -295,21 +298,18 @@ export default {
                 let data = this.chartOptions['series'][0]['data'];
                 data.forEach(v => {
                     if (v.uid === currentId) {
-                        v.itemStyle = {borderColor: '#ffff00', borderWidth: 2};
+                        v.itemStyle = {borderColor: '#fff', borderWidth: 2};
                     }
                 });
                 this.chartOptions['series'][0]['data'] = data;
                 // table勾选状态
                 let selectAccountGroupList = JSON.parse(JSON.stringify(this.selectAccountGroupList));
                 selectAccountGroupList.push(currentId);
+                console.log('******' + selectAccountGroupList);
                 this.$emit('updateSelectAccountGroupList', selectAccountGroupList);
             }
-            this.setChartOptions(this.chartOptions);
-            this.$refs['self-tree-table'].$refs['tree-table'].setCheckedKeys(this.selectAccountGroupList);
-            setTimeout(() => {
-                this.$refs['self-tree-table'].handleChecked(this.selectAccountGroupList);
-            }, 500);
-        }, */
+            this.$refs['chartRef'].initChart();
+        },
         handleEchartDblClickEvent(item) {
             if (item.dataType === 'node') {
                 let params = {

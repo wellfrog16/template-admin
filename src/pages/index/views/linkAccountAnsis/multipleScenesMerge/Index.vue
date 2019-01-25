@@ -100,8 +100,15 @@ export default {
             this.mainTableData = val;
         },
         updateSelectAccountGroupList(val) {
+            console.log('*************');
+            console.log(val);
             this.selectAccountGroupList = val;
             this.$refs['accountGroupTableRef'].selectAccountGroupList = val;
+            console.log(this.$refs['accountGroupTableRef']);
+            this.$refs['accountGroupTableRef'].$refs['self-tree-table'].$refs['tree-table'].setCheckedKeys(val);
+            setTimeout(() => {
+                this.$refs['accountGroupTableRef'].$refs['self-tree-table'].handleChecked(val);
+            }, 500);
         },
         handleClearAll() {
             // mark 样式
