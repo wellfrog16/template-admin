@@ -54,7 +54,10 @@ export default {
                 this.echart.clear();
             }
             this.echart.setOption(this.defaultOption);
-            window.onresize = this.echart.resize;
+            // window.onresize = this.echart.resize; // 该方法只有一个图表有效；弃用；
+            window.addEventListener('resize', () => {
+                this.echart.resize();
+            });
             /* 解除绑定事件 */
             this.echart && this.echart.off('click');
             this.echart && this.echart.off('dblclick');
