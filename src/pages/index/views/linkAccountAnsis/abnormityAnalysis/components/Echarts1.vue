@@ -30,7 +30,7 @@ export default {
                         normal: {
                             lineStyle: {
                                 type: 'solid',
-                                color: 'red'
+                                color: '#fff'
                             }
                         }
                     },
@@ -38,7 +38,7 @@ export default {
                         position: 'middle',
                         show: true,
                         formatter: function() {
-                            return '限仓线';
+                            return '超仓线';
                         }
                     },
                     data: [

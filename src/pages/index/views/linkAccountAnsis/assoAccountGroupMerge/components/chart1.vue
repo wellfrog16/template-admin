@@ -134,7 +134,7 @@ export default {
                             lineStyle: {
                                 normal: {
                                     type: 'dashed',
-                                    color: '#ec0000'
+                                    color: '#fff'
                                 }
                             },
                             label: {

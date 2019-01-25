@@ -42,7 +42,19 @@ export default {
                     itemGap: 20,
                     left: 'left',
                     top: 'middle',
-                    orient: 'vertical'
+                    orient: 'vertical',
+                    tooltip: {
+                        show: true,
+                        formatter: params => {
+                            if (params.name === '重要信息') {
+                                if (String(this.sceneType) === '3') {
+                                    return '（联系地址相同）或（联系电话相同）或（身份证相同）';
+                                } else if (String(this.sceneType) === '4') {
+                                    return '（同一投资经理）或（同一投资顾问）或（同一权益持有人）';
+                                }
+                            }
+                        }
+                    }
                 },
                 tooltip: {
                     formatter: params => {
@@ -100,7 +112,7 @@ export default {
             // 散点图sort
             this.chartOptions['series'][0]['links'] = chartData['links'];
             this.chartOptions['series'][0]['data'] = chartData['nodes'];
-            this.chartOptions.legend.data = ['重点指标', '次要指标'];
+            this.chartOptions.legend.data = ['重要信息', '次要信息'];
             this.chartOptions['series'][0]['categories'] = this.chartOptions.legend.data.map(v => {
                 return {name: v};
             });
