@@ -167,6 +167,7 @@ const Index = {
                 scrollTop: true,
                 title: '舆情异常识别'
             },
+            hidden: true,
             name: 'popularFeeling',
             icon: 'menu-fix-icon fa fa-address-book',
             component: LinkAccountAnsis,
