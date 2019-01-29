@@ -1,6 +1,6 @@
 <template>
     <div>
-        <echarts-common :loading="loading" :ref="`chart${index}`" :domId="`chart${index}`" :defaultOption="chartOptions" :propsChartHeight="300" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></echarts-common>
+        <echarts-common :loading="loading" :ref="`chart${index}`" :domId="`chart${index}`" :defaultOption="chartOptions" :propsChartHeight="propsChartHeight" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></echarts-common>
     </div>
 </template>
 <script>
@@ -26,6 +26,10 @@ export default {
         tabIndex: {
             type: [String, Number],
             default: '0'
+        },
+        propsChartHeight: {
+            type: [String, Number],
+            default: 300
         }
     },
     data() {

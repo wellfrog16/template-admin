@@ -1,6 +1,6 @@
 <template>
     <div class="scene2-1">
-        <echarts-common :loading="loading" :ref="`chart${index}`" :domId="`chart${index}`" :defaultOption="chartOptions" :propsChartHeight="300" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></echarts-common>
+        <echarts-common :loading="loading" :ref="`chart${index}`" :domId="`chart${index}`" :defaultOption="chartOptions" :propsChartHeight="propsChartHeight" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></echarts-common>
         <div class="select-container">
             <div v-for="(item, key, index) in options" :key="index" v-show="showSelectList">
                 <span>{{ key }}:</span>
@@ -40,6 +40,10 @@ export default {
         tabIndex: {
             type: [String, Number],
             default: '0'
+        },
+        propsChartHeight: {
+            type: [String, Number],
+            default: 300
         }
     },
     data() {
@@ -49,8 +53,9 @@ export default {
             {name: 'data3', index: 2},
             {name: 'data4', index: 3},
             {name: 'data5', index: 4},
-            {name: 'acctId', index: 5},
-            {name: 'custId', index: 6},
+            {name: 'data6', index: 5},
+            {name: 'acctId', index: 6},
+            {name: 'custId', index: 7},
         ];
         let fieldIndices = schema.reduce(function(obj, item) {
             obj[item.name] = item.index;
@@ -60,7 +65,6 @@ export default {
             return item.name;
         });
         fieldNames = fieldNames.slice(0, fieldNames.length - 2);
-        console.log(fieldIndices);
         let config = {
             xAxis3D: '日均成交量',
             yAxis3D: '日均报单次数',
@@ -75,15 +79,17 @@ export default {
             fieldIndices,
             loading: false,
             showSelectList: true,
-            selectModes: ['data1', 'data2', 'data3', 'data4', 'data5'],
+            selectModes: ['data1', 'data2', 'data3', 'data4', 'data5', 'data6'],
             mapArray: {
                 data1: '日均成交量',
                 data2: '日均报单次数',
                 data3: '日均成交率',
                 data4: '日均撤单率',
                 data5: '日均操作时间差',
+                data6: '持仓量'
             },
             options: configParameters,
+            chartData: [],
             commonSeries: {
                 name: '',
                 type: 'scatter3D',
@@ -117,7 +123,6 @@ export default {
                     borderWidth: 1,
                     extraCssText: 'width:150px; white-space:pre-wrap;',
                     formatter: data => {
-                        console.log(data);
                         if (data.componentType === 'markLine' || data.componentType === 'markPoint') {
                             return '';
                         }
@@ -125,9 +130,9 @@ export default {
                         let str = '';
                         str += `账户组号：${value[3]} \n`;
                         str += `客户号：${value[4]} \n`;
-                        str += `x：${value[0]} \n`;
-                        str += `y：${value[1]} \n`;
-                        str += `z：${value[2]} \n`;
+                        str += `${this.mapArray[this.selectModes[0]]}：${value[0]} \n`;
+                        str += `${this.mapArray[this.selectModes[1]]}：${value[1]} \n`;
+                        str += `${this.mapArray[this.selectModes[2]]}：${value[2]} \n`;
                         return str;
                     }
                 },
@@ -157,6 +162,15 @@ export default {
                 },
                 grid3D: {
                     environment: 'rgba(0, 0, 0)',
+                    postEffect: {
+                        enable: true,
+                        // depthOfField: {
+                        //     enable: true
+                        // },
+                        screenSpaceAmbientOcclusion: {
+                            enable: true
+                        }
+                    },
                     axisLine: {
                         lineStyle: {
                             color: '#00f9ff'
@@ -169,7 +183,7 @@ export default {
                     },
                     splitLine: {
                         lineStyle: {
-                            color: '#959595'
+                            color: '#3a3636'
                         }
                     },
                     viewControl: {
@@ -190,16 +204,18 @@ export default {
             // } else {
             //     this.chartOptions[xyz[index]]['type'] = 'value';
             // }
-            console.log(this.selectModes);
             this.chartOptions[key]['name'] = this.mapArray[value];
             this.chartOptions.series = [];
-            Object.keys(this.data).forEach((key, index) => {
+            if (this.chartData && !this.chartData.length) {
+                this.chartData = JSON.parse(sessionStorage.getItem('3D_scatter_chartData')) || [];
+            }
+            Object.keys(this.chartData).forEach((key, index) => {
                 this.chartOptions['series'].push(
                     {
                         ...this.commonSeries,
                         ...{
                             name: key,
-                            data: this.data[key].map(item => {
+                            data: this.chartData[key].map(item => {
                                 return [
                                     item[this.selectModes[0]],
                                     item[this.selectModes[1]],
@@ -210,12 +226,13 @@ export default {
                             })
                         },
                         ...{
-                            itemStyle: {color: echartsDefault.color[index]}
+                            itemStyle: {
+                                color: echartsDefault.color[index]
+                            }
                         }
                     }
                 );
             });
-            console.log(this.chartOptions);
             this.$refs['chart0'].initChart();
         },
         getData(chartData, id) {
@@ -235,13 +252,16 @@ export default {
                             })
                         },
                         ...{
-                            itemStyle: {color: echartsDefault.color[index]}
+                            itemStyle: {
+                                color: echartsDefault.color[index]
+                            }
                         }
                     }
                 );
             });
-            this.data = chartData;
             console.log(this.chartOptions);
+            this.chartData = chartData;
+            sessionStorage.setItem('3D_scatter_chartData', JSON.stringify(chartData));
             this.$store.commit('savechart1', {data: this.chartOptions, index: id || this.tabIndex || this.$store.getters.tabIndex});
             // select max;
             // this.$emit('updateAccountGroupAndCustIds', chartData['nodes'][0]['name'], chartData['nodes'][0]['value'].split(','));
@@ -263,7 +283,6 @@ export default {
             }
         },
         handleEchartClickEvent(val) {
-            console.log(val);
             this.$emit('handleEchartClickEvent', val, this.index);
         },
         handleEchartDblClickEvent(val) {

@@ -2,9 +2,27 @@ import _ from 'lodash';
 export default {
     data() {
         return {
+            propsChartHeight: 300,
+            fullscreen: false,
+            currentFullScreenIndex: 0
         };
     },
     methods: {
+        toggleFullScreen(index) {
+            this.$refs['fullscreen'][index].toggle();
+            this.currentFullScreenIndex = index;
+        },
+        fullscreenChange(fullscreen) {
+            this.fullscreen = fullscreen;
+            this.$nextTick(() => {
+                if (fullscreen) {
+                    this.propsChartHeight = 500;
+                } else {
+                    this.propsChartHeight = 300;
+                }
+                this.$refs[`chartComponent${this.currentFullScreenIndex + 1}`][0].$refs[`chart${this.currentFullScreenIndex}`].echart.resize();
+            });
+        },
         getChart() {
             return [this.getChart1, this.getChart2, this.getChart3, this.getChart4];
         },

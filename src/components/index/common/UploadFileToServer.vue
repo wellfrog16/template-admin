@@ -78,7 +78,7 @@ export default {
         },
         limit: {
             type: Number,
-            default: 1
+            default: 10
         },
         noLimitFileType: {
             type: Boolean,
@@ -142,7 +142,9 @@ export default {
             this.$message.error(`超出最大上传文件数目：${this.limit}`);
         },
         handleChange(file, fileList) {
-            this.$emit('currentFileList', fileList);
+            this.$refs['upload'].clearFiles();
+            this.$emit('currentFileList', [file]);
+            this.filelist = [file];
             if (this.noLimitFileType) {
                 return;
             }
