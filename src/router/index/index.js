@@ -149,23 +149,12 @@ const Index = {
                 }
             ]
         },
-        // {
-        //     path: '/',
-        //     noLink: true,
-        //     meta: {
-        //         scrollTop: true,
-        //         title: '异常波动'
-        //     },
-        //     name: 'popularFeelings1',
-        //     icon: 'menu-fix-icon fa fa-address-book',
-        //     component: LinkAccountAnsis
-        // },
         {
             path: '',
             noLink: true,
             meta: {
                 scrollTop: true,
-                title: '舆情异常识别'
+                title: '舆情异常'
             },
             hidden: true,
             name: 'popularFeeling',
@@ -181,6 +170,26 @@ const Index = {
                     name: 'popularFeelings',
                     icon: 'menu-fix-icon fa fa-location-arrow',
                     component: resolve => require(['@/pages/index/views/linkAccountAnsis/popularFeelings/Index.vue'], resolve)
+                },
+                {
+                    meta: {
+                        scrollTop: true,
+                        title: '异常波动'
+                    },
+                    path: '/publicOpinionSwings',
+                    name: 'popularFeelings',
+                    icon: 'menu-fix-icon fa fa-location-arrow',
+                    component: resolve => require(['@/pages/index/views/linkAccountAnsis/publicOpinionSwings/Index.vue'], resolve)
+                },
+                {
+                    meta: {
+                        scrollTop: true,
+                        title: '新闻详情'
+                    },
+                    path: '/newsDetails',
+                    name: 'popularFeelings',
+                    icon: 'menu-fix-icon fa fa-location-arrow',
+                    component: resolve => require(['@/pages/index/views/linkAccountAnsis/newsDetails/Index.vue'], resolve)
                 }
             ]
         }

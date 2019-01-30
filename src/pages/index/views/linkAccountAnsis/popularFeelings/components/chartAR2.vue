@@ -501,7 +501,7 @@ export default {
                 }).catch(e => {
                     this.loading2 = false;
                 });
-            }, 10000);
+            }, 1000000);
         }
     },
 };
