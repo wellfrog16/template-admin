@@ -25,20 +25,6 @@
                                 @change="getTemplateRow(scope.row)"><br></el-radio>
                         </template>
                     </el-table-column>
-                    <el-table-column
-                        align="center"
-                        :width="140"
-                        slot="tableColumnsPush"
-                        label="阈值设置"
-                        show-overflow-tooltip>
-                        <template slot-scope="scope">
-                            <el-input
-                                size="mini"
-                                placeholder="请输入阈值设置"
-                                @change="handleInsertChange(scope.row.a4)"
-                            ></el-input>
-                        </template>
-                    </el-table-column>
                 </s-table>
             </s-card>
         </el-col>
@@ -64,7 +50,7 @@
 <script>
 import SCard from '@/components/index/common/SCard';
 import STable from '@/components/index/common/STable';
-import {columnsList2, tableData2, tableDatalPF2, columnsListPF2} from './constants';
+import {columnsList2} from './constants';
 export default {
     name: 'dialogAR',
     components: {SCard, STable},
@@ -72,6 +58,12 @@ export default {
         visi: {
             type: Boolean,
             default: false
+        },
+        tableData2: {
+            type: Array,
+            default() {
+                return [];
+            }
         }
     },
     watch: {
@@ -79,7 +71,7 @@ export default {
             handler(val) {
                 if (val || !val) {
                     // this.$refs.selfTables.$refs.selfTable.clearSelection(); // 取消复选框
-                    this.checkboxTableColumn = [];
+                    // this.checkboxTableColumn = [];
                     this.celclickTableColumn = {};
                     this.flagValue = '';
                 }
@@ -91,13 +83,13 @@ export default {
             loadingAR: false,
             flagValue: '',
             celclickTableColumn: {},
-            checkboxTableColumn: [],
+            // checkboxTableColumn: [],
             // 他比证券
             columnsList: columnsList2,
-            tableData2: tableData2,
+            // tableData2: tableData2,
             // 舆情
-            columnsListPF: columnsListPF2,
-            tableData1PF: tableDatalPF2
+            // columnsListPF: columnsListPF2,
+            // tableData1PF: tableDatalPF2
         };
     },
     computed: {},
@@ -107,20 +99,20 @@ export default {
         // 输入阈值设
         handleInsertChange(val) {},
         // 单选按钮
-        getTemplateRow(row) {
-            this.flagValue = row.index;
-            this.tableData4.forEach((v, i) => {
+        getTemplateRow() {
+            this.tableData2.forEach((v, i) => {
                 if (this.flagValue === i) {
+                    this.flagValue = i;
                     this.celclickTableColumn = v || {};
                     this.$emit('celclickEmit', this.celclickTableColumn, this.flagValue);
                 }
             });
         },
         // 舆情多选
-        handleSelectionChange(val) {
-            this.checkboxTableColumn = val || [];
-            this.$emit('checkboxEmit', this.checkboxTableColumn);
-        }
+        // handleSelectionChange(val) {
+        //     this.checkboxTableColumn = val || [];
+        //     this.$emit('checkboxEmit', this.checkboxTableColumn);
+        // }
     }
 };
 </script>

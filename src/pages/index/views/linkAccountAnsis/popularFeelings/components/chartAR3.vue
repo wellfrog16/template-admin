@@ -2,7 +2,7 @@
     <s-card :title="`原油日K图`" :icon="`fa fa-handshake`">
         <el-button slot="right" type="text" @click="dialogClick">配置<i class="fa fa-undo-alt"></i></el-button>
         <el-dialog
-            width="55%"
+            width="65%"
             slot="content"
             :before-close="closeData"
             title=""
@@ -25,7 +25,7 @@
                         placeholder="请选择异常监测时间窗口"
                     >
                         <el-option
-                            v-for="times in timeWindowOptions"
+                            v-for="times in dtaWindowOptions"
                             :key="times.idName"
                             :label="times.name"
                             :value="times.idName"
@@ -33,7 +33,11 @@
                     </el-select>
                 </el-form-item>
             </el-form>
-            <dialog-a-r3 :visi="dialogVisible" @checkboxEmit2="checkboxEmit2" @checkboxEmit1="checkboxEmit1"></dialog-a-r3>
+            <dialog-a-r3
+                :visi="dialogVisible"
+                :tableData3="tableData3"
+                @checkboxEmit1="checkboxEmit1">
+            </dialog-a-r3>
             <div slot="footer" :class="$style.dialog_footer">
                 <el-button @click="dialogCancelClick">取 消</el-button>
                 <el-button type="primary" @click="dialogConfirmClick">确 定</el-button>
@@ -84,7 +88,7 @@ export default {
             }
         }, {
             normal: {
-                color: '#7d0d14',
+                color: '#743A3A',
                 opacity: 0.8,
                 shadowBlur: 10,
                 shadowOffsetX: 0,
@@ -99,7 +103,7 @@ export default {
             // 2 closingPrice  402.5   开盘价
             // 3 lowestPrice   400.5   最高价
             // 4 highestPrice  414.3   最低价
-            // 5 volume        52826  成交量
+            // 5 volume        52826  成交量1
             // 6 amplitude     13.8   振幅
             // 7 chg           -14.1  涨跌
             {name: 'tradeDay', index: 0, text: '交易日'},
@@ -116,11 +120,11 @@ export default {
             dialogVisible: false,
             // form 表单绑定值
             ruleForm: {
-                timeWindow: '', // 时间窗口
+                timeWindow: '1 天', // 时间窗口
             },
+            multipleSelection: [],
+            tableData3: [],
             checkboTableColumn1: [],
-            checkboTableColumn2: [],
-            selectMax: {},
             chartOptions3: {
                 animation: false,
                 title: [
@@ -142,58 +146,8 @@ export default {
                             fontFamily: 'sans-serif',
                             // 字体大小
                             fontSize: 12,
-                            // padding: 45,
-                            // margin: 40,
-                            // left: 'center', // left 的值可以是像 20 这样的具体像素值，可以是像 '20%' 这样相对于容器高宽的百分比，也可以是 'left', 'center', 'right',如果 left 的值为'left', 'center', 'right'，组件会根据相应的位置自动对齐。
-                            // top: 'center', // left 的值可以是像 20 这样的具体像素值，可以是像 '20%' 这样相对于容器高宽的百分比，也可以是 'left', 'center', 'right',如果 left 的值为'left', 'center', 'right'，组件会根据相应的位置自动对齐。
-                            // right: 'center', // right 的值可以是像 20 这样的具体像素值，可以是像 '20%' 这样相对于容器高宽的百分比。
-                            // bottom: 'center', // bottom 的值可以是像 20 这样的具体像素值，可以是像 '20%' 这样相对于容器高宽的百分比
                         }
-                    },
-                    // {
-                    //     text: '5月8日，特朗普\n宣布美国正式退 \n出伊朗核协议',
-                    //     borderColor: '#fff',
-                    //     borderWidth: 1,
-                    //     textStyle: {
-                    //         color: '#fff',
-                    //         fontSize: 12
-                    //     },
-                    //     left: 'left',
-                    //     top: '70%'
-                    // },
-                    // {
-                    //     text: '10月16日，中东独立 \n媒体(中东跟)报道 \n披露了沙特记者哈苏 \n吉事件被杀的内幕',
-                    //     borderColor: '#fff',
-                    //     borderWidth: 1,
-                    //     textStyle: {
-                    //         color: '#fff',
-                    //         fontSize: 12
-                    //     },
-                    //     left: '22%',
-                    //     top: '70%'
-                    // },
-                    // {
-                    //     text: '10月8日，特朗普\n宣布美国正式退 \n出伊朗核协议',
-                    //     borderColor: '#fff',
-                    //     borderWidth: 1,
-                    //     textStyle: {
-                    //         color: '#fff',
-                    //         fontSize: 12
-                    //     },
-                    //     left: '50%',
-                    //     top: '70%'
-                    // },
-                    // {
-                    //     text: '9月8日，特朗普\n宣布美国正式退 \n出伊朗核协议',
-                    //     borderColor: '#fff',
-                    //     borderWidth: 1,
-                    //     textStyle: {
-                    //         color: '#fff',
-                    //         fontSize: 12
-                    //     },
-                    //     left: '74%',
-                    //     top: '70%'
-                    // }
+                    }
                 ],
                 grid: {
                     x: 30, // 左
@@ -238,9 +192,21 @@ export default {
                     name: '日期',
                     type: 'category',
                     data: [],
+                    axisLabel: {
+                        textStyle: {
+                            fontSize: 10 // 字体
+                        }
+                    },
+                    axisLine: { // y轴
+                        lineStyle: {
+                            type: 'dashed',
+                            color: '#fff',
+                            width: 1,
+                        },
+                    },
                     scale: true,
                     boundaryGap: false,
-                    axisLine: {onZero: false},
+                    // axisLine: {onZero: false},
                     splitLine: {show: false},
                     splitNumber: 20,
                     min: 'dataMin',
@@ -249,12 +215,25 @@ export default {
                 yAxis: {
                     name: '成交价',
                     scale: true,
-                    splitArea: {
+                    splitLine: {
                         show: true,
-                        areaStyle: {
-                            color: ['transparent', 'rgba(4, 58, 127, 0.92)']
+                        //  改变轴线颜色
+                        lineStyle: {
+                            type: 'dashed',
+                            // 使用深浅的间隔色
+                            color: ['#1f416e']
                         }
-                    }
+                    },
+                    axisLine: { // y轴
+                        lineStyle: {
+                            color: '#6ab2ec',
+                            // width: 0
+                            fontSize: 9 // 字体
+                        }
+                    },
+                    axisTick: { // y轴刻度线
+                        show: true,
+                    },
                 },
                 dataZoom: [
                     {
@@ -292,6 +271,21 @@ export default {
                             }
                         },
                         markLine: {},
+                        markArea: {
+                            silent: false,
+                            itemStyle: {
+                                color: 'none',
+                                borderColor: 'red', // 001943
+                                borderWidth: '1',
+                                // shadowColor: 'rgba(0, 0, 0, 0.5)',
+                                // shadowBlur: 3,
+                                opacity: 0.9
+                                // shadowOffsetX: 2,
+                                // shadowOffsetY: 3
+
+                            },
+                            data: [],
+                        }
                     },
                     {
                         name: '卖出',
@@ -319,12 +313,13 @@ export default {
                         }
                     }
                 ]
-
             }
         };
     },
     computed: {},
     mounted() {
+        // 原油日K图--配置表
+        this.tableData3List();
         this.barEchartsDete();
     },
     methods: {
@@ -332,61 +327,72 @@ export default {
         dialogClick() {
             this.dialogVisible = true;
             this.checkboTableColumn1 = [];
-            this.checkboTableColumn2 = [];
+        },
+        // 日K图--时间窗口
+        nationyChenge(val) {
+            this.multipleSelection = val;
         },
         // 多选
         checkboxEmit1(tableColumn) {
             this.checkboTableColumn1 = tableColumn;
-        },
-        // 多选
-        checkboxEmit2(tableColumn) {
-            this.checkboTableColumn2 = tableColumn;
         },
         // 关闭弹框
         closeData(done) {
             done();
             this.dialogVisible = false;
             this.checkboTableColumn1 = [];
-            this.checkboTableColumn2 = [];
-            this.ruleForm.timeWindow = '';
+            this.ruleForm.timeWindow = '1 天';
         },
         // 取 消
         dialogCancelClick() {
             this.dialogVisible = false;
             this.checkboTableColumn1 = [];
-            this.checkboTableColumn2 = [];
-            this.ruleForm.timeWindow = '';
+            this.ruleForm.timeWindow = '1 天';
         },
         // 确 定
         dialogConfirmClick() {
-            if (this.ruleForm.timeWindow !== '' && this.checkboTableColumn1.length !== 0 && this.checkboTableColumn2.length !== 0) {
+            if (this.ruleForm.timeWindow !== '' && this.checkboTableColumn1.length !== 0) {
                 this.dialogVisible = false;
-                // console.log(this.ruleForm.timeWindow); // 时间窗口
-                // console.log(this.radioTableColumn); // 舆情
-                // console.log(this.checkboTableColumn); // 他比证券
-                this.barEchartsDete();
-                this.$message.success('成功');
-                this.ruleForm.timeWindow = '';
-                this.checkboTableColumn1 = [];
-                this.checkboTableColumn2 = [];
-                this.ruleForm.timeWindow = '';
+                this.checkboTableColumn1.forEach(v => {
+                    if (v.exceptionPeriod) {
+                        let exceptionPeriod = {
+                            exceptionPeriod: this.ruleForm.timeWindow
+                        }
+                        v.exceptionPeriod = {...exceptionPeriod};
+                    }
+                });
+                let params = {
+                    'daliySettingList': this.checkboTableColumn1
+                };
+                this.tableUpdateData(params);
+                this.ruleForm.timeWindow = '1 天';
             } else {
                 this.$message.error('请选择条件');
                 this.dialogVisible = true;
             }
         },
         barEchartsDete() {
+            // setInterval(v => {
             this.loading3 = true;
+            var now = new Date(); // 当前日期
+            var dateWeek = now.getDay(); // 今天本周的第几天
             let params = {
                 'startDate': '2018-03-26',
-                'endDate': '2019-01-10'
+                'endDate': '2019-01-10',
             };
+            let mainData = [];
+            let exceptionDatas = [];
+            let markAreaData = [];
             // 原油日K图
             postPetroleumAR3(params).then(resp => {
                 if (resp && resp.length !== 0) {
                     this.loading3 = false;
-                    // let {mainData} = resp || echartsData3;
-                    let {mainData} = resp;
+                    if (resp.exception.length !== 0) {
+                        exceptionDatas = resp.exception; // 异常数据
+                    }
+                    if (resp.mainData.lenght !== 0) {
+                        mainData = resp.mainData;
+                    }
                     if (mainData && !mainData.length) {
                         return;
                     }
@@ -402,31 +408,48 @@ export default {
                     let seriesData = [];
                     let date = [];
                     let titleText = '';
-                    // let tradeDay = ''; // 交易日
-                    // let openingPrice = ''; // 开盘价
-                    // let lowestPrice = ''; // 最高价
-                    // let openingPrice = ''; // 收盘价
-                    // let highestPrice = ''; // 最低价
-                    // let volume = ''; // 成交量
-                    // let amplitude = ''; // 振幅
-                    // let chg = ''; // 涨跌
                     mainData.forEach(v => {
                         date.push(v.tradeDay);
-                        titleText = v.tradeDay + ' 开 ' + v.openingPrice + ' 高 ' + v.lowestPrice + ' 收 ' + v.openingPrice + ' 低 ' + v.highestPrice + ' 量 ' + v.volume + ' 幅 ' + v.amplitude + ' %';
                         seriesData.push(
                             // 开盘价 - 收盘价 -最低价-最高价 / 交易日 -成交量  // amplitude;//振幅
                             // chg;//涨跌
                             [v.openingPrice, v.closingPrice, v.lowestPrice, v.highestPrice, v.volume, v.amplitude, v.chg, v.tradeDay]
                         );
+                        titleText = v.tradeDay + ' 开 ' + v.openingPrice + ' 高 ' + v.lowestPrice + ' 收 ' + v.openingPrice + ' 低 ' + v.highestPrice + ' 量 ' + v.volume + ' 幅 ' + v.amplitude + ' %';
                     });
-                    this.chartOptions3['title'][0]['text'] = titleText;
-                    this.chartOptions3['series'][0]['data'] = seriesData;
-                    this.chartOptions3['xAxis']['data'] = date;
+                    if (exceptionDatas.length !== 0) {
+                        markAreaData = [
+                            [
+                                {
+                                    'name': '异常数据',
+                                    'xAxis': mainData[mainData.length - 1].tradeDay, // 异常日期
+                                    'yAxis': mainData[mainData.length - 1].openingPrice, // 异常价格
+                                },
+                                {
+                                    'xAxis': exceptionDatas[4].tradeDay, // 前五分钟异常日期
+                                    'yAxis': exceptionDatas[4].openingPrice, // 前五分钟异常价格
+                                }
+                            ],
+                            [
+                                {
+                                    'xAxis': mainData[mainData.length - 1].tradeDay, // 异常日期
+                                },
+                                {
+                                    'xAxis': exceptionDatas[4].tradeDay, // 前五分钟异常日期
+                                }
+                            ]
+                        ];
+                    }
+                    this.chartOptions3['title'][0]['text'] = titleText; // 标题
+                    this.chartOptions3['xAxis']['data'] = date; // 日期
+                    this.chartOptions3['series'][0]['data'] = seriesData; // 成交价
+                    this.chartOptions3['series'][0]['markArea']['data'] = markAreaData; // 异常
                     this.$refs['echartsDemo3'] && this.$refs['echartsDemo3'].initChart();
                 }
             }).catch(e => {
                 this.loading3 = false;
             });
+            // }, 6000);
         }
     },
 };

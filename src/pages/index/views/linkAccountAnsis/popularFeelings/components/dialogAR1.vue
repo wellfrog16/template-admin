@@ -13,20 +13,6 @@
                     :tableData="tableData1"
                     @selection-change="handleSelectionChange1"
                 >
-                    <el-table-column
-                        align="center"
-                        :width="140"
-                        slot="tableColumnsPush"
-                        label="阈值设置"
-                        show-overflow-tooltip>
-                        <template slot-scope="scope">
-                            <el-input
-                                size="mini"
-                                placeholder="请输入阈值设置"
-                                @change="handleInsertChange(scope.row.a4)"
-                            ></el-input>
-                        </template>
-                    </el-table-column>
                 </s-table>
             </s-card>
         </el-col>
@@ -52,7 +38,8 @@
 <script>
 import SCard from '@/components/index/common/SCard';
 import STable from '@/components/index/common/STable';
-import {columnsList1, tableData1, tableDatalPF1, columnsListPF1} from './constants';
+import {columnsList1} from './constants';
+
 export default {
     name: 'dialogAR',
     components: {SCard, STable},
@@ -60,6 +47,12 @@ export default {
         visi: {
             type: Boolean,
             default: false
+        },
+        tableData1: {
+            type: Array,
+            default() {
+                return [];
+            }
         }
     },
     watch: {
@@ -68,8 +61,8 @@ export default {
                 if (val || !val) {
                     this.$refs.selfTables1.$refs.selfTable.clearSelection(); // 取消异常指标多选
                     // this.$refs.selfTables2.$refs.selfTable.clearSelection(); // 取消舆情多选
-                    this.checkboxTableColumn1 = [];
-                    this.checkboxTableColumn2 = [];
+                    // this.checkboxTableColumn1 = [];
+                    // this.checkboxTableColumn2 = [];
                 }
             }
         }
@@ -78,13 +71,13 @@ export default {
         return {
             loadingAR: false,
             checkboxTableColumn1: [],
-            checkboxTableColumn2: [],
+            // checkboxTableColumn2: [],
             // 异常指标
             columnsList: columnsList1,
-            tableData1: tableData1,
+            // tableData1: tableData1,
             // 舆情
-            columnsListPF: columnsListPF1,
-            tableData1PF: tableDatalPF1,
+            // columnsListPF: columnsListPF1,
+            // tableData1PF: tableDatalPF1,
         };
     },
     computed: {},
@@ -97,12 +90,10 @@ export default {
             this.$emit('checkboxEmit1', this.checkboxTableColumn1);
         },
         // 舆情多选
-        handleSelectionChange2(val) {
-            this.checkboxTableColumn2 = val || [];
-            this.$emit('checkboxEmit2', this.checkboxTableColumn2);
-        },
-        // 输入阈值设
-        handleInsertChange(val) {}
+        // handleSelectionChange2(val) {
+        //     this.checkboxTableColumn2 = val || [];
+        //     this.$emit('checkboxEmit2', this.checkboxTableColumn2);
+        // },
     },
 };
 </script>
