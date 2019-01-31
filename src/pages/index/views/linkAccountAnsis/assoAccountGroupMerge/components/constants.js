@@ -18,8 +18,8 @@ export const charts = [
 export const chartsBV = [
     {title: '聚类情况处理', icon: 'fa fa-globe', toggleDetailFlags: false, loading: false},
     {title: '账户组历史持仓', icon: 'fa fa-chart-bar', toggleDetailFlags: false, loading: false},
-    {title: '账户组稳态分析-按时间', icon: 'fa fa-handshake', toggleDetailFlags: false, loading: false},
-    {title: '账户组稳态分析-按客户', icon: 'fa fa-chart-line', toggleDetailFlags: false, loading: false}
+    {title: '账户组稳态分析-按时间', icon: 'fa fa-chart-bar', toggleDetailFlags: false, loading: false},
+    {title: '账户组稳态分析-按客户', icon: 'fa fa-chart-bar', toggleDetailFlags: false, loading: false}
 ];
 export const chartsBI = [
     {title: '账户组基本信息概览', icon: 'fa fa-globe', toggleDetailFlags: false, loading: false},

@@ -33,11 +33,17 @@
                     :expand-on-click-node="false">
                     <span class="custom-tree-node" slot-scope="{ node, data }">
                         <div v-for="(item, index) in columns" :key="index" style="text-align: center;">
-                            <el-popover placement="top-end" trigger="hover" :disabled="index < 5" width="200">
+                            <el-popover placement="top-end" trigger="hover" :disabled="index < 5 || !data.custId" width="200">
                                 <div>
                                     <p v-if="data.acctId" style="margin:0;">账户组号：{{ data.acctId }}</p>
                                     <p v-if="data.custId" style="margin:0;">客户编号：{{ data.custId }}</p>
-                                    <p v-if="data.custId" style="margin:0; white-space:normal; word-break:break-all;">{{ columns[index]['label'] }}：{{ (data[item.field] === null || data[item.field] === undefined) ?  '' :  data[item.field] }}</p>
+                                    <p v-if="data.custId" style="margin:0; white-space:normal; word-break:break-all;">{{ columns[index]['label'] }}：
+                                        {{ (data[item.field] === null || data[item.field] === undefined)
+                                            ?
+                                                (item.field === 'acctGroSrc' ? '其他' : '')
+                                            :   (item.formatter ? item.formatter(data[item.field]) : data[item.field])
+                                        }}
+                                    </p>
                                 </div>
                                 <span slot="reference">
                                     <span v-if="item.field !== 'custId' || data[item.field]==='客户编号'" style="width: 145px; text-overflow: ellipsis; overflow: hidden; display: inline-block; margin: 0;">

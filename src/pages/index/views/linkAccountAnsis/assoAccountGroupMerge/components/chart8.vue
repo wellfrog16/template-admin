@@ -86,7 +86,7 @@ export default {
                 ],
                 series: [
                     {
-                        name: '账户组稳态分析-客户',
+                        name: '账户组稳态分析-按客户',
                         type: 'bar',
                         barMaxWidth: '35',
                         data: []
