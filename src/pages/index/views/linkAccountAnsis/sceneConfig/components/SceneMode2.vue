@@ -134,6 +134,24 @@ export default {
                 statFreq: this.dialogItem.statFreq || this.defaultConfig.statFreq, // 统计频度
                 almSel: this.dialogItem.almSel || this.defaultConfig.almSel // 算法
             };
+            if (this.dialogItem.sceneId) {
+                let checkedList = [];
+                if (this.dialogItem.acctMakePosQtty !== null) {
+                    checkedList.push('1');
+                }
+                if (this.dialogItem.acctBargainQtty !== null) {
+                    checkedList.push('2');
+                }
+                if (this.dialogItem.acctBillCnt !== null) {
+                    checkedList.push('3');
+                }
+                if (this.dialogItem.statAcctCnt !== null) {
+                    checkedList.push('4');
+                }
+                this.checkedList = checkedList;
+            } else {
+                this.checkedList = this.defaultConfig.checkedList;
+            }
         },
         handleReset() {
             this.ruleForm = {
