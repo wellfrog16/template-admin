@@ -91,6 +91,7 @@ export default {
             {name: 'realUpsAndDowns', index: 7, text: '实时交易涨跌'},
         ];
         return {
+            timer: null,
             loading2: false,
             dialogVisible: false,
             // form 表单绑定值
@@ -430,7 +431,7 @@ export default {
             }
         },
         barEchartsDete() {
-            setInterval(v => {
+            this.timer = setInterval(v => {
                 let now = new Date();
                 let dateWeek = now.getDay(); // 今天本周的第几天
                 let params = {
@@ -504,6 +505,9 @@ export default {
             }, 1000000);
         }
     },
+    beforeDestroy() {
+        clearInterval(this.timer);
+    }
 };
 </script>
 
