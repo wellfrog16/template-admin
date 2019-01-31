@@ -58,7 +58,7 @@
                                             <el-input clearable size="small" v-model="ruleForm.customNoArray[0]" style="width: 150px;"></el-input>
                                             <span style="color: #fff; margin: 0 20px;">~</span>
                                             <el-input clearable size="small" v-model="ruleForm.customNoArray[1]" style="width: 150px;"></el-input>
-                                            <el-button size="small" type="primary" @click="handleCheckedAll" style="margin-left:5px;">全选</el-button>
+                                            <el-button size="mini" type="primary" @click="handleCheckedAll" style="margin-left:5px;">全选</el-button>
                                         </el-form-item>
                                     </el-radio>
                                 </el-radio-group>
@@ -85,7 +85,7 @@
                 </el-form>
             </div>
         </s-card>
-        <s-card class="table-container" :title="`场景配置`" :subTitle="`（ * 场景可多选 ）`" :icon="`el-icon-setting`">
+        <s-card class="table-container" :title="`场景配置`" :icon="`el-icon-setting`">
             <div slot="right">
                 <el-popover
                     placement="right"
@@ -101,9 +101,22 @@
                 </el-input>
             </div>
             <div slot="content">
-                <s-table :columns="columns" :tableData="tableData" :showSelectionColumn="true" :loading="loading" @selection-change="handleSelectChange">
+                <s-table :columns="columns" :tableData="tableData" :loading="loading" @selection-change="handleSelectChange">
+                    <el-table-column
+                        fixed
+                        align="center"
+                        :width="80"
+                        slot="tableColumnsUnshift"
+                    >
+                        <template slot-scope="scope">
+                            <el-radio v-model="checkedRadio" :label="scope.row.sceneId" @change="handleSelectedSceneChange(scope)">
+                                {{  }}
+                            </el-radio>
+                        </template>
+                    </el-table-column>
                     <el-table-column
                         :width="300"
+                        align="center"
                         slot="tableColumnsPush"
                         label="操作"
                         show-overflow-tooltip>
@@ -146,7 +159,7 @@ import {createTypeOptions} from './components/constants';
 import {getSceneList, deleteScene, mergeAccount} from '@/api/dataAnsis/sceneConfig';
 import {uploadFileByBodyInfo} from '@/api/common';
 import resultSelectComponent from '@/components/index/common/ResultSelectComponent';
-import {testData} from '../assoAccountGroupMerge/components/constants';
+// import {testData} from '../assoAccountGroupMerge//components/constants';
 import moment from 'moment';
 import _ from 'lodash';
 export default {
@@ -162,6 +175,7 @@ export default {
     data() {
         return {
             createTypeOptions,
+            checkedRadio: '',
             showDialog: false,
             showCarousel: false,
             loading: false,
@@ -229,6 +243,12 @@ export default {
         };
     },
     methods: {
+        handleSelectedSceneChange(scope) { // 单选
+            this.checkedRadio = scope.row.sceneId;
+            this.selectList = this.tableData.filter(v => {
+                return v.sceneId === scope.row.sceneId;
+            });
+        },
         handleCheckedAll() {
             this.ruleForm.exportType = '2';
             this.ruleForm.customNoArray = ['00000001', '99999999'];
@@ -310,6 +330,10 @@ export default {
                 this.$message.error('请选择一种导入客户的方式');
                 return;
             }
+            if (String(this.ruleForm.exportType) === '1' && !this.ruleForm.fileList.length) {
+                this.$message.error('请先上传一个CSV文件');
+                return;
+            }
             this.selectList = _.sortBy(this.selectList, [item => { return item.sceneId; }]);
             let sceneTypes = this.selectList.map(v => {
                 return v.sceneType;
@@ -349,6 +373,9 @@ export default {
                 .then(() => {
                     deleteScene(item.sceneId).then(() => {
                         this.getTableData();
+                        if (item.sceneId === this.checkedRadio) {
+                            this.checkedRadio = '';
+                        }
                     });
                 });
         },
@@ -457,11 +484,10 @@ export default {
             paramsArray.forEach(v => {
                 tabs[v.sceneIds] = v;
             });
-            console.log(params);
             this.$store.commit('saveSceneCommitParams', tabs);
             paramsArray.forEach(v => {
-                // this.getNextStepData(v);
-                if (v.sceneTypes !== '2') {
+                this.getNextStepData(v);
+                /* if (v.sceneTypes !== '2') {
                     this.getNextStepData(v);
                 } else {
                     if (!this.openFlag) {
@@ -471,7 +497,7 @@ export default {
                         this.$store.commit('saveSceneCommitResp', store);
                         this.$router.push({name: 'assoAccountGroupMerge'});
                     }
-                }
+                } */
             });
         }
     },

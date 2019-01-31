@@ -5,7 +5,7 @@
                 <el-button size="small" type="primary" :loading="loading" @click="createData">生成关系图谱</el-button>
             </div>
             <div slot="content">
-                <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="140">
+                <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="140" :inline="true">
                     <el-row>
                         <!-- <el-col :xl="12" :lg="12" :md="12" :sm="24" style="border-right:1px solid rgba(4, 58, 127, 0.92);">
                             <el-form-item prop="sceneTypes" label="场景类型选择：">
@@ -20,6 +20,12 @@
                         <el-col :xl="12" :lg="12" :md="12" :sm="24" style="padding-left: 20px;">
                             <el-form-item prop="showAccountCount" label="显示账户组数按持仓量排名：">
                                 前&nbsp;&nbsp;<el-input clearable size="small" v-model="ruleForm.showAccountCount" style="width: 150px;"></el-input>
+                            </el-form-item>
+
+                        </el-col>
+                        <el-col :xl="12" :lg="12" :md="12" :sm="24" style="padding-left: 20px;">
+                            <el-form-item prop="checkedOverWarehouse" label="">
+                                <el-checkbox v-model="ruleForm.checkedOverWarehouse" @change="handleCheckedOverWarehouseChange">仅显示超仓的账户组</el-checkbox>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -90,6 +96,7 @@ export default {
                 showAccountCount: '50'
             },
             rules: {
+                checkedOverWarehouse: false, // 仅显示超仓账户组
                 showAccountCount: [
                     {pattern: /^[0-9]+$/, message: '只能输入数字'}
                 ]
@@ -201,10 +208,22 @@ export default {
                     }
                 ]
             },
-            echartsData: []
+            echartsData: [],
+            maxIndex: 50,
+            computedMaxOverWarehouseIndex: 20
         };
     },
     methods: {
+        handleCheckedOverWarehouseChange(val) {
+            this.setMaxVisualMap(val);
+        },
+        setMaxVisualMap(val) {
+            if (val) {
+                this.chartOptions.visualMap.max = this.computedMaxOverWarehouseIndex;
+            } else {
+                this.chartOptions.visualMap.max = this.maxIndex;
+            }
+        },
         setChartOptions(val) {
             // 增加uid字段
             let allLeaf = [];
@@ -240,8 +259,11 @@ export default {
                     v.symbolSize = len > 5 ? 35 : len < 1 ? 8 : len * 7;
                 });
                 let max = _.maxBy(val.nodes, 'value')['value'];
-                this.chartOptions.visualMap.max = max;
+                this.maxIndex = max;
                 this.chartOptions.series[0]['data'] = val.nodes;
+                // 计算超仓的排名最大值
+                // this.computedMaxOverWarehouseIndex = ...
+                this.setMaxVisualMap(this.ruleForm.checkedOverWarehouse);
             }
             this.chartOptions.legend.data = this.checkboxes.map(v => {
                 return v.label;

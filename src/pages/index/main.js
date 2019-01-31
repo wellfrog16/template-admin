@@ -8,6 +8,7 @@ import store from '@/store';
 import jquery from 'jquery';
 import echarts from 'echarts';
 import moment from 'moment';
+import fullscreen from 'vue-fullscreen';
 import {echartsDefault} from '@/assets/style/common/theme/echart';
 import '@/utils/globle';
 
@@ -26,7 +27,8 @@ Vue.prototype.$moment = moment;
 Vue.prototype.router = router;
 Vue.prototype.theme = 'df_theme';
 Vue.use(ElementUI);
-
+// 注册vue-fullscreen组件；
+Vue.use(fullscreen, {name: 's-full-screen'});
 new Vue({
     router,
     store,

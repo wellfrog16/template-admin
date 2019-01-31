@@ -21,8 +21,10 @@ export default {
             default: ''
         },
         filterTypes: {
-            type: [Number, String],
-            default: ''
+            type: Array, // ['2', '5']
+            default() {
+                return [];
+            }
         }
     },
     watch: {
@@ -55,7 +57,7 @@ export default {
             getTlsResultInfo().then(resp => {
                 this.loading = false;
                 this.resultList = resp.filter(v => {
-                    return String(v.resultType) !== String(this.filterTypes);
+                    return this.filterTypes.indexOf(String(v.resultType)) === -1;
                 });
                 this.$emit('getResultList', resp);
             }).catch(e => {

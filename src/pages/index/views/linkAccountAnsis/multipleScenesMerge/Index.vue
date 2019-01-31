@@ -24,15 +24,20 @@
                             </el-button>
                         </div>
                         <div slot="content" style="min-height: 300px;">
-                            <div v-if="item['toggleDetailFlags']">
-                                <s-table :height="300" :columns="chartTableColumns[index]" :tableData="chartTableData[index]"></s-table>
-                            </div>
-                            <div v-else>
-                                <block1 ref="block1" v-if="index === 0" :index="index" :tableData="block1TableData"></block1>
-                                <block2 ref="block2" v-if="index === 1" :index="index"></block2>
-                                <block3 ref="block3" v-if="index === 2" :index="index"></block3>
-                                <block4 ref="block4" v-if="index === 3" :index="index"></block4>
-                            </div>
+                            <s-full-screen class="self-fullscreen-wrap" ref="fullscreen" :fullscreen.sync="fullscreen" @change="fullscreenChange" background="#00255c">
+                                <div v-if="item['toggleDetailFlags']">
+                                    <s-table :height="300" :columns="chartTableColumns[index]" :tableData="chartTableData[index]"></s-table>
+                                </div>
+                                <div v-else>
+                                    <block1 ref="block1" v-if="index === 0" :index="index" :tableData="block1TableData"></block1>
+                                    <block2 ref="block2" v-if="index === 1" :index="index"></block2>
+                                    <block3 ref="block3" v-if="index === 2" :index="index"></block3>
+                                    <block4 ref="block4" v-if="index === 3" :index="index"></block4>
+                                </div>
+                                <!--  <button v-show="!item['toggleDetailFlags'] && index !== 0" type="button" class="btn btn-default btn-map-fullscreen" @click="toggleFullScreen(index)">
+                                    <i class="fa" :class="[fullscreen ? 'fa-compress' : 'fa-expand-arrows-alt']"></i>
+                                </button> -->
+                            </s-full-screen>
                         </div>
                     </s-card>
                 </el-col>
@@ -54,6 +59,7 @@ import block3 from './components/block3';
 import block4 from './components/block4';
 import {chartTableColumns1, chartTableColumns2, chartTableColumns3, chartTableColumns4, blocks} from './components/constants';
 import {fetchBlockData1, fetchBlockData2, fetchBlockData4} from '@/api/dataAnsis/multipleScenesMerge';
+import commonMixin from '@/pages/index/common/commonMixin';
 export default {
     name: 'Index',
     components: {
@@ -67,7 +73,7 @@ export default {
         block4
     },
     // 混入, 是一个类的继承，类似于一个公共的方法。
-    mixins: [],
+    mixins: [commonMixin],
     // 存储数据
     data() {
         return {
@@ -100,11 +106,8 @@ export default {
             this.mainTableData = val;
         },
         updateSelectAccountGroupList(val) {
-            console.log('*************');
-            console.log(val);
             this.selectAccountGroupList = val;
             this.$refs['accountGroupTableRef'].selectAccountGroupList = val;
-            console.log(this.$refs['accountGroupTableRef']);
             this.$refs['accountGroupTableRef'].$refs['self-tree-table'].$refs['tree-table'].setCheckedKeys(val);
             setTimeout(() => {
                 this.$refs['accountGroupTableRef'].$refs['self-tree-table'].handleChecked(val);

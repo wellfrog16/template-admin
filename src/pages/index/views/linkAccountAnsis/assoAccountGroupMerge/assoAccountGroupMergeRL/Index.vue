@@ -10,20 +10,25 @@
                         </el-button>
                     </div>
                     <div slot="content">
-                        <div v-if="item['toggleDetailFlags']">
-                            <div v-if="index===2">
-                                <el-select class="custom-width" clearable size="small" v-model="table3CurrentType">
-                                    <el-option v-for="(o, oi) in table3Options" :key="oi" :label="o.label" :value="o.field"></el-option>
-                                </el-select>
+                        <s-full-screen class="self-fullscreen-wrap" ref="fullscreen" :fullscreen.sync="fullscreen" @change="fullscreenChange" background="#00255c">
+                            <div v-if="item['toggleDetailFlags']">
+                                <div v-if="index===2">
+                                    <el-select class="custom-width" clearable size="small" v-model="table3CurrentType">
+                                        <el-option v-for="(o, oi) in table3Options" :key="oi" :label="o.label" :value="o.field"></el-option>
+                                    </el-select>
+                                </div>
+                                <s-table :height="index === 2 ? 268 : 300" :columns="chartTableColumns[index]" :tableData="chartTableData[index]"></s-table>
                             </div>
-                            <s-table :height="index === 2 ? 268 : 300" :columns="chartTableColumns[index]" :tableData="chartTableData[index]"></s-table>
-                        </div>
-                        <div v-else>
-                            <chart1 :ref="`chartComponent${index + 1}`" v-if="index === 0" :index="index" :sceneType="4" :tabIndex="tabIndex" :childrenMap="childrenMap" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData" @updateMainTableData="updateMainTableData" @updateAccountGroupAndCustIds="updateAccountGroupAndCustIds" @getBlock2Data="getBlock2Data"  @getBlock3Data="getBlock3Data"></chart1>
-                            <chart2 :ref="`chartComponent${index + 1}`" v-if="index === 1" :index="index" :sceneType="4" :tabIndex="tabIndex" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData" @getBlock4Data="getBlock4Data"></chart2>
-                            <chart3 :ref="`chartComponent${index + 1}`" v-if="index === 2" :index="index" :sceneType="4" :tabIndex="tabIndex" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData" @getBlock4Data="getBlock4Data"></chart3>
-                            <chart4 :ref="`chartComponent${index + 1}`" v-if="index === 3" :index="index" :sceneType="4" :tabIndex="tabIndex" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData"></chart4>
-                        </div>
+                            <div v-else class="chart-container">
+                                <chart1 :ref="`chartComponent${index + 1}`" v-if="index === 0" :index="index" :propsChartHeight="propsChartHeight" :tabIndex="tabIndex" :sceneType="currentSceneType" :childrenMap="childrenMap" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateAccountGroupAndCustIds="updateAccountGroupAndCustIds" @getBlock2Data="getBlock2Data" @getBlock3Data="getBlock3Data"></chart1>
+                                <chart2 :ref="`chartComponent${index + 1}`" v-if="index === 1" :index="index" :propsChartHeight="propsChartHeight" :tabIndex="tabIndex" :sceneType="currentSceneType" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @getBlock4Data="getBlock4Data"></chart2>
+                                <chart3 :ref="`chartComponent${index + 1}`" v-if="index === 2" :index="index" :propsChartHeight="propsChartHeight" :tabIndex="tabIndex" :sceneType="currentSceneType" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @getBlock4Data="getBlock4Data"></chart3>
+                                <chart4 :ref="`chartComponent${index + 1}`" v-if="index === 3" :index="index" :propsChartHeight="propsChartHeight" :tabIndex="tabIndex" :sceneType="currentSceneType" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData"></chart4>
+                            </div>
+                            <!-- <button v-show="!item['toggleDetailFlags']" type="button" class="btn btn-default btn-map-fullscreen" @click="toggleFullScreen(index)">
+                                <i class="fa" :class="[fullscreen ? 'fa-compress' : 'fa-expand-arrows-alt']"></i>
+                            </button> -->
+                        </s-full-screen>
                         <!-- <echarts-common v-else :loading="chartLoading[index]" :ref="`chart${index}`" :domId="`chart${index}`" :defaultOption="chartOptions[index]" :propsChartHeight="300" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></echarts-common> -->
                     </div>
                 </s-card>
@@ -56,7 +61,7 @@
                                 <br>
                                 <el-button type="primary" size="small" @click="handleExportResult('4', tabIndex)">导出到结果集</el-button>
                                 <br>
-                                <el-button type="primary" size="small" class="self-width" @click="handleExportCsv('账户组信息', mainTableColumnsRL)">导出到csv</el-button>
+                                <el-button type="primary" size="small" class="self-width" @click="handleExportCsv('账户组信息-实控关系', mainTableColumnsRL)">导出到csv</el-button>
                                 <br>
                                 <el-button type="primary" size="small" @click="createNewData('4', tabIndex)">重新生成数据</el-button>
                             </div>

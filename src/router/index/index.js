@@ -111,6 +111,16 @@ const Index = {
                 {
                     meta: {
                         scrollTop: true,
+                        title: '组合场景整合'
+                    },
+                    path: 'multipleScenesMerge',
+                    name: 'multipleScenesMerge',
+                    icon: 'menu-fix-icon fa fa-code-branch', // customer_information_inquiry
+                    component: resolve => require(['@/pages/index/views/linkAccountAnsis/multipleScenesMerge/Index.vue'], resolve)
+                },
+                {
+                    meta: {
+                        scrollTop: true,
                         title: '异常交易分析'
                     },
                     path: 'abnormity',
@@ -137,15 +147,6 @@ const Index = {
                     name: 'customerInformationInquiry',
                     icon: 'menu-fix-icon fa fa-search', // customer_information_inquiry
                     component: resolve => require(['@/pages/index/views/linkAccountAnsis/customerInformationInquiry/Index.vue'], resolve)
-                }, {
-                    meta: {
-                        scrollTop: true,
-                        title: '组合场景整合'
-                    },
-                    path: 'multipleScenesMerge',
-                    name: 'multipleScenesMerge',
-                    icon: 'menu-fix-icon fa fa-code-branch', // customer_information_inquiry
-                    component: resolve => require(['@/pages/index/views/linkAccountAnsis/multipleScenesMerge/Index.vue'], resolve)
                 }
             ]
         },
@@ -156,7 +157,7 @@ const Index = {
                 scrollTop: true,
                 title: '舆情异常'
             },
-            hidden: true,
+            hidden: false,
             name: 'popularFeeling',
             icon: 'menu-fix-icon fa fa-address-book',
             component: LinkAccountAnsis,

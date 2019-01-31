@@ -2,9 +2,28 @@ import _ from 'lodash';
 export default {
     data() {
         return {
+            propsChartHeight: 300,
+            fullscreen: false,
+            currentFullScreenIndex: 0
         };
     },
     methods: {
+        toggleFullScreen(index) {
+            this.$refs['fullscreen'][index].toggle();
+            this.currentFullScreenIndex = index;
+        },
+        fullscreenChange(fullscreen) {
+            this.fullscreen = fullscreen;
+            this.$nextTick(() => {
+                if (fullscreen) {
+                    let wh = window.innerHeight * 0.9;
+                    this.propsChartHeight = wh;
+                } else {
+                    this.propsChartHeight = 300;
+                }
+                this.$refs[`chartComponent${this.currentFullScreenIndex + 1}`][0].$refs[`chart${this.currentFullScreenIndex}`].echart.resize();
+            });
+        },
         getChart() {
             return [this.getChart1, this.getChart2, this.getChart3, this.getChart4];
         },
@@ -23,10 +42,11 @@ export default {
                     this.$emit('updateAccountGroupAndCustIds', chartData['nodes'][0]['name'], chartData['nodes'][0]['value'].split(','));
                 }
                 setTimeout(() => {
-                    this.getBlock2Data();
-                    this.getBlock3Data();
                     if (this.currentSceneType === '2') {
-                        this.getBlock4Data();
+                        this.getDetailBy3D();
+                    } else {
+                        this.getBlock2Data();
+                        this.getBlock3Data();
                     }
                 });
                 if (this.currentSceneType === '4') {
@@ -83,7 +103,9 @@ export default {
                     }
                 });
                 setTimeout(() => {
-                    this.getBlock4Data(selectMax ? selectMax.txDt : '2017-06-02');
+                    if (this.currentSceneType !== '2') {
+                        this.getBlock4Data(selectMax ? selectMax.txDt : '2017-06-02');
+                    }
                 });
                 this.$refs['chartComponent3'] && this.$refs['chartComponent3'][0] && this.$refs['chartComponent3'][0].getData(resp);
             });

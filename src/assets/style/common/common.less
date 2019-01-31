@@ -53,3 +53,52 @@ body {
 .show {
     display: block;
 }
+.self-fullscreen-wrap {
+    position: relative;
+    height: 300px;
+    .chart-container {
+        height: 100%;
+        width: 100%;
+    }
+    .btn-map-fullscreen {
+        position: absolute;
+        right: 10px;
+        bottom: 0;
+        width: 36px;
+        height: 36px;
+        padding: 0;
+        font-size: 36px;
+        line-height: 36px;
+        text-align: center;
+        outline: none;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        > i {
+            color: gray;
+            font-size: 25px;
+        }
+    }
+    &.fullscreen {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .chart-container {
+            height: 90%;
+            width: 90%;
+        }
+        .btn-map-fullscreen {
+            right: 10px;
+            top: 10px;
+            left: auto;
+            bottom: auto;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            > i {
+                color: gray;
+                font-size: 25px;
+            }
+        }
+    }
+}

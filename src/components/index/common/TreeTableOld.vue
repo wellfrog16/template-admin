@@ -41,7 +41,11 @@
                                 </div>
                                 <span slot="reference">
                                     <span v-if="item.field !== 'custId' || data[item.field]==='客户编号'" style="width: 145px; text-overflow: ellipsis; overflow: hidden; display: inline-block; margin: 0;">
-                                        {{ (data[item.field] === null || data[item.field] === undefined) ?  (item.field === 'acctGroSrc' ? '其他' : '') :  data[item.field] }}
+                                        {{ (data[item.field] === null || data[item.field] === undefined)
+                                            ?
+                                                (item.field === 'acctGroSrc' ? '其他' : '')
+                                            :   (item.formatter ? item.formatter(data[item.field]) : data[item.field])
+                                        }}
                                     </span>
                                     <custIdColumn v-else :scope="{row: data}" style="text-align:center;"></custIdColumn>
                                 </span>
@@ -94,6 +98,10 @@ export default {
         clearAllSelected: {
             type: Boolean,
             default: false
+        },
+        currentSceneType: {
+            type: [String, Number],
+            default: ''
         }
     },
     watch: {
@@ -146,9 +154,13 @@ export default {
             }
             if (this.checked) {
                 let checkedNodes = checkedKeys.length ? checkedKeys : this.$refs['tree-table'].getCheckedNodes();
-                this.selectTemList = checkedNodes.filter(v => {
-                    return !!v.children;
-                });
+                if (this.currentSceneType && String(this.currentSceneType) === '2') {
+                    this.selectTemList = checkedNodes;
+                } else {
+                    this.selectTemList = checkedNodes.filter(v => {
+                        return !!v.children;
+                    });
+                }
                 this.tableDataModel = this.selectTemList;
             } else {
                 this.tableDataModel = this.allData;
@@ -178,6 +190,7 @@ export default {
         },
         filterMethods(value, data) {
             if (!value) return true;
+            if (!Object.keys(data).length) return true;
             return (data['acctId'] && data['acctId'].indexOf(value.trim()) !== -1) || (data['custId'] && data['custId'].indexOf(value.trim()) !== -1);
         },
         dealTreeData() {

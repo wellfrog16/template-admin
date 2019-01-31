@@ -1,6 +1,6 @@
 <template>
     <div>
-        <echarts-common :loading="loading" :ref="`chart${index}`" :domId="`chart${index}`" :defaultOption="chartOptions" :propsChartHeight="300" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></echarts-common>
+        <echarts-common :loading="loading" :ref="`chart${index}`" :domId="`chart${index}`" :defaultOption="chartOptions" :propsChartHeight="propsChartHeight" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></echarts-common>
     </div>
 </template>
 <script>
@@ -38,6 +38,10 @@ export default {
         tabIndex: {
             type: [String, Number],
             default: '0'
+        },
+        propsChartHeight: {
+            type: [String, Number],
+            default: 300
         }
     },
     data() {
@@ -50,6 +54,9 @@ export default {
                     data: []
                 },
                 tooltip: {},
+                grid: {
+                    right: 70
+                },
                 dataZoom: [
                     {
                         type: 'inside'
@@ -57,7 +64,7 @@ export default {
                     {
                         show: true,
                         type: 'slider',
-                        y: '90%'
+                        bottom: 0
                     }
                 ],
                 xAxis: [
@@ -73,6 +80,7 @@ export default {
                 yAxis: [
                     {
                         name: '出现次数',
+                        minInterval: 1,
                         type: 'value'
                     }
                 ],
@@ -92,15 +100,15 @@ export default {
             if (!Object.keys(resData).length) {
                 return;
             }
-            let {tableData, id} = resData;
-            if (!tableData.length) {
+            let {mainData, id} = resData;
+            if (!mainData.length) {
                 return;
             }
-            this.chartOptions['xAxis'][0]['data'] = tableData.map(v => {
+            this.chartOptions['xAxis'][0]['data'] = mainData.map(v => {
                 return v.custId;
             });
-            this.chartOptions['series'][0]['data'] = tableData.map(v => {
-                return v.count;
+            this.chartOptions['series'][0]['data'] = mainData.map(v => {
+                return v.appearCnt;
             });
             this.$store.commit('savechart4', {data: this.chartOptions, index: id || this.tabIndex || this.$store.getters.getTabIndex});
             this.$refs['chart3'] && this.$refs['chart3'].initChart();

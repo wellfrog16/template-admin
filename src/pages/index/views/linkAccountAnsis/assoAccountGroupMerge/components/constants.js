@@ -1,5 +1,14 @@
 import custIdColumn from '@/components/index/common/CustIdColumn';
 // import {graphData} from './testJson';
+import {accountTotalFrepOptions, sfOptions} from '../../sceneConfig/components/constants';
+let formatAlmSel = item => {
+    let index = sfOptions.findIndex(v => { return v.value === item; });
+    return sfOptions[index]['label'];
+};
+let formatFreq = item => {
+    let index = accountTotalFrepOptions.findIndex(v => { return v.value === item; });
+    return accountTotalFrepOptions[index]['label'];
+};
 export const charts = [
     {title: '账户组相关性概览', icon: 'fa fa-globe', toggleDetailFlags: false, loading: false},
     {title: '账户组历史持仓', icon: 'fa fa-chart-bar', toggleDetailFlags: false, loading: false},
@@ -10,7 +19,7 @@ export const chartsBV = [
     {title: '聚类情况处理', icon: 'fa fa-globe', toggleDetailFlags: false, loading: false},
     {title: '账户组历史持仓', icon: 'fa fa-chart-bar', toggleDetailFlags: false, loading: false},
     {title: '账户组稳态分析-按时间', icon: 'fa fa-handshake', toggleDetailFlags: false, loading: false},
-    {title: '账户组稳态分析-客户', icon: 'fa fa-chart-line', toggleDetailFlags: false, loading: false}
+    {title: '账户组稳态分析-按客户', icon: 'fa fa-chart-line', toggleDetailFlags: false, loading: false}
 ];
 export const chartsBI = [
     {title: '账户组基本信息概览', icon: 'fa fa-globe', toggleDetailFlags: false, loading: false},
@@ -92,21 +101,42 @@ export const chartTableColumns6 = [ // 实控关系分析关系图明细字段
     {label: '同一结算单确认人', field: 'sameStlBillCfmPerson', minWidth: 160},
     {label: '同一开户授权人', field: 'sameOpenAuthPerson', minWidth: 130}
 ];
+
 export const chartTableColumns7 = [ // 聚类散点图明细字段
     {label: '账户组号', field: 'acctId', minWidth: 130, fixed: true},
-    {label: '客户编号', field: 'custId', minWidth: 160},
+    {label: '客户编号', field: 'custId', minWidth: 160, fixed: true},
     {label: '合约代码', field: 'contrCd', minWidth: 140},
-    {label: '统计起始日', field: '', minWidth: 160},
-    {label: '统计截止日', field: '', minWidth: 160}
+    {label: '统计起始日', field: 'statStartDt', minWidth: 160},
+    {label: '统计截止日', field: 'statStopDay', minWidth: 160},
+    {label: '日均成交量', field: 'bargainQtty', minWidth: 160},
+    {label: '日均报单次数', field: 'billCnt', minWidth: 160},
+    {label: '日均成交率', field: 'bargainRate', minWidth: 160},
+    {label: '日均撤单率', field: 'billRate', minWidth: 160},
+    {label: '日均操作时间差', field: 'avgOperTmMargin', minWidth: 160},
+    {label: '账户组多头持仓量', field: 'acctGroLongQtty', align: 'center', minWidth: 160},
+    {label: '账户组空头持仓量', field: 'acctGroShortQtty', align: 'center', minWidth: 160},
+    {label: '账户多头持仓量', field: 'acctLongQtty', align: 'center', minWidth: 160},
+    {label: '账户空头持仓量', field: 'acctShortQtty', align: 'center', minWidth: 160}
+];
+export const chartTableColumns10 = [
+    {label: '账户组编号', field: 'acctId', minWidth: 130, fixed: true},
+    {label: '客户编号', field: 'custId', minWidth: 130, fixed: true, template: custIdColumn},
+    {label: '交易日', field: 'txDay', minWidth: 130},
+    {label: '合约代码', field: 'contrCd', minWidth: 100},
+    {label: '账户组多头持仓量', field: 'acctGroLongQtty', minWidth: 150},
+    {label: '账户组空头持仓量', field: 'acctGroShortQtty', minWidth: 150},
+    {label: '账户多头持仓量', field: 'acctLongQtty', minWidth: 150},
+    {label: '账户空头持仓量', field: 'acctShortQtty', minWidth: 150},
+    {label: '限仓量', field: 'limitQtty', minWidth: 150}
 ];
 export const chartTableColumns8 = [ // 聚类稳态分析-时间图明细字段
-    {label: '交易日期', field: 'acctId', minWidth: 130, fixed: true},
+    {label: '交易日期', field: 'txDt', minWidth: 150, fixed: true},
     {label: '客户编号', field: 'custId', minWidth: 160, fixed: true},
-    {label: '客户数', field: 'count', minWidth: 100}
+    {label: '客户数', field: 'custCnt', minWidth: 100}
 ];
 export const chartTableColumns9 = [ // 聚类稳态分析-客户图明细字段
     {label: '客户编号', field: 'custId', minWidth: 160, fixed: true},
-    {label: '出现次数', field: 'count', minWidth: 100}
+    {label: '出现次数', field: 'appearCnt', minWidth: 100}
 ];
 
 // tree-相关性
@@ -193,17 +223,19 @@ export const mainTableColumnsBV = [
     {field: 'custId', label: '客户编号', align: 'center'},
     {field: 'custName', label: '客户名称', align: 'center'},
     {field: 'contrCd', label: '合约代码', align: 'center'},
-    {field: 'acctGrMakePosQtty', label: '账户组净持仓量', align: 'center'},
-    {field: 'acctMakePosQtty', label: '账户净持仓量', align: 'center'},
-    {field: '', label: '成交量', align: 'center'},
-    {field: '', label: '报单次数', align: 'center'},
-    {field: '', label: '成交率', align: 'center'},
-    {field: '', label: '撤单率', align: 'center'},
-    {field: '', label: '平均操作时间差', align: 'center'},
-    {field: '', label: '统计起始日', align: 'center'},
-    {field: '', label: '统计截止日', align: 'center'},
-    {field: '', label: '统计频度', align: 'center'},
-    {field: '', label: '算法选择', align: 'center'}
+    {field: 'acctGroLongQtty', label: '账户组多头持仓量', align: 'center'},
+    {field: 'acctGroShortQtty', label: '账户组空头持仓量', align: 'center'},
+    {field: 'acctLongQtty', label: '账户多头持仓量', align: 'center'},
+    {field: 'acctShortQtty', label: '账户空头持仓量', align: 'center'},
+    {field: 'bargainQtty', label: '成交量', align: 'center'},
+    {field: 'billCnt', label: '报单次数', align: 'center'},
+    {field: 'bargainRate', label: '成交率', align: 'center'},
+    {field: 'billRate', label: '撤单率', align: 'center'},
+    {field: 'avgOperTmMargin', label: '平均操作时间差', align: 'center'},
+    {field: 'statStartDt', label: '统计起始日', align: 'center'},
+    {field: 'statStopDay', label: '统计截止日', align: 'center'},
+    {field: 'statFreq', label: '统计频度', align: 'center', formatter: formatFreq},
+    {field: 'algoSel', label: '算法选择', align: 'center', formatter: formatAlmSel}
 ];
 // tree-基本信息
 export const mainTableColumnsBI = [
@@ -568,22 +600,22 @@ export const respData4 = {
 };
 export let testData = {
     chartData: [
-        {acctId: 'JL00005', custId: '2018090999', data1: 1, data2: 3, data3: 9, data4: 27, data5: 17},
-        {acctId: 'JL00005', custId: '2018090919', data1: 4, data2: 1, data3: 19, data4: 7, data5: 16},
-        {acctId: 'JL00005', custId: '2018090929', data1: 11, data2: 8, data3: 9, data4: 17, data5: 11},
-        {acctId: 'JL00005', custId: '2018090939', data1: 6, data2: 18, data3: 29, data4: 12, data5: 31},
-        {acctId: 'JL00005', custId: '2018090949', data1: 16, data2: 18, data3: 39, data4: 27, data5: 44},
-        {acctId: 'JL00005', custId: '2018090959', data1: 26, data2: 42, data3: 49, data4: 37, data5: 55},
-        {acctId: 'JL00005', custId: '2018090969', data1: 36, data2: 13, data3: 59, data4: 47, data5: 13},
-        {acctId: 'JL00005', custId: '2018090129', data1: 46, data2: 38, data3: 19, data4: 17, data5: 71},
-        {acctId: 'JL00005', custId: '2018090229', data1: 61, data2: 18, data3: 9, data4: 1, data5: 13},
-        {acctId: 'JL00005', custId: '2018090329', data1: 6, data2: 8, data3: 77, data4: 9, data5: 11},
-        {acctId: 'JL00007', custId: '2018090918', data1: 18, data2: 37, data3: 28, data4: 17, data5: 7},
-        {acctId: 'JL00007', custId: '2018090918', data1: 38, data2: 87, data3: 38, data4: 12, data5: 71},
-        {acctId: 'JL00007', custId: '2018090918', data1: 78, data2: 17, data3: 18, data4: 17, data5: 57},
-        {acctId: 'JL00009', custId: '2018090338', data1: 8, data2: 17, data3: 28, data4: 19, data5: 7},
-        {acctId: 'JL00009', custId: '2018090128', data1: 18, data2: 17, data3: 28, data4: 57, data5: 6},
-        {acctId: 'JL00009', custId: '2018090548', data1: 48, data2: 37, data3: 2, data4: 11, data5: 17},
+        {acctId: 'JL00005', custId: '2018090999', data1: 1, data2: 3, data3: 9, data4: 27, data5: 17, data6: 9},
+        {acctId: 'JL00005', custId: '2018090919', data1: 4, data2: 1, data3: 19, data4: 7, data5: 16, data6: 19},
+        {acctId: 'JL00005', custId: '2018090929', data1: 11, data2: 8, data3: 9, data4: 17, data5: 11, data6: 99},
+        {acctId: 'JL00005', custId: '2018090939', data1: 6, data2: 18, data3: 29, data4: 12, data5: 31, data6: 29},
+        {acctId: 'JL00005', custId: '2018090949', data1: 16, data2: 18, data3: 39, data4: 27, data5: 44, data6: 9},
+        {acctId: 'JL00005', custId: '2018090959', data1: 26, data2: 42, data3: 49, data4: 37, data5: 55, data6: 91},
+        {acctId: 'JL00005', custId: '2018090969', data1: 36, data2: 13, data3: 59, data4: 47, data5: 13, data6: 9},
+        {acctId: 'JL00005', custId: '2018090129', data1: 46, data2: 38, data3: 19, data4: 17, data5: 71, data6: 93},
+        {acctId: 'JL00005', custId: '2018090229', data1: 61, data2: 18, data3: 9, data4: 1, data5: 13, data6: 49},
+        {acctId: 'JL00005', custId: '2018090329', data1: 6, data2: 8, data3: 77, data4: 9, data5: 11, data6: 19},
+        {acctId: 'JL00007', custId: '2018090918', data1: 18, data2: 37, data3: 28, data4: 17, data5: 7, data6: 98},
+        {acctId: 'JL00007', custId: '2018090918', data1: 38, data2: 87, data3: 38, data4: 12, data5: 71, data6: 9},
+        {acctId: 'JL00007', custId: '2018090918', data1: 78, data2: 17, data3: 18, data4: 17, data5: 57, data6: 79},
+        {acctId: 'JL00009', custId: '2018090338', data1: 8, data2: 17, data3: 28, data4: 19, data5: 7, data6: 49},
+        {acctId: 'JL00009', custId: '2018090128', data1: 18, data2: 17, data3: 28, data4: 57, data5: 6, data6: 9},
+        {acctId: 'JL00009', custId: '2018090548', data1: 48, data2: 37, data3: 2, data4: 11, data5: 17, data6: 19},
     ],
     mainTableData: ddd
 };

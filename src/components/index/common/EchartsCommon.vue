@@ -3,7 +3,7 @@
     <div v-loading="loading"
          element-loading-text="数据加载中，请耐心等待..."
          element-loading-background="rgba(0,0,0,0.7)"
-         :id="domId" class="echarts-container" :style="{'height': propsChartHeight + 'px'}" style="width: 100%;">
+         :id="domId" class="echarts-container chart-container" :style="{'height': propsChartHeight + 'px'}" style="width: 100%;">
          <!-- <div v-if="defaultOption.series.length && defaultOption.series[0]['data'].length" class="placeholder-text">暂无数据</div> -->
     </div>
 </template>
@@ -62,20 +62,22 @@ export default {
             this.echart && this.echart.off('click');
             this.echart && this.echart.off('dblclick');
             this.echart && this.echart.off('brushselected');
+            this.echart && this.echart.off('contextmenu');
             /* 绑定单击事件 */
             let timeFn = null;
+
+            /* 绑定双击事件 */
+            this.echart.on('dblclick', params => {
+                clearTimeout(timeFn);
+                console.log(params);
+                this.$emit('handleEchartDblClickEvent', params, this.domId);
+            });
             this.echart.on('click', params => {
                 clearTimeout(timeFn);
                 timeFn = setTimeout(() => {
                     console.log(params);
                     this.$emit('handleEchartClickEvent', params, this.domId);
                 }, 300);
-            });
-            /* 绑定双击事件 */
-            this.echart.on('dblclick', params => {
-                clearTimeout(timeFn);
-                console.log(params);
-                this.$emit('handleEchartDblClickEvent', params, this.domId);
             });
             /* 绑定框选结束事件 */
             this.echart.on('brushselected', params => {

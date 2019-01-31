@@ -19,3 +19,7 @@ export const getExportResultSet = params => {
 export const getChartTable2ByPage = params => {
     return post(`${requestPrefix}/historyNetPoolCangPage`, params || {});
 };
+// 聚类钻取
+export const getDetailBy3D = params => {
+    return post(`${requestPrefix}/cluster/detail`, params || {});
+};
