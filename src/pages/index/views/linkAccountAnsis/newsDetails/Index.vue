@@ -1,5 +1,5 @@
 <template>
-    <div>4444343424</div>
+    <div>敬请期待>>></div>
 </template>
 
 <script>

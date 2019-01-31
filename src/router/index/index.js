@@ -178,7 +178,7 @@ const Index = {
                         title: '异常波动'
                     },
                     path: '/publicOpinionSwings',
-                    name: 'popularFeelings',
+                    name: 'publicOpinionSwings',
                     icon: 'menu-fix-icon fa fa-location-arrow',
                     component: resolve => require(['@/pages/index/views/linkAccountAnsis/publicOpinionSwings/Index.vue'], resolve)
                 },
@@ -188,7 +188,7 @@ const Index = {
                         title: '新闻详情'
                     },
                     path: '/newsDetails',
-                    name: 'popularFeelings',
+                    name: 'newsDetails',
                     icon: 'menu-fix-icon fa fa-location-arrow',
                     component: resolve => require(['@/pages/index/views/linkAccountAnsis/newsDetails/Index.vue'], resolve)
                 }
