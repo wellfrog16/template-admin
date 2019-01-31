@@ -62,20 +62,22 @@ export default {
             this.echart && this.echart.off('click');
             this.echart && this.echart.off('dblclick');
             this.echart && this.echart.off('brushselected');
+            this.echart && this.echart.off('contextmenu');
             /* 绑定单击事件 */
             let timeFn = null;
+
+            /* 绑定双击事件 */
+            this.echart.on('dblclick', params => {
+                clearTimeout(timeFn);
+                console.log(params);
+                this.$emit('handleEchartDblClickEvent', params, this.domId);
+            });
             this.echart.on('click', params => {
                 clearTimeout(timeFn);
                 timeFn = setTimeout(() => {
                     console.log(params);
                     this.$emit('handleEchartClickEvent', params, this.domId);
                 }, 300);
-            });
-            /* 绑定双击事件 */
-            this.echart.on('dblclick', params => {
-                clearTimeout(timeFn);
-                console.log(params);
-                this.$emit('handleEchartDblClickEvent', params, this.domId);
             });
             /* 绑定框选结束事件 */
             this.echart.on('brushselected', params => {

@@ -159,7 +159,7 @@ import {createTypeOptions} from './components/constants';
 import {getSceneList, deleteScene, mergeAccount} from '@/api/dataAnsis/sceneConfig';
 import {uploadFileByBodyInfo} from '@/api/common';
 import resultSelectComponent from '@/components/index/common/ResultSelectComponent';
-import {testData} from '../assoAccountGroupMerge//components/constants';
+// import {testData} from '../assoAccountGroupMerge//components/constants';
 import moment from 'moment';
 import _ from 'lodash';
 export default {
@@ -484,11 +484,10 @@ export default {
             paramsArray.forEach(v => {
                 tabs[v.sceneIds] = v;
             });
-            console.log(params);
             this.$store.commit('saveSceneCommitParams', tabs);
             paramsArray.forEach(v => {
-                // this.getNextStepData(v);
-                if (v.sceneTypes !== '2') {
+                this.getNextStepData(v);
+                /* if (v.sceneTypes !== '2') {
                     this.getNextStepData(v);
                 } else {
                     if (!this.openFlag) {
@@ -498,7 +497,7 @@ export default {
                         this.$store.commit('saveSceneCommitResp', store);
                         this.$router.push({name: 'assoAccountGroupMerge'});
                     }
-                }
+                } */
             });
         }
     },

@@ -1,5 +1,14 @@
 import custIdColumn from '@/components/index/common/CustIdColumn';
 // import {graphData} from './testJson';
+import {accountTotalFrepOptions, sfOptions} from '../../sceneConfig/components/constants';
+let formatAlmSel = item => {
+    let index = sfOptions.findIndex(v => { return v.value === item; });
+    return sfOptions[index]['label'];
+};
+let formatFreq = item => {
+    let index = accountTotalFrepOptions.findIndex(v => { return v.value === item; });
+    return accountTotalFrepOptions[index]['label'];
+};
 export const charts = [
     {title: '账户组相关性概览', icon: 'fa fa-globe', toggleDetailFlags: false, loading: false},
     {title: '账户组历史持仓', icon: 'fa fa-chart-bar', toggleDetailFlags: false, loading: false},
@@ -92,21 +101,42 @@ export const chartTableColumns6 = [ // 实控关系分析关系图明细字段
     {label: '同一结算单确认人', field: 'sameStlBillCfmPerson', minWidth: 160},
     {label: '同一开户授权人', field: 'sameOpenAuthPerson', minWidth: 130}
 ];
+
 export const chartTableColumns7 = [ // 聚类散点图明细字段
     {label: '账户组号', field: 'acctId', minWidth: 130, fixed: true},
-    {label: '客户编号', field: 'custId', minWidth: 160},
+    {label: '客户编号', field: 'custId', minWidth: 160, fixed: true},
     {label: '合约代码', field: 'contrCd', minWidth: 140},
-    {label: '统计起始日', field: '', minWidth: 160},
-    {label: '统计截止日', field: '', minWidth: 160}
+    {label: '统计起始日', field: 'statStartDt', minWidth: 160},
+    {label: '统计截止日', field: 'statStopDay', minWidth: 160},
+    {label: '日均成交量', field: 'bargainQtty', minWidth: 160},
+    {label: '日均报单次数', field: 'billCnt', minWidth: 160},
+    {label: '日均成交率', field: 'bargainRate', minWidth: 160},
+    {label: '日均撤单率', field: 'billRate', minWidth: 160},
+    {label: '日均操作时间差', field: 'avgOperTmMargin', minWidth: 160},
+    {label: '账户组多头持仓量', field: 'acctGroLongQtty', align: 'center', minWidth: 160},
+    {label: '账户组空头持仓量', field: 'acctGroShortQtty', align: 'center', minWidth: 160},
+    {label: '账户多头持仓量', field: 'acctLongQtty', align: 'center', minWidth: 160},
+    {label: '账户空头持仓量', field: 'acctShortQtty', align: 'center', minWidth: 160}
+];
+export const chartTableColumns10 = [
+    {label: '账户组编号', field: 'acctId', minWidth: 130, fixed: true},
+    {label: '客户编号', field: 'custId', minWidth: 130, fixed: true, template: custIdColumn},
+    {label: '交易日', field: 'txDay', minWidth: 130},
+    {label: '合约代码', field: 'contrCd', minWidth: 100},
+    {label: '账户组多头持仓量', field: 'acctGroLongQtty', minWidth: 150},
+    {label: '账户组空头持仓量', field: 'acctGroShortQtty', minWidth: 150},
+    {label: '账户多头持仓量', field: 'acctLongQtty', minWidth: 150},
+    {label: '账户空头持仓量', field: 'acctShortQtty', minWidth: 150},
+    {label: '限仓量', field: 'limitQtty', minWidth: 150}
 ];
 export const chartTableColumns8 = [ // 聚类稳态分析-时间图明细字段
-    {label: '交易日期', field: 'acctId', minWidth: 130, fixed: true},
+    {label: '交易日期', field: 'txDt', minWidth: 150, fixed: true},
     {label: '客户编号', field: 'custId', minWidth: 160, fixed: true},
-    {label: '客户数', field: 'count', minWidth: 100}
+    {label: '客户数', field: 'custCnt', minWidth: 100}
 ];
 export const chartTableColumns9 = [ // 聚类稳态分析-客户图明细字段
     {label: '客户编号', field: 'custId', minWidth: 160, fixed: true},
-    {label: '出现次数', field: 'count', minWidth: 100}
+    {label: '出现次数', field: 'appearCnt', minWidth: 100}
 ];
 
 // tree-相关性
@@ -193,17 +223,19 @@ export const mainTableColumnsBV = [
     {field: 'custId', label: '客户编号', align: 'center'},
     {field: 'custName', label: '客户名称', align: 'center'},
     {field: 'contrCd', label: '合约代码', align: 'center'},
-    {field: 'acctGrMakePosQtty', label: '账户组净持仓量', align: 'center'},
-    {field: 'acctMakePosQtty', label: '账户净持仓量', align: 'center'},
-    {field: '', label: '成交量', align: 'center'},
-    {field: '', label: '报单次数', align: 'center'},
-    {field: '', label: '成交率', align: 'center'},
-    {field: '', label: '撤单率', align: 'center'},
-    {field: '', label: '平均操作时间差', align: 'center'},
-    {field: '', label: '统计起始日', align: 'center'},
-    {field: '', label: '统计截止日', align: 'center'},
-    {field: '', label: '统计频度', align: 'center'},
-    {field: '', label: '算法选择', align: 'center'}
+    {field: 'acctGroLongQtty', label: '账户组多头持仓量', align: 'center'},
+    {field: 'acctGroShortQtty', label: '账户组空头持仓量', align: 'center'},
+    {field: 'acctLongQtty', label: '账户多头持仓量', align: 'center'},
+    {field: 'acctShortQtty', label: '账户空头持仓量', align: 'center'},
+    {field: 'bargainQtty', label: '成交量', align: 'center'},
+    {field: 'billCnt', label: '报单次数', align: 'center'},
+    {field: 'bargainRate', label: '成交率', align: 'center'},
+    {field: 'billRate', label: '撤单率', align: 'center'},
+    {field: 'avgOperTmMargin', label: '平均操作时间差', align: 'center'},
+    {field: 'statStartDt', label: '统计起始日', align: 'center'},
+    {field: 'statStopDay', label: '统计截止日', align: 'center'},
+    {field: 'statFreq', label: '统计频度', align: 'center', formatter: formatFreq},
+    {field: 'algoSel', label: '算法选择', align: 'center', formatter: formatAlmSel}
 ];
 // tree-基本信息
 export const mainTableColumnsBI = [

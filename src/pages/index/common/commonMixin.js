@@ -16,7 +16,8 @@ export default {
             this.fullscreen = fullscreen;
             this.$nextTick(() => {
                 if (fullscreen) {
-                    this.propsChartHeight = 500;
+                    let wh = window.innerHeight * 0.9;
+                    this.propsChartHeight = wh;
                 } else {
                     this.propsChartHeight = 300;
                 }
@@ -41,10 +42,11 @@ export default {
                     this.$emit('updateAccountGroupAndCustIds', chartData['nodes'][0]['name'], chartData['nodes'][0]['value'].split(','));
                 }
                 setTimeout(() => {
-                    this.getBlock2Data();
-                    this.getBlock3Data();
                     if (this.currentSceneType === '2') {
-                        this.getBlock4Data();
+                        this.getDetailBy3D();
+                    } else {
+                        this.getBlock2Data();
+                        this.getBlock3Data();
                     }
                 });
                 if (this.currentSceneType === '4') {
@@ -101,7 +103,9 @@ export default {
                     }
                 });
                 setTimeout(() => {
-                    this.getBlock4Data(selectMax ? selectMax.txDt : '2017-06-02');
+                    if (this.currentSceneType !== '2') {
+                        this.getBlock4Data(selectMax ? selectMax.txDt : '2017-06-02');
+                    }
                 });
                 this.$refs['chartComponent3'] && this.$refs['chartComponent3'][0] && this.$refs['chartComponent3'][0].getData(resp);
             });

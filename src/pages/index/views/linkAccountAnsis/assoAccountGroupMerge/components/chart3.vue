@@ -148,7 +148,7 @@ export default {
                     {
                         show: true,
                         type: 'slider',
-                        y: '90%'
+                        bottom: 0
                     }
                 ],
                 visualMap: [

@@ -35,7 +35,7 @@ export const defaultConfig = {
     statAcctCnt: '500', // 统计账户数
     statAcctType: '1', // 统计账户类型
     statFreq: '1', // 统计频度
-    sf: '1', // 算法
+    almSel: '1', // 算法
     indexPara: {
         '1': '买入成交相关系数>=90% AND 卖出成交相关系数>=90%',
         '3': '(姓名相同 AND 身份证相同) OR (邮编相同 AND 联系地址相同)',

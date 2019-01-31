@@ -12,17 +12,17 @@
                     <div slot="content">
                         <s-full-screen class="self-fullscreen-wrap" ref="fullscreen" :fullscreen.sync="fullscreen" @change="fullscreenChange" background="#00255c">
                             <div v-if="item['toggleDetailFlags']">
-                                <s-table :columns="chartTableColumns[index]" :tableData="chartTableData[index]"></s-table>
+                                <s-table :columns="chartTableColumns[index]" :tableData="chartTableData[index]" :height="300" ></s-table>
                             </div>
-                            <div v-else>
-                                <chart1 :ref="`chartComponent${index + 1}`" v-if="index === 0" :index="index" :tabIndex="tabIndex" :sceneType="1" :childrenMap="childrenMap" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateAccountGroupAndCustIds="updateAccountGroupAndCustIds" @getBlock2Data="getBlock2Data" @getBlock3Data="getBlock3Data"></chart1>
-                                <chart2 :ref="`chartComponent${index + 1}`" v-if="index === 1" :index="index" :tabIndex="tabIndex" :sceneType="1" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @getBlock4Data="getBlock4Data"></chart2>
-                                <chart3 :ref="`chartComponent${index + 1}`" v-if="index === 2" :index="index" :tabIndex="tabIndex" :sceneType="1" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @getBlock4Data="getBlock4Data"></chart3>
-                                <chart4 :ref="`chartComponent${index + 1}`" v-if="index === 3" :index="index" :tabIndex="tabIndex" :sceneType="1" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData"></chart4>
+                            <div v-else class="chart-container">
+                                <chart1 :ref="`chartComponent${index + 1}`" v-if="index === 0" :index="index" :tabIndex="tabIndex" :fullscreen="fullscreen" :sceneType="1" :propsChartHeight="propsChartHeight" :childrenMap="childrenMap" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateAccountGroupAndCustIds="updateAccountGroupAndCustIds" @getDetailBy3D="getDetailBy3D"></chart1>
+                                <chart2 :ref="`chartComponent${index + 1}`" v-if="index === 1" :index="index" :tabIndex="tabIndex" :sceneType="1" :propsChartHeight="propsChartHeight" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></chart2>
+                                <chart3 :ref="`chartComponent${index + 1}`" v-if="index === 2" :index="index" :tabIndex="tabIndex" :sceneType="1" :propsChartHeight="propsChartHeight" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></chart3>
+                                <chart4 :ref="`chartComponent${index + 1}`" v-if="index === 3" :index="index" :tabIndex="tabIndex" :sceneType="1" :propsChartHeight="propsChartHeight" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData"></chart4>
                             </div>
-                            <!-- <button v-show="!item['toggleDetailFlags']" type="button" class="btn btn-default btn-map-fullscreen" @click="toggleFullScreen(index)">
+                            <button v-show="!item['toggleDetailFlags']" type="button" class="btn btn-default btn-map-fullscreen" @click="toggleFullScreen(index)">
                                 <i class="fa" :class="[fullscreen ? 'fa-compress' : 'fa-expand-arrows-alt']"></i>
-                            </button> -->
+                            </button>
                         </s-full-screen>
                     </div>
                 </s-card>
@@ -42,7 +42,7 @@
                     <el-row :gutter="20">
                         <el-col :span="21">
                             <div>
-                                <tree-table ref="self-tree-table" :filterText="searchText" :columns="mainTableColumns" :tableData="mainTableData" @updateCheckedList="updateCheckedList"></tree-table>
+                                <tree-table ref="self-tree-table" :filterText="searchText" :columns="mainTableColumns" :tableData="mainTableData" :clearAllSelected="true" @updateCheckedList="updateCheckedList" @handleClearAll="handleClearAll" :currentSceneType="currentSceneType"></tree-table>
                             </div>
                         </el-col>
                         <el-col :span="3">
@@ -53,9 +53,9 @@
                                 <br>
                                 <el-button type="warning" size="small" @click="handleMerge" class="self-width">合并</el-button>
                                 <br>
-                                <el-button type="primary" size="small" @click="handleExportResult('1', tabIndex)">导出到结果集</el-button>
+                                <el-button type="primary" size="small" @click="handleExportResult('2', tabIndex)">导出到结果集</el-button>
                                 <br>
-                                <el-button type="primary" size="small" class="self-width" @click="handleExportCsv('账户组信息', mainTableColumns)">导出到csv</el-button>
+                                <el-button type="primary" size="small" class="self-width" @click="handleExportCsv('账户组信息-聚类', mainTableColumns)">导出到csv</el-button>
                                 <!-- <br>
                                 <el-button type="primary" size="small" @click="createNewData('1', tabIndex)">重新生成数据</el-button> -->
                             </div>
@@ -72,19 +72,16 @@ import STable from '@/components/index/common/STable';
 import TreeTable from '@/components/index/common/TreeTableOld';
 import treeTableMixin from '@/pages/index/common/treeTableMixin';
 import commonMixin from '@/pages/index/common/commonMixin';
-// import {
-//     getChart2Data,
-//     getChart3Data,
-//     getChart4Data,
-//     // getChartTable2ByPage
-// } from '@/api/dataAnsis/assoAccountGroupMerge';
+import {
+    getDetailBy3D
+} from '@/api/dataAnsis/assoAccountGroupMerge';
 import chart1 from '../components/chart6';
-import chart2 from '../components/chart2';
+import chart2 from '../components/chart9';
 import chart3 from '../components/chart7';
 import chart4 from '../components/chart8';
 import _ from 'lodash';
-import {getBlockData2, getBlockData3, getBlockData4} from './testJson';
-import {chartsBV, mainTableColumnsBV, chartTableColumns2, chartTableColumns7, chartTableColumns8, chartTableColumns9, table3Options} from '../components/constants';
+// import {getBlockData2, getBlockData3, getBlockData4} from './testJson';
+import {chartsBV, mainTableColumnsBV, chartTableColumns10, chartTableColumns7, chartTableColumns8, chartTableColumns9, table3Options} from '../components/constants';
 export default {
     components: {chart1, chart2, chart3, chart4, SCard, STable, TreeTable},
     mixins: [treeTableMixin, commonMixin],
@@ -105,9 +102,10 @@ export default {
             table3Options,
             mainTableColumns: mainTableColumnsBV,
             sceneCommitParams: {},
+            taskId: null,
             accountIdPre: 'XG',
             charts: chartsBV,
-            chartTableColumns: [chartTableColumns7, chartTableColumns2, chartTableColumns8, chartTableColumns9],
+            chartTableColumns: [chartTableColumns7, chartTableColumns10, chartTableColumns8, chartTableColumns9],
             chartTableData: [[], [], [], []],
             searchText: '',
             currentAccountGroupId: '',
@@ -120,6 +118,18 @@ export default {
         };
     },
     methods: {
+        handleClearAll() {
+            // mark 样式
+            let data = this.$refs['chartComponent1'][0].chartOptions['series'][0]['data'];
+            data.forEach(v => {
+                v.itemStyle = {...{borderColor: 'transparent', borderWidth: 1}, ...v.itemStyle};
+            });
+            this.$refs['chartComponent1'][0].chartOptions['series'][0]['data'] = data;
+            this.$store.commit('savechart1', {data: this.$refs['chartComponent1'][0].chartOptions, index: this.tabIndex || this.$store.getters.getTabIndex});
+            // table勾选状态
+            this.selectAccountGroupList = [];
+            this.getChart1(this.$refs['chartComponent1'][0].chartOptions, 1);
+        },
         updateAccountGroupAndCustIds(groupId, custIds) {
             this.currentAccountGroupId = groupId;
             this.currentCustIds = custIds;
@@ -152,19 +162,19 @@ export default {
                     mainTableData: []
                 };
             }
-            let {mainTableData, chartData, id} = resData;
-            if (mainTableData && !mainTableData.length) {
+            let {resultList, chartDataList, id, taskId} = resData;
+            this.taskId = taskId; // 后端使用
+            if (chartDataList && !chartDataList.length) {
                 return {
                     chartData: [],
                     mainTableData: []
                 };
             }
             // 散点图sort
-            this.mainTableData = this.sortDataByAcctIdCommon(mainTableData);
-            // table data sort
-            chartData = this.sortDataByAcctIdCommon(chartData);
+            chartDataList = this.sortDataByAcctIdCommon(chartDataList);
+            this.mainTableData = this.sortDataByAcctIdCommon(resultList);
             let allLeaf = [];
-            mainTableData.forEach(v => {
+            this.mainTableData.forEach(v => {
                 if (v.children && v.children.length) {
                     let custIds = v.children.map(v => {
                         return v.custId;
@@ -181,18 +191,17 @@ export default {
                     this.childrenMap[v.id] = childIds;
                 }
             });
-            chartData.forEach(v => {
+            chartDataList.forEach(v => {
                 let index = allLeaf.findIndex(i => {
                     return i.acctId === v.acctId;
                 });
                 v.custIds = index > -1 ? allLeaf[index]['custIds'].join(',') : '';
-                v.id = index > -1 ? allLeaf[index]['id'] : '';
             });
-            this.$store.commit('saveMainTableData', {data: mainTableData, index: id || this.tabIndex || this.$store.getters.getTabIndex});
-            this.updateTableData(chartData, 0, id);
+            this.$store.commit('saveMainTableData', {data: this.mainTableData, index: id || this.tabIndex || this.$store.getters.getTabIndex});
+            this.updateTableData(chartDataList, 0, id);
             return {
-                chartData: chartData,
-                mainTableData: mainTableData
+                chartData: chartDataList,
+                mainTableData: this.mainTableColumns
             };
         },
         updateTableData(value, index, id) {
@@ -227,124 +236,104 @@ export default {
                 });
             }
         },
-        getBlock2Data() {
-            const {tableData} = getBlockData2;
-            this.updateTableData(tableData, 1);
-            this.drewChart2(getBlockData2);
-            // let flag = this.$store.getters.getClickTab;
-            // if (flag && this.$store.getters.getchart2) {
-            //     let tableData = this.$store.getters.getChartTableData[1];
-            //     let chartData = this.$store.getters.getchart2;
-            //     this.updateTableData(tableData, 1);
-            //     this.getChart2(chartData);
-            // } else {
-            //     if (this.currentAccountGroupId) {
-            //         let params = this.commonReqParams();
-            //         this.charts[1]['loading'] = true;
-            //         getChart2Data(params).then(resp => {
-            //             this.charts[1]['loading'] = false;
-            //             this.updateTableData(resp.tableData, 1);
-            //             this.drewChart2(resp);
-            //         }).catch(e => {
-            //             console.error(e);
-            //             this.charts[1]['loading'] = false;
-            //         });
-            //     }
-            // }
-        },
-        getBlock3Data() {
-            const {tableData} = getBlockData3;
-            console.log(getBlockData3);
-            this.updateTableData(tableData, 2);
-            this.drewChart3(getBlockData3);
-            // let flag = this.$store.getters.getClickTab;
-            // if (flag && this.$store.getters.getchart3) {
-            //     let tableData = this.$store.getters.getChartTableData[2];
-            //     let chartData = this.$store.getters.getchart3;
-            //     this.updateTableData(tableData, 2);
-            //     this.getChart3(chartData);
-            // } else {
-            //     if (this.currentAccountGroupId) {
-            //         this.charts[2]['loading'] = true;
-            //         let params = this.commonReqParams();
-            //         getChart3Data(params).then(resp => {
-            //             this.charts[2]['loading'] = false;
-            //             this.updateTableData(resp.tableData, 2);
-            //             this.drewChart3(resp);
-            //         }).catch(e => {
-            //             console.error(e);
-            //             this.charts[1]['loading'] = false;
-            //         });
-            //     }
-            // }
-        },
-        getBlock4Data(date) {
-            const {tableData} = getBlockData4;
-            this.updateTableData(tableData, 3);
-            this.drewChart4(getBlockData4);
-            /* let flag = this.$store.getters.getClickTab;
-            if (flag && this.$store.getters.getchart4) {
-                this.$store.commit('saveClickTab', false);
-                let tableData = this.$store.getters.getChartTableData[3];
-                let chartData = this.$store.getters.getchart4;
-                this.updateTableData(tableData, 3);
-                this.getChart4(chartData);
+        getDetailBy3D() {
+            let flag = this.$store.getters.getClickTab;
+            if (flag && this.$store.getters.getchart2) {
+                let tableData2 = this.$store.getters.getChartTableData[1];
+                let tableData3 = this.$store.getters.getChartTableData[2];
+                let tableData4 = this.$store.getters.getChartTableData[3];
+                let chartData2 = this.$store.getters.getchart2;
+                let chartData3 = this.$store.getters.getchart3;
+                let chartData4 = this.$store.getters.getchart4;
+                this.updateTableData(tableData2, 1);
+                this.updateTableData(tableData3, 2);
+                this.updateTableData(tableData4, 3);
+                this.getChart2(chartData2);
+                this.getChart3(chartData3);
+                this.getChart4(chartData4);
             } else {
                 if (this.currentAccountGroupId) {
-                    this.charts[3]['loading'] = true;
                     let params = this.commonReqParams();
-                    params.txDt = date;
-                    getChart4Data(params).then(resp => {
+                    this.charts[1]['loading'] = true;
+                    this.charts[2]['loading'] = true;
+                    this.charts[3]['loading'] = true;
+                    getDetailBy3D(params).then(resp => {
+                        this.charts[1]['loading'] = false;
+                        this.charts[2]['loading'] = false;
                         this.charts[3]['loading'] = false;
-                        this.updateTableData(resp.buysail, 3);
-                        this.drewChart4(resp);
+                        console.log(resp);
+                        let {clusterNetQtty, clusterStateAnalByTime, clusterStateAnalByCust} = resp;
+                        this.updateTableData(clusterNetQtty.tableData, 1);
+                        this.updateTableData(clusterStateAnalByTime, 2);
+                        this.updateTableData(clusterStateAnalByCust, 3);
+                        this.drewChart2({mainData: clusterNetQtty.mainData, id: resp.id});
+                        this.drewChart3({mainData: clusterStateAnalByTime, id: resp.id});
+                        this.drewChart4({mainData: clusterStateAnalByCust, id: resp.id});
                     }).catch(e => {
                         console.error(e);
                         this.charts[1]['loading'] = false;
+                        this.charts[2]['loading'] = false;
+                        this.charts[3]['loading'] = false;
                     });
                 }
-            } */
+            }
         },
         handleEchartClickEvent(params, index) {
             switch (String(index)) {
             case '0':
                 // get chart2
-                let currentId = params['data'][6];
-                let markPointData = this.$refs['chartComponent1'][0].chartOptions['series'][0]['markPoint']['data'];
+                let currentId = params['value'][6];
                 if (this.selectAccountGroupList.indexOf(currentId) > -1) { // 取消选中
-                    // markPoint 样式
-                    this.$refs['chartComponent1'][0].chartOptions['series'][0]['markPoint']['data'] = markPointData.filter(v => {
-                        return v.coord[0] !== params['data'][0] && v.coord[1] !== params['data'][1];
+                    // mark 样式
+                    let data = this.$refs['chartComponent1'][0].chartOptions['series'][0]['data'];
+                    data.forEach(v => {
+                        if (v['value'][6] === currentId) {
+                            v.itemStyle = {...{borderColor: 'transparent', borderWidth: 1}, ...v.itemStyle};
+                        }
                     });
+                    this.$refs['chartComponent1'][0].chartOptions['series'][0]['data'] = data;
                     this.$store.commit('savechart1', {data: this.$refs['chartComponent1'][0].chartOptions, index: params.id || this.tabIndex || this.$store.getters.getTabIndex});
                     // table勾选状态
                     this.selectAccountGroupList = this.selectAccountGroupList.filter(v => {
                         return v !== currentId && this.childrenMap[currentId].indexOf(v) === -1;
                     });
                 } else { // 选中
-                    // markPoint 样式
-                    this.$refs['chartComponent1'][0].chartOptions['series'][0]['markPoint']['data'].push({
-                        coord: [params['data'][0], params['data'][1]]
+                    // mark 样式
+                    let data = this.$refs['chartComponent1'][0].chartOptions['series'][0]['data'];
+                    data.forEach(v => {
+                        if (v['value'][6] === currentId) {
+                            v.itemStyle = {...{borderColor: '#fff', borderWidth: 3}, ...v.itemStyle};
+                        }
                     });
+                    this.$refs['chartComponent1'][0].chartOptions['series'][0]['data'] = data;
                     this.$store.commit('savechart1', {data: this.$refs['chartComponent1'][0].chartOptions, index: params.id || this.tabIndex || this.$store.getters.getTabIndex});
                     // table勾选状态
                     this.selectAccountGroupList.push(currentId);
                 }
-                this.getChart1(1, this.$refs['chartComponent1'][0].chartOptions);
+                console.log(this.$refs['chartComponent1'][0].chartOptions);
+                this.getChart1(this.$refs['chartComponent1'][0].chartOptions, 1);
                 this.$refs['self-tree-table'].$refs['tree-table'].setCheckedKeys(this.selectAccountGroupList);
-                break;
+                // test
+                this.$store.commit('saveClickTab', false);
+                this.currentAccountGroupId = params['value'][3];
+                this.currentCustIds = params.value[5].split(',');
+                this.$nextTick(() => {
+                    this.getDetailBy3D();
+                });
             }
         },
         handleEchartDblClickEvent(params, index) {
+            console.log('dbdbdbdbdbdbdbdbdbdbdbdb');
             this.$store.commit('saveClickTab', false);
             switch (String(index)) {
             case '0':
-                this.currentAccountGroupId = params['data'][3];
+                this.currentAccountGroupId = params['data'][4];
                 this.currentCustIds = params.data[5].split(',');
                 this.$nextTick(() => {
-                    this.getBlock2Data();
-                    this.getBlock3Data();
-                    this.getBlock4Data();
+                    // this.getBlock2Data();
+                    // this.getBlock3Data();
+                    // this.getBlock4Data();
+                    this.getDetailBy3D();
                 });
                 break;
             }
@@ -353,11 +342,12 @@ export default {
             this.sceneCommitParams = this.$store.getters.sceneCommitParams[this.tabIndex || this.$store.getters.getTabIndex];
             return {
                 id: this.sceneCommitParams.sceneIds,
-                acctId: this.currentAccountGroupId, // || 'XG00001',
-                custId: this.currentCustIds.join(','), // || '80001716,80000025,80001461',
+                acctId: this.currentAccountGroupId, // || 'JL000000',
+                custId: this.currentCustIds.join(','), // || '80000366,80000777,80000562',
                 statStartDt: this.sceneCommitParams.statStartDt, // || '2017-02-20',
                 statStopDay: this.sceneCommitParams.statStopDay, // || '2017-10-09',
-                contrCd: this.sceneCommitParams.contrCd, // || 'cu1712'
+                contrCd: this.sceneCommitParams.contrCd, // || 'cu1712',
+                taskId: this.taskId
                 // resultIds: this.resultIds || ''
             };
         },

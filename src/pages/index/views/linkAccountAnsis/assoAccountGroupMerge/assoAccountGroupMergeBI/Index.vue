@@ -61,7 +61,7 @@
                                 <br>
                                 <el-button type="primary" size="small" @click="handleExportResult('3', tabIndex)">导出到结果集</el-button>
                                 <br>
-                                <el-button type="primary" size="small" class="self-width" @click="handleExportCsv('账户组信息', mainTableColumnsBI)">导出到csv</el-button>
+                                <el-button type="primary" size="small" class="self-width" @click="handleExportCsv('账户组信息-基本信息', mainTableColumnsBI)">导出到csv</el-button>
                                 <br>
                                 <el-button type="primary" size="small" @click="createNewData('3', tabIndex)">重新生成数据</el-button>
                             </div>

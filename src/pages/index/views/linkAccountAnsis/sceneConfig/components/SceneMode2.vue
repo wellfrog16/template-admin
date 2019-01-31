@@ -48,7 +48,7 @@
             <el-col :span='12' class="right-block">
                 <s-card :title="`算法参数配置`">
                     <el-row slot="content" style="padding: 20px;">
-                        <el-radio-group v-model="ruleForm.sf">
+                        <el-radio-group v-model="ruleForm.almSel">
                             <el-radio v-for="(item, index) in sfOptions" :key="index" :label="item.value" :disabled="item.value === '2'">{{ item.label }}</el-radio>
                         </el-radio-group>
                     </el-row>
@@ -113,7 +113,7 @@ export default {
                 statAcctCnt: '', // 统计账户数
                 statAcctType: '', // 统计账户类型
                 statFreq: '', // 统计频度
-                sf: '1', // 算法
+                almSel: '1', // 算法
                 indexPara: '' // 指数内容
             }
         };
@@ -132,7 +132,7 @@ export default {
                 statAcctCnt: this.dialogItem.statAcctCnt || this.defaultConfig.statAcctCnt, // 统计账户数
                 statAcctType: this.dialogItem.statAcctType || this.defaultConfig.statAcctType, // 统计账户类型
                 statFreq: this.dialogItem.statFreq || this.defaultConfig.statFreq, // 统计频度
-                sf: this.dialogItem.sf || this.defaultConfig.sf // 算法
+                almSel: this.dialogItem.almSel || this.defaultConfig.almSel // 算法
             };
         },
         handleReset() {
@@ -147,7 +147,7 @@ export default {
                 statAcctCnt: this.defaultConfig.statAcctCnt, // 统计账户数
                 statAcctType: this.defaultConfig.statAcctType, // 统计账户类型
                 statFreq: this.defaultConfig.statFreq, // 统计频度
-                sf: this.defaultConfig.sf // 算法
+                almSel: this.defaultConfig.almSel // 算法
             };
         },
         selfValidate(rule, value, callback) {

@@ -2,12 +2,14 @@
     <div class="scene2-1">
         <echarts-common :loading="loading" :ref="`chart${index}`" :domId="`chart${index}`" :defaultOption="chartOptions" :propsChartHeight="propsChartHeight" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></echarts-common>
         <div class="select-container">
-            <div v-for="(item, key, index) in options" :key="index" v-show="showSelectList">
-                <span>{{ key }}:</span>
-                <el-select v-model="selectModes[index]" @change="handleSelectChange(key, index)">
-                    <el-option v-for="(it, i) in item" :key="i" :label="mapArray[it]" :value="it">
-                    </el-option>
-                </el-select>
+            <div v-if="showSelectList">
+                <div v-for="(item, key, index) in configParameters" :key="index">
+                    <span>{{ key.slice(0, 1) }}：</span> <!-- xyz -->
+                    <el-select v-model="selectModes[index]" @change="handleSelectChange(key, index)" :popper-append-to-body="!fullscreen">
+                        <el-option v-for="(it, i) in item" :key="i" :label="mapArray[it]" :value="it">
+                        </el-option>
+                    </el-select>
+                </div>
             </div>
             <div style="cursor: pointer; padding: 10px; color: #f5ff00; font-size: 18px; text-align: right; margin-left: 15px;" @click="showSelectList = !showSelectList">
                 <i v-if="showSelectList" class="el-icon-d-arrow-right to-right" style="position: relative;"></i>
@@ -18,7 +20,7 @@
 </template>
 <script>
 import EchartsCommon from '@/components/index/common/EchartsCommon';
-import {echartsDefault} from '@/assets/style/common/theme/echart';
+// import {echartsDefault} from '@/assets/style/common/theme/echart';
 import _ from 'lodash';
 export default {
     components: {EchartsCommon},
@@ -44,18 +46,33 @@ export default {
         propsChartHeight: {
             type: [String, Number],
             default: 300
+        },
+        fullscreen: {
+            type: Boolean,
+            default: false
+        }
+    },
+    watch: {
+        fullscreen(val) {
+            // 清除select-down位置
+            this.showSelectList = false;
+            setTimeout(() => {
+                this.showSelectList = true;
+            }, 500);
         }
     },
     data() {
         let schema = [
-            {name: 'data1', index: 0},
-            {name: 'data2', index: 1},
-            {name: 'data3', index: 2},
-            {name: 'data4', index: 3},
-            {name: 'data5', index: 4},
-            {name: 'data6', index: 5},
+            {name: 'bargainQtty', index: 0},
+            {name: 'billCnt', index: 1},
+            {name: 'bargainRate', index: 2},
+            {name: 'billRate', index: 3},
+            {name: 'avgOperTmMargin', index: 4},
+            {name: 'acctQttyMax', index: 5},
             {name: 'acctId', index: 6},
             {name: 'custId', index: 7},
+            {name: 'custIds', index: 8},
+            {name: 'id', index: 9}, // 树形table的id
         ];
         let fieldIndices = schema.reduce(function(obj, item) {
             obj[item.name] = item.index;
@@ -71,7 +88,7 @@ export default {
             zAxis3D: '日均成交率'
         };
         let configParameters = {};
-        ['xAxis3D', 'yAxis3D', 'zAxis3D'].forEach(function(fieldName) {
+        Object.keys(config).forEach(function(fieldName) {
             configParameters[fieldName] = fieldNames;
         });
         return {
@@ -79,36 +96,43 @@ export default {
             fieldIndices,
             loading: false,
             showSelectList: true,
-            selectModes: ['data1', 'data2', 'data3', 'data4', 'data5', 'data6'],
+            selectModes: ['bargainQtty', 'billCnt', 'bargainRate', 'billRate', 'avgOperTmMargin', 'acctQttyMax'],
             mapArray: {
-                data1: '日均成交量',
-                data2: '日均报单次数',
-                data3: '日均成交率',
-                data4: '日均撤单率',
-                data5: '日均操作时间差',
-                data6: '持仓量'
+                bargainQtty: '日均成交量',
+                billCnt: '日均报单次数',
+                bargainRate: '日均成交率',
+                billRate: '日均撤单率',
+                avgOperTmMargin: '日均操作时间差',
+                acctQttyMax: '持仓量'
             },
-            options: configParameters,
+            configParameters: configParameters,
             chartData: [],
             commonSeries: {
                 name: '',
                 type: 'scatter3D',
                 data: [],
-                symbolSize: 18,
+                symbolSize: 16,
                 // symbol: 'triangle',
-                itemStyle: {
-                    color: '#40f3d6',
-                    borderWidth: 1,
-                    borderColor: 'rgba(255,255,255,0.8)'
-                },
+                // itemStyle: {
+                //     color: '#40f3d6',
+                //     borderWidth: 1,
+                //     borderColor: 'rgba(255,255,255,0.8)'
+                // },
                 emphasis: {
                     itemStyle: {
                         color: '#fff'
+                    },
+                    label: {
+                        show: false, // 控制白色悬浮框隐藏
+                        // textStyle: {
+                        //     color: '#000',
+                        // }
                     }
                 }
             },
             chartOptions: {
                 legend: {
+                    type: 'scroll',
                     itemGap: 20,
                     left: 10,
                     top: 'middle',
@@ -116,7 +140,7 @@ export default {
                     data: []
                 },
                 tooltip: {
-                    show: true,
+                    enterable: true,
                     padding: 10,
                     backgroundColor: '#222',
                     borderColor: '#777',
@@ -161,16 +185,18 @@ export default {
                     }
                 },
                 grid3D: {
-                    environment: 'rgba(0, 0, 0)',
-                    postEffect: {
-                        enable: true,
-                        // depthOfField: {
-                        //     enable: true
-                        // },
-                        screenSpaceAmbientOcclusion: {
-                            enable: true
-                        }
-                    },
+                    environment: '#000',
+                    boxWidth: 100,
+                    boxHeight: 80,
+                    // postEffect: {
+                    //     enable: true,
+                    //     // depthOfField: {
+                    //     //     enable: true
+                    //     // },
+                    //     screenSpaceAmbientOcclusion: {
+                    //         enable: true
+                    //     }
+                    // },
                     axisLine: {
                         lineStyle: {
                             color: '#00f9ff'
@@ -216,19 +242,19 @@ export default {
                         ...{
                             name: key,
                             data: this.chartData[key].map(item => {
-                                return [
-                                    item[this.selectModes[0]],
-                                    item[this.selectModes[1]],
-                                    item[this.selectModes[2]],
-                                    item['acctId'],
-                                    item['custId'],
-                                ];
+                                return {
+                                    value: [
+                                        item[this.selectModes[0]],
+                                        item[this.selectModes[1]],
+                                        item[this.selectModes[2]],
+                                        item['acctId'],
+                                        item['custId'],
+                                        item['custIds'],
+                                        item['id']
+                                    ],
+                                    name: item.custId
+                                };
                             })
-                        },
-                        ...{
-                            itemStyle: {
-                                color: echartsDefault.color[index]
-                            }
                         }
                     }
                 );
@@ -239,6 +265,9 @@ export default {
             if (!this.chartOptions) {
                 return;
             }
+            // select max;
+            let maxItem = _.maxBy(chartData, 'acctQttyMax');
+            this.$emit('updateAccountGroupAndCustIds', maxItem['acctId'], maxItem['custIds'].split(','));
             chartData = _.groupBy(chartData, 'acctId');
             Object.keys(chartData).forEach((key, index) => {
                 this.chartOptions['legend']['data'].push(key);
@@ -248,13 +277,11 @@ export default {
                         ...{
                             name: key,
                             data: chartData[key].map(v => {
-                                return [v.data1, v.data2, v.data3, v.acctId, v.custId];
+                                return {
+                                    value: [v.bargainQtty, v.billCnt, v.bargainRate, v.acctId, v.custId, v.custIds, v.id],
+                                    name: v.custId
+                                };
                             })
-                        },
-                        ...{
-                            itemStyle: {
-                                color: echartsDefault.color[index]
-                            }
                         }
                     }
                 );
@@ -263,23 +290,20 @@ export default {
             this.chartData = chartData;
             sessionStorage.setItem('3D_scatter_chartData', JSON.stringify(chartData));
             this.$store.commit('savechart1', {data: this.chartOptions, index: id || this.tabIndex || this.$store.getters.tabIndex});
-            // select max;
-            // this.$emit('updateAccountGroupAndCustIds', chartData['nodes'][0]['name'], chartData['nodes'][0]['value'].split(','));
-            this.$emit('updateAccountGroupAndCustIds', 'JL2018090903', ['2018888888']);
+
             this.$refs['chart0'] && this.$refs['chart0'].initChart();
         },
         initChart(data, flag) {
             if (data) {
                 this.chartOptions = data;
             }
+            console.log(this.chartOptions);
             this.$refs['chart0'] && this.$refs['chart0'].initChart();
             this.getAssoCharts(flag);
         },
         getAssoCharts(flag) {
             if (!flag) {
-                this.$emit('getBlock2Data');
-                this.$emit('getBlock3Data');
-                this.$emit('getBlock4Data');
+                this.$emit('getDetailBy3D');
             }
         },
         handleEchartClickEvent(val) {
@@ -315,11 +339,11 @@ export default {
 
         @keyframes to-left {
             from {
-                opacity: 1;
+                opacity: 0.3;
                 right: 0;
             }
             to {
-                opacity: 0.3;
+                opacity: 1;
                 right: 15px;
             }
         }
