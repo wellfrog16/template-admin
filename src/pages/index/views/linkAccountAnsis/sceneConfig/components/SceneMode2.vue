@@ -49,7 +49,7 @@
                 <s-card :title="`算法参数配置`">
                     <el-row slot="content" style="padding: 20px;">
                         <el-radio-group v-model="ruleForm.almSel">
-                            <el-radio v-for="(item, index) in sfOptions" :key="index" :label="item.value" :disabled="item.value === '2'">{{ item.label }}</el-radio>
+                            <el-radio v-for="(item, index) in sfOptions" :key="index" :label="item.value" :disabled="item.value === '1'">{{ item.label }}</el-radio>
                         </el-radio-group>
                     </el-row>
                 </s-card>
@@ -113,7 +113,7 @@ export default {
                 statAcctCnt: '', // 统计账户数
                 statAcctType: '', // 统计账户类型
                 statFreq: '', // 统计频度
-                almSel: '1', // 算法
+                almSel: '2', // 算法
                 indexPara: '' // 指数内容
             }
         };
