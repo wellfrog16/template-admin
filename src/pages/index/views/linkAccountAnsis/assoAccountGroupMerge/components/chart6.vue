@@ -81,7 +81,7 @@ export default {
         let fieldNames = schema.map(item => {
             return item.name;
         });
-        fieldNames = fieldNames.slice(0, fieldNames.length - 2);
+        fieldNames = fieldNames.slice(0, fieldNames.length - 4);
         let config = {
             xAxis3D: '日均成交量',
             yAxis3D: '日均报单次数',
