@@ -132,6 +132,9 @@ export default {
                 // this.$router.push({path: '/sceneConfig'});
                 this.loginFlag = true;
                 this.showLoginDialog = false;
+            }).catch(e => {
+                console.error(e);
+                this.showLoginDialog = false;
             });
         },
         cardClick() {

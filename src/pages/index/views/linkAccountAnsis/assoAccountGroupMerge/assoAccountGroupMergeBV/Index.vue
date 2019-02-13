@@ -205,6 +205,25 @@ export default {
             };
         },
         updateTableData(value, index, id) {
+            if (index === 2) {
+                var tb = [];
+                var narr = [];
+                for (var i = 0; i < value.length; i++) {
+                    var n = tb.indexOf(value[i].txDt);
+                    if (n === -1) {
+                        tb.push(value[i].txDt);
+                        narr.push({custId: [value[i].custId], txDt: value[i].txDt, custCnt: 1});
+                    } else {
+                        narr[n].custId.push(value[i].custId);
+                        narr[n].custId = narr[n].custId.sort((a, b) => {
+                            return a - b;
+                        });
+                        narr[n].custCnt = narr[n].custId.length;
+                        narr[n].custId = narr[n].custId.join(',');
+                    }
+                }
+                value = narr;
+            }
             this.chartTableData[index] = value;
             this.$store.commit('saveChartTableData', {data: this.chartTableData, index: id || this.tabIndex || this.$store.getters.getTabIndex});
         },
@@ -369,6 +388,10 @@ export default {
         if (Object.keys(this.sceneCommitParams).length) {
             this.drewChart1(1);
         }
+    },
+    beforeDestroy() {
+        sessionStorage.removeItem('LAST_SELECT_3D');
+        sessionStorage.removeItem('3D_scatter_chartData');
     }
 };
 </script>

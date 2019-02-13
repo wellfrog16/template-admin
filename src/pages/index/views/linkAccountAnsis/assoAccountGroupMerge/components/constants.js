@@ -600,22 +600,22 @@ export const respData4 = {
 };
 export let testData = {
     chartData: [
-        {acctId: 'JL00005', custId: '2018090999', data1: 1, data2: 3, data3: 9, data4: 27, data5: 17, data6: 9},
-        {acctId: 'JL00005', custId: '2018090919', data1: 4, data2: 1, data3: 19, data4: 7, data5: 16, data6: 19},
-        {acctId: 'JL00005', custId: '2018090929', data1: 11, data2: 8, data3: 9, data4: 17, data5: 11, data6: 99},
-        {acctId: 'JL00005', custId: '2018090939', data1: 6, data2: 18, data3: 29, data4: 12, data5: 31, data6: 29},
-        {acctId: 'JL00005', custId: '2018090949', data1: 16, data2: 18, data3: 39, data4: 27, data5: 44, data6: 9},
-        {acctId: 'JL00005', custId: '2018090959', data1: 26, data2: 42, data3: 49, data4: 37, data5: 55, data6: 91},
-        {acctId: 'JL00005', custId: '2018090969', data1: 36, data2: 13, data3: 59, data4: 47, data5: 13, data6: 9},
-        {acctId: 'JL00005', custId: '2018090129', data1: 46, data2: 38, data3: 19, data4: 17, data5: 71, data6: 93},
-        {acctId: 'JL00005', custId: '2018090229', data1: 61, data2: 18, data3: 9, data4: 1, data5: 13, data6: 49},
-        {acctId: 'JL00005', custId: '2018090329', data1: 6, data2: 8, data3: 77, data4: 9, data5: 11, data6: 19},
-        {acctId: 'JL00007', custId: '2018090918', data1: 18, data2: 37, data3: 28, data4: 17, data5: 7, data6: 98},
-        {acctId: 'JL00007', custId: '2018090918', data1: 38, data2: 87, data3: 38, data4: 12, data5: 71, data6: 9},
-        {acctId: 'JL00007', custId: '2018090918', data1: 78, data2: 17, data3: 18, data4: 17, data5: 57, data6: 79},
-        {acctId: 'JL00009', custId: '2018090338', data1: 8, data2: 17, data3: 28, data4: 19, data5: 7, data6: 49},
-        {acctId: 'JL00009', custId: '2018090128', data1: 18, data2: 17, data3: 28, data4: 57, data5: 6, data6: 9},
-        {acctId: 'JL00009', custId: '2018090548', data1: 48, data2: 37, data3: 2, data4: 11, data5: 17, data6: 19},
+        {acctId: 'JL00005', custIds: '2018090999', bargainQtty: 0.3, billCnt: 3, bargainRate: 111111, billRate: 27, avgOperTmMargin: 17, acctQttyMax: 9},
+        {acctId: 'JL00005', custIds: '2018090919', bargainQtty: 0.2, billCnt: 1, bargainRate: 33333, billRate: 7, avgOperTmMargin: 16, acctQttyMax: 19},
+        {acctId: 'JL00005', custIds: '2018090929', bargainQtty: 0.6, billCnt: 8, bargainRate: 66222, billRate: 17, avgOperTmMargin: 11, acctQttyMax: 99},
+        {acctId: 'JL00005', custIds: '2018090939', bargainQtty: 1, billCnt: 18, bargainRate: 663666, billRate: 12, avgOperTmMargin: 31, acctQttyMax: 29},
+        {acctId: 'JL00005', custIds: '2018090949', bargainQtty: 1, billCnt: 18, bargainRate: 223232, billRate: 27, avgOperTmMargin: 44, acctQttyMax: 9},
+        {acctId: 'JL00005', custIds: '2018090959', bargainQtty: 1, billCnt: 42, bargainRate: 232232, billRate: 37, avgOperTmMargin: 55, acctQttyMax: 91},
+        /* {acctId: 'JL00005', custIds: '2018090969', bargainQtty: 36, billCnt: 13, bargainRate: 59, billRate: 47, avgOperTmMargin: 13, acctQttyMax: 9},
+        {acctId: 'JL00005', custIds: '2018090129', bargainQtty: 46, billCnt: 38, bargainRate: 19, billRate: 17, avgOperTmMargin: 71, acctQttyMax: 93},
+        {acctId: 'JL00005', custIds: '2018090229', bargainQtty: 61, billCnt: 18, bargainRate: 9, billRate: 1, avgOperTmMargin: 13, acctQttyMax: 49},
+        {acctId: 'JL00005', custIds: '2018090329', bargainQtty: 6, billCnt: 8, bargainRate: 77, billRate: 9, avgOperTmMargin: 11, acctQttyMax: 19},
+        {acctId: 'JL00007', custIds: '2018090918', bargainQtty: 18, billCnt: 37, bargainRate: 28, billRate: 17, avgOperTmMargin: 7, acctQttyMax: 98},
+        {acctId: 'JL00007', custIds: '2018090918', bargainQtty: 38, billCnt: 87, bargainRate: 38, billRate: 12, avgOperTmMargin: 71, acctQttyMax: 9},
+        {acctId: 'JL00007', custIds: '2018090918', bargainQtty: 78, billCnt: 17, bargainRate: 18, billRate: 17, avgOperTmMargin: 57, acctQttyMax: 79},
+        {acctId: 'JL00009', custIds: '2018090338', bargainQtty: 8, billCnt: 17, bargainRate: 28, billRate: 19, avgOperTmMargin: 7, acctQttyMax: 49},
+        {acctId: 'JL00009', custIds: '2018090128', bargainQtty: 18, billCnt: 17, bargainRate: 28, billRate: 57, avgOperTmMargin: 6, acctQttyMax: 9},
+        {acctId: 'JL00009', custIds: '2018090548', bargainQtty: 48, billCnt: 37, bargainRate: 2, billRate: 11, avgOperTmMargin: 17, acctQttyMax: 19}, */
     ],
     mainTableData: ddd
 };

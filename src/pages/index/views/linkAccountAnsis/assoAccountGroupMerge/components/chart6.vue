@@ -88,7 +88,7 @@ export default {
             zAxis3D: '日均成交率'
         };
         let configParameters = {};
-        Object.keys(config).forEach(function(fieldName) {
+        Object.keys(config).forEach(fieldName => {
             configParameters[fieldName] = fieldNames;
         });
         return {
@@ -111,22 +111,21 @@ export default {
                 name: '',
                 type: 'scatter3D',
                 data: [],
-                symbolSize: 16,
+                symbolSize: 12,
                 // symbol: 'triangle',
-                // itemStyle: {
-                //     color: '#40f3d6',
-                //     borderWidth: 1,
-                //     borderColor: 'rgba(255,255,255,0.8)'
-                // },
+                itemStyle: {
+                    borderWidth: 1,
+                    borderColor: 'rgba(255,255,255,0.8)'
+                },
                 emphasis: {
                     itemStyle: {
                         color: '#fff'
                     },
                     label: {
                         show: false, // 控制白色悬浮框隐藏
-                        // textStyle: {
-                        //     color: '#000',
-                        // }
+                        textStyle: {
+                            color: '#000',
+                        }
                     }
                 }
             },
@@ -147,6 +146,10 @@ export default {
                     borderWidth: 1,
                     extraCssText: 'width:150px; white-space:pre-wrap;',
                     formatter: data => {
+                        let selectModes = this.selectModes;
+                        if (JSON.parse(sessionStorage.getItem('LAST_SELECT_3D'))) {
+                            selectModes = JSON.parse(sessionStorage.getItem('LAST_SELECT_3D'));
+                        }
                         if (data.componentType === 'markLine' || data.componentType === 'markPoint') {
                             return '';
                         }
@@ -154,9 +157,9 @@ export default {
                         let str = '';
                         str += `账户组号：${value[3]} \n`;
                         str += `客户号：${value[4]} \n`;
-                        str += `${this.mapArray[this.selectModes[0]]}：${value[0]} \n`;
-                        str += `${this.mapArray[this.selectModes[1]]}：${value[1]} \n`;
-                        str += `${this.mapArray[this.selectModes[2]]}：${value[2]} \n`;
+                        str += `${this.mapArray[selectModes[0]]}：${value[0]} \n`;
+                        str += `${this.mapArray[selectModes[1]]}：${value[1]} \n`;
+                        str += `${this.mapArray[selectModes[2]]}：${value[2]} \n`;
                         return str;
                     }
                 },
@@ -223,6 +226,7 @@ export default {
     },
     methods: {
         handleSelectChange(key, index) {
+            sessionStorage.setItem('LAST_SELECT_3D', JSON.stringify(this.selectModes));
             let value = this.selectModes[index];
             // let xyz = ['xAxis3D', 'yAxis3D', 'zAxis3D'];
             // if (this.selectModes[index] === 'custId') {
@@ -314,6 +318,9 @@ export default {
         }
     },
     mounted() {
+        if (JSON.parse(sessionStorage.getItem('LAST_SELECT_3D'))) {
+            this.selectModes = JSON.parse(sessionStorage.getItem('LAST_SELECT_3D'));
+        }
     }
 };
 </script>
