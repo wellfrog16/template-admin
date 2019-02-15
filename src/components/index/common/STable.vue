@@ -6,8 +6,8 @@
             :data="newData"
             :height="height"
             v-loading="loading"
-            element-loading-text="数据加载中，请耐心等待..."
-            element-loading-background="rgba(0,0,0,0.3)"
+            :element-loading-text="loadingText"
+            element-loading-background="rgba(0,0,0,0.7)"
             :row-class-name="rowClassName"
             :cell-class-name="cellClassName"
             :show-header="showHeader"
@@ -160,6 +160,10 @@ export default {
             default() {
                 return false;
             }
+        },
+        loadingText: {
+            type: String,
+            default: '数据加载中，请耐心等待...'
         },
         highlightCurrentRow: {
             type: Boolean,

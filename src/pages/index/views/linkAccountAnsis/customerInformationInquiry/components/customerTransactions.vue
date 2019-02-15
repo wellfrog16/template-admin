@@ -47,6 +47,7 @@
                     >
                         <s-table
                             :height="320"
+                            loadingText="数据加载时间较长，请耐心等待..."
                             :loading="loadingCustomerAddress"
                             :columns="active.tableColumns"
                             :tableData="active.tableData"

@@ -1,7 +1,9 @@
 <template>
     <div :class="$style.card_table">
         <echarts-common
+            ref="myChart"
             :loading="loading2"
+            loadingText="数据加载时间较长，请耐心等待..."
             domId="AbarEcharts2"
             :defaultOption="chartOptions"
             :propsChartHeight="430"
@@ -39,7 +41,7 @@ export default {
             Echarts1Loading1: false, // bar 加载
             barEcharts: null,
             chartOptions: {
-                backgroundColor: ['rgba(7, 39, 89)'],
+                /* backgroundColor: ['rgba(7, 39, 89)'],
                 color: [
                     '#00709e',
                     '#f8f400',
@@ -51,7 +53,7 @@ export default {
                     '#e3007b',
                     '#1929b3',
                     '#b69913'
-                ],
+                ], */
                 tooltip: {
                     trigger: 'axis',
                     axisPointer: {
@@ -71,12 +73,10 @@ export default {
                 },
                 // 柱状图高度
                 grid: {
-                    left: '6%',
-                    right: '8%',
-                    bottom: '7%',
-                    width: 'auto',
-                    height: 'auto',
-                    containLabel: true
+                    x: 40,
+                    x2: 60,
+                    y: 60,
+                    y2: 60
                 },
                 yAxis: {
                     minInterval: 1,
@@ -87,7 +87,7 @@ export default {
                             color: ['rgb(20, 53, 98)'] // 网格线颜色
                         }
                     },
-                    nameTextStyle: {
+                    /* nameTextStyle: {
                         color: ['#ffffff'], // 字体颜色（y轴标题‘持仓量’）
                         fontSize: 12,
                         fontWeight: 'normal'
@@ -97,7 +97,7 @@ export default {
                             color: '#ffffff', // 金额字体色（Y轴金额）
                             width: 1 // 这里是为了突出显示加上的
                         }
-                    }
+                    } */
                 },
                 xAxis: {
                     name: '日期',
@@ -105,9 +105,9 @@ export default {
                     data: [],
                     left: 'left',
                     axisTick: {show: false},
-                    boundaryGap: true,
+                    // boundaryGap: true,
                     splitLine: {show: false}, // 去除网格线
-                    axisLabel: {
+                    /* axisLabel: {
                         // 字体选择
                         show: true,
                         rotate: 30, // 字体倾斜角度
@@ -133,7 +133,7 @@ export default {
                             color: '#0087ED',
                             width: 1 // 这里是为了突出显示加上的
                         }
-                    }
+                    } */
                 },
                 series: [],
                 // 横向滚动条
@@ -154,14 +154,15 @@ export default {
     },
     methods: {
         initChart() {
-            this.clearChartData();
+            // this.clearChartData();
             this.barEchartsDete();
         },
         clearChartData() {
-            this.barEcharts = this.$echarts.init(
+            /*  this.barEcharts = this.$echarts.init(
                 document.getElementById('AbarEcharts2'),
             );
-            this.barEcharts.clear();
+            this.barEcharts.clear(); */
+            this.$refs['myChart'].clearChart();
         },
         barEchartsDete(val, actiName) {
             let frequent = val;
@@ -200,7 +201,8 @@ export default {
                 });
                 this.chartOptions.series = temp;
                 this.chartOptions.xAxis.data = val ? val.dateList : [];
-                this.barEcharts.setOption(this.chartOptions);
+                // this.barEcharts.setOption(this.chartOptions);
+                this.$refs['myChart'].initChart();
             }
         },
     },

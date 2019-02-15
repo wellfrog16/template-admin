@@ -2,7 +2,9 @@
     <div class="scene-bi">
         <el-row :gutter="10">
             <el-col :xl="12" :lg="12" :md="24" :sm="24" v-for="(item, index) in charts" :key="index">
-                <s-card :title="item.title" :icon="item.icon" class="self-card-css" :loading="item.loading">
+                <s-card :title="item.title" :icon="item.icon" class="self-card-css"
+                        loadingText="数据加载时间较长，请耐心等待..."
+                        :loading="item.loading">
                     <div slot="right">
                         <el-button type="text" @click="toggleDetail(item, index)">
                             <span v-if="!item['toggleDetailFlags']">明细<i class="el-icon-plus" style="margign-left: 5px;"></i></span>
@@ -29,14 +31,10 @@
                                 <i class="fa" :class="[fullscreen ? 'fa-compress' : 'fa-expand-arrows-alt']"></i>
                             </button> -->
                         </s-full-screen>
-                        <!-- <echarts-common v-else :loading="chartLoading[index]" :ref="`chart${index}`" :domId="`chart${index}`" :defaultOption="chartOptions[index]" :propsChartHeight="300" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></echarts-common> -->
                     </div>
                 </s-card>
             </el-col>
         </el-row>
-        <!-- <s-card title="test分页" icon="el-edit" class="self-card-css">
-                <s-table slot="content" :showPagination="true" :totalNum="chartTableData[0].length" :columns="chartTableColumns[0]" :tableData="testTableData" @handlePaginationChange="handlePaginationChange"></s-table>
-            </s-card> -->
         <div class="main-table">
             <s-card title="账户组信息" icon="fa fa-layer-group" :minHeight="300">
                 <div slot="right">
@@ -73,8 +71,6 @@
     </div>
 </template>
 <script>
-// import {getBlock2Data1, getChart3Data2, getBlock4Data3} from './getBlock2Data';
-// import EchartsCommon from '@/components/index/common/EchartsCommon';
 import SCard from '@/components/index/common/SCard';
 import STable from '@/components/index/common/STable';
 import TreeTable from '@/components/index/common/TreeTableOld';
@@ -181,9 +177,6 @@ export default {
                 });
             }
         },
-        // historyNetPoolCang
-        // historyIsWritten
-        // timeSharingWritten
         getBlock2Data() {
             let flag = this.$store.getters.getClickTab;
             if (flag && this.$store.getters.getchart2) {
@@ -290,7 +283,7 @@ export default {
             switch (String(index)) {
             case '0':
                 this.currentAccountGroupId = params.name;
-                this.currentCustIds = params.value.split(',');
+                this.currentCustIds = params.value.split(','); // params.custIds
                 this.$nextTick(() => {
                     this.getBlock2Data();
                     this.getBlock3Data();
@@ -331,13 +324,6 @@ export default {
                 };
             }
             let resData = this.$store.getters.sceneCommitResp[this.tabIndex] || {};
-            // if (!Object.keys(resData).length) {
-            //     return {
-            //         chartData: [],
-            //         mainTableData: []
-            //     };
-            // }
-            console.log(resData);
             let {resultSetList, kmap, chartDataList, id} = resData;
             if (resultSetList && !resultSetList.length) {
                 return {
@@ -415,13 +401,6 @@ export default {
         }
     },
     mounted() {
-        // if (sessionStorage.getItem('CURRENT_CUST_IDS')) {
-        //     this.currentCustIds = JSON.parse(sessionStorage.getItem('CURRENT_CUST_IDS'));
-        // }
-        // if (sessionStorage.getItem('CURRENT_GROUP_ID')) {
-        //     this.currentAccountGroupId = JSON.parse(sessionStorage.getItem('CURRENT_GROUP_ID'));
-        // }
-        // this.createChart3Columnn(this.currentCustIds);
         this.resetToggleDetailFlag();
         this.sceneCommitParams = this.$store.getters.sceneCommitParams;
         if (Object.keys(this.sceneCommitParams).length) {

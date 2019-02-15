@@ -104,37 +104,27 @@ export default {
             if (!mainData.length) {
                 return;
             }
+            let date = [];
+            date = _.uniq(mainData.map(v => {
+                return v.txDt;
+            }));
             mainData = _.groupBy(mainData, 'custId');
             let series = [];
-            let date = [];
-            console.log(mainData);
             Object.keys(mainData).forEach(v => {
-                series.push({
-                    name: v,
-                    type: 'bar',
-                    barMaxWidth: '45',
-                    stack: '总量',
-                    markLine: { // 标记线设置
-                        lineStyle: {
-                            normal: {
-                                type: 'dashed',
-                                color: '#fff'
-                            }
-                        },
-                        label: {
-                            position: 'middle',
-                            formatter: params => {
-                                return `超仓线：${params.value}`;
-                            }
-                        },
-                        symbolSize: 0, // 控制箭头和原点的大小、官方默认的标准线会带远点和箭头
-                        data: [ // 设置条标准线——x=10
-                            {yAxis: '100000'}
-                        ]
-                    },
-                    data: mainData[v].map(m => { return m.custCnt; })
-                });
-                date = mainData[v].map(m => { return m.txDt; });
+                if (v !== 'null' && v !== '') {
+                    series.push({
+                        name: v,
+                        type: 'bar',
+                        barMaxWidth: '45',
+                        stack: '总量',
+                        data: date.map(d => {
+                            let index = mainData[v].findIndex(f => {
+                                return f.txDt === d;
+                            });
+                            return index > -1 ? mainData[v][index]['custCnt'] : '0';
+                        })
+                    });
+                }
             });
             this.chartOptions['legend']['data'] = series.map(m => { return m.name; });
             this.chartOptions['series'] = series;
@@ -147,7 +137,6 @@ export default {
             this.chartOptions['dataZoom'][0]['endValue'] = dataZoomEndValue;
             this.chartOptions['dataZoom'][1]['endValue'] = dataZoomEndValue;
             this.$store.commit('savechart3', {data: this.chartOptions, index: id || this.tabIndex || this.$store.getters.getTabIndex});
-            console.log(this.chartOptions);
             this.$refs['chart2'] && this.$refs['chart2'].initChart();
         },
         initChart(data, flag) {

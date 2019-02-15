@@ -5,10 +5,10 @@ export const correlationIndexColumns = [
     {field: 'indexValue', label: '值', template: InputInTable},
 ];
 export const createTypeOptions = [
-    {label: '相关系数', value: '1'},
-    {label: '聚类', value: '2'},
-    {label: '基本信息', value: '3'},
-    {label: '实控关系', value: '4'}
+    {label: '相关系数', value: '1', tooltip: '采用皮尔逊相关系数算法，对选定时间范围内客户的交易信息相关性进行计算，筛选出具有相似交易行为的客户群体。'},
+    {label: '聚类', value: '2', tooltip: '采用密度聚类算法，根据客户交易行为特征进行聚类计算，筛选出具有近似交易特征的客户群体。'},
+    {label: '基本信息', value: '3', tooltip: '筛选出具有相同基本信息的客户群体。'},
+    {label: '实控关系', value: '4', tooltip: '筛选出具有相同账户实际控制关系的客户群体。'}
 ];
 export const accountTotalTypeOptions = [
     {label: '按持仓量从大到小', value: '1'},

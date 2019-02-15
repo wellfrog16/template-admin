@@ -1,13 +1,13 @@
 <template>
     <div :class="$style.multiple_scenes_merge">
-        <el-tabs v-model="activeTab" type="card">
+        <!-- <el-tabs v-model="activeTab" type="card">
             <el-tab-pane
                 v-for="item in tabList"
                 :label="item.label"
                 :key="item.name"
                 :name="item.name"
             ></el-tab-pane>
-        </el-tabs>
+        </el-tabs> -->
         <!--导入树形table-->
         <account-group-table ref="accountGroupTableRef" @updateLoading="updateLoading" @updateTableInfo="updateTableInfo" @updateMainTableData="updateMainTableData" @updateSelectAccountGroupList="updateSelectAccountGroupList" @handleClearAll="handleClearAll"></account-group-table>
         <!-- 关系图谱 -->

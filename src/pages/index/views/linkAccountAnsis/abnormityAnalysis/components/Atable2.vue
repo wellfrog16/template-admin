@@ -4,6 +4,7 @@
             sortable
             :height="475"
             :loading="loadingTable"
+            loadingText="数据加载时间较长，请耐心等待..."
             :columns="tableColumns"
             :tableData="tableData"
             @cellDblClick="tableellDblClick"

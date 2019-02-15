@@ -2,7 +2,9 @@
     <div class="scene-xg">
         <el-row :gutter="10">
             <el-col :xl="12" :lg="12" :md="24" :sm="24" v-for="(item, index) in charts" :key="index">
-                <s-card :title="item.title" :icon="item.icon" class="self-card-css" :loading="item.loading">
+                <s-card :title="item.title" :icon="item.icon" class="self-card-css"
+                        loadingText="数据加载时间较长，请耐心等待..."
+                        :loading="item.loading">
                     <div slot="right">
                         <el-button type="text" @click="toggleDetail(item, index)">
                             <span v-if="!item['toggleDetailFlags']">明细<i class="el-icon-plus" style="margign-left: 5px;"></i></span>
@@ -29,7 +31,6 @@
                                 <i class="fa" :class="[fullscreen ? 'fa-compress' : 'fa-expand-arrows-alt']"></i>
                             </button> -->
                         </s-full-screen>
-                        <!-- <echarts-common v-else :loading="chartLoading[index]" :ref="`chart${index}`" :domId="`chart${index}`" :defaultOption="chartOptions[index]" :propsChartHeight="300" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></echarts-common> -->
                     </div>
                 </s-card>
             </el-col>
@@ -109,13 +110,7 @@ export default {
         currentAccountGroupId(val) {
             console.log('watchgroupid:' + val);
             this.computedCommonReqParams = this.commonReqParams();
-        },
-        // '$store.getters.sceneCommitResp': {
-        // handler() {
-        //     this.drewChart1();
-        // },
-        // deep: true
-        // }
+        }
     },
     data() {
         return {
@@ -248,7 +243,6 @@ export default {
             }
             if (!item.toggleDetailFlags) {
                 this.$nextTick(() => {
-                    // let dataMap = [this.$store.getters.getchart1, this.$store.getters.getchart2, this.$store.getters.getchart3, this.$store.getters.getchart4];
                     setTimeout(() => {
                         (this.getChart()[index])(data, 1);
                     });

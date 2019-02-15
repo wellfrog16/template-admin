@@ -143,6 +143,7 @@
             <div slot="content">
                 <s-table
                     :loading="dealWithIsLoading"
+                    loadingText="数据加载时间较长，请耐心等待..."
                     :columns="tableColumns"
                     :tableData="tableData"
                 ></s-table>

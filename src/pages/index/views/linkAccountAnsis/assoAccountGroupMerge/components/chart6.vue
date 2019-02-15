@@ -290,7 +290,6 @@ export default {
                     }
                 );
             });
-            console.log(this.chartOptions);
             this.chartData = chartData;
             sessionStorage.setItem('3D_scatter_chartData', JSON.stringify(chartData));
             this.$store.commit('savechart1', {data: this.chartOptions, index: id || this.tabIndex || this.$store.getters.tabIndex});
@@ -301,7 +300,6 @@ export default {
             if (data) {
                 this.chartOptions = data;
             }
-            console.log(this.chartOptions);
             this.$refs['chart0'] && this.$refs['chart0'].initChart();
             this.getAssoCharts(flag);
         },

@@ -2,7 +2,9 @@
     <div class="scene-bv">
         <el-row :gutter="10">
             <el-col :xl="12" :lg="12" :md="24" :sm="24" v-for="(item, index) in charts" :key="index">
-                <s-card :title="item.title" :icon="item.icon" class="self-card-css" :loading="item.loading">
+                <s-card :title="item.title" :icon="item.icon" class="self-card-css"
+                        loadingText="数据加载时间较长，请耐心等待..."
+                        :loading="item.loading">
                     <div slot="right">
                         <el-button type="text" @click="toggleDetail(item, index)">
                             <span v-if="!item['toggleDetailFlags']">明细<i class="el-icon-plus" style="margign-left: 5px;"></i></span>
@@ -212,7 +214,7 @@ export default {
                     var n = tb.indexOf(value[i].txDt);
                     if (n === -1) {
                         tb.push(value[i].txDt);
-                        narr.push({custId: [value[i].custId], txDt: value[i].txDt, custCnt: 1});
+                        narr.push({custId: [value[i].custId], txDt: value[i].txDt, custCnt: value[i]['custCnt']});
                     } else {
                         narr[n].custId.push(value[i].custId);
                         narr[n].custId = narr[n].custId.sort((a, b) => {
@@ -248,7 +250,6 @@ export default {
             }
             if (!item.toggleDetailFlags) {
                 this.$nextTick(() => {
-                    // let dataMap = [this.$store.getters.getchart1, this.$store.getters.getchart2, this.$store.getters.getchart3, this.$store.getters.getchart4];
                     setTimeout(() => {
                         (this.getChart()[index])(data, 1);
                     });
@@ -280,7 +281,6 @@ export default {
                         this.charts[1]['loading'] = false;
                         this.charts[2]['loading'] = false;
                         this.charts[3]['loading'] = false;
-                        console.log(resp);
                         let {clusterNetQtty, clusterStateAnalByTime, clusterStateAnalByCust} = resp;
                         this.updateTableData(clusterNetQtty.tableData, 1);
                         this.updateTableData(clusterStateAnalByTime, 2);
@@ -304,33 +304,33 @@ export default {
                 let currentId = params['value'][6];
                 if (this.selectAccountGroupList.indexOf(currentId) > -1) { // 取消选中
                     // mark 样式
-                    let data = this.$refs['chartComponent1'][0].chartOptions['series'][0]['data'];
+                    /* let data = this.$refs['chartComponent1'][0].chartOptions['series'][0]['data'];
                     data.forEach(v => {
                         if (v['value'][6] === currentId) {
                             v.itemStyle = {...{borderColor: 'transparent', borderWidth: 1}, ...v.itemStyle};
                         }
                     });
                     this.$refs['chartComponent1'][0].chartOptions['series'][0]['data'] = data;
-                    this.$store.commit('savechart1', {data: this.$refs['chartComponent1'][0].chartOptions, index: params.id || this.tabIndex || this.$store.getters.getTabIndex});
+                    this.$store.commit('savechart1', {data: this.$refs['chartComponent1'][0].chartOptions, index: params.id || this.tabIndex || this.$store.getters.getTabIndex}); */
                     // table勾选状态
                     this.selectAccountGroupList = this.selectAccountGroupList.filter(v => {
                         return v !== currentId && this.childrenMap[currentId].indexOf(v) === -1;
                     });
                 } else { // 选中
                     // mark 样式
-                    let data = this.$refs['chartComponent1'][0].chartOptions['series'][0]['data'];
+                    /* let data = this.$refs['chartComponent1'][0].chartOptions['series'][0]['data'];
                     data.forEach(v => {
                         if (v['value'][6] === currentId) {
                             v.itemStyle = {...{borderColor: '#fff', borderWidth: 3}, ...v.itemStyle};
                         }
                     });
                     this.$refs['chartComponent1'][0].chartOptions['series'][0]['data'] = data;
-                    this.$store.commit('savechart1', {data: this.$refs['chartComponent1'][0].chartOptions, index: params.id || this.tabIndex || this.$store.getters.getTabIndex});
+                    this.$store.commit('savechart1', {data: this.$refs['chartComponent1'][0].chartOptions, index: params.id || this.tabIndex || this.$store.getters.getTabIndex}); */
                     // table勾选状态
                     this.selectAccountGroupList.push(currentId);
                 }
-                console.log(this.$refs['chartComponent1'][0].chartOptions);
-                this.getChart1(this.$refs['chartComponent1'][0].chartOptions, 1);
+                // console.log(this.$refs['chartComponent1'][0].chartOptions);
+                // this.getChart1(this.$refs['chartComponent1'][0].chartOptions, 1);
                 this.$refs['self-tree-table'].$refs['tree-table'].setCheckedKeys(this.selectAccountGroupList);
                 // test
                 this.$store.commit('saveClickTab', false);

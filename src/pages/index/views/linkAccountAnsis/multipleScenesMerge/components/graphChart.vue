@@ -40,6 +40,7 @@
                 <echarts-common
                     ref="chartRef"
                     :loading="loading"
+                    loadingText="数据加载时间较长，请耐心等待..."
                     domId="chartId"
                     :defaultOption="chartOptions"
                     :propsChartHeight="550"
@@ -327,7 +328,6 @@ export default {
                 // table勾选状态
                 let selectAccountGroupList = JSON.parse(JSON.stringify(this.selectAccountGroupList));
                 selectAccountGroupList.push(currentId);
-                console.log('******' + selectAccountGroupList);
                 this.$emit('updateSelectAccountGroupList', selectAccountGroupList);
             }
             this.$refs['chartRef'].initChart();
@@ -366,7 +366,6 @@ export default {
                     };
                     this.loading = true;
                     createRelationChart(params).then(resp => {
-                        console.log(resp);
                         this.loading = false;
                         this.echartsData = resp;
                         this.setChartOptions(resp);

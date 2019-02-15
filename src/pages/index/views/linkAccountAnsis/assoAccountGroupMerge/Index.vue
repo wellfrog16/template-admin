@@ -1,5 +1,8 @@
 <template>
-    <div class="asso-account-group-merge" v-loading="fullLoading">
+    <div class="asso-account-group-merge"
+         element-loading-text="数据加载时间较长，请耐心等待..."
+         element-loading-background="rgba(0,0,0,0.7)"
+         v-loading="fullLoading">
         <div class="top-nav">
             <el-tabs type="card" closable v-model="activeTab" @tab-click="handleTabClick" v-if="sceneNameList.length && sceneNameList[0].sceneNames" @tab-remove="removeTab">
                 <el-tab-pane v-for="(item, index) in sceneNameList" :key="index" :name="String(item.sceneIds)" :label="item.sceneNames">
@@ -204,7 +207,6 @@ export default {
             });
         },
         getSceneNameList(sceneCommitParams, callback) {
-            console.log(sceneCommitParams);
             let sceneNameList = [];
             Object.keys(sceneCommitParams).forEach(f => {
                 if (sceneCommitParams[f].sceneNames) {
@@ -212,7 +214,6 @@ export default {
                 }
             });
             this.sceneNameList = sceneNameList;
-            console.log(this.sceneNameList);
             callback && callback();
         },
         removeTab(targetName) {
@@ -240,10 +241,8 @@ export default {
                     newArray[key] = store[key];
                 }
             }
-            console.log(newArray);
             this.$store.commit('saveSceneCommitParams', newArray);
             this.sceneNameList = tabs.filter(tab => String(tab.sceneIds) !== String(targetName));
-            console.log(this.sceneNameList);
             this.activeTab = activeName;
             this.resultIds = activeName;
         }

@@ -1,8 +1,8 @@
 import custIdColumn from '@/components/index/common/CustIdColumn';
 // 初始化表格信息
 export const tableColumns1 = [
-    {field: 'acctNum', label: '账户组号', width: 150, align: 'center', sortable: true},
-    {field: 'custId', label: '客户编号', width: 150, align: 'center', template: custIdColumn, sortable: true},
+    {field: 'acctNum', label: '账户组号', width: 150, align: 'center', sortable: true, fixed: true},
+    {field: 'custId', label: '客户编号', width: 150, align: 'center', template: custIdColumn, sortable: true, fixed: true},
     {field: 'custName', label: '客户名称', width: 150, align: 'center', sortable: true},
     {field: 'contrCd', label: '合约代码', width: 150, align: 'center', sortable: true},
     {field: 'acctCurrNetMake', label: '账户组当前净持仓', width: 200, align: 'center', sortable: true},
@@ -12,8 +12,8 @@ export const tableColumns1 = [
     {field: 'statBosomDays', label: '统计区间超仓天数', width: 200, align: 'center', sortable: true},
 ];
 export const tableColumns2 = [
-    {field: 'acctNum', label: '账户组号', width: 150, align: 'center', sortable: true},
-    {field: 'custId', label: '客户编号', width: 150, align: 'center', template: custIdColumn, sortable: true},
+    {field: 'acctNum', label: '账户组号', width: 150, align: 'center', sortable: true, fixed: true},
+    {field: 'custId', label: '客户编号', width: 150, align: 'center', template: custIdColumn, sortable: true, fixed: true},
     {field: 'custName', label: '客户名称', width: 150, align: 'center', sortable: true},
     {field: 'contrCd', label: '合约代码', width: 150, align: 'center', sortable: true},
     {field: 'txDt', label: '交易日期', width: 150, align: 'center', sortable: true},
@@ -23,8 +23,8 @@ export const tableColumns2 = [
     {field: 'acctMaAmtBillCnt', label: '账户大额撤单次数', width: 200, align: 'center', sortable: true},
 ];
 export const tableColumns3 = [
-    {field: 'acctNum', label: '账户组号', width: 150, align: 'center', sortable: true},
-    {field: 'custId', label: '客户编号', width: 150, align: 'center', template: custIdColumn, sortable: true},
+    {field: 'acctNum', label: '账户组号', width: 150, align: 'center', sortable: true, fixed: true},
+    {field: 'custId', label: '客户编号', width: 150, align: 'center', template: custIdColumn, sortable: true, fixed: true},
     {field: 'custName', label: '客户名称', width: 150, align: 'center', sortable: true},
     {field: 'contrCd', label: '合约代码', width: 150, align: 'center', sortable: true},
     {field: 'txDt', label: '交易日期', width: 150, align: 'center', sortable: true},
@@ -34,8 +34,8 @@ export const tableColumns3 = [
     {field: 'acctBargainQtty', label: '账户自成交数量', width: 150, align: 'center', sortable: true},
 ];
 export const tableColumns = [
-    {field: 'acctNum', label: '账户组号', width: 150, align: 'center'},
-    {field: 'custId', label: '客户编号', width: 150, align: 'center'},
+    {field: 'acctNum', label: '账户组号', width: 150, align: 'center', fixed: true},
+    {field: 'custId', label: '客户编号', width: 150, align: 'center', fixed: true},
     {field: 'custName', label: '客户名称', width: 150, align: 'center'},
     {field: 'memCd', label: '会员代码', width: 150, align: 'center'},
     {field: 'memName', label: '会员名称', width: 150, align: 'center'},

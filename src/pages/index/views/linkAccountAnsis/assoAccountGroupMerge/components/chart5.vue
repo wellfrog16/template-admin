@@ -96,7 +96,38 @@ export default {
                             repulsion: 100
                         }
                     }
-                ]
+                ],
+                visualMap: {
+                    left: 'right',
+                    inverse: true,
+                    textGap: 25,
+                    itemHeight: 240,
+                    itemWidth: 10,
+                    bottom: '5%',
+                    // dimension: 4, // 注意：对应映射索引
+                    type: 'continuous',
+                    min: 1,
+                    max: 50,
+                    text: ['', '持仓量排名'],
+                    realtime: false,
+                    calculable: true,
+                    // color: ['orangered', 'yellow', 'lightskyblue'],
+                    textStyle: {
+                        color: '#fb7171'
+                    },
+                    inRange: {
+                        symbol: 'circle'
+                    },
+                    outOfRange: {
+                        symbol: 'circle',
+                        color: ['rgba(255,255,255,.2)']
+                    },
+                    controller: {
+                        inRange: {
+                            color: ['#f30808', '#fff']
+                        }
+                    }
+                }
             }
         };
     },
@@ -113,17 +144,15 @@ export default {
                     v.lineStyle = {normal: {color: lineColor, width: 1}};
                 }
             });
-            // 散点图sort
+            // 关系图数据处理
             this.chartOptions['series'][0]['links'] = chartData['links'];
             this.chartOptions['series'][0]['data'] = chartData['nodes'];
             this.chartOptions.legend.data = ['重要信息', '次要信息'];
             this.chartOptions['series'][0]['categories'] = this.chartOptions.legend.data.map(v => {
                 return {name: v};
             });
-            console.log(this.chartOptions);
             this.$store.commit('savechart1', {data: this.chartOptions, index: id || this.tabIndex || this.$store.getters.tabIndex});
             // select max
-            // this.$emit('updateAccountGroupAndCustIds', selectMax ? selectMax.acctId : '', selectMax ? selectMax.custIds.split(',') : []);
             this.$emit('updateAccountGroupAndCustIds', chartData['nodes'][0]['name'], chartData['nodes'][0]['value'].split(','));
             this.$refs['chart0'] && this.$refs['chart0'].initChart();
         },

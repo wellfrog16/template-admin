@@ -20,7 +20,7 @@
                             size="small"
                             type="primary"
                             @click="handleConfirmExportResultData"
-                        >确认</el-button>
+                        >确认导入</el-button>
                     </el-col>
                     <el-col :span="10" style="line-height: 40px;">
                         <span>导入 CSV：</span>
@@ -36,7 +36,7 @@
                             @getTxtCon="handleUploadSuccess"
                             @currentFileList="currentFileList"
                         ></upload-file-to-server>
-                        <el-button size="small" type="primary" @click="handleConfirmExportCsvData">确认</el-button>
+                        <el-button size="small" type="primary" @click="handleConfirmExportCsvData">确认导入</el-button>
                     </el-col>
                 </el-row>
             </div>
@@ -63,6 +63,7 @@
                         <el-col :span="21">
                             <div>
                                 <tree-table
+                                    loadingText="数据加载时间较长，请耐心等待..."
                                     :loading="loadingTree"
                                     ref="self-tree-table"
                                     :filterText="searchText"

@@ -92,7 +92,13 @@
                     width="200"
                     trigger="click">
                     <el-radio-group v-model="createType" @change="handleRadioChange">
-                        <el-radio style="display:block; padding: 10px; margin: 0;" v-for="(item, index) in createTypeOptions" :key="index" :label="item.value">{{ item.label }}</el-radio>
+                        <el-radio style="display:block; padding: 10px; margin: 0;" v-for="(item, index) in createTypeOptions" :key="index" :label="item.value">
+                            <span>{{ item.label }}</span>
+                            <el-tooltip placement="right">
+                                <i class="el-icon-question" style="font-size: 14px; margin-left: 10px;"></i>
+                                <div slot="content" style="max-width: 250px; line-height: 20px;">{{ item['tooltip'] }}</div>
+                            </el-tooltip>
+                        </el-radio>
                     </el-radio-group>
                     <el-button slot="reference" class="new-btn" type="primary" size="mini"><i class="el-icon-plus"></i>新增自定义场景</el-button>
                 </el-popover>
@@ -136,7 +142,10 @@
                    :visible="showDialog" width="85%" @close="handleCloseDialog" :title="`${operateType === 1 ? '查看' : operateType === 2 ? '编辑' : '新增'}场景配置-${createTypeName}`">
             <edit-scene-dialog :operateType="operateType" :dialogItem="dialogItem" :createType="dialogItem.sceneType || this.createType" @updateSceneList="getTableData"></edit-scene-dialog>
         </el-dialog>
-        <el-dialog v-loading.fullscreen.lock="loading" :close-on-click-modal="false" :close-on-press-escape="false" :custom-class="`self-dialog`" :visible="showCarousel" width="85%" top="3%" @close="handleCloseCarousel">
+        <el-dialog
+            element-loading-text="数据加载时间较长，请耐心等待..."
+            element-loading-background="rgba(0,0,0,0.6)"
+            v-loading.fullscreen.lock="loading" :close-on-click-modal="false" :close-on-press-escape="false" :custom-class="`self-dialog`" :visible="showCarousel" width="85%" top="3%" @close="handleCloseCarousel">
             <el-carousel :interval="4000" height="555px">
                 <el-carousel-item v-for="(item, index) in selectList" :key="index">
                     <edit-scene-dialog :operateType="1" :dialogItem="item" :createType="item.sceneType"></edit-scene-dialog>
@@ -427,7 +436,6 @@ export default {
                     let store = this.$store.getters.sceneCommitResp;
                     store[params.sceneIds] = resp;
                     this.$store.commit('saveSceneCommitResp', store);
-                    console.log('save-store', store);
                     if (!this.openFlag) {
                         this.openFlag = true;
                         this.$router.push({name: 'assoAccountGroupMerge'});

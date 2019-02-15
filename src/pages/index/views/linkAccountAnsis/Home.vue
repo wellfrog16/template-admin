@@ -7,7 +7,7 @@
                 </div>
                 <div :class="$style.analysis">
                     <p :class="$style.span_h1">关联账户分析 </p>
-                    <el-button type="text" :class="$style.button_text"> Linked account analysisi</el-button>
+                    <el-button type="text" :class="$style.button_text"> Linked account analysis</el-button>
                 </div>
             </el-card>
         </div>

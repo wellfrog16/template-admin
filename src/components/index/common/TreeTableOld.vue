@@ -1,6 +1,9 @@
 /* 树形table */
 <template>
-    <div v-loading="loading">
+    <div
+        :element-loading-text="loadingText"
+        element-loading-background="rgba(0,0,0,0.7)"
+        v-loading="loading">
         <div style="padding-bottom: 15px; text-align: center; color: #e6a23c;">
             <span style="margin-right: 20px;">高级筛选：</span>
             <el-checkbox v-model="checked" @change="handleChecked()">只显示已选</el-checkbox>
@@ -100,6 +103,10 @@ export default {
         loading: {
             type: Boolean,
             default: false
+        },
+        loadingText: {
+            type: String,
+            default: '数据正在加载，请耐心等待...'
         },
         clearAllSelected: {
             type: Boolean,

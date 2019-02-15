@@ -1,8 +1,8 @@
 <template>
     <el-card class="self-card-component"
              v-loading="loading"
-             element-loading-text="数据加载中，请耐心等待..."
-             element-loading-background="rgba(0,0,0,0.3)">
+             :element-loading-text="loadingText"
+             element-loading-background="rgba(0,0,0,0.7)">
         <div slot="header" class="card-header">
             <div class="header-left">
                 <span><i :class="icon"></i>{{ title }}</span>
@@ -39,6 +39,10 @@ export default {
         loading: {
             type: Boolean,
             default: false
+        },
+        loadingText: {
+            type: String,
+            default: '数据加载中，请耐心等待...'
         },
         canCollose: {
             type: Boolean,
