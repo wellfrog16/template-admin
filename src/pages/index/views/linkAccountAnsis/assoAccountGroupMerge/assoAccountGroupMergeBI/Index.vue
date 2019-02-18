@@ -180,9 +180,8 @@ export default {
         getBlock2Data() {
             let flag = this.$store.getters.getClickTab;
             if (flag && this.$store.getters.getchart2) {
-                let tableData = this.$store.getters.getChartTableData[1];
+                // this.chartTableData = this.$store.getters.getChartTableData;
                 let chartData = this.$store.getters.getchart2;
-                this.updateTableData(tableData, 1);
                 this.getChart2(chartData);
             } else {
                 this.charts[1]['loading'] = true;
@@ -200,9 +199,8 @@ export default {
         getBlock3Data() {
             let flag = this.$store.getters.getClickTab;
             if (flag && this.$store.getters.getchart3) {
-                let tableData = this.$store.getters.getChartTableData[2];
+                // this.chartTableData = this.$store.getters.getChartTableData;
                 let chartData = this.$store.getters.getchart3;
-                this.updateTableData(tableData, 2);
                 this.getChart3(chartData);
             } else {
                 let params = this.commonReqParams();
@@ -221,9 +219,8 @@ export default {
             let flag = this.$store.getters.getClickTab;
             if (flag && this.$store.getters.getchart4) {
                 this.$store.commit('saveClickTab', false);
-                let tableData = this.$store.getters.getChartTableData[3];
+                // this.chartTableData = this.$store.getters.getChartTableData;
                 let chartData = this.$store.getters.getchart4;
-                this.updateTableData(tableData, 3);
                 this.getChart4(chartData);
             } else {
                 let params = this.commonReqParams();
@@ -360,9 +357,19 @@ export default {
                     v.uid = index > -1 ? allLeaf[index]['id'] : '';
                 });
             }
-            this.$store.commit('saveChartTableData', {data: kmap, index: id || this.tabIndex || this.$store.getters.getTabIndex});
+            let tabId = this.tabIndex || this.$store.getters.getTabIndex;
+            if (tabId) {
+                let storeData = this.$store.getters.getBlockData[tabId] || {};
+                if (Object.keys(storeData).length) {
+                    let chartTableData = storeData['chartTableData'];
+                    if (chartTableData && chartTableData.length) {
+                        this.chartTableData = chartTableData;
+                    }
+                }
+            }
+            this.chartTableData[0] = chartDataList;
+            this.$store.commit('saveChartTableData', {data: this.chartTableData, index: id || this.tabIndex || this.$store.getters.getTabIndex});
             this.$store.commit('saveMainTableData', {data: resultSetList, index: id || this.tabIndex || this.$store.getters.getTabIndex});
-            this.updateTableData(chartDataList, 0, id);
             return {
                 mainTableData: resultSetList,
                 chartData: kmap,

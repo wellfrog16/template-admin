@@ -161,7 +161,7 @@ export default {
                 let store = this.$store.getters.sceneCommitParams;
                 store = {...store, ...obj};
                 this.$store.commit('saveSceneCommitParams', store);
-                getExportResultSet({resultIds: this.resultIds, resultType: this.exportResultType}).then(resp => {
+                getExportResultSet({resultIds: this.resultIds, resultType: this.exportResultType, id: this.resultIds}).then(resp => {
                     this.fullLoading = false;
                     let store = this.$store.getters.sceneCommitResp;
                     store[this.resultIds] = resp;

@@ -199,8 +199,20 @@ export default {
                 });
                 v.custIds = index > -1 ? allLeaf[index]['custIds'].join(',') : '';
             });
+            let tabId = this.tabIndex || this.$store.getters.getTabIndex;
+            if (tabId) {
+                let storeData = this.$store.getters.getBlockData[tabId] || {};
+                if (Object.keys(storeData).length) {
+                    let chartTableData = storeData['chartTableData'];
+                    if (chartTableData && chartTableData.length) {
+                        this.chartTableData = chartTableData;
+                    }
+                }
+            }
+            this.chartTableData[0] = chartDataList;
+            this.$store.commit('saveChartTableData', {data: this.chartTableData, index: id || this.tabIndex || this.$store.getters.getTabIndex});
+
             this.$store.commit('saveMainTableData', {data: this.mainTableData, index: id || this.tabIndex || this.$store.getters.getTabIndex});
-            this.updateTableData(chartDataList, 0, id);
             return {
                 chartData: chartDataList,
                 mainTableData: this.mainTableColumns
@@ -259,15 +271,9 @@ export default {
         getDetailBy3D() {
             let flag = this.$store.getters.getClickTab;
             if (flag && this.$store.getters.getchart2) {
-                let tableData2 = this.$store.getters.getChartTableData[1];
-                let tableData3 = this.$store.getters.getChartTableData[2];
-                let tableData4 = this.$store.getters.getChartTableData[3];
                 let chartData2 = this.$store.getters.getchart2;
                 let chartData3 = this.$store.getters.getchart3;
                 let chartData4 = this.$store.getters.getchart4;
-                this.updateTableData(tableData2, 1);
-                this.updateTableData(tableData3, 2);
-                this.updateTableData(tableData4, 3);
                 this.getChart2(chartData2);
                 this.getChart3(chartData3);
                 this.getChart4(chartData4);

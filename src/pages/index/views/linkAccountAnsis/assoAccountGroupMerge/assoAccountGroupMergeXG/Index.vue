@@ -208,8 +208,19 @@ export default {
                 v.custIds = index > -1 ? allLeaf[index]['custIds'].join(',') : '';
                 v.id = index > -1 ? allLeaf[index]['id'] : '';
             });
+            let tabId = this.tabIndex || this.$store.getters.getTabIndex;
+            if (tabId) {
+                let storeData = this.$store.getters.getBlockData[tabId] || {};
+                if (Object.keys(storeData).length) {
+                    let chartTableData = storeData['chartTableData'];
+                    if (chartTableData && chartTableData.length) {
+                        this.chartTableData = chartTableData;
+                    }
+                }
+            }
+            this.chartTableData[0] = mainTableData;
+            this.$store.commit('saveChartTableData', {data: this.chartTableData, index: id || this.tabIndex || this.$store.getters.getTabIndex});
             this.$store.commit('saveMainTableData', {data: mainTableData, index: id || this.tabIndex || this.$store.getters.getTabIndex});
-            this.updateTableData(chartData, 0, id);
             return {
                 chartData: chartData,
                 mainTableData: mainTableData
@@ -252,9 +263,7 @@ export default {
         getBlock2Data() {
             let flag = this.$store.getters.getClickTab;
             if (flag && this.$store.getters.getchart2) {
-                let tableData = this.$store.getters.getChartTableData[1];
                 let chartData = this.$store.getters.getchart2;
-                this.updateTableData(tableData, 1);
                 this.getChart2(chartData);
             } else {
                 if (this.currentAccountGroupId) {
@@ -274,9 +283,7 @@ export default {
         getBlock3Data() {
             let flag = this.$store.getters.getClickTab;
             if (flag && this.$store.getters.getchart3) {
-                let tableData = this.$store.getters.getChartTableData[2];
                 let chartData = this.$store.getters.getchart3;
-                this.updateTableData(tableData, 1);
                 this.getChart3(chartData);
             } else {
                 if (this.currentAccountGroupId) {
@@ -297,9 +304,7 @@ export default {
             let flag = this.$store.getters.getClickTab;
             if (flag && this.$store.getters.getchart4) {
                 this.$store.commit('saveClickTab', false);
-                let tableData = this.$store.getters.getChartTableData[3];
                 let chartData = this.$store.getters.getchart4;
-                this.updateTableData(tableData, 1);
                 this.getChart4(chartData);
             } else {
                 if (this.currentAccountGroupId) {
