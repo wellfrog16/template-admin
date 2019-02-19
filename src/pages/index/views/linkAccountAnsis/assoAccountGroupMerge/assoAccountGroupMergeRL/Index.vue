@@ -27,9 +27,9 @@
                                 <chart3 :ref="`chartComponent${index + 1}`" v-if="index === 2" :index="index" :propsChartHeight="propsChartHeight" :tabIndex="tabIndex" :sceneType="currentSceneType" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @getBlock4Data="getBlock4Data"></chart3>
                                 <chart4 :ref="`chartComponent${index + 1}`" v-if="index === 3" :index="index" :propsChartHeight="propsChartHeight" :tabIndex="tabIndex" :sceneType="currentSceneType" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData"></chart4>
                             </div>
-                            <!-- <button v-show="!item['toggleDetailFlags']" type="button" class="btn btn-default btn-map-fullscreen" @click="toggleFullScreen(index)">
+                            <button v-show="!item['toggleDetailFlags']" type="button" class="btn btn-default btn-map-fullscreen" @click="toggleFullScreen(index)">
                                 <i class="fa" :class="[fullscreen ? 'fa-compress' : 'fa-expand-arrows-alt']"></i>
-                            </button> -->
+                            </button>
                         </s-full-screen>
                     </div>
                 </s-card>
@@ -82,7 +82,7 @@ import {
     getChart4Data,
 } from '@/api/dataAnsis/assoAccountGroupMerge';
 import chart1 from '../components/chart5';
-import chart2 from '../components/chart2';
+import chart2 from '../components/chart9';
 import chart3 from '../components/chart3';
 import chart4 from '../components/chart4';
 import _ from 'lodash';
@@ -217,7 +217,7 @@ export default {
                     this.drewChart3(resp);
                 }).catch(e => {
                     console.error(e);
-                    this.charts[1]['loading'] = false;
+                    this.charts[2]['loading'] = false;
                 });
             }
         },
@@ -237,7 +237,7 @@ export default {
                     this.drewChart4(resp);
                 }).catch(e => {
                     console.error(e);
-                    this.charts[1]['loading'] = false;
+                    this.charts[3]['loading'] = false;
                 });
             }
         },

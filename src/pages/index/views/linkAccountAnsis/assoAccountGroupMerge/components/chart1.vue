@@ -169,7 +169,7 @@ export default {
                 return;
             }
             this.chartOptions['series'][0]['data'] = data.map(v => {
-                return [v.acctGroOpenInt, v.acctGroAvgRela, v.custQtty, v.acctId, v.contrCd, v.custIds, v.id];
+                return [v.acctMakePosQttyMax, v.acctGroAvgRela, v.custQtty, v.acctId, v.contrCd, v.custIds, v.id];
             });
             this.$store.commit('savechart1', {data: this.chartOptions, index: id || this.tabIndex || this.$store.getters.getTabIndex});
             this.$refs['chart0'] && this.$refs['chart0'].initChart();

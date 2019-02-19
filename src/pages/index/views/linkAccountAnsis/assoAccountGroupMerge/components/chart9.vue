@@ -162,7 +162,7 @@ export default {
                     },
                     data: mainData[v].map(m => { return -m.acctShortQtty; })
                 });
-                date = mainData[v].map(m => { return m.txDay; });
+                date = mainData[v].map(m => { return m.txDay || m.date; });
             });
             this.chartOptions['legend']['data'] = series.map(m => { return m.name; });
             this.chartOptions['series'] = series;

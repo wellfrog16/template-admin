@@ -35,7 +35,7 @@ export default {
                     return;
                 }
                 if (type === 1) {
-                    let selectMax = _.maxBy(chartData, 'acctGroOpenInt');
+                    let selectMax = _.maxBy(chartData, 'acctMakePosQttyMax');
                     // select max
                     this.updateAccountGroupAndCustIds(selectMax ? selectMax.acctId : '', selectMax ? selectMax.custIds.split(',') : []);
                 } else {

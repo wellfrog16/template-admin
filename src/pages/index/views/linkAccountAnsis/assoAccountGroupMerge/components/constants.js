@@ -37,7 +37,8 @@ export const chartTableColumns1 = [
     {label: '账户组编号', field: 'acctId', minWidth: 130, fixed: true},
     {label: '子账户数量', field: 'custQtty', minWidth: 130},
     {label: '合约代码', field: 'contrCd', minWidth: 100},
-    {label: '当前净持仓量', field: 'acctGroOpenInt', minWidth: 140},
+    {label: '多头持仓量', field: 'acctMultiMakePosQtty', minWidth: 140},
+    {label: '空头持仓量', field: 'acctBillMakePosQtty', minWidth: 140},
     {label: '相关系数', field: 'acctGroAvgRela', minWidth: 100},
     {label: '所属客户编号', field: 'custIds', minWidth: 130}
 ];
@@ -46,9 +47,9 @@ export const chartTableColumns2 = [
     {label: '客户编号', field: 'custId', minWidth: 130, fixed: true, template: custIdColumn},
     {label: '交易日', field: 'txDay', minWidth: 130},
     {label: '合约代码', field: 'contrCd', minWidth: 100},
-    {label: '当前净持仓量', field: 'acctNetOpenInt', minWidth: 140},
+    // {label: '当前净持仓量', field: 'acctNetOpenInt', minWidth: 140},
     // {label: '当前净持仓金额', field: 'posLimQtty', minWidth: 150},
-    {label: '账户组净持仓量', field: 'acctGroNetOpenInt', minWidth: 150},
+    // {label: '账户组净持仓量', field: 'acctGroNetOpenInt', minWidth: 150},
     {label: '空单净持仓量', field: 'nuBillOpenInt', minWidth: 140},
     {label: '多单净持仓量', field: 'multiBillOpenInt', minWidth: 140}
 ];
@@ -172,13 +173,23 @@ export const mainTableColumns = [
         align: 'center'
     },
     {
-        field: 'acctGroNetOpenInt',
-        label: '账户组净持仓量',
+        field: 'acctMultiMakePosQtty',
+        label: '账户组多单持仓量',
         align: 'center'
     },
     {
-        field: 'acctNetOpenInt',
-        label: '账户净持仓量',
+        field: 'acctBillMakePosQtty',
+        label: '账户组空单持仓量',
+        align: 'center'
+    },
+    {
+        field: 'multiBillMakePosQtty',
+        label: '客户多单持仓量',
+        align: 'center'
+    },
+    {
+        field: 'billMakePosQtty',
+        label: '客户空单持仓量',
         align: 'center'
     },
     {
@@ -260,13 +271,23 @@ export const mainTableColumnsBI = [
         align: 'center'
     },
     {
-        field: 'acctMakeGroPosQtty',
-        label: '账户组净持仓量',
+        field: 'acctMultiMakePosQtty',
+        label: '账户组多单持仓量',
         align: 'center'
     },
     {
-        field: 'acctMakePosQtty',
-        label: '账户净持仓量',
+        field: 'acctBillMakePosQtty',
+        label: '账户组空单持仓量',
+        align: 'center'
+    },
+    {
+        field: 'multiBillMakePosQtty',
+        label: '客户多单持仓量',
+        align: 'center'
+    },
+    {
+        field: 'billMakePosQtty',
+        label: '客户空单持仓量',
         align: 'center'
     },
     {
@@ -353,13 +374,23 @@ export const mainTableColumnsRL = [
         align: 'center'
     },
     {
-        field: 'acctGrMakePosQtty',
-        label: '账户组净持仓量',
+        field: 'acctMultiMakePosQtty',
+        label: '账户组多单持仓量',
         align: 'center'
     },
     {
-        field: 'acctMakePosQtty',
-        label: '账户净持仓量',
+        field: 'acctBillMakePosQtty',
+        label: '账户组空单持仓量',
+        align: 'center'
+    },
+    {
+        field: 'multiBillMakePosQtty',
+        label: '客户多单持仓量',
+        align: 'center'
+    },
+    {
+        field: 'billMakePosQtty',
+        label: '客户空单持仓量',
         align: 'center'
     },
     {

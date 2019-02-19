@@ -114,6 +114,9 @@ export default {
             // 导入结果集
             this.fullLoading = true;
             getInfoByResultId(this.resultIds, this.exportResultType).then(resp => {
+                if (resp.message) { // 处理respData为null的情况
+                    return;
+                }
                 let resultName = resp.resultName || resp.resultSetName;
                 this.sceneNameList.push({sceneNames: resultName, sceneTypes: this.exportResultType, sceneIds: this.resultIds});
                 this.activeTab = this.resultIds;
@@ -161,25 +164,25 @@ export default {
                 let store = this.$store.getters.sceneCommitParams;
                 store = {...store, ...obj};
                 this.$store.commit('saveSceneCommitParams', store);
-                getExportResultSet({resultIds: this.resultIds, resultType: this.exportResultType, id: this.resultIds}).then(resp => {
-                    this.fullLoading = false;
-                    let store = this.$store.getters.sceneCommitResp;
-                    store[this.resultIds] = resp;
-                    this.$store.commit('saveSceneCommitResp', store);
-                    this.$store.commit('saveTabIndex', this.resultIds);
-                    this.$nextTick(() => {
-                        let flag = String(this.exportResultType) === '1' ? 1 : null;
-                        if (String(this.exportResultType) === '1') {
-                            this.$refs['sceneType1'] && this.$refs['sceneType1'][0].drewChart1(flag);
-                        } else if (String(this.exportResultType) === '3') {
-                            this.$refs['sceneType3'] && this.$refs['sceneType3'][0].drewChart1(flag);
-                        } else if (String(this.exportResultType) === '4') {
-                            this.$refs['sceneType4'] && this.$refs['sceneType4'][0].drewChart1(flag);
-                        }
-                    });
-                }).catch(e => {
-                    this.fullLoading = false;
-                    console.error(e);
+            }).catch(e => {
+                this.fullLoading = false;
+                console.error(e);
+            });
+            getExportResultSet({resultIds: this.resultIds, resultType: this.exportResultType, id: this.resultIds}).then(resp => {
+                this.fullLoading = false;
+                let store = this.$store.getters.sceneCommitResp;
+                store[this.resultIds] = resp;
+                this.$store.commit('saveSceneCommitResp', store);
+                this.$store.commit('saveTabIndex', this.resultIds);
+                this.$nextTick(() => {
+                    let flag = String(this.exportResultType) === '1' ? 1 : null;
+                    if (String(this.exportResultType) === '1') {
+                        this.$refs['sceneType1'] && this.$refs['sceneType1'][0].drewChart1(flag);
+                    } else if (String(this.exportResultType) === '3') {
+                        this.$refs['sceneType3'] && this.$refs['sceneType3'][0].drewChart1(flag);
+                    } else if (String(this.exportResultType) === '4') {
+                        this.$refs['sceneType4'] && this.$refs['sceneType4'][0].drewChart1(flag);
+                    }
                 });
             }).catch(e => {
                 this.fullLoading = false;
