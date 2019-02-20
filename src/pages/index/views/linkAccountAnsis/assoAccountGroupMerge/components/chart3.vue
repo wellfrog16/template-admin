@@ -77,7 +77,8 @@ export default {
             {name: 'open', index: 1, text: '开盘价'},
             {name: 'close', index: 2, text: '收盘价'},
             {name: 'highest', index: 3, text: '最高价'},
-            {name: 'lowest', index: 4, text: '最低价'}
+            {name: 'lowest', index: 4, text: '最低价'},
+            {name: 'bargainQuantity', index: 5, text: '成交量'},
         ];
         return {
             loading: false,
@@ -90,7 +91,6 @@ export default {
                     backgroundColor: '#222',
                     borderColor: '#777',
                     borderWidth: 1,
-                    trigger: 'item',
                     enterable: true,
                     axisPointer: {
                         type: 'cross'
@@ -102,52 +102,113 @@ export default {
                                     客户编号: ${v}<br>
                                 `;
                             }).join('');
+                        } else if (param.seriesIndex === 3) { // bar
+                            return `
+                            成交量: ${param.value}<br>
+                            `;
                         } else {
                             return schema.map((v, i) => {
-                                return v.text + ': ' + param.value[i === 0 ? 5 : i];
+                                return v.text + ': ' + param.value[i === 0 ? 5 : i === 5 ? 6 : i];
                             }).join('<br>');
                         }
                     }
                 },
                 axisPointer: {
-                    link: {xAxisIndex: 'all'},
+                    link: [{
+                        xAxisIndex: [0, 1]
+                    }],
                     label: {
                         backgroundColor: '#222',
                         borderColor: '#777'
                     }
                 },
                 legend: {
-                    data: ['日K', '卖出', '买入']
+                    data: ['日K', '卖出', '买入', '成交量']
                 },
-                xAxis: {
-                    name: '',
-                    type: 'category',
-                    data: [],
-                    scale: true,
-                    boundaryGap: false,
-                    axisLine: {onZero: false},
-                    splitLine: {show: false},
-                    splitNumber: 20,
-                    min: 'dataMin',
-                    max: 'dataMax',
-                },
-                yAxis: {
-                    name: '成交价',
-                    scale: true,
-                    splitArea: {
-                        show: true,
-                        areaStyle: {
-                            color: ['transparent', 'rgba(4, 58, 127, 0.92)']
+                grid: [{
+                    left: 60,
+                    right: 60,
+                    top: 40,
+                    height: 140,
+                    containLabel: false
+                }, {
+                    left: 60,
+                    right: 60,
+                    height: 40,
+                    bottom: 40,
+                    containLabel: false
+                }],
+                xAxis: [
+                    {
+                        name: '',
+                        type: 'category',
+                        data: [],
+                        scale: true,
+                        boundaryGap: false,
+                        axisLine: {onZero: false},
+                        splitLine: {show: false},
+                        splitNumber: 20,
+                        min: 'dataMin',
+                        max: 'dataMax',
+                    },
+                    {
+                        type: 'category',
+                        gridIndex: 1,
+                        data: [],
+                        scale: true,
+                        boundaryGap: false,
+                        splitLine: {show: false},
+                        axisLabel: {show: false},
+                        axisTick: {
+                            show: false,
+                        },
+                        splitNumber: 20,
+                        min: 'dataMin',
+                        max: 'dataMax',
+                        axisPointer: {
+                            type: 'shadow',
+                            snap: true,
+                            label: {show: false},
+                            triggerTooltip: true,
+                            handle: {
+                                show: true,
+                                margin: 15,
+                                size: 25,
+                                color: '#f3ec6cf2'
+                            }
                         }
+                    }],
+                yAxis: [
+                    {
+                        name: '成交价',
+                        scale: true,
+                        splitArea: {
+                            show: true,
+                            areaStyle: {
+                                color: ['transparent', 'rgba(4, 58, 127, 0.92)']
+                            }
+                        }
+                    },
+                    {
+                        name: '',
+                        scale: true,
+                        gridIndex: 1,
+                        splitNumber: 2,
+                        axisLabel: {show: false},
+                        axisLine: {show: false},
+                        axisTick: {show: false},
+                        splitLine: {show: false}
                     }
-                },
+                ],
                 dataZoom: [
                     {
-                        type: 'inside'
+                        type: 'inside',
+                        xAxisIndex: [0, 1]
                     },
                     {
                         show: true,
                         type: 'slider',
+                        xAxisIndex: [0, 1],
                         bottom: 0
                     }
                 ],
@@ -339,6 +400,22 @@ export default {
                         lineStyle: {
                             normal: {opacity: 0.5}
                         }
+                    },
+                    {
+                        name: '成交量',
+                        type: 'bar',
+                        barMaxWidth: 35,
+                        xAxisIndex: 1,
+                        yAxisIndex: 1,
+                        itemStyle: {
+                            normal: {
+                                // color: '#7fbe9e'
+                            },
+                            emphasis: {
+                                // color: '#140'
+                            }
+                        },
+                        data: []
                     }
                 ]
 
@@ -369,7 +446,7 @@ export default {
             mainData.forEach(v => {
                 date.push(v.txDt);
                 seriesData.push(
-                    [v.openQuotPrice, v.closeQuotPrice, v.lowestPrice, v.highestPrice, v.txDt]
+                    [v.openQuotPrice, v.closeQuotPrice, v.lowestPrice, v.highestPrice, v.txDt, v.bargainQuantity]
                 );
             });
             mainData.forEach(v => {
@@ -379,7 +456,9 @@ export default {
             this.chartOptions['series'][0]['data'] = seriesData;
             this.chartOptions['series'][1]['data'] = scatterData1;
             this.chartOptions['series'][2]['data'] = scatterData2;
-            this.chartOptions['xAxis']['data'] = date;
+            this.chartOptions['series'][3]['data'] = mainData.map(v => { return v.bargainQuantity; });
+            this.chartOptions['xAxis'][0]['data'] = date;
+            this.chartOptions['xAxis'][1]['data'] = date;
             // set cust count
             this.chartOptions['visualMap'][0]['max'] = this.currentCustIds.length;
             this.chartOptions['visualMap'][1]['max'] = this.currentCustIds.length;
@@ -416,7 +495,7 @@ export default {
             mainData.forEach(v => {
                 date.push(v.txDt);
                 seriesData.push(
-                    [v.openQuotPrice, v.closeQuotPrice, v.lowestPrice, v.highestPrice, v.txDt]
+                    [v.openQuotPrice, v.closeQuotPrice, v.lowestPrice, v.highestPrice, v.txDt, v.bargainQuantity]
                 );
             });
             mainData.forEach(v => {
@@ -426,7 +505,9 @@ export default {
             this.chartOptions['series'][0]['data'] = seriesData;
             this.chartOptions['series'][1]['data'] = scatterData1;
             this.chartOptions['series'][2]['data'] = scatterData2;
-            this.chartOptions['xAxis']['data'] = date;
+            this.chartOptions['series'][3]['data'] = mainData.map(v => { return v.bargainQuantity; });
+            this.chartOptions['xAxis'][0]['data'] = date;
+            this.chartOptions['xAxis'][1]['data'] = date;
             // set cust count
             this.chartOptions['visualMap'][0]['max'] = this.currentCustIds.length;
             this.chartOptions['visualMap'][1]['max'] = this.currentCustIds.length;
