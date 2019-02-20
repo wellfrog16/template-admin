@@ -5,8 +5,12 @@ export const mainTableColumns = [
     {field: 'custId', label: '客户编号', align: 'center'},
     {field: 'customerName', label: '客户名称', align: 'center'}, // customerName/custName
     {field: 'contractCode', label: '合约代码', align: 'center'}, // contractCode/contrCd
-    {field: 'acctGroupHold', label: '账户组持仓量', align: 'center'}, // acctGroupHold/acctGrMakePosQtty
-    {field: 'acctMakePosQtty', label: '账户持仓量', align: 'center'}, // customerHold/acctMakePosQtty
+    // {field: 'acctGroupHold', label: '账户组持仓量', align: 'center'}, // acctGroupHold/acctGrMakePosQtty
+    // {field: 'acctMakePosQtty', label: '账户持仓量', align: 'center'}, // customerHold/acctMakePosQtty
+    {field: 'acctMultiMakePosQtty', label: '账户组多单持仓量', align: 'center'},
+    {field: 'acctBillMakePosQtty', label: '账户组空单持仓量', align: 'center'},
+    {field: 'multiBillMakePosQtty', label: '账户多单持仓量', align: 'center'},
+    {field: 'billMakePosQtty', label: '账户空单持仓量', align: 'center'},
     {field: 'custWheOtherGro', label: '客户所在其他组', align: 'center'}, // custWheOtherGro/custOtherGr
     {field: 'buyBargainRela', label: '买入成交相关系数', align: 'center'},
     {field: 'sellBargainRela', label: '卖出成交相关系数', align: 'center'},

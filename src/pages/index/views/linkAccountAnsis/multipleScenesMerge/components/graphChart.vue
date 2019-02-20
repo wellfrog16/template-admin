@@ -19,7 +19,7 @@
                         </el-col> -->
                         <el-col :xl="12" :lg="12" :md="12" :sm="24" style="padding-left: 20px;">
                             <el-form-item prop="showAccountCount" label="显示账户组数按持仓量排名：">
-                                前&nbsp;&nbsp;<el-input clearable size="small" v-model="ruleForm.showAccountCount" style="width: 150px;"></el-input>
+                                前&nbsp;&nbsp;<el-input clearable size="small" v-model="ruleForm.showAccountCount" style="width: 100px;"></el-input>
                             </el-form-item>
 
                         </el-col>

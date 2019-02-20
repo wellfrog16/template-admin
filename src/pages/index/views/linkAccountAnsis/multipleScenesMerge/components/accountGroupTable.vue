@@ -353,10 +353,10 @@ export default {
             this.dialogRuleForm.contractCode = '';
             let params = {
                 mainTableData: this.mainTableData,
-                startDate: this.startDate,
-                endDate: this.endDate,
-                contractCode: this.currentConctrd,
-                statFreq: this.statFreq
+                startDate: this.startDate || '1900-01-01',
+                endDate: this.endDate || '3000-12-31',
+                contractCode: conctrd,
+                statFreq: this.statFreq || '1'
             };
             regenerateData(params).then(resp => {
                 if (resp && resp.resData !== null) {

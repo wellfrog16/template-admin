@@ -1,7 +1,7 @@
 let axisCommon = () => {
     return {
         axisLabel: {
-            rotate: 320
+            rotate: 340
         },
         nameTextStyle: {
             color: '#fff',

@@ -159,6 +159,9 @@ export default {
                 if (params.resultType === '1') {
                     params.resultList = this.dealMainData();
                 }
+                if (params.resultType === '2') {
+                    params.cluserInfoVOS = this.dealMainData();
+                }
                 if (params.resultType === '3') {
                     params.resultListInfo = this.dealMainData();
                 }
@@ -218,6 +221,9 @@ export default {
             }
             if (params.resultType === '1') {
                 params.resultList = this.dealMainData();
+            }
+            if (params.resultType === '2') {
+                params.cluserInfoVOS = this.dealMainData();
             }
             if (params.resultType === '3') {
                 params.resultListInfo = this.dealMainData();

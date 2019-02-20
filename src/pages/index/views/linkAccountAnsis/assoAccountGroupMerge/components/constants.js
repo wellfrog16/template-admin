@@ -573,7 +573,8 @@ export const table3Options = [
     {label: '空头持仓量', field: 'shortPosOpenInt', minWidth: 130},
     {label: '盈亏', field: 'prftLoss', minWidth: 90},
     {label: '净买入量', field: 'netBuyQtty', minWidth: 100},
-    {label: '净持仓量', field: 'netOpenInt', minWidth: 100}
+    {label: '净持仓量', field: 'netOpenInt', minWidth: 100},
+    {label: '成交量', field: 'bargainQuantity', minWidth: 100},
 ];
 export const respData3 = {
     mainData: [

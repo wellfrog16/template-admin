@@ -13,6 +13,7 @@
 
 <script>
 import EchartsCommon from '@/components/index/common/EchartsCommon';
+import {echartsDefault} from '@/assets/style/common/theme/echart';
 export default {
     name: 'Atable1',
     props: {
@@ -202,13 +203,29 @@ export default {
                     this.markLingOping.markLine.data[0].yAxis = val.qtty;
                     basicOptions = {...basicOptions, ...this.markLingOping};
                 }
-                Object.keys(mainData).forEach(v => {
+                Object.keys(mainData).forEach((v, i) => {
                     temp.push({
                         ...{
+                            itemStyle: {
+                                color: echartsDefault[i],
+                            },
                             name: v,
                             data: mainData[v].map(m => {
                                 // 超仓分析
-                                return (m.netMarkPosQtty || 0);
+                                return (m.multiBillMakePosQtty || 0);
+                            }),
+                        },
+                        ...basicOptions,
+                    });
+                    temp.push({
+                        ...{
+                            itemStyle: {
+                                color: echartsDefault[i],
+                            },
+                            name: v,
+                            data: mainData[v].map(m => {
+                                // 超仓分析
+                                return (-m.billMakePosQtty || 0);
                             }),
                         },
                         ...basicOptions,
