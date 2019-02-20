@@ -166,11 +166,16 @@ export default {
                         }).join('<br>');
                     }
                 },
+                legend: {
+                    top: '3%',
+                    data: ['价格', '涨跌', '均价']
+                },
                 xAxis: {
                     type: 'category',
                     boundaryGap: false,
                     // 调整x轴的lable
                     axisLabel: {
+                        interval: 130,
                         textStyle: {
                             fontSize: 10 // 字体
                         }
@@ -223,6 +228,7 @@ export default {
                     {
                         name: '涨跌',
                         type: 'value',
+                        offset: 0,
                         position: 'right',
                         min: value => {
                             return value.min;
@@ -230,7 +236,7 @@ export default {
                         max: value => {
                             return value.max;
                         },
-                        offset: 15,
+                        // offset: 45,
                         // 控制网格线是否显示
                         splitLine: {
                             show: false,
@@ -257,7 +263,7 @@ export default {
                     {
                         name: '均价',
                         show: false,
-                        offset: 0,
+                        offset: 25,
                         type: 'value',
                         position: 'right',
                         min: value => {
@@ -272,7 +278,7 @@ export default {
                             //  改变轴线颜色
                             lineStyle: {
                                 // 使用深浅的间隔色
-                                color: ['#fff']
+                                // color: ['#fff']
                                 // width: 0
                             }
                         },
@@ -306,34 +312,29 @@ export default {
                         yAxisIndex: 0,
                         type: 'line',
                         symbolSize: 5,
-                        itemStyle: {
-                            normal: {
-                                lineStyle: {
-                                    color: '#f8f400'
-                                }
-                            }
-                        },
+                        // itemStyle: {
+                        //     normal: {
+                        //         lineStyle: {
+                        //             color: '#f8f400'
+                        //         }
+                        //     }
+                        // },
                         markArea: {
                             silent: false,
                             itemStyle: {
                                 color: 'none',
-                                borderColor: '#ff0000', // 001943
+                                borderColor: 'red', // 001943
                                 borderWidth: '1',
-                                shadowColor: 'rgba(0, 0, 0, 0.5)',
-                                shadowBlur: 3,
                                 opacity: 0.9
-                                // shadowOffsetX: 2,
-                                // shadowOffsetY: 3
-
                             },
                             data: [],
-                        },
+                        }
                     },
                     {
                         name: '涨跌',
                         data: [],
                         type: 'line',
-                        yAxisIndex: 2,
+                        yAxisIndex: 1,
                         itemStyle: {
                             normal: {
                                 lineStyle: {
@@ -351,14 +352,14 @@ export default {
                         name: '均价',
                         data: [],
                         type: 'line',
-                        yAxisIndex: 1,
-                        itemStyle: {
-                            normal: {
-                                lineStyle: {
-                                    color: '#e8e4d2'
-                                }
-                            }
-                        },
+                        yAxisIndex: 0,
+                        // itemStyle: {
+                        //     normal: {
+                        //         lineStyle: {
+                        //             color: '#e8e4d2'
+                        //         }
+                        //     }
+                        // },
                         symbol: 'circle',
                         // // 设置折点大小
                         symbolSize: 0,
@@ -372,7 +373,7 @@ export default {
     computed: {},
     mounted() {
         // 原油日K图--配置表
-        this.tableData1List();
+        this.tableData3List();
         this.barEchartsDete();
     },
     methods: {
@@ -435,16 +436,16 @@ export default {
                 let now = new Date();
                 let dateWeek = now.getDay(); // 今天本周的第几天
                 let params = {
-                    // 'timeOfDay': now.getFullYear() + '-' + now.getMonth() + 1 + '-' + now.getDate()
-                    'timeOfDay': '2019-01-28'
+                //   'timeOfDay': now.getFullYear() + '-' + now.getMonth() + 1 + '-' + now.getDate(),
+                    'timeOfDay': '2019-02-18',
+                    'frequentness': '5',
+                    'crudeCode': 'BLT_OIL'
                 };
                 this.loading2 = true;
                 let mainData = [];
                 let exceptionDatas = [];
                 let markAreaData = [];
                 postPetroleumAR2(params).then(resp => {
-                    // let {mainData, exceptionData} = resp;
-                    // console.log(mainData, exceptionData);
                     if (resp && resp.length !== 0) {
                         this.loading2 = false;
                         if (resp.exceptionData.length !== 0) {
@@ -463,46 +464,70 @@ export default {
                         mainData.forEach(v => {
                             timeData.push(v.realTime); // 实时交易时间
                             priceData.push(v.realPrice); // 实时交易价格
-                            averagePriceData.push(v.realAveragePrice * 0.010); // 实时交易均价
+                            averagePriceData.push(v.realAveragePrice); // 实时交易均价
                             realUpsAndData.push(v.realUpsAndDowns); // 实时交易涨跌
                             // 产品成交时间--星期几---实时交易时间---实时交易均价---实时交易成交数量----实时交易涨跌
-                            titleText = v.crudeDealTime + '/' + dateWeek + '/' + v.realTime + ' 均 ' + v.realAveragePrice + ' 量 ' + v.realMakeBargain + ' 幅 ' + v.realUpsAndDowns + '%';
+                            titleText = v.crudeDealTime + '/' + dateWeek + '/' + v.realTime + ' 均 ' + v.realAveragePrice + '幅 ' + v.realUpsAndDowns + '%';
                         });
                         if (exceptionDatas.length !== 0) {
                             markAreaData = [
                                 [
                                     {
-                                        'name': '异常数据',
-                                        'xAxis': mainData[mainData.length - 1].realTime, // 异常时间
-                                        'yAxis': mainData[mainData.length - 1].realPrice, // 异常价格
+                                        'name': '异常',
+                                        // 'xAxis': mainData[mainData.length - 1].realTime, // 异常时间
+                                        'xAxis': '09:00', // 异常时间
+                                        // 'yAxis': mainData[mainData.length - 1].realPrice, // 异常价格
                                     },
                                     {
-                                        'xAxis': exceptionDatas[0].realTime, // 前五分钟异常时间
-                                        'yAxis': exceptionDatas[0].realPrice, // 前五分钟异常价格
+                                        // 'xAxis': exceptionDatas[0].realTime, // 前五分钟异常时间
+                                        'xAxis': '09:06', // 前五分钟异常时间
+                                        // 'yAxis': exceptionDatas[0].realPrice, // 前五分钟异常价格
+                                        'yAxis': '66.75', // 前五分钟异常价格
                                     }
                                 ],
                                 [
                                     {
-                                        'xAxis': mainData[mainData.length - 1].realTime, // 异常时间
+                                        'name': '异常',
+                                        // 'xAxis': mainData[mainData.length - 1].realTime, // 异常时间
+                                        'xAxis': '09:21', // 异常时间
+                                        // 'yAxis': mainData[mainData.length - 1].realPrice, // 异常价格
                                     },
                                     {
-                                        'xAxis': exceptionDatas[0].realTime, // 前五分钟异常时间
+                                        // 'xAxis': exceptionDatas[0].realTime, // 前五分钟异常时间
+                                        'xAxis': '09:26', // 前五分钟异常时间
+                                        // 'yAxis': exceptionDatas[0].realPrice, // 前五分钟异常价格
+                                        'yAxis': '66.51', // 前五分钟异常价格
+                                    }
+                                ],
+                                [
+                                    {
+                                        'name': '异常',
+                                        // 'xAxis': mainData[mainData.length - 1].realTime, // 异常时间
+                                        'xAxis': '10:02', // 异常时间
+                                        // 'yAxis': mainData[mainData.length - 1].realPrice, // 异常价格
+                                    },
+                                    {
+                                        // 'xAxis': exceptionDatas[0].realTime, // 前五分钟异常时间
+                                        'xAxis': '10:09', // 前五分钟异常时间
+                                        // 'yAxis': exceptionDatas[0].realPrice, // 前五分钟异常价格
+                                        'yAxis': '66.50', // 前五分钟异常价格
                                     }
                                 ]
                             ];
                         }
+                        let timeDatas = [...timeData, ...echartsData2.realTime];
                         this.chartOptions2['title'][0]['text'] = titleText; // 标题
-                        this.chartOptions2['xAxis']['data'] = timeData; // 实时交易时间
+                        this.chartOptions2['xAxis']['data'] = timeDatas; // 实时交易时间
                         this.chartOptions2['series'][0]['data'] = priceData; // 实时交易价格
+                        this.chartOptions2['series'][0]['markArea']['data'] = markAreaData || []; // 异常
                         this.chartOptions2['series'][1]['data'] = realUpsAndData; // 实时交易涨跌
                         this.chartOptions2['series'][2]['data'] = averagePriceData; // 实时交易均价
-                        this.chartOptions2['series'][0]['markArea']['data'] = markAreaData; // 异常
                         this.$refs['echartsDemo2'] && this.$refs['echartsDemo2'].initChart();
                     }
                 }).catch(e => {
                     this.loading2 = false;
                 });
-            }, 1000000);
+            }, 20000);
         }
     },
     beforeDestroy() {

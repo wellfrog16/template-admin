@@ -1,6 +1,6 @@
 import instance from '@/helper/axios';
 
-const axios = instance('http://localhost:8080');
+const axios = instance('http://localhost:8082');
 
 const base = '/mock';
 

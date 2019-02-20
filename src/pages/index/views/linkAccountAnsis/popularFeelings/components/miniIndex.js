@@ -26,11 +26,11 @@ export default {
                 // 1 秒、5 秒、1 分 钟、10 分钟，还是 1 天、5 天、1 个月、1
                 {
                     idName: '1',
-                    name: '1 天'
+                    name: '5 天'
                 },
                 {
                     idName: '2',
-                    name: '5 天'
+                    name: '10 天'
                 },
                 {
                     idName: '3',

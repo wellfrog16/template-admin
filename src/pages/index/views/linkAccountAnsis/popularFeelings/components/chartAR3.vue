@@ -374,11 +374,12 @@ export default {
         barEchartsDete() {
             // setInterval(v => {
             this.loading3 = true;
-            var now = new Date(); // 当前日期
-            var dateWeek = now.getDay(); // 今天本周的第几天
+            // var now = new Date(); // 当前日期
+            // var dateWeek = now.getDay(); // 今天本周的第几天
             let params = {
                 'startDate': '2018-03-26',
                 'endDate': '2019-01-10',
+                'frequentness': '5'
             };
             let mainData = [];
             let exceptionDatas = [];
@@ -419,23 +420,51 @@ export default {
                     });
                     if (exceptionDatas.length !== 0) {
                         markAreaData = [
+                            // [
+                            //     {
+                            //         'name': '异常',
+                            //         'xAxis': exceptionDatas[1].startTradeDay, // 异常日期
+                            //         // 'yAxis': mainData[mainData.length - 1].openingPrice, // 异常价格
+                            //     },
+                            //     {
+                            //         'xAxis': exceptionDatas[4].endTradeDay, // 前五分钟异常日期
+                            //             // 'yAxis': exceptionDatas[4].volume, // 前五分钟异常价格
+                            //     }
+                            // ],
                             [
                                 {
-                                    'name': '异常数据',
-                                    'xAxis': mainData[mainData.length - 1].tradeDay, // 异常日期
-                                    'yAxis': mainData[mainData.length - 1].openingPrice, // 异常价格
+                                    'name': '异常',
+                                    'xAxis': exceptionDatas[0].startTradeDay, // 异常日期
                                 },
                                 {
-                                    'xAxis': exceptionDatas[4].tradeDay, // 前五分钟异常日期
-                                    'yAxis': exceptionDatas[4].openingPrice, // 前五分钟异常价格
+                                    'xAxis': exceptionDatas[0].endTradeDay, // 前五分钟异常日期
                                 }
                             ],
                             [
                                 {
-                                    'xAxis': mainData[mainData.length - 1].tradeDay, // 异常日期
+                                    'name': '异常',
+                                    'xAxis': exceptionDatas[1].startTradeDay, // 异常日期
                                 },
                                 {
-                                    'xAxis': exceptionDatas[4].tradeDay, // 前五分钟异常日期
+                                    'xAxis': exceptionDatas[1].endTradeDay, // 前五分钟异常日期
+                                }
+                            ],
+                            [
+                                {
+                                    'name': '异常',
+                                    'xAxis': exceptionDatas[2].startTradeDay, // 异常日期
+                                },
+                                {
+                                    'xAxis': exceptionDatas[3].endTradeDay, // 前五分钟异常日期
+                                }
+                            ],
+                            [
+                                {
+                                    'name': '异常',
+                                    'xAxis': exceptionDatas[6].startTradeDay, // 异常日期
+                                },
+                                {
+                                    'xAxis': exceptionDatas[8].endTradeDay, // 前五分钟异常日期
                                 }
                             ]
                         ];

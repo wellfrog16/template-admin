@@ -94,6 +94,7 @@ export default {
     },
     computed: {},
     mounted() {
+        console.log(this.tableData2);
     },
     methods: {
         // 输入阈值设

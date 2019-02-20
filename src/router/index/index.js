@@ -175,7 +175,7 @@ const Index = {
                 {
                     meta: {
                         scrollTop: true,
-                        title: '异常波动'
+                        title: '舆情波动'
                     },
                     path: '/publicOpinionSwings',
                     name: 'publicOpinionSwings',
@@ -191,6 +191,16 @@ const Index = {
                     name: 'newsDetails',
                     icon: 'menu-fix-icon fa fa-location-arrow',
                     component: resolve => require(['@/pages/index/views/linkAccountAnsis/newsDetails/Index.vue'], resolve)
+                },
+                {
+                    meta: {
+                        scrollTop: true,
+                        title: '舆情情感分析'
+                    },
+                    path: '/PublicAnalysis',
+                    name: 'PublicAnalysis',
+                    icon: 'menu-fix-icon fa fa-location-arrow',
+                    component: resolve => require(['@/pages/index/views/linkAccountAnsis/PublicAnalysis/Index.vue'], resolve)
                 }
             ]
         }
