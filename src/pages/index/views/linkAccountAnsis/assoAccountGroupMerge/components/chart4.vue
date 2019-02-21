@@ -125,7 +125,7 @@ export default {
                 return;
             }
             let {mainData, buysail, id} = resData;
-            // this.txDt = buysail[0].declBillTm2.slice(0, 10);
+            this.txDt = buysail[0].declBillTm2.slice(0, 10);
             let lineData = [];
             let timeData = [];
             let colors = echartsDefault;
