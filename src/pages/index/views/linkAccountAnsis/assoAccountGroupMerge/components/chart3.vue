@@ -196,13 +196,13 @@ export default {
                         }
                     },
                     {
-                        name: '',
+                        name: '成交量',
                         scale: true,
                         gridIndex: 1,
                         splitNumber: 2,
-                        axisLabel: {show: false},
-                        axisLine: {show: false},
-                        axisTick: {show: false},
+                        // axisLabel: {show: false},
+                        // axisLine: {show: false},
+                        // axisTick: {show: false},
                         splitLine: {show: false}
                     }
                 ],

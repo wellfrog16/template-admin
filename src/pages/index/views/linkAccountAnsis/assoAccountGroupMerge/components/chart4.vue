@@ -1,5 +1,6 @@
 <template>
-    <div>
+    <div style="position: relative;">
+        <div v-if="txDt" style="position: absolute; padding-left: 10px; font-size: 14px; color: #f8f400">日期：{{ txDt }}</div>
         <echarts-common :loading="loading" :ref="`chart${index}`" :domId="`chart${index}`" :defaultOption="chartOptions" :propsChartHeight="propsChartHeight" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></echarts-common>
     </div>
 </template>
@@ -54,11 +55,12 @@ export default {
                 grid: {
                     x: 40,
                     x2: 70,
-                    y: 60,
+                    y: 70,
                     y2: 60
                 },
                 legend: {
                     type: 'scroll',
+                    top: 17,
                     data: []
                 },
                 tooltip: {
@@ -123,7 +125,7 @@ export default {
                 return;
             }
             let {mainData, buysail, id} = resData;
-            // this.txDt = buysail[0].declBillTm2.slice(0, 10);
+            this.txDt = buysail[0].declBillTm2.slice(0, 10);
             let lineData = [];
             let timeData = [];
             let colors = echartsDefault;

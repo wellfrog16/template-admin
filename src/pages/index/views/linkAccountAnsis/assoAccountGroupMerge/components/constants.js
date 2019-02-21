@@ -80,6 +80,18 @@ export const chartTableColumns4 = [
 export const chartTableColumns5 = [ // 地址分析关系图明细字段
     {label: '账户组号', field: 'acctId', minWidth: 130, fixed: true},
     {label: '账户组客户编号', field: 'acctCustId', minWidth: 160},
+    {
+        field: 'acctMultiMakePosQtty',
+        label: '账户组多单持仓量',
+        align: 'center',
+        minWidth: 160
+    },
+    {
+        field: 'acctBillMakePosQtty',
+        label: '账户组空单持仓量',
+        align: 'center',
+        minWidth: 160
+    },
     {label: '姓名相同', field: 'nameSame', minWidth: 140},
     {label: '身份证相同', field: 'idtfyCertSame', minWidth: 130},
     {label: '联系电话相同', field: 'contTelSame', minWidth: 130},
@@ -93,6 +105,18 @@ export const chartTableColumns5 = [ // 地址分析关系图明细字段
 export const chartTableColumns6 = [ // 实控关系分析关系图明细字段
     {label: '账户组号', field: 'acctId', minWidth: 130, fixed: true},
     {label: '账户组客户编号', field: 'acctCustId', minWidth: 160},
+    {
+        field: 'acctMultiMakePosQtty',
+        label: '账户组多单持仓量',
+        align: 'center',
+        minWidth: 160
+    },
+    {
+        field: 'acctBillMakePosQtty',
+        label: '账户组空单持仓量',
+        align: 'center',
+        minWidth: 160
+    },
     {label: '同一投资经理', field: 'sameInvestMger', minWidth: 140},
     {label: '同一投资顾问', field: 'sameInvestConsu', minWidth: 130},
     {label: '同一权益持有人', field: 'sameRaiHoldPerson', minWidth: 130},

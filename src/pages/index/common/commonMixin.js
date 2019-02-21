@@ -39,7 +39,7 @@ export default {
                     // select max
                     this.updateAccountGroupAndCustIds(selectMax ? selectMax.acctId : '', selectMax ? selectMax.custIds.split(',') : []);
                 } else {
-                    this.$emit('updateAccountGroupAndCustIds', chartData['nodes'][0]['name'], chartData['nodes'][0]['value'].split(','));
+                    this.$emit('updateAccountGroupAndCustIds', chartData['nodes'][0]['name'], chartData['nodes'][0]['custIds'].split(','));
                 }
                 setTimeout(() => {
                     if (this.currentSceneType === '2') {

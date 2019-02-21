@@ -21,6 +21,11 @@ let axisCommon = () => {
     };
 };
 export const echartsDefault = {
+    title: {
+        textStyle: {
+            color: '#fff'
+        }
+    },
     color: [
         '#f8f400',
         '#40f3d6',
@@ -51,7 +56,8 @@ export const echartsDefault = {
         itemWidth: 16,
         itemGap: 6,
         textStyle: {
-            color: '#eee'
+            color: '#fff',
+            fontSize: 14
         }
     },
     grid: {

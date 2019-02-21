@@ -220,9 +220,16 @@ export default {
         },
         setMaxVisualMap(val) {
             if (val) {
-                this.chartOptions.visualMap.max = this.computedMaxOverWarehouseIndex;
+                let range = [];
+                if (this.computedMaxOverWarehouseIndex) {
+                    range = [1, this.computedMaxOverWarehouseIndex];
+                } else {
+                    range = [0, 0];
+                }
+                this.$refs['chartRef'].setVisualMapDataRange(range);
+                // this.chartOptions.visualMap.max = this.computedMaxOverWarehouseIndex;
             } else {
-                this.chartOptions.visualMap.max = this.maxIndex;
+                this.$refs['chartRef'].setVisualMapDataRange([1, this.maxIndex]);
             }
         },
         setChartOptions(val) {
@@ -259,11 +266,19 @@ export default {
                     let len = v.custIds.split(',').length;
                     v.symbolSize = len > 5 ? 35 : len < 1 ? 8 : len * 7;
                 });
-                let max = _.maxBy(val.nodes, 'value')['value'];
-                this.maxIndex = max;
+                this.maxIndex = _.maxBy(val.nodes, v => {
+                    return Number(v.value);
+                })['value'];
+                this.chartOptions.visualMap.max = this.maxIndex;
                 this.chartOptions.series[0]['data'] = val.nodes;
                 // 计算超仓的排名最大值
-                // this.computedMaxOverWarehouseIndex = ...
+                let minData = _.minBy(val.nodes, v => {
+                    if (v.acctQttyMax > 100000) {
+                        return v.acctQttyMax;
+                    }
+                });
+                this.computedMaxOverWarehouseIndex = minData ? minData['value'] : null;
+                console.log(this.computedMaxOverWarehouseIndex);
                 this.setMaxVisualMap(this.ruleForm.checkedOverWarehouse);
             }
             this.chartOptions.legend.data = this.checkboxes.map(v => {

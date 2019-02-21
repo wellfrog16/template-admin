@@ -7,6 +7,7 @@
 import EchartsCommon from '@/components/index/common/EchartsCommon';
 // import {getChart2Data} from '@/api/dataAnsis/assoAccountGroupMerge';
 // import {resData2} from './constants';
+import {echartsDefault} from '@/assets/style/common/theme/echart';
 
 export default {
     components: {EchartsCommon},
@@ -52,10 +53,10 @@ export default {
                 tooltip: {
                     trigger: 'axis',
                     enterable: true,
-                    confine: true,
                     axisPointer: { // 坐标轴指示器，坐标轴触发有效
                         type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-                    }
+                    },
+                    extraCssText: 'height: 240px; overflow: auto;'
                 },
                 grid: {
                     x: 40,
@@ -105,8 +106,40 @@ export default {
             }
             let series = [];
             let date = [];
-            Object.keys(mainData).forEach(v => {
+            Object.keys(mainData).forEach((v, i) => {
                 series.push({
+                    itemStyle: {
+                        color: echartsDefault[i],
+                    },
+                    name: v,
+                    type: 'bar',
+                    barMaxWidth: '45',
+                    stack: '总量',
+                    markLine: { // 标记线设置
+                        lineStyle: {
+                            normal: {
+                                type: 'dashed',
+                                color: '#fff'
+                            }
+                        },
+                        label: {
+                            position: 'middle',
+                            formatter: params => {
+                                return `超仓线：${params.value}`;
+                            }
+                        },
+                        symbolSize: 0, // 控制箭头和原点的大小、官方默认的标准线会带远点和箭头
+                        data: [ // 设置条标准线——x=10
+                            {yAxis: '100000'},
+                            {yAxis: '-100000'},
+                        ]
+                    },
+                    data: mainData[v].map(m => { return m.acctLongQtty; })
+                });
+                series.push({
+                    itemStyle: {
+                        color: echartsDefault[i],
+                    },
                     name: v,
                     type: 'bar',
                     barMaxWidth: '45',
@@ -129,9 +162,9 @@ export default {
                             {yAxis: '100000'}
                         ]
                     },
-                    data: mainData[v].map(m => { return m.value; })
+                    data: mainData[v].map(m => { return -m.acctShortQtty; })
                 });
-                date = mainData[v].map(m => { return m.date; });
+                date = mainData[v].map(m => { return m.txDay || m.date; });
             });
             this.chartOptions['legend']['data'] = series.map(m => { return m.name; });
             this.chartOptions['series'] = series;
