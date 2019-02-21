@@ -32,23 +32,24 @@ export default {
                     itemStyle: {
                         normal: {
                             lineStyle: {
-                                type: 'solid',
+                                type: 'dashed',
                                 color: '#fff'
                             }
                         }
                     },
                     label: {
                         position: 'middle',
-                        show: true,
-                        formatter: function() {
-                            return '超仓线';
+                        formatter: params => {
+                            return `超仓线：${params.value}`;
                         }
                     },
+                    symbolSize: 0,
                     data: [
                         {
                             yAxis: '',
-                            symbol: 'none',
-                            x: '10%'
+                        },
+                        {
+                            yAxis: '',
                         }
                     ]
                 }
@@ -201,6 +202,7 @@ export default {
                 };
                 if (val && val.qtty) {
                     this.markLingOping.markLine.data[0].yAxis = val.qtty;
+                    this.markLingOping.markLine.data[1].yAxis = -val.qtty;
                     basicOptions = {...basicOptions, ...this.markLingOping};
                 }
                 Object.keys(mainData).forEach((v, i) => {

@@ -82,7 +82,7 @@ import {
     getChart4Data,
 } from '@/api/dataAnsis/assoAccountGroupMerge';
 import chart1 from '../components/chart5';
-import chart2 from '../components/chart9';
+import chart2 from '../components/chart2';
 import chart3 from '../components/chart3';
 import chart4 from '../components/chart4';
 import _ from 'lodash';

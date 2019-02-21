@@ -78,7 +78,7 @@ import {
     getDetailBy3D
 } from '@/api/dataAnsis/assoAccountGroupMerge';
 import chart1 from '../components/chart6';
-import chart2 from '../components/chart9';
+import chart2 from '../components/chart2';
 import chart3 from '../components/chart7';
 import chart4 from '../components/chart8';
 import _ from 'lodash';

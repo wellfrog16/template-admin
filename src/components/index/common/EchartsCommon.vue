@@ -94,6 +94,13 @@ export default {
             this.echart.on('contextmenu', params => {
                 this.$emit('handleContextMenu', params, this.domId);
             });
+        },
+        setVisualMapDataRange(range = []) {
+            this.echart.dispatchAction({
+                type: 'selectDataRange',
+                // 选取 20 到 40 的值范围
+                selected: range
+            });
         }
     },
     watch: {
