@@ -1,6 +1,6 @@
 <template>
     <div style="position: relative;">
-        <div v-if="txDt" style="position: absolute; padding-left: 10px; font-size: 14px; color: #f8f400">日期：{{ txDt }}</div>
+        <div v-if="txDt" style="position: absolute; padding-left: 10px; font-size: 14px; color: #f8f400;">日期：{{ txDt }}</div>
         <echarts-common :loading="loading" :ref="`chart${index}`" :domId="`chart${index}`" :defaultOption="chartOptions" :propsChartHeight="propsChartHeight" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></echarts-common>
     </div>
 </template>
@@ -126,6 +126,7 @@ export default {
             }
             let {mainData, buysail, id} = resData;
             this.txDt = buysail[0].declBillTm2.slice(0, 10);
+            sessionStorage.setItem(`txDt${this.tabIndex || this.$store.getters.getTabIndex}`, this.txDt);
             let lineData = [];
             let timeData = [];
             let colors = echartsDefault;
@@ -301,6 +302,7 @@ export default {
         }
     },
     mounted() {
+        this.txDt = sessionStorage.getItem(`txDt${this.tabIndex || this.$store.getters.getTabIndex}`) || this.txDt;
     }
 };
 </script>
