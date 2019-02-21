@@ -91,6 +91,12 @@ export default {
                     minInterval: 0.1,
                     nameLocation: 'end',
                     nameGap: 20,
+                    min: value => {
+                        return value.min;
+                    },
+                    max: value => {
+                        return value.max;
+                    },
                     splitLine: {
                         show: false
                     }

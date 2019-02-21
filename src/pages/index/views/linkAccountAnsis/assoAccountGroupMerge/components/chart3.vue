@@ -45,6 +45,12 @@ export default {
             default: 300
         }
     },
+    watch: {
+        propsChartHeight(val) {
+            this.chartOptions.grid[0]['height'] = val === 300 ? 140 : 500;
+            this.chartOptions.grid[1]['height'] = val === 300 ? 40 : 100;
+        }
+    },
     data() {
         let chart3SymbolSize = data => {
             return data[3] ? 8 : 0;
