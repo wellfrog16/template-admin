@@ -3,7 +3,7 @@ export const mainTableColumns = [
     {field: 'resultSetName', label: '结果集名称', align: 'center'}, // resultSetName/resultName
     {field: 'acctId', label: '账户组号', align: 'center'},
     {field: 'custId', label: '客户编号', align: 'center'},
-    {field: 'customerName', label: '客户名称', align: 'center'}, // customerName/custName
+    {field: 'custName', label: '客户名称', align: 'center'}, // customerName/custName
     {field: 'contractCode', label: '合约代码', align: 'center'}, // contractCode/contrCd
     // {field: 'acctGroupHold', label: '账户组持仓量', align: 'center'}, // acctGroupHold/acctGrMakePosQtty
     // {field: 'acctMakePosQtty', label: '账户持仓量', align: 'center'}, // customerHold/acctMakePosQtty
