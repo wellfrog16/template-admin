@@ -171,7 +171,7 @@ export default {
                     return v.acctQttyMax;
                 }
             });
-            this.computedMaxOverWarehouseIndex = minData ? minData['value'] : null;
+            this.computedMaxOverWarehouseIndex = minData ? minData['value'] : 0;
             // 切换明细后index丢失
             sessionStorage.setItem(`computedMaxOverWarehouseIndex${id || this.tabIndex || this.$store.getters.tabIndex}`, this.computedMaxOverWarehouseIndex);
             this.setMaxVisualMap(this.checked);

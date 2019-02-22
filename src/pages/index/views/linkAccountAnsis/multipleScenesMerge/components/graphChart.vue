@@ -277,8 +277,7 @@ export default {
                         return v.acctQttyMax;
                     }
                 });
-                this.computedMaxOverWarehouseIndex = minData ? minData['value'] : null;
-                console.log(this.computedMaxOverWarehouseIndex);
+                this.computedMaxOverWarehouseIndex = minData ? minData['value'] : 0;
                 this.setMaxVisualMap(this.ruleForm.checkedOverWarehouse);
             }
             this.chartOptions.legend.data = this.checkboxes.map(v => {
