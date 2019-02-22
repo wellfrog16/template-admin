@@ -140,6 +140,9 @@
             <el-button size="small" type="primary" @click="exporstClick">导出CSV</el-button>
         </div>
         <s-card :title="`协查报告`" :icon="`fa fa-file-alt`">
+            <div slot="right">
+                <el-checkbox v-model="checked" @change="handleSelectCheckboxChange">只显示超仓账户组</el-checkbox>
+            </div>
             <div slot="content">
                 <s-table
                     :loading="dealWithIsLoading"
@@ -247,9 +250,19 @@ export default {
             },
             barEcharts: {},
             nums: '',
+            checked: false,
+            allReportData: [], // 协查报告table全量数据
+            overData: [] // 超仓数据
         };
     },
     methods: {
+        handleSelectCheckboxChange(val) {
+            if (val) {
+                this.tableData = this.overData;
+            } else {
+                this.tableData = this.allReportData;
+            }
+        },
         EchartsClickLoading1(flag) {
             this.loadingTable0 = flag;
             this.loading1 = flag;
@@ -351,6 +364,10 @@ export default {
                         message: '操作成功！',
                         type: 'success'
                     });
+                    this.overData = resp.report.filter(v => {
+                        return v.supSto === '是';
+                    });
+                    this.allReportData = resp.report; // 全量数据
                     this.tableData = resp.report; // 3:协查报告
                     break;
                 }
@@ -442,6 +459,10 @@ export default {
                                     case '3':
                                         this.count = this.count + 1;
                                         this.dealWithIsLoading = false;
+                                        this.overData = resp.report.filter(v => {
+                                            return v.supSto === '是';
+                                        });
+                                        this.allReportData = resp.report; // 全量数据
                                         this.tableData = resp.report; // 3:协查报告
                                         break;
                                     }
