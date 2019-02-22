@@ -1,37 +1,20 @@
 <template>
-    <div :class="$style.analys3">
-        <s-card :title="`原油库存`" :icon="`fa fa-chart-line`">
-            <div slot="right">
-                <el-button type="text" @click="toggleDetail">
-                    <span v-if="detail">
-                        明细<i class="el-icon-plus" style="margign-left: 5px;"></i>
-                    </span>
-                    <span v-else>
-                        图表<i class="fa fa-undo-alt" style="margign-left: 5px;"></i>
-                    </span>
-                </el-button>
+    <div :class="$style.analys4">
+        <s-card :title="`库存数据`" :icon="`fa fa-chart-line`">
+            <div slot="content">
+                <s-table
+                    ref="selfTables1"
+                    :height="230"
+                    :loading="loadingAR"
+                    :columns="columnsList"
+                    :tableData="tableData1"
+                    @selection-change="handleSelectionChange1"
+                >
+                </s-table>
+                <div style="text-align:center; margin: 10px; width: 100%;">
+                    <el-button size="small" type="primary" @click="exporstClick">导出CSV</el-button>
+                </div>
             </div>
-            <echarts-common
-                v-if="details"
-                slot="content"
-                :loading="loading3"
-                ref="echartsDemo3"
-                domId="echartsId3"
-                :noClearFlag="false"
-                :defaultOption="chartOptions3"
-                :propsChartHeight="390">
-            </echarts-common>
-            <s-table
-                v-else
-                ref="selfTables1"
-                slot="content"
-                :height="230"
-                :loading="loadingAR"
-                :columns="columnsList"
-                :tableData="tableData1"
-                @selection-change="handleSelectionChange1"
-            >
-            </s-table>
         </s-card>
     </div>
 </template>
@@ -39,23 +22,20 @@
 <script>
 import SCard from '@/components/index/common/SCard';
 import STable from '@/components/index/common/STable';
-import {columnsListAR3, tableData3} from './constants';
-import EchartsCommon from '@/components/index/common/EchartsCommon';
+import {columnsListAR4, tableData4} from './constants';
 export default {
     name: 'analysisChart1',
-    components: {SCard, STable, EchartsCommon},
+    components: {SCard, STable},
     props: {},
     minis: [],
     data() {
         return {
             loadingAR: false,
-            checkboxTableColumn1: [],
-            columnsList: columnsListAR3,
-            tableData1: tableData3,
+            columnsList: columnsListAR4,
+            tableData1: tableData4,
             timer: null,
             fullscreen: false,
             detail: true,
-            details: true,
             loading3: false,
             dialogVisible: false,
             chartOptions3: {
@@ -316,14 +296,13 @@ export default {
     },
     methods: {
         toggleDetail() {
-            if (this.detail && this.details) {
+            if (this.detail) {
                 this.detail = !this.detail;
-                this.details = !this.details;
             } else {
                 this.detail = !this.detail;
-                this.details = !this.details;
             }
         },
+        exporstClick() {},
         handleSelectionChange1() {},
         fullscreenChange() {},
         toggleFullScreen() {

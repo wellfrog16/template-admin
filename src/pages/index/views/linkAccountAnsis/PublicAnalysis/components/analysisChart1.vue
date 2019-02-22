@@ -1,6 +1,6 @@
 <template>
     <div :class="$style.analys1">
-        <s-card :title="`原油舆情情感分`" :icon="`fa fa-chart-line`">
+        <s-card :title="`原油舆情情感分析`" :icon="`fa fa-chart-line`">
             <echarts-common
                 slot="content"
                 :loading="loading1"
@@ -8,7 +8,7 @@
                 domId="echartsId1"
                 :noClearFlag="false"
                 :defaultOption="chartOptions1"
-                :propsChartHeight="430">
+                :propsChartHeight="390">
             </echarts-common>
         </s-card>
     </div>
@@ -47,7 +47,11 @@ export default {
                 },
                 legend: {
                     top: '3%',
-                    data: ['正面', '中性', '负面', '热度']
+                    data: ['正面', '中性', '负面', '热度'],
+                    textStyle: {
+                        color: '#fff',
+                        fontSize: '14'
+                    }
                 },
                 calculable: true,
                 grid: {
@@ -702,7 +706,7 @@ export default {
 };
 </script>
 
-<style  lang="less" module>
+<style lang="less" module>
     .analys1 {
         width: 100%;
     }

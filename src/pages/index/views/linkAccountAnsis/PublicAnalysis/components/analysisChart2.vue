@@ -8,7 +8,7 @@
                 domId="echartsId2"
                 :noClearFlag="false"
                 :defaultOption="chartOptions2"
-                :propsChartHeight="430">
+                :propsChartHeight="390">
             </echarts-common>
         </s-card>
     </div>
@@ -30,7 +30,7 @@ export default {
             chartOptions2: {
                 title: {
                     left: 'left',
-                    text: '国际市场原油相关性分析',
+                    text: '日K图',
                     x: '1%',
                     textStyle: {
                         color: '#fff',
@@ -40,6 +40,10 @@ export default {
                 legend: {
                     top: '5%',
                     data: ['国油日K', '美油日K', '布伦特原油日K'],
+                    textStyle: {
+                        color: '#fff',
+                        fontSize: '14'
+                    }
                 },
                 grid: {
                     x: 30, // 左
@@ -465,11 +469,6 @@ export default {
     },
     methods: {
         da() {
-            let upColor = '#ec0000';
-            let upBorderColor = '#8A0000';
-            let downColor = '#00da3c';
-            let downBorderColor = '#008F28';
-            let dataCount = 2e5;
         }
     },
     beforeDestroy() {
