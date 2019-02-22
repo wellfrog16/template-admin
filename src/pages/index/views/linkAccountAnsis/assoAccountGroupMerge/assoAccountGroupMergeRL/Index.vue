@@ -286,7 +286,7 @@ export default {
             switch (String(index)) {
             case '0':
                 this.currentAccountGroupId = params.name;
-                this.currentCustIds = params.value.split(',');
+                this.currentCustIds = params.data.custIds.split(',');
                 this.$nextTick(() => {
                     this.getBlock2Data();
                     this.getBlock3Data();
