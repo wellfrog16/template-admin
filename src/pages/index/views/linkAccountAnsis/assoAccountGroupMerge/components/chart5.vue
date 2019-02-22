@@ -149,7 +149,6 @@ export default {
                 if (sessionIndex && String(sessionIndex) !== '0') {
                     range = [1, sessionIndex];
                 }
-                console.log(range);
                 this.$refs['chart0'].setVisualMapDataRange(range);
             } else {
                 this.$refs['chart0'].setVisualMapDataRange([1, this.maxIndex]);
