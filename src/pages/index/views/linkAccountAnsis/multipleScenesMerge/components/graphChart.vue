@@ -220,11 +220,9 @@ export default {
         },
         setMaxVisualMap(val) {
             if (val) {
-                let range = [];
-                if (this.computedMaxOverWarehouseIndex) {
+                let range = [0, 0];
+                if (String(this.computedMaxOverWarehouseIndex) !== '0') {
                     range = [1, this.computedMaxOverWarehouseIndex];
-                } else {
-                    range = [0, 0];
                 }
                 this.$refs['chartRef'].setVisualMapDataRange(range);
                 // this.chartOptions.visualMap.max = this.computedMaxOverWarehouseIndex;

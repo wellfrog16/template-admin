@@ -143,14 +143,13 @@ export default {
         },
         setMaxVisualMap(val) {
             if (val) {
-                let range = [];
+                let range = [0, 0];
                 let id = this.tabIndex || this.$store.getters.tabIndex;
                 let sessionIndex = sessionStorage.getItem(`computedMaxOverWarehouseIndex${id}`) || this.computedMaxOverWarehouseIndex;
-                if (sessionIndex) {
+                if (sessionIndex && String(sessionIndex) !== '0') {
                     range = [1, sessionIndex];
-                } else {
-                    range = [0, 0];
                 }
+                console.log(range);
                 this.$refs['chart0'].setVisualMapDataRange(range);
             } else {
                 this.$refs['chart0'].setVisualMapDataRange([1, this.maxIndex]);
