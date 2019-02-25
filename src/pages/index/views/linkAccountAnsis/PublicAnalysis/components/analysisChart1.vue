@@ -15,6 +15,8 @@
 </template>
 
 <script>
+// 原油舆情情感分析
+// import {postpAnalysis} from '@/api/PublicAnalysis/popularFeelings';
 import SCard from '@/components/index/common/SCard';
 import EchartsCommon from '@/components/index/common/EchartsCommon';
 export default {
@@ -700,6 +702,20 @@ export default {
     computed: {},
     comments: {},
     mounted() {
+    },
+    methods: {
+        // lienEchartsDete() {
+        //     let params = {
+        //         'timeOfDay': '2019-02-18'
+        //     };
+        //     this.loading1 = true;
+        //     // 原油舆情情感分析
+        //     postpAnalysis(params).then(resp => {
+        //         this.loading1 = false;
+        //     }).catch(e => {
+        //         this.loading1 = false;
+        //     });
+        // }
     },
     beforeDestroy() {
     }

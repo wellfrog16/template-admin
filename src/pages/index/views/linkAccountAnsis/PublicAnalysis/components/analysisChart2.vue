@@ -15,6 +15,8 @@
 </template>
 
 <script>
+// 国际市场原油相关性分析
+// import {postpAnalysis} from '@/api/PublicAnalysis/popularFeelings';
 import SCard from '@/components/index/common/SCard';
 import EchartsCommon from '@/components/index/common/EchartsCommon';
 export default {
@@ -468,8 +470,18 @@ export default {
     mounted() {
     },
     methods: {
-        da() {
-        }
+        // lienEchartsDete() {
+        //     let params = {
+        //         'timeOfDay': '2019-02-18'
+        //     };
+        //     this.loading1 = true;
+        //     // 原油舆情情感分析
+        //     postpAnalysis(params).then(resp => {
+        //         this.loading1 = false;
+        //     }).catch(e => {
+        //         this.loading1 = false;
+        //     });
+        // }
     },
     beforeDestroy() {
     }

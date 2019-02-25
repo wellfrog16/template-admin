@@ -20,6 +20,8 @@
 </template>
 
 <script>
+// 原油库数据  原油库存-下载
+// import {postCrudeDownDetail, postCrudeDown} from '@/api/PublicAnalysis/popularFeelings';
 import SCard from '@/components/index/common/SCard';
 import STable from '@/components/index/common/STable';
 import {columnsListAR4, tableData4} from './constants';
@@ -307,7 +309,19 @@ export default {
         fullscreenChange() {},
         toggleFullScreen() {
             console.log(22);
-        }
+        },
+        // lienEchartsDete() {
+        //     let params = {
+        //         'timeOfDay': '2019-02-18'
+        //     };
+        //     this.loading1 = true;
+        //     // 原油舆情情感分析
+        //     postpAnalysis(params).then(resp => {
+        //         this.loading1 = false;
+        //     }).catch(e => {
+        //         this.loading1 = false;
+        //     });
+        // }
     },
     beforeDestroy() {
     }

@@ -17,6 +17,8 @@
 </template>
 
 <script>
+// 舆情列表
+// import {postPublicList} from '@/api/PublicAnalysis/popularFeelings';
 import SCard from '@/components/index/common/SCard';
 import STable from '@/components/index/common/STable';
 import {columnsListAR6, tableData6} from './constants';
@@ -37,7 +39,19 @@ export default {
     mounted() {
     },
     methods: {
-        handleSelectionChange6() {}
+        handleSelectionChange6() {},
+        // lienEchartsDete() {
+        //     let params = {
+        //         'timeOfDay': '2019-02-18'
+        //     };
+        //     this.loading1 = true;
+        //     // 原油舆情情感分析
+        //     postPublicList(params).then(resp => {
+        //         this.loading1 = false;
+        //     }).catch(e => {
+        //         this.loading1 = false;
+        //     });
+        // }
     },
     beforeDestroy() {
     }
