@@ -111,6 +111,7 @@ export default {
         return {
             table3Options,
             mainTableColumnsBI,
+            taskId: null,
             sceneCommitParams: {},
             accountIdPre: 'DZ',
             charts: chartsBI,
@@ -306,6 +307,7 @@ export default {
                 statStartDt: this.sceneCommitParams.statStartDt, // || '2017-02-20',
                 statStopDay: this.sceneCommitParams.statStopDay, // || '2017-10-09',
                 contrCd: this.sceneCommitParams.contrCd, // || 'cu1712'
+                taskId: this.taskId
                 // resultIds: this.resultIds || ''
             };
         },
@@ -321,7 +323,8 @@ export default {
                 };
             }
             let resData = this.$store.getters.sceneCommitResp[this.tabIndex] || {};
-            let {resultSetList, kmap, chartDataList, id} = resData;
+            let {resultSetList, kmap, chartDataList, id, taskId} = resData;
+            this.taskId = taskId;
             if (resultSetList && !resultSetList.length) {
                 return {
                     chartData: {},

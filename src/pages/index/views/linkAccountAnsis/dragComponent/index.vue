@@ -7,6 +7,7 @@
         <g
             v-for="(item, i) in DataAll"
             :key="i" class="svg-each"
+            @mousedown="dragPre($event, i)"
             :transform="`translate(${item.translate.left}, ${item.translate.top})`">
             <foreignObject  width="180" height="30" >
                 <body style="margin: 0;" xmlns="http://www.w3.org/1999/xhtml">
@@ -84,8 +85,8 @@ export default {
         setInitRect() {
             let {left, top} = document
                 .getElementById('svgContent')
-                .getBoundingClientRect(); // 画板坐标
-            this.initPos = {left, top};
+                .getBoundingClientRect();
+            this.initPos = {left, top}; // 修正坐标
         },
         setDragFramePosition(e) {
             const x = e.x - this.initPos.left; // 修正拖动元素坐标
@@ -127,17 +128,19 @@ export default {
             e.stopPropagation();
         },
         dragIng(e) {
+            if (this.currentEvent === 'dragLink') {
+                this.setDragLinkPostion(e);
+            }
             if (this.currentEvent === 'dragPane') {
-                this.setDragFramePosition(e);
-                // 模拟框随动
+                this.setDragFramePosition(e); // 模拟框随动
             }
         },
         dragEnd(e) {
-            // 拖动结束
-            // if (this.currentEvent === 'dragPane') {
-            //     this.dragFrame = {dragFrame: false, posX: 0, posY: 0};
-            //     this.setPanePosition(e); // 设定拖动后的位置
-            // }
+            // 拖动结束;
+            if (this.currentEvent === 'dragPane') {
+                this.dragFrame = {dragFrame: false, posX: 0, posY: 0};
+                this.setPanePosition(e); // 设定拖动后的位置
+            }
             this.currentEvent = null; // 清空事件行为
         },
         setPanePosition(e) {
@@ -216,32 +219,43 @@ export default {
         }
         .parent-link {
             font-size: 0;
-            height: 12px;
-            width: 12px;
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 90px;
             transform: translateX(-50%);
-            border-top: 6px solid black;
+            border-top: 6px solid red;
             border-left: 6px solid transparent;
             border-right: 6px solid transparent;
+            &:hover {
+                height: 10px;
+                width: 10px;
+                border-radius: 50%;
+                border: 1px solid #fff;
+                background: green;
+                box-shadow: 0 0 0 6px #3ddd73;
+                cursor: crosshair;
+            }
         }
         .parent-ring {
             font-size: 0;
             height: 10px;
             width: 10px;
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 90px;
             transform: translate(-50%, -50%);
             border-radius: 50%;
             border: 1px solid #fff;
             background: green;
+            cursor: crosshair;
+            &:hover {
+                box-shadow: 0 0 0 6px #3ddd73;
+            }
         }
         .child-link {
             height: 10px;
             width: 10px;
-            position: absolute;
+            position: fixed;
             bottom: 0;
             left: 90px;
             transform: translate(-50%, 50%);
@@ -249,6 +263,9 @@ export default {
             border: 1px solid #fff;
             background: green;
             cursor: crosshair;
+            &:hover {
+                box-shadow: 0 0 0 6px #3ddd73;
+            }
         }
     }
     .selected {
@@ -264,7 +281,7 @@ export default {
             width: 180px;
             height: 30px;
             background-color: hsla(0, 0%, 100%, 0.9);
-            border: 1px dashed black;
+            border: 1px dashed red;
             border-radius: 15px;
             font-size: 12px;
             -webkit-transition: background-color 0.2s;
@@ -272,7 +289,7 @@ export default {
         }
     }
     .drag-link-arrows {
-        border-top: 6px solid black;
+        border-top: 6px solid red;
         border-left: 6px solid transparent;
         border-right: 6px solid transparent;
         z-index: -10;

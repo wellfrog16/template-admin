@@ -366,7 +366,18 @@ export default {
                     // this.$emit('generateEvent', resp.kmap); // 知识库图表
                     this.$emit('updateLoading', this.loadingTree);
                     this.$emit('updateTableInfo', {relativeTable, resultTable});
+                    // test
+                    // console.log(resp.combineResultInfos[0]['children']);
+                    // resp.combineResultInfos[0]['children'].forEach((v, i) => {
+                    //     v.bargainQtty = i + 8;
+                    //     v.billCnt = i + 11;
+                    //     v.bargainRate = i + 23;
+                    //     v.billRate = i + 5;
+                    //     v.avgOperTmMargin = i + 18;
+                    // });
+                    // console.log(resp.combineResultInfos);
                     this.mainTableData = this.sortDataByAcctIdCommon(resp.combineResultInfos); // 账户组信息
+                    console.log(this.mainTableData);
                     this.$emit('updateMainTableData', this.mainTableData);
                 }
             }).catch(e => {

@@ -145,7 +145,7 @@
         <el-dialog
             element-loading-text="数据加载时间较长，请耐心等待..."
             element-loading-background="rgba(0,0,0,0.6)"
-            v-loading.fullscreen.lock="loading" :close-on-click-modal="false" :close-on-press-escape="false" :custom-class="`self-dialog`" :visible="showCarousel" width="85%" top="3%" @close="handleCloseCarousel">
+            v-loading.fullscreen.lock="loading" :close-on-click-modal="false" :close-on-press-escape="false" :custom-class="`self-dialog`" :visible="showCarousel" width="85%" top="2%" @close="handleCloseCarousel">
             <el-carousel :interval="4000" height="555px">
                 <el-carousel-item v-for="(item, index) in selectList" :key="index">
                     <edit-scene-dialog :operateType="1" :dialogItem="item" :createType="item.sceneType"></edit-scene-dialog>
