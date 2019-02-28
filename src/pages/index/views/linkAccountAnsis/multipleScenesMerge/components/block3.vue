@@ -225,7 +225,7 @@ export default {
     },
     methods: {
         handleSelectChange(key, index) {
-            sessionStorage.setItem('LAST_SELECT_3D_ZH', JSON.stringify(this.selectModes));
+            // sessionStorage.setItem('LAST_SELECT_3D_ZH', JSON.stringify(this.selectModes));
             let value = this.selectModes[index];
             // let xyz = ['xAxis3D', 'yAxis3D', 'zAxis3D'];
             // if (this.selectModes[index] === 'custId') {
@@ -297,9 +297,9 @@ export default {
         }
     },
     mounted() {
-        if (JSON.parse(sessionStorage.getItem('LAST_SELECT_3D_ZH'))) {
+        /* if (JSON.parse(sessionStorage.getItem('LAST_SELECT_3D_ZH'))) {
             this.selectModes = JSON.parse(sessionStorage.getItem('LAST_SELECT_3D_ZH'));
-        }
+        } */
         /* let data = [
             {
                 acctId: 'ZH000033',

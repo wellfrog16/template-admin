@@ -226,8 +226,22 @@ export default {
                     var n = tb.indexOf(value[i].txDt);
                     if (n === -1) {
                         tb.push(value[i].txDt);
-                        narr.push({custId: [value[i].custId], txDt: value[i].txDt, custCnt: value[i]['custCnt']});
+                        narr.push({
+                            custId: [value[i].custId],
+                            txDt: value[i].txDt,
+                            custCnt: value[i]['custCnt'],
+                            bargainQtty: value[i]['bargainQtty'],
+                            billCnt: value[i]['billCnt'],
+                            bargainRate: value[i]['bargainRate'],
+                            cancelBillRate: value[i]['cancelBillRate'],
+                            avgOperTmMargin: value[i]['avgOperTmMargin'],
+                        });
                     } else {
+                        if (!narr[n].custId) {
+                            narr[n].custId = [];
+                        } else if (typeof narr[n].custId === 'string') {
+                            narr[n].custId = narr[n].custId.split(',');
+                        }
                         narr[n].custId.push(value[i].custId);
                         narr[n].custId = narr[n].custId.sort((a, b) => {
                             return a - b;
