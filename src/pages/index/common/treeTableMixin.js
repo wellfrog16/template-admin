@@ -211,6 +211,7 @@ export default {
             let params = {
                 id: resultId,
                 stateId: 1, // 重新生成数据标识
+                taskId: this.taskId,
                 resultType: propsResultType || '5', // 结果集类型（1：相关性；5：合并）
             };
             if (params.resultType !== '5') {
