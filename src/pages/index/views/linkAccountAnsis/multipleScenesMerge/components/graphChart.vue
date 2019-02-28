@@ -347,6 +347,7 @@ export default {
         handleEchartDblClickEvent(item) {
             if (item.dataType === 'node') {
                 let params = {
+                    acctId: item.name,
                     accNumList: item.data['custIds'], // 客户编号（逗号分隔）
                     relativeTable: this.relativeTable, // 相关性临时表名
                     resultTable: this.resultTable // 结果集临时表名

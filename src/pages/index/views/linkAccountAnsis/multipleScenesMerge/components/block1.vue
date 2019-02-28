@@ -14,6 +14,10 @@ export default {
             default() {
                 return [];
             }
+        },
+        propsChartHeight: {
+            type: [String, Number],
+            default: 300
         }
     },
     computed: {

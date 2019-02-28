@@ -203,6 +203,30 @@ const Index = {
                     component: resolve => require(['@/pages/index/views/linkAccountAnsis/PublicAnalysis/Index.vue'], resolve)
                 }
             ]
+        },
+        {
+            path: '',
+            noLink: true,
+            meta: {
+                scrollTop: true,
+                title: '可拖拽'
+            },
+            hidden: true,
+            name: 'dragabled',
+            icon: 'menu-fix-icon fa fa-address-book',
+            component: LinkAccountAnsis,
+            children: [
+                {
+                    meta: {
+                        scrollTop: true,
+                        title: '可拖拽测试'
+                    },
+                    path: '/test',
+                    name: 'test',
+                    icon: 'menu-fix-icon fa fa-location-arrow',
+                    component: resolve => require(['@/pages/index/views/linkAccountAnsis/dragComponent/index.vue'], resolve)
+                }
+            ]
         }
     ]
 };

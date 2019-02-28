@@ -33,7 +33,11 @@ export const mainTableColumns = [
     {field: 'capAnniberson', label: '资金调拨人名称', align: 'center'},
     {field: 'stlBillCfmerson', label: '结算单确认人名称', align: 'center'},
     {field: 'openAutherson', label: '开户授权人名称', align: 'center'},
-    // {field: '', label: '', align: 'center', width: 36}
+    {field: 'avgBargainQtty', label: '日均成交量', align: 'center'},
+    {field: 'avgBillCnt', label: '日均报单次数', align: 'center'},
+    {field: 'avgBargainRate', label: '日均成交率', align: 'center'},
+    {field: 'avgCancelBillRate', label: '日均撤单率', align: 'center'},
+    {field: 'avgOperTmMargin', label: '日均平均操作时间差', align: 'center'},
 ];
 export const chartTableColumns1 = [
     {label: '客户编号1', field: 'custId1', align: 'center', minWidth: 130},
@@ -55,7 +59,16 @@ export const chartTableColumns2 = [
     {label: '电子邮件', field: 'elecEmil', align: 'center', minWidth: 130},
     {label: '银行账号', field: 'bankAcct', align: 'center', minWidth: 130}
 ];
-export const chartTableColumns3 = [];
+export const chartTableColumns3 = [
+    {label: '客户编号', field: 'custId', align: 'center', minWidth: 130, fixed: true},
+    {field: 'multiBillMakePosQtty', label: '账户多单持仓量', align: 'center', minWidth: 160},
+    {field: 'billMakePosQtty', label: '账户空单持仓量', align: 'center', minWidth: 160},
+    {field: 'avgBargainQtty', label: '日均成交量', align: 'center', minWidth: 160},
+    {field: 'avgBillCnt', label: '日均报单次数', align: 'center', minWidth: 160},
+    {field: 'avgBargainRate', label: '日均成交率', align: 'center', minWidth: 160},
+    {field: 'avgCancelBillRate', label: '日均撤单率', align: 'center', minWidth: 160},
+    {field: 'avgOperTmMargin', label: '日均平均操作时间差', align: 'center', minWidth: 160}
+];
 export const chartTableColumns4 = [
     {label: '客户编号', field: 'custId', align: 'center', minWidth: 130, fixed: true},
     {label: '投资经理', field: 'investMger', align: 'center', minWidth: 100},

@@ -45,6 +45,13 @@
                 </div>
             </el-col>
             <el-col :span='12' class="right-block">
+                <s-card title="算法选择">
+                    <div slot="content" style="padding: 20px;">
+                        <el-checkbox v-model="sfChecked">按品种计算</el-checkbox>
+                    </div>
+                </s-card>
+            </el-col>
+            <el-col :span='12' class="right-block">
                 <index-param ref="indexParamRef" :operateType="operateType" :createType="createType" :dialogItem="dialogItem" :disabled="disabled" @updateIndexPara="updateIndexPara"></index-param>
             </el-col>
         </el-row>
@@ -111,7 +118,8 @@ export default {
                 indexPara: '' // 指数内容
             },
             tableData: [],
-            rules: {}
+            rules: {},
+            sfChecked: false
         };
     },
     methods: {
@@ -183,6 +191,7 @@ export default {
             } else {
                 this.checkedList = this.defaultConfig.checkedList;
             }
+            this.sfChecked = String(this.dialogItem.sfChecked) === '4'; // 3-false, 4-true
         },
         handleReset() {
             this.ruleForm = {
@@ -226,6 +235,7 @@ export default {
                         if (this.checkedList.indexOf('4') === -1) {
                             params.statAcctCnt = '';
                         }
+                        params.sfChecked = this.sfChecked ? '4' : '3'; // 是否按品种计算
                         this.$emit('saveScene', params);
                     });
                 }

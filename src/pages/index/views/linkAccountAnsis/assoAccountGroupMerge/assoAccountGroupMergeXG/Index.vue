@@ -116,6 +116,7 @@ export default {
         return {
             table3Options,
             mainTableColumns,
+            taskId: null,
             currentSceneType: 1,
             sceneCommitParams: {},
             accountIdPre: 'XG',
@@ -172,7 +173,8 @@ export default {
                     mainTableData: []
                 };
             }
-            let {mainTableData, chartData, id} = resData;
+            let {mainTableData, chartData, id, taskId} = resData;
+            this.taskId = taskId;
             if (mainTableData && !mainTableData.length) {
                 return {
                     chartData: [],
@@ -386,6 +388,7 @@ export default {
                 statStartDt: this.sceneCommitParams.statStartDt, // || '2017-02-20',
                 statStopDay: this.sceneCommitParams.statStopDay, // || '2017-10-09',
                 contrCd: this.sceneCommitParams.contrCd, // || 'cu1712'
+                taskId: this.taskId
                 // resultIds: this.resultIds || ''
             };
         },

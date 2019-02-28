@@ -157,7 +157,12 @@ export const chartTableColumns10 = [
 export const chartTableColumns8 = [ // 聚类稳态分析-时间图明细字段
     {label: '交易日期', field: 'txDt', minWidth: 150, fixed: true},
     {label: '客户编号', field: 'custId', minWidth: 160, fixed: true},
-    {label: '客户数', field: 'custCnt', minWidth: 100}
+    {label: '客户数', field: 'custCnt', minWidth: 100},
+    {label: '成交量', field: 'bargainQtty', minWidth: 100},
+    {label: '报单次数', field: 'billCnt', minWidth: 100},
+    {label: '成交率', field: 'bargainRate', minWidth: 100},
+    {label: '撤单率', field: 'cancelBillRate', minWidth: 100},
+    {label: '平均操作时间差', field: 'avgOperTmMargin', minWidth: 160},
 ];
 export const chartTableColumns9 = [ // 聚类稳态分析-客户图明细字段
     {label: '客户编号', field: 'custId', minWidth: 160, fixed: true},

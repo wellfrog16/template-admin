@@ -1,6 +1,6 @@
 <template>
     <div>
-        <echarts-common :loading="loading" :ref="`chart${index}`" :domId="`chart${index}`" :defaultOption="chartOptions" :propsChartHeight="300" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></echarts-common>
+        <echarts-common :loading="loading" :ref="`chart${index}`" :domId="`chart${index}`" :defaultOption="chartOptions" :propsChartHeight="propsChartHeight" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></echarts-common>
     </div>
 </template>
 <script>
@@ -11,6 +11,10 @@ export default {
         index: {
             type: [String, Number],
             default: '0'
+        },
+        propsChartHeight: {
+            type: [String, Number],
+            default: 300
         }
     },
     data() {
@@ -71,7 +75,6 @@ export default {
             });
             this.chartOptions['series'][0]['links'] = chartData['links'];
             this.chartOptions['series'][0]['data'] = chartData['nodes'];
-            this.$refs['chart0'] && this.$refs['chart0'].initChart();
         },
         handleEchartClickEvent(val) {
             this.$emit('handleEchartClickEvent', val, this.index);

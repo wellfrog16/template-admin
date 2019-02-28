@@ -42,6 +42,9 @@ export const tableColumns = [
     {field: 'breed', label: '协查品种', width: 150, align: 'center'},
     {field: 'contrCd', label: '合约代码', width: 150, align: 'center'},
     {field: 'supSto', label: '超仓', width: 150, align: 'center'},
+    {field: 'cntDate', label: '超仓天数', width: 150, align: 'center'},
+    {field: 'positionD', label: '多单持仓量', width: 150, align: 'center'},
+    {field: 'positionK', label: '空单持仓量', width: 150, align: 'center'},
     {field: 'freDraBill', label: '频繁报撤单', width: 150, align: 'center'},
     {field: 'bargain', label: '自成交', width: 150, align: 'center'},
 ];

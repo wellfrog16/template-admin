@@ -18,7 +18,7 @@
                 <el-col :xl="12" :lg="12" :md="24" :sm="24" v-for="(item, index) in blocks" :key="index">
                     <s-card :title="item.title" :icon="item.icon" class="self-card-css" :loading="item.loading">
                         <div slot="right">
-                            <el-button type="text" @click="toggleDetail(item, index)" v-if="index !== 2">
+                            <el-button type="text" @click="toggleDetail(item, index)">
                                 <span v-if="!item['toggleDetailFlags']">明细<i class="el-icon-plus" style="margign-left: 5px;"></i></span>
                                 <span v-else>图表<i class="fa fa-undo-alt" style="margign-left: 5px;"></i></span>
                             </el-button>
@@ -28,15 +28,15 @@
                                 <div v-if="item['toggleDetailFlags']">
                                     <s-table :height="300" :columns="chartTableColumns[index]" :tableData="chartTableData[index]"></s-table>
                                 </div>
-                                <div v-else>
-                                    <block1 ref="block1" v-if="index === 0" :index="index" :tableData="block1TableData"></block1>
-                                    <block2 ref="block2" v-if="index === 1" :index="index"></block2>
-                                    <block3 ref="block3" v-if="index === 2" :index="index"></block3>
-                                    <block4 ref="block4" v-if="index === 3" :index="index"></block4>
+                                <div v-else class="chart-container">
+                                    <block1 ref="block1" v-if="index === 0" :propsChartHeight="propsChartHeight" :index="index" :tableData="block1TableData"></block1>
+                                    <block2 ref="block2" v-if="index === 1" :propsChartHeight="propsChartHeight" :index="index"></block2>
+                                    <block3 ref="block3" v-if="index === 2" :propsChartHeight="propsChartHeight" :index="index"></block3>
+                                    <block4 ref="block4" v-if="index === 3" :propsChartHeight="propsChartHeight" :index="index"></block4>
                                 </div>
-                                <!--  <button v-show="!item['toggleDetailFlags'] && index !== 0" type="button" class="btn btn-default btn-map-fullscreen" @click="toggleFullScreen(index)">
+                                <button v-show="!item['toggleDetailFlags'] && index !== 0" type="button" class="btn btn-default btn-map-fullscreen" @click="toggleFullScreen(index)">
                                     <i class="fa" :class="[fullscreen ? 'fa-compress' : 'fa-expand-arrows-alt']"></i>
-                                </button> -->
+                                </button>
                             </s-full-screen>
                         </div>
                     </s-card>
@@ -59,7 +59,6 @@ import block3 from './components/block3';
 import block4 from './components/block4';
 import {chartTableColumns1, chartTableColumns2, chartTableColumns3, chartTableColumns4, blocks} from './components/constants';
 import {fetchBlockData1, fetchBlockData2, fetchBlockData4} from '@/api/dataAnsis/multipleScenesMerge';
-import commonMixin from '@/pages/index/common/commonMixin';
 export default {
     name: 'Index',
     components: {
@@ -73,7 +72,6 @@ export default {
         block4
     },
     // 混入, 是一个类的继承，类似于一个公共的方法。
-    mixins: [commonMixin],
     // 存储数据
     data() {
         return {
@@ -88,7 +86,10 @@ export default {
             loading: false,
             block1TableData: [], // 矩阵数据
             relativeTable: '',
-            resultTable: ''
+            resultTable: '',
+            currentFullScreenIndex: 0,
+            fullscreen: false,
+            propsChartHeight: 300
         };
     },
     computed: {},
@@ -135,11 +136,16 @@ export default {
             }
         },
         getChart() {
-            return [() => {}, this.getChart2, () => {}, this.getChart4];
+            return [() => {}, this.getChart2, this.getChart3, this.getChart4];
         },
         getChart2(data) {
             setTimeout(() => {
                 this.$refs['block2'] && this.$refs['block2'][0] && this.$refs['block2'][0].drewChart(data);
+            });
+        },
+        getChart3(data) {
+            setTimeout(() => {
+                this.$refs['block3'] && this.$refs['block3'][0] && this.$refs['block3'][0].drewChart(data);
             });
         },
         getChart4(data) {
@@ -151,7 +157,7 @@ export default {
             this.commonParams = propsParams;
             this.getBlockData1(propsParams);
             this.getBlockData2(propsParams);
-            // this.getBlockData3(propsParams);
+            this.getBlockData3(propsParams);
             this.getBlockData4(propsParams);
         },
         getBlockData1(propsParams) {
@@ -179,6 +185,17 @@ export default {
                 this.blocks[1]['loading'] = false;
             });
         },
+        getBlockData3(propsParams) {
+            // 根据acctId获取
+            let filterItem = this.mainTableData.filter(v => {
+                return v.acctId === propsParams.acctId;
+            });
+            console.log(propsParams.acctId);
+            console.log(filterItem);
+            this.chartTableData[2] = filterItem[0]['children'];
+            this.chartData[2] = filterItem[0]['children'];
+            this.getChart3(this.chartData[2]);
+        },
         getBlockData4(propsParams) {
             let params = propsParams;
             this.blocks[3]['loading'] = true;
@@ -201,7 +218,23 @@ export default {
                 .then(() => {
                     this.$router.push({name: 'abnormity'});
                 });
-        }
+        },
+        toggleFullScreen(index) {
+            this.$refs['fullscreen'][index].toggle();
+            this.currentFullScreenIndex = index;
+        },
+        fullscreenChange(fullscreen) {
+            this.fullscreen = fullscreen;
+            this.$nextTick(() => {
+                if (fullscreen) {
+                    let wh = window.innerHeight * 0.9;
+                    this.propsChartHeight = wh;
+                } else {
+                    this.propsChartHeight = 300;
+                }
+                this.$refs[`block${this.currentFullScreenIndex + 1}`][0].$refs[`chart${this.currentFullScreenIndex}`].echart.resize();
+            });
+        },
     }
 };
 </script>
