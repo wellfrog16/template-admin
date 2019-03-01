@@ -1,11 +1,11 @@
 import InputInTable from '@/components/index/common/InputInTable';
 export const columnsListAR3 = [
-    {field: 'a1', label: '库存', minWidth: 100, align: 'left'},
-    {field: 'a2', label: '公布日期', minWidth: 130, align: 'center'},
-    {field: 'a3', label: '前值', minWidth: 100, align: 'center'},
-    {field: 'a4', label: '预测值', minWidth: 130, align: 'center'},
-    {field: 'a5', label: '公布值', minWidth: 130, align: 'center'},
-    {field: 'a6', label: '影响', minWidth: 130, align: 'center'},
+    {field: 'time', label: '公布日期', minWidth: 130, align: 'center'},
+    {field: 'content', label: '数据名称', minWidth: 100, align: 'left'},
+    {field: 'befores', label: '前值(万桶)', minWidth: 100, align: 'center'},
+    {field: 'forecast', label: '预测值(万桶)', minWidth: 130, align: 'center'},
+    {field: 'publish', label: '公布值(万桶)', minWidth: 130, align: 'center'},
+    {field: 'influence', label: '影响原油', minWidth: 130, align: 'center'},
     {field: 'a7', label: '阈值范围', minWidth: 130, align: 'center', template: InputInTable}
 ];
 export const tableData3 = [
@@ -20,13 +20,14 @@ export const tableData3 = [
     }
 ];
 export const columnsListAR4 = [
-    {field: 'a1', label: '区', minWidth: 100, align: 'left'},
-    {field: 'a2', label: '交割仓库', minWidth: 130, align: 'center'},
-    {field: 'a3', label: '油种', minWidth: 100, align: 'center'},
-    {field: 'a4', label: '上周库存期货', minWidth: 130, align: 'center'},
-    {field: 'a5', label: '本周库存期货', minWidth: 130, align: 'center'},
-    {field: 'a6', label: '库存增减期货', minWidth: 130, align: 'center'},
-    {field: 'a7', label: '理论可用库容量期货', minWidth: 130, align: 'center'}
+    {field: 'region', label: '区', minWidth: 100, align: 'left'},
+    {field: 'entrepot', label: '交割仓库', minWidth: 130, align: 'center'},
+    {field: 'oilOf', label: '油种', minWidth: 100, align: 'center'},
+    {field: 'lastWeekStock', label: '上周库存期货', minWidth: 130, align: 'center'},
+    {field: 'thisWeekStock', label: '本周库存期货', minWidth: 130, align: 'center'},
+    {field: 'lastWeekAvaStock', label: '理论可用库容量上周', minWidth: 130, align: 'center'},
+    {field: 'thisWeekAvaStock', label: '理论可用库容量本周', minWidth: 130, align: 'center'},
+    {field: 'regulationAvaStock', label: '理论可用库容量本周增减', minWidth: 130, align: 'center'}
 ];
 export const tableData4 = [
     {
@@ -40,10 +41,10 @@ export const tableData4 = [
     },
 ];
 export const columnsListAR5 = [
-    {field: 'a1', label: '热点', minWidth: 130, align: 'left'},
-    {field: 'a2', label: '报道量', minWidth: 100, align: 'center'},
-    {field: 'a3', label: '评论量', minWidth: 100, align: 'center'},
-    {field: 'a4', label: '影响量', minWidth: 100, align: 'center'}
+    {field: 'OPEChot_topic', label: '热点', minWidth: 130, align: 'left'},
+    {field: 'page_hits', label: '报道量', minWidth: 100, align: 'center'},
+    {field: 'comments_num', label: '评论量', minWidth: 100, align: 'center'},
+    // {field: 'pertainOpce', label: '影响量', minWidth: 100, align: 'center'}
 ];
 export const tableData5 = [
     {
@@ -57,21 +58,10 @@ export const tableData5 = [
     }
 ];
 export const columnsListAR6 = [
-    {field: 'a1', label: '日期', minWidth: 100, align: 'left'},
-    {field: 'a2', label: '来源', minWidth: 130, align: 'center'},
-    {field: 'a3', label: '主题', minWidth: 100, align: 'center'},
-    {field: 'a4', label: '标题', minWidth: 130, align: 'center'},
-    {field: 'a5', label: '摘要', minWidth: 130, align: 'center'},
-    {field: 'a6', label: '热度', minWidth: 130, align: 'center'}
-];
-export const tableData6 = [
-    {
-        a1: '沙特记者事件', a2: '', a3: '', a4: '利空'
-    },
-    {
-        a1: '特朗普微博', a2: '', a3: '', a4: '利空'
-    },
-    {
-        a1: '沙特减产', a2: '', a3: '', a4: '利空'
-    }
+    {field: 'publishedTime', label: '日期', minWidth: 100, align: 'center'},
+    {field: 'articleSource', label: '来源', minWidth: 70, align: 'center'},
+    {field: 'hotTopic', label: '主题', minWidth: 90, align: 'left'},
+    {field: 'title', label: '标题', minWidth: 180, align: 'left'},
+    {field: 'abstracts', label: '摘要', minWidth: 70, align: 'center'},
+    {field: 'pageHits', label: '热度', minWidth: 100, align: 'center'}
 ];

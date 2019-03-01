@@ -1,6 +1,7 @@
 import {
     postConfigurationQuery1,
     postConfigurationModification1,
+    postThanSec,
     postConfigurationQuery3,
     postConfigurationModification3
 } from '@/api/dataAnsis/popularFeelings';
@@ -80,8 +81,31 @@ export default {
                 });
                 // console.log(respVale);
                 this.tableData1 = resp;
-                this.tableData2 = resp;
+                // this.tableData2 = resp;
                 this.tableData3 = resp;
+                // this.tableData4 = resp;
+            });
+        },
+        tableData3List1() {
+            let params = {
+            };
+            postThanSec(params).then(resp => {
+                let respVale = [];
+                resp.forEach(v => {
+                    if (v.referenceValueMax || v.referenceValueMin) {
+                        let resData = {
+                            indexName: v.indexName,
+                            reference: v.referenceValueMin + '-' + v.referenceValueMax,
+                            weight: v.weight,
+                            threshold: v.threshold
+                        };
+                        respVale.push(resData);
+                    }
+                });
+                // console.log(respVale);
+                // this.tableData1 = resp;
+                this.tableData2 = resp;
+                // this.tableData3 = resp;
                 this.tableData4 = resp;
             });
         },

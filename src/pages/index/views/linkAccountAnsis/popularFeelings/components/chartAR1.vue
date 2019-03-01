@@ -453,6 +453,7 @@ export default {
     mounted() {
         // 原油日K图--配置表
         this.tableData3List();
+        this.tableData3List1();
         this.barEchartsDete();
     },
     methods: {

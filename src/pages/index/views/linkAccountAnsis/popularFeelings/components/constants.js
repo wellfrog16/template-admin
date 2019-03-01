@@ -5102,24 +5102,24 @@ export const tableData1 = [
         exceptionLogo: '',
         index: 0
     }, {
-        config_date: '买总量',
-        config_time: '2000-5000',
+        config_date: '委卖总量',
+        config_time: '2001-5001',
         frequentness: '0.4',
         amplitude: '',
         Crudecode: '',
         exceptionLogo: '',
         index: 1
     }, {
-        config_date: '买总量',
-        config_time: '2000-5000',
+        config_date: '平均成交价格',
+        config_time: '200-500',
         frequentness: '0.4',
         amplitude: '',
         Crudecode: '',
         exceptionLogo: '',
         index: 2
     }, {
-        config_date: '买总量',
-        config_time: '2000-5000',
+        config_date: '波动率 ',
+        config_time: '2%-5%',
         frequentness: '0.4',
         amplitude: '',
         Crudecode: '',
@@ -5154,11 +5154,11 @@ export const tableDatalPF1 = [
 ];
 // 他比证券2
 export const columnsList2 = [
-    {field: 'indexName', label: '指标名称', minWidth: 100, align: 'left'},
-    {field: 'referenceValueText', label: '历史参考值', minWidth: 130, align: 'center'},
-    {field: 'weight', label: '相关性', minWidth: 130, align: 'center'},
-    {field: 'threshold1', label: '影响权重', minWidth: 130, align: 'center'},
-    {field: 'threshold', label: '阈值设置', minWidth: 130, align: 'center', template: InputInTable}
+    {field: 'indexname', label: '指标名称', minWidth: 100, align: 'left'},
+    {field: 'theHisValue', label: '历史参考值', minWidth: 130, align: 'center'},
+    {field: 'pertinence', label: '相关性', minWidth: 130, align: 'center'},
+    {field: 'effectWeight', label: '影响权重', minWidth: 130, align: 'center'},
+    {field: 'thrSet', label: '阈值设置', minWidth: 130, align: 'center', template: InputInTable}
     //
     // {field: 'configDate', label: '日期', minWidth: 100, align: 'center'},
     // {field: 'configTime', label: '时间', minWidth: 130, align: 'center'},
@@ -5284,11 +5284,11 @@ export const tableDatalPF3 = [
 ];
 // 他比证券4
 export const columnsList4 = [
-    {field: 'indexName', label: '指标名称', minWidth: 100, align: 'left'},
-    {field: 'referenceValueText', label: '历史参考值', minWidth: 130, align: 'center'},
-    {field: 'weight', label: '相关性', minWidth: 130, align: 'center'},
-    {field: 'threshold1', label: '影响权重', minWidth: 130, align: 'center'},
-    {field: 'threshold', label: '阈值设置', minWidth: 130, align: 'center', template: InputInTable}
+    {field: 'indexname', label: '指标名称', minWidth: 100, align: 'left'},
+    {field: 'theHisValue', label: '历史参考值', minWidth: 130, align: 'center'},
+    {field: 'pertinence', label: '相关性', minWidth: 130, align: 'center'},
+    {field: 'effectWeight', label: '影响权重', minWidth: 130, align: 'center'},
+    {field: 'thrSet', label: '阈值设置', minWidth: 130, align: 'center', template: InputInTable}
 ];
 export const tableData4 = [
     {

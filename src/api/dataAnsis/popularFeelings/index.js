@@ -35,3 +35,6 @@ export const postConfigurationQuery3 = params => {
 export const postConfigurationModification3 = params => {
     return post(`${requestPrefixs}/settings/update`, params); // 修改
 };
+export const postThanSec = params => {
+    return post(`${requestPrefixs}/thanSec`, params); // 修改
+};

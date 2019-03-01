@@ -16,7 +16,7 @@
 
 <script>
 // 原油舆情情感分析
-// import {postpAnalysis} from '@/api/PublicAnalysis/popularFeelings';
+import {postpAnalysis} from '@/api/dataAnsis/PublicAnalysis';
 import SCard from '@/components/index/common/SCard';
 import EchartsCommon from '@/components/index/common/EchartsCommon';
 export default {
@@ -39,17 +39,28 @@ export default {
                     }
                 },
                 tooltip: {
+                    backgroundColor: '#222',
+                    borderColor: '#777',
+                    borderWidth: 1,
+                    // trigger: 'item',
                     trigger: 'axis',
-                    axisPointer: {
+                    axisPointer: { // 坐标轴指示器，坐标轴触发有效
                         type: 'cross', // 默认为直线，可选为：'line' | 'shadow'
-                        label: {
-                            backgroundColor: '#6a7985'
-                        }
-                    }
+                        backgroundColor: '#6a7985'
+                        // type: 'cross'
+                        // type: 'line'
+                    },
+                    // trigger: 'axis',
+                    // axisPointer: {
+                    //     type: 'cross', // 默认为直线，可选为：'line' | 'shadow'
+                    //     label: {
+                    //         backgroundColor: '#6a7985'
+                    //     }
+                    // }
                 },
                 legend: {
                     top: '3%',
-                    data: ['正面', '中性', '负面', '热度'],
+                    data: ['正面', '负面', '中性', '热度'],
                     textStyle: {
                         color: '#fff',
                         fontSize: '14'
@@ -69,26 +80,21 @@ export default {
                 xAxis: [
                     {
                         type: 'category',
+                        boundaryGap: true,
                         axisLine: { // y轴
                             lineStyle: {
-                                color: '#fff',
+                                color: '#1fc0ff',
                                 margin: 10,
                                 width: 1,
                                 fontSize: 10 // 字体
                             }
                         },
-                        splitLine: {
-                            show: false
-                        },
-                        axisTick: {
-                            show: false
-                        },
-                        splitArea: {
-                            show: false
-                        },
                         axisLabel: {
-                            interval: 0,
+                            textStyle: {
+                                fontSize: 10 // 字体
+                            }
                         },
+                        // data: []
                         data: [
                             '2019-01-01',
                             '2019-01-02',
@@ -103,83 +109,7 @@ export default {
                             '2019-01-11',
                             '2019-01-12',
                             '2019-01-13',
-                            '2019-01-14',
-                            '2019-01-15',
-                            '2019-01-16',
-                            '2019-01-17',
-                            '2019-01-18',
-                            '2019-01-19',
-                            '2019-01-20',
-                            '2019-01-21',
-                            '2019-01-22',
-                            '2019-01-23',
-                            '2019-01-24',
-                            '2019-01-25',
-                            '2019-01-26',
-                            '2019-01-27',
-                            '2019-01-28',
-                            '2019-01-29',
-                            '2019-01-30',
-                            '2019-01-31',
-                            // '2019-02-01',
-                            // '2019-02-02',
-                            // '2019-02-03',
-                            // '2019-02-04',
-                            // '2019-02-05',
-                            // '2019-02-06',
-                            // '2019-02-07',
-                            // '2019-02-08',
-                            // '2019-02-09',
-                            // '2019-02-10',
-                            // '2019-02-11',
-                            // '2019-02-12',
-                            // '2019-02-13',
-                            // '2019-02-14',
-                            // '2019-02-15',
-                            // '2019-02-16',
-                            // '2019-02-17',
-                            // '2019-02-18',
-                            // '2019-02-19',
-                            // '2019-02-20',
-                            // '2019-02-21',
-                            // '2019-02-22',
-                            // '2019-02-23',
-                            // '2019-02-24',
-                            // '2019-02-25',
-                            // '2019-02-26',
-                            // '2019-02-27',
-                            // '2019-02-28',
-                            // '2019-03-01',
-                            // '2019-03-02',
-                            // '2019-03-03',
-                            // '2019-03-04',
-                            // '2019-03-05',
-                            // '2019-03-06',
-                            // '2019-03-07',
-                            // '2019-03-08',
-                            // '2019-03-09',
-                            // '2019-03-10',
-                            // '2019-03-11',
-                            // '2019-03-12',
-                            // '2019-03-13',
-                            // '2019-03-14',
-                            // '2019-03-15',
-                            // '2019-03-16',
-                            // '2019-03-17',
-                            // '2019-03-18',
-                            // '2019-03-19',
-                            // '2019-03-20',
-                            // '2019-03-21',
-                            // '2019-03-22',
-                            // '2019-03-23',
-                            // '2019-03-24',
-                            // '2019-03-25',
-                            // '2019-03-26',
-                            // '2019-03-27',
-                            // '2019-03-28',
-                            // '2019-03-29',
-                            // '2019-03-30',
-                            // '2019-03-31',
+                            '2019-01-14'
                         ]
                     }
                 ],
@@ -222,6 +152,66 @@ export default {
                             show: false,
                             //  改变轴线颜色
                             lineStyle: {
+                                type: 'dashed',
+                                // 使用深浅的间隔色
+                                color: ['#1f416e']
+                            }
+                        },
+                        axisLine: { // y轴
+                            lineStyle: {
+                                color: '#6ab2ec',
+                                width: 1,
+                                fontSize: 10 // 字体
+                            }
+                        },
+                        axisTick: { // y轴刻度线
+                            show: true,
+                        },
+                        axisLabel: {
+                            formatter: '{value}%'
+                        },
+                    },
+                    {
+                        name: '中性',
+                        show: false,
+                        offset: 0,
+                        type: 'value',
+                        position: 'right',
+                        // 控制网格线是否显示
+                        splitLine: {
+                            show: false,
+                            //  改变轴线颜色
+                            lineStyle: {
+                                // 使用深浅的间隔色
+                                color: ['#999']
+                                // width: 0
+                            }
+                        },
+                        axisLine: { // y轴
+                            lineStyle: {
+                                color: '#6ab2ec',
+                                width: 1,
+                                fontSize: 10 // 字体
+                            }
+                        },
+                        axisTick: { // y轴刻度线
+                            show: true,
+                        },
+                        axisLabel: {
+                            formatter: '{value}%'
+                        },
+                    },
+                    {
+                        name: '负面',
+                        show: false,
+                        offset: 0,
+                        type: 'value',
+                        position: 'right',
+                        // 控制网格线是否显示
+                        splitLine: {
+                            show: false,
+                            //  改变轴线颜色
+                            lineStyle: {
                                 // 使用深浅的间隔色
                                 color: ['#999']
                                 // width: 0
@@ -242,18 +232,6 @@ export default {
                         },
                     }
                 ],
-                // dataZoom: [
-                //     {
-                //         type: 'inside'
-                //     },
-                //     {
-                //         show: true,
-                //         type: 'slider',
-                //         start: 100,
-                //         end: 10,
-                //         y: '90%'
-                //     }
-                // ],
                 dataZoom: [
                     {
                         type: 'inside',
@@ -285,315 +263,13 @@ export default {
                                 formatter: '{c}%'
                             }
                         },
-                        data: [
-                            210,
-                            230,
-                            182,
-                            193,
-                            174,
-                            205,
-                            130,
-                            207,
-                            208,
-                            209,
-                            210,
-                            511,
-                            122,
-                            913,
-                            263,
-                            764,
-                            465,
-                            126,
-                            567,
-                            568,
-                            219,
-                            370,
-                            471,
-                            572,
-                            123,
-                            274,
-                            125,
-                            476,
-                            127,
-                            207,
-                            279,
-                            110,
-                            481,
-                            782,
-                            123,
-                            384,
-                            685,
-                            126,
-                            207,
-                            108,
-                            209,
-                            213,
-                            764,
-                            465,
-                            126,
-                            567,
-                            568,
-                            219,
-                            370,
-                            471,
-                            572,
-                            123,
-                            274,
-                            125,
-                            476,
-                            127,
-                            278,
-                            279,
-                            110,
-                            481,
-                            782,
-                            123,
-                            384,
-                            685,
-                            126,
-                            207,
-                            108,
-                            209,
-                            213,
-                            764,
-                            465,
-                            126,
-                            567,
-                            568,
-                            219,
-                            370,
-                            471,
-                            127,
-                            207,
-                            279,
-                            110,
-                            481,
-                            782,
-                            123,
-                            384,
-                            685,
-                            126,
-                            207,
-                            100,
-                            208
-                        ],
-                    },
-                    {
-                        name: '热度',
-                        type: 'line',
-                        stack: '总量',
-                        label: {
-                            normal: {
-                                show: true,
-                                position: 'insideRight',
-                                fontSize: 9,
-                                formatter: '{c}%'
-                            }
-                        },
-                        yAxisIndex: 0,
-                        data: [
-                            '1111',
-                            '211',
-                            '311',
-                            '203',
-                            '204',
-                            '205',
-                            '204',
-                            '1207',
-                            '204',
-                            '209',
-                            '210',
-                            '211',
-                            '214',
-                            '213',
-                            '1214',
-                            '215',
-                            '216',
-                            '217',
-                            '218',
-                            '219',
-                            '220',
-                            '221',
-                            '222',
-                            '1223',
-                            '224',
-                            '225',
-                            '226',
-                            '227',
-                            '228',
-                            '229',
-                            '230',
-                            '231',
-                            '1232',
-                            '233',
-                            '234',
-                            '235',
-                            '236',
-                            '237',
-                            '238',
-                            '239',
-                            '240',
-                            '241',
-                            '242',
-                            '243',
-                            '244',
-                            '245',
-                            '246',
-                            '247',
-                            '248',
-                            '249',
-                            '250',
-                            '251',
-                            '252',
-                            '253',
-                            '254',
-                            '255',
-                            '256',
-                            '257',
-                            '258',
-                            '259',
-                            '260',
-                            '261',
-                            '262',
-                            '263',
-                            '264',
-                            '265',
-                            '266',
-                            '267',
-                            '268',
-                            '269',
-                            '270',
-                            '771',
-                            '272',
-                            '273',
-                            '274',
-                            '1275',
-                            '276',
-                            '277',
-                            '278',
-                            '279',
-                            '280',
-                            '281',
-                            '282',
-                            '883',
-                            '284',
-                            '1285',
-                            '286',
-                            '287',
-                            '288',
-                            '989'
-                        ]
-                    },
-                    {
-                        name: '中性',
-                        type: 'bar',
-                        stack: '总量',
-                        label: {
-                            normal: {
-                                show: true,
-                                position: 'insideRight',
-                                fontSize: 9,
-                                formatter: '{c}%'
-                            }
-                        },
-                        data: [
-                            '200',
-                            '201',
-                            '202',
-                            '203',
-                            '204',
-                            '205',
-                            '206',
-                            '207',
-                            '208',
-                            '209',
-                            '210',
-                            '211',
-                            '212',
-                            '213',
-                            '214',
-                            '215',
-                            '216',
-                            '217',
-                            '218',
-                            '219',
-                            '220',
-                            '221',
-                            '222',
-                            '223',
-                            '224',
-                            '225',
-                            '226',
-                            '227',
-                            '228',
-                            '229',
-                            '230',
-                            '231',
-                            '232',
-                            '233',
-                            '234',
-                            '235',
-                            '236',
-                            '237',
-                            '238',
-                            '239',
-                            '240',
-                            '241',
-                            '242',
-                            '243',
-                            '244',
-                            '245',
-                            '246',
-                            '247',
-                            '248',
-                            '249',
-                            '250',
-                            '251',
-                            '252',
-                            '253',
-                            '254',
-                            '255',
-                            '256',
-                            '257',
-                            '258',
-                            '259',
-                            '260',
-                            '261',
-                            '262',
-                            '263',
-                            '264',
-                            '265',
-                            '266',
-                            '267',
-                            '268',
-                            '269',
-                            '270',
-                            '271',
-                            '272',
-                            '273',
-                            '274',
-                            '275',
-                            '276',
-                            '277',
-                            '278',
-                            '279',
-                            '280',
-                            '281',
-                            '282',
-                            '283',
-                            '284',
-                            '285',
-                            '286',
-                            '287',
-                            '288',
-                            '289'
-                        ]
+                        data: []
                     },
                     {
                         name: '负面',
                         type: 'bar',
                         stack: '总量',
-                        yAxisIndex: 1,
+                        yAxisIndex: 0,
                         label: {
                             normal: {
                                 show: true,
@@ -602,99 +278,39 @@ export default {
                                 formatter: '{c}%'
                             }
                         },
-                        data: [
-                            '200',
-                            '201',
-                            '202',
-                            '203',
-                            '204',
-                            '205',
-                            '206',
-                            '207',
-                            '208',
-                            '209',
-                            '210',
-                            '211',
-                            '212',
-                            '213',
-                            '214',
-                            '215',
-                            '216',
-                            '217',
-                            '218',
-                            '219',
-                            '220',
-                            '221',
-                            '222',
-                            '223',
-                            '224',
-                            '225',
-                            '226',
-                            '227',
-                            '228',
-                            '229',
-                            '230',
-                            '231',
-                            '232',
-                            '233',
-                            '234',
-                            '235',
-                            '236',
-                            '237',
-                            '238',
-                            '239',
-                            '240',
-                            '241',
-                            '242',
-                            '243',
-                            '244',
-                            '245',
-                            '246',
-                            '247',
-                            '248',
-                            '249',
-                            '250',
-                            '251',
-                            '252',
-                            '253',
-                            '254',
-                            '255',
-                            '256',
-                            '257',
-                            '258',
-                            '259',
-                            '260',
-                            '261',
-                            '262',
-                            '263',
-                            '264',
-                            '265',
-                            '266',
-                            '267',
-                            '268',
-                            '269',
-                            '270',
-                            '271',
-                            '272',
-                            '273',
-                            '274',
-                            '275',
-                            '276',
-                            '277',
-                            '278',
-                            '279',
-                            '280',
-                            '281',
-                            '282',
-                            '283',
-                            '284',
-                            '285',
-                            '286',
-                            '287',
-                            '288',
-                            '289'
-                        ]
-                    }
+                        data: []
+                    },
+                    {
+                        name: '中性',
+                        type: 'bar',
+                        stack: '总量',
+                        yAxisIndex: 0,
+                        label: {
+                            normal: {
+                                show: true,
+                                position: 'insideRight',
+                                fontSize: 9,
+                                formatter: '{c}%'
+                            }
+                        },
+                        data: []
+                    },
+                    {
+                        name: '热度',
+                        type: 'line',
+                        stack: '总量',
+                        yAxisIndex: 1,
+                        barGap: '10%',
+                        label: {
+                            normal: {
+                                show: true,
+                                position: 'insideRight',
+                                fontSize: 9,
+                                formatter: '{c}'
+                            }
+                        },
+                        data: []
+                    },
                 ]
             },
         };
@@ -702,20 +318,48 @@ export default {
     computed: {},
     comments: {},
     mounted() {
+        this.lienEchartsDete();
     },
     methods: {
-        // lienEchartsDete() {
-        //     let params = {
-        //         'timeOfDay': '2019-02-18'
-        //     };
-        //     this.loading1 = true;
-        //     // 原油舆情情感分析
-        //     postpAnalysis(params).then(resp => {
-        //         this.loading1 = false;
-        //     }).catch(e => {
-        //         this.loading1 = false;
-        //     });
-        // }
+        lienEchartsDete() {
+            let params = {
+                'timeOfDay': '2019-02-18'
+            };
+            this.loading1 = true;
+            let mainData = [];
+            // 日期
+            let timeDate = [];
+            // 正面
+            let heatData = [];
+            // 热度
+            let frontData = [];
+            // 中性
+            let neutralData = [];
+            // 负面
+            let negativeData = [];
+            // 原油舆情情感分析
+            postpAnalysis(params).then(resp => {
+                this.loading1 = false;
+                if (resp && resp.length !== 0) {
+                    mainData = resp;
+                    mainData.forEach(v => {
+                        timeDate.push(v.publicDate); // 日期
+                        heatData.push(v.justCount); // 正面
+                        frontData.push(parseInt(v.weixinHeat) + parseInt(v.baiduHeat)); // 热度
+                        neutralData.push(v.centreCount); // 中性
+                        negativeData.push(v.loseCount); // 负面
+                    });
+                    this.chartOptions1['xAxis']['data'] = timeDate;
+                    this.chartOptions1['series'][0]['data'] = heatData;
+                    this.chartOptions1['series'][3]['data'] = frontData;
+                    this.chartOptions1['series'][2]['data'] = neutralData;
+                    this.chartOptions1['series'][1]['data'] = negativeData;
+                    this.$refs['echartsDemos'] && this.$refs['echartsDemos'].initChart();
+                }
+            }).catch(e => {
+                this.loading1 = false;
+            });
+        }
     },
     beforeDestroy() {
     }

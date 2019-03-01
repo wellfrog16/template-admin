@@ -4,7 +4,7 @@
             <s-card class="" :title="`他比证券`" :icon="`el-icon-setting`">
                 <s-table
                     slot="content"
-                    :height="230"
+                    :height="200"
                     :showSelectionColumn="false"
                     :showIndexColumn="false"
                     tooltip-effect="dark"

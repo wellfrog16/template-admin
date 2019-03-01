@@ -8,9 +8,9 @@
                             <s-table
                                 ref="selfTables1"
                                 :height="150"
-                                :loading="loadingAR"
-                                :columns="columnsList"
-                                :tableData="tableData1"
+                                :loading="loadingAR1"
+                                :columns="columnsLists1"
+                                :tableData="tableDatas1"
                                 @selection-change="handleSelectionChange1">
                             </s-table>
                         </el-collapse-item>
@@ -18,10 +18,10 @@
                             <s-table
                                 ref="selfTables1"
                                 :height="150"
-                                :loading="loadingAR"
-                                :columns="columnsList"
-                                :tableData="tableData1"
-                                @selection-change="handleSelectionChange1">
+                                :loading="loadingAR2"
+                                :columns="columnsLists2"
+                                :tableData="tableDatas2"
+                                @selection-change="handleSelectionChange2">
                             </s-table>
                         </el-collapse-item>
                     </el-collapse>
@@ -29,7 +29,7 @@
                 <div :class="$style.environment_box">
                     <echarts-common
                         :loading="loading5"
-                        ref="echartsDemo5"
+                        ref="selfTablesa5"
                         domId="echartsId5"
                         :noClearFlag="false"
                         :defaultOption="chartOptions5"
@@ -42,10 +42,15 @@
 </template>
 
 <script>
+import {
+    postOrpeListMap1,
+    postOrpeListMapTerm,
+    postOrpeListMap5
+} from '@/api/dataAnsis/PublicAnalysis';
 import SCard from '@/components/index/common/SCard';
 import STable from '@/components/index/common/STable';
 import EchartsCommon from '@/components/index/common/EchartsCommon';
-import {columnsListAR5, tableData5} from './constants';
+import {columnsListAR5} from './constants';
 export default {
     name: 'analysisChart1',
     components: {SCard, STable, EchartsCommon},
@@ -54,22 +59,25 @@ export default {
     data() {
         return {
             activeNames: ['1'],
-            loadingAR: false,
-            columnsList: columnsListAR5,
-            tableData1: tableData5,
+            loadingAR1: false,
+            loadingAR2: false,
+            columnsLists1: columnsListAR5,
+            columnsLists2: columnsListAR5,
+            tableDatas1: [],
+            tableDatas2: [],
             timer: null,
             fullscreen: false,
             loading5: false,
             chartOptions5: {
-                title: {
-                    left: 'left',
-                    text: '折线图堆叠',
-                    x: '1%',
-                    textStyle: {
-                        color: '#fff',
-                        fontSize: '14'
-                    }
-                },
+                // title: {
+                //     left: 'left',
+                //     text: '折线图堆叠',
+                //     x: '1%',
+                //     textStyle: {
+                //         color: '#fff',
+                //         fontSize: '14'
+                //     }
+                // },
                 tooltip: {
                     trigger: 'axis',
                     axisPointer: {
@@ -81,7 +89,7 @@ export default {
                 },
                 legend: {
                     top: '3%',
-                    data: ['中性', '热度'],
+                    data: ['报道量', '评论量'],
                     textStyle: {
                         color: '#fff',
                         fontSize: '14'
@@ -122,18 +130,17 @@ export default {
                             interval: 0,
                         },
                         data: [
-                            '2019-01-01',
-                            '2019-01-02',
-                            '2019-01-03',
-                            '2019-01-04',
-                            '2019-01-05',
-                            '2019-01-06'
+                            '2019-03-01',
+                            '2019-02-28',
+                            '2019-02-27',
+                            '2019-02-26',
+                            '2019-02-25'
                         ]
                     }
                 ],
                 yAxis: [
                     {
-                        name: '正面',
+                        name: '报道量',
                         type: 'value',
                         position: 'left',
                         splitLine: {
@@ -160,7 +167,7 @@ export default {
                         }
                     },
                     {
-                        name: '热度',
+                        name: '评论量',
                         // show: false,
                         offset: 0,
                         type: 'value',
@@ -194,19 +201,19 @@ export default {
                     {
                         type: 'inside',
                         start: 100,
-                        end: 30
+                        end: 0
                     },
                     {
                         show: true,
                         type: 'slider',
                         y: '90%',
                         start: 100,
-                        end: 30
+                        end: 0
                     }
                 ],
                 series: [
                     {
-                        name: '热度',
+                        name: '报道量',
                         type: 'line',
                         stack: '总量',
                         label: {
@@ -217,7 +224,22 @@ export default {
                                 formatter: '{c}%'
                             }
                         },
-                        // yAxisIndex: 0,
+                        yAxisIndex: 0,
+                        data: [
+                        ]
+                    },
+                    {
+                        name: '评论量',
+                        type: 'line',
+                        // stack: '总量',
+                        label: {
+                            normal: {
+                                show: true,
+                                position: 'insideRight',
+                                fontSize: 9,
+                                formatter: '{c}%'
+                            }
+                        },
                         itemStyle: {
                             normal: {
                                 lineStyle: {
@@ -226,47 +248,8 @@ export default {
                                 }
                             }
                         },
-                        data: [
-                            '1111',
-                            '211',
-                            '311',
-                            '203',
-                            '204',
-                            '205',
-                            '204',
-                            '1207',
-                            '204',
-                            '209',
-                            '210',
-                            '211',
-                            '214'
-                        ]
-                    },
-                    {
-                        name: '中性',
-                        type: 'line',
-                        stack: '总量',
-                        label: {
-                            normal: {
-                                show: true,
-                                position: 'insideRight',
-                                fontSize: 9,
-                                formatter: '{c}%'
-                            }
-                        },
-                        yAxisIndex: 1,
-                        data: [
-                            '200',
-                            '201',
-                            '202',
-                            '203',
-                            '204',
-                            '205',
-                            '206',
-                            '207',
-                            '208',
-                            '209'
-                        ]
+                        yAxisIndex: 0,
+                        data: []
                     }
                 ]
             }
@@ -275,6 +258,7 @@ export default {
     computed: {},
     comments: {},
     mounted() {
+        this.lienEchartsDete();
     },
     methods: {
         handleChange(val) {
@@ -288,10 +272,108 @@ export default {
             }
         },
         exporstClick() {},
-        handleSelectionChange1() {},
+        handleSelectionChange1() {
+            let params5 = {
+                'timeOfDay': '2019-03-1',
+                'yesAndNoOpec': '1'
+            };
+            postOrpeListMap5(params5).then(resp => {
+                console.log(resp);
+            });
+        },
+        handleSelectionChange2() {
+            let params5 = {
+                'timeOfDay': '2019-03-1',
+                'yesAndNoOpec': '1'
+            };
+            postOrpeListMap5(params5).then(resp => {
+                console.log(resp);
+            });
+        },
         fullscreenChange() {},
         toggleFullScreen() {
             console.log(22);
+        },
+        lienEchartsDete() {
+            this.loading5 = true;
+            this.loadingAR1 = true;
+            this.loadingAR2 = true;
+            this.tableDatas1 = [];
+            this.tableDatas2 = [];
+            let mainData = [];
+            let timeDate = []; // 公布日期
+            let opeCcount = []; // 公布值
+            let params0 = {
+                'timeOfDay': '2019-03-1',
+                'yesAndNoOpec': 0
+            };
+            postOrpeListMap1(params0).then(resp => {
+                if (resp && resp.length !== 0) {
+                    this.loadingAR1 = false;
+                    this.tableDatas1 = resp;
+                }
+            }).catch(e => {
+                this.loadingAR1 = false;
+            });
+            let params1 = {
+                'timeOfDay': '2019-03-1',
+                'yesAndNoOpec': '1'
+            };
+            postOrpeListMap1(params1).then(resp => {
+                if (resp && resp.length !== 0) {
+                    this.loadingAR2 = false;
+                    this.tableDatas2 = resp;
+                }
+            }).catch(e => {
+                this.loadingAR2 = false;
+            });
+            // let params = {
+            //     'timeOfDay': '2019-03-1',
+            //     'yesAndNoOpec': '1',
+            //     'hotTopic': '中东局势'
+            // };
+            // postOrpeListMapTerm(params).then(resp => {
+            //     if (resp && resp.length !== 0) {
+            //         this.loading5 = false;
+            //         console.log(resp);
+            //         resp.forEach(v => {
+            //             timeDate.push(v.OPECpublished_time); // 公布日期
+            //             opeCcount.push(v.OPECcount); // 公布值
+            //         });
+            //         this.chartOptions5['xAxis']['data'] = timeDate;
+            //         this.chartOptions5['series'][0]['data'] = opeCcount;
+            //         this.chartOptions5['series'][1]['data'] = [];
+            //         this.chartOptions5['series'][2]['data'] = [];
+            //         this.$refs['selfTablesa5'] && this.$refs['selfTablesa5'].initChart();
+            //     }
+            // }).catch(e => {
+            //     this.loading5 = false;
+            // });
+            let params5 = {
+                'timeOfDay': '2019-03-1',
+                'yesAndNoOpec': '1'
+            };
+            let timeDate5 = [];
+            let commentsNums5 = [];
+            let pageHits5 = [];
+            postOrpeListMap5(params5).then(resp => {
+                console.log(resp);
+                if (resp && resp.length !== 0) {
+                    this.loading5 = false;
+                    resp.forEach(v => {
+                        timeDate5.push(v.OPECpublished_time); // 公布日期
+                        commentsNums5.push(v.comments_num); // 公布值
+                        pageHits5.push(v.page_hits); // 公布值
+                    });
+                    this.chartOptions5['xAxis']['data'] = timeDate;
+                    this.chartOptions5['series'][0]['data'] = pageHits5; // 报道量
+                    this.chartOptions5['series'][1]['data'] = commentsNums5;
+                    // this.chartOptions5['series'][0]['data'] = ['33', '422', '312', '423', '33']; // 评论量
+                    this.$refs['selfTablesa5'] && this.$refs['selfTablesa5'].initChart();
+                }
+            }).catch(e => {
+                this.loading5 = false;
+            });
         }
     },
     beforeDestroy() {

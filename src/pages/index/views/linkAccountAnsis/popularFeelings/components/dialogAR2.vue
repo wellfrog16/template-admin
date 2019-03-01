@@ -4,7 +4,7 @@
             <s-card class="" :title="`他比证券`" :icon="`el-icon-setting`">
                 <s-table
                     slot="content"
-                    :height="230"
+                    :height="200"
                     :showSelectionColumn="false"
                     :showIndexColumn="false"
                     tooltip-effect="dark"
@@ -28,6 +28,21 @@
                 </s-table>
             </s-card>
         </el-col>
+        <!--<el-col>-->
+            <!--<s-card class="" :title="`舆情`" :icon="`fa fa-chart-line`">-->
+                <!--<s-table-->
+                    <!--ref="selfTables"-->
+                    <!--slot="content"-->
+                    <!--:showSelectionColumn="true"-->
+                    <!--:showIndexColumn="false"-->
+                    <!--:height="230"-->
+                    <!--:loading="loadingAR"-->
+                    <!--:columns="columnsListPF"-->
+                    <!--:tableData="tableData1"-->
+                    <!--@selection-change="handleSelectionChange2">-->
+                <!--</s-table>-->
+            <!--</s-card>-->
+        <!--</el-col>-->
         <!--<el-col :span="12">-->
         <!--<s-card class="" :title="`舆情`" :icon="`fa fa-chart-line`">-->
         <!--<s-table-->
@@ -50,7 +65,7 @@
 <script>
 import SCard from '@/components/index/common/SCard';
 import STable from '@/components/index/common/STable';
-import {columnsList2} from './constants';
+import {columnsList2, columnsList1, tableDatalPF2} from './constants';
 export default {
     name: 'dialogAR',
     components: {SCard, STable},
@@ -60,6 +75,12 @@ export default {
             default: false
         },
         tableData2: {
+            type: Array,
+            default() {
+                return [];
+            }
+        },
+        tableData1: {
             type: Array,
             default() {
                 return [];
@@ -88,8 +109,8 @@ export default {
             columnsList: columnsList2,
             // tableData2: tableData2,
             // 舆情
-            // columnsListPF: columnsListPF2,
-            // tableData1PF: tableDatalPF2
+            columnsListPF: columnsList1,
+            // tableData1PF: columnsList1
         };
     },
     computed: {},
@@ -110,6 +131,7 @@ export default {
             });
         },
         // 舆情多选
+        handleSelectionChange2() {}
         // handleSelectionChange(val) {
         //     this.checkboxTableColumn = val || [];
         //     this.$emit('checkboxEmit', this.checkboxTableColumn);

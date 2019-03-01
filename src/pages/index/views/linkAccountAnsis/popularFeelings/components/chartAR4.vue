@@ -1,5 +1,5 @@
 <template>
-    <s-card :title="`美油日K图图`" :icon="`fa fa-handshake`">
+    <s-card :title="`美油日K图`" :icon="`fa fa-handshake`">
         <el-button slot="right" type="text" @click="dialogClick">配置<i class="fa fa-undo-alt"></i></el-button>
         <el-dialog
             width="65%"
@@ -222,9 +222,10 @@ export default {
                         return obj;
                     },
                     formatter: param => {
-                        return schema.map((v, i) => {
+                        let str = schema.map((v, i) => {
                             return v.text + ': ' + param[0].value[i === 0 ? 8 : i];
                         }).join('<br>');
+                        return '美原油日K :' + '<br>' + str;
                     }
                 },
                 axisPointer: {
@@ -371,6 +372,7 @@ export default {
     mounted() {
         // 原油日K图--配置表
         this.tableData3List();
+        this.tableData3List1();
         this.barEchartsDete();
     },
     methods: {
