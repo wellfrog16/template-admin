@@ -172,7 +172,7 @@ export default {
             this.computedMaxOverWarehouseIndex = minData ? minData['value'] : 0;
             // 切换明细后index丢失
             sessionStorage.setItem(`computedMaxOverWarehouseIndex${id || this.tabIndex || this.$store.getters.tabIndex}`, this.computedMaxOverWarehouseIndex);
-            this.setMaxVisualMap(this.checked);
+
             chartData.nodes.forEach(v => {
                 let len = v.custIds.split(',').length;
                 v.symbolSize = len > 5 ? 35 : len < 1 ? 8 : len * 7;
@@ -199,6 +199,9 @@ export default {
             // select max
             this.$emit('updateAccountGroupAndCustIds', chartData['nodes'][0]['name'], chartData['nodes'][0]['custIds'].split(','));
             this.$refs['chart0'] && this.$refs['chart0'].initChart();
+            setTimeout(() => {
+                this.setMaxVisualMap(this.checked);
+            });
         },
         sortDataByAcctIdCommon(data) {
             return _.sortBy(data, [item => { return item.acctId; }]);

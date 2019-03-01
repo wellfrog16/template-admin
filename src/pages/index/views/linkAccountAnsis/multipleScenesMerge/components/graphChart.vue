@@ -94,10 +94,10 @@ export default {
             childrenMap: {},
             ruleForm: {
                 sceneTypes: ['1', '2', '3', '4', '5'],
-                showAccountCount: '50'
+                showAccountCount: '50',
+                checkedOverWarehouse: false // 仅显示超仓账户组
             },
             rules: {
-                checkedOverWarehouse: false, // 仅显示超仓账户组
                 showAccountCount: [
                     {pattern: /^[0-9]+$/, message: '只能输入数字'}
                 ]
@@ -276,7 +276,6 @@ export default {
                     }
                 });
                 this.computedMaxOverWarehouseIndex = minData ? minData['value'] : 0;
-                this.setMaxVisualMap(this.ruleForm.checkedOverWarehouse);
             }
             this.chartOptions.legend.data = this.checkboxes.map(v => {
                 return v.label;
@@ -306,6 +305,9 @@ export default {
                 this.chartOptions.series[0]['links'] = val.links;
             }
             this.$refs['chartRef'].initChart();
+            setTimeout(() => {
+                this.setMaxVisualMap(this.ruleForm.checkedOverWarehouse);
+            });
         },
         initChart(options) {
             this.chartOptions = options;
