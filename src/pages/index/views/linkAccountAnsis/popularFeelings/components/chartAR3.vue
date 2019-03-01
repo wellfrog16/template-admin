@@ -172,9 +172,10 @@ export default {
                         return obj;
                     },
                     formatter: param => {
-                        return schema.map((v, i) => {
+                        let str = schema.map((v, i) => {
                             return v.text + ': ' + param[0].value[i === 0 ? 8 : i];
                         }).join('<br>');
+                        return '原油日K :' + '<br>' + str;
                     }
                 },
                 axisPointer: {
@@ -200,7 +201,7 @@ export default {
                     axisLine: { // y轴
                         lineStyle: {
                             type: 'dashed',
-                            color: '#fff',
+                            color: '#1fc0ff',
                             width: 1,
                         },
                     },
@@ -320,6 +321,7 @@ export default {
     mounted() {
         // 原油日K图--配置表
         this.tableData3List();
+        this.tableData3List1();
         this.barEchartsDete();
     },
     methods: {

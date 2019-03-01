@@ -1,4 +1,4 @@
-import {post, requestPrefix} from '@/utils/request';
+import {post, requestPrefix, requestPrefixs} from '@/utils/request';
 import config from '@/config';
 // 获取地区树形列表
 export const getAreaTreeList = () => {
@@ -19,6 +19,11 @@ export const uploadFileByBodyInfo = url => {
 // 导出csv
 export const exportCsv = url => {
     return `${config.server.api}${requestPrefix}/${url || 'export/analysis'}?access_token=${localStorage.getItem('ACCESS_TOKEN')}`;
+};
+
+// 导出csv
+export const exportCsvs = url => {
+    return `${config.server.api}${requestPrefixs}/${url || 'crudeDown'}?access_token=${localStorage.getItem('ACCESS_TOKEN')}`;
 };
 // 导出结果集
 export const exportResultSet = params => {
