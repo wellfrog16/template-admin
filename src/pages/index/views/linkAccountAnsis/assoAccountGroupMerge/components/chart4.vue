@@ -10,6 +10,7 @@ import EchartsCommon from '@/components/index/common/EchartsCommon';
 // import {getChart4Data} from '@/api/dataAnsis/assoAccountGroupMerge';
 import _ from 'lodash';
 import {echartsDefault} from '@/assets/style/common/theme/echart';
+// import {a} from './test';
 
 export default {
     components: {EchartsCommon},
@@ -56,7 +57,7 @@ export default {
                     x: 40,
                     x2: 70,
                     y: 70,
-                    y2: 60
+                    y2: 50
                 },
                 legend: {
                     type: 'scroll',
@@ -303,6 +304,7 @@ export default {
     },
     mounted() {
         this.txDt = sessionStorage.getItem(`txDt${this.tabIndex || this.$store.getters.getTabIndex}`) || this.txDt;
+        // this.getData(a.resData);
     }
 };
 </script>

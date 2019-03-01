@@ -219,7 +219,7 @@ export default {
             };
         },
         updateTableData(value, index, id) {
-            if (index === 2) {
+            /* if (index === 2) {
                 var tb = [];
                 var narr = [];
                 for (var i = 0; i < value.length; i++) {
@@ -251,7 +251,7 @@ export default {
                     }
                 }
                 value = narr;
-            }
+            } */
             this.chartTableData[index] = value;
             this.$store.commit('saveChartTableData', {data: this.chartTableData, index: id || this.tabIndex || this.$store.getters.getTabIndex});
         },
