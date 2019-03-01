@@ -44,7 +44,7 @@
             </el-row>
         </div>
         <div style="text-align:center; margin: 20px 0;">
-            <el-button size="small" type="primary" style="width: 100px;" @click="nextStep">下一步</el-button>
+            <el-button size="small" type="warning" style="width: 100px;" @click="nextStep">下一步</el-button>
         </div>
     </div>
 </template>

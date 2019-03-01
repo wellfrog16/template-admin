@@ -9,7 +9,7 @@
                                 <el-checkbox :disabled="disabled" :label="item.value" v-for="(item, index) in checkbox" :key="index">
                                     <div v-if="index === 0" class="header-css">按数量筛选：</div>
                                     <div v-if="index === 3"  class="header-css">按排名筛选：</div>
-                                    <el-form-item :prop="item.field" :label="item.label" label-width="140px" style="display:inline-block; padding: 5px 0;"  :rules="[
+                                    <el-form-item :prop="item.field" :label="index === 1 ? '账户日均成交量' : index === 2 ? '账户日均报单数' : item.label" label-width="140px" style="display:inline-block; padding: 5px 0;"  :rules="[
                                         {validator: selfValidate, type: item.field}
                                     ]">
                                         <el-input :disabled="disabled" :clearabled="!disabled" class="custom-width" size="small" v-model="ruleForm[item.field]"></el-input>

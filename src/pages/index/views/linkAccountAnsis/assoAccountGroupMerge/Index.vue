@@ -23,7 +23,8 @@
             <sceneType4 ref="sceneType4" v-if="String(item.sceneTypes) === '4' && String(item.sceneIds) === activeTab" :tabIndex="item.sceneIds" @updateFullLoading="updateFullLoading" @updateResultList="updateResultList"></sceneType4>
         </div>
         <div style="text-align:center; margin: 20px 0;">
-            <el-button size="small" type="primary" style="width: 100px;" @click="nextStep">下一步</el-button>
+            <el-button size="small" type="primary" style="margin-right: 20px;" @click="preStep">继续生成其他关联账户组</el-button>
+            <el-button size="small" type="warning" style="width: 100px;" @click="nextStep">下一步</el-button>
         </div>
         <!-- <div>
             <el-button v-for="(c, i) in color" :key="i" :style="{'background': c}">测试</el-button>
@@ -202,6 +203,16 @@ export default {
             })
                 .then(() => {
                     this.$router.push({name: 'multipleScenesMerge'});
+                });
+        },
+        preStep() {
+            this.$confirm('离开本页面信息将丢失，是否确定离开?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            })
+                .then(() => {
+                    this.$router.push({name: 'sceneConfig'});
                 });
         },
         resetDetailFlag() {

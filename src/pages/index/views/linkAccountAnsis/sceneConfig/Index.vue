@@ -5,7 +5,7 @@
                 <el-form ref="ruleForm" :model="ruleForm" :rules="rules">
                     <el-row>
                         <el-col :xl="12" :lg="12" :md="12" :sm="24" style="border-right:1px solid rgba(4, 58, 127, 0.92);">
-                            <el-form-item prop="a">
+                            <el-form-item prop="exportType">
                                 <el-radio-group v-model="ruleForm.exportType">
                                     <el-radio label="0">
                                         <el-form-item prop="resultId" label="导入结果集" label-width="140px" style="display:inline-block; padding: 5px 0;"
@@ -62,6 +62,7 @@
                                         </el-form-item>
                                     </el-radio>
                                 </el-radio-group>
+                                <div><span style="font-size: 14px; color: #f36565;">注：请选择一种客户导入方式</span></div>
                             </el-form-item>
                         </el-col>
                         <el-col :xl="12" :lg="12" :md="12" :sm="24">
@@ -136,7 +137,7 @@
             </div>
         </s-card>
         <div style="text-align:center; margin: 20px 0;">
-            <el-button size="small" type="primary" style="width: 100px;" @click="nextStep">下一步</el-button>
+            <el-button size="small" type="warning" style="width: 100px;" @click="nextStep">下一步</el-button>
         </div>
         <el-dialog :close-on-click-modal="false" :close-on-press-escape="false" :custom-class="`self-dialog`"
                    :visible="showDialog" width="85%" @close="handleCloseDialog" :title="`${operateType === 1 ? '查看' : operateType === 2 ? '编辑' : '新增'}场景配置-${createTypeName}`">
@@ -204,7 +205,8 @@ export default {
                 resultType: '',
                 customNoArray: ['80000001', '80001000'],
                 contractCode: 'cu1712',
-                selectDateRange: [new Date(moment().subtract(1, 'months').format('YYYY-MM-DD')), new Date(moment().subtract(1, 'days').format('YYYY-MM-DD'))]
+                selectDateRange: ['2017-06-01', '2017-08-31']
+                // selectDateRange: [new Date(moment().subtract(1, 'months').format('YYYY-MM-DD')), new Date(moment().subtract(1, 'days').format('YYYY-MM-DD'))]
             },
             tableData: [],
             columns: [

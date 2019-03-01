@@ -26,6 +26,10 @@
         </div>
         <div style="margin-top:8px; text-align:right;">
             <el-button size="small" type="primary" :loading="loadingSyntaxCheck" :disabled="disabled" @click="syntaxCheck()">语法检查</el-button>
+            <el-tooltip placement="bottom">
+                <i class="el-icon-question" style="font-size: 14px; margin-left: 5px;"></i>
+                <div slot="content" style="max-width: 250px; line-height: 20px;">语法检查采用标准SQL语法校验规则</div>
+            </el-tooltip>
         </div>
     </div>
 </template>
