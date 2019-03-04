@@ -34,7 +34,7 @@ export default {
                     backgroundColor: '#222',
                     borderColor: '#777',
                     borderWidth: 1,
-                    extraCssText: 'width:200px; white-space:pre-wrap; word-break: break-all',
+                    extraCssText: 'width:240px; white-space:pre-wrap; word-break: break-all',
                 },
                 animation: false,
                 series: [
