@@ -1,71 +1,58 @@
 <template>
-    <el-row :gutter="20">
-        <el-col>
-            <s-card class="" :title="`他比证券`" :icon="`el-icon-setting`">
-                <s-table
-                    slot="content"
-                    :height="200"
-                    :showSelectionColumn="false"
-                    :showIndexColumn="false"
-                    tooltip-effect="dark"
-                    :loading="loadingAR"
-                    :columns="columnsList"
-                    :tableData="tableData2"
-                >
-                    <el-table-column
-                        align="center"
-                        type="index"
-                        slot="tableColumnsUnshift"
-                        width="55">
-                        <template slot-scope="scope">
-                            <el-radio
-                                class="radio"
-                                v-model="flagValue"
-                                :label="scope.$index"
-                                @change="getTemplateRow(scope.row)"><br></el-radio>
-                        </template>
-                    </el-table-column>
-                </s-table>
-            </s-card>
-        </el-col>
-        <!--<el-col>-->
-            <!--<s-card class="" :title="`舆情`" :icon="`fa fa-chart-line`">-->
-                <!--<s-table-->
-                    <!--ref="selfTables"-->
-                    <!--slot="content"-->
-                    <!--:showSelectionColumn="true"-->
-                    <!--:showIndexColumn="false"-->
-                    <!--:height="230"-->
-                    <!--:loading="loadingAR"-->
-                    <!--:columns="columnsListPF"-->
-                    <!--:tableData="tableData1"-->
-                    <!--@selection-change="handleSelectionChange2">-->
-                <!--</s-table>-->
-            <!--</s-card>-->
-        <!--</el-col>-->
-        <!--<el-col :span="12">-->
-        <!--<s-card class="" :title="`舆情`" :icon="`fa fa-chart-line`">-->
-        <!--<s-table-->
-        <!--ref="selfTables"-->
-        <!--slot="content"-->
-        <!--:showSelectionColumn="true"-->
-        <!--:showIndexColumn="false"-->
-        <!--:height="230"-->
-        <!--:loading="loadingAR"-->
-        <!--:columns="columnsListPF"-->
-        <!--:tableData="tableData1PF"-->
-        <!--@selection-change="handleSelectionChange"-->
-        <!--&gt;-->
-        <!--</s-table>-->
-        <!--</s-card>-->
-        <!--</el-col>-->
-    </el-row>
+    <div>
+        <el-row :gutter="20">
+            <el-col>
+                <s-card class="" :title="`他比证券`" :icon="`el-icon-setting`">
+                    <s-table
+                        slot="content"
+                        :height="200"
+                        :showSelectionColumn="false"
+                        :showIndexColumn="false"
+                        tooltip-effect="dark"
+                        :loading="loadingAR"
+                        :columns="columnsList"
+                        :tableData="tableData2">
+                        <el-table-column
+                            align="center"
+                            type="index"
+                            slot="tableColumnsUnshift"
+                            width="55">
+                            <template slot-scope="scope">
+                                <el-radio
+                                    class="radio"
+                                    v-model="flagValue"
+                                    :label="scope.$index"
+                                    @change="getTemplateRow(scope.row)"><br></el-radio>
+                            </template>
+                        </el-table-column>
+                    </s-table>
+                </s-card>
+            </el-col>
+        </el-row>
+        <el-row :gutter="20">
+            <el-col :span="24">
+                <s-card class="" :title="`指标配置`" :icon="`fa fa-chart-line`">
+                    <s-table
+                        ref="selfTables"
+                        slot="content"
+                        :showSelectionColumn="true"
+                        :showIndexColumn="false"
+                        :height="230"
+                        :loading="loadingAR"
+                        :columns="columnsList1"
+                        :tableData="tableData1"
+                        @selection-change="handleSelectionChange2">
+                    </s-table>
+                </s-card>
+            </el-col>
+        </el-row>
+    </div>
 </template>
 
 <script>
 import SCard from '@/components/index/common/SCard';
 import STable from '@/components/index/common/STable';
-import {columnsList2, columnsList1, tableDatalPF2} from './constants';
+import {columnsList2, columnsList1} from './constants';
 export default {
     name: 'dialogAR',
     components: {SCard, STable},
@@ -109,13 +96,14 @@ export default {
             columnsList: columnsList2,
             // tableData2: tableData2,
             // 舆情
-            columnsListPF: columnsList1,
+            columnsList1: columnsList1,
             // tableData1PF: columnsList1
         };
     },
     computed: {},
     mounted() {
-        console.log(this.tableData2);
+        // console.log(this.tableData2);
+        console.log(this.tableData1);
     },
     methods: {
         // 输入阈值设

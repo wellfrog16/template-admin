@@ -36,6 +36,7 @@
             <dialog-a-r2
                 :visi="dialogVisible"
                 :tableData2="tableData2"
+                :tableData1="tableData1"
                 @celclickEmit="celclickEmit"></dialog-a-r2>
             <div slot="footer" :class="$style.dialog_footer">
                 <el-button @click="dialogCancelClick">取 消</el-button>
@@ -102,6 +103,7 @@ export default {
             flagVal: '',
             radioTableColumn: {},
             // checkboTableColumn: [],
+            tableData1: [],
             tableData2: [],
             chartOptions2: {
                 title: [

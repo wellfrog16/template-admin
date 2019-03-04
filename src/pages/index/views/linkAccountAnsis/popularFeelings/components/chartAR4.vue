@@ -36,6 +36,7 @@
             <dialog-a-r4
                 :visi="dialogVisible"
                 :tableData4="tableData4"
+                :tableData43="tableData3"
                 @celclickEmit="celclickEmit">
             </dialog-a-r4>
             <div slot="footer" :class="$style.dialog_footer">
@@ -125,6 +126,7 @@ export default {
             flagVal: '',
             radioTableColumn: {},
             tableData4: [],
+            tableData3: [],
             chartOptions4: {
                 animation: false,
                 title: [
