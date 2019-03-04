@@ -1,5 +1,17 @@
 <template>
     <s-card :title="`舆情分析结论`" :icon="`fa fa-chart-line`">
+        <div slot="right" :class="$style.box">
+            <div :class="$style.top">
+                <el-tooltip class="item" effect="dark" placement="right-end">
+                    <div slot="content">
+                        说明：<br/>
+                        新闻热度(当日新闻报道、点击量等加权之和)<br/>
+                        当前热度(最近热点事件当日报道量，点击量等加权之和)<br/>
+                    </div>
+                    <el-button type="text">?</el-button>
+                </el-tooltip>
+            </div>
+        </div>
         <div :class="$style.dashboards" slot="content">
             <div :class="$style.dashboard_box">
                 <echarts-common
@@ -65,7 +77,7 @@ export default {
             chartOptionso1: {
                 legend: {
                     top: '5%',
-                    data: ['原油舆情情感'],
+                    data: ['舆情偏向'],
                 },
                 color: [
                     '#37A2DA',
@@ -83,7 +95,7 @@ export default {
                     formatter: '{a} <br/>{b} : {c}%'
                 },
                 series: [{
-                    name: '原油舆情情感',
+                    name: '舆情偏向',
                     textStyle: {
                         color: '#fff'
                     },
@@ -141,7 +153,7 @@ export default {
                             fontSize: 16,
                             padding: [113, 4, 5, 6]
                         },
-                        formatter: '原油情感分析:{value}%'},
+                        formatter: '机器分析置信度:(利空){value}%'},
                     data: [{value: ''}]
                 }]
             },
@@ -149,7 +161,7 @@ export default {
             chartOptionso2: {
                 legend: {
                     top: '5%',
-                    data: ['原油舆情热度'],
+                    data: ['当日新闻热度'],
                 },
                 color: [
                     '#37A2DA',
@@ -167,7 +179,7 @@ export default {
                     formatter: '{a} <br/>{b} : {c}'
                 },
                 series: [{
-                    name: '原油舆情热度',
+                    name: '当日新闻热度',
                     textStyle: {
                         color: '#fff'
                     },
@@ -211,7 +223,7 @@ export default {
                             fontSize: 16,
                             padding: [113, 4, 5, 6]
                         },
-                        formatter: '原油热度{value}'},
+                        formatter: '新闻热度:{value}'},
                     data: [{value: ''}]
                 }]
             },
@@ -219,7 +231,7 @@ export default {
             chartOptionso3: {
                 legend: {
                     top: '5%',
-                    data: ['EIA原油库存'],
+                    data: ['EIA数据公布情况'],
                 },
                 color: [
                     '#37A2DA',
@@ -237,7 +249,7 @@ export default {
                     formatter: '{a} <br/>{b} : {c}'
                 },
                 series: [{
-                    name: 'EIA原油库存',
+                    name: 'EIA数据公布情况',
                     textStyle: {
                         color: '#fff'
                     },
@@ -281,7 +293,7 @@ export default {
                             fontSize: 16,
                             padding: [113, 4, 5, 6]
                         },
-                        formatter: 'EIA原油库存：{value}'},
+                        formatter: '当日库存:{value}'},
                     data: [{value: ''}]
                     // detail: {
                     //     show: true,
@@ -299,7 +311,7 @@ export default {
             chartOptionso4: {
                 legend: {
                     top: '5%',
-                    data: ['国际环境新闻报道'],
+                    data: ['热度跟踪热度'],
                 },
                 color: [
                     '#37A2DA',
@@ -317,7 +329,7 @@ export default {
                     formatter: '{a} <br/>{b} : {c}%'
                 },
                 series: [{
-                    name: '国际环境新闻报道',
+                    name: '热度跟踪热度',
                     textStyle: {
                         color: '#fff'
                     },
@@ -372,7 +384,7 @@ export default {
                             fontSize: 16,
                             padding: [113, 4, 5, 6]
                         },
-                        formatter: '新闻报道量:{value}'},
+                        formatter: '当前热度:{value}'},
                     data: [{value: ''}]
                 }]
             }
@@ -451,6 +463,14 @@ export default {
 </script>
 
 <style lang="less" module>
+    .box {
+        .top {
+            text-align: center;
+        }
+        .item {
+            margin: 4px;
+        }
+    }
     .dashboards {
         width: 100%;
         display: flex;

@@ -66,7 +66,7 @@
 </template>
 
 <script>
-// import moment from 'moment';
+import moment from 'moment';
 import MiniIndex from './miniIndex';
 import {echartsData1} from './constants';
 import {postPetroleumAR1} from '@/api/dataAnsis/popularFeelings';
@@ -522,9 +522,10 @@ export default {
             this.timer = setInterval(v => {
                 var now = new Date(); // 当前日期
                 var dateWeek = now.getDay(); // 今天本周的第几天
+                let timeDay = moment(now).format('YYYY-MM-DD');
                 let params = {
                     // 'timeOfDay': now.getFullYear() + '-' + now.getMonth() + 1 + '-' + now.getDate(),
-                    'timeOfDay': '2019-02-18',
+                    'timeOfDay': timeDay,
                     'frequentness': '5',
                     'crudeCode': 'YY_SCO'
                 };
@@ -557,18 +558,20 @@ export default {
                             titleText = v.crudeDealTime + '/' + dateWeek + '/' + v.realTime + ' 均 ' + v.realAveragePrice + ' 量 ' + v.realMakeBargain + ' 幅 ' + v.realUpsAndDowns + '%';
                         });
                         if (exceptionDatas.length !== 0) {
+                            console.log(exceptionDatas);
                             markAreaData = [
                                 [
                                     {
                                         'name': '异常',
                                         // 'xAxis': mainData[mainData.length - 1].realTime, // 异常时间
-                                        'xAxis': '09:09' // 异常时间
+                                        // 'xAxis': '09:09' // 异常时间
+                                        'xAxis': '23:11' // 异常时间
                                         // 'yAxis': mainData[mainData.length - 1].realPrice, // 异常价格
                                     },
                                     {
                                         // 'xAxis': exceptionDatas[0].realTime, // 前五分钟异常时间
-                                        'xAxis': '02:25', // 前五分钟异常时间
-                                        'yAxis': '464' // 前五分钟异常价格
+                                        'xAxis': '23:39', // 前五分钟异常时间
+                                        'yAxis': '445' // 前五分钟异常价格
                                         // 'yAxis': exceptionDatas[0].realPrice, // 前五分钟异常价格
                                     }
                                 ]

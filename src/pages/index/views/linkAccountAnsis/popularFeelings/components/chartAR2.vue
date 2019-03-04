@@ -438,9 +438,10 @@ export default {
             this.timer = setInterval(v => {
                 let now = new Date();
                 let dateWeek = now.getDay(); // 今天本周的第几天
+                let timeDay = moment(now).format('YYYY-MM-DD');
                 let params = {
                 //   'timeOfDay': now.getFullYear() + '-' + now.getMonth() + 1 + '-' + now.getDate(),
-                    'timeOfDay': '2019-02-18',
+                    'timeOfDay': timeDay,
                     'frequentness': '5',
                     'crudeCode': 'BLT_OIL'
                 };

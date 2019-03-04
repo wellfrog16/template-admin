@@ -175,6 +175,16 @@ const Index = {
                 {
                     meta: {
                         scrollTop: true,
+                        title: '舆情情感分析'
+                    },
+                    path: '/PublicAnalysis',
+                    name: 'PublicAnalysis',
+                    icon: 'menu-fix-icon fa fa-location-arrow',
+                    component: resolve => require(['@/pages/index/views/linkAccountAnsis/PublicAnalysis/Index.vue'], resolve)
+                },
+                {
+                    meta: {
+                        scrollTop: true,
                         title: '舆情波动'
                     },
                     path: '/publicOpinionSwings',
@@ -192,16 +202,6 @@ const Index = {
                     icon: 'menu-fix-icon fa fa-location-arrow',
                     component: resolve => require(['@/pages/index/views/linkAccountAnsis/newsDetails/Index.vue'], resolve)
                 },
-                {
-                    meta: {
-                        scrollTop: true,
-                        title: '舆情情感分析'
-                    },
-                    path: '/PublicAnalysis',
-                    name: 'PublicAnalysis',
-                    icon: 'menu-fix-icon fa fa-location-arrow',
-                    component: resolve => require(['@/pages/index/views/linkAccountAnsis/PublicAnalysis/Index.vue'], resolve)
-                }
             ]
         },
         {

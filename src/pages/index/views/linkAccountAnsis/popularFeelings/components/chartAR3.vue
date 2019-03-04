@@ -378,6 +378,7 @@ export default {
             this.loading3 = true;
             // var now = new Date(); // 当前日期
             // var dateWeek = now.getDay(); // 今天本周的第几天
+            // let timeDay = moment(now).format('YYYY-MM-DD'); // 当前日期
             let params = {
                 'startDate': '2018-03-26',
                 'endDate': '2019-01-10',

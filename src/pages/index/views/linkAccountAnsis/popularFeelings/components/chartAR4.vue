@@ -36,7 +36,7 @@
             <dialog-a-r4
                 :visi="dialogVisible"
                 :tableData4="tableData4"
-                :tableData43="tableData3"
+                :tableData3="tableData3"
                 @celclickEmit="celclickEmit">
             </dialog-a-r4>
             <div slot="footer" :class="$style.dialog_footer">
@@ -443,7 +443,7 @@ export default {
             postPetroleumAR4(params).then(resp => {
                 if (resp && resp.length !== 0) {
                     this.loading4 = false;
-                    if (resp.exception.length !== 0){
+                    if (resp.exception.length !== 0) {
                         exceptionDatas = resp.exception; // 异常数据
                     }
                     mainData = resp.mainData;

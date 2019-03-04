@@ -1,6 +1,6 @@
 <template>
     <div :class="$style.analys3">
-        <s-card :title="`原油库存`" :icon="`fa fa-chart-line`">
+        <s-card :title="`EIA原油库存`" :icon="`fa fa-chart-line`">
             <div slot="right">
                 <el-button type="text" @click="toggleDetail">
                     <span v-if="detail">
@@ -10,6 +10,19 @@
                         图表<i class="fa fa-undo-alt" style="margign-left: 5px;"></i>
                     </span>
                 </el-button>
+            </div>
+            <div slot="right" :class="$style.box">
+                <div :class="$style.top">
+                    <el-tooltip class="item" effect="dark" placement="right-end">
+                        <div slot="content">
+                            说明：<br/>
+                            EIA原油库存由美国能源信息署统计公布（该数据不包括战略石油储备），<br/>
+                            该数据每周公布一次【周三22：30（冬令时23：30）公布】，此数据主要显示了<br/>
+                            美国当周原油库存数量，对于沥青及原油提炼品（燃油、柴油等）有较大影响。
+                        </div>
+                        <el-button type="text">?</el-button>
+                    </el-tooltip>
+                </div>
             </div>
             <echarts-common
                 v-if="details"
@@ -63,7 +76,7 @@ export default {
             chartOptions3: {
                 title: {
                     left: 'left',
-                    text: 'EIA原油库存数据',
+                    text: '折线图',
                     x: '1%',
                     textStyle: {
                         color: '#fff',
@@ -329,7 +342,15 @@ export default {
 </script>
 
 <style lang="less" module>
-    .analys2 {
+    .analys3 {
         width: 100%;
+        .box {
+            .top {
+                text-align: center;
+            }
+            .item {
+                margin: 4px;
+            }
+        }
     }
 </style>

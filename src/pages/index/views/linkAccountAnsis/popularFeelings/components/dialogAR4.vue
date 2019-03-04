@@ -11,8 +11,7 @@
                         tooltip-effect="dark"
                         :loading="loadingAR"
                         :columns="columnsList"
-                        :tableData="tableData4"
-                    >
+                        :tableData="tableData4">
                         <el-table-column
                             align="center"
                             type="index"

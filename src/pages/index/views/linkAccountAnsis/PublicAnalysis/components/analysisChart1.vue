@@ -1,6 +1,17 @@
 <template>
     <div :class="$style.analys1">
         <s-card :title="`原油舆情情感分析`" :icon="`fa fa-chart-line`">
+            <div slot="right" :class="$style.box">
+                <div :class="$style.top">
+                    <el-tooltip class="item" effect="dark" placement="right-end">
+                        <div slot="content">
+                            说明：<br/>
+                            热度(当日新闻报道、点击量等加权之和)
+                        </div>
+                        <el-button type="text">?</el-button>
+                    </el-tooltip>
+                </div>
+            </div>
             <echarts-common
                 slot="content"
                 :loading="loading1"
@@ -60,7 +71,8 @@ export default {
                 },
                 legend: {
                     top: '3%',
-                    data: ['正面', '负面', '中性', '热度'],
+                    // data: ['正面', '负面', '中性', '热度'],
+                    data: ['利好', '利空', '中性', '热度'],
                     textStyle: {
                         color: '#fff',
                         fontSize: '14'
@@ -115,7 +127,7 @@ export default {
                 ],
                 yAxis: [
                     {
-                        name: '正面',
+                        name: '利好',
                         type: 'value',
                         position: 'left',
                         splitLine: {
@@ -202,7 +214,7 @@ export default {
                         },
                     },
                     {
-                        name: '负面',
+                        name: '利空',
                         show: false,
                         offset: 0,
                         type: 'value',
@@ -248,7 +260,7 @@ export default {
                 ],
                 series: [
                     {
-                        name: '正面',
+                        name: '利好',
                         type: 'bar',
                         stack: '总量',
                         barWidth: 30,
@@ -266,7 +278,7 @@ export default {
                         data: []
                     },
                     {
-                        name: '负面',
+                        name: '利空',
                         type: 'bar',
                         stack: '总量',
                         yAxisIndex: 0,
@@ -369,5 +381,13 @@ export default {
 <style lang="less" module>
     .analys1 {
         width: 100%;
+        .box {
+            .top {
+                text-align: center;
+            }
+            .item {
+                margin: 4px;
+            }
+        }
     }
 </style>

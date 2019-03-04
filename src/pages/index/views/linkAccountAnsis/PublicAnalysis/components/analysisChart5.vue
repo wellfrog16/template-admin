@@ -1,6 +1,18 @@
 <template>
-    <div :class="$style.analys4">
+    <div :class="$style.analys5">
         <s-card :title="`国际环境`" :icon="`fa fa-chart-line`">
+            <div slot="right" :class="$style.box">
+                <div :class="$style.top">
+                    <el-tooltip class="item" effect="dark" placement="right-end">
+                        <div slot="content">
+                            说明：<br/>
+                            国际舆情模块主要是指OPEC大区与非opec大区的热点事件，<br/>
+                            主要是热点事件的跟踪，报道量，点击量等情况。
+                        </div>
+                        <el-button type="text">?</el-button>
+                    </el-tooltip>
+                </div>
+            </div>
             <div slot="content" :class="$style.environment">
                 <div :class="$style.environment_box" style="margin-right: 20px;">
                     <el-collapse v-model="activeNames" @change="handleChange">
@@ -52,7 +64,7 @@ import STable from '@/components/index/common/STable';
 import EchartsCommon from '@/components/index/common/EchartsCommon';
 import {columnsListAR5} from './constants';
 export default {
-    name: 'analysisChart1',
+    name: 'analysisChart5',
     components: {SCard, STable, EchartsCommon},
     props: {},
     minis: [],
@@ -404,8 +416,16 @@ export default {
     }
 </style>
 <style lang="less" module>
-    .analys4 {
+    .analys5 {
         width: 100%;
+        .box {
+            .top {
+                text-align: center;
+            }
+            .item {
+                margin: 4px;
+            }
+        }
         .environment {
             width: 100%;
             display: flex;
