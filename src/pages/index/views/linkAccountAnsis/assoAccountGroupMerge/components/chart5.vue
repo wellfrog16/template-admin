@@ -66,16 +66,16 @@ export default {
                 tooltip: {
                     formatter: params => {
                         if (params.dataType === 'edge') { // link
-                            return '客户编号交集：' + params.data.tip || '';
+                            return '账户组号：' + params.name + '<br>客户编号交集：' + params.data.tip || '';
                         } else if (params.dataType === 'node') {
-                            return '持仓量排名：' + params.data.value + '<br>客户编号: ' + params.data.custIds || '';
+                            return '账户组号：' + params.name + '<br>持仓量排名：' + params.data.value + '<br>客户编号: ' + params.data.custIds || '';
                         }
                     },
                     padding: 10,
                     backgroundColor: '#222',
                     borderColor: '#777',
                     borderWidth: 1,
-                    extraCssText: 'width:200px; white-space:pre-wrap; word-break: break-all',
+                    extraCssText: 'width:240px; white-space:pre-wrap; word-break: break-all',
                 },
                 animation: false,
                 series: [
@@ -134,7 +134,8 @@ export default {
             },
             maxIndex: 50,
             computedMaxOverWarehouseIndex: 20,
-            checked: false
+            checked: false,
+            limitQtty: 100000 // 限仓量
         };
     },
     methods: {
@@ -165,7 +166,7 @@ export default {
             this.chartOptions.visualMap.max = this.maxIndex;
             // 计算超仓的排名最大值
             let minData = _.minBy(chartData['nodes'], v => {
-                if (v.acctQttyMax > 100000) {
+                if (v.acctQttyMax > this.limitQtty) {
                     return v.acctQttyMax;
                 }
             });

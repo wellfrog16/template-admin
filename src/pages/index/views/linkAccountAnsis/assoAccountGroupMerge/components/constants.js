@@ -3,11 +3,11 @@ import custIdColumn from '@/components/index/common/CustIdColumn';
 import {accountTotalFrepOptions, sfOptions} from '../../sceneConfig/components/constants';
 let formatAlmSel = item => {
     let index = sfOptions.findIndex(v => { return v.value === item; });
-    return sfOptions[index]['label'];
+    return sfOptions[index] ? sfOptions[index]['label'] : '';
 };
 let formatFreq = item => {
     let index = accountTotalFrepOptions.findIndex(v => { return v.value === item; });
-    return accountTotalFrepOptions[index]['label'];
+    return accountTotalFrepOptions[index] ? accountTotalFrepOptions[index]['label'] : '';
 };
 export const charts = [
     {title: '账户组相关性概览', icon: 'fa fa-globe', toggleDetailFlags: false, loading: false},

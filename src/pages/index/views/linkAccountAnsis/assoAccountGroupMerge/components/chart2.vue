@@ -107,6 +107,7 @@ export default {
             let series = [];
             let date = [];
             Object.keys(mainData).forEach((v, i) => {
+                // 多单柱状堆叠
                 series.push({
                     itemStyle: {
                         color: echartsDefault[i],
@@ -136,6 +137,7 @@ export default {
                     },
                     data: mainData[v].map(m => { return m.acctLongQtty; })
                 });
+                // 空单柱状堆叠
                 series.push({
                     itemStyle: {
                         color: echartsDefault[i],
@@ -144,28 +146,23 @@ export default {
                     type: 'bar',
                     barMaxWidth: '45',
                     stack: '总量',
-                    markLine: { // 标记线设置
-                        lineStyle: {
-                            normal: {
-                                type: 'dashed',
-                                color: '#fff'
-                            }
-                        },
-                        label: {
-                            position: 'middle',
-                            formatter: params => {
-                                return `超仓线：${params.value}`;
-                            }
-                        },
-                        symbolSize: 0, // 控制箭头和原点的大小、官方默认的标准线会带远点和箭头
-                        data: [ // 设置条标准线——x=10
-                            {yAxis: '100000'}
-                        ]
-                    },
                     data: mainData[v].map(m => { return -m.acctShortQtty; })
                 });
                 date = mainData[v].map(m => { return m.txDay || m.date; });
             });
+            // 多单限仓线
+            /* series.push({
+                name: '多单限仓线',
+                type: 'line',
+                data: dData
+            }); */
+            // 空单限仓线
+            /* series.push({
+                name: '空单限仓线',
+                type: 'line',
+                data: kData
+            }); */
+            console.log(series);
             this.chartOptions['legend']['data'] = series.map(m => { return m.name; });
             this.chartOptions['series'] = series;
             this.chartOptions['xAxis'][0]['data'] = date;
