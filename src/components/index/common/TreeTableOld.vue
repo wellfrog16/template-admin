@@ -7,7 +7,14 @@
         <div style="padding-bottom: 15px; text-align: center; color: #e6a23c;">
             <span style="margin-right: 20px;">高级筛选：</span>
             <el-checkbox v-model="checked" @change="handleChecked()">只显示已选</el-checkbox>
+            <el-checkbox v-model="limitChecked" @change="handleLimitChecked">只显示超仓账户组</el-checkbox>
             <el-button size="mini" type="warning" @click="handleClearChecked" style="margin-left: 20px;">清除已选</el-button>
+        </div>
+        <div style="padding-bottom: 15px; text-align: center; color: #e6a23c;">
+            <span style="margin-right: 20px;">排序方式：</span>
+            <el-select v-model="selectSort" @change="handleSortChange" style="width: 360px;" placeholder="请选择排序方式">
+                <el-option v-for="(item, index) in sortList" :key="index" :label="item.label" :value="item.value"></el-option>
+            </el-select>
         </div>
         <div style="overflow: auto;" class="asso-scrollbar-b">
             <div :style="`width: ${propsWidth}px; display: flex; text-align: center; padding-left: 55px; height: 36px; line-height: 36px;`">
@@ -68,6 +75,7 @@
 
 </template>
 <script>
+import _ from 'lodash';
 import custIdColumn from '@/components/index/common/CustIdColumn';
 export default {
     data() {
@@ -79,7 +87,18 @@ export default {
             checked: false,
             tableDataModel: [],
             selectTemList: [],
-            allData: []
+            allData: [],
+            limitQtty: 100000,
+            limitChecked: false,
+            selectSort: '',
+            sortList: [
+                {label: '按账户组号正序', value: 0},
+                {label: '按账户组号倒序', value: 1},
+                {label: '按账户组多单持仓量正序', value: 2},
+                {label: '按账户组多单持仓量倒序', value: 3},
+                {label: '按账户组空单持仓量正序', value: 4},
+                {label: '按账户组空单持仓量倒序', value: 5},
+            ]
         };
     },
     components: {custIdColumn},
@@ -149,6 +168,44 @@ export default {
         }
     },
     methods: {
+        handleSortChange(val) {
+            switch (val) {
+            case 0:
+                this.tableDataModel = _.orderBy(this.tableDataModel, ['acctId'], ['asc']);
+                break;
+            case 1:
+                this.tableDataModel = _.orderBy(this.tableDataModel, ['acctId'], ['desc']);
+                break;
+            case 2:
+                this.tableDataModel = _.orderBy(this.tableDataModel, ['acctMultiMakePosQtty'], ['asc']);
+                break;
+            case 3:
+                this.tableDataModel = _.orderBy(this.tableDataModel, ['acctMultiMakePosQtty'], ['desc']);
+                break;
+            case 4:
+                this.tableDataModel = _.orderBy(this.tableDataModel, ['acctBillMakePosQtty'], ['asc']);
+                break;
+            case 5:
+                this.tableDataModel = _.orderBy(this.tableDataModel, ['acctBillMakePosQtty'], ['desc']);
+                break;
+            }
+        },
+        filterLimitData(data) {
+            return data.filter(v => {
+                return (v.acctBillMakePosQtty > v.acctMultiMakePosQtty ? v.acctBillMakePosQtty : v.acctMultiMakePosQtty) > this.limitQtty;
+            });
+        },
+        handleTableChange() {
+            this.handleLimitChecked(this.limitChecked);
+            this.handleChecked();
+        },
+        handleLimitChecked(checked) {
+            if (checked) {
+                this.tableDataModel = this.filterLimitData(this.tableDataModel);
+            } else {
+                this.handleChecked();
+            }
+        },
         handleClearChecked() {
             this.checked = false;
             this.selectTemList = [];
@@ -174,9 +231,17 @@ export default {
                         return !!v.children;
                     });
                 }
-                this.tableDataModel = this.selectTemList;
+                if (this.limitChecked) {
+                    this.tableDataModel = this.filterLimitData(this.selectTemList);
+                } else {
+                    this.tableDataModel = this.selectTemList;
+                }
             } else {
-                this.tableDataModel = this.allData;
+                if (this.limitChecked) {
+                    this.tableDataModel = this.filterLimitData(this.allData);
+                } else {
+                    this.tableDataModel = this.allData;
+                }
             }
             let $ = this.$jquery;
             setTimeout(() => {

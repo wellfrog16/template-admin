@@ -39,6 +39,9 @@ export default {
         handleDelete() {
             let checkedNodes = this.getCheckedNodes();
             this.deleteMethods(checkedNodes);
+            setTimeout(() => {
+                this.$refs['self-tree-table'].handleTableChange();
+            }, 500);
         },
         getMaxAccountId() {
             let acctIds = [...new Set(this.mainTableData.map(v => {
@@ -87,6 +90,9 @@ export default {
                 children: checkedChildren
             });
             this.sortByAccountId();
+            setTimeout(() => {
+                this.$refs['self-tree-table'].handleTableChange();
+            }, 500);
         },
         sortByAccountId() {
             this.mainTableData = _.sortBy(this.mainTableData, [item => {
@@ -128,6 +134,9 @@ export default {
                 children: _.unionBy(checkedChildren, 'custId')
             });
             this.sortByAccountId();
+            setTimeout(() => {
+                this.$refs['self-tree-table'].handleTableChange();
+            }, 500);
         },
         dealMainData() { //  将树形结构处理为list
             let tableData = [];

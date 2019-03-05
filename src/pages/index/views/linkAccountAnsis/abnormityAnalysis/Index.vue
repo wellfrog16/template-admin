@@ -27,6 +27,7 @@
                                                 element-loading-text="数据加载中，请耐心等待..."
                                                 element-loading-background="rgba(0,0,0,0.3)"
                                                 v-model="ruleForm.resultId"
+                                                placeholder="请选择结果集"
                                             >
                                                 <el-option
                                                     v-for="item in resultList"

@@ -14,7 +14,7 @@
                                     ]">
                                         <el-input :disabled="disabled" :clearabled="!disabled" class="custom-width" size="small" v-model="ruleForm[item.field]"></el-input>
                                         <span class="unit-css" v-if="item.unit">{{ item.unit }}</span>
-                                        <el-select :disabled="disabled" :clearabled="!disabled" size="small" v-if="index === checkbox.length - 1" v-model="ruleForm.statAcctType" class="custom-width" style="margin-left:3px;">
+                                        <el-select :disabled="disabled" :clearabled="!disabled" size="small" v-if="index === checkbox.length - 1" v-model="ruleForm.statAcctType" class="custom-width" style="margin-left:3px;" placeholder="请选择账户组统计类型">
                                             <el-option
                                                 v-for="item in accountTotalTypeOptions"
                                                 :key="item.value"
@@ -29,7 +29,7 @@
                         </el-form-item>
                         <p class="remark">* 缩小账户范围能提升计算效率</p>
                         <el-form-item label-width="140px" prop="statFreq" label="统计频度" style="padding-left:23px; margin-bottom: 0;">
-                            <el-select :disabled="disabled" :clearabled="!disabled" size="small" v-model="ruleForm.statFreq" class="custom-width">
+                            <el-select :disabled="disabled" :clearabled="!disabled" size="small" v-model="ruleForm.statFreq" class="custom-width" placeholder="请选择账户组统计频度">
                                 <el-option
                                     v-for="item in accountTotalFrepOptions"
                                     :key="item.value"

@@ -1,5 +1,5 @@
 <template>
-    <el-select class="custom-width" clearable size="small" v-model="resultId" @change="handleChange" v-loading="loading">
+    <el-select class="custom-width" clearable size="small" v-model="resultId" @change="handleChange" v-loading="loading" placeholder="请选择结果集">
         <el-option
             v-for="item in resultList"
             :key="item.resultId"

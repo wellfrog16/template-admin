@@ -15,7 +15,7 @@
                         <s-full-screen class="self-fullscreen-wrap" ref="fullscreen" :fullscreen.sync="fullscreen" @change="fullscreenChange" background="#00255c">
                             <div v-if="item['toggleDetailFlags']">
                                 <div v-if="index===2">
-                                    <el-select class="custom-width" clearable size="small" v-model="table3CurrentType">
+                                    <el-select class="custom-width" clearable size="small" v-model="table3CurrentType" placeholder="请选择一个维度">
                                         <el-option v-for="(o, oi) in table3Options" :key="oi" :label="o.label" :value="o.field"></el-option>
                                     </el-select>
                                 </div>

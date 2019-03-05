@@ -14,7 +14,7 @@
                                     ]">
                                         <el-input :disabled="disabled" :clearabled="!disabled" class="custom-width" size="small" v-model="ruleForm[item.field]"></el-input>
                                         <span class="unit-css" v-if="item.unit">{{ item.unit }}</span>
-                                        <el-select :disabled="disabled" :clearabled="!disabled" size="small" v-if="index === checkbox.length - 1" v-model="ruleForm.statAcctType" class="custom-width" style="margin-left:3px;">
+                                        <el-select :disabled="disabled" :clearabled="!disabled" size="small" v-if="index === checkbox.length - 1" v-model="ruleForm.statAcctType" class="custom-width" style="margin-left:3px;" placeholder="请选择账户组统计类型">
                                             <el-option
                                                 v-for="item in accountTotalTypeOptions"
                                                 :key="item.value"
