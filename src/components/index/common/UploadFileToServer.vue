@@ -171,6 +171,7 @@ export default {
                 this.$emit('getTxtCon', resData, success, this.uploadParams);
                 // this.$refs.upload.clearFiles()
             } else {
+                this.$emit('handleUploadError');
                 this.$message.error(message || '上传失败');
             }
         },
@@ -180,6 +181,7 @@ export default {
             } else {
                 this.$message.error(`${JSON.parse(err.message).message}`);
             }
+            this.$emit('handleUploadError');
         },
         handleRemove(file, fileList) {
             console.log(file, fileList);

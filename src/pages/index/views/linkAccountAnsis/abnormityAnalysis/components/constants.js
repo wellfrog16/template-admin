@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import custIdColumn from '@/components/index/common/CustIdColumn';
 // 初始化表格信息
 export const tableColumns1 = [
@@ -34,7 +35,7 @@ export const tableColumns3 = [
     {field: 'acctBargainQtty', label: '账户自成交数量', width: 150, align: 'center', sortable: true},
 ];
 export const tableColumns = [
-    {field: 'acctNum', label: '账户组号', width: 150, align: 'center', fixed: true},
+    {field: 'acctNum', label: '账户组号', width: 150, align: 'center', fixed: true, sortable: true},
     {field: 'custId', label: '客户编号', width: 150, align: 'center', fixed: true},
     {field: 'custName', label: '客户名称', width: 150, align: 'center'},
     {field: 'memCd', label: '会员代码', width: 150, align: 'center'},
@@ -43,8 +44,10 @@ export const tableColumns = [
     {field: 'contrCd', label: '合约代码', width: 150, align: 'center'},
     {field: 'supSto', label: '超仓', width: 150, align: 'center'},
     {field: 'cntDate', label: '超仓天数', width: 150, align: 'center'},
-    {field: 'positionD', label: '多单持仓量', width: 150, align: 'center'},
-    {field: 'positionK', label: '空单持仓量', width: 150, align: 'center'},
+    {field: 'positionD', label: '账户组多单持仓量', width: 160, align: 'center', sortable: true, sortMethod: Vue.prototype.gfnSortByNumber},
+    {field: 'positionK', label: '账户组空单持仓量', width: 160, align: 'center', sortable: true, sortMethod: Vue.prototype.gfnSortByNumber},
+    {field: '', label: '账户多单持仓量', width: 160, align: 'center', sortable: true, sortMethod: Vue.prototype.gfnSortByNumber},
+    {field: '', label: '账户空单持仓量', width: 160, align: 'center', sortable: true, sortMethod: Vue.prototype.gfnSortByNumber},
     {field: 'freDraBill', label: '频繁报撤单', width: 150, align: 'center'},
     {field: 'bargain', label: '自成交', width: 150, align: 'center'},
 ];

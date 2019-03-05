@@ -45,6 +45,7 @@
                                                     :autoUploadMode="false"
                                                     @getTxtCon="handleUploadSuccess"
                                                     @currentFileList="currentFileList"
+                                                    @handleUploadError="handleUploadError"
                                                 ></upload-file-to-server>
                                             </div>
                                         </el-form-item>
@@ -212,15 +213,17 @@ export default {
             columns: [
                 {
                     label: '场景名称',
-                    field: 'sceneName'
+                    field: 'sceneName',
                 },
                 {
                     label: '场景类型',
-                    field: 'sceneTypeName'
+                    field: 'sceneTypeName',
+                    sortable: true,
+                    sortMethod: this.gfnSortByChineseCharacters.bind(this, 'sceneTypeName')
                 },
                 {
                     label: '场景说明',
-                    field: 'sceneComnt'
+                    field: 'sceneComnt',
                 }
             ],
             searchAccountText: '',
@@ -392,6 +395,9 @@ export default {
         },
         handleSearch() {
             this.getTableData({searchName: this.searchAccountText});
+        },
+        handleUploadError() {
+            this.loading = false;
         },
         handleUploadSuccess(resp, success, params) {
             this.loading = false;

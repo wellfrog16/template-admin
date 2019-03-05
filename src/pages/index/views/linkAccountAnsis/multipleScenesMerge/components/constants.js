@@ -1,3 +1,5 @@
+import Vue from 'vue';
+
 export const mainTableColumns = [
     {field: 'acctGroSrc', label: '数据来源', align: 'center'}, // dataSrc
     {field: 'resultSetName', label: '结果集名称', align: 'center'}, // resultSetName/resultName
@@ -40,45 +42,45 @@ export const mainTableColumns = [
     {field: 'avgOperTmMargin', label: '日均平均操作时间差', align: 'center'},
 ];
 export const chartTableColumns1 = [
-    {label: '客户编号1', field: 'custId1', align: 'center', minWidth: 130},
-    {label: '客户编号2', field: 'custId2', align: 'center', minWidth: 130},
-    {label: '买入成交相关系数', field: 'buyBargainRela', align: 'center', minWidth: 160},
-    {label: '卖出成交相关系数', field: 'sellBargainRela', align: 'center', minWidth: 160},
-    {label: '净买入成交相关系数', field: 'netBuyBargainRela', align: 'center', minWidth: 160},
-    {label: '多头持仓相关系数', field: 'longPosMakePosRela', align: 'center', minWidth: 160},
-    {label: '空头持仓相关系数', field: 'shortPosMakePosRela', align: 'center', minWidth: 160},
-    {label: '浮动盈亏相关系数', field: 'floatPrftLossRela', align: 'center', minWidth: 160},
+    {label: '客户编号1', field: 'custId1', align: 'center', minWidth: 130, sortable: true},
+    {label: '客户编号2', field: 'custId2', align: 'center', minWidth: 130, sortable: true},
+    {label: '买入成交相关系数', field: 'buyBargainRela', align: 'center', minWidth: 160, sortable: true},
+    {label: '卖出成交相关系数', field: 'sellBargainRela', align: 'center', minWidth: 160, sortable: true},
+    {label: '净买入成交相关系数', field: 'netBuyBargainRela', align: 'center', minWidth: 175, sortable: true},
+    {label: '多头持仓相关系数', field: 'longPosMakePosRela', align: 'center', minWidth: 160, sortable: true},
+    {label: '空头持仓相关系数', field: 'shortPosMakePosRela', align: 'center', minWidth: 160, sortable: true},
+    {label: '浮动盈亏相关系数', field: 'floatPrftLossRela', align: 'center', minWidth: 160, sortable: true},
 ];
 export const chartTableColumns2 = [
-    {label: '客户编号', field: 'custId', align: 'center', minWidth: 130, fixed: true},
-    {label: '身份证号', field: 'idtfyCertNum', align: 'center', minWidth: 130},
-    {label: '联系电话', field: 'contTel', align: 'center', minWidth: 130},
-    {label: '联系地址', field: 'contAddr', align: 'center', minWidth: 130},
-    {label: '邮编', field: 'zipCd', align: 'center', minWidth: 100},
-    {label: '工作单位', field: 'workCorp', align: 'center', minWidth: 100},
-    {label: '电子邮件', field: 'elecEmil', align: 'center', minWidth: 130},
-    {label: '银行账号', field: 'bankAcct', align: 'center', minWidth: 130}
+    {label: '客户编号', field: 'custId', align: 'center', minWidth: 130, fixed: true, sortable: true},
+    {label: '身份证号', field: 'idtfyCertNum', align: 'center', minWidth: 130, sortable: true},
+    {label: '联系电话', field: 'contTel', align: 'center', minWidth: 130, sortable: true},
+    {label: '联系地址', field: 'contAddr', align: 'center', minWidth: 130, sortable: true, sortMethod: Vue.prototype.gfnSortByChineseCharacters.bind(this, 'contAddr')},
+    {label: '邮编', field: 'zipCd', align: 'center', minWidth: 100, sortable: true},
+    {label: '工作单位', field: 'workCorp', align: 'center', minWidth: 130, sortable: true, sortMethod: Vue.prototype.gfnSortByChineseCharacters.bind(this, 'workCorp')},
+    {label: '电子邮件', field: 'elecEmil', align: 'center', minWidth: 130, sortable: true},
+    {label: '银行账号', field: 'bankAcct', align: 'center', minWidth: 130, sortable: true}
 ];
 export const chartTableColumns3 = [
-    {label: '客户编号', field: 'custId', align: 'center', minWidth: 130, fixed: true},
-    {field: 'multiBillMakePosQtty', label: '账户多单持仓量', align: 'center', minWidth: 160},
-    {field: 'billMakePosQtty', label: '账户空单持仓量', align: 'center', minWidth: 160},
-    {field: 'avgBargainQtty', label: '日均成交量', align: 'center', minWidth: 160},
-    {field: 'avgBillCnt', label: '日均报单次数', align: 'center', minWidth: 160},
-    {field: 'avgBargainRate', label: '日均成交率', align: 'center', minWidth: 160},
-    {field: 'avgCancelBillRate', label: '日均撤单率', align: 'center', minWidth: 160},
-    {field: 'avgOperTmMargin', label: '日均平均操作时间差', align: 'center', minWidth: 160}
+    {label: '客户编号', field: 'custId', align: 'center', minWidth: 130, fixed: true, sortable: true},
+    {field: 'multiBillMakePosQtty', label: '账户多单持仓量', align: 'center', minWidth: 160, sortable: true, sortMethod: Vue.prototype.gfnSortByNumber.bind(this, 'multiBillMakePosQtty')},
+    {field: 'billMakePosQtty', label: '账户空单持仓量', align: 'center', minWidth: 160, sortable: true, sortMethod: Vue.prototype.gfnSortByNumber.bind(this, 'billMakePosQtty')},
+    {field: 'avgBargainQtty', label: '日均成交量', align: 'center', minWidth: 160, sortable: true, sortMethod: Vue.prototype.gfnSortByNumber.bind(this, 'avgBargainQtty')},
+    {field: 'avgBillCnt', label: '日均报单次数', align: 'center', minWidth: 160, sortable: true, sortMethod: Vue.prototype.gfnSortByNumber.bind(this, 'avgBillCnt')},
+    {field: 'avgBargainRate', label: '日均成交率', align: 'center', minWidth: 160, sortable: true},
+    {field: 'avgCancelBillRate', label: '日均撤单率', align: 'center', minWidth: 160, sortable: true},
+    {field: 'avgOperTmMargin', label: '日均平均操作时间差', align: 'center', minWidth: 175, sortable: true, sortMethod: Vue.prototype.gfnSortByNumber.bind(this, 'avgOperTmMargin')}
 ];
 export const chartTableColumns4 = [
-    {label: '客户编号', field: 'custId', align: 'center', minWidth: 130, fixed: true},
-    {label: '投资经理', field: 'investMger', align: 'center', minWidth: 100},
-    {label: '投资顾问', field: 'investConsu', align: 'center', minWidth: 100},
-    {label: '权益产品编码', field: 'raiProdEncode', align: 'center', minWidth: 130},
-    {label: '下单人', field: 'nextBillPerson', align: 'center', minWidth: 100},
-    {label: '法人代表', field: 'lpSubstTbl', align: 'center', minWidth: 100},
-    {label: '资金调拨人', field: 'capCannibPerson', align: 'center', minWidth: 100},
-    {label: '结算单确认人', field: 'stlBillCfmPerson', align: 'center', minWidth: 130},
-    {label: '开户授权人', field: 'openAuthPerson', align: 'center', minWidth: 100}
+    {label: '客户编号', field: 'custId', align: 'center', minWidth: 130, fixed: true, sortable: true},
+    {label: '投资经理', field: 'investMger', align: 'center', minWidth: 110, sortable: true, sortMethod: Vue.prototype.gfnSortByChineseCharacters.bind(this, 'investMger')},
+    {label: '投资顾问', field: 'investConsu', align: 'center', minWidth: 110, sortable: true, sortMethod: Vue.prototype.gfnSortByChineseCharacters.bind(this, 'investConsu')},
+    {label: '权益产品编码', field: 'raiProdEncode', align: 'center', minWidth: 130, sortable: true},
+    {label: '下单人', field: 'nextBillPerson', align: 'center', minWidth: 100, sortable: true, sortMethod: Vue.prototype.gfnSortByChineseCharacters.bind(this, 'nextBillPerson')},
+    {label: '法人代表', field: 'lpSubstTbl', align: 'center', minWidth: 110, sortable: true, sortMethod: Vue.prototype.gfnSortByChineseCharacters.bind(this, 'lpSubstTbl')},
+    {label: '资金调拨人', field: 'capCannibPerson', align: 'center', minWidth: 120, sortable: true, sortMethod: Vue.prototype.gfnSortByChineseCharacters.bind(this, 'capCannibPerson')},
+    {label: '结算单确认人', field: 'stlBillCfmPerson', align: 'center', minWidth: 130, sortable: true, sortMethod: Vue.prototype.gfnSortByChineseCharacters.bind(this, 'stlBillCfmPerson')},
+    {label: '开户授权人', field: 'openAuthPerson', align: 'center', minWidth: 120, sortable: true, sortMethod: Vue.prototype.gfnSortByChineseCharacters.bind(this, 'openAuthPerson')}
 ];
 export const blocks = [
     {

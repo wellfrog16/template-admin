@@ -57,6 +57,7 @@
                                                     :showSubmitUploadBtn="false"
                                                     :autoUploadMode="false"
                                                     @getTxtCon="handleUploadSuccess"
+                                                    @handleUploadError="handleUploadError"
                                                     @currentFileList="currentFileList"
                                                 ></upload-file-to-server>
                                             </div>
@@ -320,6 +321,12 @@ export default {
             this.ruleForm.exportType = '1';
             this.ruleForm.resultId = '';
         },
+        handleUploadError() {
+            this.loadingTable0 = false;
+            this.loadingTable1 = false;
+            this.dealWithIsLoading = false;
+            this.loadingBt = false;
+        },
         // 导入CSV
         handleUploadSuccess(resp) {
             if (resp) {
@@ -369,7 +376,8 @@ export default {
                         return v.supSto === '是';
                     });
                     this.allReportData = resp.report; // 全量数据
-                    this.tableData = resp.report; // 3:协查报告
+                    this.handleSelectCheckboxChange(this.checked);
+                    // this.tableData = resp.report; // 3:协查报告
                     break;
                 }
                 if (this.count === 4) {
@@ -464,7 +472,8 @@ export default {
                                             return v.supSto === '是';
                                         });
                                         this.allReportData = resp.report; // 全量数据
-                                        this.tableData = resp.report; // 3:协查报告
+                                        // this.tableData = resp.report; // 3:协查报告
+                                        this.handleSelectCheckboxChange(this.checked);
                                         break;
                                     }
                                     if (this.count === 4) {
