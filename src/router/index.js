@@ -73,6 +73,11 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
+    // 当路由切换页面的时候，遍历全局数组，将上一个页面的所有请求cancel掉
+    for (let p in Vue.prototype.__cancels__) {
+        Vue.prototype.__cancels__[p].c('abort success'); // 执行取消操作
+    }
+    Vue.prototype.__cancels__ = [];
     if (to.name === 'login') {
         next();
     } else {

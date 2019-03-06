@@ -4,6 +4,17 @@ import config from '@/config';
 import store from '../store';
 // import router from '../router';
 import Vue from 'vue';
+let CancelToken = axios.CancelToken;
+Vue.prototype.__cancels__ = [];
+// 移除重复请求
+let removePending = ever => {
+    for (let p in Vue.prototype.__cancels__) {
+        if (Vue.prototype.__cancels__[p].u === ever.url + '&' + ever.method + '&' + JSON.stringify(ever.data)) { // 当当前请求在数组中存在时执行函数体
+            Vue.prototype.__cancels__[p].c('abort success'); // 执行取消操作
+            Vue.prototype.__cancels__.splice(p, 1); // 把这条记录从数组中移除
+        }
+    }
+};
 const instance = url => {
     // 配置token到header中
     let accessToken = localStorage.getItem('ACCESS_TOKEN');
@@ -15,6 +26,7 @@ const instance = url => {
     });
     // request 拦截器
     let loadingInstancce = null;
+
     instance.interceptors.request.use(
         // 全屏遮罩
         config => {
@@ -28,6 +40,15 @@ const instance = url => {
                     text: '加载中'
                 });
             }
+            removePending(config); // 在一个ajax响应后再执行一下取消操作，把已经完成的请求从pending中移除
+            config.cancelToken = new CancelToken(c => { // 在请求拦截器中为每一个请求添加cancelToken，并将cancel方法存入全局数组中保存
+                Vue.prototype.__cancels__.push(
+                    {
+                        u: config.url + '&' + config.method + '&' + JSON.stringify(config.data),
+                        c
+                    }
+                );
+            });
             return config;
         },
         error => {
@@ -85,6 +106,7 @@ const instance = url => {
             }
         },
         error => {
+            console.error(error);
             loadingInstancce && loadingInstancce.close();
             if (error.toString().indexOf('Request failed with status code 401') > -1) {
                 localStorage.removeItem('ACCESS_TOKEN');
@@ -94,9 +116,11 @@ const instance = url => {
                     query: {redirect: Vue.prototype.router.currentRoute.fullPath}
                 });
             }
-            Notification.error({
-                message: '加载失败'
-            });
+            if (error.toString().indexOf('abort success') === -1) {
+                Notification.error({
+                    message: '加载失败'
+                });
+            }
             return Promise.reject(error.response);
         }
     );
