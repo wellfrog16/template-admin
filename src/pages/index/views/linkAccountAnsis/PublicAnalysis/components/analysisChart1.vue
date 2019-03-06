@@ -6,7 +6,8 @@
                     <el-tooltip class="item" effect="dark" placement="right-end">
                         <div slot="content">
                             说明：<br/>
-                            热度(当日新闻报道、点击量等加权之和)
+                            每日新闻的利好、利空、中性(可理解为既不利好又不利空的消息)情况，<br/>
+                            即每天利好、利空、中性的发布条数。热度即当前新闻报道数量等加权和。
                         </div>
                         <el-button type="text">?</el-button>
                     </el-tooltip>
@@ -15,7 +16,7 @@
             <echarts-common
                 slot="content"
                 :loading="loading1"
-                ref="echartsDemo1"
+                ref="echartsDemos1"
                 domId="echartsId1"
                 :noClearFlag="false"
                 :defaultOption="chartOptions1"
@@ -26,6 +27,7 @@
 </template>
 
 <script>
+import moment from 'moment';
 // 原油舆情情感分析
 import {postpAnalysis} from '@/api/dataAnsis/PublicAnalysis';
 import SCard from '@/components/index/common/SCard';
@@ -36,38 +38,55 @@ export default {
     props: {},
     minis: [],
     data() {
+        let schema = [
+            {name: 'publicDate', index: 0, text: '日期'},
+            {name: 'justCount', index: 1, text: '利好'},
+            {name: 'loseCount', index: 2, text: '利空'},
+            {name: 'centreCount', index: 3, text: '中性'},
+            {name: 'weixinBaiduHeat', index: 4, text: '热度'},
+        ];
         return {
             timer: null,
             loading1: false,
             dialogVisible: false,
             chartOptions1: {
-                title: {
-                    text: '堆叠区域图',
-                    x: '4%',
-                    textStyle: {
-                        color: '#fff',
-                        fontSize: '14'
-                    }
-                },
+                title: [
+                    {
+                        text: '', // 动态数据
+                        // subtext: '副标题',
+                        // left: 'center',
+                        left: 'left',
+                        itemGap: 10,
+                        // left: '20%',
+                        textStyle: {
+                            // 文字颜色
+                            color: '#fff',
+                            // 字体风格,'normal','italic','oblique'
+                            fontStyle: 'normal',
+                            // 字体粗细 'normal','bold','bolder','lighter',100 | 200 | 300 | 400...
+                            fontWeight: '100',
+                            // 字体系列
+                            fontFamily: 'sans-serif',
+                            // 字体大小
+                            fontSize: 12,
+                        }
+                    },
+                ],
                 tooltip: {
-                    backgroundColor: '#222',
                     borderColor: '#777',
                     borderWidth: 1,
-                    // trigger: 'item',
                     trigger: 'axis',
-                    axisPointer: { // 坐标轴指示器，坐标轴触发有效
-                        type: 'cross', // 默认为直线，可选为：'line' | 'shadow'
-                        backgroundColor: '#6a7985'
-                        // type: 'cross'
-                        // type: 'line'
+                    textStyle: {
+                        fontSize: 12
                     },
-                    // trigger: 'axis',
-                    // axisPointer: {
-                    //     type: 'cross', // 默认为直线，可选为：'line' | 'shadow'
-                    //     label: {
-                    //         backgroundColor: '#6a7985'
-                    //     }
-                    // }
+                    axisPointer: {
+                        type: 'cross',
+                        label: {
+                            color: '#fff',
+                            backgroundColor: '#222'
+                        }
+                    }
+                    // formatter: '{a0}：{c0}' + '<br/>' + '{a1}：{c1}' + '<br/>' + '{a2}：{c2}' + '<br/>' + '{a3}：{c3}'
                 },
                 legend: {
                     top: '3%',
@@ -106,23 +125,7 @@ export default {
                                 fontSize: 10 // 字体
                             }
                         },
-                        // data: []
-                        data: [
-                            '2019-01-01',
-                            '2019-01-02',
-                            '2019-01-03',
-                            '2019-01-04',
-                            '2019-01-05',
-                            '2019-01-06',
-                            '2019-01-07',
-                            '2019-01-08',
-                            '2019-01-09',
-                            '2019-01-10',
-                            '2019-01-11',
-                            '2019-01-12',
-                            '2019-01-13',
-                            '2019-01-14'
-                        ]
+                        data: []
                     }
                 ],
                 yAxis: [
@@ -150,7 +153,7 @@ export default {
                             show: true,
                         },
                         axisLabel: {
-                            formatter: '{value}%'
+                            formatter: '{value}'
                         }
                     },
                     {
@@ -180,7 +183,7 @@ export default {
                             show: true,
                         },
                         axisLabel: {
-                            formatter: '{value}%'
+                            formatter: '{value}'
                         },
                     },
                     {
@@ -210,7 +213,7 @@ export default {
                             show: true,
                         },
                         axisLabel: {
-                            formatter: '{value}%'
+                            formatter: '{value}'
                         },
                     },
                     {
@@ -240,7 +243,7 @@ export default {
                             show: true,
                         },
                         axisLabel: {
-                            formatter: '{value}%'
+                            formatter: '{value}'
                         },
                     }
                 ],
@@ -272,7 +275,7 @@ export default {
                                 show: true,
                                 position: 'insideRight',
                                 fontSize: 9,
-                                formatter: '{c}%'
+                                formatter: '{c}'
                             }
                         },
                         data: []
@@ -287,7 +290,7 @@ export default {
                                 show: true,
                                 position: 'insideRight',
                                 fontSize: 9,
-                                formatter: '{c}%'
+                                formatter: '{c}'
                             }
                         },
                         data: []
@@ -302,7 +305,7 @@ export default {
                                 show: true,
                                 position: 'insideRight',
                                 fontSize: 9,
-                                formatter: '{c}%'
+                                formatter: '{c}'
                             }
                         },
                         data: []
@@ -334,39 +337,40 @@ export default {
     },
     methods: {
         lienEchartsDete() {
+            var now = new Date(); // 当前日期
+            let timeDay = moment(now).format('YYYY-MM-DD');
             let params = {
-                'timeOfDay': '2019-02-18'
+                'timeOfDay': timeDay // '2019-02-18'
             };
             this.loading1 = true;
             let mainData = [];
-            // 日期
-            let timeDate = [];
-            // 正面
-            let heatData = [];
-            // 热度
-            let frontData = [];
-            // 中性
-            let neutralData = [];
-            // 负面
-            let negativeData = [];
+            let timeDate = []; // 日期
+            let heatData = []; // 正面
+            let frontData = []; // 热度
+            let neutralData = []; // 中性
+            let negativeData = []; // 负面
             // 原油舆情情感分析
             postpAnalysis(params).then(resp => {
-                this.loading1 = false;
                 if (resp && resp.length !== 0) {
+                    this.loading1 = false;
+                    let titleText = '';
                     mainData = resp;
                     mainData.forEach(v => {
                         timeDate.push(v.publicDate); // 日期
-                        heatData.push(v.justCount); // 正面
+                        heatData.push(v.justCount); // 利好
                         frontData.push(parseInt(v.weixinHeat) + parseInt(v.baiduHeat)); // 热度
                         neutralData.push(v.centreCount); // 中性
-                        negativeData.push(v.loseCount); // 负面
+                        negativeData.push(v.loseCount); // 利空
+                        // 日期 - 利好 - 利空  - 中性 - 热度
+                        titleText = v.publicDate + ' 利好' + v.justCount + ' 利空' + v.loseCount + ' 中性' + v.centreCount + ' 热度' + (parseInt(v.weixinHeat) + parseInt(v.baiduHeat))
                     });
-                    this.chartOptions1['xAxis']['data'] = timeDate;
+                    this.chartOptions1['title'][0]['text'] = titleText; // 标题
+                    this.chartOptions1['xAxis'][0]['data'] = timeDate;
                     this.chartOptions1['series'][0]['data'] = heatData;
-                    this.chartOptions1['series'][3]['data'] = frontData;
-                    this.chartOptions1['series'][2]['data'] = neutralData;
                     this.chartOptions1['series'][1]['data'] = negativeData;
-                    this.$refs['echartsDemos'] && this.$refs['echartsDemos'].initChart();
+                    this.chartOptions1['series'][2]['data'] = neutralData;
+                    this.chartOptions1['series'][3]['data'] = frontData;
+                    this.$refs['echartsDemos1'] && this.$refs['echartsDemos1'].initChart();
                 }
             }).catch(e => {
                 this.loading1 = false;

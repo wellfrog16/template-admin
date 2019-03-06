@@ -5,10 +5,10 @@
                 <el-tooltip class="item" effect="dark" placement="right-end">
                     <div slot="content">
                         该模块为舆情分析得到的结论，即：<br/>
-                        原油舆情情感：最近一日的舆情偏向度，例如62%地偏向利空;<br/>
+                        原油舆情情感：最近一日的舆情偏向度，例如62%地偏向利空；<br/>
                         原油舆情热度：新闻报道量、点击量等加权之和，反映新闻热度；<br/>
-                        EIA原油库存：由美国能源信息署统计公布的美国当周原油库存数量;<br/>
-                        原油国际环境新闻报道：近期大事件的跟踪和事件的发酵值；
+                        EIA原油库存：由美国能源信息署统计公布的美国当周原油库存数量；<br/>
+                        原油国际环境新闻报道：近期大事件的跟踪和事件的发酵值；<br/>
                     </div>
                     <el-button type="text">?</el-button>
                 </el-tooltip>
@@ -16,74 +16,40 @@
         </div>
         <div :class="$style.dashboards" slot="content">
             <div :class="$style.dashboard_box">
-                <el-popover trigger="hover" title="分析结果："
-                            width="200">
-                    <echarts-common
-                        slot="reference"
-                        ref="echartsDemoa1"
-                        domId="echartsIds1"
-                        :noClearFlag="false"
-                        :defaultOption="chartOptionso1"
-                        :propsChartHeight="300">
-                    </echarts-common>
-                    <div>
-                        即对最近一日所有新闻进行的利好或利空的总分析结果
-                    </div>
-                </el-popover>
+                <echarts-common
+                    ref="echartsDemoa1"
+                    domId="echartsIds1"
+                    :noClearFlag="false"
+                    :defaultOption="chartOptionso1"
+                    :propsChartHeight="300">
+                </echarts-common>
             </div>
             <div :class="$style.dashboard_box">
-                <el-popover
-                    title="热度："
-                    width="200"
-                    trigger="hover">
-                    <echarts-common
-                        slot="reference"
-                        ref="echartsDemoa2"
-                        domId="echartsIds2"
-                        :noClearFlag="false"
-                        :defaultOption="chartOptionso2"
-                        :propsChartHeight="300">
-                    </echarts-common>
-                    <div>
-                        当日新闻报道量、点击量等加权之和；结果为一稳定值，特别是新闻数量。
-                    </div>
-                </el-popover>
+                <echarts-common
+                    ref="echartsDemoa2"
+                    domId="echartsIds2"
+                    :noClearFlag="false"
+                    :defaultOption="chartOptionso2"
+                    :propsChartHeight="300">
+                </echarts-common>
             </div>
             <div :class="$style.dashboard_box">
-                <el-popover
-                    title="公布值："
-                    width="200"
-                    trigger="hover">
-                    <echarts-common
-                        slot="reference"
-                        ref="echartsDemoa3"
-                        domId="echartsIds3"
-                        :noClearFlag="false"
-                        :defaultOption="chartOptionso3"
-                        :propsChartHeight="300">
-                    </echarts-common>
-                    <div>
-                        即由美国能源信息署统计公布（该数据不包括战略石油储备），该数据每周公布一次，其主要显示了美国当周原油库存数量。
-                    </div>
-                </el-popover>
+                <echarts-common
+                    ref="echartsDemoa3"
+                    domId="echartsIds3"
+                    :noClearFlag="false"
+                    :defaultOption="chartOptionso3"
+                    :propsChartHeight="300">
+                </echarts-common>
             </div>
             <div :class="$style.dashboard_box">
-                <el-popover
-                    title="报道量："
-                    width="200"
-                    trigger="hover">
-                    <echarts-common
-                        slot="reference"
-                        ref="echartsDemoa4"
-                        domId="echartsIds4"
-                        :noClearFlag="false"
-                        :defaultOption="chartOptionso4"
-                        :propsChartHeight="300">
-                    </echarts-common>
-                    <div>
-                        国际舆情模块主要是指OPEC大区与非OPEC大区报道量，点击量等加权之和对热度的度量。
-                    </div>
-                </el-popover>
+                <echarts-common
+                    ref="echartsDemoa4"
+                    domId="echartsIds4"
+                    :noClearFlag="false"
+                    :defaultOption="chartOptionso4"
+                    :propsChartHeight="300">
+                </echarts-common>
             </div>
         </div>
     </s-card>
@@ -107,36 +73,9 @@ export default {
     data() {
         return {
             chartOptionso1: {
-                title: [
-                    {
-                        text: '', // 动态数据
-                        // subtext: '副标题',
-                        // left: 'center',
-                        bottom: 10,
-                        itemGap: 10,
-                        padding: [
-                            0, // 上
-                            0, // 右
-                            0, // 下
-                            20, // 左
-                        ],
-                        textStyle: {
-                            // 文字颜色
-                            color: '#fff',
-                            // 字体风格,'normal','italic','oblique'
-                            fontStyle: 'normal',
-                            // 字体粗细 'normal','bold','bolder','lighter',100 | 200 | 300 | 400...
-                            fontWeight: '100',
-                            // 字体系列
-                            fontFamily: 'sans-serif',
-                            // 字体大小
-                            fontSize: 12,
-                        }
-                    },
-                ],
                 legend: {
                     top: '5%',
-                    data: ['原油舆情情感'],
+                    data: ['舆情偏向'],
                 },
                 color: [
                     '#37A2DA',
@@ -144,22 +83,17 @@ export default {
                     '#67E0E3'
                 ],
                 tooltip: {
+                    backgroundColor: '#222',
                     borderColor: '#777',
                     borderWidth: 1,
-                    textStyle: {
-                        fontSize: 12
+                    axisPointer: { // 坐标轴指示器，坐标轴触发有效
+                        type: 'cross', // 默认为直线，可选为：'line' | 'shadow'
+                        backgroundColor: '#6a7985'
                     },
-                    axisPointer: {
-                        type: 'cross',
-                        label: {
-                            color: '#fff',
-                            backgroundColor: '#222'
-                        }
-                    },
-                    formatter: '{a}{b} : {c}%'
+                    formatter: '{a} <br/>{b} : {c}%'
                 },
                 series: [{
-                    name: '原油舆情情感',
+                    name: '舆情偏向',
                     textStyle: {
                         color: '#fff'
                     },
@@ -167,7 +101,7 @@ export default {
                     // 仪表盘详情，用于显示数据。
                     // 刻度
                     splitNumber: 10,
-                    min: -100,
+                    min: 0,
                     max: 100,
                     axisLine: { // 坐标轴线
                         lineStyle: { // 属性lineStyle控制线条样式
@@ -198,12 +132,12 @@ export default {
                     axisLabel: {
                         formatter: function(e) {
                             switch (e + '') {
-                            case '-60':
-                                return '利空';
-                            case '0':
+                            case '20':
+                                return '负面';
+                            case '50':
                                 return '中性';
-                            case '60':
-                                return '利好';
+                            case '90':
+                                return '正面';
                             default:
                                 return e;
                             }
@@ -217,46 +151,14 @@ export default {
                             fontSize: 16,
                             padding: [113, 4, 5, 6]
                         },
-                        // formatter: params => {
-                        //     console.log(params);
-                        // },
-                        // formatter: '利空' + '分析结果：{value}%'} + '利好',
-                        formatter: '分析结果：{value}%'
-                    },
+                        formatter: '机器分析置信度：利空{value}%'},
                     data: [{value: ''}]
                 }]
             },
             chartOptionso2: {
-                title: [
-                    {
-                        text: '', // 动态数据
-                        // subtext: '副标题',
-                        // left: 'center',
-                        bottom: 10,
-                        itemGap: 10,
-                        padding: [
-                            0, // 上
-                            0, // 右
-                            0, // 下
-                            20, // 左
-                        ],
-                        textStyle: {
-                            // 文字颜色
-                            color: '#fff',
-                            // 字体风格,'normal','italic','oblique'
-                            fontStyle: 'normal',
-                            // 字体粗细 'normal','bold','bolder','lighter',100 | 200 | 300 | 400...
-                            fontWeight: '100',
-                            // 字体系列
-                            fontFamily: 'sans-serif',
-                            // 字体大小
-                            fontSize: 12,
-                        }
-                    },
-                ],
                 legend: {
                     top: '5%',
-                    data: ['原油舆情热度'],
+                    data: ['当日新闻度量'],
                 },
                 color: [
                     '#37A2DA',
@@ -264,22 +166,17 @@ export default {
                     '#67E0E3'
                 ],
                 tooltip: {
+                    backgroundColor: '#222',
                     borderColor: '#777',
                     borderWidth: 1,
-                    textStyle: {
-                        fontSize: 12
+                    axisPointer: { // 坐标轴指示器，坐标轴触发有效
+                        type: 'cross', // 默认为直线，可选为：'line' | 'shadow'
+                        backgroundColor: '#6a7985'
                     },
-                    axisPointer: {
-                        type: 'cross',
-                        label: {
-                            color: '#fff',
-                            backgroundColor: '#222'
-                        }
-                    },
-                    formatter: '{a}{b} : {c}'
+                    formatter: '{a} <br/>{b} : {c}'
                 },
                 series: [{
-                    name: '原油舆情热度',
+                    name: '当日新闻度量',
                     textStyle: {
                         color: '#fff'
                     },
@@ -323,41 +220,14 @@ export default {
                             fontSize: 16,
                             padding: [113, 4, 5, 6]
                         },
-                        formatter: '热度：{value}'},
+                        formatter: '估算值：{value}'},
                     data: [{value: ''}]
                 }]
             },
             chartOptionso3: {
-                title: [
-                    {
-                        text: '', // 动态数据
-                        // subtext: '副标题',
-                        // left: 'center',
-                        bottom: 10,
-                        itemGap: 10,
-                        padding: [
-                            0, // 上
-                            0, // 右
-                            0, // 下
-                            20, // 左
-                        ],
-                        textStyle: {
-                            // 文字颜色
-                            color: '#fff',
-                            // 字体风格,'normal','italic','oblique'
-                            fontStyle: 'normal',
-                            // 字体粗细 'normal','bold','bolder','lighter',100 | 200 | 300 | 400...
-                            fontWeight: '100',
-                            // 字体系列
-                            fontFamily: 'sans-serif',
-                            // 字体大小
-                            fontSize: 12,
-                        }
-                    },
-                ],
                 legend: {
                     top: '5%',
-                    data: ['EIA原油库存'],
+                    data: ['EIA数据公布情况'],
                 },
                 color: [
                     '#37A2DA',
@@ -365,22 +235,17 @@ export default {
                     '#67E0E3'
                 ],
                 tooltip: {
+                    backgroundColor: '#222',
                     borderColor: '#777',
                     borderWidth: 1,
-                    textStyle: {
-                        fontSize: 12
+                    axisPointer: { // 坐标轴指示器，坐标轴触发有效
+                        type: 'cross', // 默认为直线，可选为：'line' | 'shadow'
+                        backgroundColor: '#6a7985'
                     },
-                    axisPointer: {
-                        type: 'cross',
-                        label: {
-                            color: '#fff',
-                            backgroundColor: '#222'
-                        }
-                    },
-                    formatter: '{a}{b} : {c}'
+                    formatter: '{a} <br/>{b} : {c}'
                 },
                 series: [{
-                    name: 'EIA原油库存',
+                    name: 'EIA数据公布情况',
                     textStyle: {
                         color: '#fff'
                     },
@@ -424,41 +289,14 @@ export default {
                             fontSize: 16,
                             padding: [113, 4, 5, 6]
                         },
-                        formatter: '公布值：{value}'},
+                        formatter: '当日库存：{value}'},
                     data: [{value: ''}]
                 }]
             },
             chartOptionso4: {
-                title: [
-                    {
-                        text: '', // 动态数据
-                        // subtext: '副标题',
-                        // left: 'center',
-                        bottom: 10,
-                        itemGap: 10,
-                        padding: [
-                            0, // 上
-                            0, // 右
-                            0, // 下
-                            20, // 左
-                        ],
-                        textStyle: {
-                            // 文字颜色
-                            color: '#fff',
-                            // 字体风格,'normal','italic','oblique'
-                            fontStyle: 'normal',
-                            // 字体粗细 'normal','bold','bolder','lighter',100 | 200 | 300 | 400...
-                            fontWeight: '100',
-                            // 字体系列
-                            fontFamily: 'sans-serif',
-                            // 字体大小
-                            fontSize: 12,
-                        }
-                    },
-                ],
                 legend: {
                     top: '5%',
-                    data: ['原油国际环境新闻报道'],
+                    data: ['当前热点跟踪'],
                 },
                 color: [
                     '#37A2DA',
@@ -466,22 +304,17 @@ export default {
                     '#67E0E3'
                 ],
                 tooltip: {
+                    backgroundColor: '#222',
                     borderColor: '#777',
                     borderWidth: 1,
-                    textStyle: {
-                        fontSize: 12
+                    axisPointer: { // 坐标轴指示器，坐标轴触发有效
+                        type: 'cross', // 默认为直线，可选为：'line' | 'shadow'
+                        backgroundColor: '#6a7985'
                     },
-                    axisPointer: {
-                        type: 'cross',
-                        label: {
-                            color: '#fff',
-                            backgroundColor: '#222'
-                        }
-                    },
-                    formatter: '{a}{b} : {c}%'
+                    formatter: '{a} <br/>{b} : {c}%'
                 },
                 series: [{
-                    name: '原油国际环境新闻报道',
+                    name: '当前热点跟踪',
                     textStyle: {
                         color: '#fff'
                     },
@@ -525,7 +358,7 @@ export default {
                             fontSize: 16,
                             padding: [113, 4, 5, 6]
                         },
-                        formatter: '报道量：{value}'},
+                        formatter: '当前热度估算：{value}'},
                     data: [{value: ''}]
                 }]
             }
@@ -540,7 +373,6 @@ export default {
         lienEchartsDete() {
             var now = new Date(); // 当前日期
             let timeDay = moment(now).format('YYYY-MM-DD');
-            // console.log(timeDay);
             let params = {
                 'timeOfDay': timeDay, // '2019-02-18'
             };
@@ -553,28 +385,17 @@ export default {
                     // 最大的就是20/(16+20+2)
                     // 20/(16+20+2) = 52.63%
                     let munData = [];
-                    let titleText = '';
+
                     if (resp[resp.length - 1]) {
                         let varietys = resp[resp.length - 1];
                         munData.push(parseFloat(varietys.justCount), parseFloat(varietys.centreCount), parseFloat(varietys.loseCount));
                         let maxData = _.max(munData); // 最大值
-                        titleText = varietys.publicDate;
                         varietys1 = maxData / (parseFloat(varietys.justCount) + parseFloat(varietys.centreCount) + parseFloat(varietys.loseCount));
                         varietys2 = parseFloat(varietys.weixinHeat) + parseFloat(varietys.baiduHeat);
                     }
-                    // 标题
+                    // 求平均值
                     let mathFloor = Math.floor(varietys1 * 100);
                     let mathFloor2 = varietys2;
-                    let ums = '';
-                    if (mathFloor < 0 || mathFloor < -100) {
-                        ums = ' 利空';
-                    } else if (mathFloor === 0) {
-                        ums = ' 中性';
-                    } else if (mathFloor > 0 || mathFloor < 100) {
-                        ums = ' 利好';
-                    }
-                    this.chartOptionso1['title'][0]['text'] = titleText + ums + mathFloor + '%'; // 标题
-                    this.chartOptionso2['title'][0]['text'] = titleText + ' 热度' + mathFloor2; // 标题
                     this.chartOptionso1.series[0].data[0].value = mathFloor;
                     this.chartOptionso2.series[0].data[0].value = mathFloor2;
                 }
@@ -583,32 +404,25 @@ export default {
             postCrudeTable(params).then(resp => {
                 if (resp && resp.length !== 0) {
                     let munData = '';
-                    let titleText = '';
                     if (resp.ela[resp.ela.length - 1]) {
                         let varietys = resp.ela[resp.ela.length - 1];
-                        titleText = varietys.time;
                         munData = parseFloat(varietys.publish);
                     }
-                    this.chartOptionso3['title'][0]['text'] = titleText + ' 公布值' + munData; // 标题
                     this.chartOptionso3.series[0].data[0].value = munData; // 平均值
                 }
             });
             // 国际环境 chartOptionso4
             let params5 = {
-                // 'timeOfDay': timeDay, // '2019-03-1',
-                'timeOfDay': '2019-03-1',
-                'yesAndNoOpec': '0'
+                'timeOfDay': timeDay, // '2019-03-1',
+                'yesAndNoOpec': '1'
             };
             postOrpeListMap5(params5).then(resp => {
                 if (resp && resp.length !== 0) {
                     let munData = '';
-                    let titleText = '';
                     if (resp[resp.length - 1]) {
                         let varietys = resp[resp.length - 1];
-                        titleText = varietys.OPECpublished_time;
                         munData = parseFloat(varietys.page_hits);
                     }
-                    this.chartOptionso4['title'][0]['text'] = titleText + ' 报道量' + munData; // 标题
                     this.chartOptionso4.series[0].data[0].value = munData;
                 }
             });
@@ -618,19 +432,7 @@ export default {
     }
 };
 </script>
-<style>
-    .el-popover__title {
-        color: #fff;
-        font-size: 14px;
-    }
-    .el-popover {
-        background: #444242;
-        border: 1px solid #444242;
-        z-index: 2000;
-        color: #fff;
-        font-size: 12px;
-    }
-</style>
+
 <style lang="less" module>
     .box {
         .top {

@@ -147,6 +147,9 @@ export default {
                             backgroundColor: '#222'
                         }
                     },
+                    textStyle: {
+                        fontSize: 12
+                    },
                     position(pos, params, el, elRect, size) {
                         var obj = {top: 10};
                         obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]] = 30;
@@ -158,11 +161,11 @@ export default {
                         })[0];
                         return schema.map((v, i) => {
                             let textObj = {};
-                            textObj = v.text + ': ' + filterItem[v.name];
+                            textObj = v.text + ' : ' + filterItem[v.name];
                             if (v.text === '实时交易涨跌') {
-                                textObj = v.text + ': ' + filterItem[v.name] + '(' + filterItem.percentageAmplitude + ')';
+                                textObj = v.text + '：' + filterItem[v.name] + '(' + filterItem.percentageAmplitude + ')';
                             } else {
-                                textObj = v.text + ': ' + filterItem[v.name];
+                                textObj = v.text + ' ：' + filterItem[v.name];
                             }
                             return textObj;
                         }).join('<br>');
@@ -175,14 +178,25 @@ export default {
                 xAxis: {
                     type: 'category',
                     boundaryGap: false,
-                    // 调整x轴的lable
+                    // // 调整x轴的lable
+                    // axisLabel: {
+                    //     interval: 130,
+                    //     textStyle: {
+                    //         fontSize: 10 // 字体
+                    //     }
+                    // },
+                    data: [],
                     axisLabel: {
-                        interval: 130,
                         textStyle: {
                             fontSize: 10 // 字体
+                        },
+                        interval: (index, value) => {
+                            if (value === '07:00' || value === '11:00' || value === '15:00' || value === '19:30' || value === '23:00' || value === '03:00' || value === '06:59') {
+                                return true;
+                            }
+                            return false;
                         }
                     },
-                    data: [],
                     axisTick: { // y轴刻度线
                         show: false
                     },
@@ -440,7 +454,7 @@ export default {
                 let dateWeek = now.getDay(); // 今天本周的第几天
                 let timeDay = moment(now).format('YYYY-MM-DD');
                 let params = {
-                //   'timeOfDay': now.getFullYear() + '-' + now.getMonth() + 1 + '-' + now.getDate(),
+                    // 'timeOfDay': now.getFullYear() + '-' + now.getMonth() + 1 + '-' + now.getDate(),
                     'timeOfDay': timeDay,
                     'frequentness': '5',
                     'crudeCode': 'BLT_OIL'
@@ -454,6 +468,14 @@ export default {
                         this.loading2 = false;
                         if (resp.exceptionData.length !== 0) {
                             exceptionDatas = resp.exceptionData; // 异常数据
+                            let staetTimes = [];
+                            let endTimes = [];
+                            exceptionDatas.forEach(v => {
+                                staetTimes.push(v.configStartTime); // 开始时间
+                                endTimes.push(v.configEndTime); // 结束时间
+                            });
+                            console.log(staetTimes);
+                            console.log(endTimes);
                         }
                         mainData = resp.mainData;
                         if (mainData && !mainData.length) {
@@ -474,19 +496,22 @@ export default {
                             titleText = v.crudeDealTime + '/' + dateWeek + '/' + v.realTime + ' 均 ' + v.realAveragePrice + '幅 ' + v.realUpsAndDowns + '%';
                         });
                         if (exceptionDatas.length !== 0) {
+                            // exceptionDatas.forEach(v => {
+                            // //     console.log(v);
+                            // // });
                             markAreaData = [
                                 [
                                     {
                                         'name': '异常',
                                         // 'xAxis': mainData[mainData.length - 1].realTime, // 异常时间
-                                        'xAxis': '09:00', // 异常时间
+                                        'xAxis': '16:04', // 异常时间
                                         // 'yAxis': mainData[mainData.length - 1].realPrice, // 异常价格
                                     },
                                     {
                                         // 'xAxis': exceptionDatas[0].realTime, // 前五分钟异常时间
-                                        'xAxis': '09:06', // 前五分钟异常时间
+                                        'xAxis': '16:04', // 前五分钟异常时间
                                         // 'yAxis': exceptionDatas[0].realPrice, // 前五分钟异常价格
-                                        'yAxis': '66.75', // 前五分钟异常价格
+                                        'yAxis': '17:24', // 前五分钟异常价格
                                     }
                                 ],
                                 [

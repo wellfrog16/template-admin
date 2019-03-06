@@ -1,6 +1,18 @@
 <template>
     <div :class="$style.analys2">
         <s-card :title="`国际市场原油相关性分析`" :icon="`fa fa-chart-line`">
+            <div slot="right" :class="$style.box">
+                <div :class="$style.top">
+                    <el-tooltip class="item" effect="dark" placement="right-end">
+                        <div slot="content">
+                            说明：<br/>
+                            该图为每日的原油日k图，即上海期货交易所的原油日k图，纽约商业交易所<br/>
+                            的轻质低硫原油日k图和伦敦国际石油交易所的布伦特原油期货日k图。
+                        </div>
+                        <el-button type="text">?</el-button>
+                    </el-tooltip>
+                </div>
+            </div>
             <echarts-common
                 slot="content"
                 :loading="loading2"
@@ -15,6 +27,7 @@
 </template>
 
 <script>
+import moment from 'moment';
 // 国际市场原油相关性分析
 import {postOilDayKList} from '@/api/dataAnsis/PublicAnalysis';
 import SCard from '@/components/index/common/SCard';
@@ -36,33 +49,31 @@ export default {
             // 7 rises    -14.1  涨跌
             // 8 riseRates    -14.1  涨跌率
             // 9 swingRates    -14.1  振幅率
-            {name: 'dates', index: 0, text: '交易日'},
-            {name: 'opens', index: 1, text: '开盘价'},
-            {name: 'closes', index: 2, text: '收盘价'},
-            {name: 'lows', index: 3, text: '最低价'},
-            {name: 'highs', index: 4, text: '最高价'},
+            // {name: 'dates', index: 0, text: '日期'},
+            {name: '开盘价', index: 1, text: '开盘价(￥)'},
+            {name: 'closes', index: 2, text: '收盘价(￥)'},
+            {name: 'lows', index: 3, text: '最低价(￥)'},
+            {name: 'highs', index: 4, text: '最高价(￥)'},
             {name: 'volumes', index: 5, text: '成交量'},
-            {name: 'rises', index: 6, text: '振 幅'},
+            {name: 'swings', index: 6, text: '振幅'},
             {name: 'rises', index: 7, text: '涨跌'}
         ];
         let schema1 = [
-            {name: 'dates', index: 0, text: '交易日'},
-            {name: 'opens', index: 1, text: '开盘价'},
-            {name: 'closes', index: 2, text: '收盘价'},
-            {name: 'lows', index: 3, text: '最低价'},
-            {name: 'highs', index: 4, text: '最高价'},
+            {name: 'opens', index: 1, text: '开盘价(￥)'},
+            {name: 'closes', index: 2, text: '收盘价(￥)'},
+            {name: 'lows', index: 3, text: '最低价(￥)'},
+            {name: 'highs', index: 4, text: '最高价(￥)'},
             {name: 'volumes', index: 5, text: '成交量'},
-            {name: 'rises', index: 6, text: '振 幅'},
+            {name: 'rises', index: 6, text: '振幅'},
             {name: 'rises', index: 7, text: '涨跌'}
         ];
         let schema2 = [
-            {name: 'dates', index: 0, text: '交易日'},
-            {name: 'opens', index: 1, text: '开盘价'},
-            {name: 'closes', index: 2, text: '收盘价'},
-            {name: 'lows', index: 3, text: '最低价'},
-            {name: 'highs', index: 4, text: '最高价'},
+            {name: 'opens', index: 1, text: '开盘价(￥)'},
+            {name: 'closes', index: 2, text: '收盘价(￥)'},
+            {name: 'lows', index: 3, text: '最低价(￥)'},
+            {name: 'highs', index: 4, text: '最高价(￥)'},
             {name: 'volumes', index: 5, text: '成交量'},
-            {name: 'rises', index: 6, text: '振 幅'},
+            {name: 'rises', index: 6, text: '振幅'},
             {name: 'rises', index: 7, text: '涨跌'}
         ];
         return {
@@ -70,47 +81,63 @@ export default {
             loading2: false,
             dialogVisible: false,
             chartOptions2: {
-                title: {
-                    left: 'left',
-                    text: '日K图',
-                    x: '1%',
-                    textStyle: {
-                        color: '#fff',
-                        fontSize: '14'
-                    }
-                },
+                title: [
+                    {
+                        text: '', // 动态数据
+                        // subtext: '副标题',
+                        // left: 'center',
+                        left: 'left',
+                        itemGap: 10,
+                        // left: '20%',
+                        textStyle: {
+                            // 文字颜色
+                            color: '#fff',
+                            // 字体风格,'normal','italic','oblique'
+                            fontStyle: 'normal',
+                            // 字体粗细 'normal','bold','bolder','lighter',100 | 200 | 300 | 400...
+                            fontWeight: '100',
+                            // 字体系列
+                            fontFamily: 'sans-serif',
+                            // 字体大小
+                            fontSize: 12,
+                        }
+                    },
+                ],
                 tooltip: {
                     backgroundColor: '#222',
                     borderColor: '#777',
                     borderWidth: 1,
-                    // trigger: 'item',
                     trigger: 'axis',
                     axisPointer: { // 坐标轴指示器，坐标轴触发有效
                         type: 'cross' // 默认为直线，可选为：'line' | 'shadow'
                         // type: 'cross'
                         // type: 'line'
                     },
-                    position(pos, params, el, elRect, size) {
-                        var obj = {top: 10};
-                        obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]] = 30;
-                        return obj;
+                    textStyle: {
+                        fontSize: 12
                     },
+                    // position(pos, params, el, elRect, size) {
+                    //     var obj = {top: 10};
+                    //     obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]] = 30;
+                    //     return obj;
+                    // },
                     formatter: param => {
+                        let dateStr = '交易日：' + param[0].value[8];
                         let str1 = schema.map((v, i) => {
-                            return v.text + ': ' + param[0].value[i === 0 ? 8 : i];
-                        }).join('<br>');
+                            return v.text + ': ' + param[0].value[i + 1];
+                        }).join('；');
                         let str2 = schema1.map((v, i) => {
-                            return v.text + ': ' + param[1].value[i === 0 ? 8 : i];
-                        }).join('<br>');
+                            return v.text + '： ' + param[1].value[i + 1];
+                        }).join('；');
                         let str3 = schema2.map((v, i) => {
-                            return v.text + ': ' + param[2].value[i === 0 ? 8 : i];
-                        }).join('<br>');
-                        return '原油日K:' + '<br>' + str1 + '<br>' + '纽约日K:' + '<br>' + str2 + '<br>' + '布伦特日K成功:' + '<br>' + str3;
+                            return v.text + '： ' + param[2].value[i + 1];
+                        }).join('；');
+                        return dateStr + '<br>' + '原油日K:' + '<br>' + str1 + '<br>' + '纽约日K:' + '<br>' + str2 + '<br>' + '布伦特日K:' + '<br>' + str3;
                     }
                 },
                 legend: {
                     top: '5%',
-                    data: ['原油日K', '纽约日K', '布伦特日K成功'],
+                    data: ['原油日K', '纽约日K', '布伦特日K'],
                     textStyle: {
                         color: '#fff',
                         fontSize: '14'
@@ -153,68 +180,7 @@ export default {
                             fontSize: 10 // 字体
                         }
                     },
-                    data: [
-                        // '2019-01-01',
-                        // '2019-01-02',
-                        // '2019-01-03',
-                        // '2019-01-04',
-                        // '2019-01-05',
-                        // '2019-01-06',
-                        // '2019-01-07',
-                        // '2019-01-08',
-                        // '2019-01-09',
-                        // '2019-01-10',
-                        // '2019-01-11',
-                        // '2019-01-12',
-                        // '2019-01-13',
-                        // '2019-01-14',
-                        // '2019-01-15',
-                        // '2019-01-16',
-                        // '2019-01-17',
-                        // '2019-01-18',
-                        // '2019-01-19',
-                        // '2019-01-20',
-                        // '2019-01-20',
-                        // '2019-01-21',
-                        // '2019-01-22',
-                        // '2019-01-23',
-                        // '2019-01-24',
-                        // '2019-01-25',
-                        // '2019-01-26',
-                        // '2019-01-27',
-                        // '2019-01-28',
-                        // '2019-01-29',
-                        // '2019-01-30',
-                        // '2019-01-31',
-                        // '2019-02-01',
-                        // '2019-02-02',
-                        // '2019-02-03',
-                        // '2019-02-04',
-                        // '2019-02-05',
-                        // '2019-02-06',
-                        // '2019-02-07',
-                        // '2019-02-08',
-                        // '2019-02-09',
-                        // '2019-02-10',
-                        // '2019-02-11',
-                        // '2019-02-12',
-                        // '2019-02-13',
-                        // '2019-02-14',
-                        // '2019-02-15',
-                        // '2019-02-16',
-                        // '2019-02-17',
-                        // '2019-02-18',
-                        // '2019-02-19',
-                        // '2019-02-20',
-                        // '2019-02-21',
-                        // '2019-02-22',
-                        // '2019-02-23',
-                        // '2019-02-24',
-                        // '2019-02-25',
-                        // '2019-02-26',
-                        // '2019-02-27',
-                        // '2019-02-28',
-                    ]
+                    data: []
                 },
                 yAxis: [
                     {
@@ -326,7 +292,7 @@ export default {
                     },
                     {
                         type: 'candlestick',
-                        name: '布伦特日K成功',
+                        name: '布伦特日K',
                         barMaxWidth: 50,
                         yAxisIndex: 0,
                         data: [
@@ -353,8 +319,10 @@ export default {
     },
     methods: {
         lienEchartsDete() {
+            var now = new Date(); // 当前日期
+            let timeDay = moment(now).format('YYYY-MM-DD');
             let params = {
-                'startDate': '2018-03-26',
+                'startDate': timeDay, // '2018-03-26',
                 'endDate': '2019-01-10',
                 'frequentnes': '5'
             };
@@ -371,33 +339,42 @@ export default {
                     let bltOData2 = [];
                     let bltOData3 = [];
                     mainData = resp;
+                    let titleText = '';
                     // 原油日K
                     mainData.yyOilDay.forEach(v => {
                         bltDate1.push(v.date);
-                        // 开盘价 - 收盘价 -最低价-最高价 / 交易日 -成交量 //振幅//涨跌
-                        // 开盘价 - 收盘价 -最低价-最高价
+                        // 开盘价 - 收盘价 - 最低价 - 最高价 - 交易日 - 成交量 - 振幅 - 涨跌
                         bltOData1.push(
-                            [v.open, v.close, v.low, v.high, v.date, v.volume, v.swing, v.riseRate]
+                            [v.open, v.close, v.low, v.high, v.volume, v.swing, v.riseRate, v.date]
                             // [v.open, v.close, v.low, v.high]
                         );
                     });
                     // 纽约日K
                     mainData.nyOilDay.forEach(v => {
                         bltDate2.push(v.date);
-                        // 开盘价 - 收盘价 -最低价-最高价 / 交易日 -成交量 //振幅//涨跌
+                        let formatFunc = (value) => {
+                            let cnys = value * 6;
+                            return cnys.toFixed(3);
+                        }
+                        // 开盘价 - 收盘价 - 最低价 - 最高价 - 交易日 - 成交量 - 振幅 - 涨跌
                         bltOData2.push(
-                            [v.open * 6, v.close * 6, v.low * 6, v.high * 6, v.date * 6, v.volume * 6, v.swing * 6, v.riseRate * 6]
-                            // [v.open * 6, v.close * 6, v.low * 6, v.high * 6]
+                            [formatFunc(v.open), formatFunc(v.close), formatFunc(v.low), formatFunc(v.high), v.volume, v.swing, v.riseRate, v.date]
                         );
+                        titleText = v.date;
                     });
-                    // 布伦特日K成功
+                    // 布伦特日K
                     mainData.bltOilDay.forEach(v => {
                         bltDate3.push(v.date);
+                        let formatFunc = (value) => {
+                            let cnys = value * 6;
+                            return cnys.toFixed(3);
+                        }
                         bltOData3.push(
                             // 开盘价 - 收盘价 -最低价-最高价 / 交易日 -成交量 //振幅//涨跌
-                            [v.open * 6, v.close * 6, v.low * 6, v.high * 6, v.date * 6, v.volume * 6, v.swing * 6, v.riseRate * 6]
+                            [formatFunc(v.open), formatFunc(v.close), formatFunc(v.low), formatFunc(v.high), v.volume, v.swing, v.riseRate, v.date]
                         );
                     });
+                    this.chartOptions2['title'][0]['text'] = titleText; // 标题
                     this.chartOptions2['xAxis']['data'] = bltDate3; // 日期
                     this.chartOptions2['series'][0]['data'] = bltOData1; // 成交价
                     this.chartOptions2['series'][1]['data'] = bltOData2; // 成交价
@@ -417,5 +394,13 @@ export default {
 <style lang="less" module>
     .analys2 {
         width: 100%;
+        .box {
+            .top {
+                text-align: center;
+            }
+            .item {
+                margin: 4px;
+            }
+        }
     }
 </style>

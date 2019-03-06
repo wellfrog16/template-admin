@@ -1,10 +1,10 @@
 <template>
-    <div :class="$style.analys4">
+    <div :class="$style.analys6">
         <s-card :title="`舆情列表`" :icon="`fa fa-chart-line`">
             <div slot="content">
                 <s-table
                     ref="selfTables1"
-                    :height="300"
+                    :height="400"
                     :loading="loadingAR"
                     :columns="columnsList"
                     :tableData="tableData6"
@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import moment from 'moment';
 // 舆情列表
 import {postOrpeList} from '@/api/dataAnsis/PublicAnalysis';
 import SCard from '@/components/index/common/SCard';
@@ -42,8 +43,10 @@ export default {
     methods: {
         handleSelectionChange6() {},
         lienEchartsDete() {
+            var now = new Date(); // 当前日期
+            let timeDay = moment(now).format('YYYY-MM-DD');
             let params = {
-                'timeOfDay': '2019-02-18'
+                'timeOfDay': timeDay // '2019-02-18'
             };
             this.loadingAR = true;
             this.tableData6 = [];
@@ -74,7 +77,7 @@ export default {
 </script>
 
 <style lang="less" module>
-    .analys2 {
+    .analys6 {
         width: 100%;
     }
 </style>

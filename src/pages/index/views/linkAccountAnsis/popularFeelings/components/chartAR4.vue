@@ -208,15 +208,18 @@ export default {
                     y2: 70 // 下
                 },
                 tooltip: {
-                    backgroundColor: '#222',
                     borderColor: '#777',
                     borderWidth: 1,
-                    // trigger: 'item',
                     trigger: 'axis',
-                    axisPointer: { // 坐标轴指示器，坐标轴触发有效
-                        type: 'cross' // 默认为直线，可选为：'line' | 'shadow'
-                        // type: 'cross'
-                        // type: 'line'
+                    textStyle: {
+                        fontSize: 12
+                    },
+                    axisPointer: {
+                        type: 'cross',
+                        label: {
+                            color: '#fff',
+                            backgroundColor: '#222'
+                        }
                     },
                     position(pos, params, el, elRect, size) {
                         var obj = {top: 10};
@@ -225,7 +228,7 @@ export default {
                     },
                     formatter: param => {
                         let str = schema.map((v, i) => {
-                            return v.text + ': ' + param[0].value[i === 0 ? 8 : i];
+                            return v.text + ' ： ' + param[0].value[i === 0 ? 8 : i];
                         }).join('<br>');
                         return '美原油日K :' + '<br>' + str;
                     }

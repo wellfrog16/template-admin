@@ -46,21 +46,12 @@
             </el-dialog>
             <echarts-common
                 slot="content"
-                :loading="loading1"
                 ref="echartsDemo1"
                 domId="echartsId1"
                 :noClearFlag="false"
                 :defaultOption="chartOptions1"
                 :propsChartHeight="430">
             </echarts-common>
-            <!--<div slot="content" :class="$style.step_tag">-->
-            <!--<el-steps :active="1" align-center finish-status="success">-->
-            <!--<el-stap v-for="stepss in stepsOptions" :title="stepss.title" :description="stepss.name"></el-stap>-->
-            <!--&lt;!&ndash;<el-step title="步骤 1" description="这是一段很长很长很长的描述性文字"></el-step>&ndash;&gt;-->
-            <!--&lt;!&ndash;<el-step title="步骤 2" description="这是一段很长很长很长的描述性文字"></el-step>&ndash;&gt;-->
-            <!--&lt;!&ndash;<el-step title="步骤 3" description="这段就没那么长了"></el-step>&ndash;&gt;-->
-            <!--</el-steps>-->
-            <!--</div>-->
         </div>
     </s-card>
 </template>
@@ -105,19 +96,19 @@ export default {
             {name: 'crudeCode', index: 0, text: '原油代码'},
             {name: 'crudeDealTime', index: 1, text: '产品成交时间'},
             {name: 'crudeName', index: 2, text: '产品名称'},
-            {name: 'realAveragePrice', index: 3, text: '实时交易均价'},
-            {name: 'realMakeBargain', index: 4, text: '实时交易成交'},
-            {name: 'realPrice', index: 5, text: '实时交易价格'},
+            {name: 'realAveragePrice', index: 3, text: '实时交易均价(￥)'},
+            {name: 'realMakeBargain', index: 4, text: '实时交易成交量'},
+            {name: 'realPrice', index: 5, text: '实时交易价格(￥)'},
             {name: 'realTime', index: 6, text: '实时交易时间'},
             {name: 'realUpsAndDowns', index: 7, text: '实时交易涨跌'},
         ];
         return {
             timer: null,
-            loading1: false,
+            // loading1: false,
             dialogVisible: false,
             // form 表单绑定值
             ruleForm: {
-                timeWindow: '五分钟', // 时间窗口
+                timeWindow: '5分钟', // 时间窗口
             },
             multipleSelection: [],
             tableData1: [],
@@ -208,6 +199,9 @@ export default {
                     borderColor: '#777',
                     borderWidth: 1,
                     trigger: 'axis',
+                    textStyle: {
+                        fontSize: 12
+                    },
                     axisPointer: {
                         type: 'cross',
                         label: {
@@ -226,11 +220,11 @@ export default {
                         })[0];
                         return schema.map((v, i) => {
                             let textObj = {};
-                            textObj = v.text + ': ' + filterItem[v.name];
+                            textObj = v.text + ' ： ' + filterItem[v.name];
                             if (v.text === '实时交易涨跌') {
-                                textObj = v.text + ': ' + filterItem[v.name] + '(' + filterItem.percentageAmplitude + ')';
+                                textObj = v.text + ' ： ' + filterItem[v.name] + '(' + filterItem.percentageAmplitude + ')';
                             } else {
-                                textObj = v.text + ': ' + filterItem[v.name];
+                                textObj = v.text + ' ：' + filterItem[v.name];
                             }
                             return textObj;
                         }).join('<br>');
@@ -245,12 +239,18 @@ export default {
                     // 调整x轴的lable
                     // name: '时间',
                     boundaryGap: true,
+                    data: [],
                     axisLabel: {
                         textStyle: {
                             fontSize: 10 // 字体
+                        },
+                        interval: (index, value) => {
+                            if (value === '21:00' || value === '23:00' || value === '01:00' || value === '09:30' || value === '15:00') {
+                                return true;
+                            }
+                            return false;
                         }
                     },
-                    data: [],
                     axisTick: { // y轴刻度线
                         show: false,
                     },
@@ -382,22 +382,6 @@ export default {
                         yAxisIndex: 0,
                         type: 'line',
                         symbolSize: 5,
-                        // itemStyle: {
-                        //     normal: {
-                        //         // barBorderRadius: 30,
-                        //         lineStyle: {
-                        //             color: '#f8f400'
-                        //         }
-                        //     }
-                        // },
-                        // itemStyle: {
-                        //     normal: {
-                        //         color: 'red',
-                        //         lineStyle: {
-                        //             color: '#f8f400'
-                        //         }
-                        //     }
-                        // },
                         markArea: {
                             silent: false,
                             itemStyle: {
@@ -432,13 +416,6 @@ export default {
                         data: [],
                         type: 'line',
                         yAxisIndex: 0,
-                        // itemStyle: {
-                        //     normal: {
-                        //         lineStyle: {
-                        //             color: '#e8e4d2'
-                        //         }
-                        //     }
-                        // },
                         symbol: 'circle',
                         // // 设置折点大小
                         symbolSize: 0,
@@ -471,10 +448,6 @@ export default {
         checkboxEmit1(tableColumn) {
             this.checkboTableColumn1 = tableColumn;
         },
-        // // 多选
-        // checkboxEmit2(tableColumn) {
-        //     this.checkboTableColumn2 = tableColumn;
-        // },
         // 关闭弹框
         closeData(done) {
             done();
@@ -503,6 +476,7 @@ export default {
                 radioTable = this.checkboTableColumn1;
                 let params = {...radioTable};
                 this.tableUpdateData1(params);
+                console.log(params);
                 this.checkboTableColumn1 = [];
                 this.ruleForm.timeWindow = '5 分钟';
             } else {
@@ -510,13 +484,6 @@ export default {
                 this.dialogVisible = true;
             }
         },
-        // setInterval() {},
-        // setTimeout(() => {
-        // }, 5000);
-        // setInterval(() {
-        //
-        // });
-
         barEchartsDete() {
             clearInterval(this.timer);
             this.timer = setInterval(v => {
@@ -526,18 +493,25 @@ export default {
                 let params = {
                     // 'timeOfDay': now.getFullYear() + '-' + now.getMonth() + 1 + '-' + now.getDate(),
                     'timeOfDay': timeDay,
-                    'frequentness': '5',
+                    // 'timeOfDay': '2019-01-24',
+                    'frequentness': this.ruleForm.timeWindow,
                     'crudeCode': 'YY_SCO'
                 };
-                this.loading1 = true;
+                // this.loading1 = true;
                 let mainData = [];
                 let exceptionDatas = [];
                 let markAreaData = [];
                 postPetroleumAR1(params).then(resp => {
                     if (resp && resp.length !== 0) {
-                        this.loading1 = false;
+                        // this.loading1 = false;
                         if (resp.exceptionData.length !== 0) {
                             exceptionDatas = resp.exceptionData; // 异常数据
+                            exceptionDatas.forEach(v => {
+                                // v.configStartTime // 开始时间
+                                // v.configEndTime // 结束时间
+                                console.log(v);
+                                console.log(v.configStartTime);
+                            });
                         }
                         mainData = resp.mainData;
                         if (mainData && !mainData.length) {
@@ -558,7 +532,6 @@ export default {
                             titleText = v.crudeDealTime + '/' + dateWeek + '/' + v.realTime + ' 均 ' + v.realAveragePrice + ' 量 ' + v.realMakeBargain + ' 幅 ' + v.realUpsAndDowns + '%';
                         });
                         if (exceptionDatas.length !== 0) {
-                            console.log(exceptionDatas);
                             markAreaData = [
                                 [
                                     {
@@ -594,9 +567,10 @@ export default {
                         this.chartOptions1['series'][0]['markArea']['data'] = markAreaData; // 异常
                         this.$refs['echartsDemo1'] && this.$refs['echartsDemo1'].initChart();
                     }
-                }).catch(e => {
-                    this.loading1 = false;
                 });
+                //     .catch(e => {
+                //     this.loading1 = false;
+                // });
             }, 20000);
         }
     },

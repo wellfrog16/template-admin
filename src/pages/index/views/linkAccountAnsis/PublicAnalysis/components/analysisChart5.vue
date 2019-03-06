@@ -7,7 +7,10 @@
                         <div slot="content">
                             说明：<br/>
                             国际舆情模块主要是指OPEC大区与非opec大区的热点事件，<br/>
-                            主要是热点事件的跟踪，报道量，点击量等情况。
+                            主要是热点事件的跟踪，报道量，点击量等情况；<br/>
+                            <!--热点：“热点”为机器判断的热点，即最近发生的新闻经NLP技术自动产生的主题词<br/>-->
+                            报道量：此处的“报道量”为页面点击量的简单加权值；<br/>
+                            评论量：望文生义即可；
                         </div>
                         <el-button type="text">?</el-button>
                     </el-tooltip>
@@ -15,7 +18,7 @@
             </div>
             <div slot="content" :class="$style.environment">
                 <div :class="$style.environment_box" style="margin-right: 20px;">
-                    <el-collapse v-model="activeNames" @change="handleChange">
+                    <el-collapse v-model="activeNames">
                         <el-collapse-item title="OPEC" name="1">
                             <s-table
                                 ref="selfTables1"
@@ -23,7 +26,7 @@
                                 :loading="loadingAR1"
                                 :columns="columnsLists1"
                                 :tableData="tableDatas1"
-                                @selection-change="handleSelectionChange1">
+                                @rowClick="rowClick0">
                             </s-table>
                         </el-collapse-item>
                         <el-collapse-item title="非OPEC" name="2">
@@ -33,7 +36,7 @@
                                 :loading="loadingAR2"
                                 :columns="columnsLists2"
                                 :tableData="tableDatas2"
-                                @selection-change="handleSelectionChange2">
+                                @rowClick="rowClick1">
                             </s-table>
                         </el-collapse-item>
                     </el-collapse>
@@ -54,9 +57,10 @@
 </template>
 
 <script>
+import moment from 'moment';
 import {
     postOrpeListMap1,
-    postOrpeListMapTerm,
+    // postOrpeListMapTerm,
     postOrpeListMap5
 } from '@/api/dataAnsis/PublicAnalysis';
 import SCard from '@/components/index/common/SCard';
@@ -81,15 +85,28 @@ export default {
             fullscreen: false,
             loading5: false,
             chartOptions5: {
-                // title: {
-                //     left: 'left',
-                //     text: '折线图堆叠',
-                //     x: '1%',
-                //     textStyle: {
-                //         color: '#fff',
-                //         fontSize: '14'
-                //     }
-                // },
+                title: [
+                    {
+                        text: '', // 动态数据
+                        // subtext: '副标题',
+                        // left: 'center',
+                        left: 'left',
+                        itemGap: 10,
+                        // left: '20%',
+                        textStyle: {
+                            // 文字颜色
+                            color: '#fff',
+                            // 字体风格,'normal','italic','oblique'
+                            fontStyle: 'normal',
+                            // 字体粗细 'normal','bold','bolder','lighter',100 | 200 | 300 | 400...
+                            fontWeight: '100',
+                            // 字体系列
+                            fontFamily: 'sans-serif',
+                            // 字体大小
+                            fontSize: 12,
+                        }
+                    },
+                ],
                 tooltip: {
                     trigger: 'axis',
                     axisPointer: {
@@ -97,7 +114,11 @@ export default {
                         label: {
                             backgroundColor: '#6a7985'
                         }
-                    }
+                    },
+                    textStyle: {
+                        fontSize: 12
+                    },
+                    // formatter: '{a0} ：{c0}' + '<br/>' + '{a1} ：{c1}'
                 },
                 legend: {
                     top: '3%',
@@ -118,38 +139,24 @@ export default {
                         color: '#fff'
                     }
                 },
-                xAxis: [
-                    {
-                        type: 'category',
-                        axisLine: { // y轴
-                            lineStyle: {
-                                color: '#fff',
-                                margin: 10,
-                                width: 1,
-                                fontSize: 10 // 字体
-                            }
-                        },
-                        splitLine: {
-                            show: false
-                        },
-                        axisTick: {
-                            show: false
-                        },
-                        splitArea: {
-                            show: false
-                        },
-                        axisLabel: {
-                            interval: 0,
-                        },
-                        data: [
-                            '2019-03-01',
-                            '2019-02-28',
-                            '2019-02-27',
-                            '2019-02-26',
-                            '2019-02-25'
-                        ]
-                    }
-                ],
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: true,
+                    axisLine: { // y轴
+                        lineStyle: {
+                            color: '#1fc0ff',
+                            margin: 10,
+                            width: 1,
+                            fontSize: 10 // 字体
+                        }
+                    },
+                    axisLabel: {
+                        textStyle: {
+                            fontSize: 10 // 字体
+                        }
+                    },
+                    data: []
+                },
                 yAxis: [
                     {
                         name: '报道量',
@@ -270,56 +277,20 @@ export default {
     computed: {},
     comments: {},
     mounted() {
-        this.lienEchartsDete();
+        this.lienEchart0('2019-03-1', '0');
+        this.lienEchart1('2019-03-1', '1');
+        this.orpeListMap5('2019-03-1', '0');
     },
     methods: {
-        handleChange(val) {
-            console.log(val);
-        },
-        toggleDetail() {
-            if (this.detail) {
-                this.detail = !this.detail;
-            } else {
-                this.detail = !this.detail;
-            }
-        },
-        exporstClick() {},
-        handleSelectionChange1() {
-            let params5 = {
-                'timeOfDay': '2019-03-1',
-                'yesAndNoOpec': '1'
+        // OPEC 列表
+        lienEchart0(timeOfDay, yesAndNoOpec) {
+            let params = {
+                'timeOfDay': timeOfDay,
+                'yesAndNoOpec': yesAndNoOpec
             };
-            postOrpeListMap5(params5).then(resp => {
-                console.log(resp);
-            });
-        },
-        handleSelectionChange2() {
-            let params5 = {
-                'timeOfDay': '2019-03-1',
-                'yesAndNoOpec': '1'
-            };
-            postOrpeListMap5(params5).then(resp => {
-                console.log(resp);
-            });
-        },
-        fullscreenChange() {},
-        toggleFullScreen() {
-            console.log(22);
-        },
-        lienEchartsDete() {
-            this.loading5 = true;
             this.loadingAR1 = true;
-            this.loadingAR2 = true;
             this.tableDatas1 = [];
-            this.tableDatas2 = [];
-            let mainData = [];
-            let timeDate = []; // 公布日期
-            let opeCcount = []; // 公布值
-            let params0 = {
-                'timeOfDay': '2019-03-1',
-                'yesAndNoOpec': 0
-            };
-            postOrpeListMap1(params0).then(resp => {
+            postOrpeListMap1(params).then(resp => {
                 if (resp && resp.length !== 0) {
                     this.loadingAR1 = false;
                     this.tableDatas1 = resp;
@@ -327,11 +298,16 @@ export default {
             }).catch(e => {
                 this.loadingAR1 = false;
             });
-            let params1 = {
-                'timeOfDay': '2019-03-1',
-                'yesAndNoOpec': '1'
+        },
+        // 非 OPEC 列表
+        lienEchart1(timeOfDay, yesAndNoOpec) {
+            let params = {
+                'timeOfDay': timeOfDay,
+                'yesAndNoOpec': yesAndNoOpec
             };
-            postOrpeListMap1(params1).then(resp => {
+            this.loadingAR2 = true;
+            this.tableDatas2 = [];
+            postOrpeListMap1(params).then(resp => {
                 if (resp && resp.length !== 0) {
                     this.loadingAR2 = false;
                     this.tableDatas2 = resp;
@@ -339,54 +315,46 @@ export default {
             }).catch(e => {
                 this.loadingAR2 = false;
             });
-            // let params = {
-            //     'timeOfDay': '2019-03-1',
-            //     'yesAndNoOpec': '1',
-            //     'hotTopic': '中东局势'
-            // };
-            // postOrpeListMapTerm(params).then(resp => {
-            //     if (resp && resp.length !== 0) {
-            //         this.loading5 = false;
-            //         console.log(resp);
-            //         resp.forEach(v => {
-            //             timeDate.push(v.OPECpublished_time); // 公布日期
-            //             opeCcount.push(v.OPECcount); // 公布值
-            //         });
-            //         this.chartOptions5['xAxis']['data'] = timeDate;
-            //         this.chartOptions5['series'][0]['data'] = opeCcount;
-            //         this.chartOptions5['series'][1]['data'] = [];
-            //         this.chartOptions5['series'][2]['data'] = [];
-            //         this.$refs['selfTablesa5'] && this.$refs['selfTablesa5'].initChart();
-            //     }
-            // }).catch(e => {
-            //     this.loading5 = false;
-            // });
+        },
+        // 国际环境 折线图
+        orpeListMap5(timeOfDay, yesAndNoOpec) {
             let params5 = {
-                'timeOfDay': '2019-03-1',
-                'yesAndNoOpec': '1'
-            };
-            let timeDate5 = [];
-            let commentsNums5 = [];
-            let pageHits5 = [];
+                'timeOfDay': timeOfDay,
+                'yesAndNoOpec': yesAndNoOpec
+            }
+            this.loading5 = true;
             postOrpeListMap5(params5).then(resp => {
-                console.log(resp);
                 if (resp && resp.length !== 0) {
                     this.loading5 = false;
+                    let timeDate5 = [];
+                    let commentsNums5 = [];
+                    let pageHits5 = [];
+                    let titleText = '';
                     resp.forEach(v => {
-                        timeDate5.push(v.OPECpublished_time); // 公布日期
-                        commentsNums5.push(v.comments_num); // 公布值
-                        pageHits5.push(v.page_hits); // 公布值
+                        timeDate5.push(v.OPECpublished_time); // 日期
+                        commentsNums5.push(v.comments_num); // 评论量
+                        pageHits5.push(v.page_hits); // 报道量
+                        titleText = v.OPECpublished_time + ' 报道量' + v.page_hits + ' 评论量' + v.comments_num;
                     });
-                    this.chartOptions5['xAxis']['data'] = timeDate;
+                    this.chartOptions5['title'][0]['text'] = titleText; // 标题
+                    this.chartOptions5['xAxis']['data'] = timeDate5;
                     this.chartOptions5['series'][0]['data'] = pageHits5; // 报道量
-                    this.chartOptions5['series'][1]['data'] = commentsNums5;
-                    // this.chartOptions5['series'][0]['data'] = ['33', '422', '312', '423', '33']; // 评论量
+                    this.chartOptions5['series'][1]['data'] = commentsNums5; // 评论量
+                    // this.chartOptions5['series'][0]['data'] = ['33', '422', '312', '423', '33']; // 热点
                     this.$refs['selfTablesa5'] && this.$refs['selfTablesa5'].initChart();
                 }
             }).catch(e => {
                 this.loading5 = false;
             });
-        }
+        },
+        // OPEC 折线图
+        rowClick0(row) {
+            this.orpeListMap5(row.OPECpublished_time, '0');
+        },
+        // 非 OPEC 折线图
+        rowClick1(row) {
+            this.orpeListMap5(row.OPECpublished_time, '1');
+        },
     },
     beforeDestroy() {
     }

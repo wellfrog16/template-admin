@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import moment from 'moment';
 // 原油库数据  原油库存-下载
 import {postCrudeDownDetail} from '@/api/dataAnsis/PublicAnalysis';
 import SCard from '@/components/index/common/SCard';
@@ -62,8 +63,10 @@ export default {
             console.log(22);
         },
         lienEchartsDete() {
+            var now = new Date(); // 当前日期
+            let timeDay = moment(now).format('YYYY-MM-DD');
             let params = {
-                'timeOfDay': '2019-02-18'
+                'timeOfDay': timeDay // '2019-02-18'
             };
             this.loadingAR = true;
             this.tableData1 = [];
