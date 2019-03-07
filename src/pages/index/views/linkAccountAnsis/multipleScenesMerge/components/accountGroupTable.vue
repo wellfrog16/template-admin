@@ -70,6 +70,7 @@
                                     :columns="mainTableColumns"
                                     :tableData="mainTableData"
                                     :clearAllSelected="true"
+                                    :limitQtty="limitQtty"
                                     @updateCheckedList="updateCheckedList"
                                     @handleClearAll="handleClearAll"
                                 ></tree-table>
@@ -227,7 +228,8 @@ export default {
             importResultRespData: [], // 导入当前结果集后返回的结果
             importResultList: [], // 已经导入的结果集列表
             isHasSceneType1: false,
-            showContent: false
+            showContent: false,
+            limitQtty: ''
         };
     },
     methods: {
@@ -361,6 +363,7 @@ export default {
             regenerateData(params).then(resp => {
                 if (resp && resp.resData !== null) {
                     this.loadingTree = false;
+                    this.limitQtty = resp.xposQtty;
                     let relativeTable = resp.relativeTable;
                     let resultTable = resp.resultTable;
                     // this.$emit('generateEvent', resp.kmap); // 知识库图表

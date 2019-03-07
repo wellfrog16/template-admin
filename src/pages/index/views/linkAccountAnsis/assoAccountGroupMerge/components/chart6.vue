@@ -271,6 +271,7 @@ export default {
             }
             // select max;
             let maxItem = _.maxBy(chartData, 'acctQttyMax');
+            console.log(maxItem);
             this.$emit('updateAccountGroupAndCustIds', maxItem['acctId'], maxItem['custIds'].split(','));
             chartData = _.groupBy(chartData, 'acctId');
             Object.keys(chartData).forEach((key, index) => {

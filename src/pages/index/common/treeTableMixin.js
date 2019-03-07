@@ -246,6 +246,8 @@ export default {
             }
             this.$emit('updateFullLoading', true);
             getRegeneratingData(params).then(resp => {
+                this.$refs['self-tree-table'].checked = false;
+                this.$refs['self-tree-table'].limitChecked = false;
                 this.$emit('updateFullLoading', false);
                 let store = this.$store.getters.sceneCommitResp;
                 store[params.id] = resp;

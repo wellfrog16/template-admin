@@ -214,16 +214,19 @@ export default {
                 {
                     label: '场景名称',
                     field: 'sceneName',
+                    minWidth: 160
                 },
                 {
                     label: '场景类型',
                     field: 'sceneTypeName',
+                    minWidth: 160,
                     sortable: true,
                     sortMethod: this.gfnSortByChineseCharacters.bind(this, 'sceneTypeName')
                 },
                 {
                     label: '场景说明',
                     field: 'sceneComnt',
+                    minWidth: 160
                 }
             ],
             searchAccountText: '',

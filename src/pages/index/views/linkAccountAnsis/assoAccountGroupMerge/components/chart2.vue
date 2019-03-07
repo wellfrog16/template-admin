@@ -107,10 +107,11 @@ export default {
             // tableData中获取超仓量列表
             let limitQttyList = [];
             let json = {};
+
             tableData.forEach(v => {
                 if (!json[v]) {
                     json['txDay'] = 1;
-                    limitQttyList.push(v.posLimQtty);
+                    limitQttyList.push(v.posLimQtty || v.limitQtty);
                 }
             });
             let series = [];

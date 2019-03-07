@@ -126,7 +126,7 @@ export default {
                 return;
             }
             let {mainData, buysail, id} = resData;
-            this.txDt = buysail[0].declBillTm2.slice(0, 10);
+            this.txDt = resData.txDt;
             sessionStorage.setItem(`txDt${this.tabIndex || this.$store.getters.getTabIndex}`, this.txDt);
             let lineData = [];
             let timeData = [];

@@ -17,10 +17,10 @@
                                 <s-table :columns="chartTableColumns[index]" :tableData="chartTableData[index]" :height="300" ></s-table>
                             </div>
                             <div v-else class="chart-container">
-                                <chart1 :ref="`chartComponent${index + 1}`" v-if="index === 0" :index="index" :tabIndex="tabIndex" :fullscreen="fullscreen" :sceneType="1" :propsChartHeight="propsChartHeight" :childrenMap="childrenMap" :limitQtty="limitQtty" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateAccountGroupAndCustIds="updateAccountGroupAndCustIds" @getDetailBy3D="getDetailBy3D"></chart1>
-                                <chart2 :ref="`chartComponent${index + 1}`" v-if="index === 1" :index="index" :tabIndex="tabIndex" :sceneType="1" :propsChartHeight="propsChartHeight" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></chart2>
-                                <chart3 :ref="`chartComponent${index + 1}`" v-if="index === 2" :index="index" :tabIndex="tabIndex" :sceneType="1" :propsChartHeight="propsChartHeight" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></chart3>
-                                <chart4 :ref="`chartComponent${index + 1}`" v-if="index === 3" :index="index" :tabIndex="tabIndex" :sceneType="1" :propsChartHeight="propsChartHeight" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData"></chart4>
+                                <chart1 :ref="`chartComponent${index + 1}`" v-if="index === 0" :index="index" :tabIndex="tabIndex" :fullscreen="fullscreen" :sceneType="2" :propsChartHeight="propsChartHeight" :childrenMap="childrenMap" :limitQtty="limitQtty" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateAccountGroupAndCustIds="updateAccountGroupAndCustIds" @getDetailBy3D="getDetailBy3D"></chart1>
+                                <chart2 :ref="`chartComponent${index + 1}`" v-if="index === 1" :index="index" :tabIndex="tabIndex" :sceneType="2" :propsChartHeight="propsChartHeight" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></chart2>
+                                <chart3 :ref="`chartComponent${index + 1}`" v-if="index === 2" :index="index" :tabIndex="tabIndex" :sceneType="2" :propsChartHeight="propsChartHeight" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></chart3>
+                                <chart4 :ref="`chartComponent${index + 1}`" v-if="index === 3" :index="index" :tabIndex="tabIndex" :sceneType="2" :propsChartHeight="propsChartHeight" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData"></chart4>
                             </div>
                             <button v-show="!item['toggleDetailFlags']" type="button" class="btn btn-default btn-map-fullscreen" @click="toggleFullScreen(index)">
                                 <i class="fa" :class="[fullscreen ? 'fa-compress' : 'fa-expand-arrows-alt']"></i>
@@ -194,7 +194,10 @@ export default {
                     this.childrenMap[v.id] = childIds;
                 }
             });
-            chartDataList.forEach(v => {
+            let maxItem = _.maxBy(chartDataList, 'acctQttyMax');
+            this.currentAccountGroupId = maxItem.acctId;
+            this.currentCustIds = maxItem.custIds;
+            chartDataList.forEach((v, ii) => {
                 let index = allLeaf.findIndex(i => {
                     return i.acctId === v.acctId;
                 });
@@ -284,39 +287,44 @@ export default {
             }
         },
         getDetailBy3D() {
-            let flag = this.$store.getters.getClickTab;
-            if (flag && this.$store.getters.getchart2) {
-                let chartData2 = this.$store.getters.getchart2;
-                let chartData3 = this.$store.getters.getchart3;
-                let chartData4 = this.$store.getters.getchart4;
-                this.getChart2(chartData2);
-                this.getChart3(chartData3);
-                this.getChart4(chartData4);
-            } else {
-                if (this.currentAccountGroupId) {
-                    let params = this.commonReqParams();
-                    this.charts[1]['loading'] = true;
-                    this.charts[2]['loading'] = true;
-                    this.charts[3]['loading'] = true;
-                    getDetailBy3D(params).then(resp => {
-                        this.charts[1]['loading'] = false;
-                        this.charts[2]['loading'] = false;
-                        this.charts[3]['loading'] = false;
-                        let {clusterNetQtty, clusterStateAnalByTime, clusterStateAnalByCust} = resp;
-                        this.updateTableData(clusterNetQtty.tableData, 1);
-                        this.updateTableData(clusterStateAnalByTime, 2);
-                        this.updateTableData(clusterStateAnalByCust, 3);
-                        this.drewChart2({mainData: clusterNetQtty.mainData, id: resp.id});
-                        this.drewChart3({mainData: clusterStateAnalByTime, id: resp.id});
-                        this.drewChart4({mainData: clusterStateAnalByCust, id: resp.id});
-                    }).catch(e => {
-                        console.error(e);
-                        this.charts[1]['loading'] = false;
-                        this.charts[2]['loading'] = false;
-                        this.charts[3]['loading'] = false;
-                    });
-                }
-            }
+            setTimeout(() => {
+                this.$nextTick(() => {
+                    console.log(this.currentAccountGroupId);
+                    let flag = this.$store.getters.getClickTab;
+                    if (flag && this.$store.getters.getchart2) {
+                        let chartData2 = this.$store.getters.getchart2;
+                        let chartData3 = this.$store.getters.getchart3;
+                        let chartData4 = this.$store.getters.getchart4;
+                        this.getChart2(chartData2);
+                        this.getChart3(chartData3);
+                        this.getChart4(chartData4);
+                    } else {
+                        if (this.currentAccountGroupId) {
+                            let params = this.commonReqParams();
+                            this.charts[1]['loading'] = true;
+                            this.charts[2]['loading'] = true;
+                            this.charts[3]['loading'] = true;
+                            getDetailBy3D(params).then(resp => {
+                                this.charts[1]['loading'] = false;
+                                this.charts[2]['loading'] = false;
+                                this.charts[3]['loading'] = false;
+                                let {clusterNetQtty, clusterStateAnalByTime, clusterStateAnalByCust} = resp;
+                                this.updateTableData(clusterNetQtty.tableData, 1);
+                                this.updateTableData(clusterStateAnalByTime, 2);
+                                this.updateTableData(clusterStateAnalByCust, 3);
+                                this.drewChart2({mainData: clusterNetQtty.mainData, id: resp.id, tableData: clusterNetQtty.tableData});
+                                this.drewChart3({mainData: clusterStateAnalByTime, id: resp.id});
+                                this.drewChart4({mainData: clusterStateAnalByCust, id: resp.id});
+                            }).catch(e => {
+                                console.error(e);
+                                this.charts[1]['loading'] = false;
+                                this.charts[2]['loading'] = false;
+                                this.charts[3]['loading'] = false;
+                            });
+                        }
+                    }
+                });
+            });
         },
         handleEchartClickEvent(params, index) {
             switch (String(index)) {
@@ -363,7 +371,6 @@ export default {
             }
         },
         handleEchartDblClickEvent(params, index) {
-            console.log('dbdbdbdbdbdbdbdbdbdbdbdb');
             this.$store.commit('saveClickTab', false);
             switch (String(index)) {
             case '0':

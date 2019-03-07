@@ -3,8 +3,7 @@
         <div class="fiter-form">
             <el-checkbox v-model="checked" @change="handleCheckedOverWarehouseChange">只显示超仓账户组</el-checkbox>
         </div>
-        <div>{{ limitQtty }}</div>
-        <echarts-common :loading="loading" :ref="`chart${index}`" :domId="`chart${index}`" :defaultOption="chartOptions" :propsChartHeight="propsChartHeight" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></echarts-common>
+        <echarts-common :loading="loading" :ref="`chart${index}`" :domId="`chart${index}`" :defaultOption="chartOptions" :propsChartHeight="propsChartHeight" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @handleLegendChange="handleLegendChange"></echarts-common>
     </div>
 </template>
 <script>
@@ -171,7 +170,7 @@ export default {
             // 计算超仓的排名最大值
             console.log(this.limitQtty);
             let minData = _.minBy(chartData['nodes'], v => {
-                if (v.acctQttyMax > this.limitQtty) {
+                if (Number(v.acctQttyMax) > Number(this.limitQtty)) {
                     return v.acctQttyMax;
                 }
             });
@@ -217,6 +216,9 @@ export default {
                 this.chartOptions = data;
             }
             this.$refs['chart0'] && this.$refs['chart0'].initChart();
+            setTimeout(() => {
+                this.setMaxVisualMap(this.checked);
+            });
             this.getAssoCharts(flag);
         },
         getAssoCharts(flag) {
@@ -230,6 +232,9 @@ export default {
         },
         handleEchartDblClickEvent(val) {
             this.$emit('handleEchartDblClickEvent', val, this.index);
+        },
+        handleLegendChange(val) {
+            this.$emit('handleLegendChange', val, this.index);
         }
     },
     mounted() {

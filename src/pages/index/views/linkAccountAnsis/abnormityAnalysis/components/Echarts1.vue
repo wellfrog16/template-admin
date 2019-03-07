@@ -200,10 +200,32 @@ export default {
                     barMaxWidth: '45',
                     stack: '总量'
                 };
-                if (val && val.qtty) {
-                    this.markLingOping.markLine.data[0].yAxis = val.qtty;
-                    this.markLingOping.markLine.data[1].yAxis = -val.qtty;
-                    basicOptions = {...basicOptions, ...this.markLingOping};
+                let limitQttyList = [];
+                if (Object.keys(mainData).length > 0) {
+                    let list = mainData[Object.keys(mainData)[0]];
+                    limitQttyList = list.map(v => {
+                        return v.qtty;
+                    });
+                }
+                if (limitQttyList) {
+                    // this.markLingOping.markLine.data[0].yAxis = val.qtty;
+                    // this.markLingOping.markLine.data[1].yAxis = -val.qtty;
+                    // basicOptions = {...basicOptions, ...this.markLingOping};
+
+                    // 多单限仓线
+                    temp.push({
+                        name: '多单限仓线',
+                        type: 'line',
+                        data: limitQttyList
+                    });
+                    // 空单限仓线
+                    temp.push({
+                        name: '空单限仓线',
+                        type: 'line',
+                        data: limitQttyList.map(v => {
+                            return -v;
+                        })
+                    });
                 }
                 Object.keys(mainData).forEach((v, i) => {
                     temp.push({
@@ -233,6 +255,7 @@ export default {
                         ...basicOptions,
                     });
                 });
+                console.log(temp);
                 this.chartOptions.series = temp;
                 this.chartOptions.xAxis.data = val ? val.dateList : [];
                 // this.barEcharts.setOption(this.chartOptions);

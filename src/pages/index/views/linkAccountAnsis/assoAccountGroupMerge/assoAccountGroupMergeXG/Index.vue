@@ -315,6 +315,7 @@ export default {
                     let params = this.commonReqParams();
                     params.txDt = date;
                     getChart4Data(params).then(resp => {
+                        resp.txDt = date;
                         this.charts[3]['loading'] = false;
                         this.updateTableData(resp.buysail, 3);
                         this.drewChart4(resp);
