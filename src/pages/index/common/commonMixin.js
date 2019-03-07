@@ -4,7 +4,8 @@ export default {
         return {
             propsChartHeight: 300,
             fullscreen: false,
-            currentFullScreenIndex: 0
+            currentFullScreenIndex: 0,
+            limitQtty: ''
         };
     },
     methods: {
@@ -76,7 +77,9 @@ export default {
                         }
                     });
                 }
-                this.$refs['chartComponent1'] && this.$refs['chartComponent1'][0] && this.$refs['chartComponent1'][0].getData(chartData, id);
+                setTimeout(() => {
+                    this.$refs['chartComponent1'] && this.$refs['chartComponent1'][0] && this.$refs['chartComponent1'][0].getData(chartData, id);
+                });
             });
         },
         getChart1(data, flag) {

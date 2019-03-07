@@ -88,7 +88,6 @@ export default {
             tableDataModel: [],
             selectTemList: [],
             allData: [],
-            limitQtty: 100000,
             limitChecked: false,
             selectSort: '',
             sortList: [
@@ -134,6 +133,10 @@ export default {
         currentSceneType: {
             type: [String, Number],
             default: ''
+        },
+        limitQtty: {
+            type: [String, Number],
+            default: '100000'
         }
     },
     watch: {

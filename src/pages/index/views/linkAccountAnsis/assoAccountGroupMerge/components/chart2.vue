@@ -100,10 +100,19 @@ export default {
     },
     methods: {
         getData(resp) {
-            let {mainData, id} = resp;
+            let {mainData, id, tableData} = resp;
             if (!Object.keys(mainData).length) {
                 return;
             }
+            // tableData中获取超仓量列表
+            let limitQttyList = [];
+            let json = {};
+            tableData.forEach(v => {
+                if (!json[v]) {
+                    json['txDay'] = 1;
+                    limitQttyList.push(v.posLimQtty);
+                }
+            });
             let series = [];
             let date = [];
             Object.keys(mainData).forEach((v, i) => {
@@ -116,7 +125,7 @@ export default {
                     type: 'bar',
                     barMaxWidth: '45',
                     stack: '总量',
-                    markLine: { // 标记线设置
+                    /* markLine: { // 标记线设置
                         lineStyle: {
                             normal: {
                                 type: 'dashed',
@@ -134,7 +143,7 @@ export default {
                             {yAxis: '100000'},
                             {yAxis: '-100000'},
                         ]
-                    },
+                    }, */
                     data: mainData[v].map(m => { return m.acctLongQtty; })
                 });
                 // 空单柱状堆叠
@@ -151,17 +160,20 @@ export default {
                 date = mainData[v].map(m => { return m.txDay || m.date; });
             });
             // 多单限仓线
-            /* series.push({
+            series.push({
                 name: '多单限仓线',
                 type: 'line',
-                data: dData
-            }); */
+                data: limitQttyList
+            });
             // 空单限仓线
-            /* series.push({
+            series.push({
                 name: '空单限仓线',
                 type: 'line',
-                data: kData
-            }); */
+                data: limitQttyList.map(v => {
+                    return -v;
+                })
+            });
+
             console.log(series);
             this.chartOptions['legend']['data'] = series.map(m => { return m.name; });
             this.chartOptions['series'] = series;

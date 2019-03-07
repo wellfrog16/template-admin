@@ -17,7 +17,7 @@
                                 <s-table :columns="chartTableColumns[index]" :tableData="chartTableData[index]" :height="300" ></s-table>
                             </div>
                             <div v-else class="chart-container">
-                                <chart1 :ref="`chartComponent${index + 1}`" v-if="index === 0" :index="index" :tabIndex="tabIndex" :fullscreen="fullscreen" :sceneType="1" :propsChartHeight="propsChartHeight" :childrenMap="childrenMap" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateAccountGroupAndCustIds="updateAccountGroupAndCustIds" @getDetailBy3D="getDetailBy3D"></chart1>
+                                <chart1 :ref="`chartComponent${index + 1}`" v-if="index === 0" :index="index" :tabIndex="tabIndex" :fullscreen="fullscreen" :sceneType="1" :propsChartHeight="propsChartHeight" :childrenMap="childrenMap" :limitQtty="limitQtty" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateAccountGroupAndCustIds="updateAccountGroupAndCustIds" @getDetailBy3D="getDetailBy3D"></chart1>
                                 <chart2 :ref="`chartComponent${index + 1}`" v-if="index === 1" :index="index" :tabIndex="tabIndex" :sceneType="1" :propsChartHeight="propsChartHeight" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></chart2>
                                 <chart3 :ref="`chartComponent${index + 1}`" v-if="index === 2" :index="index" :tabIndex="tabIndex" :sceneType="1" :propsChartHeight="propsChartHeight" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></chart3>
                                 <chart4 :ref="`chartComponent${index + 1}`" v-if="index === 3" :index="index" :tabIndex="tabIndex" :sceneType="1" :propsChartHeight="propsChartHeight" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData"></chart4>
@@ -44,7 +44,7 @@
                     <el-row :gutter="20">
                         <el-col :span="21">
                             <div>
-                                <tree-table ref="self-tree-table" :filterText="searchText" :columns="mainTableColumns" :tableData="mainTableData" :clearAllSelected="true" @updateCheckedList="updateCheckedList" @handleClearAll="handleClearAll" :currentSceneType="currentSceneType"></tree-table>
+                                <tree-table ref="self-tree-table" :filterText="searchText" :columns="mainTableColumns" :tableData="mainTableData" :clearAllSelected="true" :limitQtty="limitQtty" @updateCheckedList="updateCheckedList" @handleClearAll="handleClearAll" :currentSceneType="currentSceneType"></tree-table>
                             </div>
                         </el-col>
                         <el-col :span="3">
@@ -164,8 +164,9 @@ export default {
                     mainTableData: []
                 };
             }
-            let {resultList, chartDataList, id, taskId} = resData;
+            let {resultList, chartDataList, id, taskId, xposQtty} = resData;
             this.taskId = taskId; // 后端使用
+            this.limitQtty = xposQtty; // 限仓量
             if (chartDataList && !chartDataList.length) {
                 return {
                     chartData: [],

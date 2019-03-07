@@ -3,6 +3,7 @@
         <div class="fiter-form">
             <el-checkbox v-model="checked" @change="handleCheckedOverWarehouseChange">只显示超仓账户组</el-checkbox>
         </div>
+        <div>{{ limitQtty }}</div>
         <echarts-common :loading="loading" :ref="`chart${index}`" :domId="`chart${index}`" :defaultOption="chartOptions" :propsChartHeight="propsChartHeight" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></echarts-common>
     </div>
 </template>
@@ -33,6 +34,10 @@ export default {
         propsChartHeight: {
             type: [String, Number],
             default: 300
+        },
+        limitQtty: {
+            type: [String, Number],
+            default: ''
         }
     },
     data() {
@@ -135,7 +140,6 @@ export default {
             maxIndex: 50,
             computedMaxOverWarehouseIndex: 20,
             checked: false,
-            limitQtty: 100000 // 限仓量
         };
     },
     methods: {
@@ -165,6 +169,7 @@ export default {
             })['value'];
             this.chartOptions.visualMap.max = this.maxIndex;
             // 计算超仓的排名最大值
+            console.log(this.limitQtty);
             let minData = _.minBy(chartData['nodes'], v => {
                 if (v.acctQttyMax > this.limitQtty) {
                     return v.acctQttyMax;

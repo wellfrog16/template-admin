@@ -52,7 +52,8 @@ export const chartTableColumns2 = [
     // {label: '当前净持仓金额', field: 'posLimQtty', minWidth: 150},
     // {label: '账户组净持仓量', field: 'acctGroNetOpenInt', minWidth: 150},
     {label: '客户空单净持仓量', field: 'nuBillOpenInt', minWidth: 170, sortable: true},
-    {label: '客户多单净持仓量', field: 'multiBillOpenInt', minWidth: 170, sortable: true}
+    {label: '客户多单净持仓量', field: 'multiBillOpenInt', minWidth: 170, sortable: true},
+    {label: '超仓线', field: 'posLimQtty', minWidth: 140, sortable: true}
 ];
 export const chartTableColumns3 = [ // no use
     {label: '账户组编号', field: '', minWidth: 130, sortable: true},

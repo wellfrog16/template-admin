@@ -25,6 +25,10 @@ export default {
         propsChartHeight: {
             type: [String, Number],
             default: 300
+        },
+        limitQtty: {
+            type: [String, Number],
+            default: 300
         }
     },
     data() {
@@ -177,6 +181,7 @@ export default {
             this.chartOptions['series'][0]['data'] = data.map(v => {
                 return [v.acctMakePosQttyMax, v.acctGroAvgRela, v.custQtty, v.acctId, v.contrCd, v.custIds, v.id];
             });
+            this.chartOptions['series'][0]['markLine'].data[0].xAxis = this.limitQtty || data[0]['xposQtty'] || '';
             this.$store.commit('savechart1', {data: this.chartOptions, index: id || this.tabIndex || this.$store.getters.getTabIndex});
             this.$refs['chart0'] && this.$refs['chart0'].initChart();
         },
