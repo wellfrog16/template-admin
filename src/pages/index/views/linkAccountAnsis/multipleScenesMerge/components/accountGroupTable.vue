@@ -275,6 +275,10 @@ export default {
         sortDataByAcctIdCommon(data) {
             return _.sortBy(data, [item => { return item.acctId; }]);
         },
+        clearChecked() {
+            this.$refs['self-tree-table'].checked = false;
+            this.$refs['self-tree-table'].limitChecked = false;
+        },
         // 确认结果集导入
         handleConfirmExportResultData() {
             if (this.isHasSceneType1 && String(this.resultType) === '1') {
@@ -285,6 +289,7 @@ export default {
                 this.$message.error('该结果集已经导入，不能重复导入');
                 return;
             }
+            this.clearChecked();
             this.importResultList.push(this.resultIds);
             this.showContent = true;
             this.mainTableData = this.sortDataByAcctIdCommon(this.mainTableData.concat(this.importResultRespData));
@@ -299,6 +304,7 @@ export default {
         // 导入CSV
         handleUploadSuccess(resp) {
             if (resp && resp.length) {
+                this.clearChecked();
                 this.showContent = true;
                 this.mainTableData = this.sortDataByAcctIdCommon(this.mainTableData.concat(resp));
             } else {

@@ -46,6 +46,7 @@
                     :propsChartHeight="550"
                     @handleEchartClickEvent="handleEchartClickEvent"
                     @handleEchartDblClickEvent="handleEchartDblClickEvent"
+                    @handleLegendChange="handleLegendChange"
                 ></echarts-common>
             </div>
         </s-card>
@@ -216,6 +217,9 @@ export default {
         };
     },
     methods: {
+        handleLegendChange(params) {
+            this.chartOptions.legend.selected = params.selected;
+        },
         handleCheckedOverWarehouseChange(val) {
             this.setMaxVisualMap(val);
         },
