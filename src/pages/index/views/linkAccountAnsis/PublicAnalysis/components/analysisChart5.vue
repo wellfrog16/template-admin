@@ -5,14 +5,15 @@
                 <div :class="$style.top">
                     <el-tooltip class="item" effect="dark" placement="right-end">
                         <div slot="content">
-                            说明：<br/>
-                            国际舆情模块主要是指OPEC大区与非opec大区的热点事件，<br/>
-                            主要是热点事件的跟踪，报道量，点击量等情况；<br/>
+                            热点：即为机器"总结出的"近期的热度较高的新闻事件，例如"特朗普制裁"事件等；<br/>
+                            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                            此模块主要是指OPEC组织成员国与非opec国家的热点事件，主要是热点事件的跟踪，报道量，点击量等情况；<br/>
+                            下面是对“报道量”和“评论量”的解释。<br/>
                             <!--热点：“热点”为机器判断的热点，即最近发生的新闻经NLP技术自动产生的主题词<br/>-->
                             报道量：此处的“报道量”为页面点击量的简单加权值；<br/>
-                            评论量：望文生义即可；
+                            评论量：即每个热点的网友的评论数量，望文生义即可；
                         </div>
-                        <el-button type="text">?</el-button>
+                        <el-button type="text">说明 ?</el-button>
                     </el-tooltip>
                 </div>
             </div>
@@ -155,6 +156,14 @@ export default {
                             fontSize: 10 // 字体
                         }
                     },
+                    // data: [
+                    //     '2019-02-20',
+                    //     '2019-02-21',
+                    //     '2019-02-22',
+                    //     '2019-02-23',
+                    //     '2019-02-24',
+                    //     '2019-02-25'
+                    // ]
                     data: []
                 },
                 yAxis: [
@@ -182,7 +191,7 @@ export default {
                             show: true,
                         },
                         axisLabel: {
-                            formatter: '{value}%'
+                            formatter: '{value}'
                         }
                     },
                     {
@@ -212,7 +221,7 @@ export default {
                             show: true,
                         },
                         axisLabel: {
-                            formatter: '{value}%'
+                            formatter: '{value}'
                         },
                     }
                 ],
@@ -277,9 +286,9 @@ export default {
     computed: {},
     comments: {},
     mounted() {
-        this.lienEchart0('2019-03-1', '0');
-        this.lienEchart1('2019-03-1', '1');
-        this.orpeListMap5('2019-03-1', '0');
+        this.lienEchart0('2019-03-01', '0');
+        this.lienEchart1('2019-03-01', '1');
+        this.orpeListMap5('2019-03-01', '0');
     },
     methods: {
         // OPEC 列表
@@ -334,7 +343,7 @@ export default {
                         timeDate5.push(v.OPECpublished_time); // 日期
                         commentsNums5.push(v.comments_num); // 评论量
                         pageHits5.push(v.page_hits); // 报道量
-                        titleText = v.OPECpublished_time + ' 报道量' + v.page_hits + ' 评论量' + v.comments_num;
+                        titleText = '2019-02-25' + ' 报道量' + v.page_hits + ' 评论量' + v.comments_num;
                     });
                     this.chartOptions5['title'][0]['text'] = titleText; // 标题
                     this.chartOptions5['xAxis']['data'] = timeDate5;

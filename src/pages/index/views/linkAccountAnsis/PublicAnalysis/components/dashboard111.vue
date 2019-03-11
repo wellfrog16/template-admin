@@ -61,7 +61,7 @@ import {
     postpAnalysis, // 舆情情感 -- // 热度
     postCrudeTable, // 原油库存
     postOrpeListMap5 // 国际环境
-} from '@/api/dataAnsis/PublicAnalysis';
+} from '@/api/dataAnsis/publicAnalysis';
 import _ from 'lodash';
 import SCard from '@/components/index/common/SCard';
 import EchartsCommon from '@/components/index/common/EchartsCommon';

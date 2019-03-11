@@ -1,5 +1,5 @@
 
-//状态(要设置的初始属性值)
+// 状态(要设置的初始属性值)
 const state = {
     abnorDataState: {
         momentState: {},
@@ -11,17 +11,17 @@ const state = {
 };
 // 存储数据
 const mutations = {
-    momentMut (state, val) {
+    momentMut(state, val) {
         state.abnorDataState.momentState = val;
     },
 
-    overStoreMut (state, val) {
+    overStoreMut(state, val) {
         state.abnorDataState.overStoreData = val;
     },
-    frequentMut (state, val) {
+    frequentMut(state, val) {
         state.abnorDataState.frequentData = val;
     },
-    autoTradeMut (state, val) {
+    autoTradeMut(state, val) {
         state.abnorDataState.autoTradeData = val;
     }
 };

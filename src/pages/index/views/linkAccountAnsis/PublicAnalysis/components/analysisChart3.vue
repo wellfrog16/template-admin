@@ -15,13 +15,12 @@
                 <div :class="$style.top">
                     <el-tooltip class="item" effect="dark" placement="right-end">
                         <div slot="content">
-                            说明：<br/>
                             EIA原油库存由美国能源信息署统计公布（该数据不包括战略石油储备），<br/>
                             该数据每周公布一次【周三22：30（冬令时23：30）公布】，此数据主要显示了<br/>
                             美国当周原油库存数量，对于沥青及原油提炼品（燃油、柴油等）有较大影响。<br/>
                             预测值和前值即为EIA发布的预测值和之前的剩余量。
                         </div>
-                        <el-button type="text">?</el-button>
+                        <el-button type="text" style="margin-right: 100px;">说明 ?</el-button>
                     </el-tooltip>
                 </div>
             </div>
@@ -50,7 +49,7 @@
 
 <script>
 import moment from 'moment';
-// 原油库存3 // 原油库存明细3
+// EIA原油库存3 // EIA原油库存明细3
 import {postCrudeTable} from '@/api/dataAnsis/PublicAnalysis';
 import SCard from '@/components/index/common/SCard';
 import STable from '@/components/index/common/STable';
@@ -111,7 +110,7 @@ export default {
                             backgroundColor: '#222'
                         }
                     },
-                    // formatter: '{a0} ：{c0}' + '<br/>' + '{a1} ：{c1}'
+                    formatter: '{a0} ：{c0}' + '(万桶)' + '<br/>' + '{a1} ：{c1}' + '(万桶)' + '<br/>' + '{a2} ：{c2}' + '(万桶)'
                 },
                 legend: {
                     top: '5%',
@@ -248,8 +247,7 @@ export default {
                     mainData = resp.ela;
                     let titleText = '';
                     mainData.forEach(v => {
-                        let ttDate = v.time.match(/\d{4}.\d{1,2}.\d{1,2}/mg).toString();
-                        let times = ttDate.replace(/[^0-9]/mg, '-')
+                        let times = moment(new Date(v.time.replace(/[年月]/g, '-').replace(/[日]/g, ''))).format('YYYY-MM-DD');
                         timeDate.push(times); // 公布日期
                         elaData.push(v.publish); // 公布值
                         apiData.push(v.forecast); // 预测值

@@ -6,6 +6,7 @@ import login from '@/store/module/index/login';
 import sceneConfig from '@/store/module/index/sceneConfig';
 import abnormitysAnalysis from '@/store/module/index/abnormitysAnalysis';
 import accountMerge from '@/store/module/index/accountMerge';
+import PublicAnalysis from '@/store/module/index/PublicAnalysis';
 
 Vue.use(Vuex);
 
@@ -28,5 +29,6 @@ export default new Vuex.Store({
         sceneConfig,
         abnormitysAnalysis,
         accountMerge,
+        PublicAnalysis
     }
 });

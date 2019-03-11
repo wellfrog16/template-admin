@@ -177,31 +177,41 @@ const Index = {
                         scrollTop: true,
                         title: '舆情情感分析'
                     },
-                    path: '/PublicAnalysis',
-                    name: 'PublicAnalysis',
+                    path: '/publicAnalysis',
+                    name: 'publicAnalysis',
                     icon: 'menu-fix-icon fa fa-location-arrow',
                     component: resolve => require(['@/pages/index/views/linkAccountAnsis/PublicAnalysis/Index.vue'], resolve)
                 },
                 {
                     meta: {
                         scrollTop: true,
-                        title: '舆情波动'
+                        title: '重点名单监控'
                     },
-                    path: '/publicOpinionSwings',
-                    name: 'publicOpinionSwings',
+                    path: '/priorityListMonitoring',
+                    name: 'priorityListMonitoring',
                     icon: 'menu-fix-icon fa fa-location-arrow',
-                    component: resolve => require(['@/pages/index/views/linkAccountAnsis/publicOpinionSwings/Index.vue'], resolve)
+                    component: resolve => require(['@/pages/index/views/linkAccountAnsis/priorityListMonitoring/Index.vue'], resolve)
                 },
-                {
-                    meta: {
-                        scrollTop: true,
-                        title: '新闻详情'
-                    },
-                    path: '/newsDetails',
-                    name: 'newsDetails',
-                    icon: 'menu-fix-icon fa fa-location-arrow',
-                    component: resolve => require(['@/pages/index/views/linkAccountAnsis/newsDetails/Index.vue'], resolve)
-                },
+                //     {
+            //         meta: {
+            //             scrollTop: true,
+            //             title: '舆情波动'
+            //         },
+            //         path: '/publicOpinionSwings',
+            //         name: 'publicOpinionSwings',
+            //         icon: 'menu-fix-icon fa fa-location-arrow',
+            //         component: resolve => require(['@/pages/index/views/linkAccountAnsis/publicOpinionSwings/Index.vue'], resolve)
+            //     },
+            //     {
+            //         meta: {
+            //             scrollTop: true,
+            //             title: '新闻详情'
+            //         },
+            //         path: '/newsDetails',
+            //         name: 'newsDetails',
+            //         icon: 'menu-fix-icon fa fa-location-arrow',
+            //         component: resolve => require(['@/pages/index/views/linkAccountAnsis/newsDetails/Index.vue'], resolve)
+            //     },
             ]
         },
         {

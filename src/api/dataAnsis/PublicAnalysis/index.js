@@ -9,6 +9,10 @@ export const postpAnalysis = params => {
 export const postOilDayKList = params => {
     return post(`${requestPrefixs}/oilDayKList`, params);
 };
+// 热度
+export const postBaiduAndWeixin = params => {
+    return post(`${requestPrefixs}/baiduAndWeixin`, params);
+};
 // 原油库存3 // 原油库存明细3
 export const postCrudeTable = params => {
     return post(`${requestPrefixs}/crudeTable`, params);

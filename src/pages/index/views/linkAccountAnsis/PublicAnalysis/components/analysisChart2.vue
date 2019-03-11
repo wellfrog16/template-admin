@@ -5,11 +5,10 @@
                 <div :class="$style.top">
                     <el-tooltip class="item" effect="dark" placement="right-end">
                         <div slot="content">
-                            说明：<br/>
                             该图为每日的原油日k图，即上海期货交易所的原油日k图，纽约商业交易所<br/>
                             的轻质低硫原油日k图和伦敦国际石油交易所的布伦特原油期货日k图。
                         </div>
-                        <el-button type="text">?</el-button>
+                        <el-button type="text">说明 ?</el-button>
                     </el-tooltip>
                 </div>
             </div>

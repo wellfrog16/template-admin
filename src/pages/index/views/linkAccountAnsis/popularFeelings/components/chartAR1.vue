@@ -476,7 +476,6 @@ export default {
                 radioTable = this.checkboTableColumn1;
                 let params = {...radioTable};
                 this.tableUpdateData1(params);
-                console.log(params);
                 this.checkboTableColumn1 = [];
                 this.ruleForm.timeWindow = '5 分钟';
             } else {

@@ -10,13 +10,17 @@ export const columnsListAR3 = [
 ];
 export const columnsListAR4 = [
     {field: 'region', label: '区', minWidth: 100, align: 'left'},
-    {field: 'entrepot', label: '交割仓库', minWidth: 130, align: 'center'},
-    {field: 'oilOf', label: '油种', minWidth: 100, align: 'center'},
-    {field: 'lastWeekStock', label: '上周库存期货', minWidth: 130, align: 'center'},
-    {field: 'thisWeekStock', label: '本周库存期货', minWidth: 130, align: 'center'},
-    {field: 'lastWeekAvaStock', label: '理论可用库容量上周', minWidth: 130, align: 'center'},
-    {field: 'thisWeekAvaStock', label: '理论可用库容量本周', minWidth: 130, align: 'center'},
-    {field: 'regulationAvaStock', label: '理论可用库容量本周增减', minWidth: 130, align: 'center'}
+    {field: 'entrepot', label: '交割仓库', minWidth: 140, align: 'center'},
+    {field: 'oilOf', label: '油种', minWidth: 140, align: 'center'},
+    {field: 'lastWeekStock', label: '上周库存期货', minWidth: 140, align: 'center'},
+    {field: 'thisWeekStock', label: '本周库存期货', minWidth: 140, align: 'center'},
+    {field: '', label: '理论可用库容量', align: 'center', minWidth: 400,
+        children: [
+            {label: '上周', field: 'lastWeekAvaStock', minWidth: 140, align: 'center'},
+            {label: '本周', field: 'thisWeekAvaStock', minWidth: 140, align: 'center'},
+            {label: '本周增减', field: 'regulationAvaStock', minWidth: 140, align: 'center'},
+        ]
+    },
 ];
 export const columnsListAR5 = [
     {field: 'OPEChot_topic', label: '热点', minWidth: 130, align: 'left'},

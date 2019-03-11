@@ -5,11 +5,13 @@
                 <div :class="$style.top">
                     <el-tooltip class="item" effect="dark" placement="right-end">
                         <div slot="content">
-                            说明：<br/>
-                            每日新闻的利好、利空、中性(可理解为既不利好又不利空的消息)情况，<br/>
-                            即每天利好、利空、中性的发布条数。热度即当前新闻报道数量等加权和。
+                            智能机器人“总结的”每日新闻分别应属于利多、利空、中性的条数。<br/>
+                            即每日新闻经自然语言处理技术判断生成的利多还是利空（或者中性）的分析结论，即<br/>
+                            热度即当前新闻报道数量等加权和。
+                            <!--每日新闻的利多、利空、中性(可理解为既不利多又不利空的消息)情况，<br/>-->
+                            <!--即每天利多、利空、中性的发布条数。热度即当前新闻报道数量等加权和。-->
                         </div>
-                        <el-button type="text">?</el-button>
+                        <el-button type="text">说明 ?</el-button>
                     </el-tooltip>
                 </div>
             </div>
@@ -29,7 +31,7 @@
 <script>
 import moment from 'moment';
 // 原油舆情情感分析
-import {postpAnalysis} from '@/api/dataAnsis/PublicAnalysis';
+import {postpAnalysis, postBaiduAndWeixin} from '@/api/dataAnsis/PublicAnalysis';
 import SCard from '@/components/index/common/SCard';
 import EchartsCommon from '@/components/index/common/EchartsCommon';
 export default {
@@ -38,13 +40,13 @@ export default {
     props: {},
     minis: [],
     data() {
-        let schema = [
-            {name: 'publicDate', index: 0, text: '日期'},
-            {name: 'justCount', index: 1, text: '利好'},
-            {name: 'loseCount', index: 2, text: '利空'},
-            {name: 'centreCount', index: 3, text: '中性'},
-            {name: 'weixinBaiduHeat', index: 4, text: '热度'},
-        ];
+        // let schema = [
+        //     {name: 'publicDate', index: 0, text: '日期'},
+        //     {name: 'justCount', index: 1, text: '利好'},
+        //     {name: 'loseCount', index: 2, text: '利空'},
+        //     {name: 'centreCount', index: 3, text: '中性'},
+        //     {name: 'weixinBaiduHeat', index: 4, text: '热度'},
+        // ];
         return {
             timer: null,
             loading1: false,
@@ -91,7 +93,7 @@ export default {
                 legend: {
                     top: '3%',
                     // data: ['正面', '负面', '中性', '热度'],
-                    data: ['利好', '利空', '中性', '热度'],
+                    data: ['利多', '利空', '中性', '热度'],
                     textStyle: {
                         color: '#fff',
                         fontSize: '14'
@@ -130,7 +132,7 @@ export default {
                 ],
                 yAxis: [
                     {
-                        name: '利好',
+                        name: '利多',
                         type: 'value',
                         position: 'left',
                         splitLine: {
@@ -263,7 +265,7 @@ export default {
                 ],
                 series: [
                     {
-                        name: '利好',
+                        name: '利多',
                         type: 'bar',
                         stack: '总量',
                         barWidth: 30,
@@ -341,34 +343,50 @@ export default {
             let timeDay = moment(now).format('YYYY-MM-DD');
             let params = {
                 'timeOfDay': timeDay // '2019-02-18'
+                // 'timeOfDay': '2019-03-08' // '2019-02-18'
             };
             this.loading1 = true;
             let mainData = [];
             let timeDate = []; // 日期
-            let heatData = []; // 正面
+            let heatData = []; // 利多
             let frontData = []; // 热度
             let neutralData = []; // 中性
-            let negativeData = []; // 负面
+            let negativeData = []; // 利空
             // 原油舆情情感分析
             postpAnalysis(params).then(resp => {
+                console.log(resp);
                 if (resp && resp.length !== 0) {
                     this.loading1 = false;
                     let titleText = '';
                     mainData = resp;
+                    this.$store.commit('analysisMut1', mainData);
                     mainData.forEach(v => {
-                        timeDate.push(v.publicDate); // 日期
-                        heatData.push(v.justCount); // 利好
-                        frontData.push(parseInt(v.weixinHeat) + parseInt(v.baiduHeat)); // 热度
+                        let times = moment(v.publicDate).format('YYYY-MM-DD');
+                        timeDate.push(times); // 日期
+                        heatData.push(v.justCount); // 利多
                         neutralData.push(v.centreCount); // 中性
                         negativeData.push(v.loseCount); // 利空
-                        // 日期 - 利好 - 利空  - 中性 - 热度
-                        titleText = v.publicDate + ' 利好' + v.justCount + ' 利空' + v.loseCount + ' 中性' + v.centreCount + ' 热度' + (parseInt(v.weixinHeat) + parseInt(v.baiduHeat))
+                        // 日期 - 利多 - 利空  - 中性 - 热度
+                        titleText = v.publicDate + ' 利多' + v.justCount + ' 利空' + v.loseCount + ' 中性' + v.centreCount + ' 热度' + (parseInt(v.weixinHeat) + parseInt(v.baiduHeat))
                     });
                     this.chartOptions1['title'][0]['text'] = titleText; // 标题
                     this.chartOptions1['xAxis'][0]['data'] = timeDate;
                     this.chartOptions1['series'][0]['data'] = heatData;
                     this.chartOptions1['series'][1]['data'] = negativeData;
                     this.chartOptions1['series'][2]['data'] = neutralData;
+                    // this.chartOptions1['series'][3]['data'] = frontData;
+                    this.$refs['echartsDemos1'] && this.$refs['echartsDemos1'].initChart();
+                }
+            }).catch(e => {
+                this.loading1 = false;
+            });
+            postBaiduAndWeixin({'timeOfDay': '2019-03-08'}).then(resp => {
+                console.log(resp);
+                if (resp && resp.length !== 0) {
+                    this.loading1 = false;
+                    resp.forEach(v => {
+                        frontData.push(parseInt(v.wxIndex) + parseInt(v.baiduIndex)); // 热度
+                    });
                     this.chartOptions1['series'][3]['data'] = frontData;
                     this.$refs['echartsDemos1'] && this.$refs['echartsDemos1'].initChart();
                 }

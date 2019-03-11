@@ -1,107 +1,134 @@
 <template>
-    <s-card :title="`舆情分析结论`" :icon="`fa fa-chart-line`">
-        <div slot="right" :class="$style.box">
-            <div :class="$style.top">
-                <el-tooltip class="item" effect="dark" placement="right-end">
-                    <div slot="content">
-                        该模块为舆情分析得到的结论，即：<br/>
-                        原油舆情情感：最近一日的舆情偏向度，例如62%地偏向利空;<br/>
-                        原油舆情热度：新闻报道量、点击量等加权之和，反映新闻热度；<br/>
-                        EIA原油库存：由美国能源信息署统计公布的美国当周原油库存数量;<br/>
-                        原油国际环境新闻报道：近期大事件的跟踪和事件的发酵值；
-                    </div>
-                    <el-button type="text">?</el-button>
-                </el-tooltip>
+    <div :class="$style.dashboard">
+        <s-card :title="`舆情分析结论`" :icon="`fa fa-chart-line`">
+            <div slot="right" :class="$style.box">
+                <div :class="$style.top">
+                    <el-tooltip class="item" effect="dark" placement="right-end">
+                        <div slot="content">
+                            原油舆情情感：智能机器人"总结出"的最近一个交易日的新闻利多或是利空(或中性)的占比情况，<br/>
+                            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                            例如"利多63%"，即机器认为当天有63%的新闻消息属于利多消息；<br/>
+                            原油舆情热度：新闻报道量、点击量等加权之和，反映新闻事件的热度；<br/>
+                            EIA原油库存：由美国能源信息署统计公布的美国当周原油库存数量;<br/>
+                            原油国际环境新闻报道：近期机器“总结出的”新闻热点事件，例如“特朗普制裁”事件，<br/>
+                            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                            仪表盘的值为该事件最近一个交易日的报道量；
+                        </div>
+                        <el-button type="text">说明 ?</el-button>
+                    </el-tooltip>
+                </div>
             </div>
+            <div :class="$style.dashboards" slot="content">
+                <div :class="$style.dashboard_box">
+                    <el-popover trigger="hover"
+                                width="200">
+                        <echarts-common
+                            slot="reference"
+                            ref="echartsDemoa1"
+                            domId="echartsIds1"
+                            :noClearFlag="false"
+                            :defaultOption="chartOptionso1"
+                            :propsChartHeight="300">
+                        </echarts-common>
+                        <div>
+                            <!--机器“总结出”的最近一个交易日的新闻利多或是利空(或中性)的占比情况， 例如“利空63%”，即机器认为当天有63%的新闻消息属于利空消息。-->
+                            智能机器人计算出的最近一个交易日的新闻利多或是利空(或中性)的占比情况， 例如"利多63%"，即机器认为当天有63%的新闻消息属于利多消息。
+                        </div>
+                    </el-popover>
+                </div>
+                <div :class="$style.dashboard_box">
+                    <el-popover
+                        width="200"
+                        trigger="hover">
+                        <echarts-common
+                            slot="reference"
+                            ref="echartsDemoa2"
+                            domId="echartsIds2"
+                            :noClearFlag="false"
+                            :defaultOption="chartOptionso2"
+                            :propsChartHeight="300">
+                        </echarts-common>
+                        <div>
+                            当日新闻报道量、点击量等加权之和；结果为一稳定值，特别是新闻数量。
+                        </div>
+                    </el-popover>
+                </div>
+                <div :class="$style.dashboard_box">
+                    <el-popover
+                        width="200"
+                        trigger="hover">
+                        <echarts-common
+                            slot="reference"
+                            ref="echartsDemoa3"
+                            domId="echartsIds3"
+                            :noClearFlag="false"
+                            :defaultOption="chartOptionso3"
+                            :propsChartHeight="300">
+                        </echarts-common>
+                        <div>
+                            即由美国能源信息署统计公布（该数据不包括战略石油储备），该数据每周公布一次，其主要显示了美国当周原油库存数量。
+                        </div>
+                    </el-popover>
+                </div>
+                <div :class="$style.dashboard_box">
+                    <el-popover
+                        width="200"
+                        trigger="hover">
+                        <echarts-common
+                            slot="reference"
+                            ref="echartsDemoa4"
+                            domId="echartsIds4"
+                            :noClearFlag="false"
+                            :defaultOption="chartOptionso4"
+                            :propsChartHeight="300">
+                        </echarts-common>
+                        <div>
+                            国际舆情模块主要是指OPEC大区与非OPEC大区报道量，点击量等加权之和对热度的度量。
+                        </div>
+                    </el-popover>
+                </div>
+            </div>
+        </s-card>
+        <div>
+            <AnalysisChart1></AnalysisChart1>
+            <AnalysisChart2></AnalysisChart2>
+            <AnalysisChart3></AnalysisChart3>
+            <AnalysisChart4></AnalysisChart4>
+            <AnalysisChart5></AnalysisChart5>
+            <AnalysisChart6></AnalysisChart6>
         </div>
-        <div :class="$style.dashboards" slot="content">
-            <div :class="$style.dashboard_box">
-                <el-popover trigger="hover" title="分析结果："
-                            width="200">
-                    <echarts-common
-                        slot="reference"
-                        ref="echartsDemoa1"
-                        domId="echartsIds1"
-                        :noClearFlag="false"
-                        :defaultOption="chartOptionso1"
-                        :propsChartHeight="300">
-                    </echarts-common>
-                    <div>
-                        即对最近一日所有新闻进行的利好或利空的总分析结果
-                    </div>
-                </el-popover>
-            </div>
-            <div :class="$style.dashboard_box">
-                <el-popover
-                    title="热度："
-                    width="200"
-                    trigger="hover">
-                    <echarts-common
-                        slot="reference"
-                        ref="echartsDemoa2"
-                        domId="echartsIds2"
-                        :noClearFlag="false"
-                        :defaultOption="chartOptionso2"
-                        :propsChartHeight="300">
-                    </echarts-common>
-                    <div>
-                        当日新闻报道量、点击量等加权之和；结果为一稳定值，特别是新闻数量。
-                    </div>
-                </el-popover>
-            </div>
-            <div :class="$style.dashboard_box">
-                <el-popover
-                    title="公布值："
-                    width="200"
-                    trigger="hover">
-                    <echarts-common
-                        slot="reference"
-                        ref="echartsDemoa3"
-                        domId="echartsIds3"
-                        :noClearFlag="false"
-                        :defaultOption="chartOptionso3"
-                        :propsChartHeight="300">
-                    </echarts-common>
-                    <div>
-                        即由美国能源信息署统计公布（该数据不包括战略石油储备），该数据每周公布一次，其主要显示了美国当周原油库存数量。
-                    </div>
-                </el-popover>
-            </div>
-            <div :class="$style.dashboard_box">
-                <el-popover
-                    title="报道量："
-                    width="200"
-                    trigger="hover">
-                    <echarts-common
-                        slot="reference"
-                        ref="echartsDemoa4"
-                        domId="echartsIds4"
-                        :noClearFlag="false"
-                        :defaultOption="chartOptionso4"
-                        :propsChartHeight="300">
-                    </echarts-common>
-                    <div>
-                        国际舆情模块主要是指OPEC大区与非OPEC大区报道量，点击量等加权之和对热度的度量。
-                    </div>
-                </el-popover>
-            </div>
-        </div>
-    </s-card>
+    </div>
 </template>
 
 <script>
 import moment from 'moment';
 import {
-    postpAnalysis, // 舆情情感 -- // 热度
+    postpAnalysis, // 舆情情感
+    postBaiduAndWeixin, // 热度
     postCrudeTable, // 原油库存
     postOrpeListMap5 // 国际环境
 } from '@/api/dataAnsis/PublicAnalysis';
 import _ from 'lodash';
 import SCard from '@/components/index/common/SCard';
 import EchartsCommon from '@/components/index/common/EchartsCommon';
+import AnalysisChart1 from '../components/analysisChart1';
+import AnalysisChart2 from '../components/analysisChart2';
+import AnalysisChart3 from '../components/analysisChart3';
+import AnalysisChart4 from '../components/analysisChart4';
+import AnalysisChart5 from '../components/analysisChart5';
+import AnalysisChart6 from '../components/analysisChart6';
 export default {
     name: 'dashboard',
-    components: {SCard, EchartsCommon},
+    components: {
+        SCard,
+        EchartsCommon,
+        AnalysisChart1,
+        AnalysisChart2,
+        AnalysisChart3,
+        AnalysisChart4,
+        AnalysisChart5,
+        AnalysisChart6,
+    },
     props: {},
     minis: [],
     data() {
@@ -172,9 +199,9 @@ export default {
                     axisLine: { // 坐标轴线
                         lineStyle: { // 属性lineStyle控制线条样式
                             color: [
-                                [0.3, '#fd666d'],
-                                [0.7, '#FFCA4B'],
-                                [1, '#37a2da']
+                                [0.5, '#37a2da'],
+                                // [0.1, '#FFCA4B'],
+                                [1, '#fd666d']
                             ],
                             width: 20
                         }
@@ -199,11 +226,11 @@ export default {
                         formatter: function(e) {
                             switch (e + '') {
                             case '-60':
-                                return '利空';
+                                return '-60 利空';
                             case '0':
                                 return '中性';
                             case '60':
-                                return '利好';
+                                return '60 利多';
                             default:
                                 return e;
                             }
@@ -221,9 +248,9 @@ export default {
                         //     console.log(params);
                         // },
                         // formatter: '利空' + '分析结果：{value}%'} + '利好',
-                        formatter: '分析结果：{value}%'
+                        formatter: '属于利多的比例：{value}%'
                     },
-                    data: [{value: ''}]
+                    data: [{value: '0'}]
                 }]
             },
             chartOptionso2: {
@@ -292,9 +319,9 @@ export default {
                     axisLine: { // 坐标轴线
                         lineStyle: { // 属性lineStyle控制线条样式
                             color: [
-                                [0.3, '#fd666d'],
+                                [0.3, '#0cda47'],
                                 [0.7, '#FFCA4B'],
-                                [1, '#37a2da']
+                                [1, '#fd0e10']
                             ],
                             width: 20
                         }
@@ -324,7 +351,7 @@ export default {
                             padding: [113, 4, 5, 6]
                         },
                         formatter: '热度：{value}'},
-                    data: [{value: ''}]
+                    data: [{value: '0'}]
                 }]
             },
             chartOptionso3: {
@@ -392,10 +419,11 @@ export default {
                     max: 648,
                     axisLine: { // 坐标轴线
                         lineStyle: { // 属性lineStyle控制线条样式
+                            // color: '#63869e',
                             color: [
-                                [0.3, '#fd666d'],
+                                [0.3, '#017cda'],
                                 [0.7, '#FFCA4B'],
-                                [1, '#37a2da']
+                                [1, '#fd666d']
                             ],
                             width: 20
                         }
@@ -424,8 +452,8 @@ export default {
                             fontSize: 16,
                             padding: [113, 4, 5, 6]
                         },
-                        formatter: '公布值：{value}'},
-                    data: [{value: ''}]
+                        formatter: '公布值：{value}(万桶)'},
+                    data: [{value: '0'}]
                 }]
             },
             chartOptionso4: {
@@ -494,9 +522,9 @@ export default {
                     axisLine: { // 坐标轴线
                         lineStyle: { // 属性lineStyle控制线条样式
                             color: [
-                                [0.3, '#fd666d'],
+                                [0.3, '#03c6f7'],
                                 [0.7, '#FFCA4B'],
-                                [1, '#37a2da']
+                                [1, '#f77309']
                             ],
                             width: 20
                         }
@@ -526,21 +554,21 @@ export default {
                             padding: [113, 4, 5, 6]
                         },
                         formatter: '报道量：{value}'},
-                    data: [{value: ''}]
+                    data: [{value: '0'}]
                 }]
             }
         };
     },
     computed: {},
-    comments: {},
     mounted() {
         this.lienEchartsDete();
     },
     methods: {
         lienEchartsDete() {
+            let storeData = this.$store.getters.analysisGetters1;
+            console.log(storeData);
             var now = new Date(); // 当前日期
             let timeDay = moment(now).format('YYYY-MM-DD');
-            // console.log(timeDay);
             let params = {
                 'timeOfDay': timeDay, // '2019-02-18'
             };
@@ -560,24 +588,27 @@ export default {
                         let maxData = _.max(munData); // 最大值
                         titleText = varietys.publicDate;
                         varietys1 = maxData / (parseFloat(varietys.justCount) + parseFloat(varietys.centreCount) + parseFloat(varietys.loseCount));
-                        varietys2 = parseFloat(varietys.weixinHeat) + parseFloat(varietys.baiduHeat);
                     }
                     // 标题
                     let mathFloor = Math.floor(varietys1 * 100);
-                    let mathFloor2 = varietys2;
-                    let ums = '';
-                    if (mathFloor < 0 || mathFloor < -100) {
-                        ums = ' 利空';
-                    } else if (mathFloor === 0) {
-                        ums = ' 中性';
-                    } else if (mathFloor > 0 || mathFloor < 100) {
-                        ums = ' 利好';
-                    }
-                    this.chartOptionso1['title'][0]['text'] = titleText + ums + mathFloor + '%'; // 标题
-                    this.chartOptionso2['title'][0]['text'] = titleText + ' 热度' + mathFloor2; // 标题
+                    let titleText1 = moment(new Date(titleText.replace(/[年月]/g, '-').replace(/[日]/g, ''))).format('YYYY-MM-DD');
+                    this.chartOptionso1['title'][0]['text'] = titleText1; // 标题
                     this.chartOptionso1.series[0].data[0].value = mathFloor;
-                    this.chartOptionso2.series[0].data[0].value = mathFloor2;
                 }
+            });
+            // 热度
+            postBaiduAndWeixin({'timeOfDay': '2019-03-08'}).then(resp => {
+                let titleText = '';
+                if (resp[resp.length - 1]) {
+                    let varietys = resp[resp.length - 1];
+                    titleText = varietys.date;
+                    varietys2 = parseFloat(varietys.wxIndex) + parseFloat(varietys.baiduIndex);
+                }
+                // 标题
+                let mathFloor2 = varietys2;
+                let titleText1 = moment(new Date(titleText.replace(/[年月]/g, '-').replace(/[日]/g, ''))).format('YYYY-MM-DD');
+                this.chartOptionso2['title'][0]['text'] = titleText1; // 标题
+                this.chartOptionso2.series[0].data[0].value = mathFloor2;
             });
             // 原油库存 chartOptionso3
             postCrudeTable(params).then(resp => {
@@ -589,7 +620,8 @@ export default {
                         titleText = varietys.time;
                         munData = parseFloat(varietys.publish);
                     }
-                    this.chartOptionso3['title'][0]['text'] = titleText + ' 公布值' + munData; // 标题
+                    let titleText1 = moment(new Date(titleText.replace(/[年月]/g, '-').replace(/[日]/g, ''))).format('YYYY-MM-DD');
+                    this.chartOptionso3['title'][0]['text'] = titleText1; // 标题
                     this.chartOptionso3.series[0].data[0].value = munData; // 平均值
                 }
             });
@@ -608,7 +640,8 @@ export default {
                         titleText = varietys.OPECpublished_time;
                         munData = parseFloat(varietys.page_hits);
                     }
-                    this.chartOptionso4['title'][0]['text'] = titleText + ' 报道量' + munData; // 标题
+                    let titleText1 = moment(new Date(titleText.replace(/[年月]/g, '-').replace(/[日]/g, ''))).format('YYYY-MM-DD');
+                    this.chartOptionso4['title'][0]['text'] = titleText1; // 标题
                     this.chartOptionso4.series[0].data[0].value = munData;
                 }
             });
