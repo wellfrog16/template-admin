@@ -9,6 +9,8 @@
             :element-loading-text="loadingText"
             element-loading-background="rgba(0,0,0,0.7)"
             :row-class-name="rowClassName"
+            :row-style="rowStyle"
+            :cell-style="cellStyle"
             :cell-class-name="cellClassName"
             :show-header="showHeader"
             :show-summary="showSummary"
@@ -140,7 +142,9 @@ export default {
             }
         },
         rowClassName: [String, Function],
+        rowStyle: [String, Function],
         cellClassName: [String, Function],
+        cellStyle: [String, Function],
         summaryMethod: Function,
         spanMethod: Function,
         showSummary: {
