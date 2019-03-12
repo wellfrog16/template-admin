@@ -362,7 +362,7 @@ export default {
                     if (v.exceptionPeriod) {
                         let exceptionPeriod = {
                             exceptionPeriod: this.ruleForm.timeWindow
-                        }
+                        };
                         v.exceptionPeriod = {...exceptionPeriod};
                     }
                 });

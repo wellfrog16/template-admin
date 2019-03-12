@@ -2,14 +2,6 @@
     <div :class="$style.analys4">
         <s-card :title="`库存数据`" :icon="`fa fa-chart-line`">
             <div slot="content">
-                <!--<s-table-columns-->
-                    <!--ref="selfTables1"-->
-                    <!--:height="230"-->
-                    <!--:loading="loadingAR"-->
-                    <!--:columns="columnsList"-->
-                    <!--:tableData="tableData1"-->
-                <!--&gt;-->
-                <!--</s-table-columns>-->
                 <el-table
                     :data="tableData1"
                     border
@@ -40,12 +32,10 @@ import moment from 'moment';
 // 原油库数据  原油库存-下载
 import {postCrudeDownDetail} from '@/api/dataAnsis/PublicAnalysis';
 import SCard from '@/components/index/common/SCard';
-// import STable from '@/components/index/common/STable';
-import STableColumns from '@/components/index/common/STableColumns';
 import {columnsListAR4} from './constants';
 export default {
     name: 'analysisChart1',
-    components: {SCard, STableColumns},
+    components: {SCard},
     props: {},
     minis: [],
     data() {

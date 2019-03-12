@@ -36,7 +36,7 @@ const getters = {
     frequentGetters(state) {
         return state.abnorDataState.frequentData;
     },
-    autoTradeGetters(state){
+    autoTradeGetters(state) {
         return state.abnorDataState.autoTradeData;
     }
 };
@@ -48,5 +48,3 @@ export default {
     getters,
     actions
 };
-
-

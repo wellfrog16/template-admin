@@ -1,4 +1,3 @@
-import InputInTable from '@/components/index/common/InputInTable';
 export const columnsListAR3 = [
     {field: 'time', label: '公布日期', minWidth: 130, align: 'center'},
     {field: 'content', label: '数据名称', minWidth: 100, align: 'left'},
@@ -6,7 +5,6 @@ export const columnsListAR3 = [
     {field: 'forecast', label: '预测值(万桶)', minWidth: 130, align: 'center'},
     {field: 'publish', label: '公布值(万桶)', minWidth: 130, align: 'center'},
     {field: 'influence', label: '影响原油', minWidth: 130, align: 'center'}
-    // {field: 'a7', label: '阈值范围', minWidth: 130, align: 'center', template: InputInTable} // 用后端说没有值
 ];
 export const columnsListAR4 = [
     {field: 'region', label: '区', minWidth: 100, align: 'left'},
@@ -14,12 +12,7 @@ export const columnsListAR4 = [
     {field: 'oilOf', label: '油种', minWidth: 140, align: 'center'},
     {field: 'lastWeekStock', label: '上周库存期货', minWidth: 140, align: 'center'},
     {field: 'thisWeekStock', label: '本周库存期货', minWidth: 140, align: 'center'},
-    {field: '', label: '理论可用库容量', align: 'center', minWidth: 400,
-        children: [
-            {label: '上周', field: 'lastWeekAvaStock', minWidth: 140, align: 'center'},
-            {label: '本周', field: 'thisWeekAvaStock', minWidth: 140, align: 'center'},
-            {label: '本周增减', field: 'regulationAvaStock', minWidth: 140, align: 'center'},
-        ]
+    {field: '', label: '理论可用库容量', align: 'center', minWidth: 400, children: [{label: '上周', field: 'lastWeekAvaStock', minWidth: 140, align: 'center'}, {label: '本周', field: 'thisWeekAvaStock', minWidth: 140, align: 'center'}, {label: '本周增减', field: 'regulationAvaStock', minWidth: 140, align: 'center'}]
     },
 ];
 export const columnsListAR5 = [

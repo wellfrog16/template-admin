@@ -367,7 +367,7 @@ export default {
                         neutralData.push(v.centreCount); // 中性
                         negativeData.push(v.loseCount); // 利空
                         // 日期 - 利多 - 利空  - 中性 - 热度
-                        titleText = v.publicDate + ' 利多' + v.justCount + ' 利空' + v.loseCount + ' 中性' + v.centreCount + ' 热度' + (parseInt(v.weixinHeat) + parseInt(v.baiduHeat))
+                        titleText = v.publicDate + ' 利多' + v.justCount + ' 利空' + v.loseCount + ' 中性' + v.centreCount + ' 热度' + (parseInt(v.weixinHeat) + parseInt(v.baiduHeat));
                     });
                     this.chartOptions1['title'][0]['text'] = titleText; // 标题
                     this.chartOptions1['xAxis'][0]['data'] = timeDate;

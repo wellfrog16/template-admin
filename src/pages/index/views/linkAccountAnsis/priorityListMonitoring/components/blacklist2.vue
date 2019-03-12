@@ -1,196 +1,185 @@
 <template>
     <div :class="$style.black_list2">
-        <div :class="$style.box1" style="margin-right: 20px;">
-            <s-card :title="`筛选条件`" :icon="`fa fa-chart-line`">
-                <el-form
-                    slot="content"
-                    :model="ruleForm"
-                    :rules="rules"
-                    ref="ruleForm"
-                    label-width="100px"
-                    :class="$style.demo_rule_form">
-                    <el-row :class="$style.card1">
-                        <el-col :xl="12" :lg="12" :md="12" :sm="24">
-                            <el-form-item label="交易品种" prop="timeWindow" label-width="100px">
-                                <el-select
-                                    style="width: 100%;"
-                                    v-model="ruleForm.timeWindow"
-                                    class="custom-width"
-                                    size="small"
-                                    clearable
-                                    @change="nationyChenge"
-                                    placeholder="请选择交易品种"
-                                >
-                                    <el-option
-                                        v-for="times in timeWindowOptions"
-                                        :key="times.idName"
-                                        :label="times.name"
-                                        :value="times.name"
-                                    ></el-option>
-                                </el-select>
-                            </el-form-item>
-                            <el-form-item label="持仓量" prop="timeWindow" label-width="100px">
-                                <el-select
-                                    style="width: 100%;"
-                                    v-model="ruleForm.timeWindow"
-                                    class="custom-width"
-                                    size="small"
-                                    clearable
-                                    @change="nationyChenge"
-                                    placeholder="请选择交易品种"
-                                >
-                                    <el-option
-                                        v-for="times in timeWindowOptions"
-                                        :key="times.idName"
-                                        :label="times.name"
-                                        :value="times.name"
-                                    ></el-option>
-                                </el-select>
-                            </el-form-item>
-                            <el-form-item label="下单次数" prop="timeWindow" label-width="100px">
-                                <el-select
-                                    style="width: 100%;"
-                                    v-model="ruleForm.timeWindow"
-                                    class="custom-width"
-                                    size="small"
-                                    clearable
-                                    @change="nationyChenge"
-                                    placeholder="请选择交易品种"
-                                >
-                                    <el-option
-                                        v-for="times in timeWindowOptions"
-                                        :key="times.idName"
-                                        :label="times.name"
-                                        :value="times.name"
-                                    ></el-option>
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :xl="12" :lg="12" :md="12" :sm="24">
-                            <el-form-item label="撤单次数" prop="timeWindow" label-width="100px">
-                                <el-select
-                                    style="width: 100%;"
-                                    v-model="ruleForm.timeWindow"
-                                    class="custom-width"
-                                    size="small"
-                                    clearable
-                                    @change="nationyChenge"
-                                    placeholder="请选择交易品种"
-                                >
-                                    <el-option
-                                        v-for="times in timeWindowOptions"
-                                        :key="times.idName"
-                                        :label="times.name"
-                                        :value="times.name"
-                                    ></el-option>
-                                </el-select>
-                            </el-form-item>
-                            <el-form-item label="处理原因" prop="timeWindow" label-width="100px">
-                                <el-select
-                                    style="width: 100%;"
-                                    v-model="ruleForm.timeWindow"
-                                    class="custom-width"
-                                    size="small"
-                                    clearable
-                                    @change="nationyChenge"
-                                    placeholder="请选择交易品种"
-                                >
-                                    <el-option
-                                        v-for="times in timeWindowOptions"
-                                        :key="times.idName"
-                                        :label="times.name"
-                                        :value="times.name"
-                                    ></el-option>
-                                </el-select>
-                            </el-form-item>
-                            <el-form-item label="外部数据验证标记" prop="timeWindow" label-width="160px">
-                                <el-select
-                                    style="width: 100%;"
-                                    v-model="ruleForm.timeWindow"
-                                    class="custom-width"
-                                    size="small"
-                                    clearable
-                                    @change="nationyChenge"
-                                    placeholder="请选择交易品种"
-                                >
-                                    <el-option
-                                        v-for="times in timeWindowOptions"
-                                        :key="times.idName"
-                                        :label="times.name"
-                                        :value="times.name"
-                                    ></el-option>
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                </el-form>
-            </s-card>
-            <s-card :title="`黑名单列表`" :icon="`fa fa-chart-line`">
-                <s-table
-                    slot="content"
-                    ref="selfTables1"
-                    :showSelectionColumn="true"
-                    :showIndexColumn="false"
-                    :height="180"
-                    :loading="loadingAR"
-                    :columns="columnsList"
-                    :tableData="tableData"
-                    @selection-change="handleSelectionChange1">
-                </s-table>
-                <div slot="content" style="text-align:center; margin-top: 10px; width: 100%;">
-                    <el-button
-                        size="small"
-                        type="primary"
-                        @click="importClick">
-                        导入
-                    </el-button>
-                    <el-button
-                        size="small"
-                        type="primary"
-                        @click="exportClick">
-                        导出
-                    </el-button>
-                    <el-button
-                        size="small"
-                        type="primary"
-                        @click="chooseMonitorClick">
-                        选择监控
-                    </el-button>
-                </div>
-            </s-card>
-        </div>
-        <div :class="$style.box1">
-            <s-card :title="`交易分析`" :icon="`fa fa-chart-line`">
-                <div slot="right">
-                    <el-button type="text" @click="toggleDetail">
-                        <span v-if="detail">
-                            明细<i class="el-icon-plus" style="margign-left: 5px;"></i>
-                        </span>
-                        <span v-else>
-                            图表<i class="fa fa-undo-alt" style="margign-left: 5px;"></i>
-                        </span>
-                    </el-button>
-                </div>
-                <echarts-common
-                    slot="content"
-                    v-if="details"
-                    :loading="loading2"
-                    ref="echartsDemos2"
-                    domId="echartsId2"
-                    :noClearFlag="false"
-                    :defaultOption="chartOptions2"
-                    :propsChartHeight="420">
-                </echarts-common>
-                <s-table
-                    v-else
-                    slot="content"
-                    :height="420"
-                    :loading="loadingAR2"
-                    :columns="columnsList2"
-                    :tableData="tableData2"
-                >
-                </s-table>
-            </s-card>
+        <s-card :title="`结果集分析`" :icon="`fa fa-chart-line`">
+            <el-form
+                slot="content"
+                :model="ruleForm"
+                :rules="rules"
+                ref="ruleForm"
+                label-width="100px"
+                :class="$style.demo_rule_form">
+                <el-row :class="$style.card1">
+                    <el-col :xl="6" :lg="6" :md="6" :sm="12">
+                        <el-form-item label="交易品种合约" prop="timeWindow" label-width="110px">
+                            <el-select
+                                style="width: 100%;"
+                                v-model="ruleForm.timeWindow"
+                                class="custom-width"
+                                size="small"
+                                clearable
+                                @change="nationyChenge"
+                                placeholder="请选择交易品种"
+                            >
+                                <el-option
+                                    v-for="times in timeWindowOptions"
+                                    :key="times.idName"
+                                    :label="times.name"
+                                    :value="times.name"
+                                ></el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="分析模型" prop="timeInput1" label-width="110px">
+                            <el-input
+                                style="width: 100%;"
+                                v-model="ruleForm.timeInput1"
+                                class="custom-width"
+                                size="small"
+                                clearable
+                                @change="nationyChenge"
+                                placeholder="请输入分析模型"
+                            >
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xl="6" :lg="6" :md="6" :sm="12">
+                        <el-form-item label="持仓量" prop="timeInput2" label-width="100px">
+                            <el-input
+                                style="width: 100%;"
+                                v-model="ruleForm.timeInput2"
+                                class="custom-width"
+                                size="small"
+                                clearable
+                                placeholder="请输入持仓量"
+                            >
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item label="处理原因" prop="timeInput3" label-width="100px">
+                            <el-input
+                                style="width: 100%;"
+                                v-model="ruleForm.timeInput3"
+                                class="custom-width"
+                                size="small"
+                                clearable
+                                placeholder="请输入处理原因"
+                            >
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xl="6" :lg="6" :md="6" :sm="12">
+                        <el-form-item label="下单次数" prop="timeInput4" label-width="100px">
+                            <el-input
+                                style="width: 100%;"
+                                v-model="ruleForm.timeInput4"
+                                class="custom-width"
+                                size="small"
+                                clearable
+                                placeholder="请输入下单次数"
+                            >
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item label="外部数据验证标记" prop="timeInput5" label-width="160px">
+                            <el-input
+                                style="width: 100%;"
+                                v-model="ruleForm.timeInput5"
+                                class="custom-width"
+                                size="small"
+                                clearable
+                                @change="nationyChenge"
+                                placeholder="请输入外部数据验证标记"
+                            >
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xl="6" :lg="6" :md="6" :sm="12">
+                        <el-form-item label="撤单次数" prop="timeInput6" label-width="100px">
+                            <el-input
+                                style="width: 100%;"
+                                v-model="ruleForm.timeInput6"
+                                class="custom-width"
+                                size="small"
+                                clearable
+                                @change="nationyChenge"
+                                placeholder="请输入撤单次数"
+                            >
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button type="primary" @click="submitForm('ruleForm')" size="small">查询</el-button>
+                            <el-button @click="resetForm('ruleForm')" size="small">重置</el-button>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+        </s-card>
+        <div :class="$style.black_lists">
+            <div :class="$style.box1" style="margin-right: 20px;">
+                <s-card :title="`模型结果集分析`" :icon="`fa fa-chart-line`">
+                    <s-table
+                        slot="content"
+                        ref="selfTables1"
+                        :showSelectionColumn="true"
+                        :showIndexColumn="false"
+                        :height="336"
+                        :loading="loadingAR"
+                        :columns="columnsList"
+                        :tableData="tableData"
+                        @selection-change="handleSelectionChange1">
+                    </s-table>
+                    <div slot="content" style="text-align:center; margin-top: 10px; width: 100%;">
+                        <el-button
+                            size="small"
+                            type="primary"
+                            @click="importClick">
+                            导入
+                        </el-button>
+                        <el-button
+                            size="small"
+                            type="primary"
+                            @click="exportClick">
+                            导出
+                        </el-button>
+                        <el-button
+                            size="small"
+                            type="primary"
+                            @click="chooseMonitorClick">
+                            选择监控
+                        </el-button>
+                    </div>
+                </s-card>
+            </div>
+            <div :class="$style.box1">
+                <s-card :title="`交易分析`" :icon="`fa fa-chart-line`">
+                    <div slot="right">
+                        <el-button type="text" @click="toggleDetail">
+                            <span v-if="detail">
+                                明细<i class="el-icon-plus" style="margign-left: 5px;"></i>
+                            </span>
+                            <span v-else>
+                                图表<i class="fa fa-undo-alt" style="margign-left: 5px;"></i>
+                            </span>
+                        </el-button>
+                    </div>
+                    <echarts-common
+                        slot="content"
+                        v-if="details"
+                        :loading="loading2"
+                        ref="echartsDemos2"
+                        domId="echartsId2"
+                        :noClearFlag="false"
+                        :defaultOption="chartOptions2"
+                        :propsChartHeight="380">
+                    </echarts-common>
+                    <s-table
+                        v-else
+                        slot="content"
+                        :height="380"
+                        :loading="loadingAR2"
+                        :columns="columnsList2"
+                        :tableData="tableData2"
+                    >
+                    </s-table>
+                </s-card>
+            </div>
         </div>
     </div>
 </template>
@@ -213,18 +202,66 @@ export default {
                 {field: 'time3', label: '电话', minWidth: 130, align: 'center'},
                 {field: 'time4', label: '涉及品种', minWidth: 130, align: 'center'},
                 {field: 'time5', label: '处理时间', minWidth: 130, align: 'center'},
-                {field: 'time7', label: '处理原因', minWidth: 130, align: 'center'},
-                {field: 'time8', label: '处理结果', minWidth: 130, align: 'center'},
-                {field: 'time9', label: '目前状态', minWidth: 130, align: 'center'},
-                {field: 'time10', label: '交易次数', minWidth: 130, align: 'center'},
-                {field: 'time11', label: '持仓量', minWidth: 130, align: 'center'},
-                {field: 'time12', label: '外部数据验证标记', minWidth: 130, align: 'center'}
+                {field: 'time6', label: '处理原因', minWidth: 130, align: 'center'},
+                {field: 'time7', label: '处理结果', minWidth: 130, align: 'center'},
+                {field: 'time8', label: '目前状态', minWidth: 130, align: 'center'},
+                {field: 'time9', label: '交易次数', minWidth: 130, align: 'center'},
+                {field: 'time10', label: '持仓量', minWidth: 130, align: 'center'},
+                {field: 'time11', label: '外部数据验证标记', minWidth: 130, align: 'center'}
             ],
             tableData: [
-                {'time1': '21', 'time2': '21', 'time3': '21', 'time4': '21', 'time5': '21', 'time6': '21'},
-                {'time1': '21', 'time2': '21', 'time3': '21', 'time4': '21', 'time5': '21', 'time6': '21'},
-                {'time1': '21', 'time2': '21', 'time3': '21', 'time4': '21', 'time5': '21', 'time6': '21'},
-                {'time1': '21', 'time2': '21', 'time3': '21', 'time4': '21', 'time5': '21', 'time6': '21'}
+                {
+                    'time1': '80000255',
+                    'time2': '刘波',
+                    'time3': '13120567211',
+                    'time4': 'A',
+                    'time5': '20171231',
+                    'time6': '未知',
+                    'time7': '待处理',
+                    'time8': 'active',
+                    'time9': '68',
+                    'time10': '375624',
+                    'time11': '失信',
+                },
+                {
+                    'time1': '80000255',
+                    'time2': '刘波',
+                    'time3': '13120567211',
+                    'time4': 'A',
+                    'time5': '20171231',
+                    'time6': '未知',
+                    'time7': '待处理',
+                    'time8': 'active',
+                    'time9': '68',
+                    'time10': '375624',
+                    'time11': '失信',
+                },
+                {
+                    'time1': '80000255',
+                    'time2': '刘波',
+                    'time3': '13120567211',
+                    'time4': 'A',
+                    'time5': '20171231',
+                    'time6': '未知',
+                    'time7': '待处理',
+                    'time8': 'active',
+                    'time9': '68',
+                    'time10': '375624',
+                    'time11': '失信',
+                },
+                {
+                    'time1': '80000255',
+                    'time2': '刘波',
+                    'time3': '13120567211',
+                    'time4': 'A',
+                    'time5': '20171231',
+                    'time6': '未知',
+                    'time7': '待处理',
+                    'time8': 'active',
+                    'time9': '68',
+                    'time10': '375624',
+                    'time11': '失信',
+                }
             ],
             loadingAR2: false,
             columnsList2: [
@@ -233,18 +270,66 @@ export default {
                 {field: 'time3', label: '电话', minWidth: 130, align: 'center'},
                 {field: 'time4', label: '涉及品种', minWidth: 130, align: 'center'},
                 {field: 'time5', label: '处理时间', minWidth: 130, align: 'center'},
-                {field: 'time7', label: '处理原因', minWidth: 130, align: 'center'},
-                {field: 'time8', label: '处理结果', minWidth: 130, align: 'center'},
-                {field: 'time9', label: '目前状态', minWidth: 130, align: 'center'},
-                {field: 'time10', label: '交易次数', minWidth: 130, align: 'center'},
-                {field: 'time11', label: '持仓量', minWidth: 130, align: 'center'},
-                {field: 'time12', label: '外部数据验证标记', minWidth: 130, align: 'center'}
+                {field: 'time6', label: '处理原因', minWidth: 130, align: 'center'},
+                {field: 'time7', label: '处理结果', minWidth: 130, align: 'center'},
+                {field: 'time8', label: '目前状态', minWidth: 130, align: 'center'},
+                {field: 'time9', label: '交易次数', minWidth: 130, align: 'center'},
+                {field: 'time10', label: '持仓量', minWidth: 130, align: 'center'},
+                {field: 'time11', label: '外部数据验证标记', minWidth: 130, align: 'center'}
             ],
             tableData2: [
-                {'time1': '21', 'time2': '21', 'time3': '21', 'time4': '21', 'time5': '21', 'time6': '21'},
-                {'time1': '21', 'time2': '21', 'time3': '21', 'time4': '21', 'time5': '21', 'time6': '21'},
-                {'time1': '21', 'time2': '21', 'time3': '21', 'time4': '21', 'time5': '21', 'time6': '21'},
-                {'time1': '21', 'time2': '21', 'time3': '21', 'time4': '21', 'time5': '21', 'time6': '21'}
+                {
+                    'time1': '80000255',
+                    'time2': '刘波',
+                    'time3': '13120567211',
+                    'time4': 'A',
+                    'time5': '20171231',
+                    'time6': '未知',
+                    'time7': '待处理',
+                    'time8': 'active',
+                    'time9': '68',
+                    'time10': '375624',
+                    'time11': '失信',
+                },
+                {
+                    'time1': '80000255',
+                    'time2': '刘波',
+                    'time3': '13120567211',
+                    'time4': 'A',
+                    'time5': '20171231',
+                    'time6': '未知',
+                    'time7': '待处理',
+                    'time8': 'active',
+                    'time9': '68',
+                    'time10': '375624',
+                    'time11': '失信',
+                },
+                {
+                    'time1': '80000255',
+                    'time2': '刘波',
+                    'time3': '13120567211',
+                    'time4': 'A',
+                    'time5': '20171231',
+                    'time6': '未知',
+                    'time7': '待处理',
+                    'time8': 'active',
+                    'time9': '68',
+                    'time10': '375624',
+                    'time11': '失信',
+                },
+                {
+                    'time1': '80000255',
+                    'time2': '刘波',
+                    'time3': '13120567211',
+                    'time4': 'A',
+                    'time5': '20171231',
+                    'time6': '未知',
+                    'time7': '待处理',
+                    'time8': 'active',
+                    'time9': '68',
+                    'time10': '375624',
+                    'time11': '失信',
+                }
             ],
             loading2: false,
             chartOptions2: {
@@ -1799,32 +1884,49 @@ export default {
             },
             // form 表单绑定值
             ruleForm: {
-                timeWindow: '5分钟', // 时间窗口
+                timeWindow: '原油', // 时间窗口
+                timeInput1: '300',
+                timeInput2: '300',
+                timeInput3: '超仓',
+                timeInput4: '300',
+                timeInput5: '1',
+                timeInput6: '300',
             },
             rules: {
                 timeWindow: [
-                    {required: true, message: '请选择时间窗口', trigger: 'change'}
+                    {required: true, message: '请选择交易品种', trigger: 'change'}
                 ]
             },
             timeWindowOptions: [
-                // 1 秒、5 秒、1 分 钟、10 分钟，还是 1 天、5 天、1 个月、1
                 {
                     idName: '0',
-                    name: '5 分钟'
+                    name: '原油'
                 },
                 {
                     idName: '1',
-                    name: '10 分钟'
-                },
-                {
-                    idName: '2',
-                    name: '15 分 钟'
-                },
-            ],
+                    name: '铜'
+                }
+            ]
         };
     },
     methods: {
+        // 选择交易品种
         nationyChenge() {},
+        // 查询
+        submitForm(formName) {
+            this.$refs[formName].validate(valid => {
+                if (valid) {
+                    alert('submit!');
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
+        },
+        // 重置
+        resetForm(formName) {
+            this.$refs[formName].resetFields();
+        },
         // 导入
         importClick() {},
         // 导出
@@ -1852,12 +1954,15 @@ export default {
 <style lang="less" module>
 .black_list2 {
     width: 100%;
-    display: flex;
-    .box1 {
-        width: calc(100% / 2 - 10px);
-        .card1 {
-            height: 90px;
-            overflow-y: auto;
+    .black_lists {
+        width: 100%;
+        display: flex;
+        .box1 {
+            width: calc(100% / 2 - 10px);
+            .card1 {
+                height: 90px;
+                overflow-y: auto;
+            }
         }
     }
 }

@@ -6,8 +6,12 @@
                     <el-tooltip class="item" effect="dark" placement="right-end">
                         <div slot="content">
                             热点：即为机器"总结出的"近期的热度较高的新闻事件，例如"特朗普制裁"事件等；<br/>
-                            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                            此模块主要是指OPEC组织成员国与非opec国家的热点事件，主要是热点事件的跟踪，报道量，点击量等情况；<br/>
+                            <p style="padding: 0; margin: 0; text-indent:35px;">
+                                此模块主要是指OPEC组织成员国与非opec国家的热点事件，
+                            </p>
+                            <p style="padding: 0; margin: 0; text-indent:35px;">
+                                主要是热点事件的跟踪，报道量，点击量等情况；
+                            </p>
                             下面是对“报道量”和“评论量”的解释。<br/>
                             <!--热点：“热点”为机器判断的热点，即最近发生的新闻经NLP技术自动产生的主题词<br/>-->
                             报道量：此处的“报道量”为页面点击量的简单加权值；<br/>
@@ -58,7 +62,7 @@
 </template>
 
 <script>
-import moment from 'moment';
+// import moment from 'moment';
 import {
     postOrpeListMap1,
     // postOrpeListMapTerm,
@@ -330,7 +334,7 @@ export default {
             let params5 = {
                 'timeOfDay': timeOfDay,
                 'yesAndNoOpec': yesAndNoOpec
-            }
+            };
             this.loading5 = true;
             postOrpeListMap5(params5).then(resp => {
                 if (resp && resp.length !== 0) {

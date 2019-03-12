@@ -5,14 +5,16 @@
                 <div :class="$style.top">
                     <el-tooltip class="item" effect="dark" placement="right-end">
                         <div slot="content">
-                            原油舆情情感：智能机器人"总结出"的最近一个交易日的新闻利多或是利空(或中性)的占比情况，<br/>
-                            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                            例如"利多63%"，即机器认为当天有63%的新闻消息属于利多消息；<br/>
-                            原油舆情热度：新闻报道量、点击量等加权之和，反映新闻事件的热度；<br/>
-                            EIA原油库存：由美国能源信息署统计公布的美国当周原油库存数量;<br/>
-                            原油国际环境新闻报道：近期机器“总结出的”新闻热点事件，例如“特朗普制裁”事件，<br/>
-                            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                            仪表盘的值为该事件最近一个交易日的报道量；
+                            原油舆情情感：智能机器人"总结出"的最近一个交易日的新闻利多或是利空(或中性)的占比情况，
+                            <p style="padding: 0; margin: 0; text-indent:85px;">
+                                例如"利多63%"，即机器认为当天有63%的新闻消息属于利多消息；
+                            </p>
+                            原油舆情热度：新闻报道量、点击量等加权之和，反映新闻事件的热度；<br>
+                            EIA原油库存：由美国能源信息署统计公布的美国当周原油库存数量;<br>
+                            原油国际环境新闻报道：近期机器"总结出的"新闻热点事件，例如"特朗普制裁"事件，
+                            <p style="padding: 0; margin: 0; text-indent:132px;">
+                                仪表盘的值为该事件最近一个交易日的报道量；
+                            </p>
                         </div>
                         <el-button type="text">说明 ?</el-button>
                     </el-tooltip>
@@ -683,6 +685,22 @@ export default {
             border: 1px solid #00a0ea;
             width: 100%;
             margin-bottom: 20px;
+        }
+    }
+    .rows1 {
+        width: 600px;
+    }
+    .col1 {
+        display: flex;
+        p {
+            padding: 0;
+            margin: 3px;
+        }
+        .p1 {
+            width: 84px;
+        }
+        .p2 {
+            width: 500px;
         }
     }
 </style>

@@ -351,10 +351,10 @@ export default {
                     // 纽约日K
                     mainData.nyOilDay.forEach(v => {
                         bltDate2.push(v.date);
-                        let formatFunc = (value) => {
+                        let formatFunc = value => {
                             let cnys = value * 6;
                             return cnys.toFixed(3);
-                        }
+                        };
                         // 开盘价 - 收盘价 - 最低价 - 最高价 - 交易日 - 成交量 - 振幅 - 涨跌
                         bltOData2.push(
                             [formatFunc(v.open), formatFunc(v.close), formatFunc(v.low), formatFunc(v.high), v.volume, v.swing, v.riseRate, v.date]
@@ -364,10 +364,10 @@ export default {
                     // 布伦特日K
                     mainData.bltOilDay.forEach(v => {
                         bltDate3.push(v.date);
-                        let formatFunc = (value) => {
+                        let formatFunc = value => {
                             let cnys = value * 6;
                             return cnys.toFixed(3);
-                        }
+                        };
                         bltOData3.push(
                             // 开盘价 - 收盘价 -最低价-最高价 / 交易日 -成交量 //振幅//涨跌
                             [formatFunc(v.open), formatFunc(v.close), formatFunc(v.low), formatFunc(v.high), v.volume, v.swing, v.riseRate, v.date]

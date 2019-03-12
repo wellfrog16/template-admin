@@ -1538,7 +1538,7 @@ export let echartsData1 = {
         '14:58',
         '14:59',
         '15:00',
-],
+    ],
     'realTime1': [
         '21:00',
         '21:01',
@@ -2621,7 +2621,7 @@ export let echartsData1 = {
         '14:58',
         '14:59',
         '15:00',
-],
+    ],
     'exceptionData': [
         {
             'crudeCode': 'YY_SCO',
@@ -5581,7 +5581,7 @@ export let echartsData2 = {
         '06:57',
         '06:58',
         '06:59'
-],
+    ],
     'exceptionData': [
         {
             'crudeCode': 'YY_SCO',
