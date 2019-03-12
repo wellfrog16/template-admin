@@ -41,7 +41,7 @@ export const mainTableColumns = [
     {field: 'avgCancelBillRate', label: '日均撤单率', align: 'center'},
     {field: 'avgOperTmMargin', label: '日均平均操作时间差', align: 'center'},
 ];
-export const chartTableColumns1 = [
+export const combineChartTableColumns1 = [
     {label: '客户编号1', field: 'custId1', align: 'center', minWidth: 130, sortable: true},
     {label: '客户编号2', field: 'custId2', align: 'center', minWidth: 130, sortable: true},
     {label: '买入成交相关系数', field: 'buyBargainRela', align: 'center', minWidth: 160, sortable: true},
@@ -51,7 +51,7 @@ export const chartTableColumns1 = [
     {label: '空头持仓相关系数', field: 'shortPosMakePosRela', align: 'center', minWidth: 160, sortable: true},
     {label: '浮动盈亏相关系数', field: 'floatPrftLossRela', align: 'center', minWidth: 160, sortable: true},
 ];
-export const chartTableColumns2 = [
+export const combineChartTableColumns2 = [
     {label: '客户编号', field: 'custId', align: 'center', minWidth: 130, fixed: true, sortable: true},
     {label: '身份证号', field: 'idtfyCertNum', align: 'center', minWidth: 130, sortable: true},
     {label: '联系电话', field: 'contTel', align: 'center', minWidth: 130, sortable: true},
@@ -61,7 +61,7 @@ export const chartTableColumns2 = [
     {label: '电子邮件', field: 'elecEmil', align: 'center', minWidth: 130, sortable: true},
     {label: '银行账号', field: 'bankAcct', align: 'center', minWidth: 130, sortable: true}
 ];
-export const chartTableColumns3 = [
+export const combineChartTableColumns3 = [
     {label: '客户编号', field: 'custId', align: 'center', minWidth: 130, fixed: true, sortable: true},
     {field: 'multiBillMakePosQtty', label: '账户多单持仓量', align: 'center', minWidth: 160, sortable: true, sortMethod: Vue.prototype.gfnSortByNumber.bind(this, 'multiBillMakePosQtty')},
     {field: 'billMakePosQtty', label: '账户空单持仓量', align: 'center', minWidth: 160, sortable: true, sortMethod: Vue.prototype.gfnSortByNumber.bind(this, 'billMakePosQtty')},
@@ -71,7 +71,7 @@ export const chartTableColumns3 = [
     {field: 'avgCancelBillRate', label: '日均撤单率', align: 'center', minWidth: 160, sortable: true},
     {field: 'avgOperTmMargin', label: '日均平均操作时间差', align: 'center', minWidth: 175, sortable: true, sortMethod: Vue.prototype.gfnSortByNumber.bind(this, 'avgOperTmMargin')}
 ];
-export const chartTableColumns4 = [
+export const combineChartTableColumns4 = [
     {label: '客户编号', field: 'custId', align: 'center', minWidth: 130, fixed: true, sortable: true},
     {label: '投资经理', field: 'investMger', align: 'center', minWidth: 110, sortable: true, sortMethod: Vue.prototype.gfnSortByChineseCharacters.bind(this, 'investMger')},
     {label: '投资顾问', field: 'investConsu', align: 'center', minWidth: 110, sortable: true, sortMethod: Vue.prototype.gfnSortByChineseCharacters.bind(this, 'investConsu')},
@@ -106,5 +106,8 @@ export const blocks = [
         icon: 'fa fa-link',
         loading: false,
         toggleDetailFlags: false
-    }
+    },
+    {title: '账户组历史持仓', icon: 'fa fa-chart-bar', toggleDetailFlags: false, loading: false},
+    {title: '账户组历史成交', icon: 'fa fa-handshake', toggleDetailFlags: false, loading: false},
+    {title: '账户组分时报单', icon: 'fa fa-chart-line', toggleDetailFlags: false, loading: false}
 ];

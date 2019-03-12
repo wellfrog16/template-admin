@@ -3,7 +3,7 @@
         <div class="fiter-form">
             <el-checkbox v-model="checked" @change="handleCheckedOverWarehouseChange">只显示超仓账户组</el-checkbox>
         </div>
-        <echarts-common :loading="loading" :ref="`chart${index}`" :domId="`chart${index}`" :defaultOption="chartOptions" :propsChartHeight="propsChartHeight" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></echarts-common>
+        <echarts-common :loading="loading" :ref="`chart${index}`" :domId="`chart${index}`" :defaultOption="chartOptions" :propsChartHeight="propsChartHeight" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @handleLegendChange="handleLegendChange"></echarts-common>
     </div>
 </template>
 <script>
@@ -33,6 +33,19 @@ export default {
         propsChartHeight: {
             type: [String, Number],
             default: 300
+        },
+        limitQtty: {
+            type: [String, Number],
+            default: ''
+        },
+        echartRef: {
+            type: String,
+            default: ''
+        }
+    },
+    computed: {
+        domRef() {
+            return this.echartRef || `chart${this.index}`;
         }
     },
     data() {
@@ -68,7 +81,7 @@ export default {
                         if (params.dataType === 'edge') { // link
                             return '账户组号：' + params.name + '<br>客户编号交集：' + params.data.tip || '';
                         } else if (params.dataType === 'node') {
-                            return '账户组号：' + params.name + '<br>持仓量排名：' + params.data.value + '<br>客户编号: ' + params.data.custIds || '';
+                            return '账户组号：' + params.name + '<br>持仓量排名：' + params.data.value + '<br>客户编号: ' + (params.data.custIds || params.data.custId) || '';
                         }
                     },
                     padding: 10,
@@ -135,7 +148,6 @@ export default {
             maxIndex: 50,
             computedMaxOverWarehouseIndex: 20,
             checked: false,
-            limitQtty: 100000 // 限仓量
         };
     },
     methods: {
@@ -166,7 +178,7 @@ export default {
             this.chartOptions.visualMap.max = this.maxIndex;
             // 计算超仓的排名最大值
             let minData = _.minBy(chartData['nodes'], v => {
-                if (v.acctQttyMax > this.limitQtty) {
+                if (Number(v.acctQttyMax) > Number(this.limitQtty)) {
                     return v.acctQttyMax;
                 }
             });
@@ -199,7 +211,7 @@ export default {
             this.$store.commit('savechart1', {data: this.chartOptions, index: id || this.tabIndex || this.$store.getters.tabIndex});
             // select max
             this.$emit('updateAccountGroupAndCustIds', chartData['nodes'][0]['name'], chartData['nodes'][0]['custIds'].split(','));
-            this.$refs['chart0'] && this.$refs['chart0'].initChart();
+            this.$refs[this.domRef] && this.$refs[this.domRef].initChart();
             setTimeout(() => {
                 this.setMaxVisualMap(this.checked);
             });
@@ -211,7 +223,10 @@ export default {
             if (data) {
                 this.chartOptions = data;
             }
-            this.$refs['chart0'] && this.$refs['chart0'].initChart();
+            this.$refs[this.domRef] && this.$refs[this.domRef].initChart();
+            setTimeout(() => {
+                this.setMaxVisualMap(this.checked);
+            });
             this.getAssoCharts(flag);
         },
         getAssoCharts(flag) {
@@ -225,6 +240,9 @@ export default {
         },
         handleEchartDblClickEvent(val) {
             this.$emit('handleEchartDblClickEvent', val, this.index);
+        },
+        handleLegendChange(val) {
+            this.$emit('handleLegendChange', val, this.index);
         }
     },
     mounted() {

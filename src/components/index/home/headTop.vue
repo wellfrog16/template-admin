@@ -76,7 +76,6 @@ export default {
         },
         handleRouterLink(item) {
             if (item.link) {
-                console.log(item.link);
                 this.$router.push({name: item.link});
             }
         }

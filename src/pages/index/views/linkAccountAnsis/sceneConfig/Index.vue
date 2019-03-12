@@ -57,7 +57,7 @@
                                                           validator: validateCustomNo, required: String(ruleForm.exportType) === '2'
                                                       }]">
                                             <el-input clearable size="small" v-model="ruleForm.customNoArray[0]" style="width: 150px;"></el-input>
-                                            <span style="color: #fff; margin: 0 20px;">~</span>
+                                            <span style="color: #fff; margin: 0 8px;">~</span>
                                             <el-input clearable size="small" v-model="ruleForm.customNoArray[1]" style="width: 150px;"></el-input>
                                             <el-button size="mini" type="primary" @click="handleCheckedAll" style="margin-left:5px;">全选</el-button>
                                         </el-form-item>
@@ -214,16 +214,19 @@ export default {
                 {
                     label: '场景名称',
                     field: 'sceneName',
+                    minWidth: 160
                 },
                 {
                     label: '场景类型',
                     field: 'sceneTypeName',
+                    minWidth: 160,
                     sortable: true,
                     sortMethod: this.gfnSortByChineseCharacters.bind(this, 'sceneTypeName')
                 },
                 {
                     label: '场景说明',
                     field: 'sceneComnt',
+                    minWidth: 160
                 }
             ],
             searchAccountText: '',

@@ -22,7 +22,7 @@
                                 <s-table :height="index === 2 ? 268 : 300" :columns="chartTableColumns[index]" :tableData="chartTableData[index]"></s-table>
                             </div>
                             <div v-else class="chart-container">
-                                <chart1 :ref="`chartComponent${index + 1}`" v-if="index === 0" :index="index" :propsChartHeight="propsChartHeight" :tabIndex="tabIndex" :sceneType="currentSceneType" :childrenMap="childrenMap" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateAccountGroupAndCustIds="updateAccountGroupAndCustIds" @getBlock2Data="getBlock2Data" @getBlock3Data="getBlock3Data"></chart1>
+                                <chart1 :ref="`chartComponent${index + 1}`" v-if="index === 0" :index="index" :propsChartHeight="propsChartHeight" :tabIndex="tabIndex" :sceneType="currentSceneType" :childrenMap="childrenMap" :limitQtty="limitQtty" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @handleLegendChange="handleLegendChange" @updateAccountGroupAndCustIds="updateAccountGroupAndCustIds" @getBlock2Data="getBlock2Data" @getBlock3Data="getBlock3Data"></chart1>
                                 <chart2 :ref="`chartComponent${index + 1}`" v-if="index === 1" :index="index" :propsChartHeight="propsChartHeight" :tabIndex="tabIndex" :sceneType="currentSceneType" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @getBlock4Data="getBlock4Data"></chart2>
                                 <chart3 :ref="`chartComponent${index + 1}`" v-if="index === 2" :index="index" :propsChartHeight="propsChartHeight" :tabIndex="tabIndex" :sceneType="currentSceneType" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @getBlock4Data="getBlock4Data"></chart3>
                                 <chart4 :ref="`chartComponent${index + 1}`" v-if="index === 3" :index="index" :propsChartHeight="propsChartHeight" :tabIndex="tabIndex" :sceneType="currentSceneType" :commonReqParams="computedCommonReqParams" :currentAccountGroupId="currentAccountGroupId" :currentCustIds="currentCustIds" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateTableData="updateTableData"></chart4>
@@ -46,7 +46,7 @@
                     <el-row :gutter="20">
                         <el-col :span="21">
                             <div>
-                                <tree-table ref="self-tree-table" :filterText="searchText" :columns="mainTableColumnsBI" :tableData="mainTableData" :clearAllSelected="true" @updateCheckedList="updateCheckedList" @handleClearAll="handleClearAll"></tree-table>
+                                <tree-table ref="self-tree-table" :filterText="searchText" :columns="mainTableColumnsBI" :tableData="mainTableData" :clearAllSelected="true" :limitQtty="limitQtty" @updateCheckedList="updateCheckedList" @handleClearAll="handleClearAll"></tree-table>
                             </div>
                         </el-col>
                         <el-col :span="3">
@@ -103,7 +103,7 @@ export default {
             },
             deep: true
         },
-        currentAccountGroupId() {
+        currentAccountGroupId(val) {
             this.computedCommonReqParams = this.commonReqParams();
         }
     },
@@ -228,6 +228,7 @@ export default {
                 this.charts[3]['loading'] = true;
                 params.txDt = date;
                 getChart4Data(params).then(resp => {
+                    resp.txDt = date;
                     this.charts[3]['loading'] = false;
                     this.updateTableData(resp.buysail, 3);
                     this.drewChart4(resp);
@@ -298,6 +299,11 @@ export default {
                 break;
             }
         },
+        handleLegendChange(params, index) {
+            if (index === 0) {
+                this.$refs['chartComponent1'][0].chartOptions.legend.selected = params.selected;
+            }
+        },
         commonReqParams() {
             this.sceneCommitParams = this.$store.getters.sceneCommitParams[this.tabIndex || this.$store.getters.getTabIndex];
             return {
@@ -323,8 +329,9 @@ export default {
                 };
             }
             let resData = this.$store.getters.sceneCommitResp[this.tabIndex] || {};
-            let {resultSetList, kmap, chartDataList, id, taskId} = resData;
+            let {resultSetList, kmap, chartDataList, id, taskId, xposQtty} = resData;
             this.taskId = taskId;
+            this.limitQtty = xposQtty;
             if (resultSetList && !resultSetList.length) {
                 return {
                     chartData: {},
@@ -352,7 +359,11 @@ export default {
                 }
             });
             if (kmap && kmap.nodes) {
-                kmap.nodes.forEach(v => {
+                kmap.nodes.forEach((v, i) => {
+                    if (i === 0) {
+                        this.currentAccountGroupId = v.id;
+                        this.currentCustIds = v.custIds ? v.custIds.split(',') : [];
+                    }
                     let index = allLeaf.findIndex(i => {
                         return i.acctId === v.name;
                     });

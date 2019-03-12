@@ -43,6 +43,15 @@ export default {
         propsChartHeight: {
             type: [String, Number],
             default: 300
+        },
+        echartRef: {
+            type: String,
+            default: ''
+        }
+    },
+    computed: {
+        domRef() {
+            return this.echartRef || `chart${this.index}`;
         }
     },
     data() {
@@ -100,10 +109,20 @@ export default {
     },
     methods: {
         getData(resp) {
-            let {mainData, id} = resp;
+            let {mainData, id, tableData} = resp;
             if (!Object.keys(mainData).length) {
                 return;
             }
+            // tableData中获取超仓量列表
+            let limitQttyList = [];
+            let json = {};
+
+            tableData.forEach(v => {
+                if (!json[v]) {
+                    json['txDay'] = 1;
+                    limitQttyList.push(v.posLimQtty || v.limitQtty);
+                }
+            });
             let series = [];
             let date = [];
             Object.keys(mainData).forEach((v, i) => {
@@ -116,7 +135,7 @@ export default {
                     type: 'bar',
                     barMaxWidth: '45',
                     stack: '总量',
-                    markLine: { // 标记线设置
+                    /* markLine: { // 标记线设置
                         lineStyle: {
                             normal: {
                                 type: 'dashed',
@@ -134,7 +153,7 @@ export default {
                             {yAxis: '100000'},
                             {yAxis: '-100000'},
                         ]
-                    },
+                    }, */
                     data: mainData[v].map(m => { return m.acctLongQtty; })
                 });
                 // 空单柱状堆叠
@@ -151,18 +170,20 @@ export default {
                 date = mainData[v].map(m => { return m.txDay || m.date; });
             });
             // 多单限仓线
-            /* series.push({
+            series.push({
                 name: '多单限仓线',
                 type: 'line',
-                data: dData
-            }); */
+                data: limitQttyList
+            });
             // 空单限仓线
-            /* series.push({
+            series.push({
                 name: '空单限仓线',
                 type: 'line',
-                data: kData
-            }); */
-            console.log(series);
+                data: limitQttyList.map(v => {
+                    return -v;
+                })
+            });
+
             this.chartOptions['legend']['data'] = series.map(m => { return m.name; });
             this.chartOptions['series'] = series;
             this.chartOptions['xAxis'][0]['data'] = date;
@@ -174,13 +195,13 @@ export default {
             this.chartOptions['dataZoom'][0]['endValue'] = dataZoomEndValue;
             this.chartOptions['dataZoom'][1]['endValue'] = dataZoomEndValue;
             this.$store.commit('savechart2', {data: this.chartOptions, index: id || this.tabIndex || this.$store.getters.getTabIndex});
-            this.$refs['chart1'] && this.$refs['chart1'].initChart();
+            this.$refs[this.domRef] && this.$refs[this.domRef].initChart();
         },
         initChart(data, flag) {
             if (data) {
                 this.chartOptions = data;
             }
-            this.$refs['chart1'] && this.$refs['chart1'].initChart();
+            this.$refs[this.domRef] && this.$refs[this.domRef].initChart();
         },
         handleEchartClickEvent(val) {
             if (String(this.sceneType) === '2') { // 聚类
@@ -189,7 +210,7 @@ export default {
             this.$emit('handleEchartClickEvent', val, this.index);
         },
         handleEchartDblClickEvent(val) {
-            if (String(this.sceneType) === '2') {
+            if (String(this.sceneType) === '2') { // 聚类
                 return;
             }
             this.$emit('handleEchartDblClickEvent', val, this.index);

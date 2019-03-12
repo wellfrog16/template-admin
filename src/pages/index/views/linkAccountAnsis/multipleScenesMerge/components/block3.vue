@@ -261,7 +261,6 @@ export default {
                     }
                 );
             });
-            console.log(this.chartOptions);
             this.$refs['chart2'].initChart();
         },
         drewChart(chartData, id) {

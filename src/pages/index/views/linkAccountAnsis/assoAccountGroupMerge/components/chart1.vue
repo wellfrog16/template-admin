@@ -1,8 +1,12 @@
 <template>
-    <echarts-common :loading="loading" :ref="`chart${index}`" :domId="`chart${index}`" :defaultOption="chartOptions" :propsChartHeight="propsChartHeight" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></echarts-common>
+    <div>
+        <!-- <iframe src="http://taobao.com" name="sendMessage" width="800" height ="800"></iframe> -->
+        <echarts-common :loading="loading" :ref="`chart${index}`" :domId="`chart${index}`" :defaultOption="chartOptions" :propsChartHeight="propsChartHeight" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></echarts-common>
+    </div>
 </template>
 <script>
 import EchartsCommon from '@/components/index/common/EchartsCommon';
+// import {leavePageTest} from '@/api/common/index';
 // import {resData1} from './constants';
 import _ from 'lodash';
 export default {
@@ -25,6 +29,19 @@ export default {
         propsChartHeight: {
             type: [String, Number],
             default: 300
+        },
+        limitQtty: {
+            type: [String, Number],
+            default: 300
+        },
+        echartRef: {
+            type: String,
+            default: ''
+        }
+    },
+    computed: {
+        domRef() {
+            return this.echartRef || `chart${this.index}`;
         }
     },
     data() {
@@ -174,11 +191,15 @@ export default {
             if (!data || (data && !data.length)) {
                 return;
             }
+            let selectMax = _.maxBy(data, 'acctMakePosQttyMax');
+            // select max
+            this.$emit('updateAccountGroupAndCustIds', selectMax ? selectMax.acctId : '', selectMax ? selectMax.custIds.split(',') : []);
             this.chartOptions['series'][0]['data'] = data.map(v => {
                 return [v.acctMakePosQttyMax, v.acctGroAvgRela, v.custQtty, v.acctId, v.contrCd, v.custIds, v.id];
             });
+            this.chartOptions['series'][0]['markLine'].data[0].xAxis = this.limitQtty || data[0]['xposQtty'] || '';
             this.$store.commit('savechart1', {data: this.chartOptions, index: id || this.tabIndex || this.$store.getters.getTabIndex});
-            this.$refs['chart0'] && this.$refs['chart0'].initChart();
+            this.$refs[this.domRef] && this.$refs[this.domRef].initChart();
         },
         sortDataByAcctIdCommon(data) {
             return _.sortBy(data, [item => { return item.acctId; }]);
@@ -187,7 +208,7 @@ export default {
             if (data) {
                 this.chartOptions = data;
             }
-            this.$refs['chart0'] && this.$refs['chart0'].initChart();
+            this.$refs[this.domRef] && this.$refs[this.domRef].initChart();
             this.getAssoCharts(flag);
         },
         getAssoCharts(flag) {
@@ -204,6 +225,42 @@ export default {
         }
     },
     mounted() {
+        // let blob = new Blob(['indexType=1'], {type: 'application/x-www-form-urlencoded'});
+        // navigator.sendBeacon(leavePageTest(), blob);
+        window.addEventListener('beforeunload', function(event) {
+            // text/html
+            // let blob = new Blob(['indexType=1']);
+            // navigator.sendBeacon(leavePageTest(), blob);
+            // form data
+            // var fd = new FormData();
+            // fd.append('indexType', 1);
+            // navigator.sendBeacon(leavePageTest(), fd);
+            // Cancel the event as stated by the standard.
+            event.preventDefault();
+            // Chrome requires returnValue to be set.
+            event.returnValue = '';
+        });
+        this.$once('hook:beforeDestroy', () => {
+            window.removeEventListener('beforeunload', null, false);
+        });
+        setTimeout(() => {
+            // let ifr = window.frames['sendMessage'];
+            // console.log(ifr);
+            // 使用iframe的window向iframe发送message。
+            // ifr.contentWindow.postmessage('give u a message', 'http://taobao.com');
+            // // tuhao.com的脚本
+            // window.addEventListener('message', receiver, false);
+            // function receiver(e) {
+            //     console.log(e);
+            //     if (e.origin === 'http://taobao.com') {
+            //         if (e.data === 'give u a message') {
+            //             e.source.postMessage('received', e.origin); // 向原网页返回信息
+            //         } else {
+            //             console.log(e.data);
+            //         }
+            //     }
+            // }
+        }, 3000);
     }
 };
 </script>

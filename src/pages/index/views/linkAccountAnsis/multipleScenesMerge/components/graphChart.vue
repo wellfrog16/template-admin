@@ -46,6 +46,7 @@
                     :propsChartHeight="550"
                     @handleEchartClickEvent="handleEchartClickEvent"
                     @handleEchartDblClickEvent="handleEchartDblClickEvent"
+                    @handleLegendChange="handleLegendChange"
                 ></echarts-common>
             </div>
         </s-card>
@@ -212,10 +213,13 @@ export default {
             echartsData: [],
             maxIndex: 50,
             computedMaxOverWarehouseIndex: 20,
-            limitQtty: 100000 // 限仓线
+            limitQtty: '' // 限仓线
         };
     },
     methods: {
+        handleLegendChange(params) {
+            this.chartOptions.legend.selected = params.selected;
+        },
         handleCheckedOverWarehouseChange(val) {
             this.setMaxVisualMap(val);
         },
@@ -232,6 +236,7 @@ export default {
             }
         },
         setChartOptions(val) {
+            this.limitQtty = val.xposQtty || '';
             // 增加uid字段
             let allLeaf = [];
             if (this.mainTableData) {
@@ -272,8 +277,8 @@ export default {
                 this.chartOptions.series[0]['data'] = val.nodes;
                 // 计算超仓的排名最大值
                 let minData = _.minBy(val.nodes, v => {
-                    if (v.acctQttyMax > this.limitQtty) {
-                        return v.acctQttyMax;
+                    if (v.acctMakePostty > this.limitQtty) {
+                        return v.acctMakePostty;
                     }
                 });
                 this.computedMaxOverWarehouseIndex = minData ? minData['value'] : 0;

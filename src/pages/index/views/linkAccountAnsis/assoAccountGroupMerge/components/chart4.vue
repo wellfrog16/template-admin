@@ -46,6 +46,15 @@ export default {
         propsChartHeight: {
             type: [String, Number],
             default: 300
+        },
+        echartRef: {
+            type: String,
+            default: ''
+        }
+    },
+    computed: {
+        domRef() {
+            return this.echartRef || `chart${this.index}`;
         }
     },
     data() {
@@ -126,7 +135,7 @@ export default {
                 return;
             }
             let {mainData, buysail, id} = resData;
-            this.txDt = buysail[0].declBillTm2.slice(0, 10);
+            this.txDt = resData.txDt;
             sessionStorage.setItem(`txDt${this.tabIndex || this.$store.getters.getTabIndex}`, this.txDt);
             let lineData = [];
             let timeData = [];
@@ -134,10 +143,10 @@ export default {
             let buy = {};
             let sail = {};
             let buyArray = buysail.filter(v => {
-                return v.bizDir === '买';
+                return String(v.bizDir) === '0'; // 买
             });
             let sailArray = buysail.filter(v => {
-                return v.bizDir === '卖';
+                return String(v.bizDir) === '1'; // 卖
             });
             buyArray.forEach(v => {
                 if (!buy[v.custId]) {
@@ -287,13 +296,13 @@ export default {
                 return v.name;
             });
             this.$store.commit('savechart4', {data: this.chartOptions, index: id || this.tabIndex || this.$store.getters.getTabIndex});
-            this.$refs['chart3'] && this.$refs['chart3'].initChart();
+            this.$refs[this.domRef] && this.$refs[this.domRef].initChart();
         },
         initChart(data, flag) {
             if (data) {
                 this.chartOptions = data;
             }
-            this.$refs['chart3'] && this.$refs['chart3'].initChart();
+            this.$refs[this.domRef] && this.$refs[this.domRef].initChart();
         },
         handleEchartClickEvent(val) {
             this.$emit('handleEchartClickEvent', val, this.index);

@@ -49,7 +49,7 @@
                 <s-card :title="`算法参数配置`">
                     <el-row slot="content" style="padding: 20px;">
                         <el-radio-group v-model="ruleForm.almSel">
-                            <el-radio v-for="(item, index) in sfOptions" :key="index" :label="item.value" :disabled="item.value === '1'">{{ item.label }}</el-radio>
+                            <el-radio v-for="(item, index) in sfOptions" :key="index" :label="item.value" :disabled="item.value === '1' || disabled">{{ item.label }}</el-radio>
                         </el-radio-group>
                     </el-row>
                 </s-card>
@@ -259,6 +259,7 @@ export default {
             }
         }
         .header-css {
+            color: #fff;
             margin-left: -20px;
             padding: 10px 32px;
             background: url('../../../../../../assets/img/usr/card_header_bg.png') no-repeat -10px bottom;

@@ -50,6 +50,15 @@ export default {
         fullscreen: {
             type: Boolean,
             default: false
+        },
+        echartRef: {
+            type: String,
+            default: ''
+        }
+    },
+    computed: {
+        domRef() {
+            return this.echartRef || `chart${this.index}`;
         }
     },
     watch: {
@@ -263,7 +272,7 @@ export default {
                     }
                 );
             });
-            this.$refs['chart0'].initChart();
+            this.$refs[this.domRef].initChart();
         },
         getData(chartData, id) {
             if (!this.chartOptions) {
@@ -294,13 +303,13 @@ export default {
             sessionStorage.setItem('3D_scatter_chartData', JSON.stringify(chartData));
             this.$store.commit('savechart1', {data: this.chartOptions, index: id || this.tabIndex || this.$store.getters.tabIndex});
 
-            this.$refs['chart0'] && this.$refs['chart0'].initChart();
+            this.$refs[this.domRef] && this.$refs[this.domRef].initChart();
         },
         initChart(data, flag) {
             if (data) {
                 this.chartOptions = data;
             }
-            this.$refs['chart0'] && this.$refs['chart0'].initChart();
+            this.$refs[this.domRef] && this.$refs[this.domRef].initChart();
             this.getAssoCharts(flag);
         },
         getAssoCharts(flag) {

@@ -70,29 +70,32 @@ export default {
             this.echart && this.echart.off('dblclick');
             this.echart && this.echart.off('brushselected');
             this.echart && this.echart.off('contextmenu');
-            /* 绑定单击事件 */
+            this.echart && this.echart.off('legendselectchanged');
             let timeFn = null;
 
             /* 绑定双击事件 */
             this.echart.on('dblclick', params => {
                 clearTimeout(timeFn);
-                console.log(params);
                 this.$emit('handleEchartDblClickEvent', params, this.domId);
             });
+            /* 绑定单击事件 */
             this.echart.on('click', params => {
                 clearTimeout(timeFn);
                 timeFn = setTimeout(() => {
-                    console.log(params);
                     this.$emit('handleEchartClickEvent', params, this.domId);
                 }, 300);
             });
-            /* 绑定框选结束事件 */
+            /* 绑定框选事件 */
             this.echart.on('brushselected', params => {
                 this.$emit('handleBrushSelectedEvent', params, this.domId);
             });
-            /* 绑定框选结束事件 */
+            /* 右击事件 */
             this.echart.on('contextmenu', params => {
                 this.$emit('handleContextMenu', params, this.domId);
+            });
+            /* 图例变更事件 */
+            this.echart.on('legendselectchanged', params => {
+                this.$emit('handleLegendChange', params, this.domId);
             });
         },
         setVisualMapDataRange(range = []) {
@@ -111,7 +114,7 @@ export default {
             deep: true
         },
         propsChartHeight(newValue) {
-            this.echart.resize({
+            this.echart && this.echart.resize({
                 height: newValue
             });
         }

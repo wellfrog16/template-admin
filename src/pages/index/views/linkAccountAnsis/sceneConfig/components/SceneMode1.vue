@@ -299,6 +299,7 @@ export default {
             }
         }
         .header-css {
+            color: #fff;
             margin-left: -20px;
             padding: 10px 32px;
             background: url('../../../../../../assets/img/usr/card_header_bg.png') no-repeat -10px bottom;

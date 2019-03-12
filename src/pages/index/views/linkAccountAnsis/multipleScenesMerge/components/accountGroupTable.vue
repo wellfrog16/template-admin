@@ -70,6 +70,7 @@
                                     :columns="mainTableColumns"
                                     :tableData="mainTableData"
                                     :clearAllSelected="true"
+                                    :limitQtty="limitQtty"
                                     @updateCheckedList="updateCheckedList"
                                     @handleClearAll="handleClearAll"
                                 ></tree-table>
@@ -227,7 +228,8 @@ export default {
             importResultRespData: [], // 导入当前结果集后返回的结果
             importResultList: [], // 已经导入的结果集列表
             isHasSceneType1: false,
-            showContent: false
+            showContent: false,
+            limitQtty: ''
         };
     },
     methods: {
@@ -263,7 +265,6 @@ export default {
                         this.endDate = this.endDate || resp[0]['children'][0]['endDate'] || '3000-12-31';
                         this.statFreq = this.statFreq || resp[0]['children'][0]['statFrep'] || '1';
                     }
-                    console.log(this.startDate);
                 }).catch(e => {
                     this.loadingBt = false;
                     this.fullScreenLoading = false;
@@ -272,6 +273,10 @@ export default {
         },
         sortDataByAcctIdCommon(data) {
             return _.sortBy(data, [item => { return item.acctId; }]);
+        },
+        clearChecked() {
+            this.$refs['self-tree-table'].checked = false;
+            this.$refs['self-tree-table'].limitChecked = false;
         },
         // 确认结果集导入
         handleConfirmExportResultData() {
@@ -283,6 +288,7 @@ export default {
                 this.$message.error('该结果集已经导入，不能重复导入');
                 return;
             }
+            this.clearChecked();
             this.importResultList.push(this.resultIds);
             this.showContent = true;
             this.mainTableData = this.sortDataByAcctIdCommon(this.mainTableData.concat(this.importResultRespData));
@@ -297,6 +303,7 @@ export default {
         // 导入CSV
         handleUploadSuccess(resp) {
             if (resp && resp.length) {
+                this.clearChecked();
                 this.showContent = true;
                 this.mainTableData = this.sortDataByAcctIdCommon(this.mainTableData.concat(resp));
             } else {
@@ -338,7 +345,6 @@ export default {
         },
         generateDataMethods() {
             let conctrd = this.dialogRuleForm.contractCode || this.currentConctrd;
-            console.log(conctrd);
             this.mainTableData.forEach(v => {
                 v.contractCode = conctrd;
                 if (v.children) {
@@ -361,11 +367,13 @@ export default {
             regenerateData(params).then(resp => {
                 if (resp && resp.resData !== null) {
                     this.loadingTree = false;
+                    this.limitQtty = resp.xposQtty;
                     let relativeTable = resp.relativeTable;
                     let resultTable = resp.resultTable;
                     // this.$emit('generateEvent', resp.kmap); // 知识库图表
                     this.$emit('updateLoading', this.loadingTree);
                     this.$emit('updateTableInfo', {relativeTable, resultTable});
+                    this.$emit('requestParams', {...params, ...{taskId: resp.taskId}});
                     // test
                     // console.log(resp.combineResultInfos[0]['children']);
                     // resp.combineResultInfos[0]['children'].forEach((v, i) => {
@@ -377,7 +385,6 @@ export default {
                     // });
                     // console.log(resp.combineResultInfos);
                     this.mainTableData = this.sortDataByAcctIdCommon(resp.combineResultInfos); // 账户组信息
-                    console.log(this.mainTableData);
                     this.$emit('updateMainTableData', this.mainTableData);
                 }
             }).catch(e => {

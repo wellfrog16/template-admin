@@ -4,7 +4,8 @@ export default {
         return {
             propsChartHeight: 300,
             fullscreen: false,
-            currentFullScreenIndex: 0
+            currentFullScreenIndex: 0,
+            limitQtty: ''
         };
     },
     methods: {
@@ -76,7 +77,9 @@ export default {
                         }
                     });
                 }
-                this.$refs['chartComponent1'] && this.$refs['chartComponent1'][0] && this.$refs['chartComponent1'][0].getData(chartData, id);
+                setTimeout(() => {
+                    this.$refs['chartComponent1'] && this.$refs['chartComponent1'][0] && this.$refs['chartComponent1'][0].getData(chartData, id);
+                });
             });
         },
         getChart1(data, flag) {
@@ -104,7 +107,7 @@ export default {
                 });
                 setTimeout(() => {
                     if (this.currentSceneType !== '2') {
-                        this.getBlock4Data(selectMax ? selectMax.txDt : '2017-06-02');
+                        this.getBlock4Data(selectMax ? selectMax.txDt : resp.mainData[0]['txDt']);
                     }
                 });
                 this.$refs['chartComponent3'] && this.$refs['chartComponent3'][0] && this.$refs['chartComponent3'][0].getData(resp);
