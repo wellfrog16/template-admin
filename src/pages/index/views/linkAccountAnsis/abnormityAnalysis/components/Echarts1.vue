@@ -255,7 +255,6 @@ export default {
                         ...basicOptions,
                     });
                 });
-                console.log(temp);
                 this.chartOptions.series = temp;
                 this.chartOptions.xAxis.data = val ? val.dateList : [];
                 // this.barEcharts.setOption(this.chartOptions);

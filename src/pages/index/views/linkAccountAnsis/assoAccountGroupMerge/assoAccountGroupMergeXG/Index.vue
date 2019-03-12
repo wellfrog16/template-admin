@@ -108,7 +108,6 @@ export default {
             deep: true
         },
         currentAccountGroupId(val) {
-            console.log('watchgroupid:' + val);
             this.computedCommonReqParams = this.commonReqParams();
         }
     },

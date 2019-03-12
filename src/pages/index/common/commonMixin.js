@@ -107,7 +107,7 @@ export default {
                 });
                 setTimeout(() => {
                     if (this.currentSceneType !== '2') {
-                        this.getBlock4Data(selectMax ? selectMax.txDt : '2017-06-02');
+                        this.getBlock4Data(selectMax ? selectMax.txDt : resp.mainData[0]['txDt']);
                     }
                 });
                 this.$refs['chartComponent3'] && this.$refs['chartComponent3'][0] && this.$refs['chartComponent3'][0].getData(resp);

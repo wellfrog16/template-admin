@@ -10,6 +10,9 @@ let formatFreq = item => {
     let index = accountTotalFrepOptions.findIndex(v => { return v.value === item; });
     return accountTotalFrepOptions[index] ? accountTotalFrepOptions[index]['label'] : '';
 };
+let bizDirFormatter = item => {
+    return String(item.bizDir) === '0' ? '买' : '卖';
+};
 export const charts = [
     {title: '账户组相关性概览', icon: 'fa fa-globe', toggleDetailFlags: false, loading: false},
     {title: '账户组历史持仓', icon: 'fa fa-chart-bar', toggleDetailFlags: false, loading: false},
@@ -70,7 +73,7 @@ export const chartTableColumns3 = [ // no use
 ];
 export const chartTableColumns4 = [
     {label: '客户编号', field: 'custId', minWidth: 130, fixed: true, template: custIdColumn, sortable: true},
-    {label: '买卖方向', field: 'bizDir', minWidth: 130, sortable: true},
+    {label: '买卖方向', field: 'bizDir', minWidth: 130, sortable: true, formatter: bizDirFormatter},
     // {label: '报单时间1', field: 'declBillTm1', minWidth: 100},
     {label: '报单时间', field: 'declBillTm2', minWidth: 140, sortable: true},
     {label: '报单数量', field: 'declBillQtty', minWidth: 130, sortable: true},

@@ -43,6 +43,15 @@ export default {
         propsChartHeight: {
             type: [String, Number],
             default: 300
+        },
+        echartRef: {
+            type: String,
+            default: ''
+        }
+    },
+    computed: {
+        domRef() {
+            return this.echartRef || `chart${this.index}`;
         }
     },
     watch: {
@@ -518,20 +527,20 @@ export default {
             this.chartOptions['visualMap'][0]['max'] = this.currentCustIds.length;
             this.chartOptions['visualMap'][1]['max'] = this.currentCustIds.length;
             this.$store.commit('savechart3', {data: this.chartOptions, index: id || this.tabIndex || this.$store.getters.getTabIndex});
-            this.$refs['chart2'] && this.$refs['chart2'].initChart();
+            this.$refs[this.domRef] && this.$refs[this.domRef].initChart();
             // 最近交易日，包含买入或卖出
             this.selectMax = _.maxBy(mainData, v => {
                 if (!!v.sellAcctCnt || !!v.buyAcctCnt) {
                     return v.txDt;
                 }
             });
-            sessionStorage.setItem('MAX_DATE', this.selectMax.txDt);
+            sessionStorage.setItem('MAX_DATE', this.selectMax ? this.selectMax.txDt : mainData[0]['txDt']);
         },
         initChart(data, flag) {
             if (data) {
                 this.chartOptions = data;
             }
-            this.$refs['chart2'] && this.$refs['chart2'].initChart();
+            this.$refs[this.domRef] && this.$refs[this.domRef].initChart();
             this.getAssoCharts(flag);
         },
         getAssoCharts(flag) {
@@ -545,7 +554,6 @@ export default {
                             date = sessionStorage.getItem('MAX_DATE');
                         }
                     }
-                    console.log('date:', date);
                     this.$emit('getBlock4Data', date);
                 });
             }

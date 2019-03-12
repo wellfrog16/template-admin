@@ -80,7 +80,6 @@ export default {
                     let sceneCommitParams = this.$store.getters.sceneCommitParams;
                     this.activeTab = 0; // switch to update data
                     this.activeTab = this.resultIds || Object.keys(sceneCommitParams)[0];
-                    console.log(this.activeTab);
                 });
             },
             deep: true

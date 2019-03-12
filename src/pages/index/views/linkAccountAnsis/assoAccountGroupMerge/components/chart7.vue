@@ -43,6 +43,15 @@ export default {
         propsChartHeight: {
             type: [String, Number],
             default: 300
+        },
+        echartRef: {
+            type: String,
+            default: ''
+        }
+    },
+    computed: {
+        domRef() {
+            return this.echartRef || `chart${this.index}`;
         }
     },
     data() {
@@ -137,13 +146,13 @@ export default {
             this.chartOptions['dataZoom'][0]['endValue'] = dataZoomEndValue;
             this.chartOptions['dataZoom'][1]['endValue'] = dataZoomEndValue;
             this.$store.commit('savechart3', {data: this.chartOptions, index: id || this.tabIndex || this.$store.getters.getTabIndex});
-            this.$refs['chart2'] && this.$refs['chart2'].initChart();
+            this.$refs[this.domRef] && this.$refs[this.domRef].initChart();
         },
         initChart(data, flag) {
             if (data) {
                 this.chartOptions = data;
             }
-            this.$refs['chart2'] && this.$refs['chart2'].initChart();
+            this.$refs[this.domRef] && this.$refs[this.domRef].initChart();
         },
         handleEchartClickEvent(val) {
             if (String(this.sceneType) === '2') { // 聚类

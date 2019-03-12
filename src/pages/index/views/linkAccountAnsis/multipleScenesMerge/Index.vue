@@ -9,7 +9,7 @@
             ></el-tab-pane>
         </el-tabs> -->
         <!--导入树形table-->
-        <account-group-table ref="accountGroupTableRef" @updateLoading="updateLoading" @updateTableInfo="updateTableInfo" @updateMainTableData="updateMainTableData" @updateSelectAccountGroupList="updateSelectAccountGroupList" @handleClearAll="handleClearAll"></account-group-table>
+        <account-group-table ref="accountGroupTableRef" @updateLoading="updateLoading" @updateTableInfo="updateTableInfo" @updateMainTableData="updateMainTableData" @requestParams="requestParams" @updateSelectAccountGroupList="updateSelectAccountGroupList" @handleClearAll="handleClearAll"></account-group-table>
         <!-- 关系图谱 -->
         <graph-chart ref="graphChartRef" :relativeTable="relativeTable" :resultTable="resultTable" :mainTableData="mainTableData" :selectAccountGroupList="selectAccountGroupList" @getBlockData="getBlockData" @updateSelectAccountGroupList="updateSelectAccountGroupList"></graph-chart>
         <!-- 账户组钻取 -->
@@ -26,13 +26,21 @@
                         <div slot="content" style="min-height: 300px;">
                             <s-full-screen class="self-fullscreen-wrap" ref="fullscreen" :fullscreen.sync="fullscreen" @change="fullscreenChange" background="#00255c">
                                 <div v-if="item['toggleDetailFlags']">
-                                    <s-table :height="300" :columns="chartTableColumns[index]" :tableData="chartTableData[index]"></s-table>
+                                    <div v-if="index===5">
+                                        <el-select class="custom-width" clearable size="small" v-model="table3CurrentType" placeholder="请选择一个维度">
+                                            <el-option v-for="(o, oi) in table3Options" :key="oi" :label="o.label" :value="o.field"></el-option>
+                                        </el-select>
+                                    </div>
+                                    <s-table :height="index === 5 ? 268 : 300" :columns="chartTableColumns[index]" :tableData="chartTableData[index]"></s-table>
                                 </div>
                                 <div v-else class="chart-container">
                                     <block1 ref="block1" v-if="index === 0" :propsChartHeight="propsChartHeight" :index="index" :tableData="block1TableData"></block1>
                                     <block2 ref="block2" v-if="index === 1" :propsChartHeight="propsChartHeight" :index="index"></block2>
                                     <block3 ref="block3" v-if="index === 2" :propsChartHeight="propsChartHeight" :index="index"></block3>
                                     <block4 ref="block4" v-if="index === 3" :propsChartHeight="propsChartHeight" :index="index"></block4>
+                                    <block5 ref="block5" domRef="combine5" v-if="index === 4" :propsChartHeight="propsChartHeight" :index="index" @handleEchartDblClickEvent="getDetailByDate"></block5>
+                                    <block6 ref="block6" domRef="combine6" v-if="index === 5" :propsChartHeight="propsChartHeight" :index="index" @handleEchartDblClickEvent="getDetailByDate"></block6>
+                                    <block7 ref="block7" domRef="combine7" v-if="index === 6" :propsChartHeight="propsChartHeight" :index="index"></block7>
                                 </div>
                                 <button v-show="!item['toggleDetailFlags'] && index !== 0" type="button" class="btn btn-default btn-map-fullscreen" @click="toggleFullScreen(index)">
                                     <i class="fa" :class="[fullscreen ? 'fa-compress' : 'fa-expand-arrows-alt']"></i>
@@ -49,6 +57,7 @@
     </div>
 </template>
 <script>
+import _ from 'lodash';
 import SCard from '@/components/index/common/SCard';
 import STable from '@/components/index/common/STable';
 import graphChart from './components/graphChart'; // 全量关系图谱组件
@@ -57,8 +66,17 @@ import block1 from './components/block1'; // 钻取
 import block2 from './components/block2';
 import block3 from './components/block3';
 import block4 from './components/block4';
-import {chartTableColumns1, chartTableColumns2, chartTableColumns3, chartTableColumns4, blocks} from './components/constants';
+import block5 from '@/pages/index/views/linkAccountAnsis/assoAccountGroupMerge/components/chart2';
+import block6 from '@/pages/index/views/linkAccountAnsis/assoAccountGroupMerge/components/chart3';
+import block7 from '@/pages/index/views/linkAccountAnsis/assoAccountGroupMerge/components/chart4';
+import {chartTableColumns2, chartTableColumns4, table3Options} from '@/pages/index/views/linkAccountAnsis/assoAccountGroupMerge/components/constants';
+import {combineChartTableColumns1, combineChartTableColumns2, combineChartTableColumns3, combineChartTableColumns4, blocks} from './components/constants';
 import {fetchBlockData1, fetchBlockData2, fetchBlockData4} from '@/api/dataAnsis/multipleScenesMerge';
+import {
+    getChart2Data,
+    getChart3Data,
+    getChart4Data,
+} from '@/api/dataAnsis/assoAccountGroupMerge';
 export default {
     name: 'Index',
     components: {
@@ -69,18 +87,24 @@ export default {
         block1,
         block2,
         block3,
-        block4
+        block4,
+        block5,
+        block6,
+        block7,
     },
     // 混入, 是一个类的继承，类似于一个公共的方法。
     // 存储数据
+
     data() {
         return {
             blocks,
+            table3Options,
+            table3CurrentType: 'buyCnt',
             mainTableData: [],
             selectAccountGroupList: [],
-            chartTableColumns: [chartTableColumns1, chartTableColumns2, chartTableColumns3, chartTableColumns4],
-            chartTableData: [[], [], [], []],
-            chartData: [[], [], [], []],
+            chartTableColumns: [combineChartTableColumns1, combineChartTableColumns2, combineChartTableColumns3, combineChartTableColumns4, chartTableColumns2, [], chartTableColumns4],
+            chartTableData: [[], [], [], [], [], [], []],
+            chartData: [[], [], [], [], [], [], []],
             activeTab: '0',
             tabList: [{name: '0', label: '手工合并'}],
             loading: false,
@@ -89,12 +113,39 @@ export default {
             resultTable: '',
             currentFullScreenIndex: 0,
             fullscreen: false,
-            propsChartHeight: 300
+            propsChartHeight: 300,
+            proCommonParams: {}
         };
     },
     computed: {},
     watch: {},
     methods: {
+        getDetailByDate(params, index) {
+            this.getBlockData7(params['name']);
+        },
+        createChart3Columnn(val) {
+            if (!val) {
+                return;
+            }
+            let chart3Column = val.map(v => {
+                return {
+                    'label': v,
+                    'field': v,
+                    'minWidth': 140,
+                    'formatter': item => {
+                        item = item.map;
+                        return item[v] ? item[v][this.table3CurrentType] : '';
+                    }
+                };
+            });
+            chart3Column.unshift({
+                'label': '交易日',
+                'field': 'date',
+                'minWidth': 140,
+                'fixed': true
+            });
+            this.chartTableColumns.splice(5, 1, chart3Column);
+        },
         updateLoading(flag) {
             this.loading = flag;
         },
@@ -102,6 +153,9 @@ export default {
             const {relativeTable, resultTable} = val;
             this.relativeTable = relativeTable;
             this.resultTable = resultTable;
+        },
+        requestParams(params) {
+            this.proCommonParams = params;
         },
         updateMainTableData(val) {
             this.mainTableData = val;
@@ -136,7 +190,7 @@ export default {
             }
         },
         getChart() {
-            return [() => {}, this.getChart2, this.getChart3, this.getChart4];
+            return [() => {}, this.getChart2, this.getChart3, this.getChart4, this.getChart5, this.getChart6, this.getChart7];
         },
         getChart2(data) {
             setTimeout(() => {
@@ -153,12 +207,41 @@ export default {
                 this.$refs['block4'] && this.$refs['block4'][0] && this.$refs['block4'][0].drewChart(data);
             });
         },
+        getChart5(data) {
+            setTimeout(() => {
+                this.$refs['block5'] && this.$refs['block5'][0] && this.$refs['block5'][0].getData(data);
+            });
+        },
+        getChart6(data) {
+            setTimeout(() => {
+                this.$refs['block6'] && this.$refs['block6'][0] && this.$refs['block6'][0].getData(data);
+            });
+        },
+        getChart7(data) {
+            setTimeout(() => {
+                this.$refs['block7'] && this.$refs['block7'][0] && this.$refs['block7'][0].getData(data);
+            });
+        },
         getBlockData(propsParams) {
+            // test
+            propsParams = {
+                accNumList: propsParams.accNumList || '80000455,80000501',
+                contrCd: this.proCommonParams.contractCode || 'cu1712',
+                custId: propsParams.accNumList || '80000455,80000501',
+                acctId: propsParams.acctId || 'ZH000002',
+                taskId: this.proCommonParams.taskId || '719966',
+                relativeTable: 'ts_dm.tls_combine_1552289017354_relative',
+                resultTable: 'ts_dm.tls_combine_1552289017354_result',
+                statStartDt: this.proCommonParams.statStartDt || '2016-01-31',
+                statStopDay: this.proCommonParams.statStopDay || '2019-02-26'
+            };
             this.commonParams = propsParams;
             this.getBlockData1(propsParams);
             this.getBlockData2(propsParams);
             this.getBlockData3(propsParams);
             this.getBlockData4(propsParams);
+            this.getBlockData5(propsParams);
+            this.getBlockData6(propsParams);
         },
         getBlockData1(propsParams) {
             let params = propsParams;
@@ -190,8 +273,6 @@ export default {
             let filterItem = this.mainTableData.filter(v => {
                 return v.acctId === propsParams.acctId;
             });
-            console.log(propsParams.acctId);
-            console.log(filterItem);
             this.chartTableData[2] = filterItem[0]['children'];
             this.chartData[2] = filterItem[0]['children'];
             this.getChart3(this.chartData[2]);
@@ -207,6 +288,57 @@ export default {
                 this.getChart4({nodes, links});
             }).catch(e => {
                 this.blocks[3]['loading'] = false;
+            });
+        },
+        getBlockData5(propsParams) {
+            let params = propsParams;
+            this.blocks[4]['loading'] = true;
+            getChart2Data(params).then(resp => {
+                this.blocks[4]['loading'] = false;
+                this.chartTableData[4] = resp.tableData;
+                this.chartData[4] = resp;
+                this.getChart5(resp);
+            }).catch(e => {
+                this.blocks[4]['loading'] = false;
+            });
+        },
+        getBlockData6(propsParams) {
+            let params = propsParams;
+            this.blocks[5]['loading'] = true;
+            getChart3Data(params).then(resp => {
+                this.blocks[5]['loading'] = false;
+                this.createChart3Columnn(propsParams.accNumList.split(','));
+                const {tableData} = resp;
+                this.chartTableData[5] = tableData;
+                this.chartData[5] = resp;
+                this.getChart6(resp);
+                // 最近交易日，包含买入或卖出
+                let selectMax = _.maxBy(resp.mainData, v => {
+                    if (!!v.sellAcctCnt || !!v.buyAcctCnt) {
+                        return v.txDt;
+                    }
+                });
+                setTimeout(() => {
+                    // 钻取分时图
+                    this.getBlockData7(selectMax ? selectMax.txDt : resp.mainData[0]['txDt']);
+                });
+            }).catch(e => {
+                this.blocks[5]['loading'] = false;
+            });
+        },
+        getBlockData7(txDt) {
+            let params = this.commonParams;
+            params.txDt = txDt;
+            this.blocks[6]['loading'] = true;
+            getChart4Data(params).then(resp => {
+                this.blocks[6]['loading'] = false;
+                const {buysail} = resp;
+                resp.txDt = txDt;
+                this.chartTableData[6] = buysail;
+                this.chartData[6] = resp;
+                this.getChart7(resp);
+            }).catch(e => {
+                this.blocks[6]['loading'] = false;
             });
         },
         nextStep() {
@@ -235,6 +367,11 @@ export default {
                 this.$refs[`block${this.currentFullScreenIndex + 1}`][0].$refs[`chart${this.currentFullScreenIndex}`].echart.resize();
             });
         },
+    },
+    mounted() {
+    },
+    beforeDestroy() {
+        sessionStorage.removeItem('txDt0');
     }
 };
 </script>

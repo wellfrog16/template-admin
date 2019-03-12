@@ -43,6 +43,15 @@ export default {
         propsChartHeight: {
             type: [String, Number],
             default: 300
+        },
+        echartRef: {
+            type: String,
+            default: ''
+        }
+    },
+    computed: {
+        domRef() {
+            return this.echartRef || `chart${this.index}`;
         }
     },
     data() {
@@ -175,7 +184,6 @@ export default {
                 })
             });
 
-            console.log(series);
             this.chartOptions['legend']['data'] = series.map(m => { return m.name; });
             this.chartOptions['series'] = series;
             this.chartOptions['xAxis'][0]['data'] = date;
@@ -187,13 +195,13 @@ export default {
             this.chartOptions['dataZoom'][0]['endValue'] = dataZoomEndValue;
             this.chartOptions['dataZoom'][1]['endValue'] = dataZoomEndValue;
             this.$store.commit('savechart2', {data: this.chartOptions, index: id || this.tabIndex || this.$store.getters.getTabIndex});
-            this.$refs['chart1'] && this.$refs['chart1'].initChart();
+            this.$refs[this.domRef] && this.$refs[this.domRef].initChart();
         },
         initChart(data, flag) {
             if (data) {
                 this.chartOptions = data;
             }
-            this.$refs['chart1'] && this.$refs['chart1'].initChart();
+            this.$refs[this.domRef] && this.$refs[this.domRef].initChart();
         },
         handleEchartClickEvent(val) {
             if (String(this.sceneType) === '2') { // 聚类
@@ -202,7 +210,7 @@ export default {
             this.$emit('handleEchartClickEvent', val, this.index);
         },
         handleEchartDblClickEvent(val) {
-            if (String(this.sceneType) === '2') {
+            if (String(this.sceneType) === '2') { // 聚类
                 return;
             }
             this.$emit('handleEchartDblClickEvent', val, this.index);

@@ -41,3 +41,7 @@ export const getInfoByResultId = (resultIds, resultType) => {
 export const deleteResultById = resultIds => {
     return post(`${requestPrefix}/resultSet/del`, {resultIds});
 };
+// 离开页面发送请求test
+export const leavePageTest = () => {
+    return `${config.server.api}${requestPrefix}/getTlsIndexTlb?access_token=${localStorage.getItem('ACCESS_TOKEN')}`;
+};

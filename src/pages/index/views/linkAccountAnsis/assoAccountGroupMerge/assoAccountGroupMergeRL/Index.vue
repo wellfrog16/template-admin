@@ -368,7 +368,8 @@ export default {
                 kmap.nodes.forEach((v, i) => {
                     if (i === 0) {
                         this.currentAccountGroupId = v.id;
-                        this.custIds = v.custIds;
+                        let custIds = v.custIds || v.custId;
+                        this.currentCustIds = custIds ? custIds.split(',') : [];
                     }
                     let index = allLeaf.findIndex(i => {
                         return i.acctId === v.name;

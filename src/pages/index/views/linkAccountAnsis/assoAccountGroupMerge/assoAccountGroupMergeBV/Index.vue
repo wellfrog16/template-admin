@@ -95,7 +95,6 @@ export default {
     },
     watch: {
         currentAccountGroupId(val) {
-            console.log('watchgroupid:' + val);
             this.computedCommonReqParams = this.commonReqParams();
         }
     },
@@ -289,7 +288,6 @@ export default {
         getDetailBy3D() {
             setTimeout(() => {
                 this.$nextTick(() => {
-                    console.log(this.currentAccountGroupId);
                     let flag = this.$store.getters.getClickTab;
                     if (flag && this.$store.getters.getchart2) {
                         let chartData2 = this.$store.getters.getchart2;

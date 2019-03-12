@@ -265,7 +265,6 @@ export default {
                         this.endDate = this.endDate || resp[0]['children'][0]['endDate'] || '3000-12-31';
                         this.statFreq = this.statFreq || resp[0]['children'][0]['statFrep'] || '1';
                     }
-                    console.log(this.startDate);
                 }).catch(e => {
                     this.loadingBt = false;
                     this.fullScreenLoading = false;
@@ -346,7 +345,6 @@ export default {
         },
         generateDataMethods() {
             let conctrd = this.dialogRuleForm.contractCode || this.currentConctrd;
-            console.log(conctrd);
             this.mainTableData.forEach(v => {
                 v.contractCode = conctrd;
                 if (v.children) {
@@ -375,6 +373,7 @@ export default {
                     // this.$emit('generateEvent', resp.kmap); // 知识库图表
                     this.$emit('updateLoading', this.loadingTree);
                     this.$emit('updateTableInfo', {relativeTable, resultTable});
+                    this.$emit('requestParams', {...params, ...{taskId: resp.taskId}});
                     // test
                     // console.log(resp.combineResultInfos[0]['children']);
                     // resp.combineResultInfos[0]['children'].forEach((v, i) => {
@@ -386,7 +385,6 @@ export default {
                     // });
                     // console.log(resp.combineResultInfos);
                     this.mainTableData = this.sortDataByAcctIdCommon(resp.combineResultInfos); // 账户组信息
-                    console.log(this.mainTableData);
                     this.$emit('updateMainTableData', this.mainTableData);
                 }
             }).catch(e => {

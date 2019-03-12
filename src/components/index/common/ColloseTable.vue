@@ -92,11 +92,11 @@ export default {
                 } else {
                     this.multipleSelection = [];
                 }
-                console.log(this.multipleSelection);
+                // console.log(this.multipleSelection);
             });
         },
         handleSubTableSelectionChange(selection) {
-            console.log(selection);
+            // console.log(selection);
             // let seledtionCodes = selection.map(v => {
             //     return v.accountId
             // })
@@ -115,7 +115,7 @@ export default {
                 return seledtionCodes.indexOf(v.customId) === -1;
             });
             this.multipleSelection = [...this.multipleSelection, ...rows];
-            console.log(this.multipleSelection);
+            // console.log(this.multipleSelection);
             if (rows) {
                 rows.forEach(row => {
                     this.$refs[`subTableRef${row.accountId}`].toggleRowSelection(row, true);

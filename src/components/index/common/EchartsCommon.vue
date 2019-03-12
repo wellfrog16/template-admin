@@ -76,14 +76,12 @@ export default {
             /* 绑定双击事件 */
             this.echart.on('dblclick', params => {
                 clearTimeout(timeFn);
-                console.log(params);
                 this.$emit('handleEchartDblClickEvent', params, this.domId);
             });
             /* 绑定单击事件 */
             this.echart.on('click', params => {
                 clearTimeout(timeFn);
                 timeFn = setTimeout(() => {
-                    console.log(params);
                     this.$emit('handleEchartClickEvent', params, this.domId);
                 }, 300);
             });
@@ -116,7 +114,7 @@ export default {
             deep: true
         },
         propsChartHeight(newValue) {
-            this.echart.resize({
+            this.echart && this.echart.resize({
                 height: newValue
             });
         }

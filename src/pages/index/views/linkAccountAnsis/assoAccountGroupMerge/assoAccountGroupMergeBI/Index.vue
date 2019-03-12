@@ -104,7 +104,6 @@ export default {
             deep: true
         },
         currentAccountGroupId(val) {
-            console.log(val);
             this.computedCommonReqParams = this.commonReqParams();
         }
     },
@@ -270,7 +269,6 @@ export default {
                     // table勾选状态
                     this.selectAccountGroupList.push(currentId);
                 }
-                console.log(this.$refs['chartComponent1'][0].chartOptions);
                 this.getChart1(this.$refs['chartComponent1'][0].chartOptions, 1);
                 this.$refs['self-tree-table'].$refs['tree-table'].setCheckedKeys(this.selectAccountGroupList);
                 setTimeout(() => {
@@ -302,7 +300,6 @@ export default {
             }
         },
         handleLegendChange(params, index) {
-            console.log(params, index);
             if (index === 0) {
                 this.$refs['chartComponent1'][0].chartOptions.legend.selected = params.selected;
             }
@@ -365,7 +362,7 @@ export default {
                 kmap.nodes.forEach((v, i) => {
                     if (i === 0) {
                         this.currentAccountGroupId = v.id;
-                        this.custIds = v.custIds;
+                        this.currentCustIds = v.custIds ? v.custIds.split(',') : [];
                     }
                     let index = allLeaf.findIndex(i => {
                         return i.acctId === v.name;
