@@ -197,6 +197,27 @@
 .el-range-editor--small.el-input__inner {
     height: 35px !important;
 }
+.el-select-dropdown {
+    background: #00255c;
+    border-color: #0b4c8f;
+    li.el-select-dropdown__item {
+        &:hover {
+            background: #0b4c8f;
+        }
+        &:focus {
+            border-color: #0b4c8f;
+        }
+        &:visited {
+            border-color: #0b4c8f;
+        }
+        &:active {
+            border-color: #0b4c8f;
+        }
+    }
+    .el-select-dropdown__item.hover {
+        background: #0b4c8f;
+    }
+}
 // select
 .el-select {
     border-color: @g-form-border;
@@ -215,6 +236,12 @@
     &:active {
         border-color: @g-form-border-focus;
     }
+}
+.el-popper[x-placement^=bottom] .popper__arrow {
+    border-bottom-color: #0b4c8f;
+}
+.el-popper[x-placement^=bottom] .popper__arrow::after {
+    border-bottom-color: #00255c;
 }
 // 表单
 .el-form {

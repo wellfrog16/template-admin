@@ -1,18 +1,25 @@
 <template>
     <el-select class="custom-width" clearable size="small" v-model="resultId" @change="handleChange" v-loading="loading" placeholder="请选择结果集">
-        <el-option
-            v-for="item in resultList"
-            :key="item.resultId"
-            :label="item.resultName"
-            :value="item.resultId">
-            <span style="float: left;">{{ item.resultName }}</span>
-            <span style="float: right; color: #8492a6; font-size: 13px;">
-                <el-button size="mini" type="danger" @click="handleDelete(item)">删除</el-button>
-            </span>
-        </el-option>
+
+        <el-option-group
+            v-for="group in resultOptions"
+            :key="group.label"
+            :label="group.label">
+            <el-option
+                v-for="item in group.options"
+                :key="item.resultId"
+                :label="item.resultName"
+                :value="item.resultId">
+                <span :style="{'float': 'left', 'color': cssMap[item.resultType - 1]}">{{ item.resultName }}</span>
+                <span style="float: right; color: #8492a6; font-size: 13px;">
+                    <el-button size="mini" type="danger" @click.stop="handleDelete(item)">删除</el-button>
+                </span>
+            </el-option>
+        </el-option-group>
     </el-select>
 </template>
 <script>
+import _ from 'lodash';
 import {getTlsResultInfo, deleteResultById} from '@/api/common';
 export default {
     props: {
@@ -32,11 +39,24 @@ export default {
             this.resultId = val;
         }
     },
+    computed: {
+        resultOptions() {
+            let labelMap = ['相关系数', '聚类', '基本信息', '实控关系', '组合场景'];
+            let resultList = _.groupBy(this.resultList, 'resultType');
+            return Object.keys(resultList).map(v => {
+                return {
+                    label: labelMap[v - 1],
+                    options: resultList[v]
+                };
+            });
+        }
+    },
     data() {
         return {
             loading: false,
             resultId: '',
-            resultList: []
+            resultList: [],
+            cssMap: ['#f8f400', '#40f3d6', '#ce20ff', '#13ce34', '#fff']
         };
     },
     methods: {

@@ -175,13 +175,12 @@ export default {
                 this.$store.commit('saveSceneCommitResp', store);
                 this.$store.commit('saveTabIndex', this.resultIds);
                 this.$nextTick(() => {
-                    let flag = String(this.exportResultType) === '1' ? 1 : null;
                     if (String(this.exportResultType) === '1') {
-                        this.$refs['sceneType1'] && this.$refs['sceneType1'][0].drewChart1(flag);
+                        this.$refs['sceneType1'] && this.$refs['sceneType1'][0].drewChart1();
                     } else if (String(this.exportResultType) === '3') {
-                        this.$refs['sceneType3'] && this.$refs['sceneType3'][0].drewChart1(flag);
+                        this.$refs['sceneType3'] && this.$refs['sceneType3'][0].drewChart1();
                     } else if (String(this.exportResultType) === '4') {
-                        this.$refs['sceneType4'] && this.$refs['sceneType4'][0].drewChart1(flag);
+                        this.$refs['sceneType4'] && this.$refs['sceneType4'][0].drewChart1();
                     }
                 });
             }).catch(e => {
