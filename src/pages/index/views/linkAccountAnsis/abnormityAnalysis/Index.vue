@@ -18,24 +18,7 @@
                                                     required: String(ruleForm.exportType) === '0', message: '请选择结果集'
                                                 }]"
                                         >
-                                            <el-select
-                                                class="custom-width"
-                                                clearable
-                                                size="small"
-                                                @change="resultChange"
-                                                v-loading="fullScreenLoading"
-                                                element-loading-text="数据加载中，请耐心等待..."
-                                                element-loading-background="rgba(0,0,0,0.3)"
-                                                v-model="ruleForm.resultId"
-                                                placeholder="请选择结果集"
-                                            >
-                                                <el-option
-                                                    v-for="item in resultList"
-                                                    :key="item.resultId"
-                                                    :label="item.resultName"
-                                                    :value="item.resultId"
-                                                ></el-option>
-                                            </el-select>
+                                            <resultSelectComponent ref="resultSelectComponent" :resultIdProps="ruleForm.resultId" @selectResultId="selectResultId"></resultSelectComponent>
                                         </el-form-item>
                                     </el-radio>
                                     <br>
@@ -180,7 +163,7 @@ import {
     postTlsResultInfo, // 结果集列表
     postExportType, // 当选择结果集时的生成报告接口
 } from '@/api/dataAnsis/abnormityAnalysis';
-
+import ResultSelectComponent from '@/components/index/common/ResultSelectComponent';
 export default {
     components: {
         SCard,
@@ -192,7 +175,8 @@ export default {
         ATable3,
         ECharts1,
         ECharts2,
-        ECharts3
+        ECharts3,
+        ResultSelectComponent
     },
     mixins: [],
     data() {
@@ -255,10 +239,14 @@ export default {
             nums: '',
             checked: false,
             allReportData: [], // 协查报告table全量数据
-            overData: [] // 超仓数据
+            overData: [], // 超仓数据
         };
     },
     methods: {
+        selectResultId(val, name, type) {
+            this.ruleForm.resultId = val;
+            this.resultChange(val);
+        },
         handleSelectCheckboxChange(val) {
             if (val) {
                 this.tableData = this.overData;
@@ -563,8 +551,6 @@ export default {
         },
     },
     mounted() {
-        //  结果集列表
-        this.getResultList();
     },
 };
 </script>

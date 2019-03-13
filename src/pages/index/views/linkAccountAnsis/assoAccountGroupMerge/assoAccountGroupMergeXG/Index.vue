@@ -116,7 +116,6 @@ export default {
             table3Options,
             mainTableColumns,
             taskId: null,
-            currentSceneType: 1,
             sceneCommitParams: {},
             accountIdPre: 'XG',
             charts: charts,
@@ -129,6 +128,7 @@ export default {
             testTableData: [],
             pagination: {pageIndex: 1, pageRows: 10},
             computedCommonReqParams: {},
+            currentSceneType: '1'
         };
     },
     methods: {
@@ -439,7 +439,7 @@ export default {
         this.resetToggleDetailFlag();
         this.sceneCommitParams = this.$store.getters.sceneCommitParams;
         if (Object.keys(this.sceneCommitParams).length) {
-            this.drewChart1(1);
+            this.drewChart1(true);
         }
     }
 };

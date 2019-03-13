@@ -109,7 +109,7 @@
                 </el-input>
             </div>
             <div slot="content">
-                <s-table :columns="columns" :tableData="tableData" :loading="loading" @selection-change="handleSelectChange">
+                <s-table :columns="columns" :tableData="tableData" :loading="loading" @selection-change="handleSelectChange" :cellStyle="selfCellStyle">
                     <el-table-column
                         fixed
                         align="center"
@@ -256,10 +256,16 @@ export default {
                 }
             },
             openWindows: {},
-            openFlag: false
+            openFlag: false,
+            cssMap: ['#f8f400', '#40f3d6', '#ce20ff', '#13ce34']
         };
     },
     methods: {
+        selfCellStyle({row, column, rowIndex, columnIndex}) {
+            if (columnIndex === 3) {
+                return `color: ${this.cssMap[row.sceneType - 1]}`;
+            }
+        },
         handleSelectedSceneChange(scope) { // 单选
             this.checkedRadio = scope.row.sceneId;
             this.selectList = this.tableData.filter(v => {

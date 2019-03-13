@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import moment from 'moment';
 import {exportResultSet, getRegeneratingData} from '@/api/common';
 export default {
     data() {
@@ -152,55 +153,70 @@ export default {
             this.$prompt('请输入结果集名称', '导出到结果集', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
-                inputPattern: /^[A-Za-z0-9\u4e00-\u9fa5]{1,30}$/,
-                inputErrorMessage: '结果集名称只能输入汉字、字母或者数字，长度30个字符以内'
+                inputPattern: /^[A-Za-z0-9\u4e00-\u9fa5]{1,20}$/,
+                inputErrorMessage: '结果集名称只能输入汉字、字母或者数字，长度20个字符以内'
             }).then(({value}) => {
-                let params = {
-                    resultType: propsResultType || '5', // 结果集类型（1：相关性；5：合并）
-                    resultName: value
-                };
-                if (params.resultType !== '5') {
-                    let sceneCommitParams = this.$store.getters.sceneCommitParams[resultId];
-                    params.statStartDt = sceneCommitParams.statStartDt;
-                    params.statStopDay = sceneCommitParams.statStopDay;
-                    params.statFreq = sceneCommitParams.statFreq;
-                }
-                if (params.resultType === '1') {
-                    params.resultList = this.dealMainData();
-                }
-                if (params.resultType === '2') {
-                    params.cluserInfoVOS = this.dealMainData();
-                }
-                if (params.resultType === '3') {
-                    params.resultListInfo = this.dealMainData();
-                }
-                if (params.resultType === '4') {
-                    params.resultListPerson = this.dealMainData();
-                }
-                if (params.resultType === '5') {
-                    params.resultListSyn = this.dealMainData();
-                }
-                this.$emit('updateFullLoading', true);
-                if (params.resultType === '5') {
-                    this.updateFullLoading(true);
-                }
-                exportResultSet(params).then(resp => {
-                    this.$emit('updateFullLoading', false);
-                    if (params.resultType === '5') {
-                        this.updateFullLoading(false);
-                    }
-                    if (this.$route.name === 'assoAccountGroupMerge') {
-                        this.$emit('updateResultList');
-                    } else if (this.$route.name === 'multipleScenesMerge') {
-                        this.updateResultList();
-                    }
-                }).catch(e => {
-                    console.error(e);
-                    this.$emit('updateFullLoading', false);
-                });
+                this.handleExportResultCallback(propsResultType, resultId, value);
             }).catch(() => {});
         },
-
+        handleExportResultCallback(propsResultType, resultId, inputName) {
+            if (!resultId) {
+                return;
+            }
+            // 生成自动导出结果集名称
+            let resultName = inputName || 'Auto' + moment(new Date()).format('YYYYMMDDHHmmss');
+            let params = {
+                resultType: propsResultType || '5', // 结果集类型（1：相关性；5：合并）
+                resultName: resultName,
+                presvType: inputName ? '1' : '0' // 导出类型 0：自动  1：手动
+            };
+            if (params.resultType !== '5') {
+                console.log(resultId);
+                let sceneCommitParams = this.$store.getters.sceneCommitParams[resultId];
+                params.statStartDt = sceneCommitParams ? sceneCommitParams.statStartDt : '';
+                params.statStopDay = sceneCommitParams ? sceneCommitParams.statStopDay : '';
+                params.statFreq = sceneCommitParams ? sceneCommitParams.statFreq : '';
+            }
+            if (params.resultType === '1') {
+                params.resultList = this.dealMainData();
+            }
+            if (params.resultType === '2') {
+                params.cluserInfoVOS = this.dealMainData();
+            }
+            if (params.resultType === '3') {
+                params.resultListInfo = this.dealMainData();
+            }
+            if (params.resultType === '4') {
+                params.resultListPerson = this.dealMainData();
+            }
+            if (params.resultType === '5') {
+                params.resultListSyn = this.dealMainData();
+            }
+            if (String(params.presvType) === '1') {
+                this.$emit('updateFullLoading', true); // 手动保存
+            }
+            if (params.resultType === '5' && String(params.presvType) === '1') {
+                this.updateFullLoading(true);
+            }
+            exportResultSet(params).then(resp => {
+                if (String(params.presvType) === '1') {
+                    this.$emit('updateFullLoading', false); // 手动保存
+                }
+                if (params.resultType === '5' && String(params.presvType) === '1') {
+                    this.updateFullLoading(false);
+                }
+                if (this.$route.name === 'assoAccountGroupMerge') {
+                    this.$emit('updateResultList');
+                } else if (this.$route.name === 'multipleScenesMerge') {
+                    this.updateResultList();
+                }
+            }).catch(e => {
+                console.error(e);
+                if (String(params.presvType) === '1') {
+                    this.$emit('updateFullLoading', false); // 手动保存
+                }
+            });
+        },
         // 导出到csv
         handleExportCsv(fileName, mainTableColumns) {
             let tableData = this.dealMainData();
@@ -252,8 +268,8 @@ export default {
                 let store = this.$store.getters.sceneCommitResp;
                 store[params.id] = resp;
                 this.$store.commit('saveSceneCommitResp', store);
-                let flag = String(propsResultType) === '1' ? 1 : null;
-                this.drewChart1(flag);
+                this.drewChart1(true);
+                // 自动保存到结果集列表
             }).catch(e => {
                 console.error(e);
                 this.$emit('updateFullLoading', false);

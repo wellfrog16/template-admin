@@ -28,22 +28,22 @@ export default {
         getChart() {
             return [this.getChart1, this.getChart2, this.getChart3, this.getChart4];
         },
-        drewChart1(type) {
+        drewChart1(autoSave) {
             setTimeout(() => {
                 let respData = this.dealChart1AndMainTableData();
                 let {chartData, id} = respData;
                 if (!chartData) {
                     return;
                 }
-                if (type === 1) {
+                if (String(this.currentSceneType) === '1') {
                     let selectMax = _.maxBy(chartData, 'acctMakePosQttyMax');
                     // select max
                     this.updateAccountGroupAndCustIds(selectMax ? selectMax.acctId : '', selectMax ? selectMax.custIds.split(',') : []);
-                } else {
+                } else if (String(this.currentSceneType) === '3' || String(this.currentSceneType) === '4') {
                     this.$emit('updateAccountGroupAndCustIds', chartData['nodes'][0]['name'], chartData['nodes'][0]['custIds'].split(','));
                 }
                 setTimeout(() => {
-                    if (this.currentSceneType === '2') {
+                    if (String(this.currentSceneType) === '2') {
                         this.getDetailBy3D();
                     } else {
                         this.getBlock2Data();
@@ -79,6 +79,11 @@ export default {
                 }
                 setTimeout(() => {
                     this.$refs['chartComponent1'] && this.$refs['chartComponent1'][0] && this.$refs['chartComponent1'][0].getData(chartData, id);
+                    // 自动导出结果集
+                    console.log('export**');
+                    if (autoSave) {
+                        this.handleExportResultCallback(this.currentSceneType, this.tabIndex);
+                    }
                 });
             });
         },

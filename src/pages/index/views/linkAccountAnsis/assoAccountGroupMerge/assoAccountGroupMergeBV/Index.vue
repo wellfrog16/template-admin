@@ -412,7 +412,7 @@ export default {
         this.resetToggleDetailFlag();
         this.sceneCommitParams = this.$store.getters.sceneCommitParams;
         if (Object.keys(this.sceneCommitParams).length) {
-            this.drewChart1(1);
+            this.drewChart1(true);
         }
     },
     beforeDestroy() {
