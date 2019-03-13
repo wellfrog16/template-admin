@@ -160,7 +160,7 @@ export default {
             }).catch(() => {});
         },
         handleExportResultCallback(propsResultType, resultId, inputName) {
-            if (!resultId) {
+            if (propsResultType && !resultId) { // 不是组合场景并且没有resultId
                 return;
             }
             // 生成自动导出结果集名称
