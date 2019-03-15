@@ -62,7 +62,7 @@ export const chartTableColumns3 = [ // no use
     {label: '账户组编号', field: '', minWidth: 130, sortable: true},
     {label: '客户编号', field: '', minWidth: 130, template: custIdColumn, sortable: true},
     {label: '交易日', field: '', minWidth: 130, sortable: true},
-    {label: '合约代码', field: '', minWidth: 100, sortable: true},
+    {label: '合约代码', field: '', minWidth: 110, sortable: true},
     {label: '买入量', field: '', minWidth: 100, sortable: true},
     {label: '卖出量', field: '', minWidth: 100, sortable: true},
     {label: '多头持仓量', field: '', minWidth: 130, sortable: true},

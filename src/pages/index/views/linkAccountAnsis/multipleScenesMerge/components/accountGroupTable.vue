@@ -387,7 +387,7 @@ export default {
                     this.mainTableData = this.sortDataByAcctIdCommon(resp.combineResultInfos); // 账户组信息
                     this.$emit('updateMainTableData', this.mainTableData);
                     // 自动导出
-                    this.handleExportResultCallback();
+                    // this.handleExportResultCallback();
                 }
             }).catch(e => {
                 this.dialogFormVisible = false;
