@@ -159,7 +159,7 @@ const Index = {
             },
             hidden: false,
             name: 'popularFeeling',
-            icon: 'menu-fix-icon fa fa-address-book',
+            icon: 'menu-fix-icon fab fa-audible',
             component: LinkAccountAnsis,
             children: [
                 {
@@ -169,7 +169,7 @@ const Index = {
                     },
                     path: '/popularFeelings',
                     name: 'popularFeelings',
-                    icon: 'menu-fix-icon fa fa-location-arrow',
+                    icon: 'menu-fix-icon fa fa-volume-up',
                     component: resolve => require(['@/pages/index/views/linkAccountAnsis/popularFeelings/Index.vue'], resolve)
                 },
                 {
@@ -179,7 +179,7 @@ const Index = {
                     },
                     path: '/publicAnalysis',
                     name: 'publicAnalysis',
-                    icon: 'menu-fix-icon fa fa-location-arrow',
+                    icon: 'menu-fix-icon fa fa-robot',
                     component: resolve => require(['@/pages/index/views/linkAccountAnsis/PublicAnalysis/Index.vue'], resolve)
                 },
                 {
@@ -189,7 +189,7 @@ const Index = {
                     },
                     path: '/priorityListMonitoring',
                     name: 'priorityListMonitoring',
-                    icon: 'menu-fix-icon fa fa-location-arrow',
+                    icon: 'menu-fix-icon fab fa-creative-commons-by',
                     component: resolve => require(['@/pages/index/views/linkAccountAnsis/priorityListMonitoring/Index.vue'], resolve)
                 },
                 //     {

@@ -18,6 +18,7 @@
                     <div>
                         <el-row :gutter="10">
                             <el-col :span="12" v-for="(item, index) in topNavList" :key="index"
+
                                     style="margin: 5px 0; cursor: pointer; text-align: center;">
                                 <el-card :style="{background: `${item.bg}`, backgroundSize: 'cover'}">
                                     <span @click="handleRouterLink(item)">{{ item.name }}</span>
@@ -57,7 +58,7 @@ export default {
         return {
             userName: localStorage.getItem('USER_NAME') || '',
             topNavList: [
-                {name: '研究支撑平台', link: '', bg: 'url(' + img1 + ') no-repeat'},
+                {name: '研究支撑平台', link: 'experimentPlatformHome', bg: 'url(' + img1 + ') no-repeat'},
                 {name: '监管科技工具集', link: 'toolsHome', bg: 'url(' + img2 + ') no-repeat'},
                 {name: '国际化应用', link: '', bg: 'url(' + img3 + ') no-repeat'},
                 {name: '行业应用', link: '', bg: 'url(' + img4 + ') no-repeat'},

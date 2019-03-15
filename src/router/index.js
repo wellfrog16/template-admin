@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Tools from './index/index';
+import ExperimentPlatform from './experimentPlatform/index';
 import {Notification} from 'element-ui';
 Vue.use(Router);
 
@@ -33,7 +34,7 @@ const router = new Router({
     scrollBehavior,
     routes: [
         {
-            path: 'index',
+            path: '/index',
             name: 'index',
             hidden: true,
             meta: {
@@ -42,7 +43,8 @@ const router = new Router({
             },
             component: resolve => require(['@/pages/index/views/Index.vue'], resolve),
         },
-        Tools,
+        Tools, // 工具集
+        ExperimentPlatform, // 研究支撑平台
         // PopularFeelings,
         {
             path: '/login',

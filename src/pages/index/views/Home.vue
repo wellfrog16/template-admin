@@ -23,7 +23,7 @@
                 :style=" {'width' : `calc(100% - ${width})`}"
                 id="main-container"
             >
-                <el-main>
+                <el-main :style="{'overflow-x': 'hidden', 'padding': ($route.name === 'operationFlow' ? '0' : '15px')}">
                     <router-view/>
                     <!-- <bottom-operate-button></bottom-operate-button> -->
                 </el-main>

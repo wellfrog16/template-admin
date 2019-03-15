@@ -1,6 +1,6 @@
 <template>
     <div>
-        <!-- <iframe src="http://taobao.com" name="sendMessage" width="800" height ="800"></iframe> -->
+        <!-- <iframe src="/#/login" name="sendMessage" width="800" height ="800"></iframe> -->
         <echarts-common :loading="loading" :ref="`chart${index}`" :domId="`chart${index}`" :defaultOption="chartOptions" :propsChartHeight="propsChartHeight" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></echarts-common>
     </div>
 </template>

@@ -145,7 +145,10 @@
             <edit-scene-dialog :operateType="operateType" :dialogItem="dialogItem" :createType="dialogItem.sceneType || this.createType" @updateSceneList="getTableData"></edit-scene-dialog>
         </el-dialog>
         <el-dialog
-            element-loading-text="数据加载时间较长，请耐心等待..."
+            element-loading-text="
+            计算任务进行中，需时较长
+            如遇特殊情况退出（断网、断电等）
+            无需重复操作，计算完成后将自动保存到结果集"
             element-loading-background="rgba(0,0,0,0.6)"
             v-loading.fullscreen.lock="loading" :close-on-click-modal="false" :close-on-press-escape="false" :custom-class="`self-dialog`" :visible="showCarousel" width="85%" top="2%" @close="handleCloseCarousel">
             <el-carousel :interval="4000" height="555px">
@@ -535,6 +538,10 @@ export default {
 <style lang="less" scoped>
     .scene-config-page {
         color: #fff;
+        .loading-css {
+            background: red;
+            white-space: pre;
+        }
         .el-form {
             color: #fff;
         }

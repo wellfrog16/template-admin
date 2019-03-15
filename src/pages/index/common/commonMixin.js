@@ -9,6 +9,25 @@ export default {
         };
     },
     methods: {
+        getHasTask() {
+            // 调取接口获取是否还是未执行完的任务
+            let has = true;
+            if (has) {
+                this.$confirm('抱歉：您有计算任务进行中，建议当前任务完成后再操作', '提示', {
+                    confirmButtonText: '继续执行',
+                    cancelButtonText: '取消操作',
+                    type: 'warning'
+                })
+                    .then(() => {
+                        // 继续操作
+                        return true;
+                    }).catch(() => {
+                        // 取消继续操作
+                        return false;
+                    });
+            }
+            return true;
+        },
         toggleFullScreen(index) {
             this.$refs['fullscreen'][index].toggle();
             this.currentFullScreenIndex = index;
@@ -80,10 +99,9 @@ export default {
                 setTimeout(() => {
                     this.$refs['chartComponent1'] && this.$refs['chartComponent1'][0] && this.$refs['chartComponent1'][0].getData(chartData, id);
                     // 自动导出结果集
-                    console.log('export**');
-                    if (autoSave) {
-                        this.handleExportResultCallback(this.currentSceneType, this.tabIndex);
-                    }
+                    // if (autoSave) {
+                    //     this.handleExportResultCallback(this.currentSceneType, this.tabIndex);
+                    // }
                 });
             });
         },

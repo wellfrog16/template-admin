@@ -26,7 +26,6 @@ const instance = url => {
     });
     // request 拦截器
     let loadingInstancce = null;
-
     instance.interceptors.request.use(
         // 全屏遮罩
         config => {
@@ -49,6 +48,19 @@ const instance = url => {
                     }
                 );
             });
+            // 公共参数
+            let setupUser = localStorage.getItem('USER_NAME');
+            if (config.method === 'post') {
+                config.data = {
+                    setupUser,
+                    ...config.data
+                };
+            } else if (config.method === 'get') {
+                config.params = {
+                    setupUser,
+                    ...config.params
+                };
+            }
             return config;
         },
         error => {
