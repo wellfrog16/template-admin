@@ -134,6 +134,7 @@ export default {
             } else if (index === 3) {
                 data = storeData['chartData4'];
             }
+            console.log(data);
             if (!item.toggleDetailFlags) {
                 this.$nextTick(() => {
                     setTimeout(() => {
