@@ -224,7 +224,7 @@ export default {
                 size: 'small',
                 type: 'primary'
             },
-            uploadParams: {}, // 上传文件body参数
+            uploadParams: {...{setupUser: localStorage.getItem('USER_NAME')}}, // 上传文件body参数
             actionUrl: uploadFileByBodyInfo('customer/combinedscence/csv'),
             defaultLimitFileType: ['csv'],
             searchText: '',
@@ -325,7 +325,10 @@ export default {
                 if (!this.currentConctrd) {
                     this.dialogFormVisible = true;
                 } else {
-                    this.generateDataMethods();
+                    // 判断任务队列有慢请求
+                    this.getUserInterfaceState('/customer/combinedscence/regenerate', () => {
+                        this.generateDataMethods();
+                    });
                 }
             }
         },

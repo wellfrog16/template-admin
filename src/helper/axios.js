@@ -16,11 +16,12 @@ let removePending = ever => {
     }
 };
 const instance = url => {
+    let baseURL = url || config.server.api;
     // 配置token到header中
     let accessToken = localStorage.getItem('ACCESS_TOKEN');
     accessToken = accessToken || store.state.login.accessToken;
     let instance = axios.create({
-        baseURL: url || config.server.api,
+        baseURL: baseURL,
         timeout: 0,
         headers: {Authorization: 'Bearer' + accessToken}
     });
@@ -50,14 +51,17 @@ const instance = url => {
             });
             // 公共参数
             let setupUser = localStorage.getItem('USER_NAME');
+            // let reqUrl = 'operate' + config.url.split('/operate')[1];
             if (config.method === 'post') {
                 config.data = {
                     setupUser,
+                    // reqUrl,
                     ...config.data
                 };
             } else if (config.method === 'get') {
                 config.params = {
                     setupUser,
+                    // reqUrl,
                     ...config.params
                 };
             }

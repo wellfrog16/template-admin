@@ -445,7 +445,7 @@ export default {
         getNextStepData(params) {
             this.loading = true;
             if (this.ruleForm.exportType === '1') {
-                this.uploadParams = {...this.uploadParams, ...params};
+                this.uploadParams = {...this.uploadParams, ...params, ...{setupUser: localStorage.getItem('USER_NAME')}};
                 this.$nextTick(() => {
                     this.$refs['uploadFile'].submitUpload();
                 });
@@ -513,19 +513,12 @@ export default {
                 tabs[v.sceneIds] = v;
             });
             this.$store.commit('saveSceneCommitParams', tabs);
-            paramsArray.forEach(v => {
-                this.getNextStepData(v);
-                /* if (v.sceneTypes !== '2') {
+            // 判断任务队列有慢请求
+            let reqUrl = this.ruleForm.exportType === '1' ? 'operate/accountMerge/csv' : 'operate/accountMerge';
+            this.getUserInterfaceState(reqUrl, () => {
+                paramsArray.forEach(v => {
                     this.getNextStepData(v);
-                } else {
-                    if (!this.openFlag) {
-                        this.openFlag = true;
-                        let store = this.$store.getters.sceneCommitResp;
-                        store[v.sceneIds] = testData;
-                        this.$store.commit('saveSceneCommitResp', store);
-                        this.$router.push({name: 'assoAccountGroupMerge'});
-                    }
-                } */
+                });
             });
         }
     },

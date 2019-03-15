@@ -492,7 +492,7 @@ export default {
                                 this.loadingTable1 = true;
                                 this.loadingTable2 = true;
                                 this.dealWithIsLoading = true;
-                                this.uploadParams = v;
+                                this.uploadParams = {...v, ...{setupUser: localStorage.getItem('USER_NAME')}};
                                 this.$store.commit('momentMut', this.uploadParams); // tab 表格数据
                                 this.$nextTick(() => {
                                     this.$refs['uploadFile'].submitUpload();

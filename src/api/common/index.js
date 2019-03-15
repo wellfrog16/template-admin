@@ -41,6 +41,10 @@ export const getInfoByResultId = (resultIds, resultType) => {
 export const deleteResultById = resultIds => {
     return post(`${requestPrefix}/resultSet/del`, {resultIds});
 };
+// 获取请求队列中是否有慢任务；0-没有 1-有相同 2-有不同
+export const getUserInterfaceState = params => {
+    return post(`${requestPrefix}/getUserInterfaceState`, params);
+};
 // 离开页面发送请求test
 export const leavePageTest = () => {
     return `${config.server.api}${requestPrefix}/getTlsIndexTlb?access_token=${localStorage.getItem('ACCESS_TOKEN')}`;
