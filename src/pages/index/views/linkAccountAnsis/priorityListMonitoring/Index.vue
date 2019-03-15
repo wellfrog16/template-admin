@@ -3,7 +3,7 @@
         <s-card :title="`重点跟踪名单池`" :icon="`fa fa-chart-line`">
             <div slot="content">
                 <s-table
-                    rowClassName="self_color"
+                    :rowStyle="rowStyle"
                     ref="selfTables1"
                     :height="340"
                     :loading="loadingAR"
@@ -86,16 +86,18 @@ export default {
         };
     },
     methods: {
-        rowClass({row, rowInde}) {
+        rowStyle({row}) {
             if (row.time1 === '高级') {
-                console.log(rowInde);
-                return 'self_color';
+                return {'color': 'red'};
+            } else if (row.time1 === '中级') {
+                return {'color': '#f56c6c'};
+            } else if (row.time1 === '低级') {
+                return {'color': '#e6a23c'};
+            } else if (row.time1 === '正常') {
+                return {'color': '#fbc4c4'};
+            } else {
+                return {'color': '#017cda'};
             }
-            // else if (row.time1 === '中级') {
-            //     return 'backgtound: #999';
-            // } else if (row.time1 === '低级') {
-            //     return 'background: #fff';
-            // }
         },
         // 设置监控指标-弹框
         exporstClick() {
@@ -130,10 +132,6 @@ export default {
         color: #fff;
         padding: 0 20px 20px;
         text-align: center;
-    }
-    .self_color {
-        background-color: red !important;
-        color: blue;
     }
 }
 </style>

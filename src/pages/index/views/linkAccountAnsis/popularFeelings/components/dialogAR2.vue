@@ -10,8 +10,8 @@
                         :showIndexColumn="false"
                         tooltip-effect="dark"
                         :loading="loadingAR"
-                        :columns="columnsList"
-                        :tableData="tableData2">
+                        :columns="columnsList2"
+                        :tableData="tableDatas2">
                         <el-table-column
                             align="center"
                             type="index"
@@ -39,8 +39,8 @@
                         :showIndexColumn="false"
                         :height="230"
                         :loading="loadingAR"
-                        :columns="columnsList1"
-                        :tableData="tableData1"
+                        :columns="columnsLists"
+                        :tableData="tableData2"
                         @selection-change="handleSelectionChange2">
                     </s-table>
                 </s-card>
@@ -50,9 +50,10 @@
 </template>
 
 <script>
+import {postThanSec, postConfigurationQuery1} from '@/api/dataAnsis/popularFeelings';
 import SCard from '@/components/index/common/SCard';
 import STable from '@/components/index/common/STable';
-import {columnsList2, columnsList1} from './constants';
+import {columnsList, columnsLists} from './constants';
 export default {
     name: 'dialogAR',
     components: {SCard, STable},
@@ -60,18 +61,6 @@ export default {
         visi: {
             type: Boolean,
             default: false
-        },
-        tableData2: {
-            type: Array,
-            default() {
-                return [];
-            }
-        },
-        tableData1: {
-            type: Array,
-            default() {
-                return [];
-            }
         }
     },
     watch: {
@@ -91,26 +80,49 @@ export default {
             loadingAR: false,
             flagValue: '',
             celclickTableColumn: {},
-            // checkboxTableColumn: [],
-            // 他比证券
-            columnsList: columnsList2,
-            // tableData2: tableData2,
-            // 舆情
-            columnsList1: columnsList1,
-            // tableData1PF: columnsList1
+            columnsList2: columnsLists,
+            columnsLists: columnsList,
+            tableDatas2: [],
+            tableData2: []
         };
     },
     computed: {},
     mounted() {
-        // console.log(this.tableData2);
-        console.log(this.tableData1);
+        this.tableDataS2();
+        this.tableDatas24();
     },
     methods: {
+        // 原油日分时图1--异常指标配置表
+        tableDataS2() {
+            let params = {};
+            this.loadingAR = true;
+            postConfigurationQuery1(params).then(resp => {
+                if (resp && resp.length !== 0) {
+                    this.loadingAR = false;
+                    this.tableData2 = resp;
+                }
+            }).catch(e => {
+                this.loadingAR = false;
+            });
+        },
+        // 美油日分时图2--他比证券配置表;  美油日K图4- 他比证券配置表
+        tableDatas24() {
+            let params = {};
+            this.loadingAR = true;
+            postThanSec(params).then(resp => {
+                if (resp && resp.length !== 0) {
+                    this.loadingAR = false;
+                    this.tableDatas2 = resp;
+                }
+            }).catch(e => {
+                this.loadingAR = false;
+            });
+        },
         // 输入阈值设
         handleInsertChange(val) {},
         // 单选按钮
         getTemplateRow() {
-            this.tableData2.forEach((v, i) => {
+            this.tableDatas2.forEach((v, i) => {
                 if (this.flagValue === i) {
                     this.flagValue = i;
                     this.celclickTableColumn = v || {};

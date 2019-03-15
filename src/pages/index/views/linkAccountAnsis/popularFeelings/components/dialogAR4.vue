@@ -11,7 +11,7 @@
                         tooltip-effect="dark"
                         :loading="loadingAR"
                         :columns="columnsList"
-                        :tableData="tableData4">
+                        :tableData="tableDatas4">
                         <el-table-column
                             align="center"
                             type="index"
@@ -41,7 +41,7 @@
                         :height="230"
                         :loading="loadingAR"
                         :columns="columnsList3"
-                        :tableData="tableData3"
+                        :tableData="tableData4"
                         @selection-change="handleSelectionChange2">
                     </s-table>
                 </s-card>
@@ -51,9 +51,10 @@
 </template>
 
 <script>
+import {postThanSec, postConfigurationQuery1} from '@/api/dataAnsis/popularFeelings';
 import SCard from '@/components/index/common/SCard';
 import STable from '@/components/index/common/STable';
-import {columnsList4, columnsList3} from './constants';
+import {columnsLists, columnsList} from './constants';
 export default {
     name: 'dialogAR',
     components: {SCard, STable},
@@ -61,18 +62,6 @@ export default {
         visi: {
             type: Boolean,
             default: false
-        },
-        tableData4: {
-            type: Array,
-            default() {
-                return [];
-            }
-        },
-        tableData3: {
-            type: Array,
-            default() {
-                return [];
-            }
         }
     },
     watch: {
@@ -92,20 +81,50 @@ export default {
             celclickTableColumn: {},
             checkboxTableColumn1: [],
             // 他比证券
-            columnsList: columnsList4,
-            columnsList3: columnsList3
+            columnsList: columnsLists,
+            columnsList3: columnsList,
+            tableDatas4: [],
+            tableData4: []
         };
     },
     computed: {},
     mounted() {
+        this.tableDataS1();
+        this.tableDatas24();
     },
     methods: {
+        // 原油日分时图1--异常指标配置表
+        tableDataS1() {
+            let params = {};
+            this.loadingAR = true;
+            postConfigurationQuery1(params).then(resp => {
+                if (resp && resp.length !== 0) {
+                    this.loadingAR = false;
+                    this.tableData4 = resp;
+                }
+            }).catch(e => {
+                this.loadingAR = false;
+            });
+        },
+        // 美油日分时图2--他比证券配置表;  美油日K图4- 他比证券配置表
+        tableDatas24() {
+            let params = {};
+            this.loadingAR = true;
+            postThanSec(params).then(resp => {
+                if (resp && resp.length !== 0) {
+                    this.loadingAR = false;
+                    this.tableDatas4 = resp;
+                }
+            }).catch(e => {
+                this.loadingAR = false;
+            });
+        },
         // 输入阈值设
         handleInsertChange(val) {},
         handleSelectionChange2() {},
         // 单选按钮
         getTemplateRow() {
-            this.tableData4.forEach((v, i) => {
+            this.tableDatas4.forEach((v, i) => {
                 if (this.flagValue === i) {
                     this.flagValue = i;
                     this.celclickTableColumn = v || {};

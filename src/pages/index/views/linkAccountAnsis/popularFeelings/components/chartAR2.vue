@@ -33,11 +33,7 @@
                     </el-select>
                 </el-form-item>
             </el-form>
-            <dialog-a-r2
-                :visi="dialogVisible"
-                :tableData2="tableData2"
-                :tableData1="tableData1"
-                @celclickEmit="celclickEmit"></dialog-a-r2>
+            <dialog-a-r2 :visi="dialogVisible" @celclickEmit="celclickEmit"></dialog-a-r2>
             <div slot="footer" :class="$style.dialog_footer">
                 <el-button @click="dialogCancelClick">取 消</el-button>
                 <el-button type="primary" @click="dialogConfirmClick">确 定</el-button>
@@ -45,9 +41,9 @@
         </el-dialog>
         <echarts-common
             slot="content"
-            :loading="loading2"
             ref="echartsDemo2"
             domId="echartsId2"
+            :loading="loading2"
             :defaultOption="chartOptions2"
             :propsChartHeight="430">
         </echarts-common>
@@ -85,9 +81,9 @@ export default {
             {name: 'crudeCode', index: 0, text: '原油代码'},
             {name: 'crudeDealTime', index: 1, text: '产品成交时间'},
             {name: 'crudeName', index: 2, text: '产品名称'},
-            {name: 'realAveragePrice', index: 3, text: '实时交易均价'},
+            {name: 'realAveragePrice', index: 3, text: '实时交易均价(￥)'},
             {name: 'realMakeBargain', index: 4, text: '实时交易成交'},
-            {name: 'realPrice', index: 5, text: '实时交易价格'},
+            {name: 'realPrice', index: 5, text: '实时交易价格(￥)'},
             {name: 'realTime', index: 6, text: '实时交易时间'},
             {name: 'realUpsAndDowns', index: 7, text: '实时交易涨跌'},
         ];
@@ -102,9 +98,6 @@ export default {
             multipleSelection: [],
             flagVal: '',
             radioTableColumn: {},
-            // checkboTableColumn: [],
-            tableData1: [],
-            tableData2: [],
             chartOptions2: {
                 title: [
                     {
@@ -388,10 +381,7 @@ export default {
     },
     computed: {},
     mounted() {
-        // 原油日K图--配置表
-        this.tableData3List();
-        this.tableData3List1();
-        this.barEchartsDete();
+        this.barEchartsDete(this.paramsData2());
     },
     methods: {
         // 配置按钮
@@ -448,18 +438,123 @@ export default {
                 this.dialogVisible = true;
             }
         },
-        barEchartsDete() {
+        paramsData2() {
+            let now = new Date(); // 当前日期
+            let timeDay = moment(now).format('YYYY-MM-DD');
+            let params = {
+                'timeOfDay': timeDay,
+                'frequentness': '5',
+                'crudeCode': 'BLT_OIL'
+            };
+            return params;
+        },
+        barEchartsDete(params) {
+            let now = new Date();
+            let dateWeek = now.getDay(); // 今天本周的第几天
+            this.loading2 = true;
+            let mainData = [];
+            let exceptionDatas = [];
+            let markAreaData = [];
+            postPetroleumAR2(params).then(resp => {
+                this.setIntervalData2(params);
+                if (resp && resp.length !== 0) {
+                    this.loading2 = false;
+                    if (resp.exceptionData.length !== 0) {
+                        exceptionDatas = resp.exceptionData; // 异常数据
+                        let staetTimes = [];
+                        let endTimes = [];
+                        exceptionDatas.forEach(v => {
+                            staetTimes.push(v.configStartTime); // 开始时间
+                            endTimes.push(v.configEndTime); // 结束时间
+                        });
+                        // console.log(staetTimes);
+                        // console.log(endTimes);
+                    }
+                    mainData = resp.mainData;
+                    if (mainData && !mainData.length) {
+                        return;
+                    }
+                    let timeData = []; // 实时交易时间
+                    let priceData = []; // 实时交易价格
+                    let averagePriceData = []; // 实时交易均价
+                    let realUpsAndData = []; // 实时交易涨跌
+                    let titleText = '';
+                    this.mainData = mainData;
+                    mainData.forEach(v => {
+                        timeData.push(v.realTime); // 实时交易时间
+                        priceData.push(v.realPrice); // 实时交易价格
+                        averagePriceData.push(v.realAveragePrice); // 实时交易均价
+                        realUpsAndData.push(v.realUpsAndDowns); // 实时交易涨跌
+                        // 产品成交时间--星期几---实时交易时间---实时交易均价---实时交易成交数量----实时交易涨跌
+                        titleText = v.crudeDealTime + '/' + dateWeek + '/' + v.realTime + ' 均' + v.realAveragePrice + '幅 ' + v.realUpsAndDowns + '%';
+                    });
+                    if (exceptionDatas.length !== 0) {
+                        // exceptionDatas.forEach(v => {
+                        // //     console.log(v);
+                        // // });
+                        markAreaData = [
+                            [
+                                {
+                                    'name': '异常',
+                                    // 'xAxis': mainData[mainData.length - 1].realTime, // 异常时间
+                                    'xAxis': '16:04', // 异常时间
+                                    // 'yAxis': mainData[mainData.length - 1].realPrice, // 异常价格
+                                },
+                                {
+                                    // 'xAxis': exceptionDatas[0].realTime, // 前五分钟异常时间
+                                    'xAxis': '16:04', // 前五分钟异常时间
+                                    // 'yAxis': exceptionDatas[0].realPrice, // 前五分钟异常价格
+                                    'yAxis': '17:24', // 前五分钟异常价格
+                                }
+                            ],
+                            [
+                                {
+                                    'name': '异常',
+                                    // 'xAxis': mainData[mainData.length - 1].realTime, // 异常时间
+                                    'xAxis': '09:21', // 异常时间
+                                    // 'yAxis': mainData[mainData.length - 1].realPrice, // 异常价格
+                                },
+                                {
+                                    // 'xAxis': exceptionDatas[0].realTime, // 前五分钟异常时间
+                                    'xAxis': '09:26', // 前五分钟异常时间
+                                    // 'yAxis': exceptionDatas[0].realPrice, // 前五分钟异常价格
+                                    'yAxis': '66.51', // 前五分钟异常价格
+                                }
+                            ],
+                            [
+                                {
+                                    'name': '异常',
+                                    // 'xAxis': mainData[mainData.length - 1].realTime, // 异常时间
+                                    'xAxis': '10:02', // 异常时间
+                                    // 'yAxis': mainData[mainData.length - 1].realPrice, // 异常价格
+                                },
+                                {
+                                    // 'xAxis': exceptionDatas[0].realTime, // 前五分钟异常时间
+                                    'xAxis': '10:09', // 前五分钟异常时间
+                                    // 'yAxis': exceptionDatas[0].realPrice, // 前五分钟异常价格
+                                    'yAxis': '66.50', // 前五分钟异常价格
+                                }
+                            ]
+                        ];
+                    }
+                    let timeDatas = [...timeData, ...echartsData2.realTime];
+                    this.chartOptions2['title'][0]['text'] = titleText; // 标题
+                    this.chartOptions2['xAxis']['data'] = timeDatas; // 实时交易时间
+                    this.chartOptions2['series'][0]['data'] = priceData; // 实时交易价格
+                    this.chartOptions2['series'][0]['markArea']['data'] = markAreaData || []; // 异常
+                    this.chartOptions2['series'][1]['data'] = realUpsAndData; // 实时交易涨跌
+                    this.chartOptions2['series'][2]['data'] = averagePriceData; // 实时交易均价
+                    this.$refs['echartsDemo2'] && this.$refs['echartsDemo2'].initChart();
+                }
+            }).catch(e => {
+                this.loading2 = false;
+            });
+        },
+        setIntervalData2(params) {
             this.timer = setInterval(v => {
                 let now = new Date();
                 let dateWeek = now.getDay(); // 今天本周的第几天
-                let timeDay = moment(now).format('YYYY-MM-DD');
-                let params = {
-                    // 'timeOfDay': now.getFullYear() + '-' + now.getMonth() + 1 + '-' + now.getDate(),
-                    'timeOfDay': timeDay,
-                    'frequentness': '5',
-                    'crudeCode': 'BLT_OIL'
-                };
-                this.loading2 = true;
+                this.loading2 = false;
                 let mainData = [];
                 let exceptionDatas = [];
                 let markAreaData = [];
@@ -474,8 +569,8 @@ export default {
                                 staetTimes.push(v.configStartTime); // 开始时间
                                 endTimes.push(v.configEndTime); // 结束时间
                             });
-                            console.log(staetTimes);
-                            console.log(endTimes);
+                            // console.log(staetTimes);
+                            // console.log(endTimes);
                         }
                         mainData = resp.mainData;
                         if (mainData && !mainData.length) {
@@ -493,7 +588,7 @@ export default {
                             averagePriceData.push(v.realAveragePrice); // 实时交易均价
                             realUpsAndData.push(v.realUpsAndDowns); // 实时交易涨跌
                             // 产品成交时间--星期几---实时交易时间---实时交易均价---实时交易成交数量----实时交易涨跌
-                            titleText = v.crudeDealTime + '/' + dateWeek + '/' + v.realTime + ' 均 ' + v.realAveragePrice + '幅 ' + v.realUpsAndDowns + '%';
+                            titleText = v.crudeDealTime + '/' + dateWeek + '/' + v.realTime + ' 均' + v.realAveragePrice + '幅 ' + v.realUpsAndDowns + '%';
                         });
                         if (exceptionDatas.length !== 0) {
                             // exceptionDatas.forEach(v => {

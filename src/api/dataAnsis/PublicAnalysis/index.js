@@ -9,10 +9,6 @@ export const postpAnalysis = params => {
 export const postOilDayKList = params => {
     return post(`${requestPrefixs}/oilDayKList`, params);
 };
-// 热度
-export const postBaiduAndWeixin = params => {
-    return post(`${requestPrefixs}/baiduAndWeixin`, params);
-};
 // 原油库存3 // 原油库存明细3
 export const postCrudeTable = params => {
     return post(`${requestPrefixs}/crudeTable`, params);
@@ -30,9 +26,9 @@ export const postOrpeListMap1 = params => {
     return post(`${requestPrefixs}/orpeListMap1`, params);
 };
 // 国际环境5 初始值 -图
-export const postOrpeListMapTerm = params => {
-    return post(`${requestPrefixs}/orpeListMapTerm`, params);
-};
+// export const postOrpeListMapTerm = params => {
+//     return post(`${requestPrefixs}/orpeListMapTerm`, params);
+// };
 // 国际环境5 图
 export const postOrpeListMap5 = params => {
     return post(`${requestPrefixs}/orpeListMap5`, params);

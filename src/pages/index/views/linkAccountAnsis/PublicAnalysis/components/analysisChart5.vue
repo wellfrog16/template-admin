@@ -62,7 +62,7 @@
 </template>
 
 <script>
-// import moment from 'moment';
+import moment from 'moment';
 import {
     postOrpeListMap1,
     // postOrpeListMapTerm,
@@ -354,6 +354,22 @@ export default {
                     this.chartOptions5['series'][0]['data'] = pageHits5; // 报道量
                     this.chartOptions5['series'][1]['data'] = commentsNums5; // 评论量
                     // this.chartOptions5['series'][0]['data'] = ['33', '422', '312', '423', '33']; // 热点
+
+                    // ...................................
+                    let titleTexts = '';
+                    let munDatas = [];
+                    if (resp[resp.length - 1]) {
+                        let varietys = resp[resp.length - 1];
+                        titleTexts = varietys.OPECpublished_time;
+                        munDatas = parseFloat(varietys.page_hits);
+                    }
+                    let mathFloor5 = munDatas;
+                    let mainObj5 = {
+                        'titleText': moment(new Date(titleTexts.replace(/[年月]/g, '-').replace(/[日]/g, ''))).format('YYYY-MM-DD'), // 日期
+                        'front5': mathFloor5, // 公布值仪表盘
+                    };
+                    this.$emit('evetClick5', this.loading5, mainObj5);
+                    // ...................................
                     this.$refs['selfTablesa5'] && this.$refs['selfTablesa5'].initChart();
                 }
             }).catch(e => {

@@ -34,11 +34,7 @@
                         </el-select>
                     </el-form-item>
                 </el-form>
-                <dialog-a-r1
-                    :visi="dialogVisible"
-                    :tableData1="tableData1"
-                    @checkboxEmit1="checkboxEmit1">
-                </dialog-a-r1>
+                <dialog-a-r1 :visi="dialogVisible" @checkboxEmit1="checkboxEmit1"></dialog-a-r1>
                 <div slot="footer" :class="$style.dialog_footer">
                     <el-button @click="dialogCancelClick">取 消</el-button>
                     <el-button type="primary" @click="dialogConfirmClick">确 定</el-button>
@@ -48,6 +44,7 @@
                 slot="content"
                 ref="echartsDemo1"
                 domId="echartsId1"
+                :loading="loading1"
                 :noClearFlag="false"
                 :defaultOption="chartOptions1"
                 :propsChartHeight="430">
@@ -104,14 +101,13 @@ export default {
         ];
         return {
             timer: null,
-            // loading1: false,
+            loading1: false,
             dialogVisible: false,
             // form 表单绑定值
             ruleForm: {
                 timeWindow: '5分钟', // 时间窗口
             },
             multipleSelection: [],
-            tableData1: [],
             checkboTableColumn1: [],
             // checkboTableColumn2: [],
             chartOptions1: {
@@ -428,17 +424,13 @@ export default {
     },
     computed: {},
     mounted() {
-        // 原油日K图--配置表
-        this.tableData3List();
-        this.tableData3List1();
-        this.barEchartsDete();
+        this.barEchartsDete(this.paramsData());
     },
     methods: {
         // 配置按钮
         dialogClick() {
             this.dialogVisible = true;
             this.checkboTableColumn1 = [];
-            // this.checkboTableColumn2 = [];
         },
         // 日K图--时间窗口
         nationyChenge(val) {
@@ -453,14 +445,12 @@ export default {
             done();
             this.dialogVisible = false;
             this.checkboTableColumn1 = [];
-            // this.checkboTableColumn2 = [];
             this.ruleForm.timeWindow = '5 分钟';
         },
         // 取 消
         dialogCancelClick() {
             this.dialogVisible = false;
             this.checkboTableColumn1 = [];
-            // this.checkboTableColumn2 = [];
             this.ruleForm.timeWindow = '5 分钟';
         },
         // 确 定
@@ -483,26 +473,109 @@ export default {
                 this.dialogVisible = true;
             }
         },
-        barEchartsDete() {
+        // 参数
+        paramsData() {
+            let now = new Date(); // 当前日期
+            let timeDay = moment(now).format('YYYY-MM-DD');
+            let params = {
+                'timeOfDay': timeDay,
+                'frequentness': this.ruleForm.timeWindow,
+                'crudeCode': 'YY_SCO'
+            };
+            return params;
+        },
+        // 分时图
+        barEchartsDete(params) {
+            var now = new Date(); // 当前日期
+            var dateWeek = now.getDay(); // 今天本周的第几天
+            this.loading1 = true;
+            let mainData = [];
+            let exceptionDatas = [];
+            let markAreaData = [];
+            postPetroleumAR1(params).then(resp => {
+                this.setIntervalData(params);
+                if (resp && resp.length !== 0) {
+                    this.loading1 = false;
+                    if (resp.exceptionData.length !== 0) {
+                        exceptionDatas = resp.exceptionData; // 异常数据
+                        exceptionDatas.forEach(v => {
+                            // v.configStartTime // 开始时间
+                            // v.configEndTime // 结束时间
+                            console.log(v);
+                            console.log(v.configStartTime);
+                        });
+                    }
+                    mainData = resp.mainData;
+                    if (mainData && !mainData.length) {
+                        return;
+                    }
+                    let timeData = []; // 实时交易时间
+                    let priceData = []; // 实时交易价格
+                    let averagePriceData = []; // 实时交易均价
+                    let realUpsAndData = []; // 实时交易涨跌
+                    let titleText = '';
+                    this.mainData = mainData;
+                    mainData.forEach(v => {
+                        timeData.push(v.realTime); // 实时交易时间
+                        priceData.push(v.realPrice); // 实时交易价格
+                        averagePriceData.push(v.realAveragePrice); // 实时交易均价
+                        realUpsAndData.push(v.realUpsAndDowns); // 实时交易涨跌
+                        // 产品成交时间--星期几---实时交易时间---实时交易均价---实时交易成交数量----实时交易涨跌
+                        titleText = v.crudeDealTime + '/' + dateWeek + '/' + v.realTime + ' 均 ' + v.realAveragePrice + ' 量 ' + v.realMakeBargain + ' 幅 ' + v.realUpsAndDowns + '%';
+                    });
+                    if (exceptionDatas.length !== 0) {
+                        markAreaData = [
+                            [
+                                {
+                                    'name': '异常',
+                                    // 'xAxis': mainData[mainData.length - 1].realTime, // 异常时间
+                                    // 'xAxis': '09:09' // 异常时间
+                                    'xAxis': '23:11' // 异常时间
+                                    // 'yAxis': mainData[mainData.length - 1].realPrice, // 异常价格
+                                },
+                                {
+                                    // 'xAxis': exceptionDatas[0].realTime, // 前五分钟异常时间
+                                    'xAxis': '23:39', // 前五分钟异常时间
+                                    'yAxis': '445' // 前五分钟异常价格
+                                    // 'yAxis': exceptionDatas[0].realPrice, // 前五分钟异常价格
+                                }
+                            ]
+                            // [
+                            //     {
+                            //         'xAxis': '21:09', // 异常时间
+                            //     },
+                            //     {
+                            //         'xAxis': '21:30', // 前五分钟异常时间
+                            //     }
+                            // ]
+                        ];
+                    }
+                    let timeDatas = [...timeData, ...echartsData1.realTime];
+                    this.chartOptions1['title'][0]['text'] = titleText; // 标题
+                    this.chartOptions1['xAxis']['data'] = timeDatas; // 实时交易时间
+                    this.chartOptions1['series'][0]['data'] = priceData; // 实时交易价格
+                    this.chartOptions1['series'][1]['data'] = realUpsAndData; // 实时交易涨跌
+                    this.chartOptions1['series'][2]['data'] = averagePriceData; // 实时交易均价
+                    this.chartOptions1['series'][0]['markArea']['data'] = markAreaData; // 异常
+                    this.$refs['echartsDemo1'] && this.$refs['echartsDemo1'].initChart();
+                }
+            }).catch(e => {
+                this.loading1 = false;
+            });
+        },
+        // 2分钟触发一次
+        setIntervalData(params) {
             clearInterval(this.timer);
             this.timer = setInterval(v => {
                 var now = new Date(); // 当前日期
                 var dateWeek = now.getDay(); // 今天本周的第几天
-                let timeDay = moment(now).format('YYYY-MM-DD');
-                let params = {
-                    // 'timeOfDay': now.getFullYear() + '-' + now.getMonth() + 1 + '-' + now.getDate(),
-                    'timeOfDay': timeDay,
-                    // 'timeOfDay': '2019-01-24',
-                    'frequentness': this.ruleForm.timeWindow,
-                    'crudeCode': 'YY_SCO'
-                };
-                // this.loading1 = true;
+                this.loading1 = false;
                 let mainData = [];
                 let exceptionDatas = [];
                 let markAreaData = [];
                 postPetroleumAR1(params).then(resp => {
                     if (resp && resp.length !== 0) {
-                        // this.loading1 = false;
+                        this.loading1 = false;
                         if (resp.exceptionData.length !== 0) {
                             exceptionDatas = resp.exceptionData; // 异常数据
                             exceptionDatas.forEach(v => {
@@ -566,10 +639,9 @@ export default {
                         this.chartOptions1['series'][0]['markArea']['data'] = markAreaData; // 异常
                         this.$refs['echartsDemo1'] && this.$refs['echartsDemo1'].initChart();
                     }
+                }).catch(e => {
+                    this.loading1 = false;
                 });
-                //     .catch(e => {
-                //     this.loading1 = false;
-                // });
             }, 20000);
         }
     },

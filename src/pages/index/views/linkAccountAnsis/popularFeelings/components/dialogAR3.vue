@@ -20,9 +20,10 @@
 </template>
 
 <script>
+import {postConfigurationQuery3} from '@/api/dataAnsis/popularFeelings';
 import SCard from '@/components/index/common/SCard';
 import STable from '@/components/index/common/STable';
-import {columnsList3} from './constants';
+import {columnsList} from './constants';
 export default {
     name: 'dialogAR',
     components: {SCard, STable},
@@ -30,12 +31,6 @@ export default {
         visi: {
             type: Boolean,
             default: false
-        },
-        tableData3: {
-            type: Array,
-            default() {
-                return [];
-            }
         }
     },
     watch: {
@@ -53,13 +48,28 @@ export default {
             loadingAR: false,
             checkboxTableColumn1: [],
             // 异常指标
-            columnsList: columnsList3
+            columnsList: columnsList,
+            tableData3: []
         };
     },
     computed: {},
     mounted() {
+        this.tableDataS3();
     },
     methods: {
+        // 原油日分时图1--异常指标配置表
+        tableDataS3() {
+            let params = {};
+            this.loadingAR = true;
+            postConfigurationQuery3(params).then(resp => {
+                if (resp && resp.length !== 0) {
+                    this.loadingAR = false;
+                    this.tableData3 = resp;
+                }
+            }).catch(e => {
+                this.loadingAR = false;
+            });
+        },
         // 异常指标多选
         handleSelectionChange1(val) {
             this.checkboxTableColumn1 = val || [];

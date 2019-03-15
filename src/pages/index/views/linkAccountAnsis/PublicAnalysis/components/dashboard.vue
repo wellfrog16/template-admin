@@ -92,25 +92,17 @@
             </div>
         </s-card>
         <div>
-            <AnalysisChart1></AnalysisChart1>
+            <AnalysisChart1 @evetClick1="evetClick1" ref="chart1"></AnalysisChart1>
             <AnalysisChart2></AnalysisChart2>
-            <AnalysisChart3></AnalysisChart3>
+            <AnalysisChart3 @evetClick3="evetClick3"></AnalysisChart3>
             <AnalysisChart4></AnalysisChart4>
-            <AnalysisChart5></AnalysisChart5>
+            <AnalysisChart5 @evetClick5="evetClick5"></AnalysisChart5>
             <AnalysisChart6></AnalysisChart6>
         </div>
     </div>
 </template>
 
 <script>
-import moment from 'moment';
-import {
-    postpAnalysis, // 舆情情感
-    postBaiduAndWeixin, // 热度
-    postCrudeTable, // 原油库存
-    postOrpeListMap5 // 国际环境
-} from '@/api/dataAnsis/PublicAnalysis';
-import _ from 'lodash';
 import SCard from '@/components/index/common/SCard';
 import EchartsCommon from '@/components/index/common/EchartsCommon';
 import AnalysisChart1 from '../components/analysisChart1';
@@ -135,6 +127,7 @@ export default {
     minis: [],
     data() {
         return {
+            timer: null,
             chartOptionso1: {
                 title: [
                     {
@@ -562,94 +555,42 @@ export default {
         };
     },
     computed: {},
+    watch: {},
     mounted() {
         this.lienEchartsDete();
     },
     methods: {
-        lienEchartsDete() {
-            let storeData = this.$store.getters.analysisGetters1;
-            console.log(storeData);
-            var now = new Date(); // 当前日期
-            let timeDay = moment(now).format('YYYY-MM-DD');
-            let params = {
-                'timeOfDay': timeDay, // '2019-02-18'
-            };
-            let varietys1 = '';
-            let varietys2 = '';
-            // 舆情情感 -- // 热度 chartOptionso1 && chartOptionso2
-            postpAnalysis(params).then(resp => {
-                if (resp && resp.length !== 0) {
-                    // 最近一天的数据  假设是  16 20 2
-                    // 最大的就是20/(16+20+2)
-                    // 20/(16+20+2) = 52.63%
-                    let munData = [];
-                    let titleText = '';
-                    if (resp[resp.length - 1]) {
-                        let varietys = resp[resp.length - 1];
-                        munData.push(parseFloat(varietys.justCount), parseFloat(varietys.centreCount), parseFloat(varietys.loseCount));
-                        let maxData = _.max(munData); // 最大值
-                        titleText = varietys.publicDate;
-                        varietys1 = maxData / (parseFloat(varietys.justCount) + parseFloat(varietys.centreCount) + parseFloat(varietys.loseCount));
-                    }
-                    // 标题
-                    let mathFloor = Math.floor(varietys1 * 100);
-                    let titleText1 = moment(new Date(titleText.replace(/[年月]/g, '-').replace(/[日]/g, ''))).format('YYYY-MM-DD');
-                    this.chartOptionso1['title'][0]['text'] = titleText1; // 标题
-                    this.chartOptionso1.series[0].data[0].value = mathFloor;
-                }
-            });
-            // 热度
-            postBaiduAndWeixin({'timeOfDay': '2019-03-08'}).then(resp => {
-                let titleText = '';
-                if (resp[resp.length - 1]) {
-                    let varietys = resp[resp.length - 1];
-                    titleText = varietys.date;
-                    varietys2 = parseFloat(varietys.wxIndex) + parseFloat(varietys.baiduIndex);
-                }
-                // 标题
-                let mathFloor2 = varietys2;
-                let titleText1 = moment(new Date(titleText.replace(/[年月]/g, '-').replace(/[日]/g, ''))).format('YYYY-MM-DD');
-                this.chartOptionso2['title'][0]['text'] = titleText1; // 标题
-                this.chartOptionso2.series[0].data[0].value = mathFloor2;
-            });
-            // 原油库存 chartOptionso3
-            postCrudeTable(params).then(resp => {
-                if (resp && resp.length !== 0) {
-                    let munData = '';
-                    let titleText = '';
-                    if (resp.ela[resp.ela.length - 1]) {
-                        let varietys = resp.ela[resp.ela.length - 1];
-                        titleText = varietys.time;
-                        munData = parseFloat(varietys.publish);
-                    }
-                    let titleText1 = moment(new Date(titleText.replace(/[年月]/g, '-').replace(/[日]/g, ''))).format('YYYY-MM-DD');
-                    this.chartOptionso3['title'][0]['text'] = titleText1; // 标题
-                    this.chartOptionso3.series[0].data[0].value = munData; // 平均值
-                }
-            });
-            // 国际环境 chartOptionso4
-            let params5 = {
-                // 'timeOfDay': timeDay, // '2019-03-1',
-                'timeOfDay': '2019-03-1',
-                'yesAndNoOpec': '0'
-            };
-            postOrpeListMap5(params5).then(resp => {
-                if (resp && resp.length !== 0) {
-                    let munData = '';
-                    let titleText = '';
-                    if (resp[resp.length - 1]) {
-                        let varietys = resp[resp.length - 1];
-                        titleText = varietys.OPECpublished_time;
-                        munData = parseFloat(varietys.page_hits);
-                    }
-                    let titleText1 = moment(new Date(titleText.replace(/[年月]/g, '-').replace(/[日]/g, ''))).format('YYYY-MM-DD');
-                    this.chartOptionso4['title'][0]['text'] = titleText1; // 标题
-                    this.chartOptionso4.series[0].data[0].value = munData;
-                }
-            });
+        evetClick1(val, obj) {
+            if (!val) {
+                this.chartOptionso1['title'][0]['text'] = obj.titleText; // 标题
+                this.chartOptionso2['title'][0]['text'] = obj.titleText; // 标题
+                this.chartOptionso1.series[0].data[0].value = obj.front1;
+                this.chartOptionso2.series[0].data[0].value = obj.front2;
+            }
         },
+        evetClick3(val, obj) {
+            if (!val) {
+                this.chartOptionso3['title'][0]['text'] = obj.titleText; // 标题
+                this.chartOptionso3.series[0].data[0].value = obj.front3;
+            }
+        },
+        evetClick5(val, obj) {
+            if (!val) {
+                this.chartOptionso4['title'][0]['text'] = obj.titleText; // 标题
+                this.chartOptionso4.series[0].data[0].value = obj.front5;
+            }
+        },
+        lienEchartsDete() {
+            clearInterval(this.timer);
+            this.timer = setInterval(v => {
+                this.evetClick1();
+                this.evetClick3();
+                this.evetClick5();
+            }, 30000);
+        }
     },
     beforeDestroy() {
+        clearInterval(this.timer);
     }
 };
 </script>
@@ -685,22 +626,6 @@ export default {
             border: 1px solid #00a0ea;
             width: 100%;
             margin-bottom: 20px;
-        }
-    }
-    .rows1 {
-        width: 600px;
-    }
-    .col1 {
-        display: flex;
-        p {
-            padding: 0;
-            margin: 3px;
-        }
-        .p1 {
-            width: 84px;
-        }
-        .p2 {
-            width: 500px;
         }
     }
 </style>

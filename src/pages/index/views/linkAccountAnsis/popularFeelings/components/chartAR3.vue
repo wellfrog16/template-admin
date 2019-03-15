@@ -33,11 +33,7 @@
                     </el-select>
                 </el-form-item>
             </el-form>
-            <dialog-a-r3
-                :visi="dialogVisible"
-                :tableData3="tableData3"
-                @checkboxEmit1="checkboxEmit1">
-            </dialog-a-r3>
+            <dialog-a-r3 :visi="dialogVisible" @checkboxEmit1="checkboxEmit1"></dialog-a-r3>
             <div slot="footer" :class="$style.dialog_footer">
                 <el-button @click="dialogCancelClick">取 消</el-button>
                 <el-button type="primary" @click="dialogConfirmClick">确 定</el-button>
@@ -107,13 +103,13 @@ export default {
             // 6 amplitude     13.8   振幅
             // 7 chg           -14.1  涨跌
             {name: 'tradeDay', index: 0, text: '交易日'},
-            {name: 'openingPrice', index: 1, text: '开盘价'},
-            {name: 'closingPrice', index: 2, text: '收盘价'},
-            {name: 'lowestPrice', index: 3, text: '最低价'},
-            {name: 'highestPrice', index: 4, text: '最高价'},
+            {name: 'openingPrice', index: 1, text: '开盘价(￥)'},
+            {name: 'closingPrice', index: 2, text: '收盘价(￥)'},
+            {name: 'lowestPrice', index: 3, text: '最低价(￥)'},
+            {name: 'highestPrice', index: 4, text: '最高价(￥)'},
             {name: 'volume', index: 5, text: '成交量'},
             {name: 'amplitude', index: 6, text: '振 幅'},
-            {name: 'chg', index: 7, text: '涨跌'}
+            {name: 'chg', index: 7, text: '涨跌(%)'}
         ];
         return {
             loading3: false,
@@ -123,7 +119,6 @@ export default {
                 timeWindow: '1 天', // 时间窗口
             },
             multipleSelection: [],
-            tableData3: [],
             checkboTableColumn1: [],
             chartOptions3: {
                 animation: false,
@@ -322,9 +317,6 @@ export default {
     },
     computed: {},
     mounted() {
-        // 原油日K图--配置表
-        this.tableData3List();
-        this.tableData3List1();
         this.barEchartsDete();
     },
     methods: {
@@ -397,7 +389,7 @@ export default {
                     if (resp.exception.length !== 0) {
                         exceptionDatas = resp.exception; // 异常数据
                     }
-                    if (resp.mainData.lenght !== 0) {
+                    if (resp.mainData.length !== 0) {
                         mainData = resp.mainData;
                     }
                     if (mainData && !mainData.length) {
@@ -426,17 +418,6 @@ export default {
                     });
                     if (exceptionDatas.length !== 0) {
                         markAreaData = [
-                            // [
-                            //     {
-                            //         'name': '异常',
-                            //         'xAxis': exceptionDatas[1].startTradeDay, // 异常日期
-                            //         // 'yAxis': mainData[mainData.length - 1].openingPrice, // 异常价格
-                            //     },
-                            //     {
-                            //         'xAxis': exceptionDatas[4].endTradeDay, // 前五分钟异常日期
-                            //             // 'yAxis': exceptionDatas[4].volume, // 前五分钟异常价格
-                            //     }
-                            // ],
                             [
                                 {
                                     'name': '异常',

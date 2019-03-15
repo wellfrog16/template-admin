@@ -259,6 +259,21 @@ export default {
                     this.chartOptions3['series'][0]['data'] = elaData;
                     this.chartOptions3['series'][1]['data'] = apiData;
                     this.chartOptions3['series'][2]['data'] = ineData;
+                    // ...................................
+                    let titleTexts = '';
+                    let munDatas = [];
+                    if (resp.ela[resp.ela.length - 1]) {
+                        let varietys = resp.ela[resp.ela.length - 1];
+                        titleTexts = varietys.time;
+                        munDatas = parseFloat(varietys.publish);// 公布值
+                    }
+                    let mathFloor3 = munDatas;
+                    let mainObj3 = {
+                        'titleText': moment(new Date(titleTexts.replace(/[年月]/g, '-').replace(/[日]/g, ''))).format('YYYY-MM-DD'), // 日期
+                        'front3': mathFloor3, // 公布值仪表盘
+                    };
+                    this.$emit('evetClick3', this.loading3, mainObj3);
+                    // ...................................
                     this.$refs['echartsDemos3'] && this.$refs['echartsDemos3'].initChart();
                 }
             }).catch(e => {

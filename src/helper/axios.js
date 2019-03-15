@@ -118,7 +118,7 @@ const instance = url => {
             }
         },
         error => {
-            console.error(error);
+            // console.error(error);
             loadingInstancce && loadingInstancce.close();
             if (error.toString().indexOf('Request failed with status code 401') > -1) {
                 localStorage.removeItem('ACCESS_TOKEN');

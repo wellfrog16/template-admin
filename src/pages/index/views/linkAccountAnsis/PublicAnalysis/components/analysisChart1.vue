@@ -29,9 +29,12 @@
 </template>
 
 <script>
+import _ from 'lodash';
 import moment from 'moment';
 // 原油舆情情感分析
-import {postpAnalysis, postBaiduAndWeixin} from '@/api/dataAnsis/PublicAnalysis';
+import {
+    postpAnalysis, // 舆情情感
+} from '@/api/dataAnsis/PublicAnalysis';
 import SCard from '@/components/index/common/SCard';
 import EchartsCommon from '@/components/index/common/EchartsCommon';
 export default {
@@ -352,42 +355,51 @@ export default {
             let frontData = []; // 热度
             let neutralData = []; // 中性
             let negativeData = []; // 利空
+            let varietys1 = ''; // 原油舆情情感仪表盘
+            let varietys2 = '';// 原油舆情热度仪表盘
             // 原油舆情情感分析
             postpAnalysis(params).then(resp => {
-                console.log(resp);
                 if (resp && resp.length !== 0) {
                     this.loading1 = false;
                     let titleText = '';
                     mainData = resp;
                     this.$store.commit('analysisMut1', mainData);
                     mainData.forEach(v => {
-                        let times = moment(v.publicDate).format('YYYY-MM-DD');
+                        let times = moment(v.date).format('YYYY-MM-DD');
                         timeDate.push(times); // 日期
-                        heatData.push(v.justCount); // 利多
-                        neutralData.push(v.centreCount); // 中性
-                        negativeData.push(v.loseCount); // 利空
+                        heatData.push(v.just_count); // 利多justCount
+                        neutralData.push(v.centre_count); // 中性centreCount
+                        negativeData.push(v.lose_count); // 利空loseCount
+                        frontData.push(parseInt(v.wx_INDEX) + parseInt(v.baidu_INDEX)); // 热度
                         // 日期 - 利多 - 利空  - 中性 - 热度
-                        titleText = v.publicDate + ' 利多' + v.justCount + ' 利空' + v.loseCount + ' 中性' + v.centreCount + ' 热度' + (parseInt(v.weixinHeat) + parseInt(v.baiduHeat));
+                        titleText = v.date + ' 利多' + v.just_count + ' 利空' + v.lose_count + ' 中性' + v.centre_count + ' 热度' + (parseInt(v.wx_INDEX) + parseInt(v.baidu_INDEX));
                     });
                     this.chartOptions1['title'][0]['text'] = titleText; // 标题
                     this.chartOptions1['xAxis'][0]['data'] = timeDate;
                     this.chartOptions1['series'][0]['data'] = heatData;
                     this.chartOptions1['series'][1]['data'] = negativeData;
                     this.chartOptions1['series'][2]['data'] = neutralData;
-                    // this.chartOptions1['series'][3]['data'] = frontData;
-                    this.$refs['echartsDemos1'] && this.$refs['echartsDemos1'].initChart();
-                }
-            }).catch(e => {
-                this.loading1 = false;
-            });
-            postBaiduAndWeixin({'timeOfDay': '2019-03-08'}).then(resp => {
-                console.log(resp);
-                if (resp && resp.length !== 0) {
-                    this.loading1 = false;
-                    resp.forEach(v => {
-                        frontData.push(parseInt(v.wxIndex) + parseInt(v.baiduIndex)); // 热度
-                    });
                     this.chartOptions1['series'][3]['data'] = frontData;
+                    // ...................................
+                    let titleTexts = '';
+                    let munDatas = [];
+                    if (resp[resp.length - 1]) {
+                        let varietys = resp[resp.length - 1];
+                        titleTexts = varietys.date;
+                        munDatas.push(parseFloat(varietys.just_count), parseFloat(varietys.centre_count), parseFloat(varietys.lose_count));
+                        let maxData1 = _.max(munDatas); // 最大值
+                        varietys1 = maxData1 / (parseFloat(varietys.just_count) + parseFloat(varietys.centre_count) + parseFloat(varietys.lose_count));
+                        varietys2 = parseFloat(varietys.wx_INDEX) + parseFloat(varietys.baidu_INDEX);
+                    }
+                    let mathFloor1 = Math.floor(varietys1 * 100);
+                    let mathFloor2 = varietys2;
+                    let mainObj = {
+                        'titleText': titleTexts, // 日期
+                        'front1': mathFloor1, // 原油舆情情感仪表盘
+                        'front2': mathFloor2 // 原油舆情热度仪表盘
+                    };
+                    this.$emit('evetClick1', this.loading1, mainObj);
+                    // ...................................
                     this.$refs['echartsDemos1'] && this.$refs['echartsDemos1'].initChart();
                 }
             }).catch(e => {
