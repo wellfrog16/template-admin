@@ -28,7 +28,7 @@
                     </div>
                     <div slot="content">
                         <s-full-screen class="self-fullscreen-wrap" ref="fullscreen" :fullscreen.sync="fullscreen" @change="fullscreenChange" background="#00255c">
-                            <div v-if="item['toggleDetailFlags']">
+                            <div v-show="item['toggleDetailFlags']">
                                 <div v-if="index===2">
                                     <el-select class="custom-width" clearable size="small" v-model="table3CurrentType" placeholder="请选择一个维度">
                                         <el-option v-for="(o, oi) in table3Options" :key="oi" :label="o.label" :value="o.field"></el-option>
@@ -36,7 +36,7 @@
                                 </div>
                                 <s-table :height="index === 2 ? 268 : 300" :columns="chartTableColumns[index]" :tableData="chartTableData[index]"></s-table>
                             </div>
-                            <div v-else class="chart-container">
+                            <div v-show="!item['toggleDetailFlags']" class="chart-container">
                                 <chart1 :ref="`chartComponent${index + 1}`" v-if="index === 0" :index="index" :tabIndex="111" :propsChartHeight="propsChartHeight" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></chart1>
                                 <chart2 :ref="`chartComponent${index + 1}`" v-if="index === 1" :index="index" :tabIndex="111" :propsChartHeight="propsChartHeight" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></chart2>
                                 <chart3 :ref="`chartComponent${index + 1}`" v-if="index === 2" :index="index" :tabIndex="111" :propsChartHeight="propsChartHeight" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></chart3>
@@ -57,7 +57,7 @@ import SCard from '@/components/index/common/SCard.vue';
 import STable from '@/components/index/common/STable.vue';
 import resultSelectComponent from '@/components/index/common/ResultSelectComponent.vue';
 import {columns, charts, table3Options, chartTableColumns} from '../components/constants';
-
+import {custInfo, data1, data3, data4} from '../components/testJson';
 import chart1 from '@/pages/index/views/linkAccountAnsis/assoAccountGroupMerge/components/chart7';
 import chart2 from '@/pages/index/views/linkAccountAnsis/assoAccountGroupMerge/components/chart8';
 import chart3 from '@/pages/index/views/linkAccountAnsis/assoAccountGroupMerge/components/chart3';
@@ -67,6 +67,7 @@ export default {
     components: {SCard, STable, resultSelectComponent, chart1, chart2, chart3, chart4},
     data() {
         return {
+            custInfo,
             columns,
             charts,
             table3Options,
@@ -76,10 +77,10 @@ export default {
             resultId: '',
             currentFullScreenIndex: 0,
             propsChartHeight: 300,
-            table3CurrentType: '',
+            table3CurrentType: 'buyCnt',
             loadingCustomerAddress: false,
-            tableData: [],
-            chartTableData: [[], [], [], []]
+            tableData: custInfo.resData,
+            chartTableData: [data1.resData.clusterStateAnalByTime, data1.resData.clusterStateAnalByCust, data3.resData.tableData, data4.resData.buysail]
         };
     },
     methods: {
@@ -92,8 +93,9 @@ export default {
         handleEchartClickEvent() {
 
         },
-        handleEchartDblClickEvent() {
-
+        handleEchartDblClickEvent(params, index) {
+            // this.getBlock4Data(params['name']);
+            this.$refs['chartComponent4'][0].getData(data4.resData);
         },
         createChart3Columnn(val) {
             if (!val) {
@@ -121,7 +123,7 @@ export default {
         toggleDetail(item, index) {
             this.charts[index]['toggleDetailFlags'] = !item.toggleDetailFlags;
             let data = {};
-            let storeData = this.$store.getters.getBlockData[this.$store.getters.getTabIndex] || {};
+            /* let storeData = this.$store.getters.getBlockData[this.$store.getters.getTabIndex] || {};
             if (storeData && !Object.keys(storeData).length) {
                 return;
             }
@@ -133,14 +135,21 @@ export default {
                 data = storeData['chartData3'];
             } else if (index === 3) {
                 data = storeData['chartData4'];
-            }
+            } */
             console.log(data);
+            let dataMap = [{mainData: data1.resData.clusterStateAnalByTime, id: data1.resData.id}, {mainData: data1.resData.clusterStateAnalByCust, id: data1.resData.id}, data3.resData, data4.resData];
             if (!item.toggleDetailFlags) {
                 this.$nextTick(() => {
                     setTimeout(() => {
-                        // (this.getChart()[index])(data, 1);
+                        console.log(111);
+                        this.$refs[`chartComponent${index + 1}`][0].getData([dataMap[index]]);
                     });
                 });
+            } else {
+                console.log(this.chartTableData);
+                if (String(index) === '2') {
+                    this.createChart3Columnn(['80000655', '80000659']);
+                }
             }
         },
         toggleFullScreen(index) {
@@ -159,6 +168,12 @@ export default {
                 this.$refs[`chartComponent${this.currentFullScreenIndex + 1}`][0].$refs[`chart${this.currentFullScreenIndex}`].echart.resize();
             });
         },
+    },
+    mounted() {
+        this.$refs['chartComponent1'][0].getData({mainData: data1.resData.clusterStateAnalByTime, id: data1.resData.id});
+        this.$refs['chartComponent2'][0].getData({mainData: data1.resData.clusterStateAnalByCust, id: data1.resData.id});
+        this.$refs['chartComponent3'][0].getData(data3.resData);
+        this.$refs['chartComponent4'][0].getData(data4.resData);
     }
 };
 </script>

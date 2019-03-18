@@ -125,12 +125,14 @@ const instance = url => {
             console.error(error);
             loadingInstancce && loadingInstancce.close();
             if (error.toString().indexOf('Request failed with status code 401') > -1) {
+                Vue.prototype.$message.error('验证失效，请重新登录');
                 localStorage.removeItem('ACCESS_TOKEN');
                 localStorage.removeItem('USER_NAME');
                 Vue.prototype.router.replace({
                     path: '/login',
                     query: {redirect: Vue.prototype.router.currentRoute.fullPath}
                 });
+                return;
             }
             if (error.toString().indexOf('abort success') === -1) {
                 Notification.error({

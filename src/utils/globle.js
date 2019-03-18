@@ -94,10 +94,10 @@ Vue.prototype.getUserInterfaceState = (reqUrl, callback) => {
     });
     getUserInterfaceState({reqUrl}).then(resp => {
         loading.close();
-        if (String(resp) === '0') {
+        if (String(resp) === '2') {
             callback && callback();
         } else {
-            let text = String(resp) === '1' ? '有相同' : '有不同';
+            let text = String(resp) === '0' ? '有相同' : '有不同';
             Vue.prototype.$confirm(`${text}任务在执行，确定继续?`, '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
