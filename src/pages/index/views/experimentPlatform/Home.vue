@@ -1,7 +1,7 @@
 <template>
     <div :class="$style.home_mian">
 
-        <el-row style="width: 100%" gutter="10">
+        <el-row style="width: 100%;" gutter="10">
             <el-col :span="6">
                 <div @click="cardClick">
                     <el-card :body-style="{ padding: '0px' }">
@@ -29,9 +29,7 @@
                 </div>
             </el-col>
         </el-row>
-
     </div>
-
     <!--<div :class="$style.card_box">
             <el-card :body-style="{ padding: '0px' }">
                 <div :class="$style.img_box">
