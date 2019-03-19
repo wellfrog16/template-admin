@@ -116,7 +116,7 @@ const instance = url => {
                 });
             }
             if (data.success || data.access_token || data.code === 200) { // mock
-                return data.resData || data;
+                return data.resData || (data.resData === 0 ? 0 : data);
             } else {
                 return Promise.reject(data);
             }
