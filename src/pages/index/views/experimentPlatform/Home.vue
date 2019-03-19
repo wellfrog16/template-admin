@@ -6,7 +6,7 @@
                     <img :class="$style.img_pic" src="../../../../assets/img/pages/pic_1.jpg" alt="">
                 </div>
                 <div :class="$style.analysis">
-                    <p :class="$style.span_h1">业务流程 </p>
+                    <p :class="$style.span_h1">实验流程 </p>
                     <el-button type="text" :class="$style.button_text"> Operation Flow</el-button>
                 </div>
             </el-card>

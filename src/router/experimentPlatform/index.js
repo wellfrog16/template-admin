@@ -31,7 +31,7 @@ const Index =
             {
                 meta: {
                     scrollTop: true,
-                    title: '业务流程'
+                    title: '实验流程'
                 },
                 path: '/operationFlow',
                 name: 'operationFlow',
