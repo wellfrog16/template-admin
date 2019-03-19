@@ -48,6 +48,7 @@
                                         </el-form-item>
                                     </el-radio>
                                 </el-radio-group>
+                                <div><span style="font-size: 14px; color: #f36565;">注：请选择一种客户导入方式</span></div>
                             </el-form-item>
                         </el-col>
                         <el-col :xl="10" :lg="10" :md="10" :sm="24">
@@ -356,6 +357,10 @@ export default {
                 case '3':
                     this.count = this.count + 1;
                     this.dealWithIsLoading = false;
+                    if (resp.report.length > 2000) {
+                        this.$alert('返回数据量过大，为提高操作体验，只显示前2000条数据，可导出到csv查看全部');
+                        resp.report = resp.report.slice(0, 2000);
+                    }
                     this.$notify({
                         title: '',
                         message: '操作成功！',
@@ -457,6 +462,10 @@ export default {
                                     case '3':
                                         this.count = this.count + 1;
                                         this.dealWithIsLoading = false;
+                                        if (resp.report.length > 2000) {
+                                            this.$alert('返回数据量过大，为提高操作体验，只显示前2000条数据，可导出到csv查看全部');
+                                            resp.report = resp.report.slice(0, 2000);
+                                        }
                                         this.overData = resp.report.filter(v => {
                                             return v.supSto === '是';
                                         });
@@ -492,7 +501,7 @@ export default {
                                 this.loadingTable1 = true;
                                 this.loadingTable2 = true;
                                 this.dealWithIsLoading = true;
-                                this.uploadParams = v;
+                                this.uploadParams = {...v, ...{setupUser: localStorage.getItem('USER_NAME')}};
                                 this.$store.commit('momentMut', this.uploadParams); // tab 表格数据
                                 this.$nextTick(() => {
                                     this.$refs['uploadFile'].submitUpload();

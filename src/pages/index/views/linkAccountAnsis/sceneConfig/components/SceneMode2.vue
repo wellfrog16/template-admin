@@ -200,9 +200,20 @@ export default {
         saveSceneConfig() {
             if (!this.ruleForm.sceneName) {
                 this.$message.error('请输入场景名称');
+                return;
             }
+            if (this.ruleForm.sceneName.length > 20) {
+                this.$message.error('场景名称长度限制20个字符以内');
+                return;
+            }
+
             if (!this.ruleForm.sceneComnt) {
                 this.$message.error('请输入场景说明');
+                return;
+            }
+            if (this.ruleForm.sceneComnt.length > 50) {
+                this.$message.error('场景说明长度限制50个字符以内');
+                return;
             }
             // 语法校验
             this.syntaxCheck(() => {

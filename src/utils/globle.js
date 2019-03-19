@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import {requestPrefix} from '@/utils/request';
-import {exportCsv, exportCsvs} from '@/api/common';
+import {exportCsv, exportCsvs, getUserInterfaceState} from '@/api/common';
 const exportWithForm = (url, params) => {
     let form = document.createElement('form');
     form.style.display = 'none';
@@ -85,3 +85,27 @@ function sortByChineseCharacters(a, b) {
         return a.localeCompare(b, 'zh-Hans-CN', {sensitivity: 'accent'});
     }
 }
+Vue.prototype.getUserInterfaceState = (reqUrl, callback) => {
+    const loading = Vue.prototype.$loading({
+        lock: true,
+        text: 'Loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+    });
+    getUserInterfaceState({reqUrl}).then(resp => {
+        loading.close();
+        if (String(resp) === '2') {
+            callback && callback();
+        } else {
+            let text = String(resp) === '0' ? '有相同' : '有不同';
+            Vue.prototype.$confirm(`${text}任务在执行，确定继续?`, '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            })
+                .then(() => {
+                    callback && callback();
+                });
+        }
+    });
+};

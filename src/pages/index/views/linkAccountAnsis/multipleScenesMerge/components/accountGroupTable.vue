@@ -63,7 +63,10 @@
                         <el-col :span="21">
                             <div>
                                 <tree-table
-                                    loadingText="数据加载时间较长，请耐心等待..."
+                                    loadingText="
+                                    计算任务进行中，需时较长
+                                    如遇特殊情况退出（断网、断电等）
+                                    无需重复操作，计算完成后将自动保存到结果集"
                                     :loading="loadingTree"
                                     ref="self-tree-table"
                                     :filterText="searchText"
@@ -221,7 +224,7 @@ export default {
                 size: 'small',
                 type: 'primary'
             },
-            uploadParams: {}, // 上传文件body参数
+            uploadParams: {...{setupUser: localStorage.getItem('USER_NAME')}}, // 上传文件body参数
             actionUrl: uploadFileByBodyInfo('customer/combinedscence/csv'),
             defaultLimitFileType: ['csv'],
             searchText: '',
@@ -322,7 +325,10 @@ export default {
                 if (!this.currentConctrd) {
                     this.dialogFormVisible = true;
                 } else {
-                    this.generateDataMethods();
+                    // 判断任务队列有慢请求
+                    this.getUserInterfaceState('/customer/combinedscence/regenerate', () => {
+                        this.generateDataMethods();
+                    });
                 }
             }
         },

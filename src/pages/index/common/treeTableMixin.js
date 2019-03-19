@@ -232,7 +232,7 @@ export default {
             this.gfnExportFileWithForm(params);
         },
         // 重新生成数据
-        createNewData(propsResultType, resultId) {
+        createNewDataCallback(propsResultType, resultId) {
             let params = {
                 id: resultId,
                 stateId: 1, // 重新生成数据标识
@@ -275,5 +275,10 @@ export default {
                 this.$emit('updateFullLoading', false);
             });
         },
+        createNewData(propsResultType, resultId) {
+            this.getUserInterfaceState('getRegeneratingData', () => {
+                this.createNewDataCallback(propsResultType, resultId);
+            });
+        }
     }
 };

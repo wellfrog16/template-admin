@@ -16,11 +16,12 @@ let removePending = ever => {
     }
 };
 const instance = url => {
+    let baseURL = url || config.server.api;
     // 配置token到header中
     let accessToken = localStorage.getItem('ACCESS_TOKEN');
     accessToken = accessToken || store.state.login.accessToken;
     let instance = axios.create({
-        baseURL: url || config.server.api,
+        baseURL: baseURL,
         timeout: 0,
         headers: {Authorization: 'Bearer' + accessToken}
     });
@@ -50,14 +51,17 @@ const instance = url => {
             });
             // 公共参数
             let setupUser = localStorage.getItem('USER_NAME');
+            // let reqUrl = 'operate' + config.url.split('/operate')[1];
             if (config.method === 'post') {
                 config.data = {
                     setupUser,
+                    // reqUrl,
                     ...config.data
                 };
             } else if (config.method === 'get') {
                 config.params = {
                     setupUser,
+                    // reqUrl,
                     ...config.params
                 };
             }
@@ -112,7 +116,7 @@ const instance = url => {
                 });
             }
             if (data.success || data.access_token || data.code === 200) { // mock
-                return data.resData || data;
+                return data.resData || (data.resData === 0 ? 0 : data);
             } else {
                 return Promise.reject(data);
             }
@@ -121,12 +125,14 @@ const instance = url => {
             // console.error(error);
             loadingInstancce && loadingInstancce.close();
             if (error.toString().indexOf('Request failed with status code 401') > -1) {
+                Vue.prototype.$message.error('验证失效，请重新登录');
                 localStorage.removeItem('ACCESS_TOKEN');
                 localStorage.removeItem('USER_NAME');
                 Vue.prototype.router.replace({
                     path: '/login',
                     query: {redirect: Vue.prototype.router.currentRoute.fullPath}
                 });
+                return;
             }
             if (error.toString().indexOf('abort success') === -1) {
                 Notification.error({

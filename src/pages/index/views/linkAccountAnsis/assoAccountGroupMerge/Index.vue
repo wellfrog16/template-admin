@@ -1,6 +1,6 @@
 <template>
     <div class="asso-account-group-merge"
-         element-loading-text="数据加载时间较长，请耐心等待..."
+         :element-loading-text="loadingText"
          element-loading-background="rgba(0,0,0,0.7)"
          v-loading="fullLoading">
         <div class="top-nav">
@@ -69,7 +69,8 @@ export default {
             activeTab: '0',
             resultIds: '',
             exportResultType: '1',
-            sceneNameList: [{sceneNames: '', sceneTypes: 1, sceneIds: 0}]
+            sceneNameList: [{sceneNames: '', sceneTypes: 1, sceneIds: 0}],
+            loadingText: ''
         };
     },
     watch: {
@@ -87,6 +88,10 @@ export default {
     },
     methods: {
         updateFullLoading(loading) {
+            this.loadingText =
+                '计算任务进行中，需时较长' +
+                '如遇特殊情况退出（断网、断电等）' +
+                '无需重复操作，计算完成后将自动保存到结果集';
             this.fullLoading = loading;
         },
         updateResultList() {
@@ -112,6 +117,7 @@ export default {
                 return;
             }
             // 导入结果集
+            this.loadingText = '数据加载时间较长，请耐心等待...';
             this.fullLoading = true;
             getInfoByResultId(this.resultIds, this.exportResultType).then(resp => {
                 if (resp.message) { // 处理respData为null的情况
