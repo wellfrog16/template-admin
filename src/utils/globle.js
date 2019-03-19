@@ -107,5 +107,8 @@ Vue.prototype.getUserInterfaceState = (reqUrl, callback) => {
                     callback && callback();
                 });
         }
+    }).catch(e => {
+        loading.close();
+        console.error(e);
     });
 };
