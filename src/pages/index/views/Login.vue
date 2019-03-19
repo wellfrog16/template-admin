@@ -48,7 +48,7 @@
                     </div>
                 </div>
                 <div class="bottom-content">
-                    <div class="div1">研究支撑平台</div>
+                    <div class="div1" @click="$router.push({name: 'experimentPlatformHome'})">研究支撑平台</div>
                     <div class="div2" @click="cardClick">监管科技工具集</div>
                     <div class="div3">国际化应用</div>
                     <div class="div4">行业应用</div>

@@ -1,16 +1,20 @@
 <template>
     <div :class="$style.home_mian">
-        <div @click="cardClick" :class="$style.card_box">
-            <el-card :body-style="{ padding: '0px' }">
-                <div :class="$style.img_box">
-                    <img :class="$style.img_pic" src="../../../../assets/img/pages/pic_1.jpg" alt="">
+        <el-row style="width: 100%" gutter="10">
+            <el-col :span="6">
+                <div @click="cardClick">
+                    <el-card :body-style="{ padding: '0px' }">
+                        <div :class="$style.img_box">
+                            <img :class="$style.img_pic" style="width:100%; height:100%;" src="../../../../assets/img/pages/pic_1.jpg" alt="">
+                        </div>
+                        <div :class="$style.analysis">
+                            <p :class="$style.span_h1">关联账户分析 </p>
+                            <el-button type="text" :class="$style.button_text"> Operation Flow</el-button>
+                        </div>
+                    </el-card>
                 </div>
-                <div :class="$style.analysis">
-                    <p :class="$style.span_h1">关联账户分析 </p>
-                    <el-button type="text" :class="$style.button_text"> Linked account analysis</el-button>
-                </div>
-            </el-card>
-        </div>
+            </el-col>
+        </el-row>
         <!--<div :class="$style.card_box">
             <el-card :body-style="{ padding: '0px' }">
                 <div :class="$style.img_box">
@@ -96,7 +100,7 @@ export default {
         }
         .analysis {
             text-align: center;
-            padding: 10px 15px;
+            padding: 15px;
             .span_h1 {
                 color: #0cf;
                 font-size: 23px;

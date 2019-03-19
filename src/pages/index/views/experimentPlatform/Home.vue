@@ -1,17 +1,38 @@
 <template>
     <div :class="$style.home_mian">
-        <div @click="cardClick" :class="$style.card_box">
-            <el-card :body-style="{ padding: '0px' }">
-                <div :class="$style.img_box">
-                    <img :class="$style.img_pic" src="../../../../assets/img/pages/pic_1.jpg" alt="">
+
+        <el-row style="width: 100%" gutter="10">
+            <el-col :span="6">
+                <div @click="cardClick">
+                    <el-card :body-style="{ padding: '0px' }">
+                        <div :class="$style.img_box">
+                            <img :class="$style.img_pic" style="width:100%; height:100%;" src="../../../../assets/img/pages/pic_1.jpg" alt="">
+                        </div>
+                        <div :class="$style.analysis">
+                            <p :class="$style.span_h1">实验流程 </p>
+                            <el-button type="text" :class="$style.button_text"> Operation Flow</el-button>
+                        </div>
+                    </el-card>
                 </div>
-                <div :class="$style.analysis">
-                    <p :class="$style.span_h1">实验流程 </p>
-                    <el-button type="text" :class="$style.button_text"> Operation Flow</el-button>
+            </el-col>
+            <el-col :span="6">
+                <div @click="$router.push({name: 'bussinessEvaluation'})">
+                    <el-card :body-style="{ padding: '0px' }">
+                        <div :class="$style.img_box">
+                            <img :class="$style.img_pic" style="width:100%; height:100%;" src="../../../../assets/img/pages/pic_1.jpg" alt="">
+                        </div>
+                        <div :class="$style.analysis">
+                            <p :class="$style.span_h1">业务评价 </p>
+                            <el-button type="text" :class="$style.button_text"> Business Evaluation</el-button>
+                        </div>
+                    </el-card>
                 </div>
-            </el-card>
-        </div>
-        <!--<div :class="$style.card_box">
+            </el-col>
+        </el-row>
+
+    </div>
+
+    <!--<div :class="$style.card_box">
             <el-card :body-style="{ padding: '0px' }">
                 <div :class="$style.img_box">
                     <img :class="$style.img_pic" src="../../../../assets/img/pages/pic_02.jpg" alt="">
@@ -59,7 +80,6 @@
                 </div>
             </el-card>
         </div> -->
-    </div>
 </template>
 
 <script>
@@ -87,16 +107,10 @@ export default {
             cursor: pointer;
             box-shadow: 0 0 10px #326fcb;
             width: calc(100% / 4 - 15px);
-            .img_box {
-                .img_pic {
-                    width: 100%;
-                    height: 100%;
-                }
-            }
         }
         .analysis {
             text-align: center;
-            padding: 10px 15px;
+            padding: 15px;
             .span_h1 {
                 color: #0cf;
                 font-size: 23px;
