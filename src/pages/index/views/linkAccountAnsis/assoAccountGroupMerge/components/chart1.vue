@@ -227,7 +227,7 @@ export default {
     mounted() {
         // let blob = new Blob(['indexType=1'], {type: 'application/x-www-form-urlencoded'});
         // navigator.sendBeacon(leavePageTest(), blob);
-        window.addEventListener('beforeunload', function(event) {
+        /* window.addEventListener('beforeunload', function(event) {
             // text/html
             // let blob = new Blob(['indexType=1']);
             // navigator.sendBeacon(leavePageTest(), blob);
@@ -239,11 +239,11 @@ export default {
             event.preventDefault();
             // Chrome requires returnValue to be set.
             event.returnValue = '';
-        });
-        this.$once('hook:beforeDestroy', () => {
+        }); */
+        /* this.$once('hook:beforeDestroy', () => {
             window.removeEventListener('beforeunload', null, false);
-        });
-        setTimeout(() => {
+        }); */
+        /* setTimeout(() => {
             // let ifr = window.frames['sendMessage'];
             // console.log(ifr);
             // 使用iframe的window向iframe发送message。
@@ -260,7 +260,7 @@ export default {
             //         }
             //     }
             // }
-        }, 3000);
+        }, 3000); */
     }
 };
 </script>
