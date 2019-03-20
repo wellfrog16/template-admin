@@ -224,17 +224,21 @@ export default {
         },
         getBlockData(propsParams) {
             // test
-            propsParams = {
-                accNumList: propsParams.accNumList || '80000455,80000501',
-                contrCd: this.proCommonParams.contractCode || 'cu1712',
-                custId: propsParams.accNumList || '80000455,80000501',
-                acctId: propsParams.acctId || 'ZH000002',
-                taskId: this.proCommonParams.taskId || '719966',
-                relativeTable: 'ts_dm.tls_combine_1552289017354_relative',
-                resultTable: 'ts_dm.tls_combine_1552289017354_result',
-                statStartDt: this.proCommonParams.statStartDt || '2016-01-31',
-                statStopDay: this.proCommonParams.statStopDay || '2019-02-26'
-            };
+            // propsParams = {
+            //     accNumList: propsParams.accNumList || '80000455,80000501',
+            //     contrCd: this.proCommonParams.contractCode || 'cu1712',
+            //     custId: propsParams.accNumList || '80000455,80000501',
+            //     acctId: propsParams.acctId || 'ZH000002',
+            //     taskId: this.proCommonParams.taskId || '719966',
+            //     relativeTable: 'ts_dm.tls_combine_1552289017354_relative',
+            //     resultTable: 'ts_dm.tls_combine_1552289017354_result',
+            //     statStartDt: this.proCommonParams.statStartDt || '2016-01-31',
+            //     statStopDay: this.proCommonParams.statStopDay || '2019-02-26'
+            // };
+            propsParams.contrCd = this.proCommonParams.contractCode;
+            propsParams.taskId = this.proCommonParams.taskId;
+            propsParams.statStartDt = this.proCommonParams.statStartDt;
+            propsParams.statStopDay = this.proCommonParams.statStopDay;
             this.commonParams = propsParams;
             this.getBlockData1(propsParams);
             this.getBlockData2(propsParams);
