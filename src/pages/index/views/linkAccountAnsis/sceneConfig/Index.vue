@@ -151,7 +151,7 @@
             无需重复操作，计算完成后将自动保存到结果集"
             element-loading-background="rgba(0,0,0,0.6)"
             v-loading.fullscreen.lock="loading" :close-on-click-modal="false" :close-on-press-escape="false" :custom-class="`self-dialog`" :visible="showCarousel" width="85%" top="2%" @close="handleCloseCarousel">
-            <el-carousel :interval="4000" height="555px">
+            <el-carousel :interval="4000" height="555px" v-if="showCarousel">
                 <el-carousel-item v-for="(item, index) in selectList" :key="index">
                     <edit-scene-dialog :operateType="1" :dialogItem="item" :createType="item.sceneType"></edit-scene-dialog>
                 </el-carousel-item>
