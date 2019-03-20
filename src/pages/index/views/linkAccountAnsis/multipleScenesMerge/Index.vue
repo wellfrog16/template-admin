@@ -235,6 +235,7 @@ export default {
             //     statStartDt: this.proCommonParams.statStartDt || '2016-01-31',
             //     statStopDay: this.proCommonParams.statStopDay || '2019-02-26'
             // };
+            propsParams.custId = propsParams.accNumList; // 字段不一致
             propsParams.contrCd = this.proCommonParams.contractCode;
             propsParams.taskId = this.proCommonParams.taskId;
             propsParams.statStartDt = this.proCommonParams.statStartDt;
