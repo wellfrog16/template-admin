@@ -155,11 +155,7 @@ export default {
             this.loadingSyntaxCheck = true;
             checkSql(this.ruleForm.indexPara, this.ruleForm.sceneType).then(resp => {
                 this.loadingSyntaxCheck = false;
-                if (resp) {
-                    callback && callback();
-                } else {
-                    this.$message.error('请插入正确的指标');
-                }
+                callback && callback();
             }).catch(e => {
                 console.error(e);
                 this.loadingSyntaxCheck = false;
