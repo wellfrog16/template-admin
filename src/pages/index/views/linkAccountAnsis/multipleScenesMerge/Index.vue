@@ -238,8 +238,8 @@ export default {
             propsParams.custId = propsParams.accNumList; // 字段不一致
             propsParams.contrCd = this.proCommonParams.contractCode;
             propsParams.taskId = this.proCommonParams.taskId;
-            propsParams.statStartDt = this.proCommonParams.statStartDt;
-            propsParams.statStopDay = this.proCommonParams.statStopDay;
+            propsParams.statStartDt = this.proCommonParams.startDate;
+            propsParams.statStopDay = this.proCommonParams.endDate;
             this.commonParams = propsParams;
             this.getBlockData1(propsParams);
             this.getBlockData2(propsParams);
