@@ -34,7 +34,7 @@
             <el-col :span="24">
                 <s-card class="" :title="`指标配置`" :icon="`fa fa-chart-line`">
                     <s-table
-                        ref="selfTables"
+                        ref="selfTables4"
                         slot="content"
                         :showSelectionColumn="true"
                         :showIndexColumn="false"
@@ -42,7 +42,7 @@
                         :loading="loadingAR"
                         :columns="columnsList3"
                         :tableData="tableData4"
-                        @selection-change="handleSelectionChange2">
+                        @selection-change="handleSelectionChange4">
                     </s-table>
                 </s-card>
             </el-col>
@@ -68,7 +68,9 @@ export default {
         visi: {
             handler(val) {
                 if (val || !val) {
-                    this.celclickTableColumn = {};
+                    this.$refs.selfTables4.$refs.selfTable.clearSelection(); // 取消复选框
+                    this.checkboxTableColumn4 = [];
+                    this.celclickTableColumns4 = {};
                     this.flagValue = '';
                 }
             }
@@ -78,8 +80,8 @@ export default {
         return {
             loadingAR: false,
             flagValue: '',
-            celclickTableColumn: {},
-            checkboxTableColumn1: [],
+            celclickTableColumns4: {},
+            checkboxTableColumn4: [], // 异常指标配置表
             // 他比证券
             columnsList: columnsLists,
             columnsList3: columnsList,
@@ -119,19 +121,21 @@ export default {
                 this.loadingAR = false;
             });
         },
-        // 输入阈值设
-        handleInsertChange(val) {},
-        handleSelectionChange2() {},
         // 单选按钮
         getTemplateRow() {
             this.tableDatas4.forEach((v, i) => {
                 if (this.flagValue === i) {
                     this.flagValue = i;
                     this.celclickTableColumn = v || {};
-                    this.$emit('celclickEmit', this.celclickTableColumn, this.flagValue);
+                    this.$emit('celclickEmits4', this.celclickTableColumn, this.flagValue);
                 }
             });
         },
+        // 异常指标多选
+        handleSelectionChange4(val) {
+            this.checkboxTableColumn4 = val || [];
+            this.$emit('checkboxEmit4', this.checkboxTableColumn4);
+        }
     }
 };
 </script>

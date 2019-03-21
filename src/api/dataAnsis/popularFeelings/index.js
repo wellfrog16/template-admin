@@ -31,11 +31,11 @@ export const postConfigurationQuery3 = params => {
 export const postThanSec = params => {
     return post(`${requestPrefixs}/thanSec`, params);
 };
-// 美油日分时图2--修改 - 配置表
-export const postConfigurationModification1 = params => {
+// 美油日分时图(2,4)--修改 - 配置表
+export const postUpdateConfig = params => {
     return post(`${requestPrefixs}/updateExceptionCrudeConfig`, params); // 修改
 };
-// 原油日K图1--修改 - 配置表
-export const postConfigurationModification3 = params => {
+// 原油日K图(1,3)--修改 - 配置表
+export const postUpdate = params => {
     return post(`${requestPrefixs}/settings/update`, params); // 修改
 };

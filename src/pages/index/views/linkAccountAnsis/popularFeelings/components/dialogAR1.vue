@@ -39,6 +39,7 @@ export default {
             handler(val) {
                 if (val || !val) {
                     this.$refs.selfTables1.$refs.selfTable.clearSelection(); // 取消异常指标多选
+                    this.checkboxTableColumn1 = [];
                 }
             }
         }

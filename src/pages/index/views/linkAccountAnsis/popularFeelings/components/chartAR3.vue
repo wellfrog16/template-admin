@@ -33,7 +33,7 @@
                     </el-select>
                 </el-form-item>
             </el-form>
-            <dialog-a-r3 :visi="dialogVisible" @checkboxEmit1="checkboxEmit1"></dialog-a-r3>
+            <dialog-a-r3 :visi="dialogVisible" @checkboxEmit3="checkboxEmit3"></dialog-a-r3>
             <div slot="footer" :class="$style.dialog_footer">
                 <el-button @click="dialogCancelClick">取 消</el-button>
                 <el-button type="primary" @click="dialogConfirmClick">确 定</el-button>
@@ -53,8 +53,7 @@
 <script>
 import MiniIndex from './miniIndex';
 import _ from 'lodash';
-import {postPetroleumAR3} from '@/api/dataAnsis/popularFeelings';
-// import {echartsData3} from './constants';
+import {postPetroleumAR3, postUpdate} from '@/api/dataAnsis/popularFeelings';
 import SCard from '@/components/index/common/SCard';
 import EchartsCommon from '@/components/index/common/EchartsCommon';
 import DialogAR3 from './dialogAR3';
@@ -119,7 +118,7 @@ export default {
                 timeWindow: '1 天', // 时间窗口
             },
             multipleSelection: [],
-            checkboTableColumn1: [],
+            checkboTableColumn3: [],
             chartOptions3: {
                 animation: false,
                 title: [
@@ -323,46 +322,41 @@ export default {
         // 配置按钮
         dialogClick() {
             this.dialogVisible = true;
-            this.checkboTableColumn1 = [];
+            this.checkboTableColumn3 = [];
         },
         // 日K图--时间窗口
         nationyChenge(val) {
             this.multipleSelection = val;
         },
         // 多选
-        checkboxEmit1(tableColumn) {
-            this.checkboTableColumn1 = tableColumn;
+        checkboxEmit3(tableColumn) {
+            this.checkboTableColumn3 = tableColumn;
         },
         // 关闭弹框
         closeData(done) {
             done();
             this.dialogVisible = false;
-            this.checkboTableColumn1 = [];
+            this.checkboTableColumn3 = [];
             this.ruleForm.timeWindow = '1 天';
         },
         // 取 消
         dialogCancelClick() {
             this.dialogVisible = false;
-            this.checkboTableColumn1 = [];
+            this.checkboTableColumn3 = [];
             this.ruleForm.timeWindow = '1 天';
         },
         // 确 定
         dialogConfirmClick() {
-            if (this.ruleForm.timeWindow !== '' && this.checkboTableColumn1.length !== 0) {
+            if (this.ruleForm.timeWindow !== '' && this.checkboTableColumn3.length !== 0) {
                 this.dialogVisible = false;
-                this.checkboTableColumn1.forEach(v => {
-                    if (v.exceptionPeriod) {
-                        let exceptionPeriod = {
-                            exceptionPeriod: this.ruleForm.timeWindow
-                        };
-                        v.exceptionPeriod = {...exceptionPeriod};
-                    }
-                });
                 let params = {
-                    'daliySettingList': this.checkboTableColumn1
+                    'frequentness': this.ruleForm.timeWindow,
+                    'daliySettingList': this.checkboTableColumn3
                 };
-                this.tableUpdateData(params);
-                this.ruleForm.timeWindow = '1 天';
+                postUpdate(params).then(resp => {
+                    // this.$message.success('修改成功');
+                    return resp;
+                }).catch(e => {});
             } else {
                 this.$message.error('请选择条件');
                 this.dialogVisible = true;

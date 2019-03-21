@@ -1,11 +1,3 @@
-// import {
-//     // postConfigurationQuery1,
-//     // postConfigurationModification1,
-//     // postThanSec,
-//     // postConfigurationQuery3,
-//     // postConfigurationModification3
-// } from '@/api/dataAnsis/popularFeelings';
-// import moment from 'moment';
 export default {
     data() {
         return {
@@ -46,97 +38,7 @@ export default {
             },
         };
     },
-    methods: {
-        // // 原油日分时图1--异常指标配置表
-        // tableDatas1() {
-        //     // let now = new Date(); // 当前日期
-        //     // let timeDay = moment(now).format('YYYY-MM-DD');
-        //     let params = {
-        //         // 'timeOfDay': timeDay,
-        //         // 'timeOfDay': '2019-01-11',
-        //     };
-        //     postConfigurationQuery1(params).then(resp => {
-        //         this.tableData1 = resp;
-        //         this.tableData2 = resp;
-        //     }).catch(e => {});
-        // },
-        // // 原油日K图3--异常指标配置表
-        // tableDatas3() {
-        //     let params = {};
-        //     postConfigurationQuery3(params).then(resp => {
-        //         // console.log(resp);
-        //         this.tableData3 = resp;
-        //         this.tableData4 = resp;
-        //     }).catch(e => {});
-        // },
-        // // 美油日分时图2--他比证券配置表;  美油日K图4- 他比证券配置表
-        // tableDatas24() {
-        //     let params = {};
-        //     postThanSec(params).then(resp => {
-        //         // console.log(resp);
-        //         this.tableDatas2 = resp;
-        //         this.tableDatas4 = resp;
-        //     }).catch(e => {});
-        // },
-        // // 美油日分时图2--修改 - 配置表
-        // tableUpdateData1(val) {
-        //     postConfigurationModification1(val).then(resp => {
-        //         console.log(resp);
-        //         // this.$message.success('成功');
-        //         return resp;
-        //     }).catch(e => {});
-        // },
-        // // 原油日K图3--配置表
-        // tableData3List() {
-        //     let params = {
-        //     };
-        //     postConfigurationQuery3(params).then(resp => {
-        //         let respVale = [];
-        //         resp.forEach(v => {
-        //             if (v.referenceValueMax || v.referenceValueMin) {
-        //                 let resData = {
-        //                     indexName: v.indexName,
-        //                     reference: v.referenceValueMin + '-' + v.referenceValueMax,
-        //                     weight: v.weight,
-        //                     threshold: v.threshold
-        //                 };
-        //                 respVale.push(resData);
-        //             }
-        //         });
-        //         console.log(resp);
-        //         this.tableData1 = resp;
-        //         this.tableData3 = resp;
-        //     }).catch(e => {});
-        // },
-        // // 美油日K图4- 他比证券配置表
-        // tableData3List1() {
-        //     let params = {
-        //     };
-        //     postThanSec(params).then(resp => {
-        //         let respVale = [];
-        //         resp.forEach(v => {
-        //             if (v.referenceValueMax || v.referenceValueMin) {
-        //                 let resData = {
-        //                     indexName: v.indexName,
-        //                     reference: v.referenceValueMin + '-' + v.referenceValueMax,
-        //                     weight: v.weight,
-        //                     threshold: v.threshold
-        //                 };
-        //                 respVale.push(resData);
-        //             }
-        //         });
-        //         console.log(resp);
-        //         this.tableData4 = resp;
-        //     }).catch(e => {});
-        // },
-        // // 原油日K图--修改配置表
-        // tableUpdateData(val) {
-        //     postConfigurationModification3(val).then(resp => {
-        //         console.log(resp);
-        //         return resp;
-        //     }).catch(e => {});
-        // },
-    },
+    methods: {},
     mounted() {
     },
 };

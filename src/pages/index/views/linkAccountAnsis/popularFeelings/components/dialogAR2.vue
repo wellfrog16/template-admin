@@ -33,7 +33,7 @@
             <el-col :span="24">
                 <s-card class="" :title="`指标配置`" :icon="`fa fa-chart-line`">
                     <s-table
-                        ref="selfTables"
+                        ref="selfTables2"
                         slot="content"
                         :showSelectionColumn="true"
                         :showIndexColumn="false"
@@ -67,9 +67,9 @@ export default {
         visi: {
             handler(val) {
                 if (val || !val) {
-                    // this.$refs.selfTables.$refs.selfTable.clearSelection(); // 取消复选框
-                    // this.checkboxTableColumn = [];
-                    this.celclickTableColumn = {};
+                    this.$refs.selfTables2.$refs.selfTable.clearSelection(); // 取消复选框
+                    this.checkboxTableColumn2 = [];
+                    this.celclickTableColumns2 = {};
                     this.flagValue = '';
                 }
             }
@@ -79,7 +79,8 @@ export default {
         return {
             loadingAR: false,
             flagValue: '',
-            celclickTableColumn: {},
+            celclickTableColumns2: {},
+            checkboxTableColumn2: [], // 异常指标配置表
             columnsList2: columnsLists,
             columnsLists: columnsList,
             tableDatas2: [],
@@ -118,24 +119,21 @@ export default {
                 this.loadingAR = false;
             });
         },
-        // 输入阈值设
-        handleInsertChange(val) {},
         // 单选按钮
         getTemplateRow() {
             this.tableDatas2.forEach((v, i) => {
                 if (this.flagValue === i) {
                     this.flagValue = i;
-                    this.celclickTableColumn = v || {};
-                    this.$emit('celclickEmit', this.celclickTableColumn, this.flagValue);
+                    this.celclickTableColumns2 = v || {};
+                    this.$emit('celclickEmits2', this.celclickTableColumns2, this.flagValue);
                 }
             });
         },
-        // 舆情多选
-        handleSelectionChange2() {}
-        // handleSelectionChange(val) {
-        //     this.checkboxTableColumn = val || [];
-        //     this.$emit('checkboxEmit', this.checkboxTableColumn);
-        // }
+        // 异常指标多选
+        handleSelectionChange2(val) {
+            this.checkboxTableColumn2 = val || [];
+            this.$emit('checkboxEmit2', this.checkboxTableColumn2);
+        }
     }
 };
 </script>

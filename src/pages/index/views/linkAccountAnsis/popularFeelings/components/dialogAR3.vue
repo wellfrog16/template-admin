@@ -3,7 +3,7 @@
         <el-col :span="24">
             <s-card class="" :title="`异常指标`" :icon="`fa fa-chart-line`">
                 <s-table
-                    ref="selfTables1"
+                    ref="selfTables3"
                     slot="content"
                     :showSelectionColumn="true"
                     :showIndexColumn="false"
@@ -37,7 +37,7 @@ export default {
         visi: {
             handler(val) {
                 if (val || !val) {
-                    this.$refs.selfTables1.$refs.selfTable.clearSelection(); // 取消异常指标多选
+                    this.$refs.selfTables3.$refs.selfTable.clearSelection(); // 取消异常指标多选
                 }
             }
         },
@@ -46,7 +46,7 @@ export default {
         return {
             threshold: '',
             loadingAR: false,
-            checkboxTableColumn1: [],
+            checkboxTableColumn3: [],
             // 异常指标
             columnsList: columnsList,
             tableData3: []
@@ -72,8 +72,8 @@ export default {
         },
         // 异常指标多选
         handleSelectionChange1(val) {
-            this.checkboxTableColumn1 = val || [];
-            this.$emit('checkboxEmit1', this.checkboxTableColumn1);
+            this.checkboxTableColumn3 = val || [];
+            this.$emit('checkboxEmit3', this.checkboxTableColumn3);
         },
     },
 };

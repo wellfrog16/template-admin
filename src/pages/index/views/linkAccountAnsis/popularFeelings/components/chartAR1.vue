@@ -57,7 +57,7 @@
 import moment from 'moment';
 import MiniIndex from './miniIndex';
 import {echartsData1} from './constants';
-import {postPetroleumAR1} from '@/api/dataAnsis/popularFeelings';
+import {postPetroleumAR1, postUpdate} from '@/api/dataAnsis/popularFeelings';
 import SCard from '@/components/index/common/SCard';
 import EchartsCommon from '@/components/index/common/EchartsCommon';
 import DialogAR1 from './dialogAR1';
@@ -457,17 +457,14 @@ export default {
         dialogConfirmClick() {
             if (this.ruleForm.timeWindow !== '' && this.checkboTableColumn1.length !== 0) {
                 this.dialogVisible = false;
-                let radioTable = [];
-                this.checkboTableColumn1.forEach(v => {
-                    if (v.frequentness) {
-                        v.frequentness = this.ruleForm.timeWindow;
-                    }
-                });
-                radioTable = this.checkboTableColumn1;
-                let params = {...radioTable};
-                this.tableUpdateData1(params);
-                this.checkboTableColumn1 = [];
-                this.ruleForm.timeWindow = '5 分钟';
+                let params = {
+                    'frequentness': this.ruleForm.timeWindow,
+                    'daliySettingList': this.checkboTableColumn1,
+                };
+                postUpdate(params).then(resp => {
+                    // this.$message.success('修改成功');
+                    return resp;
+                }).catch(e => {});
             } else {
                 this.$message.error('请选择条件');
                 this.dialogVisible = true;
@@ -478,7 +475,8 @@ export default {
             let now = new Date(); // 当前日期
             let timeDay = moment(now).format('YYYY-MM-DD');
             let params = {
-                'timeOfDay': timeDay,
+                // 'timeOfDay': timeDay,
+                'timeOfDay': '2019-01-03',
                 'frequentness': this.ruleForm.timeWindow,
                 'crudeCode': 'YY_SCO'
             };

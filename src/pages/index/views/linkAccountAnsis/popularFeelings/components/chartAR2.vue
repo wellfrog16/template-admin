@@ -33,7 +33,7 @@
                     </el-select>
                 </el-form-item>
             </el-form>
-            <dialog-a-r2 :visi="dialogVisible" @celclickEmit="celclickEmit"></dialog-a-r2>
+            <dialog-a-r2 :visi="dialogVisible" @celclickEmits2="celclickEmits2" @checkboxEmit2="checkboxEmit2"></dialog-a-r2>
             <div slot="footer" :class="$style.dialog_footer">
                 <el-button @click="dialogCancelClick">取 消</el-button>
                 <el-button type="primary" @click="dialogConfirmClick">确 定</el-button>
@@ -54,7 +54,7 @@
 import moment from 'moment';
 import MiniIndex from './miniIndex';
 import {echartsData2} from './constants';
-import {postPetroleumAR2} from '@/api/dataAnsis/popularFeelings';
+import {postPetroleumAR2, postUpdateConfig} from '@/api/dataAnsis/popularFeelings';
 import SCard from '@/components/index/common/SCard';
 import EchartsCommon from '@/components/index/common/EchartsCommon';
 import DialogAR2 from './dialogAR2';
@@ -98,6 +98,7 @@ export default {
             multipleSelection: [],
             flagVal: '',
             radioTableColumn: {},
+            checkboTableColumn: [],
             chartOptions2: {
                 title: [
                     {
@@ -388,51 +389,52 @@ export default {
         dialogClick() {
             this.dialogVisible = true;
             this.radioTableColumn = {};
-            // this.checkboTableColumn = [];
+            this.checkboTableColumn = [];
         },
         // 日K图--时间窗口
         nationyChenge(val) {
             this.multipleSelection = val;
         },
         // 单选
-        celclickEmit(tableColumn, flagVal) {
+        celclickEmits2(tableColumn, flagVal) {
             this.radioTableColumn = tableColumn;
             this.flagVal = flagVal;
         },
         // 多选
-        // checkboxEmit(tableColumn) {
-        //     this.checkboTableColumn = tableColumn;
-        // },
+        checkboxEmit2(tableColumn) {
+            this.checkboTableColumn = tableColumn;
+        },
         // 关闭弹框
         closeData(done) {
             done();
             this.dialogVisible = false;
+            this.ruleForm.timeWindow = '5 分钟';
             this.flagVal = '';
             this.radioTableColumn = {};
-            this.ruleForm.timeWindow = '5 分钟';
-            // this.checkboTableColumn = [];
+            this.checkboTableColumn = [];
         },
         // 取 消
         dialogCancelClick() {
             this.dialogVisible = false;
+            this.ruleForm.timeWindow = '5 分钟';
             this.flagVal = '';
             this.radioTableColumn = {};
-            this.ruleForm.timeWindow = '5 分钟';
-            // this.checkboTableColumn = [];
+            this.checkboTableColumn = [];
         },
         // 确 定
         dialogConfirmClick() {
-            if (this.flagVal !== '' && this.ruleForm.timeWindow !== '' && this.radioTableColumn.length !== 0) {
+            if (this.flagVal !== '' && this.ruleForm.timeWindow !== '' && this.radioTableColumn.length !== 0 && this.checkboTableColumn.length !== 0) {
                 this.dialogVisible = false;
-                let radioTable = [];
-                if (this.radioTableColumn.frequentness) {
-                    this.radioTableColumn.frequentness = this.ruleForm.timeWindow;
-                }
-                radioTable.push(this.radioTableColumn);
-                this.flagVal = '';
-                let params = {...radioTable};
-                this.tableUpdateData(params);
-                this.ruleForm.timeWindow = '5 分钟';
+                let params = {
+                    'flagVal': this.flagVal,
+                    'frequentness': this.ruleForm.timeWindow,
+                    'daliySettingList': this.radioTableColumn,
+                    'checkboSettingList': this.checkboTableColumn,
+                };
+                postUpdateConfig(params).then(resp => {
+                    // this.$message.success('修改成功');
+                    return resp;
+                }).catch(e => {});
             } else {
                 this.$message.error('请选择条件');
                 this.dialogVisible = true;
@@ -442,7 +444,8 @@ export default {
             let now = new Date(); // 当前日期
             let timeDay = moment(now).format('YYYY-MM-DD');
             let params = {
-                'timeOfDay': timeDay,
+                // 'timeOfDay': timeDay,
+                'timeOfDay': '2019-01-03',
                 'frequentness': '5',
                 'crudeCode': 'BLT_OIL'
             };
