@@ -97,8 +97,8 @@ Vue.prototype.getUserInterfaceState = (reqUrl, callback) => {
         if (String(resp) === '2') {
             callback && callback();
         } else {
-            let text = String(resp) === '0' ? '有相同' : '有不同';
-            Vue.prototype.$confirm(`${text}任务在执行，确定继续?`, '提示', {
+            // let text = String(resp) === '0' ? '有相同' : '有不同';
+            Vue.prototype.$confirm('本任务预计运行时间较长，监测到现在有其它耗时任务正在后台执行，是否确定继续执行本任务?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
