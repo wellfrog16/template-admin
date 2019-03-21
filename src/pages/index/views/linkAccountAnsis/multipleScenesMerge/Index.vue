@@ -39,7 +39,7 @@
                                     <block3 ref="block3" v-if="index === 2" :propsChartHeight="propsChartHeight" :index="index"></block3>
                                     <block4 ref="block4" v-if="index === 3" :propsChartHeight="propsChartHeight" :index="index"></block4>
                                     <block5 ref="block5" domRef="combine5" v-if="index === 4" :propsChartHeight="propsChartHeight" :index="index" @handleEchartDblClickEvent="getDetailByDate"></block5>
-                                    <block6 ref="block6" domRef="combine6" v-if="index === 5" :propsChartHeight="propsChartHeight" :index="index" @handleEchartDblClickEvent="getDetailByDate"></block6>
+                                    <block6 ref="block6" domRef="combine6" v-if="index === 5" :propsChartHeight="propsChartHeight" :index="index" :currentCustIds="commonParams.custId ? commonParams.custId.split(',') : []" @handleEchartDblClickEvent="getDetailByDate"></block6>
                                     <block7 ref="block7" domRef="combine7" v-if="index === 6" :propsChartHeight="propsChartHeight" :index="index"></block7>
                                 </div>
                                 <button v-show="!item['toggleDetailFlags'] && index !== 0" type="button" class="btn btn-default btn-map-fullscreen" @click="toggleFullScreen(index)">
@@ -114,7 +114,8 @@ export default {
             currentFullScreenIndex: 0,
             fullscreen: false,
             propsChartHeight: 300,
-            proCommonParams: {}
+            proCommonParams: {},
+            commonParams: {}
         };
     },
     computed: {},
