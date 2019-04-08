@@ -17,7 +17,7 @@
                     </el-tooltip>
                     <div class="user_name">欢迎您登陆！{{ ruleForm.userName }}</div>
                     <el-tooltip class="item" effect="dark" placement="bottom">
-                        <div class="login_out" @click="handleLoginOut"><i class="fa fa-sign-out-alt"></i></div>
+                        <div class="login_out" @click.stop="handleLoginOut"><i class="fa fa-sign-out-alt"></i></div>
                         <div slot="content">登出</div>
                     </el-tooltip>
                 </div>
@@ -80,6 +80,8 @@
 <script>
 // import {saveAuthedInfos, saveRealName} from '@/utils/storageUtil';
 import {getAccessToken} from '@/api/login';
+// import instance from '@/helper/axios';
+// import axios from 'axios';
 export default {
     data() {
         return {
@@ -128,13 +130,16 @@ export default {
             getAccessToken(params).then(resp => {
                 localStorage.setItem('ACCESS_TOKEN', resp.access_token);
                 localStorage.setItem('USER_NAME', params.username);
+                localStorage.setItem('PASSWORD', params.password);
                 this.$store.commit('saveAccessToken', resp.access_token);
                 // this.$router.push({path: '/sceneConfig'});
                 this.loginFlag = true;
                 this.showLoginDialog = false;
+                this.fullScreenLoading = false;
             }).catch(e => {
                 console.error(e);
                 this.showLoginDialog = false;
+                this.fullScreenLoading = false;
             });
         },
         cardClick() {

@@ -524,6 +524,9 @@ export default {
     },
     mounted() {
         this.getTableData();
+        // window.addEventListener('message', function(event) {
+        //     console.log(event);
+        // }, false);
     }
 
 };

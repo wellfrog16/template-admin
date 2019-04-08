@@ -32,6 +32,14 @@ export default {
             default() {
                 return [];
             }
+        },
+        resultUrl: {
+            type: String,
+            default: ''
+        },
+        deleteUrl: {
+            type: String,
+            default: ''
         }
     },
     watch: {
@@ -74,7 +82,7 @@ export default {
         },
         getResultList() {
             this.loading = true;
-            getTlsResultInfo().then(resp => {
+            getTlsResultInfo(this.resultUrl).then(resp => {
                 this.loading = false;
                 this.resultList = resp.filter(v => {
                     return this.filterTypes.indexOf(String(v.resultType)) === -1;
@@ -91,7 +99,7 @@ export default {
                 type: 'warning'
             })
                 .then(() => {
-                    deleteResultById(item.resultId).then(() => {
+                    deleteResultById(this.deleteUrl, item.resultId).then(() => {
                         this.resultId = '';
                         this.resultList.splice(this.resultList.findIndex(f => { return f.resultId === item.resultId; }), 1);
                     });

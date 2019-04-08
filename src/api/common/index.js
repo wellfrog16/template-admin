@@ -1,4 +1,4 @@
-import {post, requestPrefix, requestPrefixs} from '@/utils/request';
+import {get, post, requestPrefix, requestPrefixs} from '@/utils/request';
 import config from '@/config';
 // 获取地区树形列表
 export const getAreaTreeList = () => {
@@ -9,8 +9,8 @@ export const getAccountsByUploadFile = () => {
     return `${config.server.api}${requestPrefix}/uploadFiles?access_token=${localStorage.getItem('ACCESS_TOKEN')}`;
 };
 // 结果集列表
-export const getTlsResultInfo = () => {
-    return post(`${requestPrefix}/getTlsResultInfo`, {});
+export const getTlsResultInfo = url => {
+    return post(`${requestPrefix}/${url || 'getTlsResultInfo'}`, {});
 };
 // 上传文件；file + body
 export const uploadFileByBodyInfo = url => {
@@ -38,8 +38,8 @@ export const getInfoByResultId = (resultIds, resultType) => {
     return post(`${requestPrefix}/getRegeneratingResults`, {resultIds: resultIds, resultType: resultType});
 };
 // 通过结果集id查询合约代码，起止日期等
-export const deleteResultById = resultIds => {
-    return post(`${requestPrefix}/resultSet/del`, {resultIds});
+export const deleteResultById = (url, resultIds) => {
+    return post(`${requestPrefix}/${url || 'resultSet/del'}`, url ? {resultId: resultIds} : {resultIds});
 };
 // 获取请求队列中是否有慢任务；0-没有 1-有相同 2-有不同
 export const getUserInterfaceState = params => {
@@ -48,4 +48,8 @@ export const getUserInterfaceState = params => {
 // 离开页面发送请求test
 export const leavePageTest = () => {
     return `${config.server.api}${requestPrefix}/getTlsIndexTlb?access_token=${localStorage.getItem('ACCESS_TOKEN')}`;
+};
+// test nginx
+export const testDoubanapi = params => {
+    return get(`${config.server.api}/v2/movie/top250?start=25&count=25`, params);
 };

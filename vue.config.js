@@ -10,6 +10,17 @@ module.exports = {
         host: '0.0.0.0',
         port: 8080,
         proxy: null,
+        // proxy: {
+        //     '/api-service': {
+        //         target: 'http://172.25.61.10:8899',
+        //         changeOrigin: true,
+        //         // secure: false,
+        //         logLevel: 'debug'
+        //         // pathRewrite: {
+        //         //     '^/': ''
+        //         // }
+        //     }
+        // },
         before(app) { mock(app); }
     },
 

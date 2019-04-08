@@ -2,7 +2,7 @@
     <div>
         <el-row style="padding: 10px 0; text-align: right;">
             <span style="margin-right: 10px;">导入结果集：</span>
-            <resultSelectComponent ref="resultSelectComponent" :resultIdProps="resultId" @selectResultId="selectResultId"></resultSelectComponent>
+            <resultSelectComponent ref="resultSelectComponent" resultUrl="evaluation/queryresultlist" deleteUrl="evaluation/deleteresult" :resultIdProps="resultId" @selectResultId="selectResultId"></resultSelectComponent>
             <el-button size="mini" type="primary" style="margin-left:5px;" @click="handleImport" :loading="loading">确定</el-button>
         </el-row>
         <s-card class="table-container" :title="`静态信息验证`" :icon="`fa fa-address-card`">
@@ -12,11 +12,13 @@
                     :loading="loadingCustomerAddress"
                     :columns="columns"
                     :tableData="tableData"
+                    @handleRowDblClick="handleRowDblclick"
                 ></s-table>
+                <!-- <tree-table v-loading="loadingCustomerAddress" ref="self-tree-table" :columns="columns" :tableData="tableData" :showCheckbox="false"></tree-table> -->
             </div>
         </s-card>
         <el-row :gutter="10">
-            <el-col :xl="12" :lg="12" :md="24" :sm="24" v-for="(item, index) in charts" :key="index">
+            <el-col :xl="12" :lg="12" :md="24" :sm="24" v-for="(item, index) in currentCharts" :key="index">
                 <s-card :title="item.title" :icon="item.icon" class="self-card-css"
                         loadingText="数据加载时间较长，请耐心等待..."
                         :loading="item.loading">
@@ -37,10 +39,10 @@
                                 <s-table :height="index === 2 ? 268 : 300" :columns="chartTableColumns[index]" :tableData="chartTableData[index]"></s-table>
                             </div>
                             <div v-show="!item['toggleDetailFlags']" class="chart-container">
-                                <chart1 :ref="`chartComponent${index + 1}`" v-if="index === 0" :index="index" :tabIndex="111" :propsChartHeight="propsChartHeight" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></chart1>
-                                <chart2 :ref="`chartComponent${index + 1}`" v-if="index === 1" :index="index" :tabIndex="111" :propsChartHeight="propsChartHeight" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></chart2>
-                                <chart3 :ref="`chartComponent${index + 1}`" v-if="index === 2" :index="index" :tabIndex="111" :propsChartHeight="propsChartHeight" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></chart3>
-                                <chart4 :ref="`chartComponent${index + 1}`" v-if="index === 3" :index="index" :tabIndex="111" :propsChartHeight="propsChartHeight" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></chart4>
+                                <chart1 :ref="`chartComponent${index + 1}`" v-if="index === 0 && String(resultType) === '2'" :index="index" :tabIndex="resultId" :propsChartHeight="propsChartHeight" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></chart1>
+                                <chart2 :ref="`chartComponent${index + 1}`" v-if="index === 1 && String(resultType) === '2'" :index="index" :tabIndex="resultId" :propsChartHeight="propsChartHeight" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></chart2>
+                                <chart3 :ref="`chartComponent${index + 1}`" v-if="index === 0 && String(resultType) === '1'" :index="index" :tabIndex="resultId" :propsChartHeight="propsChartHeight" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></chart3>
+                                <chart4 :ref="`chartComponent${index + 1}`" v-if="index === 1 && String(resultType) === '1'" :index="index" :tabIndex="resultId" :propsChartHeight="propsChartHeight" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></chart4>
                             </div>
                             <button v-show="!item['toggleDetailFlags']" type="button" class="btn btn-default btn-map-fullscreen" @click="toggleFullScreen(index)">
                                 <i class="fa" :class="[fullscreen ? 'fa-compress' : 'fa-expand-arrows-alt']"></i>
@@ -56,12 +58,16 @@
 import SCard from '@/components/index/common/SCard.vue';
 import STable from '@/components/index/common/STable.vue';
 import resultSelectComponent from '@/components/index/common/ResultSelectComponent.vue';
+// import treeTable from '@/components/index/common/TreeTableOld.vue';
 import {columns, charts, table3Options, chartTableColumns} from '../components/constants';
 import {custInfo, data1, data3, data4} from '../components/testJson';
 import chart1 from '@/pages/index/views/linkAccountAnsis/assoAccountGroupMerge/components/chart7';
 import chart2 from '@/pages/index/views/linkAccountAnsis/assoAccountGroupMerge/components/chart8';
 import chart3 from '@/pages/index/views/linkAccountAnsis/assoAccountGroupMerge/components/chart3';
 import chart4 from '@/pages/index/views/linkAccountAnsis/assoAccountGroupMerge/components/chart4';
+import {getDetailBy3D} from '@/api/dataAnsis/assoAccountGroupMerge';
+import {getCustomList, getEvaluationHistoryDeal, getEvaluationHistoryDealDetail} from '@/api/platform';
+import _ from 'lodash';
 
 export default {
     components: {SCard, STable, resultSelectComponent, chart1, chart2, chart3, chart4},
@@ -69,32 +75,131 @@ export default {
         return {
             custInfo,
             columns,
-            charts,
             table3Options,
             chartTableColumns,
             loading: false,
             fullscreen: false,
-            resultId: '',
+            selectedResultType: '', // 只选择结果集，没有导入
+            selectedResultId: '', // 只选择结果集，没有导入
+            resultId: '', // 导入的结果集id
+            resultType: '1', // 导入的结果集type
+            currentCustIds: [],
+            selectedAccountGroup: {},
             currentFullScreenIndex: 0,
             propsChartHeight: 300,
             table3CurrentType: 'buyCnt',
             loadingCustomerAddress: false,
-            tableData: custInfo.resData,
-            chartTableData: [data1.resData.clusterStateAnalByTime, data1.resData.clusterStateAnalByCust, data3.resData.tableData, data4.resData.buysail]
+            tableData: [],
+            taskId: '',
+            spanArr: [], // 合并单元格
+            currentItem: {}, // 当前选择的客户信息
+            chartTableData: [[], [], [], []],
+            // chartTableData: [data1.resData.clusterStateAnalByTime, data1.resData.clusterStateAnalByCust, data3.resData.tableData, data4.resData.buysail]
         };
     },
+    computed: {
+        currentCharts() {
+            return String(this.resultType) === '1' ? charts.slice(2) : charts.slice(0, 2);
+        }
+    },
     methods: {
-        handleImport() {
-            // 导入结果集
+        commonReqParams() {
+            return {
+                // id: '',
+                acctId: this.currentItem.acctId, // || 'JL000000',
+                custId: this.currentItem.custGroId, // || '80000366,80000777,80000562',
+                statStartDt: this.currentItem.startDtString.slice(0, 10), // || '2017-02-20',
+                statStopDay: this.currentItem.endDtString.slice(0, 10), // || '2017-10-09',
+                contrCd: this.currentItem.contrCd, // || 'cu1712',
+                // taskId: this.taskId
+                resultIds: this.resultId || ''
+            };
         },
-        selectResultId(id) {
-            // select
+        handleRowDblclick(row) {
+            console.log(row);
+            this.currentCustIds = row.custGroId.split(',');
+            this.currentItem = row;
+            // 钻取稳态图
+            this.getJLInfo();
+            // 钻取历史成交图
+            this.getHistoryInfo();
+        },
+        getJLInfo() {
+            let params = this.commonReqParams();
+            this.charts[0]['loading'] = true;
+            this.charts[1]['loading'] = true;
+            getDetailBy3D(params).then(resp => {
+                this.charts[0]['loading'] = false;
+                this.charts[1]['loading'] = false;
+                let {clusterStateAnalByTime, clusterStateAnalByCust} = resp;
+                this.updateTableData(clusterStateAnalByTime, 0);
+                this.updateTableData(clusterStateAnalByCust, 1);
+                this.drewChart1({mainData: clusterStateAnalByTime, id: resp.id});
+                this.drewChart2({mainData: clusterStateAnalByCust, id: resp.id});
+            }).catch(e => {
+                console.error(e);
+                this.charts[0]['loading'] = false;
+                this.charts[1]['loading'] = false;
+            });
+        },
+        getHistoryInfo() {
+            this.charts[2]['loading'] = true;
+            let params = this.commonReqParams();
+            getEvaluationHistoryDeal(params).then(resp => {
+                this.charts[2]['loading'] = false;
+                this.updateTableData(resp.tableData, 2);
+                this.drewChart3(resp);
+            }).catch(e => {
+                console.error(e);
+                this.charts[2]['loading'] = false;
+            });
+        },
+        getTimeSharingInfo(date) {
+            this.charts[3]['loading'] = true;
+            let params = this.commonReqParams();
+            params.txDt = date;
+            getEvaluationHistoryDealDetail(params).then(resp => {
+                resp.txDt = date;
+                this.charts[3]['loading'] = false;
+                this.updateTableData(resp.buysail, 3);
+                this.drewChart4(resp);
+            }).catch(e => {
+                console.error(e);
+                this.charts[3]['loading'] = false;
+            });
+        },
+        handleImport() {
+            if (!this.selectedResultId) {
+                this.$message.error('请先选择一个结果集');
+            }
+            let params = {resultId: this.selectedResultId};
+            this.loadingCustomerAddress = true;
+            getCustomList(params).then(resp => {
+                this.resultId = this.selectedResultId;
+                this.resultType = this.selectedResultType;
+                this.loadingCustomerAddress = false;
+                this.tableData = _.sortBy(resp, [item => { return item.acctId; }]);
+            }).catch(e => {
+                this.loadingCustomerAddress = false;
+                console.error(e);
+            });
+            // 导入结果集
+            // let params = {}
+            // getInfoByResultId(params).then(resp => {
+            //     this.tableData = resp;
+            //     this.resultId = this.selectedResultId;
+            // })
+        },
+        selectResultId(val, name, type) {
+            this.selectedResultId = val;
+            this.selectedResultType = type;
         },
         handleEchartClickEvent() {
 
         },
         handleEchartDblClickEvent(params, index) {
-            // this.getBlock4Data(params['name']);
+            // 钻取分时图
+            // this.getTimeSharingInfo(params['name']);
             this.$refs['chartComponent4'][0].getData(data4.resData);
         },
         createChart3Columnn(val) {
@@ -123,7 +228,7 @@ export default {
         toggleDetail(item, index) {
             this.charts[index]['toggleDetailFlags'] = !item.toggleDetailFlags;
             let data = {};
-            /* let storeData = this.$store.getters.getBlockData[this.$store.getters.getTabIndex] || {};
+            /* let storeData = this.$store.getters.getBlockData[this.resultId] || {};
             if (storeData && !Object.keys(storeData).length) {
                 return;
             }
@@ -141,7 +246,6 @@ export default {
             if (!item.toggleDetailFlags) {
                 this.$nextTick(() => {
                     setTimeout(() => {
-                        console.log(111);
                         this.$refs[`chartComponent${index + 1}`][0].getData([dataMap[index]]);
                     });
                 });
@@ -168,12 +272,76 @@ export default {
                 this.$refs[`chartComponent${this.currentFullScreenIndex + 1}`][0].$refs[`chart${this.currentFullScreenIndex}`].echart.resize();
             });
         },
+        updateTableData(value, index, id) {
+            if (index === 2) {
+                this.createChart3Columnn(this.currentCustIds);
+            }
+            this.chartTableData[index] = value;
+            this.$store.commit('saveChartTableData', {data: this.chartTableData, index: id || this.resultId});
+        },
+        drewChart1(resp) {
+            setTimeout(() => {
+                this.$refs['chartComponent1'] && this.$refs['chartComponent1'][0] && this.$refs['chartComponent1'][0].getData(resp);
+            });
+        },
+        drewChart2(resp) {
+            setTimeout(() => {
+                this.$refs['chartComponent2'] && this.$refs['chartComponent2'][0] && this.$refs['chartComponent2'][0].getData(resp);
+            });
+        },
+        drewChart3(resp) {
+            setTimeout(() => {
+                // 最近交易日，包含买入或卖出
+                let selectMax = _.maxBy(resp.mainData, v => {
+                    if (!!v.sellAcctCnt || !!v.buyAcctCnt) {
+                        return v.txDt;
+                    }
+                });
+                setTimeout(() => {
+                    this.getTimeSharingInfo(selectMax ? selectMax.txDt : resp.mainData[0]['txDt']);
+                });
+                this.$refs['chartComponent3'] && this.$refs['chartComponent3'][0] && this.$refs['chartComponent3'][0].getData(resp);
+            });
+        },
+        drewChart4(resp) {
+            setTimeout(() => {
+                this.$refs['chartComponent4'] && this.$refs['chartComponent4'][0] && this.$refs['chartComponent4'][0].getData(resp);
+            });
+        },
+        getSpanArr(data) {
+            let pos = 0;
+            for (var i = 0; i < data.length; i++) {
+                if (i === 0) {
+                    this.spanArr.push(1);
+                    pos = 0;
+                } else {
+                    // 判断当前元素与上一个元素是否相同
+                    if (data[i].acctId === data[i - 1].acctId) {
+                        this.spanArr[pos] += 1;
+                        this.spanArr.push(0);
+                    } else {
+                        this.spanArr.push(1);
+                        pos = i;
+                    }
+                }
+            }
+        },
+        spanMethod({row, column, rowIndex, columnIndex}) {
+            if (columnIndex === 1) {
+                const _row = this.spanArr[rowIndex];
+                const _col = _row > 0 ? 1 : 0;
+                return {
+                    rowspan: _row,
+                    colspan: _col
+                };
+            }
+        }
     },
     mounted() {
-        this.$refs['chartComponent1'][0].getData({mainData: data1.resData.clusterStateAnalByTime, id: data1.resData.id});
-        this.$refs['chartComponent2'][0].getData({mainData: data1.resData.clusterStateAnalByCust, id: data1.resData.id});
-        this.$refs['chartComponent3'][0].getData(data3.resData);
-        this.$refs['chartComponent4'][0].getData(data4.resData);
+        // this.$refs['chartComponent1'][0].getData({mainData: data1.resData.clusterStateAnalByTime, id: data1.resData.id});
+        // this.$refs['chartComponent2'][0].getData({mainData: data1.resData.clusterStateAnalByCust, id: data1.resData.id});
+        // this.$refs['chartComponent3'][0].getData(data3.resData);
+        // this.$refs['chartComponent4'][0].getData(data4.resData);
     }
 };
 </script>

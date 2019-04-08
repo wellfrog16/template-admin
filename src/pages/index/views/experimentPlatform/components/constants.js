@@ -1,7 +1,8 @@
 import {chartTableColumns4, chartTableColumns8, chartTableColumns9} from '@/pages/index/views/linkAccountAnsis/assoAccountGroupMerge/components/constants';
 // 客户地址查询
 export const columns = [
-    {field: 'custId', label: '客户编号', width: '200'},
+    {field: 'acctId', label: '账户组号', width: '200'},
+    {field: 'custid', label: '客户编号', width: '200'},
     {field: 'custName', label: '客户名称', width: '200'},
     {field: 'custType', label: '客户类型', width: '200'},
     {field: 'bankSwift', label: '开户银行', width: '200'},
@@ -30,7 +31,7 @@ export const columns = [
     {field: 'workUnit', label: '工作单位', width: '200'},
     {field: 'position', label: '职位', width: '200'},
     {field: 'corpChar', label: '单位性质', width: '200'},
-    {field: 'email', label: '电子邮件', width: '200'},
+    {field: 'eMail', label: '电子邮件', width: '200'},
     {field: 'zdxSoloName', label: '指定下单人姓名', width: '200'},
     {
         field: 'zdxSoloDoctype',

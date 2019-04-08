@@ -4,13 +4,13 @@
         :element-loading-text="loadingText"
         element-loading-background="rgba(0,0,0,0.7)"
         v-loading="loading">
-        <div style="padding-bottom: 15px; text-align: center; color: #e6a23c;">
+        <div style="padding-bottom: 15px; text-align: center; color: #e6a23c;" v-if="showCheckbox">
             <span style="margin-right: 20px;">高级筛选：</span>
             <el-checkbox v-model="checked" @change="handleChecked()">只显示已选</el-checkbox>
             <el-checkbox v-model="limitChecked" @change="handleLimitChecked">只显示超仓账户组</el-checkbox>
             <el-button size="mini" type="warning" @click="handleClearChecked" style="margin-left: 20px;">清除已选</el-button>
         </div>
-        <div style="padding-bottom: 15px; text-align: center; color: #e6a23c;">
+        <div style="padding-bottom: 15px; text-align: center; color: #e6a23c;" v-if="showCheckbox">
             <span style="margin-right: 20px;">排序方式：</span>
             <el-select v-model="selectSort" @change="handleSortChange" style="width: 360px;" placeholder="请选择排序方式">
                 <el-option v-for="(item, index) in sortList" :key="index" :label="item.label" :value="item.value"></el-option>
@@ -34,7 +34,7 @@
                 <el-tree
                     ref="tree-table"
                     class="tree-table asso-scrollbar"
-                    show-checkbox
+                    :show-checkbox="showCheckbox"
                     node-key="id"
                     :data="tableDataModel"
                     :default-expanded-keys="[0]"
@@ -137,6 +137,10 @@ export default {
         limitQtty: {
             type: [String, Number],
             default: '100000'
+        },
+        showCheckbox: {
+            type: Boolean,
+            default: true
         }
     },
     watch: {

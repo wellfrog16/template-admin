@@ -25,7 +25,7 @@
             @cell-click="handleCellClick"
             @cell-dblclick="handleCellDblClick"
             @row-contextmenu="handleRowContextMenu"
-            @row-dblclick="handleRowDbClick"
+            @row-dblclick="handleRowDblClick"
             @sort-change="sortChange"
             @current-change="handleCurrentChange"
             style="width: 100%; overflow:visible;">
@@ -215,7 +215,6 @@ export default {
             this.$emit('rowClick', row, event, column);
         },
         handleCellClick(row) {
-            // console.log(row);
             this.$emit('celCick', row);
         },
         handleCellDblClick(row) {
@@ -227,8 +226,8 @@ export default {
         handleRowContextMenu(row, event) {
             this.$emit('handleRowContextMenu', row, event);
         },
-        handleRowDbClick(row, event) {
-            this.$emit('handleRowDbClick', row, event);
+        handleRowDblClick(row, event) {
+            this.$emit('handleRowDblClick', row, event);
         },
         handleSelectedRow(selection, row) {
             this.$emit('select', selection, row);

@@ -98,9 +98,16 @@ const instance = url => {
                             message: '登录成功'
                         });
                     } else {
-                        Notification.error({
-                            message: data.message
-                        });
+                        if (config.url.indexOf('/accountMerge') > -1) {
+                            Notification.error({
+                                message: data.message,
+                                duration: 0
+                            });
+                        } else {
+                            Notification.error({
+                                message: data.message
+                            });
+                        }
                     }
                 }
             } else if (status === 401) {
@@ -111,9 +118,16 @@ const instance = url => {
                     query: {redirect: Vue.prototype.router.currentRoute.fullPath}
                 });
             } else if (status !== 200 && status !== 201 && status !== 204) {
-                Notification.error({
-                    message: statusText
-                });
+                if (config.url.indexOf('/accountMerge') > -1) {
+                    Notification.error({
+                        message: statusText,
+                        duration: 0
+                    });
+                } else {
+                    Notification.error({
+                        message: statusText
+                    });
+                }
             }
             if (data.success || data.access_token || data.code === 200) { // mock
                 return data.resData || (data.resData === 0 ? 0 : data);
