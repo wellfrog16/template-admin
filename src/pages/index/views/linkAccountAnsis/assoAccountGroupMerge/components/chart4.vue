@@ -304,6 +304,9 @@ export default {
             }
             this.$refs[this.domRef] && this.$refs[this.domRef].initChart();
         },
+        clearChart() {
+            this.$refs[this.domRef] && this.$refs[this.domRef].clearChart();
+        },
         handleEchartClickEvent(val) {
             this.$emit('handleEchartClickEvent', val, this.index);
         },

@@ -112,11 +112,14 @@ export default {
     },
     methods: {
         getData(resData) {
+            if (!resData) {
+                return;
+            }
             if (!Object.keys(resData).length) {
                 return;
             }
             let {mainData, id} = resData;
-            if (!mainData.length) {
+            if (!mainData || !mainData.length) {
                 return;
             }
             this.chartOptions['xAxis'][0]['data'] = mainData.map(v => {
@@ -133,6 +136,9 @@ export default {
                 this.chartOptions = data;
             }
             this.$refs[this.domRef] && this.$refs[this.domRef].initChart();
+        },
+        clearChart() {
+            this.$refs[this.domRef] && this.$refs[this.domRef].clearChart();
         },
         handleEchartClickEvent(val) {
             this.$emit('handleEchartClickEvent', val, this.index);

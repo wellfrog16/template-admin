@@ -109,8 +109,11 @@ export default {
     },
     methods: {
         getData(resp) {
+            if (!resp) {
+                return;
+            }
             let {mainData, id} = resp;
-            if (!mainData.length) {
+            if (!mainData || !mainData.length) {
                 return;
             }
             let date = [];
@@ -153,6 +156,9 @@ export default {
                 this.chartOptions = data;
             }
             this.$refs[this.domRef] && this.$refs[this.domRef].initChart();
+        },
+        clearChart() {
+            this.$refs[this.domRef] && this.$refs[this.domRef].clearChart();
         },
         handleEchartClickEvent(val) {
             if (String(this.sceneType) === '2') { // 聚类

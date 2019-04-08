@@ -477,7 +477,7 @@ export default {
             // set cust count
             this.chartOptions['visualMap'][0]['max'] = this.currentCustIds.length;
             this.chartOptions['visualMap'][1]['max'] = this.currentCustIds.length;
-            this.$store.commit('saveXGchart3', {data: this.chartOptions, index: this.tabIndex || this.$store.getters.getTabIndex});
+            this.$store.commit('savechart3', {data: this.chartOptions, index: this.tabIndex || this.$store.getters.getTabIndex});
             this.initChart();
             // 最近交易日，包含买入或卖出
             this.selectMax = _.maxBy(mainData, v => {
@@ -557,6 +557,9 @@ export default {
                     this.$emit('getBlock4Data', date);
                 });
             }
+        },
+        clearChart() {
+            this.$refs[this.domRef] && this.$refs[this.domRef].clearChart();
         },
         handleEchartClickEvent(val) {
             this.$emit('handleEchartClickEvent', val, this.index);

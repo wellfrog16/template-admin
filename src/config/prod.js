@@ -1,7 +1,7 @@
 const config = {
     server: {
-        api: 'http://172.25.61.103:18003',
-        sophon: 'http://172.25.61.101:8066/SHFE' // sophon实验平台
+        api: 'http://172.25.61.96:18003', // 103
+        sophon: 'http://172.25.61.98:8066/SHFE' // sophon实验平台 // 101
     }
 };
 
