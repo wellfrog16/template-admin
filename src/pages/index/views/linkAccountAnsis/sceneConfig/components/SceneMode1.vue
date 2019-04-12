@@ -32,6 +32,7 @@
                             <el-select :disabled="disabled" :clearabled="!disabled" size="small" v-model="ruleForm.statFreq" class="custom-width" placeholder="请选择账户组统计频度">
                                 <el-option
                                     v-for="item in accountTotalFrepOptions"
+                                    :disabled="item.value === '4' || item.value === '5'"
                                     :key="item.value"
                                     :label="item.label"
                                     :value="item.value">

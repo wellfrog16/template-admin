@@ -207,6 +207,13 @@
     background: #00255c;
     border-color: #0b4c8f;
     li.el-select-dropdown__item {
+        color: #fff;
+        &.is-disabled {
+            color: #909399;
+        }
+        &.selected {
+            color: @g-active-bg;
+        }
         &:hover {
             background: #0b4c8f;
         }
