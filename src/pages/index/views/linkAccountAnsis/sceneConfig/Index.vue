@@ -73,7 +73,7 @@
                                 </div>
                             </el-form-item>
                             <el-form-item prop="contractCode" label="合约代码" label-width="140px">
-                                <el-input clearable size="small" v-model="ruleForm.contractCode" class="custom-width"></el-input>
+                                <el-input clearable size="small" v-model="ruleForm.contractCode" class="custom-width" placeholder="cu1712"></el-input>
                             </el-form-item>
                             <el-form-item prop="selectDateRange" label="统计区间" label-width="140px">
                                 <s-date-picker
@@ -208,9 +208,9 @@ export default {
                 resultId: '',
                 resultType: '',
                 customNoArray: ['80000001', '80001000'],
-                contractCode: 'cu1712',
-                selectDateRange: ['2017-06-01', '2017-08-31']
-                // selectDateRange: [new Date(moment().subtract(1, 'months').format('YYYY-MM-DD')), new Date(moment().subtract(1, 'days').format('YYYY-MM-DD'))]
+                contractCode: '',
+                // selectDateRange: ['2017-06-01', '2017-08-31']
+                selectDateRange: [new Date(moment().subtract(1, 'months').format('YYYY-MM-DD')), new Date(moment().subtract(1, 'days').format('YYYY-MM-DD'))]
             },
             tableData: [],
             columns: [
