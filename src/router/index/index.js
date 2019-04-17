@@ -157,7 +157,7 @@ const Index = {
                 scrollTop: true,
                 title: '舆情异常'
             },
-            hidden: true,
+            hidden: false,
             name: 'popularFeeling',
             icon: 'menu-fix-icon fab fa-audible',
             component: LinkAccountAnsis,
@@ -212,6 +212,40 @@ const Index = {
             //         icon: 'menu-fix-icon fa fa-location-arrow',
             //         component: resolve => require(['@/pages/index/views/linkAccountAnsis/newsDetails/Index.vue'], resolve)
             //     },
+            ]
+        },
+        {
+            path: '',
+            noLink: true,
+            meta: {
+                scrollTop: true,
+                title: '动因分析'
+            },
+            hidden: false,
+            name: 'unusualAnalysisHome',
+            icon: 'menu-fix-icon fab fa-audible',
+            component: LinkAccountAnsis,
+            children: [
+                {
+                    meta: {
+                        scrollTop: true,
+                        title: '动因分析'
+                    },
+                    path: '/unusualAnalysis',
+                    name: 'unusualAnalysis',
+                    icon: 'menu-fix-icon fa fa-volume-up',
+                    component: resolve => require(['@/pages/index/views/linkAccountAnsis/unusualAnalysis/Index.vue'], resolve)
+                },
+                {
+                    meta: {
+                        scrollTop: true,
+                        title: '交易分析'
+                    },
+                    path: '/tradeAnalysis',
+                    name: 'tradeAnalysis',
+                    icon: 'menu-fix-icon fa fa-robot',
+                    component: resolve => require(['@/pages/index/views/linkAccountAnsis/tradeAnalysis/Index.vue'], resolve)
+                }
             ]
         },
         {
