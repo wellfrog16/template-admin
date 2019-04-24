@@ -1,5 +1,6 @@
 <template>
     <el-card class="self-card-component"
+             :style="{'height': propsHeight ? propsHeight + 'px' : ''}"
              v-loading="loading"
              :element-loading-text="loadingText"
              element-loading-background="rgba(0,0,0,0.7)">
@@ -51,6 +52,10 @@ export default {
         showContent: {
             type: Boolean,
             default: true
+        },
+        propsHeight: {
+            type: [String, Number],
+            default: ''
         }
     },
     data() {

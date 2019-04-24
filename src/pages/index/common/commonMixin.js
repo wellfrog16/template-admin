@@ -48,6 +48,7 @@ export default {
             return [this.getChart1, this.getChart2, this.getChart3, this.getChart4];
         },
         drewChart1(autoSave) {
+            this.charts[0]['toggleDetailFlags'] = false;
             setTimeout(() => {
                 let respData = this.dealChart1AndMainTableData();
                 let {chartData, id} = respData;
@@ -106,21 +107,25 @@ export default {
             });
         },
         getChart1(data, flag) {
+            this.charts[0]['toggleDetailFlags'] = false;
             setTimeout(() => {
                 this.$refs['chartComponent1'] && this.$refs['chartComponent1'][0] && this.$refs['chartComponent1'][0].initChart(data, flag);
             });
         },
         drewChart2(resp) {
+            this.charts[1]['toggleDetailFlags'] = false;
             setTimeout(() => {
                 this.$refs['chartComponent2'] && this.$refs['chartComponent2'][0] && this.$refs['chartComponent2'][0].getData(resp);
             });
         },
         getChart2(data, flag) {
+            this.charts[1]['toggleDetailFlags'] = false;
             setTimeout(() => {
                 this.$refs['chartComponent2'] && this.$refs['chartComponent2'][0] && this.$refs['chartComponent2'][0].initChart(data, flag);
             });
         },
         drewChart3(resp) {
+            this.charts[2]['toggleDetailFlags'] = false;
             setTimeout(() => {
                 // 最近交易日，包含买入或卖出
                 let selectMax = _.maxBy(resp.mainData, v => {
@@ -137,16 +142,19 @@ export default {
             });
         },
         getChart3(data, flag) {
+            this.charts[2]['toggleDetailFlags'] = false;
             setTimeout(() => {
                 this.$refs['chartComponent3'] && this.$refs['chartComponent3'][0] && this.$refs['chartComponent3'][0].initChart(data, flag);
             });
         },
         drewChart4(resp) {
+            this.charts[3]['toggleDetailFlags'] = false;
             setTimeout(() => {
                 this.$refs['chartComponent4'] && this.$refs['chartComponent4'][0] && this.$refs['chartComponent4'][0].getData(resp);
             });
         },
         getChart4(data, flag) {
+            this.charts[3]['toggleDetailFlags'] = false;
             setTimeout(() => {
                 this.$refs['chartComponent4'] && this.$refs['chartComponent4'][0] && this.$refs['chartComponent4'][0].initChart(data, flag);
             });

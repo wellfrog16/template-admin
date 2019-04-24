@@ -151,7 +151,7 @@
             无需重复操作，计算完成后将自动保存到结果集"
             element-loading-background="rgba(0,0,0,0.6)"
             v-loading.fullscreen.lock="loading" :close-on-click-modal="false" :close-on-press-escape="false" :custom-class="`self-dialog`" :visible="showCarousel" width="85%" top="2%" @close="handleCloseCarousel">
-            <el-carousel :interval="4000" height="555px" v-if="showCarousel">
+            <el-carousel :interval="4000" :height="carouselHeight" indicator-position="none" arrow="never" v-if="showCarousel">
                 <el-carousel-item v-for="(item, index) in selectList" :key="index">
                     <edit-scene-dialog :operateType="1" :dialogItem="item" :createType="item.sceneType"></edit-scene-dialog>
                 </el-carousel-item>
@@ -260,7 +260,8 @@ export default {
             },
             openWindows: {},
             openFlag: false,
-            cssMap: ['#f8f400', '#40f3d6', '#ce20ff', '#13ce34']
+            cssMap: ['#f8f400', '#40f3d6', '#ce20ff', '#13ce34'],
+            carouselHeight: '555px'
         };
     },
     methods: {
@@ -360,6 +361,9 @@ export default {
                 this.$message.error('请先上传一个CSV文件');
                 return;
             }
+            this.selectList = this.tableData.filter(v => {
+                return v.sceneId === this.checkedRadio;
+            });
             this.selectList = _.sortBy(this.selectList, [item => { return item.sceneId; }]);
             let sceneTypes = this.selectList.map(v => {
                 return v.sceneType;
@@ -369,6 +373,8 @@ export default {
                 this.$message.error('不能选择同一种场景类型');
                 return;
             }
+            // 轮播图高度
+            this.carouselHeight = this.selectList[0]['sceneType'] === '1' ? '660px' : '555px';
             this.$refs['ruleForm'].validate(valid => {
                 if (valid) {
                     this.showCarousel = true;
@@ -413,6 +419,9 @@ export default {
         },
         handleUploadSuccess(resp, success, params) {
             this.loading = false;
+            if (!resp) {
+                return;
+            }
             this.showCarousel = false;
             let store = this.$store.getters.sceneCommitResp;
             store[params.sceneIds] = resp;
@@ -452,6 +461,9 @@ export default {
             } else {
                 mergeAccount(params).then(resp => {
                     this.loading = false;
+                    if (!resp) {
+                        return;
+                    }
                     this.showCarousel = false;
                     let store = this.$store.getters.sceneCommitResp;
                     store[params.sceneIds] = resp;

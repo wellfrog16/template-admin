@@ -134,8 +134,8 @@ export const chartTableColumns6 = [ // 实控关系分析关系图明细字段
     {label: '同一投资顾问', field: 'sameInvestConsu', minWidth: 140, sortable: true, sortMethod: Vue.prototype.gfnSortByChineseCharacters.bind(this, 'sameInvestConsu')},
     {label: '同一权益持有人', field: 'sameRaiHoldPerson', minWidth: 150, sortable: true, sortMethod: Vue.prototype.gfnSortByChineseCharacters.bind(this, 'sameRaiHoldPerson')},
     {label: '同一下单人', field: 'sameNextBillPerson', minWidth: 140, sortable: true, sortMethod: Vue.prototype.gfnSortByChineseCharacters.bind(this, 'sameNextBillPerson')},
-    {label: '同一法人代表', field: 'sameCapCannibPerson', minWidth: 140, sortable: true, sortMethod: Vue.prototype.gfnSortByChineseCharacters.bind(this, 'sameCapCannibPerson')},
-    {label: '同一资金调拨人', field: 'sameLpSubstTbl', minWidth: 170, sortable: true, sortMethod: Vue.prototype.gfnSortByChineseCharacters.bind(this, 'sameLpSubstTbl')},
+    {label: '同一法人代表', field: 'sameLpSubstTbl', minWidth: 140, sortable: true, sortMethod: Vue.prototype.gfnSortByChineseCharacters.bind(this, 'sameLpSubstTbl')},
+    {label: '同一资金调拨人', field: 'sameCapCannibPerson', minWidth: 170, sortable: true, sortMethod: Vue.prototype.gfnSortByChineseCharacters.bind(this, 'sameCapCannibPerson')},
     {label: '同一结算单确认人', field: 'sameStlBillCfmPerson', minWidth: 170, sortable: true, sortMethod: Vue.prototype.gfnSortByChineseCharacters.bind(this, 'sameStlBillCfmPerson')},
     {label: '同一开户授权人', field: 'sameOpenAuthPerson', minWidth: 170, sortable: true, sortMethod: Vue.prototype.gfnSortByChineseCharacters.bind(this, 'sameOpenAuthPerson')},
 ];

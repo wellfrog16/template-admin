@@ -13,6 +13,7 @@
             :cell-style="cellStyle"
             :cell-class-name="cellClassName"
             :show-header="showHeader"
+            :header-row-class-name="headerRowClassName"
             :show-summary="showSummary"
             :summary-method="summaryMethod"
             :span-method="spanMethod"
@@ -145,6 +146,7 @@ export default {
         rowStyle: [String, Function],
         cellClassName: [String, Function],
         cellStyle: [String, Function],
+        headerRowClassName: [String, Function],
         summaryMethod: Function,
         spanMethod: Function,
         showSummary: {

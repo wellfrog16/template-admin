@@ -157,7 +157,7 @@ const Index = {
                 scrollTop: true,
                 title: '舆情异常'
             },
-            hidden: false,
+            hidden: true,
             name: 'popularFeeling',
             icon: 'menu-fix-icon fab fa-audible',
             component: LinkAccountAnsis,
@@ -221,7 +221,7 @@ const Index = {
                 scrollTop: true,
                 title: '动因分析'
             },
-            hidden: false,
+            hidden: true,
             name: 'unusualAnalysisHome',
             icon: 'menu-fix-icon fab fa-audible',
             component: LinkAccountAnsis,

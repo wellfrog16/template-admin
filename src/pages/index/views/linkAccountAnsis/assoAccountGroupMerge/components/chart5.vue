@@ -1,3 +1,4 @@
+/* 基本信息、实控关系概览图 */
 <template>
     <div style="position: relative;">
         <div class="fiter-form">
@@ -145,7 +146,7 @@ export default {
                     }
                 }
             },
-            maxIndex: 50,
+            maxIndex: 9999,
             computedMaxOverWarehouseIndex: 20,
             checked: false,
         };
@@ -155,9 +156,9 @@ export default {
             this.setMaxVisualMap(val);
         },
         setMaxVisualMap(val) {
+            let id = this.tabIndex || this.$store.getters.tabIndex;
             if (val) {
                 let range = [0, 0];
-                let id = this.tabIndex || this.$store.getters.tabIndex;
                 let sessionIndex = sessionStorage.getItem(`computedMaxOverWarehouseIndex${id}`) || this.computedMaxOverWarehouseIndex;
                 if (sessionIndex && String(sessionIndex) !== '0') {
                     range = [1, sessionIndex];

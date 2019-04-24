@@ -19,7 +19,7 @@
                                         <el-option v-for="(o, oi) in table3Options" :key="oi" :label="o.label" :value="o.field"></el-option>
                                     </el-select>
                                 </div>
-                                <s-table :height="index === 2 ? 268 : 300" :columns="chartTableColumns[index]" :tableData="chartTableData[index]"></s-table>
+                                <s-table :height="index === 2 ? 268 : 300" :columns="chartTableColumns[index]" :tableData="chartTableData[index]" @handleRowDblClick="handleRowDblClick"></s-table>
                             </div>
                             <div v-else class="chart-container">
                                 <chart1 :ref="`chartComponent${index + 1}`" v-if="index === 0" :index="index" :propsChartHeight="propsChartHeight" :tabIndex="tabIndex" :sceneType="currentSceneType" :childrenMap="childrenMap" :limitQtty="limitQtty" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @handleLegendChange="handleLegendChange" @updateAccountGroupAndCustIds="updateAccountGroupAndCustIds" @getBlock2Data="getBlock2Data" @getBlock3Data="getBlock3Data"></chart1>
@@ -303,6 +303,17 @@ export default {
                 this.getBlock4Data(params['name']);
                 // get chart4
                 break;
+            }
+        },
+        handleRowDblClick(row, event) {
+            if (row.acctId && row.acctCustId) {
+                this.$store.commit('saveClickTab', false);
+                this.currentAccountGroupId = row.acctId;
+                this.currentCustIds = row.acctCustId.split(','); // params.custIds
+                this.$nextTick(() => {
+                    this.getBlock2Data();
+                    this.getBlock3Data();
+                });
             }
         },
         handleLegendChange(params, index) {

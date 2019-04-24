@@ -194,31 +194,37 @@ export default {
             return [() => {}, this.getChart2, this.getChart3, this.getChart4, this.getChart5, this.getChart6, this.getChart7];
         },
         getChart2(data) {
+            this.blocks[1]['toggleDetailFlags'] = false;
             setTimeout(() => {
                 this.$refs['block2'] && this.$refs['block2'][0] && this.$refs['block2'][0].drewChart(data);
             });
         },
         getChart3(data) {
+            this.blocks[2]['toggleDetailFlags'] = false;
             setTimeout(() => {
                 this.$refs['block3'] && this.$refs['block3'][0] && this.$refs['block3'][0].drewChart(data);
             });
         },
         getChart4(data) {
+            this.blocks[3]['toggleDetailFlags'] = false;
             setTimeout(() => {
                 this.$refs['block4'] && this.$refs['block4'][0] && this.$refs['block4'][0].drewChart(data);
             });
         },
         getChart5(data) {
+            this.blocks[4]['toggleDetailFlags'] = false;
             setTimeout(() => {
                 this.$refs['block5'] && this.$refs['block5'][0] && this.$refs['block5'][0].getData(data);
             });
         },
         getChart6(data) {
+            this.blocks[5]['toggleDetailFlags'] = false;
             setTimeout(() => {
                 this.$refs['block6'] && this.$refs['block6'][0] && this.$refs['block6'][0].getData(data);
             });
         },
         getChart7(data) {
+            this.blocks[6]['toggleDetailFlags'] = false;
             setTimeout(() => {
                 this.$refs['block7'] && this.$refs['block7'][0] && this.$refs['block7'][0].getData(data);
             });

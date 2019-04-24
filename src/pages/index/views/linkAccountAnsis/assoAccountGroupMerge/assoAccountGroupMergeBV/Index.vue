@@ -14,7 +14,7 @@
                     <div slot="content">
                         <s-full-screen class="self-fullscreen-wrap" ref="fullscreen" :fullscreen.sync="fullscreen" @change="fullscreenChange" background="#00255c">
                             <div v-if="item['toggleDetailFlags']">
-                                <s-table :columns="chartTableColumns[index]" :tableData="chartTableData[index]" :height="300" ></s-table>
+                                <s-table :columns="chartTableColumns[index]" :tableData="chartTableData[index]" :height="300" @handleRowDblClick="handleRowDblClick"></s-table>
                             </div>
                             <div v-else class="chart-container">
                                 <chart1 :ref="`chartComponent${index + 1}`" v-if="index === 0" :index="index" :tabIndex="tabIndex" :fullscreen="fullscreen" :sceneType="2" :propsChartHeight="propsChartHeight" :childrenMap="childrenMap" :limitQtty="limitQtty" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateAccountGroupAndCustIds="updateAccountGroupAndCustIds" @getDetailBy3D="getDetailBy3D"></chart1>
@@ -381,6 +381,16 @@ export default {
                     this.getDetailBy3D();
                 });
                 break;
+            }
+        },
+        handleRowDblClick(row, event) {
+            if (row.acctId && row.custIds) {
+                this.$store.commit('saveClickTab', false);
+                this.currentAccountGroupId = row.acctId;
+                this.currentCustIds = row.custIds.split(',');
+                this.$nextTick(() => {
+                    this.getDetailBy3D();
+                });
             }
         },
         commonReqParams() {

@@ -83,9 +83,11 @@ const instance = url => {
             // 需要后端定义一个异常的需要用户登录的状态码来判断，让用户重新登录
             if ((status === 200 || status === 201 || status === 204) && (config.method === 'get' || config.method === 'post' || config.method === 'put' || config.method === 'delete')) {
                 if (data.success) {
-                    Notification.success({
-                        message: data.message
-                    });
+                    if (data.resData || data.resData === 0) {
+                        Notification.success({
+                            message: data.message
+                        });
+                    }
                     if (data.message && data.message.indexOf('筛选2000') > -1) {
                         MessageBox.alert('返回结果过大，为提高操作体验，已自动筛选前2000条数据', '警告', {
                             confirmButtonText: '确定'
@@ -130,7 +132,22 @@ const instance = url => {
                 }
             }
             if (data.success || data.access_token || data.code === 200) { // mock
-                return data.resData || (data.resData === 0 ? 0 : data);
+                if (data.access_token) {
+                    return data;
+                } else if (data.resData || data.resData === 0) {
+                    return data.resData;
+                } else {
+                    if (config.url.indexOf('/accountMerge') > -1) {
+                        Notification.error({
+                            message: data.message || '未返回结果',
+                            duration: 0
+                        });
+                    } else {
+                        Notification.success({
+                            message: data.message
+                        });
+                    }
+                }
             } else {
                 return Promise.reject(data);
             }

@@ -19,7 +19,7 @@
                                         <el-option v-for="(o, oi) in table3Options" :key="oi" :label="o.label" :value="o.field"></el-option>
                                     </el-select>
                                 </div>
-                                <s-table :height="index === 2 ? 268 : 300" :columns="chartTableColumns[index]" :tableData="chartTableData[index]"></s-table>
+                                <s-table :height="index === 2 ? 268 : 300" :columns="chartTableColumns[index]" :tableData="chartTableData[index]" @handleRowDblClick="handleRowDblClick"></s-table>
                             </div>
                             <div v-else class="chart-container">
                                 <chart1 :ref="`chartComponent${index + 1}`" v-if="index === 0" :index="index" :propsChartHeight="propsChartHeight" :tabIndex="tabIndex" :sceneType="currentSceneType" :childrenMap="childrenMap" :limitQtty="limitQtty" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent" @updateAccountGroupAndCustIds="updateAccountGroupAndCustIds" @getBlock2Data="getBlock2Data" @getBlock3Data="getBlock3Data"></chart1>
@@ -380,6 +380,17 @@ export default {
                 break;
             }
         },
+        handleRowDblClick(row, event) {
+            if (row.acctId && row.custIds && row.acctGroAvgRela) { // 概览图
+                this.$store.commit('saveClickTab', false);
+                this.currentAccountGroupId = row.acctId;
+                this.currentCustIds = row.custIds.split(','); // params.custIds
+                this.$nextTick(() => {
+                    this.getBlock2Data();
+                    this.getBlock3Data();
+                });
+            }
+        },
         commonReqParams() {
             this.sceneCommitParams = this.$store.getters.sceneCommitParams[this.tabIndex || this.$store.getters.getTabIndex];
             return {
@@ -389,7 +400,7 @@ export default {
                 statStartDt: this.sceneCommitParams.statStartDt, // || '2017-02-20',
                 statStopDay: this.sceneCommitParams.statStopDay, // || '2017-10-09',
                 contrCd: this.sceneCommitParams.contrCd, // || 'cu1712'
-                taskId: this.taskId
+                taskId: this.taskId,
                 // resultIds: this.resultIds || ''
             };
         },
