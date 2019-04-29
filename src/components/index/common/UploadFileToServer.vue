@@ -177,6 +177,10 @@ export default {
                         message: message || '没有查到符合条件的数据',
                         duration: 0
                     });
+                    this.$nextTick(() => {
+                        this.$refs.upload.clearFiles();
+                        this.$emit('currentFileList', []);
+                    });
                 } else {
                     this.$message.error(message || '上传失败');
                 }

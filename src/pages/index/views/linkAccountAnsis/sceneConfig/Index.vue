@@ -433,6 +433,11 @@ export default {
         },
         handleUploadError() {
             this.loading = false;
+            this.showCarousel = false;
+            /* this.$nextTick(() => {
+                this.$refs['uploadFile'].$refs['upload'].clearFiles();
+                this.ruleForm.fileList = [];
+            }); */
         },
         handleUploadSuccess(resp, success, params) {
             this.loading = false;
@@ -478,11 +483,6 @@ export default {
                 this.uploadParams = {...this.uploadParams, ...params, ...{setupUser: localStorage.getItem('USER_NAME')}};
                 this.$nextTick(() => {
                     this.$refs['uploadFile'].submitUpload();
-                    setTimeout(() => {
-                        // 清空文件列表
-                        this.$refs['uploadFile'].$refs['upload'].clearFiles();
-                        this.ruleForm.fileList = [];
-                    }, 1000);
                 });
             } else {
                 mergeAccount(params).then(resp => {
