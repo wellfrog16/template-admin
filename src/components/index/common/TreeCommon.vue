@@ -211,7 +211,16 @@ export default {
             this.value = '';
         },
         getCheckedList(flag) {
-            return this.$refs['tree-common'].getCheckedNodes(flag);
+            let allCheckedNodes = this.$refs['tree-common'].getCheckedNodes();
+            let allChecked = allCheckedNodes.filter(v => {
+                return v.id === '0';
+            });
+            // 全国时，city字段为空
+            if (allChecked.length) {
+                return '';
+            } else {
+                return this.$refs['tree-common'].getCheckedNodes(flag);
+            }
         }
     },
     created() {

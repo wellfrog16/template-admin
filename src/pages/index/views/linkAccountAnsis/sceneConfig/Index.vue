@@ -47,6 +47,7 @@
                                                     @currentFileList="currentFileList"
                                                     @handleUploadError="handleUploadError"
                                                 ></upload-file-to-server>
+                                                <!-- <el-button @click="remove">remove</el-button> -->
                                             </div>
                                         </el-form-item>
                                     </el-radio>
@@ -261,10 +262,26 @@ export default {
             openWindows: {},
             openFlag: false,
             cssMap: ['#f8f400', '#40f3d6', '#ce20ff', '#13ce34'],
-            carouselHeight: '555px'
+            carouselHeight: '555px',
         };
     },
     methods: {
+        remove() {
+            // let fileList = this.ruleForm.fileList;
+            // this.ruleForm.fileList = [];
+            setTimeout(() => {
+                // this.ruleForm.fileList = fileList;
+
+                console.log(this.ruleForm.fileList);
+                this.$nextTick(() => {
+                    this.$refs['uploadFile'].submitUpload();
+                    setTimeout(() => {
+                        this.$refs['uploadFile'].$refs['upload'].clearFiles();
+                        this.ruleForm.fileList = [];
+                    }, 1000);
+                });
+            });
+        },
         selfCellStyle({row, column, rowIndex, columnIndex}) {
             if (columnIndex === 3) {
                 return `color: ${this.cssMap[row.sceneType - 1]}`;
@@ -418,7 +435,6 @@ export default {
             this.loading = false;
         },
         handleUploadSuccess(resp, success, params) {
-            console.log(resp);
             this.loading = false;
             if (!resp) {
                 this.$notify.error({
@@ -462,6 +478,11 @@ export default {
                 this.uploadParams = {...this.uploadParams, ...params, ...{setupUser: localStorage.getItem('USER_NAME')}};
                 this.$nextTick(() => {
                     this.$refs['uploadFile'].submitUpload();
+                    setTimeout(() => {
+                        // 清空文件列表
+                        this.$refs['uploadFile'].$refs['upload'].clearFiles();
+                        this.ruleForm.fileList = [];
+                    }, 1000);
                 });
             } else {
                 mergeAccount(params).then(resp => {
@@ -484,10 +505,12 @@ export default {
             }
         },
         handleNextStep() {
-            let cityIds = this.$refs['tree-components'].getCheckedList(true).map(v => {
-                return v.id;
-            });
-
+            let cityIds = [];
+            if (this.$refs['tree-components'].getCheckedList(true)) {
+                cityIds = this.$refs['tree-components'].getCheckedList(true).map(v => {
+                    return v.id;
+                });
+            }
             let params = {
                 exportType: this.ruleForm.exportType,
                 cityIds: cityIds.join(',') || '',

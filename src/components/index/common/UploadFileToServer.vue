@@ -172,7 +172,14 @@ export default {
                 // this.$refs.upload.clearFiles()
             } else {
                 this.$emit('handleUploadError');
-                this.$message.error(message || '上传失败');
+                if (this.actionUrl.indexOf('accountMerge/csv') > -1) {
+                    this.$notify.error({
+                        message: message || '没有查到符合条件的数据',
+                        duration: 0
+                    });
+                } else {
+                    this.$message.error(message || '上传失败');
+                }
             }
         },
         handleError(err) {
