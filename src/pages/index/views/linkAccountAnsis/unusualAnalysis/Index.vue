@@ -10,8 +10,8 @@
             <el-col :xl="12" :lg="12" :md="12" :sm="24">
                 <s-card class="inner-distinguish" :title="`内因识别`" :icon="`fa fa-broadcast-tower`" :propsHeight="850">
                     <div slot="content">
-                        <p class="header-css" style="margin-top:0;">K线图和分时图</p>
-                        <distinguish-index :indexType="0" :distinguishIndexOptions="distinguishIndexOptions[0]"></distinguish-index>
+                        <!-- <p class="header-css" style="margin-top:0;">K线图和分时图</p> -->
+                        <!-- <distinguish-index :indexType="0" :distinguishIndexOptions="distinguishIndexOptions[0]"></distinguish-index> -->
                         <inner-disting :unusualMarkAreaData="unusualMarkAreaData"></inner-disting>
                     </div>
                 </s-card>
@@ -20,16 +20,16 @@
                 <s-card class="outer-distinguish" :title="`外因识别`" :icon="`fa fa-compass`" :propsHeight="850">
                     <div slot="content" style="height: 764px; overflow: auto;">
                         <p class="header-css" style="margin-top:0;">重要舆情</p>
-                        <distinguish-index :indexType="1" :distinguishIndexOptions="distinguishIndexOptions[1]"></distinguish-index>
+                        <!-- <distinguish-index :indexType="1" :distinguishIndexOptions="distinguishIndexOptions[1]"></distinguish-index> -->
                         <important-consensus :unusualMarkAreaData="unusualMarkAreaData" v-bind="$attrs"></important-consensus>
                         <p class="header-css">舆情热度</p>
-                        <distinguish-index :indexType="2" :distinguishIndexOptions="distinguishIndexOptions[2]"></distinguish-index>
+                        <!-- <distinguish-index :indexType="2" :distinguishIndexOptions="distinguishIndexOptions[2]"></distinguish-index> -->
                         <consensus-hot-chart :unusualMarkAreaData="unusualMarkAreaData" v-bind="$attrs"></consensus-hot-chart>
                         <p class="header-css">热词走势</p>
-                        <distinguish-index :indexType="3" :distinguishIndexOptions="distinguishIndexOptions[3]"></distinguish-index>
+                        <!-- <distinguish-index :indexType="3" :distinguishIndexOptions="distinguishIndexOptions[3]"></distinguish-index> -->
                         <hot-words-trend-chart :unusualMarkAreaData="unusualMarkAreaData" v-bind="$attrs"></hot-words-trend-chart>
                         <p class="header-css">情感走势</p>
-                        <distinguish-index :indexType="4" :distinguishIndexOptions="distinguishIndexOptions[4]"></distinguish-index>
+                        <!-- <distinguish-index :indexType="4" :distinguishIndexOptions="distinguishIndexOptions[4]"></distinguish-index> -->
                         <emotional-trend-chart :unusualMarkAreaData="unusualMarkAreaData" v-bind="$attrs"></emotional-trend-chart>
                     </div>
                 </s-card>
@@ -60,12 +60,15 @@
                     </div>
                 </s-card>
             </el-col>
+            <el-col style="text-align: center;">
+                <el-button type="warning" size="small" @click="nextStep">下一步</el-button>
+            </el-col>
         </el-row>
     </div>
 </template>
 <script>
 import queryBlock from './components/queryBlock';
-import distinguishIndex from './components/distinguishIndex';
+// import distinguishIndex from './components/distinguishIndex';
 import innerDisting from './components/innerDisting';
 import importantConsensus from './components/importantConsensus';
 import consensusHotChart from './components/consensusHotChart';
@@ -78,7 +81,7 @@ import {reasonReportColumns, unusualReportColumns} from './components/constants'
 export default {
     components: {
         queryBlock,
-        distinguishIndex,
+        // distinguishIndex,
         innerDisting,
         importantConsensus,
         consensusHotChart,
@@ -151,6 +154,16 @@ export default {
                 return {'color': '#1bf772'};
             }
             return {'color': '#fff'};
+        },
+        nextStep() {
+            this.$confirm('离开本页面信息将丢失，是否确定离开?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            })
+                .then(() => {
+                    this.$router.push({name: 'tradeAnalysis'});
+                });
         },
     }
 };

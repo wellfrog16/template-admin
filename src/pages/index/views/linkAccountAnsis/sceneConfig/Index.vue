@@ -418,8 +418,13 @@ export default {
             this.loading = false;
         },
         handleUploadSuccess(resp, success, params) {
+            console.log(resp);
             this.loading = false;
             if (!resp) {
+                this.$notify.error({
+                    message: '没有查到符合条件的数据',
+                    duration: 0
+                });
                 return;
             }
             this.showCarousel = false;

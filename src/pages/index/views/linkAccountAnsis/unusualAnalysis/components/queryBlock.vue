@@ -7,7 +7,7 @@
             <el-form ref="searchForm" :model="searchForm" :rules="rules" label-width="120px">
                 <el-row>
                     <el-col :xl="12" :lg="12" :md="12" :sm="24">
-                        <el-form-item prop="category" label="交易品种：">
+                        <el-form-item prop="category" label="交易品种">
                             <el-select v-model="searchForm.category" size="small" class="custom-width" placeholder="请选择交易品种">
                                 <el-option v-for="(item, index) in categoryOptions"
                                            :label="item.label"
@@ -17,12 +17,12 @@
                         </el-form-item>
                     </el-col>
                     <el-col :xl="12" :lg="12" :md="12" :sm="24">
-                        <el-form-item prop="contractCode" label="合约代码：">
+                        <el-form-item prop="contractCode" label="合约代码">
                             <el-input clearable size="small" v-model="searchForm.contractCode" class="custom-width" placeholder="cu1712"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xl="12" :lg="12" :md="12" :sm="24">
-                        <el-form-item prop="selectDateRange" label="统计区间：">
+                        <el-form-item prop="selectDateRange" label="统计区间">
                             <s-date-picker
                                 :value="searchForm.selectDateRange"
                                 :isRange="true"
@@ -31,7 +31,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :xl="12" :lg="12" :md="12" :sm="24">
-                        <el-form-item label="指标设置：">
+                        <el-form-item label="指标设置">
                             <el-button size="small" type="primary" @click="showSettingDialog">指标设置<i class="el-icon-setting"></i></el-button>
                         </el-form-item>
                     </el-col>

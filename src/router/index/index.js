@@ -221,7 +221,7 @@ const Index = {
                 scrollTop: true,
                 title: '动因分析'
             },
-            hidden: true,
+            hidden: false,
             name: 'unusualAnalysisHome',
             icon: 'menu-fix-icon fab fa-audible',
             component: LinkAccountAnsis,

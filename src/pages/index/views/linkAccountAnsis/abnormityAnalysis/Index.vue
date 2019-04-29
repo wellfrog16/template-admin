@@ -114,7 +114,7 @@
                     </div>
                 </div>
             </s-card>
-            <s-card style="padding: 10px 0;" v-if="activeName ==='2'" :title="`自成交分析图`" :icon="`fa fa-user-md`"
+            <s-card style="padding: 10px 0;" v-if="activeName ==='2'" :title="`自成交分析图`" :icon="`fa fa-donate`"
                     class="a_form_table_bar">
                 <div slot="content">
                     <div slot="content">

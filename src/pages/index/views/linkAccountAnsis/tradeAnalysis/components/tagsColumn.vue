@@ -1,12 +1,12 @@
 <template>
-    <div class="click-on-table-cell">
-        <a @click="handleClick" style="cursor: pointer;">{{ scope.row[item.field] }}</a>
+    <div class="tags-column">
+        <el-tag type="warning" size="small" v-for="(item, index) in scope.row[item.field]" :key="index">{{ item.name }}</el-tag>
     </div>
 </template>
 
 <script>
 export default {
-    name: 'clickOnTableCell',
+    name: 'tagsColumn',
     props: {
         scope: {
             type: Object,
@@ -29,9 +29,9 @@ export default {
     },
     computed: {},
     methods: {
-        handleClick() {
-            this.$emit('handlerChange', {row: this.scope.row, item: this.item});
-        }
+        // handleClick() {
+        //     this.$emit('handlerChange', {row: this.scope.row, item: this.item});
+        // }
     },
     created() {
     },
@@ -43,7 +43,7 @@ export default {
 </script>
 
 <style lang="less" module>
-    .click-on-table-cell {
+    .tags-column {
         text-align: center;
         &:focus {
             outline: none;

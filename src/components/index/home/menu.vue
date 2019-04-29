@@ -62,6 +62,7 @@
 <script>
 // todo: 三级菜单通用组件化
 export default {
+    inject: ['reload'],
     props: {
         'data': {type: Array, default: () => []},
         'collapse': {type: Boolean, default: false},
@@ -90,6 +91,9 @@ export default {
             localStorage.removeItem('USER_NAME');
             this.$router.push({name: 'login'});
             this.$message.success('登出成功');
+            sessionStorage.clear();
+            // refresh
+            this.reload();
         }
     }
 };

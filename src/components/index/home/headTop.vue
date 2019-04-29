@@ -54,6 +54,7 @@ import img3 from '@/assets/img/usr/login/3_1.png';
 import img4 from '@/assets/img/usr/login/4_1.png';
 export default {
     name: 'headTop',
+    inject: ['reload'],
     data() {
         return {
             userName: localStorage.getItem('USER_NAME') || '',
@@ -71,6 +72,9 @@ export default {
             localStorage.removeItem('USER_NAME');
             this.$router.push({name: 'login'});
             this.$message.success('登出成功');
+            sessionStorage.clear();
+            // refresh
+            this.reload();
         },
         goHome() {
             this.$router.push({name: 'login', query: {loginFlag: true}});

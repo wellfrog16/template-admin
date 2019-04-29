@@ -83,6 +83,7 @@ import {getAccessToken} from '@/api/login';
 // import instance from '@/helper/axios';
 // import axios from 'axios';
 export default {
+    inject: ['reload'],
     data() {
         return {
             loginFlag: false,
@@ -154,6 +155,9 @@ export default {
             localStorage.removeItem('ACCESS_TOKEN');
             localStorage.removeItem('USER_NAME');
             this.$message.success('登出成功');
+            sessionStorage.clear();
+            // refresh
+            this.reload();
         }
     },
     mounted() {
