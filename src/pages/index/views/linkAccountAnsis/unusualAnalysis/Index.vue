@@ -97,20 +97,20 @@ export default {
             unusualReportColumns,
             activeTab: '0',
             showReasonReport: false,
-            unusualMarkAreaData: [[{name: '异常区域', xAxis: '2019-04-12'}, {xAxis: '2019-04-13'}], [{name: '异常区域', xAxis: '2019-04-15'}, {xAxis: '2019-04-16'}]],
+            unusualMarkAreaData: [[{name: '异常区域', xAxis: '2019-04-15'}, {xAxis: '2019-04-16'}]], //, [{name: '异常区域', xAxis: '2019-04-12'}, {xAxis: '2019-04-13'}]
             reasonReportData: [
-                {name: '美油价格', curPrice: '11', hisPriceAvg: '1', deviate: '1', influenceEffect: '1', attribute: '外因/宏观因素'},
-                {name: '原油价格', curPrice: '22', hisPriceAvg: '3', deviate: '3', influenceEffect: '3', attribute: '内因/异常交易'},
+                {name: '螺纹钢价格', curPrice: '11', hisPriceAvg: '1', deviate: '1', influenceEffect: '1', attribute: '外因/宏观因素'},
+                {name: '螺纹钢价格', curPrice: '22', hisPriceAvg: '3', deviate: '3', influenceEffect: '3', attribute: '内因/异常交易'},
                 {name: '汇率', curPrice: '13', hisPriceAvg: '13', deviate: '4', influenceEffect: '4', attribute: '外因'},
                 {name: '交易量', curPrice: '44', hisPriceAvg: '21', deviate: '3', influenceEffect: '4', attribute: '外因'},
                 {name: '现货价格偏离', curPrice: '23', hisPriceAvg: '31', deviate: '12', influenceEffect: '21', attribute: '内因'},
                 {name: '舆情情感', curPrice: '13', hisPriceAvg: '11', deviate: '1', influenceEffect: '11', attribute: '外因'},
             ],
             unusualReportData: [
-                {varieties: '原油', identifyingTargets: '舆情', keywords: '减产', timeRange: '2019-04-02 10:01:09 -- 11:00:02', thingsDesc: '**', userRange: '1000', influenceRange: '20%', grade: '高'},
-                {varieties: '原油', identifyingTargets: '价格', keywords: '价格波动过大', timeRange: '2019-04-02 10:01:09 -- 11:00:02', thingsDesc: '**', userRange: '1000', influenceRange: '10%', grade: '中'},
-                {varieties: '沪铜', identifyingTargets: '现期', keywords: '期现差', timeRange: '2019-04-02 10:01:09 -- 11:00:02', thingsDesc: '**', userRange: '1000', influenceRange: '4%', grade: '低'},
-                {varieties: '原油', identifyingTargets: '舆情', keywords: '减产', timeRange: '2019-04-02 10:01:09 -- 11:00:02', thingsDesc: '**', userRange: '1000', influenceRange: '20%', grade: '高'},
+                {varieties: '螺纹钢', contrCode: 'cu1712', identifyingTargets: '舆情', keywords: '减产', timeRange: '2019-04-02 10:01:09 -- 11:00:02', thingsDesc: '**', userRange: '1000', influenceRange: '20%', grade: '高'},
+                {varieties: '螺纹钢', contrCode: 'cu1712', identifyingTargets: '价格', keywords: '价格波动过大', timeRange: '2019-04-02 10:01:09 -- 11:00:02', thingsDesc: '**', userRange: '1000', influenceRange: '10%', grade: '中'},
+                {varieties: '螺纹钢', contrCode: 'cu1712', identifyingTargets: '现期', keywords: '期现差', timeRange: '2019-04-02 10:01:09 -- 11:00:02', thingsDesc: '**', userRange: '1000', influenceRange: '4%', grade: '低'},
+                {varieties: '螺纹钢', contrCode: 'cu1712', identifyingTargets: '舆情', keywords: '增产', timeRange: '2019-04-02 10:01:09 -- 11:00:02', thingsDesc: '**', userRange: '1000', influenceRange: '20%', grade: '高'},
             ],
             distinguishIndexOptions: [
                 [
@@ -141,7 +141,9 @@ export default {
         };
     },
     methods: {
-        handleExportUnusualReport() {},
+        handleExportUnusualReport() {
+            this.$message.success('导出成功');
+        },
         toggleDetail() {
             this.showReasonReport = !this.showReasonReport;
         },

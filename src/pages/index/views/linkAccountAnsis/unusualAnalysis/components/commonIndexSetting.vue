@@ -2,7 +2,7 @@
     <div class="common-index-setting">
         <el-row :gutter="10">
             <el-col :span="10">
-                <s-table style="width:100%;" :loading="loading" header-row-class-name="table-header-css" :columns="correlationIndexColumns" :tableData="tableData[indexType]" :height="200" :otherProps="{unit: '%'}">
+                <s-table style="width:100%;" :loading="loading" header-row-class-name="table-header-css" :columns="correlationIndexColumns" :tableData="tableData[indexType]" :height="200"> <!--  :otherProps="{unit: '%'}" -->
                     <el-table-column
                         :width="100"
                         align="center"
@@ -37,7 +37,7 @@
 </template>
 <script>
 import STable from '@/components/index/common/STable';
-import {correlationIndexColumns} from '../../sceneConfig/components/constants';
+import {correlationIndexColumns} from './constants';
 export default {
     components: {STable},
     props: {
@@ -57,7 +57,7 @@ export default {
             tableData: [
                 [ // 内因指标
                     {indexName: '买入成交', indexCon: '>=', indexValue: '90'},
-                    {indexName: '卖出成交', indexCon: '>=', indexValue: '90'},
+                    {indexName: '卖出成交', indexCon: '<=', indexValue: '90'},
                     {indexName: '净买入成交', indexCon: '>=', indexValue: '90'},
                     {indexName: '多头持仓', indexCon: '>=', indexValue: '90'},
                     {indexName: '空头持仓', indexCon: '>=', indexValue: '90'},
@@ -92,7 +92,7 @@ export default {
     methods: {
         exportModel() {},
         handleInsert(item) {
-            let str = `${item.indexName} ${item.indexCon} ${item.indexValue}%`;
+            let str = `${item.indexName} ${item.indexCon} ${item.indexValue}`;
             this.insertText(str);
         },
         insertText(str, obj) {

@@ -4,7 +4,10 @@
             <el-row slot="content">
                 指标模板列表：
                 <el-select size="small" v-model="selectIndexModel">
-                    <el-option v-for="(item, index) in indexModels" :key="index" :label="item.label" :value="item.value"></el-option>
+                    <el-option v-for="(item, index) in indexModels" :key="index" :label="item.label" :value="item.value">
+                        <span style="float: left;">{{ item.label }}</span>
+                        <span style="float: rihgt;"><el-button size="mini" type="danger" @click="deleteModel(item)">删除</el-button></span>
+                    </el-option>
                 </el-select>
                 <el-button style="margin-left:15px;" type="warning" size="small" @click="handleApplyModel">应用模板</el-button>
                 <el-button style="margin-left:15px;" type="primary" size="small" @click="handleCreateNewModel">{{ showCreateModelBlock ? '隐藏' : '新增模板' }}<i :class=" {'el-icon-arrow-up': showCreateModelBlock,  'el-icon-arrow-down': !showCreateModelBlock}"></i></el-button>
@@ -168,6 +171,9 @@ export default {
         },
         handleCreateNewModel() {
             this.showCreateModelBlock = !this.showCreateModelBlock;
+        },
+        deleteModel(item) {
+
         },
         exportModel() {},
         handleApplyModel() {

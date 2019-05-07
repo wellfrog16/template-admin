@@ -3,19 +3,19 @@
         <!-- 查询条件 -->
         <query-block @handleConfirmQuery="handleConfirmQuery"></query-block>
         <!-- 事件分析模块 -->
-        <s-card title="事件分析" icon="fa fa-file-contract">
+        <s-card title="事件分析" icon="fa fa-file-contract" :loading = "loading">
             <div slot="content">
                 <event-analysis></event-analysis>
             </div>
         </s-card>
         <!-- 用户列表模块 -->
-        <s-card title="用户列表" icon="fa fa-user">
+        <s-card title="用户列表" icon="fa fa-user" :loading = "loading">
             <div slot="content">
                 <user-list></user-list>
             </div>
         </s-card>
         <!-- 异常行为分析 -->
-        <s-card title="异常行为分析" icon="fa fa-file-invoice-dollar">
+        <s-card title="异常行为分析" icon="fa fa-file-invoice-dollar" :loading = "loading">
             <div slot="content">
                 <abnorma-analysis></abnorma-analysis>
             </div>
@@ -38,13 +38,18 @@ export default {
     },
     data() {
         return {
-            ruleForm: {}
+            ruleForm: {},
+            loading: false
         };
     },
     methods: {
         handleConfirmQuery(ruleForm) {
             console.log(ruleForm);
             this.ruleForm = ruleForm;
+            this.loading = true;
+            setTimeout(() => {
+                this.loading = false;
+            }, 10000);
             // todo get user list
             // todo get event analysis
         },

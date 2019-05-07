@@ -3,8 +3,11 @@
         <s-card :title="`指标模板选择`">
             <el-row slot="content">
                 指标模板列表：
-                <el-select size="small" v-model="selectIndexModels" multiple collapse-tags>
-                    <el-option v-for="(item, index) in indexModels" :key="index" :label="item.label" :value="item.value"></el-option>
+                <el-select size="small" v-model="selectIndexModels" multiple collapse-tags style="width: 300px;">
+                    <el-option v-for="(item, index) in indexModels" :key="index" :label="item.label" :value="item.value">
+                        <el-button style="float: left;" size="mini" type="danger" @click.stop="deleteModel(item)">删除</el-button>
+                        <span style="float: right; margin-right: 20px;">{{ item.label }}</span>
+                    </el-option>
                 </el-select>
                 <el-button style="margin-left:15px;" type="warning" size="small" @click="handleApplyModel">应用模板</el-button>
                 <el-button style="margin-left:15px;" type="primary" size="small" @click="showCreateModelBlock = !showCreateModelBlock">{{ showCreateModelBlock ? '隐藏' : '新增模板' }}<i :class=" {'el-icon-arrow-up': showCreateModelBlock,  'el-icon-arrow-down': !showCreateModelBlock}"></i></el-button>
@@ -64,6 +67,18 @@ export default {
             this.$message.success('指标模板应用成功！');
             this.$emit('selectModels', this.selectIndexModelDetail);
             this.$emit('closeDialog');
+        },
+        deleteModel(item) {
+            this.$confirm(`确定删除'${item.label}'?`, '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            })
+                .then(() => {
+                    // deleteResultById(this.deleteUrl, item.resultId).then(() => {
+                    //     this.resultList.splice(this.resultList.findIndex(f => { return f.resultId === item.resultId; }), 1);
+                    // });
+                });
         }
     },
     mounted() {

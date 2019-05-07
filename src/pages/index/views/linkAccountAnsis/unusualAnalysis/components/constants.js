@@ -1,5 +1,12 @@
 import clickOnTableCell from '@/components/index/common/clickOnTableCell';
 import consensusTags from './consensusTags';
+import InputInTable from '@/components/index/common/InputInTable';
+import SelectInTable from '@/components/index/common/SelectInTable';
+export const correlationIndexColumns = [
+    {field: 'indexName', label: '指标名称', minWidth: 130},
+    {field: 'indexCon', label: '条件', minWidth: 100, template: SelectInTable},
+    {field: 'indexValue', label: '值', template: InputInTable},
+];
 export const importantConsensusColumns = [
     {label: '舆情标题', field: 'title', minWidth: 100, template: clickOnTableCell},
     {label: '相似文章统计', field: 'count', minWidth: 150},
@@ -18,6 +25,7 @@ export const reasonReportColumns = [
 ];
 export const unusualReportColumns = [
     {label: '品种', field: 'varieties', minWidth: 100},
+    {label: '合约代码', field: 'contrCode', minWidth: 100},
     {label: '识别标的', field: 'identifyingTargets', minWidth: 100},
     {label: '关键词', field: 'keywords', minWidth: 100},
     {label: '时间范围', field: 'timeRange', minWidth: 100},

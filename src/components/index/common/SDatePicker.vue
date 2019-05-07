@@ -380,15 +380,25 @@ export default {
             if (this.useSelfValidateDateRange) { // 启用自定义校验方法，开始日期不用小于结束日期
                 defaultDisabledFlag = false;
             }
-            let propsUpDisabledTime = time.getTime() > this.propsUpDisabledTime;
-            let propsDownDisabledTime = time.getTime() < this.propsDownDisabledTime;
-            return this.propsUpDisabledTime ? (defaultDisabledFlag || propsUpDisabledTime) : this.propsDownDisabledTime ? (defaultDisabledFlag || propsDownDisabledTime) : defaultDisabledFlag;
+            if (this.propsUpDisabledTime && this.propsDownDisabledTime) {
+                return (time.getTime() > this.propsUpDisabledTime || time.getTime() < this.propsDownDisabledTime || time.getTime() > moment(this.value2)._d);
+            } else if (this.propsUpDisabledTime) {
+                return time.getTime() > this.propsUpDisabledTime || time.getTime() > moment(this.value2)._d;
+            } else if (this.propsDownDisabledTime) {
+                return time.getTime() < this.propsDownDisabledTime || time.getTime() > moment(this.value2)._d;
+            }
+            return defaultDisabledFlag;
         },
         rangeDate2(time) {
             let defaultDisabledFlag = time.getTime() < moment(this.value1)._d;
-            let propsUpDisabledTime = time.getTime() > this.propsUpDisabledTime;
-            let propsDownDisabledTime = time.getTime() < this.propsDownDisabledTime;
-            return this.propsUpDisabledTime ? (defaultDisabledFlag || propsUpDisabledTime) : this.propsDownDisabledTime ? (defaultDisabledFlag || propsDownDisabledTime) : defaultDisabledFlag;
+            if (this.propsUpDisabledTime && this.propsDownDisabledTime) {
+                return (time.getTime() > this.propsUpDisabledTime || time.getTime() < this.propsDownDisabledTime || time.getTime() < moment(this.value1)._d);
+            } else if (this.propsUpDisabledTime) {
+                return time.getTime() > this.propsUpDisabledTime || time.getTime() < moment(this.value1)._d;
+            } else if (this.propsDownDisabledTime) {
+                return time.getTime() < this.propsDownDisabledTime || time.getTime() < moment(this.value1)._d;
+            }
+            return defaultDisabledFlag;
         },
         handlerChange(index) {
             if (this.isRange) {

@@ -1,7 +1,7 @@
 <template>
     <div class="user-list">
         <el-form label-width="140px;">
-            <el-form-item label="事件集选择：" style="margin-bottom: 0;">
+            <el-form-item label="时间窗口选择：" style="margin-bottom: 0;">
                 <el-checkbox-group v-model="checkedResults" @change="handleCheckedResultsChange">
                     <el-checkbox v-for="(item, index) in eventResults" :key="index" :label="item.value">
                         <span :style="{'background-color': colorMap[item.value]}" class="edge-css"></span>
@@ -9,7 +9,7 @@
                     </el-checkbox>
                 </el-checkbox-group>
             </el-form-item>
-            <el-form-item label="批量操作：">
+            <el-form-item label="批量查看操作：">
                 <el-button type="primary" size="mini" @click="showStaticInfo">静态信息</el-button>
                 <el-button type="primary" size="mini" @click="showGraphMap">用户关系推理</el-button>
                 <el-button type="primary" size="mini" @click="showTradeDetail">交易明细</el-button>
@@ -95,11 +95,11 @@ export default {
             staticInfoColumns,
             tradeDetailColumns,
             userList: [
-                {eventTimeRange: 0, custId: '80002930', qtty: '8776', custName: '张三', eventTags: [{name: '算法', type: 2}], tradeTags: [{name: 'afas', type: 2}], modelTags: [{name: 'aerv', type: 2}], hisEventTags: [{name: 'iioe', type: 2}], outTags: [{name: 'ibnww', type: 2}]},
-                {eventTimeRange: 1, custId: '80002930', qtty: '8776', custName: '张三', eventTags: [{name: '算法', type: 2}], tradeTags: [{name: 'afas', type: 2}], modelTags: [{name: 'aerv', type: 2}], hisEventTags: [{name: 'iioe', type: 2}], outTags: [{name: 'ibnww', type: 2}]},
-                {eventTimeRange: 2, custId: '80002930', qtty: '8776', custName: '张三', eventTags: [{name: '算法', type: 2}], tradeTags: [{name: 'afas', type: 2}], modelTags: [{name: 'aerv', type: 2}], hisEventTags: [{name: 'iioe', type: 2}], outTags: [{name: 'ibnww', type: 2}]},
-                {eventTimeRange: 0, custId: '80002930', qtty: '8776', custName: '张三', eventTags: [{name: '算法', type: 2}], tradeTags: [{name: 'afas', type: 2}], modelTags: [{name: 'aerv', type: 2}], hisEventTags: [{name: 'iioe', type: 2}], outTags: [{name: 'ibnww', type: 2}]},
-                {eventTimeRange: 1, custId: '80002930', qtty: '8776', custName: '张三', eventTags: [{name: '算法', type: 2}], tradeTags: [{name: 'afas', type: 2}], modelTags: [{name: 'aerv', type: 2}], hisEventTags: [{name: 'iioe', type: 2}], outTags: [{name: 'ibnww', type: 2}]},
+                {eventTimeRange: 0, custId: '80002930', qtty: '8776', custName: '***', eventTags: [{name: '频繁报撤单', type: 2}], tradeTags: [{name: 'afas', type: 2}], modelTags: [{name: 'aerv', type: 2}], hisEventTags: [{name: 'iioe', type: 2}], outTags: [{name: 'ibnww', type: 2}]},
+                {eventTimeRange: 1, custId: '80002931', qtty: '7422', custName: '***', eventTags: [{name: '频繁报撤单', type: 2}], tradeTags: [{name: 'afas', type: 2}], modelTags: [{name: 'aerv', type: 2}], hisEventTags: [{name: 'iioe', type: 2}], outTags: [{name: 'ibnww', type: 2}]},
+                {eventTimeRange: 2, custId: '80002932', qtty: '9211', custName: '***', eventTags: [{name: '频繁报撤单', type: 2}], tradeTags: [{name: 'afas', type: 2}], modelTags: [{name: 'aerv', type: 2}], hisEventTags: [{name: 'iioe', type: 2}], outTags: [{name: 'ibnww', type: 2}]},
+                {eventTimeRange: 0, custId: '80002933', qtty: '1123', custName: '***', eventTags: [{name: '频繁报撤单', type: 2}], tradeTags: [{name: 'afas', type: 2}], modelTags: [{name: 'aerv', type: 2}], hisEventTags: [{name: 'iioe', type: 2}], outTags: [{name: 'ibnww', type: 2}]},
+                {eventTimeRange: 1, custId: '80002934', qtty: '2221', custName: '***', eventTags: [{name: '频繁报撤单', type: 2}], tradeTags: [{name: 'afas', type: 2}], modelTags: [{name: 'aerv', type: 2}], hisEventTags: [{name: 'iioe', type: 2}], outTags: [{name: 'ibnww', type: 2}]},
             ],
             staticInfoDialog: false,
             graphMapDialog: false,
@@ -109,7 +109,7 @@ export default {
             loadingStaticInfo: false,
             loadingTradeDetail: false,
             staticInfoTableData: [],
-            tradeDetailTableData: [{custId: '183331', custName: '张三'}],
+            tradeDetailTableData: [{custId: '183331', custName: '***'}],
             currentItem: {},
             checkedResults: [0, 1, 2],
             eventResults: [

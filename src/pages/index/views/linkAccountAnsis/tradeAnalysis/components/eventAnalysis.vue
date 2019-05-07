@@ -3,7 +3,7 @@
         <div class="event-main-info">
             <el-row>
                 <el-col :span="6" class="self-line">
-                    品种：原油
+                    品种：螺纹钢
                 </el-col>
                 <el-col :span="6" class="self-line">
                     识别标的：舆情
@@ -15,8 +15,8 @@
                 <el-col :span="24" class="self-line">
                     时间范围：2017-04-01 09:30:02 -- 2017-04-01 09:32:42
                 </el-col>
-                <el-col :span="24" class="self-line">事件描述：发顺丰</el-col>
-                <el-col :span="24" class="self-line">事件标签：异常交易</el-col>
+                <el-col :span="24" class="self-line">事件描述：减产利多</el-col>
+                <el-col :span="24" class="self-line">事件标签：<el-tag type="warning" size="small">舆情异常</el-tag></el-col>
             </el-row>
         </div>
         <div>
@@ -170,7 +170,7 @@ export default {
                             },
                             data: [
                                 [{name: '异常区域', xAxis: '09:31'}, {xAxis: '09:33'}],
-                                [{name: '异常区域', xAxis: '09:30', itemStyle: {color: 'transparent', borderColor: '#ccc', borderWidth: 1, borderType: 'dashed'}}, {xAxis: '09:34'}],
+                                [{name: '观察窗口', xAxis: '09:30', itemStyle: {color: 'transparent', borderColor: '#ccc', borderWidth: 1, borderType: 'dashed'}, label: {color: '#ccc', position: 'insideTopRight'}}, {xAxis: '09:34'}],
                             ]
                         }
                     },
@@ -197,7 +197,7 @@ export default {
                             },
                             data: [
                                 [{name: '异常区域', xAxis: '09:31'}, {xAxis: '09:33'}],
-                                [{name: '异常区域', xAxis: '09:30', itemStyle: {color: 'transparent', borderColor: '#ccc', borderWidth: 1, borderType: 'dashed'}}, {xAxis: '09:34'}],
+                                [{name: '观察窗口', xAxis: '09:30', itemStyle: {color: 'transparent', borderColor: '#ccc', borderWidth: 1, borderType: 'dashed'}, label: {color: '#ccc', position: 'insideTopRight'}}, {xAxis: '09:34'}],
                             ]
                         },
                         data: [1233, 4444, 5225, 1166, 7111, 7117, 2254],
@@ -215,7 +215,7 @@ export default {
                             },
                             data: [
                                 [{name: '异常区域', xAxis: '09:31'}, {xAxis: '09:33'}],
-                                [{name: '异常区域', xAxis: '09:30', itemStyle: {color: 'transparent', borderColor: '#ccc', borderWidth: 1, borderType: 'dashed'}}, {xAxis: '09:34'}],
+                                [{name: '观察窗口', xAxis: '09:30', itemStyle: {color: 'transparent', borderColor: '#ccc', borderWidth: 1, borderType: 'dashed'}, label: {color: '#ccc', position: 'insideTopRight'}}, {xAxis: '09:34'}],
                             ]
                         },
                         areaStyle: {},
@@ -235,7 +235,7 @@ export default {
                             },
                             data: [
                                 [{name: '异常区域', xAxis: '09:31'}, {xAxis: '09:33'}],
-                                [{name: '异常区域', xAxis: '09:30', itemStyle: {color: 'transparent', borderColor: '#ccc', borderWidth: 1, borderType: 'dashed'}}, {xAxis: '09:34'}],
+                                [{name: '观察窗口', xAxis: '09:30', itemStyle: {color: 'transparent', borderColor: '#ccc', borderWidth: 1, borderType: 'dashed'}, label: {color: '#ccc', position: 'insideTopRight'}}, {xAxis: '09:34'}],
                             ]
                         },
                         areaStyle: {},

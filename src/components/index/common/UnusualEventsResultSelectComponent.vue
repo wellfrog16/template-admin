@@ -1,5 +1,5 @@
 <template>
-    <el-select class="custom-width" clearable size="small" v-model="resultId" @change="handleChange" v-loading="loading" placeholder="请选择结果集">
+    <el-select class="custom-width" clearable size="small" v-model="resultId" @change="handleChange" v-loading="loading" placeholder="请选择异常事件">
         <el-option-group
             v-for="group in resultOptions"
             :key="group.label"
@@ -68,12 +68,14 @@ export default {
                     resultName: '事件1',
                     resultType: '1',
                     setupUser: 'appadmin',
-                    timeRange: '2019-02-12 09:09:19 - 2019-02-13 09:09:19'
+                    contrCode: 'cu1712',
+                    timeRange: '2019-02-10 09:09:19 - 2019-02-13 09:09:19'
                 },
                 {
                     resultId: '1555988375',
                     resultName: '事件2',
                     resultType: '1',
+                    contrCode: 'cu1712',
                     setupUser: 'appadmin',
                     timeRange: '2019-02-16 09:09:19 - 2019-02-17 09:09:19'
                 }

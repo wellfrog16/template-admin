@@ -2,7 +2,7 @@
     <div class="abnorma-nalysis">
         <el-tabs class="a_form_table_bar bar-shoe" v-model="activeName" size="small" type="card" @tab-click="handleTabsClick">
             <el-tab-pane label="超仓分析" name="0">
-                <el-row :gutter="15">
+                <el-row :gutter="15" style="padding: 6px 6px 0 6px;">
                     <el-col :span="12">
                         <s-card :title="`超仓分析表`" :icon="`fa fa-chart-bar`">
                             <div slot="content">
@@ -21,7 +21,7 @@
                 </el-row>
             </el-tab-pane>
             <el-tab-pane label="频繁报撤单分析" name="1">
-                <el-row :gutter="15">
+                <el-row :gutter="15" style="padding: 6px 6px 0 6px;">
                     <el-col :span="12">
                         <s-card :title="`频繁报撤单分析表`" :icon="`fa fa-user-md`">
                             <div slot="content">
@@ -44,7 +44,7 @@
 
             </el-tab-pane>
             <el-tab-pane label="自成交分析" name="2">
-                <el-row :gutter="15">
+                <el-row :gutter="15" style="padding: 6px 6px 0 6px;">
                     <el-col :span="12">
                         <s-card :title="`自成交分析表`" :icon="`fa fa-donate`">
                             <div slot="content">
@@ -137,7 +137,7 @@ export default {
         getTestData() {
             let params = {
                 analysisType: '',
-                resultSetNo: '1556015132', // '1555986171', // 结果集编号
+                resultSetNo: '1556002654', // '1556015132', // '1555666647', // 结果集编号
                 contrCode: 'cu1712', // 合约代码
                 statTimeBegin: '2017-05-05', // 统计起始日
                 statTimeEnd: '2017-09-09', // 统计截止日

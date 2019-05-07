@@ -1,7 +1,7 @@
 <template>
     <s-card class="query-block" :title="`动因分析指标筛选及设置`" :icon="`fa fa-filter`">
         <div slot="right">
-            <el-button type="primary" size="small">确定</el-button>
+            <el-button type="warning" size="small">确定</el-button>
         </div>
         <div slot="content">
             <el-form ref="searchForm" :model="searchForm" :rules="rules" label-width="120px">
@@ -28,6 +28,13 @@
                                 :isRange="true"
                                 @change="handleSdatePickerDateRangeChange"
                             ></s-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xl="12" :lg="12" :md="12" :sm="24">
+                        <el-form-item prop="timeGranularity" label="时间粒度">
+                            <el-select size="small" v-model="searchForm.timeGranularity" class="custom-width">
+                                <el-option :disabled="item.value !== '3'" v-for="(item, index) in timeGranularityOptions" :key="index" :value="item.value" :label="item.label"></el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :xl="12" :lg="12" :md="12" :sm="24">
@@ -73,15 +80,23 @@ export default {
     data() {
         return {
             searchForm: {
-                category: '',
+                category: '0',
                 selectDateRange: [new Date(moment().subtract(5, 'days').format('YYYY-MM-DD')), new Date(moment().subtract(1, 'days').format('YYYY-MM-DD'))],
-                contractCode: ''
+                contractCode: '',
+                timeGranularity: '3'
             },
             categoryOptions: [
-                {label: '原油', value: 0},
-                {label: '橡胶', value: 1},
-                {label: '黄金', value: 2},
-                {label: '燃油', value: 3},
+                {label: '螺纹钢', value: '0'},
+                {label: '橡胶', value: '1'},
+                {label: '黄金', value: '2'},
+                {label: '燃油', value: '3'},
+            ],
+            timeGranularityOptions: [
+                {label: '分时图', value: '0'},
+                {label: '15分钟', value: '1'},
+                {label: '一小时', value: '2'},
+                {label: '一天', value: '3'},
+                {label: '一月', value: '4'},
             ],
             rules: {},
             settingDialog: false,

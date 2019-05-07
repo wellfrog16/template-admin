@@ -23,12 +23,12 @@ export default {
             type: Object,
             default() {
                 return {
-                    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                    // backgroundColor: 'rgba(255, 255, 255, 0.8)',
                     series: [{
                         type: 'wordCloud',
                         gridSize: 2,
-                        sizeRange: [12, 50],
-                        rotationRange: [-90, 90],
+                        sizeRange: [20, 50],
+                        // rotationRange: [-90, 90],
                         shape: 'pentagon',
                         textStyle: {
                             normal: {
@@ -42,18 +42,20 @@ export default {
                             },
                             emphasis: {
                                 shadowBlur: 10,
-                                shadowColor: '#333'
+                                shadowColor: '#fff'
                             }
                         },
                         data: [
-                            {name: '上升', value: 34},
-                            {name: '增长', value: 4},
-                            {name: '矮冬瓜', value: 54},
-                            {name: '丰富', value: 1},
-                            {name: '法尔', value: 22},
-                            {name: '阿飞', value: 111},
-                            {name: '如果', value: 99},
-                            {name: '文网文', value: 99},
+                            {name: '开闸', value: 34},
+                            {name: '下行拐点', value: 4},
+                            {name: '下跌', value: 54},
+                            {name: '弱势', value: 1},
+                            {name: '回调', value: 22},
+                            {name: '调降', value: 111},
+                            {name: '均衡', value: 99},
+                            {name: '平稳', value: 199},
+                            {name: '中性', value: 44},
+                            {name: '上升', value: 121},
                         ]
                     }]
                 };

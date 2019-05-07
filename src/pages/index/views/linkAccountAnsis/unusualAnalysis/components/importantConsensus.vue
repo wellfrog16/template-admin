@@ -14,7 +14,7 @@
         </el-form>
         <s-table :columns="importantConsensusColumns" :tableData="tableData" :height="200" @handlerChange="handleCellClick">
             <el-table-column
-                :width="350"
+                :width="200"
                 align="center"
                 slot="tableColumnsPush"
                 label="操作"
@@ -23,8 +23,8 @@
                     <span type="text" @click="handleFocus(scope.row)" style="cursor: pointer;">
                         <i class="fa fa-heart" :class="{'focus': scope.row.focus}"><span style="user-select: none;">关注&nbsp;&nbsp;</span></i>
                     </span>
-                    <el-button type="primary" size="mini" @click="handleMonitor(scope.row)">监控</el-button>
-                    <el-button type="primary" size="mini" @click="handleThemeAnalysis(scope.row)">主题分析</el-button>
+                    <!-- <el-button type="primary" size="mini" @click="handleMonitor(scope.row)">监控</el-button> -->
+                    <!-- <el-button type="primary" size="mini" @click="handleThemeAnalysis(scope.row)">主题分析</el-button> -->
                     <el-button type="warning" size="mini" @click="modifyKeyword(scope.row)">修改关键词</el-button>
                 </template>
             </el-table-column>
@@ -83,13 +83,13 @@ export default {
             rules: {},
             showDialog: false,
             tableData: [
-                {id: 0, title: '舆情1', count: 11, analysis: '正面', keyword: '上升', tags: [], source: '万德', focus: true},
-                {id: 1, title: '舆情2', count: 11, analysis: '正面', keyword: '增长', tags: [], source: '财经', focus: false},
-                {id: 2, title: '舆情3', count: 11, analysis: '负面', keyword: '矮冬瓜', tags: [], source: '万德', focus: true},
-                {id: 3, title: '舆情4', count: 11, analysis: '中性', keyword: '法尔', tags: [], source: '万德', focus: true},
-                {id: 4, title: '舆情5', count: 11, analysis: '中性', keyword: '阿飞', tags: [], source: '万德', focus: true},
-                {id: 5, title: '舆情6', count: 11, analysis: '中性', keyword: '如果', tags: [], source: '万德', focus: true},
-                {id: 6, title: '舆情7', count: 11, analysis: '中性', keyword: '文网文', tags: [], source: '万德', focus: true},
+                {id: 0, title: '银河证券：期货公司将迎来A股IPO开闸 利好期货概念股', count: 4111, analysis: '正面', keyword: '开闸', tags: ['利好'], source: '万德', focus: true},
+                {id: 1, title: '钢价面临下行拐点 利好逐步兑现', count: 2121, analysis: '正面', keyword: '下行拐点', tags: ['利好'], source: '财经', focus: false},
+                {id: 2, title: '沪胶呈现弱势寻底格局', count: 7631, analysis: '负面', keyword: '弱势', tags: ['弱势'], source: '万德', focus: true},
+                {id: 3, title: '焦炭盘面企稳 沥青等待回调', count: 987, analysis: '正面', keyword: '回调', tags: ['企稳'], source: '万德', focus: true},
+                {id: 4, title: '巨头纷纷调降产量背后 难掩铁矿石高位隐忧', count: 1311, analysis: '负面', keyword: '调降', tags: ['调降产量'], source: '万德', focus: true},
+                {id: 5, title: '甲醇多空力量相对均衡', count: 531, analysis: '中性', keyword: '均衡', tags: ['平稳'], source: '万德', focus: true},
+                {id: 6, title: '红枣期货在郑商所上市交易', count: 3311, analysis: '中性', keyword: '平稳', tags: ['上市'], source: '万德', focus: true},
             ],
             currentItem: {},
             settingTagsDialog: false,
@@ -107,6 +107,11 @@ export default {
         },
         handleFocus(row) {
             row.focus = !row.focus;
+            if (row.focus) {
+                this.$message.success('关注成功');
+            } else {
+                this.$message.success('已取消关注');
+            }
         },
         handleMonitor() {
 

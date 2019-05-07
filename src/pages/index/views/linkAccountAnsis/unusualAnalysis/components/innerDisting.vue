@@ -57,8 +57,9 @@ export default {
                 {label: '开盘价', field: 'openPrice'},
                 {label: '最高价', field: 'highestPrice'},
                 {label: '最低价', field: 'lowestPrice'},
+                {label: '收盘价', field: 'closePrice'},
                 {label: '结算价', field: 'settlementPrice'},
-                {label: '昨结算', field: 'yesterdaySettlementPrice'},
+                // {label: '昨结算', field: 'yesterdaySettlementPrice'},
                 {label: '持仓量', field: 'openInterest'},
                 {label: '成交量', field: 'volume'},
                 {label: '买入价', field: 'buyingPrice'},
@@ -71,8 +72,9 @@ export default {
                 openPrice: 2333,
                 highestPrice: 2455,
                 lowestPrice: 999,
+                closePrice: 2342,
                 settlementPrice: 1244,
-                yesterdaySettlementPrice: 2342,
+                // yesterdaySettlementPrice: 2342,
                 openInterest: 12873,
                 volume: 99,
                 buyingPrice: 3456,
@@ -84,13 +86,13 @@ export default {
     },
     computed: {
         priceRange() {
-            return this.currentDashboardInfo['newPrice'] - this.currentDashboardInfo['yesterdaySettlementPrice'];
+            return this.currentDashboardInfo['newPrice'] - this.currentDashboardInfo['closePrice'];
         },
         priceRadtio() {
-            return ((this.currentDashboardInfo['newPrice'] - this.currentDashboardInfo['yesterdaySettlementPrice']) / this.currentDashboardInfo['yesterdaySettlementPrice']).toFixed(2);
+            return ((this.currentDashboardInfo['newPrice'] - this.currentDashboardInfo['closePrice']) / this.currentDashboardInfo['closePrice']).toFixed(2);
         },
         upOrDown() {
-            return this.currentDashboardInfo['newPrice'] < this.currentDashboardInfo['yesterdaySettlementPrice'] ? 'down' : this.currentDashboardInfo['newPrice'] > this.currentDashboardInfo['yesterdaySettlementPrice'] ? 'up' : '';
+            return this.currentDashboardInfo['newPrice'] < this.currentDashboardInfo['closePrice'] ? 'down' : this.currentDashboardInfo['newPrice'] > this.currentDashboardInfo['closePrice'] ? 'up' : '';
         }
     },
     methods: {

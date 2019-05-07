@@ -37,7 +37,7 @@ export default {
     data() {
         return {
             selectTags: [],
-            tagsOptions: ['高', '帅', '瘦'],
+            tagsOptions: ['企稳', '上市', '调降', '增长', '下跌'],
             inputTag: '',
         };
     },

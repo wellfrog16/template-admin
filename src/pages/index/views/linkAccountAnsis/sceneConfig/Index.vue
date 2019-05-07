@@ -267,18 +267,25 @@ export default {
     },
     methods: {
         remove() {
-            // let fileList = this.ruleForm.fileList;
-            // this.ruleForm.fileList = [];
+            let fileList = this.ruleForm.fileList;
             setTimeout(() => {
-                // this.ruleForm.fileList = fileList;
-
                 console.log(this.ruleForm.fileList);
                 this.$nextTick(() => {
                     this.$refs['uploadFile'].submitUpload();
                     setTimeout(() => {
                         this.$refs['uploadFile'].$refs['upload'].clearFiles();
                         this.ruleForm.fileList = [];
+                        this.$refs['uploadFile'].$refs['upload'].abort(this.ruleForm.fileList[0]);
                     }, 1000);
+                    setTimeout(() => {
+                        fileList[0].status = '';
+                        this.ruleForm.fileList = fileList;
+                        this.$nextTick(() => {
+                            console.log(this.ruleForm.fileList);
+                            this.$refs.uploadFile.$refs['upload'].$children[0].post(this.ruleForm.fileList[0]);
+                            // this.$refs['uploadFile'].submitUpload();
+                        });
+                    }, 2000);
                 });
             });
         },

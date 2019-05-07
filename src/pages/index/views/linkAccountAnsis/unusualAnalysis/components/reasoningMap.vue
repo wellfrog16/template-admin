@@ -27,7 +27,7 @@ export default {
                     '#1929b3',
                     '#006624'],
                 legend: {
-                    data: ['非1', '非2', '非3'],
+                    data: ['类目1', '类目2', '类目3'],
                     itemGap: 20,
                     left: 'left',
                     top: 'middle',
@@ -48,7 +48,7 @@ export default {
                     formatter: params => {
                         if (params.dataType === 'edge') { // link
                             console.log(params.data);
-                            return '关系名称：' + params.data.relationName + '<br>权重：' + (params.data.impactWeight || '无');
+                            return '关系名称：' + (params.data.relationName || '上游') + '<br>权重：' + (params.data.impactWeight || '0.8');
                         } else if (params.dataType === 'node') {
                         }
                     },
@@ -69,9 +69,9 @@ export default {
                             edgeLength: [10, 200]
                         },
                         categories: [
-                            {name: '非1'},
-                            {name: '非2'},
-                            {name: '非3'},
+                            {name: '类目1'},
+                            {name: '类目2'},
+                            {name: '类目3'},
                         ],
                         draggable: true,
                         focusNodeAdjacency: true,
@@ -187,20 +187,23 @@ export default {
         },
         handleEchartDblClickEvent(val) {
             this.$emit('handleEchartDblClickEvent', val);
+        },
+        getData() {
+            getKnowledgeMap().then(resp => {
+                let {objects, links} = resp;
+                this.chartOptions.series[0]['data'] = objects;
+                this.chartOptions.series[0]['links'] = links;
+                this.chartOptions.legend.data = objects.map(v => {
+                    return v.categoryName || '其它';
+                });
+                this.chartOptions.series[0]['categories'] = objects.map(v => {
+                    return {name: v.categoryName || ''};
+                });
+            });
         }
     },
     mounted() {
-        getKnowledgeMap().then(resp => {
-            let {objects, links} = resp;
-            this.chartOptions.series[0]['data'] = objects;
-            this.chartOptions.series[0]['links'] = links;
-            this.chartOptions.legend.data = objects.map(v => {
-                return v.categoryName || '其它';
-            });
-            this.chartOptions.series[0]['categories'] = objects.map(v => {
-                return {name: v.categoryName || ''};
-            });
-        });
+
     }
 };
 </script>
