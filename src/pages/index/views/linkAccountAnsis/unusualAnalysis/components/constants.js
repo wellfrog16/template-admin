@@ -2,18 +2,24 @@ import clickOnTableCell from '@/components/index/common/clickOnTableCell';
 import consensusTags from './consensusTags';
 import InputInTable from '@/components/index/common/InputInTable';
 import SelectInTable from '@/components/index/common/SelectInTable';
+let formatIdtfySubjMatter = item => {
+    return String(item.bizDir) === '0' ? '内因' : String(item.bizDir) === '1' ? '外因' : '';
+};
+let formatTimeRange = item => {
+    return `${item.a} ~ ${item.b}`;
+};
 export const correlationIndexColumns = [
     {field: 'indexName', label: '指标名称', minWidth: 130},
     {field: 'indexCon', label: '条件', minWidth: 100, template: SelectInTable},
     {field: 'indexValue', label: '值', template: InputInTable},
 ];
 export const importantConsensusColumns = [
-    {label: '舆情标题', field: 'title', minWidth: 100, template: clickOnTableCell},
-    {label: '相似文章统计', field: 'count', minWidth: 150},
-    {label: '情感分析', field: 'analysis', minWidth: 100},
-    {label: '关键词', field: 'keyword', minWidth: 100},
-    {label: '标签', field: 'tags', minWidth: 100, template: consensusTags},
-    {label: '舆情来源', field: 'source', minWidth: 100}
+    {label: '舆情标题', field: 'publicOpinTitle', minWidth: 100, template: clickOnTableCell},
+    {label: '相似文章统计', field: 'similarArticleStat', minWidth: 150},
+    {label: '情感分析', field: 'emotionAnaly', minWidth: 100},
+    {label: '关键词', field: 'keyWord', minWidth: 180},
+    {label: '标签', field: 'label', minWidth: 180, template: consensusTags},
+    {label: '舆情来源', field: 'publicOpinSrc', minWidth: 100}
 ];
 export const reasonReportColumns = [
     {label: '名称', field: 'name', minWidth: 120},
@@ -25,12 +31,12 @@ export const reasonReportColumns = [
 ];
 export const unusualReportColumns = [
     {label: '品种', field: 'varieties', minWidth: 100},
-    {label: '合约代码', field: 'contrCode', minWidth: 100},
-    {label: '识别标的', field: 'identifyingTargets', minWidth: 100},
-    {label: '关键词', field: 'keywords', minWidth: 100},
-    {label: '时间范围', field: 'timeRange', minWidth: 100},
-    {label: '事件描述', field: 'thingsDesc', minWidth: 100},
+    {label: '合约代码', field: 'contrCd', minWidth: 100},
+    {label: '识别标的', field: 'idtfySubjMatter', minWidth: 100, formatter: formatIdtfySubjMatter},
+    {label: '关键词', field: 'keyword', minWidth: 100},
+    {label: '时间范围', field: 'dateRange', minWidth: 100, formatter: formatTimeRange},
+    {label: '事件描述', field: 'eventDesc', minWidth: 100},
     {label: '用户范围', field: 'userRange', minWidth: 100},
-    {label: '影响范围', field: 'influenceRange', minWidth: 100},
-    {label: '等级', field: 'grade', minWidth: 100},
+    {label: '影响范围', field: 'influ', minWidth: 100},
+    {label: '等级', field: 'lev', minWidth: 100},
 ];

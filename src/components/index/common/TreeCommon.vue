@@ -146,7 +146,7 @@ export default {
                 let data = [
                     {
                         label: '全国',
-                        value: '0',
+                        value: '156',
                         children: resp
                     }
                 ];
@@ -213,7 +213,7 @@ export default {
         getCheckedList(flag) {
             let allCheckedNodes = this.$refs['tree-common'].getCheckedNodes();
             let allChecked = allCheckedNodes.filter(v => {
-                return v.id === '0';
+                return v.id === '156'; // 全国为156
             });
             // 全国时，city字段为空
             if (allChecked.length) {

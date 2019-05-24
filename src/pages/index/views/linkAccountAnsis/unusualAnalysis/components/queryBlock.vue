@@ -1,7 +1,7 @@
 <template>
     <s-card class="query-block" :title="`动因分析指标筛选及设置`" :icon="`fa fa-filter`">
         <div slot="right">
-            <el-button type="warning" size="small">确定</el-button>
+            <el-button type="warning" size="small" :loading="loading" @click="confirmQuery">确定</el-button>
         </div>
         <div slot="content">
             <el-form ref="searchForm" :model="searchForm" :rules="rules" label-width="120px">
@@ -11,7 +11,7 @@
                             <el-select v-model="searchForm.category" size="small" class="custom-width" placeholder="请选择交易品种">
                                 <el-option v-for="(item, index) in categoryOptions"
                                            :label="item.label"
-                                           :value="item.value"
+                                           :value="item.label"
                                            :key="index"></el-option>
                             </el-select>
                         </el-form-item>
@@ -50,7 +50,7 @@
                                 v-for="(item, index) in selectIndexModels"
                                 :key="index"
                                 type="warning">
-                                {{ item }}
+                                {{ item.idtfyIndex }}
                             </el-tag>
                             <span @click="showMoreIndex=!showMoreIndex" style="cursor: pointer; margin-left: 10px;">
                                 <i class="el-icon-arrow-up" v-if="showMoreIndex">收起</i>
@@ -77,19 +77,26 @@ export default {
         SDatePicker,
         allIndexSettingDialog
     },
+    props: {
+        loading: {
+            type: Boolean,
+            default: false
+        }
+    },
     data() {
         return {
             searchForm: {
-                category: '0',
-                selectDateRange: [new Date(moment().subtract(5, 'days').format('YYYY-MM-DD')), new Date(moment().subtract(1, 'days').format('YYYY-MM-DD'))],
-                contractCode: '',
+                category: '螺纹钢', // '0'
+                selectDateRange: ['2014-04-01', '2014-04-30'],
+                // selectDateRange: [new Date(moment().subtract(5, 'days').format('YYYY-MM-DD')), new Date(moment().subtract(1, 'days').format('YYYY-MM-DD'))],
+                contractCode: 'oo6124', // ef6129 // oo6124
                 timeGranularity: '3'
             },
             categoryOptions: [
                 {label: '螺纹钢', value: '0'},
-                {label: '橡胶', value: '1'},
-                {label: '黄金', value: '2'},
-                {label: '燃油', value: '3'},
+                // {label: '橡胶', value: '1'},
+                // {label: '黄金', value: '2'},
+                // {label: '燃油', value: '3'},
             ],
             timeGranularityOptions: [
                 {label: '分时图', value: '0'},
@@ -116,6 +123,24 @@ export default {
         },
         selectModels(val) {
             this.selectIndexModels = val;
+        },
+        confirmQuery() {
+            let taskId = new Date().getTime();
+            this.$emit(
+                'updateQueryBlockData',
+                {
+                    'txBreed': this.searchForm.category, // 品种
+                    'timeGranularity': this.searchForm.timeGranularity, // 时间粒度
+                    'statStartTm': moment(this.searchForm.selectDateRange[0]).format('YYYY-MM-DD'),
+                    'statEndTm': moment(this.searchForm.selectDateRange[1]).format('YYYY-MM-DD'),
+                    'contrCd': this.searchForm.contractCode,
+                    // 'template': '0;1532461,1;1532462',
+                    'taskId': taskId,
+                    'template': this.selectIndexModels.map(v => {
+                        return v.moduleType + ';' + v.templId;
+                    }).join(','),
+                }
+            );
         }
     }
 };

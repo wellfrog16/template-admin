@@ -2,7 +2,8 @@ import tagsColumn from './tagsColumn';
 export const userListColumns = [
     {label: '用户名称', field: 'custName', minWidth: 100},
     {label: '用户编号', field: 'custId', minWidth: 100},
-    {label: '持仓量', field: 'qtty', minWidth: 100},
+    {label: '持仓量', field: 'qtty', minWidth: 100, sortable: true},
+    {label: '是否盈利盘', field: 'isProfitMargin', minWidth: 100},
     {label: '事件标签', field: 'eventTags', minWidth: 130, template: tagsColumn},
     {label: '历史事件标签', field: 'hisEventTags', minWidth: 130, template: tagsColumn},
     {label: '交易风格标签', field: 'tradeTags', minWidth: 130, template: tagsColumn},

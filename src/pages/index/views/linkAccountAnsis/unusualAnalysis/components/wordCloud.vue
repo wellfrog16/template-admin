@@ -5,6 +5,7 @@
     </div>
 </template>
 <script>
+import _ from 'lodash';
 import EchartsCommon from '@/components/index/common/EchartsCommon';
 export default {
     components: {
@@ -17,7 +18,15 @@ export default {
         },
         propsChartHeight: {
             type: [Number, String],
-            default: 500
+            default: 400
+        },
+        data: {
+            type: Array,
+            default() {
+                return [
+
+                ];
+            }
         },
         chartOptions: {
             type: Object,
@@ -27,9 +36,10 @@ export default {
                     series: [{
                         type: 'wordCloud',
                         gridSize: 2,
-                        sizeRange: [20, 50],
-                        // rotationRange: [-90, 90],
+                        sizeRange: [15, 40],
+                        rotationRange: [-90, 90],
                         shape: 'pentagon',
+                        drawOutOfBound: true,
                         textStyle: {
                             normal: {
                                 color: function() {
@@ -45,21 +55,18 @@ export default {
                                 shadowColor: '#fff'
                             }
                         },
-                        data: [
-                            {name: '开闸', value: 34},
-                            {name: '下行拐点', value: 4},
-                            {name: '下跌', value: 54},
-                            {name: '弱势', value: 1},
-                            {name: '回调', value: 22},
-                            {name: '调降', value: 111},
-                            {name: '均衡', value: 99},
-                            {name: '平稳', value: 199},
-                            {name: '中性', value: 44},
-                            {name: '上升', value: 121},
-                        ]
+                        data: []
                     }]
                 };
             }
+        }
+    },
+    watch: {
+        data: {
+            handler(val) {
+                this.setData(val);
+            },
+            deep: true
         }
     },
     methods: {
@@ -68,7 +75,36 @@ export default {
         },
         handleEchartDblClickEvent(val) {
             this.$emit('handleEchartDblClickEvent', val);
+        },
+        setData(val) {
+            let chartData = [];
+            val.forEach(v => {
+                chartData = [...chartData, ...v.keyWord.split(',').map(f => {
+                    return {
+                        name: f,
+                        value: v.similarArticleStat
+                    };
+                })];
+            });
+            console.log(chartData);
+            // chartData = [
+            //     {name: '埃及法', value: 222},
+            //     {name: '埃及法', value: 22},
+            //     {name: '埃及法', value: 2666},
+            //     {name: '案发后', value: 222},
+            //     {name: '案发后', value: 11},
+            //     {name: '那是', value: 2322},
+            //     {name: '为啥', value: 1123},
+            //     {name: '阿尔冯', value: 22},
+            //     {name: '案发后', value: 999},
+            // ];
+            let uniqData = _.uniqBy(_.orderBy(chartData, 'value', 'desc'), 'name');
+            console.log(uniqData);
+            this.chartOptions.series[0]['data'] = uniqData;
         }
+    },
+    mounted() {
+        this.setData(this.data);
     }
 };
 </script>

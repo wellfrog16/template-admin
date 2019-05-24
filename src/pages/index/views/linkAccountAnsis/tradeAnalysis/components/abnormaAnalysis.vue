@@ -137,7 +137,7 @@ export default {
         getTestData() {
             let params = {
                 analysisType: '',
-                resultSetNo: '1556002654', // '1556015132', // '1555666647', // 结果集编号
+                resultSetNo: '1555666647', // '1556015132', // '1555666647', // 结果集编号
                 contrCode: 'cu1712', // 合约代码
                 statTimeBegin: '2017-05-05', // 统计起始日
                 statTimeEnd: '2017-09-09', // 统计截止日

@@ -154,6 +154,8 @@ export default {
             case 'statAcctCnt':
                 if (this.checkedList.indexOf('4') > -1 && !reg.test(value)) {
                     callback(new Error('账户数只能输入正整数'));
+                } else if (this.checkedList.indexOf('4') > -1 && reg.test(value) && !this.ruleForm.statAcctType) {
+                    callback(new Error('请选择统计类型'));
                 }
                 break;
             }
@@ -244,6 +246,7 @@ export default {
                         }
                         if (this.checkedList.indexOf('4') === -1) {
                             params.statAcctCnt = '';
+                            params.statAcctType = '';
                         }
                         params.almSel = this.almSel ? '4' : '3'; // 是否按品种计算
                         this.$emit('saveScene', params);

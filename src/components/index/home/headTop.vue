@@ -1,6 +1,11 @@
 <template>
     <div :class="$style.head_top" @click="goHome">
-        <div :class="$style.head_top_log">
+        <div :class="$style.head_top_log" style="display: flex;">
+            <div style="display: flex; flex: 1; justify-content: center; align-items: center;">
+            </div>
+            <div :class="$style.title">
+                <div>上期大数据监管科技平台</div>
+            </div>
             <div :class="$style.top_container">
                 <!-- <el-tooltip class="item" effect="dark" placement="bottom">
                     <div :class="$style.user_img"><i class="fa fa-user"></i></div>
@@ -100,8 +105,22 @@ export default {
         cursor: pointer;
         width: 100%;
         height: @height;
+        .title {
+            background: url('../../../assets/img/common/top_banner_logo.png') no-repeat;
+            background-position: left center;
+            background-size: 29px 27px;
+            display: flex;
+            flex: 1;
+            justify-content: center;
+            align-items: center;
+            font-size: 26px;
+            font-weight: 600;
+            line-height: 60px;
+            letter-spacing: 7px;
+            color: #0cf;
+        }
         .head_top_log {
-            background: url('../../../assets/img/common/top_logo.png') no-repeat;
+            background: url('../../../assets/img/common/top_banner.png') no-repeat;
             width: 100%;
             height: @height;
             z-index: -10;
@@ -121,9 +140,10 @@ export default {
             }
         }
         .top_container {
-            height: 60px;
+            height: 45px;
             display: flex;
-            line-height: 60px;
+            flex: 1;
+            line-height: 45px;
             justify-content: flex-end;
             align-items: center;
             color: #00cfff;

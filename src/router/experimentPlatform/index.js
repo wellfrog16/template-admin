@@ -43,6 +43,7 @@ const Index =
                     scrollTop: true,
                     title: '业务评价'
                 },
+                hidden: true,
                 path: 'bussinessEvaluation',
                 name: 'bussinessEvaluation',
                 icon: 'menu-fix-icon fa fa-atlas',

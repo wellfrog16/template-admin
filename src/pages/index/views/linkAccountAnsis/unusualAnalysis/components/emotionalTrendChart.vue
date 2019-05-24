@@ -34,16 +34,16 @@ export default {
                     },
                     grid: {
                         top: '12%',
-                        left: '3%',
-                        right: '15%',
+                        left: '10%',
+                        right: '12%',
                         bottom: '15%',
-                        containLabel: true
+                        // containLabel: true
                     },
-                    toolbox: {
-                        feature: {
-                            saveAsImage: {}
-                        }
-                    },
+                    // toolbox: {
+                    //     feature: {
+                    //         saveAsImage: {}
+                    //     }
+                    // },
                     dataZoom: [
                         {
                             show: true,
@@ -59,7 +59,7 @@ export default {
                         name: '日期',
                         type: 'category',
                         boundaryGap: false,
-                        data: ['2019-04-11', '2019-04-12', '2019-04-13', '2019-04-14', '2019-04-15', '2019-04-16', '2019-04-17']
+                        data: []
                     },
                     yAxis: {
                         type: 'value',
@@ -69,7 +69,7 @@ export default {
                         {
                             name: '正面',
                             type: 'line',
-                            data: [120, 22, 101, 134, 490, 230, 210],
+                            data: [],
                             markArea: {
                                 label: {
                                     color: '#d92e20'
@@ -77,13 +77,13 @@ export default {
                                 itemStyle: {
                                     color: '#592749'
                                 },
-                                data: this.$attrs.unusualMarkAreaData
+                                data: []
                             }
                         },
                         {
                             name: '中性',
                             type: 'line',
-                            data: [220, 182, 191, 234, 290, 330, 310],
+                            data: [],
                             markArea: {
                                 label: {
                                     color: '#d92e20'
@@ -91,13 +91,13 @@ export default {
                                 itemStyle: {
                                     color: '#592749'
                                 },
-                                data: this.$attrs.unusualMarkAreaData
+                                data: []
                             }
                         },
                         {
                             name: '负面',
                             type: 'line',
-                            data: [150, 232, 201, 154, 190, 330, 410],
+                            data: [],
                             markArea: {
                                 label: {
                                     color: '#d92e20'
@@ -105,13 +105,27 @@ export default {
                                 itemStyle: {
                                     color: '#592749'
                                 },
-                                data: this.$attrs.unusualMarkAreaData
+                                data: []// this.$attrs.unusualMarkAreaData
                             }
                         }
                     ]
                 };
             }
+        },
+        chartData: {
+            type: Object,
+            default() {
+                return {};
+            }
         }
+    },
+    watch: {
+        chartData: {
+            handler(val) {
+                this.updateChartData(val);
+            }
+        },
+        deep: true
     },
     methods: {
         handleEchartClickEvent(val) {
@@ -119,6 +133,32 @@ export default {
         },
         handleEchartDblClickEvent(val) {
             this.$emit('handleEchartDblClickEvent', val);
+        },
+        updateChartData(val) {
+            if (!Object.keys(val).length) {
+                return;
+            }
+            let date = [];
+            let data1 = [];
+            let data2 = [];
+            let data3 = [];
+            let data4 = [];
+            val.mtExtHotwordTrendImputList.forEach(v => {
+                data1.push(v.positiveValue);
+                data2.push(v.negativeValue);
+                data3.push(v.neutralValue);
+                date.push(v.tradingdayString);
+            });
+            this.chartOptions.xAxis['data'] = date;
+            this.chartOptions.series[0]['data'] = data1;
+            this.chartOptions.series[1]['data'] = data2;
+            this.chartOptions.series[2]['data'] = data3;
+            data4 = val.mtExpeventInfoOutEmotionList.map(v => {
+                return [{xAxis: v.expstartTmString}, {xAxis: v.expendTmString}];
+            });
+            this.chartOptions.series[0]['markArea']['data'] = data4;
+            this.chartOptions.series[1]['markArea']['data'] = data4;
+            this.chartOptions.series[2]['markArea']['data'] = data4;
         }
     }
 };

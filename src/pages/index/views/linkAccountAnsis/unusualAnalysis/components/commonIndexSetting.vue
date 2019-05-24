@@ -38,6 +38,7 @@
 <script>
 import STable from '@/components/index/common/STable';
 import {correlationIndexColumns} from './constants';
+import {saveTemplate} from '@/api/unusualAnalysis';
 export default {
     components: {STable},
     props: {
@@ -56,41 +57,66 @@ export default {
             commonTableHeader: [{indexName: '指标名称', indexCon: '条件', indexValue: '值'}],
             tableData: [
                 [ // 内因指标
-                    {indexName: '买入成交', indexCon: '>=', indexValue: '90'},
-                    {indexName: '卖出成交', indexCon: '<=', indexValue: '90'},
-                    {indexName: '净买入成交', indexCon: '>=', indexValue: '90'},
-                    {indexName: '多头持仓', indexCon: '>=', indexValue: '90'},
-                    {indexName: '空头持仓', indexCon: '>=', indexValue: '90'},
-                    {indexName: '浮动盈亏', indexCon: '>=', indexValue: '90'},
-                    {indexName: '买入报单', indexCon: '>=', indexValue: '90'},
-                    {indexName: '卖出报单', indexCon: '>=', indexValue: '90'},
-                    {indexName: '报单次数', indexCon: '>=', indexValue: '90'},
-                    {indexName: '报单速度', indexCon: '>=', indexValue: '90'},
-                    {indexName: '撤单次数', indexCon: '>=', indexValue: '90'},
-                    {indexName: '撤单率', indexCon: '>=', indexValue: '90'},
+                    {indexName: '成交量', indexCon: '>=', indexValue: '90'},
+                    {indexName: '成交价', indexCon: '>=', indexValue: '90'},
+                    // {indexName: '卖出成交', indexCon: '>=', indexValue: '90'},
+                    // {indexName: '净买入成交', indexCon: '>=', indexValue: '90'},
+                    // {indexName: '多头持仓', indexCon: '>=', indexValue: '90'},
+                    // {indexName: '空头持仓', indexCon: '>=', indexValue: '90'},
+                    // {indexName: '浮动盈亏', indexCon: '>=', indexValue: '90'},
+                    // {indexName: '买入报单', indexCon: '>=', indexValue: '90'},
+                    // {indexName: '卖出报单', indexCon: '>=', indexValue: '90'},
+                    // {indexName: '报单次数', indexCon: '>=', indexValue: '90'},
+                    // {indexName: '报单速度', indexCon: '>=', indexValue: '90'},
+                    // {indexName: '撤单次数', indexCon: '>=', indexValue: '90'},
+                    // {indexName: '撤单率', indexCon: '>=', indexValue: '90'},
                 ],
-                [ // 重要舆情
-                    {indexName: '报道量', indexCon: '>=', indexValue: '90'},
-                    {indexName: '评论量', indexCon: '>=', indexValue: '90'},
-                    {indexName: '转载量', indexCon: '>=', indexValue: '90'},
-                ],
-                [ // 舆情热度
-                    {indexName: '搜索量', indexCon: '>=', indexValue: '90'},
-                    {indexName: '评论量', indexCon: '>=', indexValue: '90'},
-                ],
-                [ // 热词趋势
-                    {indexName: '主题词模型', indexCon: '>=', indexValue: '90'},
-                ],
+                // [ // 重要舆情
+                //     {indexName: '报道量', indexCon: '>=', indexValue: '90'},
+                //     {indexName: '评论量', indexCon: '>=', indexValue: '90'},
+                //     {indexName: '转载量', indexCon: '>=', indexValue: '90'},
+                // ],
+                // [ // 舆情热度
+                //     {indexName: '搜索量', indexCon: '>=', indexValue: '90'},
+                //     {indexName: '评论量', indexCon: '>=', indexValue: '90'},
+                // ],
+                // [ // 热词趋势
+                //     {indexName: '主题词模型', indexCon: '>=', indexValue: '90'},
+                // ],
                 [ // 情感走势
-                    {indexName: '情感模型', indexCon: '>=', indexValue: '90'},
-                    {indexName: '情感偏离值', indexCon: '>=', indexValue: '90'},
+                    {indexName: '正面', indexCon: '>=', indexValue: '90'},
+                    {indexName: '中性', indexCon: '>=', indexValue: '90'},
+                    {indexName: '负面', indexCon: '>=', indexValue: '90'},
                 ]
             ],
             loadingExport: false,
         };
     },
     methods: {
-        exportModel() {},
+        exportModel() {
+            this.$prompt('请输入模板名称', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                inputPattern: /^[a-zA-Z0-9\u4E00-\u9FA5]{1,15}$/,
+                inputErrorMessage: '只能输入字母、汉字或数字'
+            }).then(({value}) => {
+                let params = {
+                    templName: value,
+                    moduleType: this.indexType,
+                    idtfyIndex: this.ruleForm.indexPara
+                };
+                this.loadingExport = true;
+                saveTemplate(params).then(resp => {
+                    this.loadingExport = false;
+                    this.$emit('updateModelList');
+                }).catch(e => {
+                    this.loadingExport = false;
+                    console.error(e);
+                });
+            }).catch(() => {
+                // 取消输入
+            });
+        },
         handleInsert(item) {
             let str = `${item.indexName} ${item.indexCon} ${item.indexValue}`;
             this.insertText(str);

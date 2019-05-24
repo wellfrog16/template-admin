@@ -31,7 +31,7 @@ export default {
     data() {
         return {
             loading: false,
-            propsChartHeight: 650,
+            propsChartHeight: 780,
             extraPrv: 1, // 前置30分钟
             extraNext: 1, // 后置40分钟
             chartOptions: {
@@ -54,13 +54,20 @@ export default {
                         left: 60,
                         right: 80,
                         height: 130,
+                        top: 440,
+                        containLabel: false
+                    },
+                    {
+                        left: 60,
+                        right: 80,
+                        height: 110,
                         bottom: 60,
                         containLabel: false
                     }
                 ],
                 axisPointer: {
                     link: [{
-                        xAxisIndex: [0, 2]
+                        xAxisIndex: [0, 3]
                     }],
                     label: {
                         backgroundColor: '#222',
@@ -69,7 +76,7 @@ export default {
                 },
                 legend: {
                     type: 'scroll',
-                    data: ['分时图', '成交量', '交易用户数多头', '交易用户数空头']
+                    data: ['分时图', '成交量', '交易用户数多头', '交易用户数空头', '盈利盘']
                 },
                 tooltip: {
                     trigger: 'item',
@@ -116,6 +123,13 @@ export default {
                         data: ['08:30', '09:31', '09:32', '09:33', '09:34', '09:35', '10:36'],
                         scale: true,
                         boundaryGap: false,
+                    },
+                    {
+                        type: 'category',
+                        name: '时间',
+                        gridIndex: 3,
+                        data: ['08:30', '09:31', '09:32', '09:33', '09:34', '09:35', '10:36'],
+                        boundaryGap: false
                     }
                 ],
                 yAxis: [
@@ -142,17 +156,28 @@ export default {
                         gridIndex: 2,
                         splitNumber: 2,
                         splitLine: {show: false}
+                    },
+                    {
+                        name: '数量',
+                        type: 'value',
+                        gridIndex: 3,
+                        min: value => {
+                            return value.min;
+                        },
+                        max: value => {
+                            return value.max;
+                        },
                     }
                 ],
                 dataZoom: [
                     {
                         type: 'inside',
-                        xAxisIndex: [0, 2]
+                        xAxisIndex: [0, 3]
                     },
                     {
                         show: true,
                         type: 'slider',
-                        xAxisIndex: [0, 2],
+                        xAxisIndex: [0, 3],
                         bottom: 0
                     }
                 ],
@@ -240,6 +265,25 @@ export default {
                         },
                         areaStyle: {},
                         data: [-1233, -4444, -5225, -1166, -7111, -7117, -2254],
+                    },
+                    {
+                        name: '盈利盘',
+                        data: [3221, 3112, 3156, 3887, 3044, 3000, 3082],
+                        type: 'line',
+                        xAxisIndex: 3,
+                        yAxisIndex: 3,
+                        markArea: {
+                            label: {
+                                color: '#d92e20'
+                            },
+                            itemStyle: {
+                                color: '#592749'
+                            },
+                            data: [
+                                [{name: '异常区域', xAxis: '09:31'}, {xAxis: '09:33'}],
+                                [{name: '观察窗口', xAxis: '09:30', itemStyle: {color: 'transparent', borderColor: '#ccc', borderWidth: 1, borderType: 'dashed'}, label: {color: '#ccc', position: 'insideTopRight'}}, {xAxis: '09:34'}],
+                            ]
+                        }
                     }
                 ]
             }

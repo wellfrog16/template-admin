@@ -5,7 +5,7 @@
 </template>
 <script>
 import EchartsCommon from '@/components/index/common/EchartsCommon';
-import _ from 'lodash';
+// import _ from 'lodash';
 export default {
     components: {EchartsCommon},
     props: {
@@ -16,12 +16,47 @@ export default {
         echartRef: {
             type: String,
             default: 'defaultRef'
+        },
+        chartData: {
+            type: Array,
+            default() {
+                return [];
+            }
+        },
+        unusualMarkAreaData: {
+            type: Array,
+            default() {
+                return [];
+            }
         }
     },
     watch: {
         propsChartHeight(val) {
             this.chartOptions.grid[0]['height'] = val === 300 ? 140 : 500;
             this.chartOptions.grid[1]['height'] = val === 300 ? 40 : 100;
+        },
+        chartData(val = []) {
+            let date = [];
+            let data1 = [];
+            let data2 = [];
+            val.forEach(v => {
+                date.push(v.tradingdayString);
+                data1.push([v.todayOpenQuot, v.todaycloseQuot, v.lowestPrice, v.highestPrice]);
+                data2.push(v.bargainQtty);
+            });
+            // k 线图
+            this.chartOptions.series[0]['data'] = data1;
+            // 成交量
+            this.chartOptions.series[1]['data'] = data2;
+            // 时间
+            this.chartOptions.xAxis[0]['data'] = date;
+            this.chartOptions.xAxis[1]['data'] = date;
+            console.log(this.chartOptions);
+        },
+        unusualMarkAreaData(val = []) {
+            this.chartOptions.series[0]['markArea']['data'] = val.map(v => {
+                return [{xAxis: v.expstartTmString}, {xAxis: v.expendTmString}];
+            });
         }
     },
     data() {
@@ -71,7 +106,7 @@ export default {
                     {
                         name: '',
                         type: 'category',
-                        data: ['2019-04-11', '2019-04-12', '2019-04-13', '2019-04-14', '2019-04-15', '2019-04-16', '2019-04-17'],
+                        data: [],
                         scale: true,
                         boundaryGap: false,
                         axisLine: {onZero: false},
@@ -83,7 +118,7 @@ export default {
                     {
                         type: 'category',
                         gridIndex: 1,
-                        data: ['2019-04-11', '2019-04-12', '2019-04-13', '2019-04-14', '2019-04-15', '2019-04-16', '2019-04-17'],
+                        data: [],
                         scale: true,
                         boundaryGap: false,
                         splitLine: {show: false},
@@ -143,7 +178,7 @@ export default {
                         name: '日K',
                         type: 'candlestick',
                         barMaxWidth: 50,
-                        data: [[1122, 1342, 1735, 2111], [1983, 2311, 1873, 1442], [1983, 1811, 1101, 999], [1113, 2133, 1998, 1134, 2876], [3711, 1234, 1441, 3211], [1283, 3111, 2944, 1343], [1422, 1932, 1917, 1327]],
+                        data: [],
                         itemStyle: {
                             normal: {
                                 color: upColor,
@@ -159,7 +194,7 @@ export default {
                             itemStyle: {
                                 color: '#592749'
                             },
-                            data: this.$attrs.unusualMarkAreaData
+                            data: []
                         }
                     },
                     {
@@ -176,7 +211,7 @@ export default {
                                 // color: '#140'
                             }
                         },
-                        data: [1233, 4444, 5225, 1166, 7111, 7117, 2254],
+                        data: [],
                     }
                 ]
 
@@ -184,42 +219,6 @@ export default {
         };
     },
     methods: {
-        getData(resp) {
-            let {mainData} = resp;
-            if (mainData && !mainData.length) {
-                return;
-            }
-            mainData = _.sortBy(mainData, [item => {
-                return item.txDt;
-            }]);
-            // set datazoom
-            let dataZoomStartValue = mainData[mainData.length > 20 ? mainData.length - 20 : 0]['txDt'];
-            let dataZoomEndValue = mainData[mainData.length - 1]['txDt'];
-            this.chartOptions['dataZoom'][0]['startValue'] = dataZoomStartValue;
-            this.chartOptions['dataZoom'][1]['startValue'] = dataZoomStartValue;
-            this.chartOptions['dataZoom'][0]['endValue'] = dataZoomEndValue;
-            this.chartOptions['dataZoom'][1]['endValue'] = dataZoomEndValue;
-            let seriesData = [];
-            let date = [];
-            mainData.forEach(v => {
-                date.push(v.txDt);
-                seriesData.push(
-                    [v.openQuotPrice, v.closeQuotPrice, v.lowestPrice, v.highestPrice, v.txDt, v.bargainQuantity]
-                );
-            });
-            this.chartOptions['series'][0]['data'] = seriesData;
-            this.chartOptions['series'][1]['data'] = mainData.map(v => { return v.bargainQuantity; });
-            this.chartOptions['xAxis'][0]['data'] = date;
-            this.chartOptions['xAxis'][1]['data'] = date;
-            this.$refs[this.echartRef] && this.$refs[this.echartRef].initChart();
-        },
-        initChart(data, flag) {
-            if (data) {
-                this.chartOptions = data;
-            }
-            this.$refs[this.echartRef] && this.$refs[this.echartRef].initChart();
-        },
-
         clearChart() {
             this.$refs[this.echartRef] && this.$refs[this.echartRef].clearChart();
         },
@@ -228,9 +227,10 @@ export default {
         },
         handleEchartDblClickEvent(val) {
             this.$emit('handleEchartDblClickEvent', val);
-        }
+        },
     },
     mounted() {
+
     }
 };
 </script>

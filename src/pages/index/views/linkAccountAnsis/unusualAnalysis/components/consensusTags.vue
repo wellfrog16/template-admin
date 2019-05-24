@@ -1,6 +1,6 @@
 <template>
     <div class="consenusus-tags">
-        <el-tag v-for="(item, index) in scope.row[item.field]" :key="index" type="warning" style="margin-left: 5px;">{{ item }}</el-tag>
+        <el-tag v-for="(item, index) in (scope.row[item.field] ? scope.row[item.field].split(',') : [])" :key="index" size="small" type="warning" style="margin-left: 5px;">{{ item }}</el-tag>
     </div>
 </template>
 

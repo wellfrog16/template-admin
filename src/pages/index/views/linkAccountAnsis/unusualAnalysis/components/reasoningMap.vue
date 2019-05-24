@@ -39,11 +39,11 @@ export default {
                 //     bottom: '15%',
                 //     containLabel: true
                 // },
-                toolbox: {
-                    feature: {
-                        saveAsImage: {}
-                    }
-                },
+                // toolbox: {
+                //     feature: {
+                //         saveAsImage: {}
+                //     }
+                // },
                 tooltip: {
                     formatter: params => {
                         if (params.dataType === 'edge') { // link

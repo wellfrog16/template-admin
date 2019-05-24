@@ -139,13 +139,13 @@
 
     tr.current-row, tr:hover {
         td {
-            background-color: @g-table-highlight-color !important;
+            background-color: @g-hover-bg !important;
         }
     }
     tr.hover-row {
-        background-color: @g-table-highlight-color !important;
+        background-color: @g-hover-bg !important;
         td {
-            background-color: @g-table-highlight-color !important;
+            background-color: @g-hover-bg !important;
         }
     }
 
@@ -210,7 +210,7 @@
 }
 .el-select-dropdown {
     background: #00255c;
-    border-color: #0b4c8f;
+    border-color: @g-hover-bg;
     li.el-select-dropdown__item {
         color: #fff;
         &.is-disabled {
@@ -220,20 +220,20 @@
             color: @g-active-bg;
         }
         &:hover {
-            background: #0b4c8f;
+            background: @g-hover-bg;
         }
         &:focus {
-            border-color: #0b4c8f;
+            border-color: @g-hover-bg;
         }
         &:visited {
-            border-color: #0b4c8f;
+            border-color: @g-hover-bg;
         }
         &:active {
-            border-color: #0b4c8f;
+            border-color: @g-hover-bg;
         }
     }
     .el-select-dropdown__item.hover {
-        background: #0b4c8f;
+        background: @g-hover-bg;
     }
 }
 // select
@@ -264,7 +264,7 @@
     background: transparent;
 }
 .el-popper[x-placement^=bottom] .popper__arrow {
-    border-bottom-color: #0b4c8f;
+    border-bottom-color: @g-hover-bg;
 }
 .el-popper[x-placement^=bottom] .popper__arrow::after {
     border-bottom-color: #00255c;
@@ -320,6 +320,9 @@
     .el-dialog__title {
         color: @g-color;
     }
+}
+.el-dialog__footer {
+    background: @g-dialog-bg;
 }
 .el-input.is-disabled .el-input__inner {
     height: 35px;
@@ -511,12 +514,40 @@ button.self-width {
         color: #fff;
     }
     .pager-nat .el-pagination .btn-next:hover {
-        color: #0b4c8f;
+        color: @g-hover-bg;
     }
     .el-pagination .btn-prev:hover {
-        color: #0b4c8f;
+        color: @g-hover-bg;
     }
     .el-pager li:hover {
-        color: #0b4c8f;
+        color: @g-hover-bg;
+    }
+}
+//el-tree
+.el-tree {
+    background: transparent;
+    color: @g-color;
+    .el-tree-node__content {
+        height: 32px;
+        line-height: 32px;
+        &:hover {
+            background: @g-hover-bg !important;
+            color: @g-color;
+        }
+        &:active {
+            background: @g-hover-bg !important;
+            color: @g-color;
+        }
+        &:visited {
+            background: @g-hover-bg !important;
+            color: @g-color;
+        }
+        &:focus {
+            background: @g-hover-bg !important;
+            color: @g-color;
+        }
+    }
+    .el-tree-node.is-focusable {
+        background: transparent;
     }
 }

@@ -143,12 +143,12 @@ export default {
             columnsCTrI4: columnsCTrI4, // 模糊地址查询(列表头)
             // form 表单绑定值
             nationyOptions: [
-                {name: '中国', idName: '0'}
+                {name: '中国', idName: '156'}
             ],
             provinceOptions: [], // 省
             cityOptions: [], // 市
             ruleForm: {
-                nationy: '0', // 国家
+                nationy: '156', // 国家
                 province: '', // 省
                 city: '', // 市
                 address: '' // 地址
@@ -171,7 +171,7 @@ export default {
                 let data = [
                     {
                         name: '中国',
-                        idName: '0',
+                        idName: '156',
                         children: resp
                     }
                 ];

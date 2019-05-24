@@ -50,7 +50,7 @@
                         <el-col :xl="12" :lg="12" :md="12" :sm="24">
                             <el-form-item prop="selectDateRange" label-width="130px" :rules="[{required: true, validator: validDateRange}]">
                                 <span slot="label">
-                                    <span>统计时间区间</span>
+                                    <span>异常事件时间</span>
                                     <el-tooltip>
                                         <span slot="content">规定异常事件的统计时间区间</span>
                                         <i class="el-icon-info" style="font-size: 12px;"></i>
