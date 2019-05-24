@@ -524,30 +524,32 @@ button.self-width {
     }
 }
 //el-tree
-.el-tree {
-    background: transparent;
-    color: @g-color;
-    .el-tree-node__content {
-        height: 32px;
-        line-height: 32px;
-        &:hover {
-            background: @g-hover-bg !important;
-            color: @g-color;
-        }
-        &:active {
-            background: @g-hover-bg !important;
-            color: @g-color;
-        }
-        &:visited {
-            background: @g-hover-bg !important;
-            color: @g-color;
-        }
-        &:focus {
-            background: @g-hover-bg !important;
-            color: @g-color;
-        }
-    }
-    .el-tree-node.is-focusable {
+.my-tree-style {
+    &.el-tree {
         background: transparent;
+        color: @g-color;
+        .el-tree-node__content {
+            height: 32px;
+            line-height: 32px;
+            &:hover {
+                background: @g-hover-bg !important;
+                color: @g-color;
+            }
+            &:active {
+                background: @g-hover-bg !important;
+                color: @g-color;
+            }
+            &:visited {
+                background: @g-hover-bg !important;
+                color: @g-color;
+            }
+            &:focus {
+                background: @g-hover-bg !important;
+                color: @g-color;
+            }
+        }
+        .el-tree-node.is-focusable {
+            background: transparent;
+        }
     }
 }

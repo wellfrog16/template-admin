@@ -10,6 +10,7 @@
         </el-input>
         <el-button v-if="Object.keys(treeData).length" size="small" type="primary" style="margin-left: 10px;" @click="createNewArticle">新增舆情</el-button>
         <el-tree
+            class="my-tree-style"
             v-if="Object.keys(treeData).length"
             ref="myTree"
             :data="[treeData]"
