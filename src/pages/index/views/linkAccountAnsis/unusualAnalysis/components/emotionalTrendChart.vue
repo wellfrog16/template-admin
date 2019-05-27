@@ -63,7 +63,8 @@ export default {
                     },
                     yAxis: {
                         type: 'value',
-                        name: '数量'
+                        name: '数量',
+                        minInterval: 1
                     },
                     series: [
                         {

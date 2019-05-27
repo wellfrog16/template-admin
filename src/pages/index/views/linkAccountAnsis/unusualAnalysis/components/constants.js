@@ -3,10 +3,7 @@ import consensusTags from './consensusTags';
 import InputInTable from '@/components/index/common/InputInTable';
 import SelectInTable from '@/components/index/common/SelectInTable';
 let formatIdtfySubjMatter = item => {
-    return String(item.bizDir) === '0' ? '内因' : String(item.bizDir) === '1' ? '外因' : '';
-};
-let formatTimeRange = item => {
-    return `${item.a} ~ ${item.b}`;
+    return String(item.idtfySubjMatter) === '0' ? '内因' : String(item.idtfySubjMatter) === '1' ? '外因' : '';
 };
 export const correlationIndexColumns = [
     {field: 'indexName', label: '指标名称', minWidth: 130},
@@ -30,11 +27,11 @@ export const reasonReportColumns = [
     {label: '属性', field: 'attribute', minWidth: 130},
 ];
 export const unusualReportColumns = [
-    {label: '品种', field: 'varieties', minWidth: 100},
+    {label: '品种', field: 'breed', minWidth: 100},
     {label: '合约代码', field: 'contrCd', minWidth: 100},
     {label: '识别标的', field: 'idtfySubjMatter', minWidth: 100, formatter: formatIdtfySubjMatter},
     {label: '关键词', field: 'keyword', minWidth: 100},
-    {label: '时间范围', field: 'dateRange', minWidth: 100, formatter: formatTimeRange},
+    {label: '时间范围', field: 'dateRange', minWidth: 100},
     {label: '事件描述', field: 'eventDesc', minWidth: 100},
     {label: '用户范围', field: 'userRange', minWidth: 100},
     {label: '影响范围', field: 'influ', minWidth: 100},

@@ -50,11 +50,7 @@ export default {
         return {
             loading: false,
             selectIndexModels: [],
-            indexModels: [
-                {templId: 'ajfeoff1', templName: '模板1', moduleType: 0, idtfyIndex: '买入量>=1000 AND 卖出量>=200'},
-                {templId: 'ajfeoff2', templName: '模板2', moduleType: 1, idtfyIndex: '搜索量>=1000 OR 报道量>=400'},
-                {templId: 'ajfeoff3', templName: '模板3', moduleType: 2, idtfyIndex: '情感偏离>=10'}
-            ],
+            indexModels: [],
             showCreateModelBlock: false,
             // titleArray: ['内因识别', '外因识别-重要舆情', '外因识别-舆情热度', '外因识别-热词走势', '外因识别-情感走势'],
             titleArray: ['内因识别', '外因识别-情感走势'],

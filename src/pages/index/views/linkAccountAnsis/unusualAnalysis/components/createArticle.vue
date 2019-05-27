@@ -12,9 +12,7 @@
                     placeholder="选择日期">
                 </el-date-picker>
             </el-form-item>
-            <div v-if="addKeywordsList.length" style="margin-left: 120px; line-height: 50px; margin-top: -20px;">
-                <el-tag v-for="(item, index) in addKeywordsList" :key="index" size="small" type="warning" style="margin-right: 5px;" closable @close="handleCloseTag(item)" >{{ item.label }}</el-tag>
-            </div>
+
             <el-form-item prop="title" label="舆情标题：">
                 <el-input clearable size="small" v-model="createArticleForm.title" placeholder="请输入舆情标题" style="width: 350px;"></el-input>
             </el-form-item>
@@ -60,8 +58,11 @@
                 </el-select>
                 &nbsp;&nbsp;&nbsp;&nbsp; -->
                 <el-input clearable size="small" style="width: 350px;" v-model="createArticleForm.articleKeywordName" @keyup.enter.native="confirmAddArticleKeyword"></el-input>
-                <!-- <el-button size="mini" type="primary" style="margin-left: 5px;" @click="confirmAddArticleKeyword">确定</el-button> -->
+                <el-button size="mini" type="primary" style="margin-left: 5px;" @click="confirmAddArticleKeyword">确定</el-button>
             </el-form-item>
+            <div v-show="addKeywordsList.length" style="margin-left: 120px; line-height: 50px; margin-top: -20px;">
+                <el-tag v-for="(item, index) in addKeywordsList" :key="index" size="small" type="warning" style="margin-right: 5px;" closable @close="handleCloseTag(item)" >{{ item.label }}</el-tag>
+            </div>
             <setting-tags ref="settingTags" @handleConfirmSelectTags="handleConfirmExportArticle" @handleCancelSelectTags="handleCancelExportArticle"></setting-tags>
         </el-form>
 
@@ -76,7 +77,7 @@ export default {
         return {
             createArticleForm: {
                 articleTime: moment(new Date()).format('YYYY-MM-DD'),
-                articleKeywordType: '',
+                // articleKeywordType: '',
                 articleKeywordName: '',
                 title: '',
                 content: '',
@@ -137,11 +138,25 @@ export default {
     },
     methods: {
         confirmAddArticleKeyword() {
-            if (this.createArticleForm.articleKeywordName && this.createArticleForm.articleKeywordType) {
+            if (!this.createArticleForm.articleKeywordName) {
+                this.$message.error('请输入关键词名称');
+                return;
+            } else {
+                let keywords = this.addKeywordsList.map(v => {
+                    return v.label;
+                });
+                if (keywords.indexOf(this.createArticleForm.articleKeywordName) > -1) {
+                    this.$message.error('关键词已存在');
+                    return;
+                }
+            }
+            if (this.createArticleForm.articleKeywordName) {
                 this.addKeywordsList.push({
                     label: this.createArticleForm.articleKeywordName,
-                    type: this.createArticleForm.articleKeywordType
+                    // type: this.createArticleForm.articleKeywordType
                 });
+            } else {
+                this.$message.error('请输入');
             }
         },
         handleConfirmExportArticle(value) {
@@ -153,7 +168,7 @@ export default {
                 if (valid) {
                     let emitValue = {
                         tags: value,
-                        keywords: this.addKeywordsList,
+                        keywords: this.addKeywordsList.map(v => { return v.label; }),
                         title: this.createArticleForm.title,
                         content: this.createArticleForm.content,
                         currentTime: this.createArticleForm.articleTime,
@@ -185,7 +200,7 @@ export default {
         resetForm() {
             this.addKeywordsList = [];
             this.createArticleForm = {
-                articleKeywordType: '',
+                // articleKeywordType: '',
                 articleKeywordName: '',
                 title: '',
                 content: ''

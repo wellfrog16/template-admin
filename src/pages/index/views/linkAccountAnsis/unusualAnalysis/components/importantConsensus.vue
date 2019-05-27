@@ -212,7 +212,7 @@ export default {
                 'newsText': value.content,
                 'newsSource': value.newsSource,
                 'breedProsInflu': value.breedProsInflu,
-                'keyWord': value.articleKeywordName,
+                'keyWord': value.keywords.join(','),
                 'lable': value.tags ? value.tags.join(',') : '',
                 'newsTm': value.currentTime,
                 'newsRelTm': value.currentTime
