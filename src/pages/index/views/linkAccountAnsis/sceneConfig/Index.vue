@@ -57,9 +57,9 @@
                                                       :rules="[{
                                                           validator: validateCustomNo, required: String(ruleForm.exportType) === '2'
                                                       }]">
-                                            <el-input clearable size="small" v-model="ruleForm.customNoArray[0]" style="width: 150px;"></el-input>
+                                            <el-input clearable size="small" v-model.trim="ruleForm.customNoArray[0]" style="width: 150px;"></el-input>
                                             <span style="color: #fff; margin: 0 8px;">~</span>
-                                            <el-input clearable size="small" v-model="ruleForm.customNoArray[1]" style="width: 150px;"></el-input>
+                                            <el-input clearable size="small" v-model.trim="ruleForm.customNoArray[1]" style="width: 150px;"></el-input>
                                             <el-button size="mini" type="primary" @click="handleCheckedAll" style="margin-left:5px;">全选</el-button>
                                         </el-form-item>
                                     </el-radio>
@@ -313,7 +313,7 @@ export default {
             if (String(this.ruleForm.exportType) === '2') {
                 if (!value.length) {
                     callback(new Error('请输入客户段号'));
-                } else if (!value[0] && value[0] !== 0) {
+                } else if (!(value[0]) && value[0] !== 0) {
                     callback(new Error('请输入客户段起始号'));
                 } else if (!value[1] && value[1] !== 0) {
                     callback(new Error('请输入客户段结束号'));

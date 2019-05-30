@@ -5,8 +5,11 @@ import SelectInTable from '@/components/index/common/SelectInTable';
 let formatIdtfySubjMatter = item => {
     return String(item.idtfySubjMatter) === '0' ? '内因' : String(item.idtfySubjMatter) === '1' ? '外因' : '';
 };
+let formatEventLevel = item => {
+    return String(item.lev) === '0' ? '高' : String(item.lev) === '1' ? '中' : String(item.lev) === '2' ? '低' : '';
+};
 export const correlationIndexColumns = [
-    {field: 'indexName', label: '指标名称', minWidth: 130},
+    {field: 'indexName', label: '指标名称', minWidth: 120},
     {field: 'indexCon', label: '条件', minWidth: 100, template: SelectInTable},
     {field: 'indexValue', label: '值', template: InputInTable},
 ];
@@ -29,11 +32,11 @@ export const reasonReportColumns = [
 export const unusualReportColumns = [
     {label: '品种', field: 'breed', minWidth: 100},
     {label: '合约代码', field: 'contrCd', minWidth: 100},
-    {label: '识别标的', field: 'idtfySubjMatter', minWidth: 100, formatter: formatIdtfySubjMatter},
+    {label: '识别标的', field: 'idtfySubjMatter', minWidth: 100, formatter: formatIdtfySubjMatter, sortable: true},
     {label: '关键词', field: 'keyword', minWidth: 100},
-    {label: '时间范围', field: 'dateRange', minWidth: 100},
+    {label: '时间范围', field: 'dateRange', minWidth: 100, sortable: true},
     {label: '事件描述', field: 'eventDesc', minWidth: 100},
-    {label: '用户范围', field: 'userRange', minWidth: 100},
+    {label: '用户范围', field: 'userRange', minWidth: 100, sortable: true},
     {label: '影响范围', field: 'influ', minWidth: 100},
-    {label: '等级', field: 'lev', minWidth: 100},
+    {label: '等级', field: 'lev', minWidth: 100, formatter: formatEventLevel, sortable: true}
 ];

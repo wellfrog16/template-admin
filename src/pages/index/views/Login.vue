@@ -26,7 +26,7 @@
         <div class="main-content">
             <div class="main-width">
                 <div class="top-content">
-                    <h3>上期所大数据监管科技平台</h3>
+                    <h3>上期大数据监管科技平台</h3>
                     <h5>数字上期 智慧期市</h5>
                     <el-button size="small" @click="handleDetail">了解详情</el-button>
                     <div class="login-area" v-if="showLoginDialog">

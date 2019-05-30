@@ -7,6 +7,7 @@ import sceneConfig from '@/store/module/index/sceneConfig';
 import abnormitysAnalysis from '@/store/module/index/abnormitysAnalysis';
 import accountMerge from '@/store/module/index/accountMerge';
 import PublicAnalysis from '@/store/module/index/PublicAnalysis';
+import unusualAnalysisReport from '@/store/module/index/unusualAnalysisReport';
 
 Vue.use(Vuex);
 
@@ -29,6 +30,7 @@ export default new Vuex.Store({
         sceneConfig,
         abnormitysAnalysis,
         accountMerge,
-        PublicAnalysis
+        PublicAnalysis,
+        unusualAnalysisReport // 动因分析
     }
 });

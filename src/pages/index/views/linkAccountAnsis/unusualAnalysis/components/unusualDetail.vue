@@ -133,7 +133,7 @@
             <create-article-in-knowledge :keyWordTypeOptions="keyWordTypeOptions" @handleConfirmExportArticle="handleConfirmExportArticle" @handleCancelExportArticle="handleCancelExportArticle"></create-article-in-knowledge>
         </el-dialog>
 
-        <el-dialog title="舆情详情" :close-on-click-modal="false" :close-on-press-escape="false" width="80%" :visible="articleDetailDialog" @close="articleDetailDialog = false">
+        <el-dialog title="舆情详情" v-loading="loading" :close-on-click-modal="false" :close-on-press-escape="false" width="80%" :visible="articleDetailDialog" @close="articleDetailDialog = false">
             <article-detail :currentNewsDetails="currentNewsDetails"></article-detail>
         </el-dialog>
     </div>
@@ -407,9 +407,9 @@ export default {
             this.articleDetailDialog = true;
             this.setCurrentNode(node, data);
             this.loading = true;
-            getArticleDetailByKeywords({keyWord: node.data.keyWord}).then(resp => {
+            getArticleDetailByKeywords({keyWord: node.data.name}).then(resp => {
                 this.loading = false;
-                this.currentNewsDetails = resp;
+                this.currentNewsDetails = resp[0];
             }).catch(e => {
                 this.loading = false;
                 console.error(e);

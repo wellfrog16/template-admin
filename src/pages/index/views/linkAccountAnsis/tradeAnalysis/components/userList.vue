@@ -9,18 +9,20 @@
                     </el-checkbox>
                 </el-checkbox-group>
             </el-form-item>
+            <el-form-item label="仅显示盈利盘：">
+                <el-checkbox v-model="showProfitMargin" @change="handleProfitMarginChange">
+                    仅显示盈利盘
+                </el-checkbox>
+            </el-form-item>
             <el-form-item label="批量查看操作：">
                 <el-button type="primary" size="mini" @click="showStaticInfo">静态信息</el-button>
                 <el-button type="primary" size="mini" @click="showGraphMap">用户关系推理</el-button>
                 <el-button type="primary" size="mini" @click="showTradeDetail">交易明细</el-button>
                 <el-button type="primary" size="mini" @click="showTagsCloud">标签词云</el-button>
                 <el-button type="primary" size="mini" @click="showTagsStatistics">标签统计</el-button>
+                <el-button type="primary" size="mini" @click="exportAnalysis">生成异常行为分析</el-button>
             </el-form-item>
-            <el-form-item label="仅显示盈利盘：">
-                <el-checkbox v-model="showProfitMargin" @change="handleProfitMarginChange">
-                    仅显示盈利盘
-                </el-checkbox>
-            </el-form-item>
+
         </el-form>
         <s-table ref="userList" :columns="userListColumns" :tableData="userList" :showSelectionColumn="true" @selection-change="handleSelectChange" :rowStyle="rowStyle"><!--  :rowStyle="rowStyle" -->
             <el-table-column
@@ -37,15 +39,15 @@
             <s-table :height="200" :loading="loadingStaticInfo" :columns="staticInfoColumns" :tableData="staticInfoTableData"></s-table>
         </el-dialog>
         <el-dialog title="关系推理图谱" :close-on-click-modal="false" :close-on-press-escape="false" :visible="graphMapDialog" @close="graphMapDialog = false" width="85%">
-            <reasoning-map></reasoning-map>
+            <reasoning-map v-loading="loading" :chartData="graphMapData"></reasoning-map>
         </el-dialog>
         <el-dialog title="交易明细" :close-on-click-modal="false" :close-on-press-escape="false" :visible="tradeDetailDialog" @close="tradeDetailDialog = false" width="85%">
             <s-table :loading="loadingTradeDetail" :columns="tradeDetailColumns" :tableData="tradeDetailTableData"></s-table>
         </el-dialog>
         <el-dialog title="事件标签词云" :close-on-click-modal="false" :close-on-press-escape="false" :visible="tagCloudDialog" @close="tagCloudDialog = false" width="85%">
-            <word-cloud></word-cloud>
+            <word-cloud v-loading="loading" :data="tagsCloudData"></word-cloud>
         </el-dialog>
-        <el-dialog title="修改标签" :close-on-click-modal="false" :close-on-press-escape="false" :visible="modifyTagsDialog" @close="modifyTagsDialog = false" width="85%">
+        <el-dialog v-loading="loading" title="修改标签" :close-on-click-modal="false" :close-on-press-escape="false" :visible="modifyTagsDialog" @close="modifyTagsDialog = false" width="85%">
             <div>
                 <el-row style="line-height: 40px;">
                     <el-col :span="2">事件标签：</el-col>
@@ -82,7 +84,7 @@
             </div>
         </el-dialog>
         <el-dialog title="标签统计" :close-on-click-modal="false" :close-on-press-escape="false" :visible="showTagsStatisticsDialog" @close="showTagsStatisticsDialog = false" width="85%">
-            <tags-statistics></tags-statistics>
+            <tags-statistics v-loading="loading" :data="tagsTatisticData"></tags-statistics>
         </el-dialog>
     </div>
 </template>
@@ -92,7 +94,8 @@ import reasoningMap from '../../unusualAnalysis/components/reasoningMap';
 import wordCloud from '../../unusualAnalysis/components/wordCloud';
 import tagsStatistics from './tagsStatistics';
 import {userListColumns, staticInfoColumns, tradeDetailColumns} from './constants';
-import {postCustomerAddress} from '@/api/dataAnsis/customerInformationInquiry';// postCustomerTransactions
+// import {postCustomerAddress} from '@/api/dataAnsis/customerInformationInquiry';// postCustomerTransactions
+import {queryStaticInfo, queryTradeInfo, queryTagsCloud, queryTagsTatistic, updateUserTags, queryUserRelation} from '@/api/tradeAnalysis';
 export default {
     components: {
         STable,
@@ -100,24 +103,47 @@ export default {
         wordCloud,
         tagsStatistics
     },
+    props: {
+        propsUserList: {
+            type: Array,
+            default() {
+                return [];
+            }
+        },
+        ruleForm: {
+            type: Object,
+            default() {
+                return {};
+            }
+        }
+    },
+    watch: {
+        propsUserList: {
+            handler(val) {
+                this.userList = JSON.parse(JSON.stringify(val));
+            },
+            deep: true
+        }
+    },
     data() {
         return {
             userListColumns,
             staticInfoColumns,
             tradeDetailColumns,
+            loading: false,
             userList: [
-                {eventTimeRange: 0, custId: '80002930', qtty: '8776', isProfitMargin: '否', custName: '***', eventTags: [{name: '频繁报撤单', type: 2}], tradeTags: [{name: 'afas', type: 2}], modelTags: [{name: 'aerv', type: 2}], hisEventTags: [{name: 'iioe', type: 2}], outTags: [{name: 'ibnww', type: 2}]},
-                {eventTimeRange: 1, custId: '80002931', qtty: '7422', isProfitMargin: '是', custName: '***', eventTags: [{name: '频繁报撤单', type: 2}], tradeTags: [{name: 'afas', type: 2}], modelTags: [{name: 'aerv', type: 2}], hisEventTags: [{name: 'iioe', type: 2}], outTags: [{name: 'ibnww', type: 2}]},
-                {eventTimeRange: 2, custId: '80002932', qtty: '9211', isProfitMargin: '否', custName: '***', eventTags: [{name: '频繁报撤单', type: 2}], tradeTags: [{name: 'afas', type: 2}], modelTags: [{name: 'aerv', type: 2}], hisEventTags: [{name: 'iioe', type: 2}], outTags: [{name: 'ibnww', type: 2}]},
-                {eventTimeRange: 0, custId: '80002933', qtty: '1123', isProfitMargin: '是', custName: '***', eventTags: [{name: '频繁报撤单', type: 2}], tradeTags: [{name: 'afas', type: 2}], modelTags: [{name: 'aerv', type: 2}], hisEventTags: [{name: 'iioe', type: 2}], outTags: [{name: 'ibnww', type: 2}]},
-                {eventTimeRange: 1, custId: '80002934', qtty: '2221', isProfitMargin: '是', custName: '***', eventTags: [{name: '频繁报撤单', type: 2}], tradeTags: [{name: 'afas', type: 2}], modelTags: [{name: 'aerv', type: 2}], hisEventTags: [{name: 'iioe', type: 2}], outTags: [{name: 'ibnww', type: 2}]},
+                {eventTimeRange: 0, custId: '80002930', qtty: '8776', prftF: '否', custName: '***', eventLabel: '0|test', txStyleLabel: 'fssf,afe,fefe,fef', modelLabel: 'ad,fef,ee,wer', hEventLabel: 'sdf,fe,gt,gs', extLabel: 'ev,ew,dg,gr'},
+                {eventTimeRange: 1, custId: '80002931', qtty: '7422', prftF: '是', custName: '***', eventLabel: '0|hhaf', txStyleLabel: 'fssf,afe,fefe,fef', modelLabel: 'ad,fef,ee,wer', hEventLabel: 'sdf,fe,gt,gs', extLabel: 'ev,ew,dg,gr'},
+                {eventTimeRange: 2, custId: '80002932', qtty: '9211', prftF: '否', custName: '***', eventLabel: 'aefsfs', txStyleLabel: 'fssf,afe,fefe,fef', modelLabel: 'ad,fef,ee,wer', hEventLabel: 'sdf,fe,gt,gs', extLabel: 'ev,ew,dg,gr'},
+                {eventTimeRange: 0, custId: '80002933', qtty: '1123', prftF: '是', custName: '***', eventLabel: '1|fefa', txStyleLabel: 'fssf,afe,fefe,fef', modelLabel: 'ad,fef,ee,wer', hEventLabel: 'sdf,fe,gt,gs', extLabel: 'ev,ew,dg,gr'},
+                {eventTimeRange: 1, custId: '80002934', qtty: '2221', prftF: '是', custName: '***', eventLabel: '0|ffsb', txStyleLabel: 'fssf,afe,fefe,fef', modelLabel: 'ad,fef,ee,wer', hEventLabel: 'sdf,fe,gt,gs', extLabel: 'ev,ew,dg,gr'},
             ],
             allUserList: [
-                {eventTimeRange: 0, custId: '80002930', qtty: '8776', isProfitMargin: '否', custName: '***', eventTags: [{name: '频繁报撤单', type: 2}], tradeTags: [{name: 'afas', type: 2}], modelTags: [{name: 'aerv', type: 2}], hisEventTags: [{name: 'iioe', type: 2}], outTags: [{name: 'ibnww', type: 2}]},
-                {eventTimeRange: 1, custId: '80002931', qtty: '7422', isProfitMargin: '是', custName: '***', eventTags: [{name: '频繁报撤单', type: 2}], tradeTags: [{name: 'afas', type: 2}], modelTags: [{name: 'aerv', type: 2}], hisEventTags: [{name: 'iioe', type: 2}], outTags: [{name: 'ibnww', type: 2}]},
-                {eventTimeRange: 2, custId: '80002932', qtty: '9211', isProfitMargin: '否', custName: '***', eventTags: [{name: '频繁报撤单', type: 2}], tradeTags: [{name: 'afas', type: 2}], modelTags: [{name: 'aerv', type: 2}], hisEventTags: [{name: 'iioe', type: 2}], outTags: [{name: 'ibnww', type: 2}]},
-                {eventTimeRange: 0, custId: '80002933', qtty: '1123', isProfitMargin: '是', custName: '***', eventTags: [{name: '频繁报撤单', type: 2}], tradeTags: [{name: 'afas', type: 2}], modelTags: [{name: 'aerv', type: 2}], hisEventTags: [{name: 'iioe', type: 2}], outTags: [{name: 'ibnww', type: 2}]},
-                {eventTimeRange: 1, custId: '80002934', qtty: '2221', isProfitMargin: '是', custName: '***', eventTags: [{name: '频繁报撤单', type: 2}], tradeTags: [{name: 'afas', type: 2}], modelTags: [{name: 'aerv', type: 2}], hisEventTags: [{name: 'iioe', type: 2}], outTags: [{name: 'ibnww', type: 2}]},
+                {eventTimeRange: 0, custId: '80002930', qtty: '8776', prftF: '否', custName: '***', eventLabel: '0|test', txStyleLabel: 'fssf,afe,fefe,fef', modelLabel: 'ad,fef,ee,wer', hEventLabel: 'sdf,fe,gt,gs', extLabel: 'ev,ew,dg,gr'},
+                {eventTimeRange: 1, custId: '80002931', qtty: '7422', prftF: '是', custName: '***', eventLabel: '0|hhaf', txStyleLabel: 'fssf,afe,fefe,fef', modelLabel: 'ad,fef,ee,wer', hEventLabel: 'sdf,fe,gt,gs', extLabel: 'ev,ew,dg,gr'},
+                {eventTimeRange: 2, custId: '80002932', qtty: '9211', prftF: '否', custName: '***', eventLabel: 'aefsfs', txStyleLabel: 'fssf,afe,fefe,fef', modelLabel: 'ad,fef,ee,wer', hEventLabel: 'sdf,fe,gt,gs', extLabel: 'ev,ew,dg,gr'},
+                {eventTimeRange: 0, custId: '80002933', qtty: '1123', prftF: '是', custName: '***', eventLabel: '1|fefa', txStyleLabel: 'fssf,afe,fefe,fef', modelLabel: 'ad,fef,ee,wer', hEventLabel: 'sdf,fe,gt,gs', extLabel: 'ev,ew,dg,gr'},
+                {eventTimeRange: 1, custId: '80002934', qtty: '2221', prftF: '是', custName: '***', eventLabel: '0|ffsb', txStyleLabel: 'fssf,afe,fefe,fef', modelLabel: 'ad,fef,ee,wer', hEventLabel: 'sdf,fe,gt,gs', extLabel: 'ev,ew,dg,gr'},
             ],
             staticInfoDialog: false,
             graphMapDialog: false,
@@ -128,7 +154,10 @@ export default {
             loadingStaticInfo: false,
             loadingTradeDetail: false,
             staticInfoTableData: [],
-            tradeDetailTableData: [{custId: '183331', custName: '***'}],
+            graphMapData: [],
+            tagsCloudData: [],
+            tagsTatisticData: [],
+            tradeDetailTableData: [],
             currentItem: {},
             checkedResults: [0, 1, 2],
             eventResults: [
@@ -142,15 +171,20 @@ export default {
                 tagType: ''
             },
             tagTypes: [
-                {value: '0', label: '集五福'},
-                {value: '1', label: '撤单'},
-                {value: '2', label: '算法'},
+                {value: '0', label: '内因'},
+                {value: '1', label: '外因'},
             ],
             colorMap: ['#ec6e6e', '#f7f01b', '#1bf772'],
             showProfitMargin: false
         };
     },
     methods: {
+        computedParams() {
+            return {
+                ...this.ruleForm,
+                custId: this.selectionArray.map(v => { return v.custId; }).join(',')
+            };
+        },
         showStaticInfo() {
             if (!this.selectionArray.length) {
                 this.$message.error('请先选择用户');
@@ -158,11 +192,8 @@ export default {
             }
             this.staticInfoDialog = true;
             // get static info
-            let params = {
-                custId: this.selectionArray.map(v => { return v.custId; })[0] // test
-            };
             this.loadingStaticInfo = true;
-            postCustomerAddress(params).then(resp => {
+            queryStaticInfo(this.computedParams()).then(resp => {
                 if (resp) {
                     this.loadingStaticInfo = false;
                     this.staticInfoTableData = resp;
@@ -180,6 +211,16 @@ export default {
                 return;
             }
             this.graphMapDialog = true;
+            this.loading = true;
+            queryUserRelation(this.computedParams()).then(resp => {
+                this.loading = false;
+                if (resp) {
+                    this.graphMapData = resp.txRelationAnalyTblList;
+                }
+            }).catch(e => {
+                this.loading = false;
+                console.error(e);
+            });
         },
         showTradeDetail() {
             if (!this.selectionArray.length) {
@@ -187,21 +228,18 @@ export default {
                 return;
             }
             this.tradeDetailDialog = true;
-            // let params = {
-            //     custId: item.custId
-            // };
-            // this.loadingTradeDetail = true;
-            // postCustomerTransactions(params).then(resp => {
-            //     if (resp) {
-            //         this.loadingTradeDetail = false;
-            //         this.tradeDetailTableData = resp;
-            //     } else {
-            //         this.loadingTradeDetail = false;
-            //         return [];
-            //     }
-            // }).catch(e => {
-            //     this.loadingTradeDetail = false;
-            // });
+            this.loadingTradeDetail = true;
+            queryTradeInfo(this.computedParams()).then(resp => {
+                if (resp) {
+                    this.loadingTradeDetail = false;
+                    this.tradeDetailTableData = resp.txRelationAnalyTblList;
+                } else {
+                    this.loadingTradeDetail = false;
+                    return [];
+                }
+            }).catch(e => {
+                this.loadingTradeDetail = false;
+            });
         },
         showTagsCloud() {
             if (!this.selectionArray.length) {
@@ -209,6 +247,21 @@ export default {
                 return;
             }
             this.tagCloudDialog = true;
+            this.loading = true;
+            queryTagsCloud(this.computedParams()).then(resp => {
+                this.loading = false;
+                if (resp) {
+                    this.tagsCloudData = resp.txRelationAnalyTblList.map(v => {
+                        return {
+                            name: v.labelName,
+                            value: v.qtty
+                        };
+                    });
+                }
+            }).catch(e => {
+                this.loading = false;
+                console.error(e);
+            });
         },
         showTagsStatistics() {
             // if (!this.selectionArray.length) {
@@ -216,10 +269,28 @@ export default {
             //     return;
             // }
             this.showTagsStatisticsDialog = true;
+            this.loading = true;
+            queryTagsTatistic(this.computedParams()).then(resp => {
+                this.loading = false;
+                if (resp) {
+                    this.tagsTatisticData = resp.txRelationAnalyTblList;
+                }
+            }).catch(e => {
+                this.loading = false;
+                console.error(e);
+            });
         },
         modifyTags(item) {
             this.modifyTagsDialog = true;
-            this.currentItem = item;
+            this.currentItem = JSON.parse(JSON.stringify(item));
+            let tags = item.eventLabel.split(',');
+            console.log(tags);
+            this.currentItem.eventTags = tags.map(v => {
+                return {
+                    type: v.split('|')[0],
+                    name: v.split('|')[1]
+                };
+            });
         },
         handleCloseTag(item, type) {
             switch (type) {
@@ -227,16 +298,16 @@ export default {
                 this.currentItem.eventTags.splice(this.currentItem.eventTags.indexOf(item), 1);
                 break;
             case 1:
-                this.currentItem.tradeTags.splice(this.currentItem.tradeTags.indexOf(item), 1);
+                this.currentItem.txStyleLabel.splice(this.currentItem.txStyleLabel.indexOf(item), 1);
                 break;
             case 2:
-                this.currentItem.modelTags.splice(this.currentItem.modelTags.indexOf(item), 1);
+                this.currentItem.modelLabel.splice(this.currentItem.modelLabel.indexOf(item), 1);
                 break;
             case 3:
-                this.currentItem.hisEventTags.splice(this.currentItem.hisEventTags.indexOf(item), 1);
+                this.currentItem.hEventLabel.splice(this.currentItem.hEventLabel.indexOf(item), 1);
                 break;
             case 4:
-                this.currentItem.outTags.splice(this.currentItem.outTags.indexOf(item), 1);
+                this.currentItem.extLabel.splice(this.currentItem.extLabel.indexOf(item), 1);
                 break;
             }
         },
@@ -256,6 +327,16 @@ export default {
                 type: this.addTagForm.tagType,
                 name: this.addTagForm.tagName,
             });
+
+            let params = this.computedParams();
+            params.eventLabel = this.currentItem.eventTags.map(v => {
+                return v.type + '|' + v.name;
+            }).join(',');
+            updateUserTags(params).then(resp => {
+                if (resp) {
+                    this.$emit('updateUserList');
+                }
+            });
         },
         handleConfirmModifyTags() {
             this.$message.success('修改成功');
@@ -267,17 +348,20 @@ export default {
         },
         handleCheckedResultsChange(checkedArray) {
             this.userList = this.allUserList.filter(item => {
-                return this.checkedResults.indexOf(item.eventTimeRange) > -1 && (this.showProfitMargin ? item.isProfitMargin === '是' : true);
+                return this.checkedResults.indexOf(item.eventTimeRange) > -1 && (this.showProfitMargin ? item.prftF === '是' : true);
             });
         },
         handleProfitMarginChange(val) {
             if (val) {
                 this.userList = this.allUserList.filter(item => {
-                    return this.checkedResults.indexOf(item.eventTimeRange) > -1 && item.isProfitMargin === '是';
+                    return this.checkedResults.indexOf(item.eventTimeRange) > -1 && item.prftF === '是';
                 });
             } else {
                 this.userList = JSON.parse(JSON.stringify(this.allUserList));
             }
+        },
+        exportAnalysis() {
+
         }
     }
 };

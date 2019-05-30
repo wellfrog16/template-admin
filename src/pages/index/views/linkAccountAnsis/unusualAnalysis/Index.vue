@@ -21,7 +21,7 @@
                     <div slot="content" style="height: 880px; overflow: auto;">
                         <p class="header-css" style="margin-top:0;">重要舆情</p>
                         <!-- <distinguish-index :indexType="1" :distinguishIndexOptions="distinguishIndexOptions[1]"></distinguish-index> -->
-                        <important-consensus ref="importantConsensus" :loading="loading" :importantConsensusTableData="importantConsensusTableData" :queryBlockData="queryBlockData" :unusualMarkAreaData="unusualMarkAreaData" v-bind="$attrs" @fetchArticleList="fetchArticleList"></important-consensus>
+                        <important-consensus ref="importantConsensus" :loading="loadingArticleTable" :importantConsensusTableData="importantConsensusTableData" :queryBlockData="queryBlockData" :unusualMarkAreaData="unusualMarkAreaData" v-bind="$attrs" @fetchArticleList="fetchArticleList"></important-consensus>
                         <!-- <p class="header-css">舆情热度</p> -->
                         <!-- <distinguish-index :indexType="2" :distinguishIndexOptions="distinguishIndexOptions[2]"></distinguish-index> -->
                         <!-- <consensus-hot-chart :unusualMarkAreaData="unusualMarkAreaData" v-bind="$attrs"></consensus-hot-chart> -->
@@ -55,15 +55,15 @@
             <el-col :span="24">
                 <s-card class="unusual-report" :title="`异常报告`" :icon="`fa fa-file-signature`">
                     <div slot="right">
-                        <el-button type="primary" size="small" @click="handleExportUnusualReport">导出分析</el-button>
+                        <el-button type="primary" size="small" @click="handleExportUnusualReport">导出CSV</el-button>
                     </div>
                     <div slot="content">
-                        <s-table :loading="loadingUnusualReportData" :columns="unusualReportColumns" :tableData="unusualReportData" :rowStyle="rowStyle"></s-table>
+                        <s-table :loading="loading" :columns="unusualReportColumns" :tableData="unusualReportData" :rowStyle="rowStyle"></s-table>
                     </div>
                 </s-card>
             </el-col>
             <el-col style="text-align: center;">
-                <el-button type="warning" size="small" @click="nextStep">下一步</el-button>
+                <el-button :loading="loading" type="warning" size="small" @click="nextStep">下一步</el-button>
             </el-col>
         </el-row>
     </div>
@@ -99,11 +99,16 @@ export default {
         SCard,
         STable
     },
+    computed: {
+        loading() {
+            return this.loadingKnowledgeTree || this.loadingKnowledgeTreeMap || this.loadingArticleTable || this.loadingInnerData || this.loadingOutterData || this.loadingUnusualReportData;
+        }
+    },
     data() {
         return {
-            loading: false, // fullscreen
             loadingKnowledgeTree: false,
             loadingKnowledgeTreeMap: false,
+            loadingArticleTable: false,
             loadingInnerData: false,
             loadingOutterData: false,
             loadingUnusualReportData: false,
@@ -113,7 +118,7 @@ export default {
             showReasonReport: false,
             modifyTreeConfigFlag: false,
             unusualMarkAreaData: [[{name: '异常区域', xAxis: '2019-04-15'}, {xAxis: '2019-04-16'}]], //, [{name: '异常区域', xAxis: '2019-04-12'}, {xAxis: '2019-04-13'}]
-            reasonReportData: [],
+            // reasonReportData: [],
             // {name: '螺纹钢价格', curPrice: '11', hisPriceAvg: '1', deviate: '1', influenceEffect: '1', attribute: '外因/宏观因素'},
             // {name: '螺纹钢价格', curPrice: '22', hisPriceAvg: '3', deviate: '3', influenceEffect: '3', attribute: '内因/异常交易'},
             // {name: '汇率', curPrice: '13', hisPriceAvg: '13', deviate: '4', influenceEffect: '4', attribute: '外因'},
@@ -157,7 +162,8 @@ export default {
             importantConsensusTableData: [],
             innerInfo: {},
             outterInfo: {},
-            counter: 0
+            counter: 0,
+            taskId: null
         };
     },
     methods: {
@@ -180,23 +186,28 @@ export default {
             }
         },
         rowStyle({row}) {
-            if (row.grade === '高') {
+            if (row.lev === '高') {
                 return {'color': '#ec6e6e'};
-            } else if (row.grade === '中') {
+            } else if (row.lev === '中') {
                 return {'color': '#f7f01b'};
-            } else if (row.grade === '低') {
+            } else if (row.lev === '低') {
                 return {'color': '#1bf772'};
             }
             return {'color': '#fff'};
         },
         nextStep() {
+            // 导出异常事件
+            let taskId = this.taskId;
+            if (!this.taskId || !this.unusualReportData.length) {
+                taskId = null;
+            }
             this.$confirm('离开本页面信息将丢失，是否确定离开?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             })
                 .then(() => {
-                    this.$router.push({name: 'tradeAnalysis'});
+                    this.$router.push({name: 'tradeAnalysis', query: {taskId: taskId}});
                 });
         },
         getKnowledgeTreeMap() {
@@ -237,7 +248,9 @@ export default {
             this.loadingKnowledgeTreeMap = true;
             getKnowledgeTreeMap(params).then(resp => {
                 this.loadingKnowledgeTreeMap = false;
-                this.treeMapData = resp;
+                if (resp) {
+                    this.treeMapData = resp;
+                }
             }).catch(e => {
                 this.loadingKnowledgeTreeMap = false;
                 console.error(e);
@@ -248,18 +261,29 @@ export default {
             this.loadingKnowledgeTree = true;
             getKnowledgeTreeMapNoArticle(params).then(resp => {
                 this.loadingKnowledgeTree = false;
-                this.treeData = resp;
+                if (resp) {
+                    this.treeData = resp;
+                }
             }).catch(e => {
                 this.loadingKnowledgeTree = false;
                 console.error(e);
             });
         },
         updateQueryBlockData(value) {
+            // 重置taskId
+            this.taskId = null;
             this.queryBlockData = value;
             this.getAllInfoByQueryBlock();
         },
         getAllInfoByQueryBlock() {
             this.counter = 0;
+            // clear
+            this.importantConsensusTableData = [];
+            this.innerInfo = {};
+            this.outterInfo = {};
+            this.treeData = {};
+            this.treeMapData = {};
+            this.unusualReportData = [];
             // 内因
             this.fetchInnerInfo(this.queryBlockData);
             // 外因
@@ -274,11 +298,13 @@ export default {
         fetchInnerInfo(params) {
             this.loadingInnerData = true;
             getInnerInfo(params).then(resp => {
-                this.counter++;
-                this.loadingInnerData = false;
-                this.innerInfo = resp;
-                if (this.counter === 2) {
-                    this.fetchUnusualReport(params);
+                if (resp) {
+                    this.counter++;
+                    this.loadingInnerData = false;
+                    this.innerInfo = resp;
+                    if (this.counter === 2) {
+                        this.fetchUnusualReport(params);
+                    }
                 }
             }).catch(e => {
                 this.loadingInnerData = false;
@@ -288,11 +314,13 @@ export default {
         fetchOutterInfo(params) {
             this.loadingOutterData = true;
             getOutterInfo(params).then(resp => {
-                this.counter++;
-                this.loadingOutterData = false;
-                this.outterInfo = resp;
-                if (this.counter === 2) {
-                    this.fetchUnusualReport(params);
+                if (resp) {
+                    this.counter++;
+                    this.loadingOutterData = false;
+                    this.outterInfo = resp;
+                    if (this.counter === 2) {
+                        this.fetchUnusualReport(params);
+                    }
                 }
             }).catch(e => {
                 this.loadingOutterData = false;
@@ -303,20 +331,30 @@ export default {
             this.loadingUnusualReportData = true;
             getUnusualReport(params).then(resp => {
                 this.loadingUnusualReportData = false;
-                this.unusualReportData = resp.mtExpReportOutList;
+                if (resp) {
+                    this.unusualReportData = resp.mtExpReportOutList;
+                    this.taskId = params.taskId;
+                    let store = this.$store.getters.unusualEventList;
+                    store[params.taskId] = resp.mtExpReportOutList;
+                    // test
+                    localStorage.setItem('TEMP_EVENT_LIST', JSON.stringify(store));
+                    this.$store.commit('saveUnusualEventList', store);
+                }
             }).catch(e => {
                 this.loadingUnusualReportData = false;
                 console.error(e);
             });
         },
         fetchArticleList(props = {}, callback) {
-            this.loading = true;
+            this.loadingArticleTable = true;
             getArticleList({...this.queryBlockData, ...props || {}}).then(resp => {
-                this.loading = false;
-                this.importantConsensusTableData = resp.mainData;
-                callback && callback();
+                this.loadingArticleTable = false;
+                if (resp) {
+                    this.importantConsensusTableData = resp.mainData;
+                    callback && callback();
+                }
             }).catch(e => {
-                this.loading = false;
+                this.loadingArticleTable = false;
                 console.error(e);
             });
         },

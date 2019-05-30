@@ -188,7 +188,7 @@ export default {
         },
         handleConfirmSelectTags(selectTags) {
             this.dialogLoading = true;
-            updateArticleItem({lable: selectTags.join(','), newsid: this.currentItem.newsId}).then(resp => {
+            updateArticleItem({lable: selectTags.map(v => { return v.tagName; }).join(','), newsid: this.currentItem.newsId}).then(resp => {
                 this.$refs['detailSettingTagsDialog'].clearForm();
                 this.dialogLoading = false;
                 this.settingTagsDialog = false;

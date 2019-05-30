@@ -1,66 +1,147 @@
 <template>
     <div class="event-analysis">
-        <div class="event-main-info">
+        <div class="event-main-info" v-loading="loadingBasicInfo">
             <el-row>
-                <el-col :span="6" class="self-line">
-                    品种：螺纹钢
+                <el-col :span="4" class="self-line">
+                    品种：{{ eventBasicInfo.breed }}
+                </el-col>
+                <el-col :span="4" class="self-line">
+                    合约代码：{{ eventBasicInfo.contrCd }}
+                </el-col>
+                <el-col :span="4" class="self-line">
+                    识别标的：{{ eventBasicInfo.idtfySubjMatter === '0' ? '内因' : eventBasicInfo.idtfySubjMatter === '1' ? '外因' : '' }}
                 </el-col>
                 <el-col :span="6" class="self-line">
-                    识别标的：舆情
+                    关键词：{{ eventBasicInfo.keyword }}
                 </el-col>
-                <el-col :span="6" class="self-line">
-                    关键词：减产
-                </el-col>
-                <el-col :span="6" class="self-line">用户范围： 909</el-col>
+                <el-col :span="6" class="self-line">用户范围： {{ eventBasicInfo.userRange }}</el-col>
                 <el-col :span="24" class="self-line">
-                    时间范围：2017-04-01 09:30:02 -- 2017-04-01 09:32:42
+                    时间范围：{{ eventBasicInfo.dateRange }}
                 </el-col>
-                <el-col :span="24" class="self-line">事件描述：减产利多</el-col>
-                <el-col :span="24" class="self-line">事件标签：<el-tag type="warning" size="small">舆情异常</el-tag></el-col>
+                <el-col :span="24" class="self-line">事件描述：{{ eventBasicInfo.eventDesc }}</el-col>
+                <el-col :span="24" class="self-line">
+                    <setting-tags labelText="事件标签" :showTagType="true" :showBorder="false" :propsSelectTags="eventBasicInfo.eventLabel" @handleConfirmSelectTags="handleConfirmSelectTags" @handleCancelSelectTags="handleCancelSelectTags"></setting-tags>
+                </el-col>
             </el-row>
         </div>
         <div>
-            <echarts-common :loading="loading" ref="eventAnalysisChart" domId="eventAnalysisChartDom" :defaultOption="chartOptions" :propsChartHeight="propsChartHeight" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></echarts-common>
+            <echarts-common :loading="loadingEventChartData" ref="eventAnalysisChart" domId="eventAnalysisChartDom" :defaultOption="chartOptions" :propsChartHeight="propsChartHeight" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></echarts-common>
         </div>
     </div>
 </template>
 <script>
 import EchartsCommon from '@/components/index/common/EchartsCommon';
+import settingTags from '../../unusualAnalysis/components/settingTags';
+import {updateEventTags} from '@/api/tradeAnalysis';
 export default {
-    components: {EchartsCommon},
+    components: {EchartsCommon, settingTags},
+    props: {
+        propsEventBasicInfo: {
+            type: Object,
+            default() {
+                return {};
+            }
+        },
+        propsEventChartData: {
+            type: Object,
+            default() {
+                return {};
+            }
+        },
+        loadingBasicInfo: {
+            type: Boolean,
+            default: false
+        },
+        loadingEventChartData: {
+            type: Boolean,
+            default: false
+        },
+        unusualMarkArea: {
+            type: Array,
+            default() {
+                return [];
+            }
+        }
+    },
+    watch: {
+        propsEventBasicInfo: {
+            handler(val) {
+                this.eventBasicInfo = JSON.parse(JSON.stringify(val));
+            },
+            deep: true
+        },
+        propsEventChartData: {
+            handler(val) {
+                this.eventChartData = JSON.parse(JSON.stringify(val));
+                let date = [];
+                let data1 = [];
+                let data2 = [];
+                let data3 = [];
+                let data4 = [];
+                let data5 = [];
+                this.eventChartData.forEach(v => {
+                    date.push(v.date);
+                    data1.push(v.closeQuot);
+                    data2.push(v.bargainQtty);
+                    data3.push(v.multiUserCnt);
+                    data4.push(v.oversellUserCnt);
+                    data5.push(v.prftStat);
+                });
+                this.chartOptions['xAxis'][4]['data'] = date;
+                this.chartOptions['series'][0]['data'] = data1;
+                this.chartOptions['series'][1]['data'] = data2;
+                this.chartOptions['series'][2]['data'] = data3;
+                this.chartOptions['series'][3]['data'] = data4;
+                this.chartOptions['series'][4]['data'] = data5;
+            },
+            deep: true
+        },
+        unusualMarkArea: {
+            handler(val) {
+                this.chartOptions.series[0]['markArea']['data'] = val;
+                this.chartOptions.series[1]['markArea']['data'] = val;
+                this.chartOptions.series[2]['markArea']['data'] = val;
+                this.chartOptions.series[3]['markArea']['data'] = val;
+                this.chartOptions.series[4]['markArea']['data'] = val;
+            },
+            deep: true
+        }
+    },
     data() {
+        let date = ['08:30', '09:31', '09:32', '09:33', '09:34', '09:35', '10:36'];
         return {
-            loading: false,
             propsChartHeight: 780,
             extraPrv: 1, // 前置30分钟
             extraNext: 1, // 后置40分钟
+            eventBasicInfo: {},
+            eventChartData: {},
             chartOptions: {
                 grid: [
                     {
                         left: 60,
                         right: 80,
-                        height: 300,
+                        height: 280,
                         top: 45,
                         containLabel: false
                     },
                     {
                         left: 60,
                         right: 80,
-                        height: 40,
+                        height: 60,
                         top: 380,
                         containLabel: false
                     },
                     {
                         left: 60,
                         right: 80,
-                        height: 130,
-                        top: 440,
+                        height: 120,
+                        top: 470,
                         containLabel: false
                     },
                     {
                         left: 60,
                         right: 80,
-                        height: 110,
+                        height: 80,
                         bottom: 60,
                         containLabel: false
                     }
@@ -87,12 +168,12 @@ export default {
                         name: '时间',
                         type: 'category',
                         boundaryGap: false,
-                        data: ['08:30', '09:31', '09:32', '09:33', '09:34', '09:35', '10:36']
+                        data: date,
                     },
                     {
                         type: 'category',
                         gridIndex: 1,
-                        data: ['08:30', '09:31', '09:32', '09:33', '09:34', '09:35', '10:36'],
+                        data: date,
                         scale: true,
                         boundaryGap: false,
                         splitLine: {show: false},
@@ -120,15 +201,15 @@ export default {
                         type: 'category',
                         name: '时间',
                         gridIndex: 2,
-                        data: ['08:30', '09:31', '09:32', '09:33', '09:34', '09:35', '10:36'],
                         scale: true,
+                        data: date,
                         boundaryGap: false,
                     },
                     {
                         type: 'category',
                         name: '时间',
                         gridIndex: 3,
-                        data: ['08:30', '09:31', '09:32', '09:33', '09:34', '09:35', '10:36'],
+                        data: date,
                         boundaryGap: false
                     }
                 ],
@@ -295,7 +376,23 @@ export default {
         },
         handleEchartDblClickEvent(val) {
             this.$emit('handleEchartDblClickEvent', val);
+        },
+        handleConfirmSelectTags(tags) {
+            // confirm select tags
+            let params = {
+                expEventId: this.eventBasicInfo.expReportid,
+                eventLabel: tags.map(v => { return v.tagName; }).join(',')
+            };
+            updateEventTags(params).then(resp => {
+                this.$emit('updateEventBasicInfo');
+            });
+        },
+        handleCancelSelectTags() {
+            // cancel select tags
+            this.$emit('updateEventBasicInfo');
         }
+    },
+    mounted() {
     }
 };
 </script>

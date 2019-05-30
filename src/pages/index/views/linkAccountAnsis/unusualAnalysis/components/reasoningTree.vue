@@ -154,9 +154,9 @@ export default {
             //     console.log(this.chartOptions.series);
             //     this.$refs['reasoningMapRef'].initChart();
             // });
-            this.chartOptions.series[0].data = [data];
-            console.log(data);
-            console.log(this.chartOptions.series);
+            if (Object.keys(data).length) {
+                this.chartOptions.series[0].data = [data];
+            }
         }
     },
     mounted() {

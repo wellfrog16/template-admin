@@ -28,22 +28,22 @@
                     <k-line-chart :loading="loading" :chartData="innerInfo.mtInternalExportImputList" :unusualMarkAreaData="innerInfo.mtExpeventInfoOutList" v-bind="$attrs" v-if="activeInnerChartTab === '0'" ref="kLineRef" echartRef="kLineChartRef" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></k-line-chart>
                 </keep-alive>
             </el-tab-pane>
-            <el-tab-pane label="分时图" name="1" >
+            <!-- <el-tab-pane label="分时图" name="1" >
                 <keep-alive>
                     <time-sharing-trade-chart v-if="activeInnerChartTab === '1'" :loading="loading" ref="timeSharingTradeRef" echartRef="timeSharingTradeChartRef" @handleEchartClickEvent="handleEchartClickEvent" @handleEchartDblClickEvent="handleEchartDblClickEvent"></time-sharing-trade-chart>
                 </keep-alive>
-            </el-tab-pane>
+            </el-tab-pane> -->
         </el-tabs>
     </div>
 </template>
 <script>
 import kLineChart from './kLineChart';
-import timeSharingTradeChart from './timeSharingTradeChart';
+// import timeSharingTradeChart from './timeSharingTradeChart';
 import moment from 'moment';
 export default {
     components: {
         kLineChart,
-        timeSharingTradeChart
+        // timeSharingTradeChart
     },
     props: {
         loading: {

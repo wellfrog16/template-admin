@@ -7,6 +7,7 @@
 <script>
 import _ from 'lodash';
 import EchartsCommon from '@/components/index/common/EchartsCommon';
+// import {echartsDefault} from '@/assets/style/common/theme/echart';
 export default {
     components: {
         EchartsCommon
@@ -36,19 +37,39 @@ export default {
                     series: [{
                         type: 'wordCloud',
                         gridSize: 2,
-                        sizeRange: [15, 40],
-                        rotationRange: [-90, 90],
+                        sizeRange: [15, 50],
+                        rotationRange: [-45, 90],
                         shape: 'pentagon',
                         drawOutOfBound: true,
                         textStyle: {
                             normal: {
+                                // color: function() {
+                                //     return 'rgb(' + [
+                                //         Math.round(Math.random() * 255),
+                                //         Math.round(Math.random() * 255),
+                                //         Math.round(Math.random() * 255)
+                                //     ].join(',') + ')';
+                                // },
                                 color: function() {
-                                    return 'rgb(' + [
-                                        Math.round(Math.random() * 255),
-                                        Math.round(Math.random() * 255),
-                                        Math.round(Math.random() * 255)
-                                    ].join(',') + ')';
+                                    let colorArray = [
+                                        '#f8f400',
+                                        '#40f3d6',
+                                        '#ce20ff',
+                                        '#13ce34',
+                                        '#ff8a00',
+                                        '#e3007b',
+                                        '#b9cc87',
+                                        '#ffabf3',
+                                        '#f3253c',
+                                        '#dbef09',
+                                        '#09beef',
+                                        '#c475cc',
+                                        '#75ccbe'
+                                    ];
+                                    let colorIndex = Math.ceil(Math.random() * 12);
+                                    return colorArray[colorIndex];
                                 }
+
                             },
                             emphasis: {
                                 shadowBlur: 10,
@@ -86,7 +107,6 @@ export default {
                     };
                 })];
             });
-            console.log(chartData);
             // chartData = [
             //     {name: '埃及法', value: 222},
             //     {name: '埃及法', value: 22},
@@ -99,7 +119,6 @@ export default {
             //     {name: '案发后', value: 999},
             // ];
             let uniqData = _.uniqBy(_.orderBy(chartData, 'value', 'desc'), 'name');
-            console.log(uniqData);
             this.chartOptions.series[0]['data'] = uniqData;
         }
     },

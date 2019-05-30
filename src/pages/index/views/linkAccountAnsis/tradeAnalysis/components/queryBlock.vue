@@ -2,13 +2,12 @@
     <div class="query-block">
         <s-card :title="`用户选择`" :icon="`fa fa-user-check`">
             <div slot="content">
-                <el-form ref="ruleForm" :model="ruleForm" :rules="rules">
+                <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="130px">
                     <el-row>
                         <el-col :xl="12" :lg="12" :md="12" :sm="24">
                             <el-form-item
                                 prop="resultId"
                                 label="导入异常事件"
-                                label-width="130px"
                                 style="display:inline-block;"
                                 :rules="
                                     [{
@@ -18,41 +17,40 @@
                                 <resultSelectComponent ref="resultSelectComponent" :resultIdProps="ruleForm.resultId" @selectResultId="selectResultId"></resultSelectComponent>
                             </el-form-item>
                         </el-col>
-                        <!--    <el-col :xl="12" :lg="12" :md="12" :sm="24">
-                            <el-form-item prop="contractCode" label="合约代码" label-width="100px">
+                        <el-col :xl="12" :lg="12" :md="12" :sm="24">
+                            <el-form-item prop="contrCd" label="合约代码">
                                 <el-input
-                                    clearable
+                                    disabled
                                     size="small"
-                                    v-model="ruleForm.contractCode"
+                                    v-model="ruleForm.contrCd"
                                     class="custom-width"
-                                    placeholder="cu1712"
                                 ></el-input>
                             </el-form-item>
-                        </el-col> -->
+                        </el-col>
                         <el-col :xl="12" :lg="12" :md="12" :sm="24">
-                            <el-form-item prop="extra" label-width="130px" style="display:inline-block; padding: 5px 0;"
+                            <el-form-item prop="extra" style="display:inline-block; padding: 5px 0;"
                                           :rules="[{
                                               validator: validateExtraArray, required: true
                                           }]">
                                 <span slot="label">
                                     <span>观察窗口</span>
                                     <el-tooltip>
-                                        <span slot="content">基于统计时间区间，前置m分钟，后置n分钟的一个时间区域</span>
+                                        <span slot="content">基于统计时间区间，前置m天，后置n天的一个时间范围</span>
                                         <i class="el-icon-info" style="font-size: 12px;"></i>
                                     </el-tooltip>
                                 </span>
                                 <span style="color: #fff; margin: 0 8px;">前</span>
-                                <el-input clearable size="small" v-model="ruleForm.extra[0]" style="width: 120px;"></el-input>
+                                <el-input clearable size="small" v-model.trim="ruleForm.extra[0]" style="width: 120px;"></el-input>
                                 <span style="color: #fff; margin: 0 8px;">后</span>
-                                <el-input clearable size="small" v-model="ruleForm.extra[1]" style="width: 120px;"></el-input>（分钟）
+                                <el-input clearable size="small" v-model.trim="ruleForm.extra[1]" style="width: 120px;"></el-input>（天）
                             </el-form-item>
                         </el-col>
                         <el-col :xl="12" :lg="12" :md="12" :sm="24">
-                            <el-form-item prop="selectDateRange" label-width="130px" :rules="[{required: true, validator: validDateRange}]">
+                            <el-form-item prop="selectDateRange" :rules="[{required: true, validator: validDateRange}]">
                                 <span slot="label">
                                     <span>异常事件时间</span>
                                     <el-tooltip>
-                                        <span slot="content">规定异常事件的统计时间区间</span>
+                                        <span slot="content">异常事件的统计时间区间</span>
                                         <i class="el-icon-info" style="font-size: 12px;"></i>
                                     </el-tooltip>
                                 </span>
@@ -88,11 +86,11 @@ export default {
         return {
             rules: {},
             ruleForm: {
+                eventInfo: {},
                 resultId: '',
                 selectDateRange: [],
-                contractCode: '',
+                contrCd: '',
                 extra: [],
-                timeRange: '' // 用于计算统计区间范围限制
             },
             upDisabledTime: 0,
             downDisabledTime: 0,
@@ -109,9 +107,10 @@ export default {
                 callback(new Error('请输入后置观察窗口'));
             } else if (!reg.test(value[0]) || !reg.test(value[1])) {
                 callback(new Error('观察窗口只能为数字'));
-            } else if (value[0] > 60 || value[1] > 60) {
-                callback(new Error('观察窗口小于60'));
             }
+            //  else if (value[0] > 60 || value[1] > 60) {
+            //     callback(new Error('观察窗口小于60'));
+            // }
             callback();
         },
         validDateRange(rule, value, callback) {
@@ -125,13 +124,13 @@ export default {
             callback();
         },
         selectResultId(item) {
-            this.ruleForm.resultId = item.resultId;
-            this.ruleForm.selectDateRange = [item.timeRange.slice(0, 11), item.timeRange.slice(22, 33)];
+            this.ruleForm.resultId = item.expReportid;
+            this.ruleForm.contrCd = item.contrCd;
+            this.ruleForm.eventInfo = item;
+            this.ruleForm.selectDateRange = [item.dateRange.slice(0, 10), item.dateRange.slice(11, 21)];
             // todo set disabled timeRange
-            console.log(item.timeRange.slice(0, 20));
-            console.log(item.timeRange.slice(22));
-            this.upDisabledTime = new Date(item.timeRange.slice(22, 33) + '00:00:00').getTime() + 24 * 60 * 60 * 1000;
-            this.downDisabledTime = new Date(item.timeRange.slice(0, 11) + '00:00:00').getTime() - 24 * 60 * 60 * 1000;
+            this.upDisabledTime = new Date(item.dateRange.slice(11, 21) + '00:00:00').getTime() + 24 * 60 * 60 * 1000;
+            this.downDisabledTime = new Date(item.dateRange.slice(0, 10) + '00:00:00').getTime() - 24 * 60 * 60 * 1000;
         },
         handleSdatePickerDateRangeChange(val) {
             this.ruleForm.selectDateRange = val;

@@ -10,7 +10,7 @@
                         label="操作"
                         show-overflow-tooltip>
                         <template slot-scope="scope">
-                            <el-button type="primary" size="small" @click="handleInsert(scope.row)">插入</el-button>
+                            <el-button type="primary" size="mini" @click="handleInsert(scope.row)">插入</el-button>
                         </template>
                     </el-table-column>
                 </s-table>

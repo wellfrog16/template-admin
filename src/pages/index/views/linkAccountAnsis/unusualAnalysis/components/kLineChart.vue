@@ -11,7 +11,7 @@ export default {
     props: {
         propsChartHeight: {
             type: [String, Number],
-            default: 300
+            default: 350
         },
         echartRef: {
             type: String,
@@ -98,7 +98,7 @@ export default {
                 }, {
                     left: 60,
                     right: 80,
-                    height: 40,
+                    height: 70,
                     bottom: 40,
                     containLabel: false
                 }],

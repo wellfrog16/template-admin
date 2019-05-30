@@ -1,24 +1,29 @@
 import tagsColumn from './tagsColumn';
 export const userListColumns = [
-    {label: '用户名称', field: 'custName', minWidth: 100},
-    {label: '用户编号', field: 'custId', minWidth: 100},
+    {label: '用户名称', field: 'userName', minWidth: 100},
+    {label: '用户编号', field: 'userId', minWidth: 100},
     {label: '持仓量', field: 'qtty', minWidth: 100, sortable: true},
-    {label: '是否盈利盘', field: 'isProfitMargin', minWidth: 100},
-    {label: '事件标签', field: 'eventTags', minWidth: 130, template: tagsColumn},
-    {label: '历史事件标签', field: 'hisEventTags', minWidth: 130, template: tagsColumn},
-    {label: '交易风格标签', field: 'tradeTags', minWidth: 130, template: tagsColumn},
-    {label: '模型标签', field: 'modelTags', minWidth: 130, template: tagsColumn},
-    {label: '外部标签', field: 'outTags', minWidth: 130, template: tagsColumn}
+    {label: '是否盈利盘', field: 'prftF', minWidth: 100},
+    {label: '事件标签', field: 'eventLabel', minWidth: 300, template: tagsColumn},
+    {label: '历史事件标签', field: 'hEventLabel', minWidth: 130, template: tagsColumn},
+    {label: '交易风格标签', field: 'txStyleLabel', minWidth: 130, template: tagsColumn},
+    {label: '模型标签', field: 'modelLabel', minWidth: 130, template: tagsColumn},
+    {label: '外部标签', field: 'extLabel', minWidth: 130, template: tagsColumn}
 ];
 export const tradeDetailColumns = [
-    {label: '用户名称', field: 'custName', minWidth: 100},
-    {label: '用户编号', field: 'custId', minWidth: 100},
-    {label: '持仓量', field: 'qtty', minWidth: 100},
-    {label: '事件标签', field: 'eventTags', minWidth: 130, template: tagsColumn},
-    {label: '交易风格标签', field: 'tradeTags', minWidth: 130, template: tagsColumn},
-    {label: '模型标签', field: 'modelTags', minWidth: 130, template: tagsColumn},
-    {label: '历史事件标签', field: 'hisEventTags', minWidth: 130, template: tagsColumn},
-    {label: '外部标签', field: 'outTags', minWidth: 130, template: tagsColumn}
+    {label: '用户编号', field: 'userId', minWidth: 100},
+    {label: '合约代码', field: 'contrCd', minWidth: 100},
+    {label: '交易日期', field: 'tradingday', minWidth: 130},
+    {label: '买卖', field: 'buySell', minWidth: 100},
+    {label: '开平标志', field: 'kaipingFlag', minWidth: 100},
+    {label: '投机套保标志', field: 'hedgeflag', minWidth: 100},
+    {label: '价格', field: 'price', minWidth: 100},
+    {label: '数量', field: 'quantity', minWidth: 100},
+    {label: '成交时间', field: 'tranday', minWidth: 100},
+    {label: '成交类型', field: 'tranType', minWidth: 100},
+    {label: '持仓盈亏', field: 'positionprofit', minWidth: 100},
+    {label: '浮动盈亏', field: 'openprofit', minWidth: 100},
+    {label: '平仓盈亏', field: 'closeprofit', minWidth: 100},
 ];
 export const staticInfoColumns = [
     {field: 'custId', label: '客户编号', width: '200'},

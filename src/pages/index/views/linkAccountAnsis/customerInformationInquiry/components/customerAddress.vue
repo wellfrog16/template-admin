@@ -36,7 +36,7 @@
                 </el-row>
             </el-form>
         </el-card>
-        <s-card :title="`客户地址查询`" :icon="`fa fa-search-location`">
+        <s-card :title="`客户基本信息查询`" :icon="`fa fa-search-location`">
             <div slot="content">
                 <s-table
                     :height="230"
