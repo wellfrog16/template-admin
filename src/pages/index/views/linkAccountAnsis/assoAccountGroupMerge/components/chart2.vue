@@ -88,12 +88,13 @@ export default {
                     {
                         name: '持仓量',
                         type: 'value',
+                        scale: true
                     }
                 ],
                 dataZoom: [
                     {
                         type: 'slider',
-                        show: true,
+                        // show: true,
                         xAxisIndex: [0],
                         bottom: 0
                     },

@@ -66,12 +66,12 @@ export default {
         handleConfirmQuery(ruleForm) {
             console.log(ruleForm);
             let params = {
-                expEventId: this.ruleForm.resultId,
-                expStartTm: this.ruleForm.selectDateRange[0],
-                expEndTm: this.ruleForm.selectDateRange[1],
-                watchStartTm: moment(this.ruleForm.selectDateRange[0]).subtract(this.ruleForm.extra[0], 'days').format('YYYY-MM-DD'),
-                watchEndTm: moment(this.ruleForm.selectDateRange[1]).add(this.ruleForm.extra[1], 'days').format('YYYY-MM-DD'),
-                contrCd: this.ruleForm.contrCd
+                expEventId: ruleForm.resultId,
+                expStartTm: ruleForm.selectDateRange[0],
+                expEndTm: ruleForm.selectDateRange[1],
+                watchStartTm: moment(ruleForm.selectDateRange[0]).subtract(ruleForm.extra[0], 'days').format('YYYY-MM-DD'),
+                watchEndTm: moment(ruleForm.selectDateRange[1]).add(ruleForm.extra[1], 'days').format('YYYY-MM-DD'),
+                contrCd: ruleForm.contrCd
             };
             console.log(params);
             this.ruleForm = {...ruleForm, ...params};

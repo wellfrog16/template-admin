@@ -121,7 +121,7 @@ export default {
                 dataZoom: [
                     {
                         type: 'slider',
-                        show: true,
+                        // show: true,
                         xAxisIndex: [0],
                         bottom: 0
                     },

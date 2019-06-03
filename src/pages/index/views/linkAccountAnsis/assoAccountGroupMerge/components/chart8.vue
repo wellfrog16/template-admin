@@ -78,7 +78,7 @@ export default {
                         type: 'inside'
                     },
                     {
-                        show: true,
+                        // show: true,
                         type: 'slider',
                         bottom: 0
                     }

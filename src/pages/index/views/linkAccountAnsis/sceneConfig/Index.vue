@@ -53,9 +53,10 @@
                                     </el-radio>
                                     <br>
                                     <el-radio label="2">
+                                        <!-- validator: validateCustomNo, required: String(ruleForm.exportType) === '2' -->
                                         <el-form-item prop="customNoArray" label="导入连续客户号" label-width="140px" style="display:inline-block; padding: 5px 0;"
                                                       :rules="[{
-                                                          validator: validateCustomNo, required: String(ruleForm.exportType) === '2'
+                                                          validator: validateCustomNo
                                                       }]">
                                             <el-input clearable size="small" v-model.trim="ruleForm.customNoArray[0]" style="width: 150px;"></el-input>
                                             <span style="color: #fff; margin: 0 8px;">~</span>
@@ -208,8 +209,8 @@ export default {
                 exportType: '',
                 resultId: '',
                 resultType: '',
-                customNoArray: ['80000001', '80001000'],
-                contractCode: '',
+                customNoArray: ['00001394', '00206000'],
+                contractCode: 'cw6135',
                 // selectDateRange: ['2017-06-01', '2017-08-31']
                 selectDateRange: [new Date(moment().subtract(1, 'months').format('YYYY-MM-DD')), new Date(moment().subtract(1, 'days').format('YYYY-MM-DD'))]
             },
@@ -311,7 +312,12 @@ export default {
         validateCustomNo(rule, value, callback) {
             let reg = /^[0-9]+$/;
             if (String(this.ruleForm.exportType) === '2') {
-                if (!value.length) {
+                if (!reg.test(value[0]) || !reg.test(value[1])) {
+                    callback(new Error('客户编号只能为数字'));
+                } else if (value[0] > value[1]) {
+                    callback(new Error('客户段起始号不能大于结束号'));
+                }
+                /* if (!value.length) {
                     callback(new Error('请输入客户段号'));
                 } else if (!(value[0]) && value[0] !== 0) {
                     callback(new Error('请输入客户段起始号'));
@@ -321,7 +327,7 @@ export default {
                     callback(new Error('客户编号只能为数字'));
                 } else if (value[0] > value[1]) {
                     callback(new Error('客户段起始号不能大于结束号'));
-                }
+                } */
             }
             callback();
         },
@@ -538,8 +544,8 @@ export default {
                 params.resultType = this.ruleForm.resultType;
             }
             if (this.ruleForm.exportType === '2') {
-                params.accountStart = this.ruleForm.customNoArray[0];
-                params.accountEnd = this.ruleForm.customNoArray[1];
+                params.accountStart = this.ruleForm.customNoArray[0] ? this.ruleForm.customNoArray[0] : '00001394';
+                params.accountEnd = this.ruleForm.customNoArray[1] ? this.ruleForm.customNoArray[1] : '00206000';
             }
             let paramsArray = [];
             this.selectList.forEach(v => {

@@ -5,10 +5,10 @@ export const userListColumns = [
     {label: '持仓量', field: 'qtty', minWidth: 100, sortable: true},
     {label: '是否盈利盘', field: 'prftF', minWidth: 100},
     {label: '事件标签', field: 'eventLabel', minWidth: 300, template: tagsColumn},
-    {label: '历史事件标签', field: 'hEventLabel', minWidth: 130, template: tagsColumn},
-    {label: '交易风格标签', field: 'txStyleLabel', minWidth: 130, template: tagsColumn},
-    {label: '模型标签', field: 'modelLabel', minWidth: 130, template: tagsColumn},
-    {label: '外部标签', field: 'extLabel', minWidth: 130, template: tagsColumn}
+    {label: '历史事件标签', field: 'hEventLabel', minWidth: 200, template: tagsColumn},
+    {label: '交易风格标签', field: 'txStyleLabel', minWidth: 200, template: tagsColumn},
+    {label: '模型标签', field: 'modelLabel', minWidth: 200, template: tagsColumn},
+    {label: '外部标签', field: 'extLabel', minWidth: 200, template: tagsColumn}
 ];
 export const tradeDetailColumns = [
     {label: '用户编号', field: 'userId', minWidth: 100},

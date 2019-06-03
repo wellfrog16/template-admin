@@ -171,7 +171,7 @@ export default {
                         end: 80
                     },
                     {
-                        show: true,
+                        // show: true,
                         type: 'slider',
                         y: '90%',
                         start: 100,

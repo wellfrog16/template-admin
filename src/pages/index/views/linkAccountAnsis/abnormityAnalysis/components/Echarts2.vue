@@ -140,7 +140,7 @@ export default {
                 dataZoom: [
                     {
                         type: 'slider', // 图表下方的伸缩条
-                        show: true, // 是否显示
+                        // show: true, // 是否显示
                         xAxisIndex: [0],
                         bottom: 0
                     },

@@ -5,7 +5,7 @@
             :height="475"
             :loading="loadingTable"
             loadingText="数据加载时间较长，请耐心等待..."
-            :columns="tableColumns"
+            :columns="noAccountGroup ? tableColumns.filter(v => {return v.field !== 'acctNum'}) : tableColumns"
             :tableData="tableData"
             @cellDblClick="tableellDblClick"
         ></s-table>
@@ -24,14 +24,19 @@ export default {
         tableData2: {
             type: Array,
             required: true,
+            default() {
+                return [];
+            }
         },
         // 加载
         loadingTable: {
             ttype: Boolean,
-            default() {
-                return {};
-            },
+            default: false
         },
+        noAccountGroup: {
+            type: Boolean,
+            default: false
+        }
     },
     components: {STable},
     watch: {

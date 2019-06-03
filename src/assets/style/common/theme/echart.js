@@ -68,6 +68,7 @@ export const echartsDefault = {
         containLabel: true
     },
     dataZoom: {
+        show: false,
         backgroundColor: '#001c4c',
         borderColor: '#092b66',
         handleStyle: {

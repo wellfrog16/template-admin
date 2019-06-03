@@ -43,7 +43,7 @@ export default {
                     // },
                     dataZoom: [
                         {
-                            show: true,
+                            // show: true,
                             realtime: true,
                             bottom: 0
                         },

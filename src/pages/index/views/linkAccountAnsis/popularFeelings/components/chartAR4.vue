@@ -240,7 +240,7 @@ export default {
                         type: 'inside'
                     },
                     {
-                        show: true,
+                        // show: true,
                         type: 'slider',
                         y: '90%'
                     }

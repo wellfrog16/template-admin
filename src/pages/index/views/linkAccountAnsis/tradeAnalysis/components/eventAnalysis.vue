@@ -256,7 +256,7 @@ export default {
                         xAxisIndex: [0, 3]
                     },
                     {
-                        show: true,
+                        // show: true,
                         type: 'slider',
                         xAxisIndex: [0, 3],
                         bottom: 0

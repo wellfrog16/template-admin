@@ -6,7 +6,7 @@
                     <el-col :span="12">
                         <s-card :title="`超仓分析表`" :icon="`fa fa-chart-bar`">
                             <div slot="content">
-                                <table1 @barEchartsCick="barEchartsCick" @EchartsClickLoading="EchartsClickLoading1"
+                                <table1 :noAccountGroup="true" @barEchartsCick="barEchartsCick" @EchartsClickLoading="EchartsClickLoading1"
                                         :loadingTable="loadingTable0" :tableData1="tableData1"></table1>
                             </div>
                         </s-card>
@@ -25,7 +25,7 @@
                     <el-col :span="12">
                         <s-card :title="`频繁报撤单分析表`" :icon="`fa fa-user-md`">
                             <div slot="content">
-                                <table2 @barEchartsCick="barEchartsCick" @EchartsClickLoading="EchartsClickLoading2"
+                                <table2 :noAccountGroup="true" @barEchartsCick="barEchartsCick" @EchartsClickLoading="EchartsClickLoading2"
                                         :loadingTable="loadingTable1"
                                         :tableData2="tableData2"></table2>
                             </div>
@@ -48,7 +48,7 @@
                     <el-col :span="12">
                         <s-card :title="`自成交分析表`" :icon="`fa fa-donate`">
                             <div slot="content">
-                                <table3 @barEchartsCick="barEchartsCick" @EchartsClickLoading="EchartsClickLoading3"
+                                <table3 :noAccountGroup="true" @barEchartsCick="barEchartsCick" @EchartsClickLoading="EchartsClickLoading3"
                                         :loadingTable="loadingTable2"
                                         :tableData3="tableData3"></table3>
                             </div>

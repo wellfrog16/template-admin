@@ -114,7 +114,7 @@ export default {
                         type: 'inside'
                     },
                     {
-                        show: true,
+                        // show: true,
                         type: 'slider',
                         bottom: 0
                     }
@@ -237,7 +237,7 @@ export default {
             // }
             Object.keys(buy).forEach((v, i) => {
                 let data = buy[v].map(m => {
-                    return [m.declBillTm2.slice(-5), m.currPrice - (i + 1) * gap, m.declBillQtty, '买入', v];
+                    return [m.declBillTm2.slice(-5), Number(m.currPrice) - (i + 1) * gap, m.declBillQtty, '买入', v];
                     // return [m.declBillTm2.slice(-5), lPrice + i * 2, m.declBillQtty, '买入', v];
                 });
                 series.push({
@@ -264,7 +264,7 @@ export default {
             });
             Object.keys(sail).forEach((v, i) => {
                 let data = sail[v].map(m => {
-                    return [m.declBillTm2.slice(-5), m.currPrice + (i + 1) * gap, m.declBillQtty, '卖出', v];
+                    return [m.declBillTm2.slice(-5), Number(m.currPrice) + (i + 1) * gap, m.declBillQtty, '卖出', v];
                     // return [m.declBillTm2.slice(-5), hPrice - i * 2, m.declBillQtty, '卖出', v];
                 });
                 series.push({
@@ -295,6 +295,7 @@ export default {
             this.chartOptions['legend']['data'] = series.map(v => {
                 return v.name;
             });
+            // console.log(this.chartOptions);
             this.$store.commit('savechart4', {data: this.chartOptions, index: id || this.tabIndex || this.$store.getters.getTabIndex});
             this.$refs[this.domRef] && this.$refs[this.domRef].initChart();
         },

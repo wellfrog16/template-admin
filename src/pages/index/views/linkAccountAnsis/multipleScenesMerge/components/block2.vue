@@ -25,7 +25,7 @@ export default {
                 tooltip: {
                     formatter: params => {
                         if (params.dataType === 'edge') { // link
-                            return '账户组号：' + params.name + '<br>客户交集：' + params.data.tip || '';
+                            return '账户组号：' + params.data.point + '<br>客户交集：' + params.data.tip || '';
                         } else if (params.dataType === 'node') {
                             // return '客户编号: ' + params.value || '';
                         }
@@ -65,6 +65,16 @@ export default {
         drewChart(chartData) {
             let lineColor = '#959595';
             chartData.links.forEach(v => {
+                // 转换v.source、v.target为唯一标识对应值
+                v.point = `${v.source} > ${v.target}`;
+                chartData.nodes.forEach(n => {
+                    if (n.name === v.source) {
+                        v.source = n.id;
+                    }
+                    if (n.name === v.target) {
+                        v.target = n.id;
+                    }
+                });
                 if (v.tip.split(',').length > 5) {
                     v.lineStyle = {normal: {color: lineColor, width: 10}};
                 } else if (v.tip.split(',').length > 3) {
@@ -73,6 +83,7 @@ export default {
                     v.lineStyle = {normal: {color: lineColor, width: 1}};
                 }
             });
+            console.log(chartData.links);
             this.chartOptions['series'][0]['links'] = chartData['links'];
             this.chartOptions['series'][0]['data'] = chartData['nodes'];
         },

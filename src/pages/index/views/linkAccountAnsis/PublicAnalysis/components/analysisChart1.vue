@@ -259,7 +259,7 @@ export default {
                         end: 30
                     },
                     {
-                        show: true,
+                        // show: true,
                         type: 'slider',
                         y: '90%',
                         start: 100,
